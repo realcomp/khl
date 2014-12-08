@@ -1,0 +1,21 @@
+# Mac crap
+.DS_Store
+
+*.py[co]
+
+#Translations
+*.mo
+
+db.sqlite3
+
+media/
+reports/
+
+sportparser/local_settings.py
+local_settings.py
+node_modules
+
+/static/
+/docs/_build
+/local_email_box
+/logs
