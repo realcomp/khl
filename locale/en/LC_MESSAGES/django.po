@@ -1,0 +1,280 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-09 16:54+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: accounts/admin.py:15
+msgid "Personal info"
+msgstr ""
+
+#: accounts/admin.py:19
+msgid "Permissions"
+msgstr ""
+
+#: accounts/admin.py:21
+msgid "Important dates"
+msgstr ""
+
+#: accounts/apps.py:9 accounts/models.py:71
+msgid "Users"
+msgstr ""
+
+#: accounts/forms.py:12
+msgid "The two password fields didn't match."
+msgstr ""
+
+#: accounts/forms.py:14
+msgid "Password"
+msgstr ""
+
+#: accounts/forms.py:15
+msgid "Password confirmation"
+msgstr ""
+
+#: accounts/forms.py:17
+msgid "Enter the same password as above, for verification."
+msgstr ""
+
+#: accounts/models.py:35
+msgid "username"
+msgstr ""
+
+#: accounts/models.py:37
+msgid "A user with that username already exists."
+msgstr ""
+
+#: accounts/models.py:39
+msgid "staff status"
+msgstr ""
+
+#: accounts/models.py:40
+msgid "Designates whether the user can log into this admin site."
+msgstr ""
+
+#: accounts/models.py:42
+msgid "active"
+msgstr ""
+
+#: accounts/models.py:43
+msgid ""
+"Designates whether this user should be treated as active. Unselect this "
+"instead of deleting accounts."
+msgstr ""
+
+#: accounts/models.py:45
+msgid "date joined"
+msgstr ""
+
+#: accounts/models.py:50
+msgid "user"
+msgstr ""
+
+#: accounts/models.py:51
+msgid "users"
+msgstr ""
+
+#: accounts/models.py:65
+msgid "FIO"
+msgstr ""
+
+#: accounts/models.py:70
+msgid "User"
+msgstr ""
+
+#: base/apps.py:9
+msgid "Base"
+msgstr ""
+
+#: hockeyapp/apps.py:9
+msgid "Hockey info"
+msgstr ""
+
+#: sportomatics/settings.py:56
+msgid "Russian"
+msgstr ""
+
+#: sportomatics/settings.py:57
+msgid "English"
+msgstr ""
+
+#: sportomatics/settings.py:108
+msgid "Translation"
+msgstr ""
+
+#: templates/rosetta/languages.html:5 templates/rosetta/languages.html.py:8
+msgid "Language selection"
+msgstr ""
+
+#: templates/rosetta/languages.html:8 templates/rosetta/profile.html:9
+msgid "Home"
+msgstr ""
+
+#: templates/rosetta/languages.html:9
+msgid ""
+"Couldn't load the specified language file. This usually happens when using "
+"the Encrypted Cookies Session Storage backend on Django 1.4 or higher.<br/"
+">Setting ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage' in "
+"your settings file should fix this."
+msgstr ""
+
+#: templates/rosetta/languages.html:17
+msgid "Project"
+msgstr ""
+
+#: templates/rosetta/languages.html:20
+msgid "Third party"
+msgstr ""
+
+#: templates/rosetta/languages.html:23
+msgid "Django"
+msgstr ""
+
+#: templates/rosetta/languages.html:26 templates/rosetta/profile.html:64
+msgid "All"
+msgstr ""
+
+#: templates/rosetta/languages.html:40
+msgid "Application"
+msgstr ""
+
+#: templates/rosetta/languages.html:41
+msgid "Progress"
+msgstr ""
+
+#: templates/rosetta/languages.html:42
+msgid "Messages"
+msgstr ""
+
+#: templates/rosetta/languages.html:43
+msgid "Translated"
+msgstr ""
+
+#: templates/rosetta/languages.html:44 templates/rosetta/profile.html:79
+msgid "Fuzzy"
+msgstr ""
+
+#: templates/rosetta/languages.html:45
+msgid "Obsolete"
+msgstr ""
+
+#: templates/rosetta/languages.html:46
+msgid "File"
+msgstr ""
+
+#: templates/rosetta/languages.html:69
+msgid "Nothing to translate!"
+msgstr ""
+
+#: templates/rosetta/languages.html:70
+msgid ""
+"You haven't specified any languages in your settings file, or haven't yet "
+"generated a batch of translation catalogs."
+msgstr ""
+
+#: templates/rosetta/languages.html:71
+#, python-format
+msgid ""
+"Please refer to <a href=\"%(i18n_doc_link)s\">Django's I18N documentation</"
+"a> for a guide on how to set up internationalization for your project."
+msgstr ""
+
+#: templates/rosetta/profile.html:11
+msgid "Translation selection"
+msgstr ""
+
+#: templates/rosetta/profile.html:24
+#, python-format
+msgid "Progress: %(percent_translated)s%%"
+msgstr ""
+
+#: templates/rosetta/profile.html:26
+msgid "File is read-only: download the file when done editing!"
+msgstr ""
+
+#: templates/rosetta/profile.html:27
+msgid ""
+"Some items in your last translation block couldn't be saved: this usually "
+"happens when the catalog file changes on disk after you last loaded it."
+msgstr ""
+
+#: templates/rosetta/profile.html:31
+#, python-format
+msgid "Translate into %(rosetta_i18n_lang_name)s"
+msgstr ""
+
+#: templates/rosetta/profile.html:37
+msgid "Options"
+msgstr ""
+
+#: templates/rosetta/profile.html:41
+msgid "Pick another file"
+msgstr ""
+
+#: templates/rosetta/profile.html:42
+msgid "Download this catalog"
+msgstr ""
+
+#: templates/rosetta/profile.html:49
+msgid "Go"
+msgstr ""
+
+#: templates/rosetta/profile.html:55
+msgid "Untranslated only"
+msgstr ""
+
+#: templates/rosetta/profile.html:58
+msgid "Translated only"
+msgstr ""
+
+#: templates/rosetta/profile.html:61
+msgid "Fuzzy only"
+msgstr ""
+
+#: templates/rosetta/profile.html:76
+msgid "Original"
+msgstr ""
+
+#: templates/rosetta/profile.html:80
+msgid "Occurrences(s)"
+msgstr ""
+
+#: templates/rosetta/profile.html:94 templates/rosetta/profile.html.py:97
+#: templates/rosetta/profile.html:112 templates/rosetta/profile.html.py:115
+msgid "Context hint"
+msgstr ""
+
+#: templates/rosetta/profile.html:122
+msgid "suggest"
+msgstr ""
+
+#: templates/rosetta/profile.html:133
+#, python-format
+msgid "%(more_count)s more"
+msgid_plural "%(more_count)s more"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/rosetta/profile.html:145
+msgid "Save and translate next block"
+msgstr ""
+
+#: templates/rosetta/profile.html:166
+#, python-format
+msgid "%(hits)s/%(message_number)s message"
+msgid_plural "%(hits)s/%(message_number)s messages"
+msgstr[0] ""
+msgstr[1] ""

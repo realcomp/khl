@@ -1,0 +1,47 @@
+{% load static i18n %}
+{% get_static_prefix as STATIC_PREFIX %}
+<footer class="footer">
+    <div class="container">
+        <div class="ui grid">
+            <div class="four wide column">
+                <div class="copyright">© 2014 SPORTMATICS.RU</div>
+                <img src="{{STATIC_PREFIX}}images/12.png" width="59" alt="12+">
+            </div>
+            <div class="four wide column">
+                <div class="sub-heading">{% trans 'About project' %}</div>
+                <div class="ui link list">
+                    <a class="item">{% trans 'User Agreement' %}</a>
+                    <a class="item">{% trans 'Site rules' %}</a>
+                    <a class="item">{% trans 'Paid services' %}</a>
+                    <a class="item">{% trans 'Free services' %}</a>
+                    <a class="item">{% trans 'Contacts' %}</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <div class="sub-heading">{% trans 'HELP' %}</div>
+                <div class="ui link list">
+                    <a class="item">{% trans 'FAQ' %}</a>
+                    <a class="item">{% trans 'Search' %}</a>
+                    <a class="item">{% trans 'Support' %}</a>
+                </div>
+            </div>
+            <div class="four wide column">
+                <div class="socials">
+                    <span class="sub-heading">{% trans 'Social' %}</span>
+                    <ul class="social-list">
+                        <li class="social-item">
+                            <a href="#" class="social-link"><i class="vk icon"></i></a>
+                        </li>
+                        <li class="social-item">
+                            <a href="#" class="social-link"><i class="facebook icon"></i></a>
+                        </li>
+                        <li class="social-item">
+                            <a href="#" class="social-link"><i class="twitter icon"></i></a>
+                        </li>
+                    </ul>
+                    <a class="mini ui orange button">{% trans 'For advertisers' %} <i class="right arrow icon"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

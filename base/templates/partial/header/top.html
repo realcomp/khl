@@ -1,0 +1,41 @@
+{% load i18n %}
+<div class="top-line">
+    <div class="container">
+        <div class="ui text menu">
+            <div class="header item">{% trans 'Sports type' %}:</div>
+            {% include 'partial/header/items.html' %}
+
+            <div class="ui dropdown item">
+                {% trans 'All' %}
+                <i class="dropdown icon"></i>
+
+                <div class="menu">
+                    {% include 'partial/header/items.html' %}
+                </div>
+            </div>
+            <div class="ui text right menu">
+                {% if user.is_authenticated %}
+                <a href="" class="item">{% trans 'Logout' %}</a>
+                {% else %}
+                <a href="" class="item">{% trans 'Login' %}</a>
+                <a href="" class="item">{% trans 'Registration' %}</a>
+                {% endif %}
+
+                <div class="ui dropdown item">
+                    {% trans 'Language' %} <i class="dropdown icon"></i>
+                    <div class="menu">
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <a href="#{{ language.code }}">{{ language.name_local }}</a>
+                        {% endfor%}
+                    </div>
+                    <form action="{% url 'set_language' %}" method="post" id="languageselect" style="block:none;">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="/" />
+                        <input name="language" type="hidden" value="{{ language.code }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

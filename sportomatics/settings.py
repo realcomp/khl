@@ -23,6 +23,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'django_select2',
+    'rest_framework',
+    'rosetta',
 
     'accounts',
     'base',
@@ -99,9 +101,22 @@ NOSE_ARGS = [
 SUIT_CONFIG = {
     'ADMIN_NAME': 'Sportomatics',
     'CONFIRM_UNSAVED_CHANGES': True,
+    'MENU': (
+        {'app': 'accounts',},
+        {'app': 'base',},
+        {'app': 'hockeyapp',},
+        {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
+    ),
     'MENU_EXCLUDE': ('sites', 'auth'),
 }
 
+#rosetta
+ROSETTA_MESSAGES_PER_PAGE = 30
+ROSETTA_WSGI_AUTO_RELOAD = True
+ROSETTA_UWSGI_AUTO_RELOAD = True
+ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE = 'ru'
+ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME = 'Russian'
+ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 
 try:
     from local_settings import *

@@ -1,0 +1,30 @@
+/* Header bottom line */
+.bottom-line {
+    background: #f1f2e9;
+}
+
+/* Team menu first item */
+.bottom-line .ui.menu a.item:nth-child(2) {
+    color: #32782b;
+}
+.bottom-line .ui.menu a.item:nth-child(2).active, .bottom-line .ui.menu a.item:nth-child(2):hover {
+    background: #32782b;
+}
+.bottom-line .ui.menu a.item:nth-child(2):after {
+    background: #32782b;
+}
+
+/* Content team menu background */
+.page-menu.ui.green.menu {
+    background: #408e3a;
+}
+
+/* Content container border */
+.page-container {
+    background: #ecede4;
+}
+
+/* Inner content container */
+.page-inner-container {
+    background: #fff;
+}

@@ -1,0 +1,39 @@
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/semantic.min.css">
+        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/style.css">
+        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/teams/ska.css">
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        {% include "partial/header.html" %}
+
+        {% block body %}
+        <section class="content">
+            
+        </section>
+        {% endblock %}
+        
+        {% include "partial/footer.html" %}
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="{{STATIC_PREFIX}}js/semantic.min.js"></script>
+        <script src="{{STATIC_PREFIX}}js/jquery-ui.min.js"></script>
+        <script src="{{STATIC_PREFIX}}js/slides.min.jquery.js"></script>
+        <script src="{{STATIC_PREFIX}}js/masonry.pkgd.min.js"></script>
+        <script src="{{STATIC_PREFIX}}js/jquery.imagesloaded.js"></script>
+        <script src="{{STATIC_PREFIX}}js/script.min.js"></script>
+    </body>
+</html>
