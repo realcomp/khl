@@ -17,6 +17,7 @@ Django==1.7.1
 djangorestframework
 django-suit
 django-select2
+django-rosetta
 
 #development
 ipython

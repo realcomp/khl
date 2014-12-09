@@ -4,6 +4,6 @@ from django.apps import AppConfig
 from django.utils.translation import ugettext_lazy as _
 
 
-class HockeyAppConfig(AppConfig):
-    name = 'hockeyapp'
-    verbose_name = _('Hockey info')
+class AccountsConfig(AppConfig):
+    name = 'accounts'
+    verbose_name = _('Users')

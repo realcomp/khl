@@ -1,7 +1,12 @@
 #coding: utf-8
 import os
+
+from django.utils.translation import ugettext_lazy as _
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'wwgwj3gc7al-mwofc6u0xjvi4&@7d&^59mvb=nien887rqjwpb'
+
+AUTH_USER_MODEL = 'accounts.User'
 
 DEBUG = True
 TEMPLATE_DEBUG = True
@@ -19,6 +24,7 @@ INSTALLED_APPS = (
 
     'django_select2',
 
+    'accounts',
     'base',
     'hockeyapp',
 )
@@ -45,7 +51,9 @@ DATABASES = {
 }
 
 LANGUAGE_CODE = 'ru'
-LANGUAGES = (('ru','Russian'),)
+LANGUAGES = (   ('ru',_('Russian')),
+                ('en', _('English')),
+            )
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
@@ -91,7 +99,7 @@ NOSE_ARGS = [
 SUIT_CONFIG = {
     'ADMIN_NAME': 'Sportomatics',
     'CONFIRM_UNSAVED_CHANGES': True,
-    'MENU_EXCLUDE': ('sites',),
+    'MENU_EXCLUDE': ('sites', 'auth'),
 }
 
 

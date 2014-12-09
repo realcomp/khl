@@ -1,8 +1,9 @@
 #coding: utf-8
 from __future__ import unicode_literals
 from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
 
 
 class BaseAppConfig(AppConfig):
     name = 'base'
-    verbose_name = u'Общее'
+    verbose_name = _('Base')
