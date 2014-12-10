@@ -31,3 +31,4 @@ ipython
 nose
 nose-notify
 django-nose
+rednose
