@@ -73,3 +73,7 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         super(User, self).save(*args, **kwargs)
+
+    @property
+    def email(self):
+        return self.username
