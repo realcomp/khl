@@ -93,4 +93,11 @@ $(document).ready(function(){
             gutterWidth: 20
         });
     });
+
+    //submit language form on click
+    $('div.menu > a').click(function(e) {
+        e.stopPropagation();
+        $('#languageselect input[name=language]').val($(this).attr('href').substring(1));
+        $('#languageselect').submit();
+    });
 });

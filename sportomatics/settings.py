@@ -34,6 +34,7 @@ INSTALLED_APPS = (
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -56,6 +57,9 @@ LANGUAGE_CODE = 'ru'
 LANGUAGES = (   ('ru',_('Russian')),
                 ('en', _('English')),
             )
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, "locale"),
+)
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True

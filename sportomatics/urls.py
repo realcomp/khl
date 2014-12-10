@@ -38,10 +38,10 @@ if settings.DEBUG:
         url(r'', include('django.contrib.staticfiles.urls')),
     ) + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += patterns('',
-    url(r'^$', 'base.views.index',),
-)
-
 urlpatterns += i18n_patterns('',
     url(r'^$', 'base.views.index', name='index'),
+)
+
+urlpatterns += patterns('',
+    url(r'^$', 'base.views.index',),
 )
