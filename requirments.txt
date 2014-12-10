@@ -1,3 +1,5 @@
+psycopg2
+
 #grab
 lxml==3.4.1
 pycurl==7.19.5
@@ -17,6 +19,7 @@ Django==1.7.1
 djangorestframework
 django-suit
 django-select2
+django-redis-sessions
 django-rosetta
 
 #development

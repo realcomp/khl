@@ -114,6 +114,9 @@ SUIT_CONFIG = {
     'MENU_EXCLUDE': ('sites', 'auth'),
 }
 
+#session
+SESSION_ENGINE = 'redis_sessions.session'
+
 #rosetta
 ROSETTA_MESSAGES_PER_PAGE = 30
 ROSETTA_WSGI_AUTO_RELOAD = True
@@ -121,6 +124,9 @@ ROSETTA_UWSGI_AUTO_RELOAD = True
 ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE = 'ru'
 ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME = 'Russian'
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
+
+#social
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
 try:
     from local_settings import *

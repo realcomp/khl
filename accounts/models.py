@@ -25,7 +25,7 @@ class BaseUserManager(UserManager):
     def create_user(self, username, password=None, **extra_fields):
         return self._create_user(username, password, False, False,
                                 **extra_fields)
-        
+
     def create_superuser(self, username, password, **extra_fields):
         return self._create_user(username, password, True, True,
                                 **extra_fields)
@@ -46,10 +46,12 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     objects = BaseUserManager()
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ()
+
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
         abstract = True
+        
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
