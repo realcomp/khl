@@ -1,0 +1,358 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container player-card-short-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section">Игроки</a>
+                <div class="divider"> / </div>
+                <div class="active section">Ковальчук Илья</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid">
+            <div class="row">
+                <div class="twelve wide column">
+                    <div class="player-card-block">
+                        <img src="../static/images/player-avatar.jpg" width="105" alt="" class="player-card-avatar">
+                        <div class="player-card-desc">
+                            <div class="player-card-name">Ковальчук Илья Валерьевич</div>
+                            <div class="player-card-amplua">Амплуа: нападающий</div>
+                            <ul class="player-card-list">
+                                <li class="player-card-item">Рост: 180 см.</li>
+                                <li class="player-card-item">Вес: 89 кг.</li>
+                                <li class="player-card-item">Хват: правый</li>
+                            </ul>
+                            <ul class="player-card-list player-card-list_nb">
+                                <li class="player-card-item">Дата рождения: 19 марта 1983г.</li>
+                                <li class="player-card-item">Возраст: 24 года 5 месяцев</li>
+                                <li class="player-card-item">Гражданство: Россия</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="align-center">
+                        <a class="ui mini orange button player-like-btn">+мне нравится этот игрок</a>
+                        <span class="player-likers">Нравится: <a href="#" class="player-likers-link">23 участникам</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+                <a class="active item">Краткая информация</a>
+                <a class="item">Спортивные показатели</a>
+                <a class="item">Клубы</a>
+                <a class="item">Тренеры</a>
+                <a class="item">Партнеры по команде</a>
+                <a class="item">Фотографии</a>
+                <a class="item">Общение</a>
+                <a class="item">Новости</a>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eight wide column">
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Спортивные показатели</span>
+                            </div>
+                            <table class="ui celled table segment design-table">
+                                <thead>
+                                    <tr>
+                                        <th>Характеристики</th>
+                                        <th align="center">Показатели</th>
+                                        <th align="center">Место</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Сезоны</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Матчи</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Голы</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Передачи</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Очки</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Плюс/минус</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее количество голов за игру</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее количество передач за игру</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее количество очков за игру</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Средний показатель "плюс/минус" за игру</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SM-индекс</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>CORSI-индекс</td>
+                                        <td align="center">12</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="eight wide column">
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Главные новости</span>
+                            </div>
+                            <ul class="player-news-list">
+                                <li class="player-news-item">Открытие УКРК "Арена 2000" (универсальный культурно-развлекательный комплекс "Арена 2000. Локомотив").</li>
+                                <li class="player-news-item">Прошли соревнования в универсальный культурно-спортивный комплекс российского города Ярославля. Открыт в 2001 году.</li>
+                                <li class="player-news-item">Расположен в Красноперекопском районе города в жилом районе Нефтестрой, на пересечении улиц Гагарина и Институтской. Проводятся домашние матчи.</li>
+                            </ul>
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Внешние ссылки</span>
+                            </div>
+                            <div class="ui grid">
+                                <div class="row">
+                                    <div class="eight wide column">
+                                        <ul class="player-links-list">
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="../static/images/khl-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Профиль на сайте КХЛ</span>
+                                                </a>
+                                            </li>
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="../static/images/nhl-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Профиль на сайте НХЛ</span>
+                                                </a>
+                                            </li>
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="../static/images/wiki-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Статья в Википедии</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="eight wide column">
+                                        <ul class="player-links-list">
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="../static/images/fb-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Страница на Facebook</span>
+                                                </a>
+                                            </li>
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="../static/images/vk-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Страница ВКонтакте</span>
+                                                </a>
+                                            </li>
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link player-links-link_internet">
+                                                    +ЕЩЕ В ИНТЕРНЕТ
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <hr class="hr">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <div class="photo-title heading">Фотографии</div>
+                            <a href="#" class="view-all-photos-btn">посмотреть все фото</a>
+                            <div class="player-photos-slider">
+                                <div class="slides_container">
+                                    <div>
+                                        <ul class="photos-list">
+                                            <li class="photo-item">
+                                                <a href="#" class="player-photo player-photo_add"><span class="add-photo-icon"><i class="add sign icon"></i></span>добавить свое фото</a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <ul class="photos-list">
+                                            <li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li><li class="photo-item">
+                                                <a href="#" class="player-photo">
+                                                    <img src="http://lorempixel.com/136/119/sports/" alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="#" class="prev"><i class="chevron circle left icon"></i></a>
+                                <a href="#" class="next"><i class="chevron circle right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <hr class="hr">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <div class="news-title heading">События из жизни</div>
+                            <div class="player-news-slider">
+                                <div class="slides_container">
+                                    <div>
+                                        <div class="slide">
+                                            <div class="news-image">
+                                                <img src="../static/images/player-news-slider-pic.png" alt="" class="news-image-pic">
+                                            </div>
+                                            <div class="news-desc">
+                                                <div class="news-date">1 августа 2003</div>
+                                                <div class="news-title">Приглашение в сборную России</div>
+                                                <div class="news-description">Вместе с рядом других игроков Илья был приглашен принять участие в тренировочном сборе в белорусском Пинске.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="slide">
+                                            <div class="news-image">
+                                                <img src="../static/images/player-news-slider-pic.png" alt="" class="news-image-pic">
+                                            </div>
+                                            <div class="news-desc">
+                                                <div class="news-date">12 августа 2003</div>
+                                                <div class="news-title">Новость 2</div>
+                                                <div class="news-description">Вместе с рядом других игроков Илья был приглашен принять участие в тренировочном сборе в белорусском Пинске.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#" class="prev"><i class="arrow left icon"></i></a>
+                                <a href="#" class="next"><i class="arrow right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <div class="align-center">
+                                <img src="../static/images/player-card-short-graph.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

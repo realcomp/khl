@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container players-diff-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section">Метрики</a>
+                <div class="divider"> / </div>
+                <div class="active section">Сравнение игроков</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content page-container">
+            <div class="diff-block">
+                <div class="ui divided grid">
+                    <div class="one column row">
+                        <div class="diff-title">Сравнение игроков</div>
+                    </div>
+                    <div class="four column row diff-options">
+                        <div class="column">
+                            <div class="sub-title">Выбрать период</div> 
+                            <p class="slider-desc">
+                                <label class="slider-label" for="players-diff-first-year-amount">с </label>
+                                <input type="text" class="slider-input players-diff-first-year-amount" id="players-diff-first-year-amount" readonly>
+                                <label class="slider-label" for="players-diff-second-year-amount">до </label>
+                                <input type="text" class="slider-input players-diff-second-year-amount" id="players-diff-second-year-amount" readonly>
+                            </p>
+                            <div class="players-diff-slider">
+                                <div class="players-diff-year-slider"></div>
+                            </div>
+                            <p class="slider-limits players-diff-slider-limits">
+                                <span class="slider-limits-max"></span>
+                                <span class="slider-limits-min"></span>
+                            </p>
+                        </div>
+                        <div class="column">
+                            <div class="sub-title">Только в клубах</div> 
+                            <select name="players-diff-clubs" id="players-diff-clubs" class="select players-diff-select" multiple="multiple" size="4">
+                                <option value="">Локомотив (Москва)</option>
+                                <option value="">Атлант (Мытищи)</option>
+                                <option value="">Динамо (Москва)</option>
+                                <option value="">НьюТрейд (Сан-Льюс)</option>
+                                <option value="">Локомотив (Москва)</option>
+                                <option value="">Атлант (Мытищи)</option>
+                                <option value="">Динамо (Москва)</option>
+                                <option value="">НьюТрейд (Сан-Льюс)</option>
+                            </select>
+                        </div>
+                        <div class="column">
+                            <div class="sub-title">Отображение</div>
+                            <div class="graph-type-block">
+                                <div class="grouped inline fields">
+                                    <div class="field">
+                                        <div class="ui radio checkbox">
+                                            <input type="radio" name="graph_type" checked="checked">
+                                            <label>Линейные графики</label>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui radio checkbox">
+                                            <input type="radio" name="graph_type">
+                                            <label>Лепестковые диаграммы</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <a href="#" class="graph-builder-btn">построитель графиков<i class="right arrow icon"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="one column row">
+                        <div class="column">
+                            <div class="graph-controls-block">
+                                <ul class="graph-controls-list">
+                                    <li class="graph-control-item">Что сравнить</li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Ш</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">А</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">О</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">+/-</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Штр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШР</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШБ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШМ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШО</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШП</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">РБ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">БВ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">%БВ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">БВ/И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Вбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ВВбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">%Вбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ВП/И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">См/И</a>
+                                    </li>
+                                </ul>
+                                <div class="graph-controls-heading">Игроки</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui grid">
+                    <div class="row players-controls">
+                        <div class="four wide column">
+                            <ul class="players-list">
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                            </ul>
+                            <a href="#" class="player-add-btn">+ Добавить игрока</a>
+                        </div>
+                        <div class="twelve wide column">
+                            <img class="player-diff-graph" src="../static/images/player-diff.jpg" alt="" width="660">
+                        </div>
+                    </div>
+                    <ul class="team-controls player-controls-block">
+                        <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                        <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                        <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

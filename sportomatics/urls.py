@@ -1,9 +1,13 @@
+import os
+
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import TemplateView
+
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
@@ -45,3 +49,13 @@ urlpatterns += i18n_patterns('',
 urlpatterns += patterns('',
     url(r'^$', 'base.views.index',),
 )
+
+#TODO: remove this later
+if settings.DEBUG:
+    for template in os.listdir('base/templates/markup/'):
+        _template = 'markup/{0}'.format(template,)
+        urlpatterns += patterns('',
+            url(r'^%s' % _template,
+                TemplateView.as_view(template_name=_template)
+            )
+        )

@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ПРОФИЛЬ</a>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-card">
+            <div class="user-avatar">
+                <div class="user-avatar-hex1">
+                    <div class="user-avatar-hex2" style="background-image: url(../static/images/user-avatar.png)"></div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-info-name">Кристина</div>
+                <div class="user-info-surname">Старикова</div>
+                <a href="#" class="user-change-avatar">сменить фото ></a>
+            </div>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+                <a class="item">Доступные опции</a>
+                <a class="item">Пакетные предложения</a>
+                <a class="active item">История покупок</a>
+                <a class="item">Личные данные</a>
+            </div>
+            <div class="page-inner-container">
+                <div class="user-page">
+                    <div class="ui tabular menu content-tabs">
+                        <span class="heading">История покупок</span>
+                    </div>
+                    <div class="user-sport-type">
+                        <label class="user-sport-type-label">Валюта счета</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="sport_type">
+                            <div class="default text">Выберите валюту счета</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item" data-value="usd">Доллары США</div>
+                                <div class="item" data-value="rub">Рубли</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid">
+                        <div class="two column row user-options">
+                            <div class="column">
+                                <div class="payment-block payment-block_new">
+                                    <div class="ui tabular menu payment-block-tabs content-tabs">
+                                        <ul class="tabs-to-right">
+                                            <li><a class="item" href="#payment-new-week" data-tab="payment-new-week">За неделю</a></li>
+                                            <li><a class="item" href="#payment-new-month" data-tab="payment-new-month">За месяц</a></li>
+                                            <li><a class="item" href="#payment-new-all" data-tab="payment-new-all">Все</a></li>
+                                        </ul>
+                                        <span class="heading">Поступившие платежи</span>
+                                    </div>
+                                    
+                                    <div class="ui tab" id="payment-new-week" data-tab="payment-new-week">
+                                        <table class="ui celled table">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="88">12.01.2014</td>
+                                                    <td width="50">$200</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2014</td>
+                                                    <td>$200</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="ui tab" id="payment-new-month" data-tab="payment-new-month">
+                                        <table class="ui celled table">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="88">12.01.2014</td>
+                                                    <td width="50">$200</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2014</td>
+                                                    <td>$200</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="ui tab" id="payment-new-all" data-tab="payment-new-all">
+                                        <table class="ui celled table">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="88">12.01.2014</td>
+                                                    <td width="50">$200</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2014</td>
+                                                    <td>$200</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2013</td>
+                                                    <td>$800</td>
+                                                    <td>Оплата кредитной картой</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="payment-block payment-block_old">
+                                    <div class="ui tabular menu payment-block-tabs content-tabs">
+                                        <ul class="tabs-to-right">
+                                            <li><a class="item" href="#payment-old-week" data-tab="payment-old-week">За неделю</a></li>
+                                            <li><a class="item" href="#payment-old-month" data-tab="payment-old-month">За месяц</a></li>
+                                            <li><a class="item" href="#payment-old-all" data-tab="payment-old-all">Все</a></li>
+                                        </ul>
+                                        <span class="heading">Поступившие платежи</span>
+                                    </div>
+                                    <div class="ui tab" id="payment-old-week" data-tab="payment-old-week">
+                                        <table class="ui celled table">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="88">12.01.2014</td>
+                                                    <td width="50">$200</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2014</td>
+                                                    <td>$200</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="ui tab" id="payment-old-month" data-tab="payment-old-month">
+                                        <table class="ui celled table">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="88">12.01.2014</td>
+                                                    <td width="50">$200</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2014</td>
+                                                    <td>$200</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="ui tab" id="payment-old-all" data-tab="payment-old-all">
+                                        <table class="ui celled table">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="88">12.01.2014</td>
+                                                    <td width="50">$200</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2014</td>
+                                                    <td>$200</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>10.01.2013</td>
+                                                    <td>$800</td>
+                                                    <td>Доступ к БД "Игроки" НХЛ</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="one column row user-options">
+                            <div class="column">
+                                <div class="payment-method-block">
+                                    <div class="payment-method-title">Методы оплаты</div>
+                                    <ol class="ui list payment-method-list">
+                                        <li class="payment-method-item">Оплата кредитной картой он-лайн</li>
+                                        <li class="payment-method-item">Оплата по безналичному расчету с заключением договора <a href="#" class="payment-method-contract">скачать форму договора<i class="triangle down icon"></i></a></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

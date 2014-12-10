@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container player-select-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section">Метрики</a>
+                <div class="divider"> / </div>
+                <div class="active section">Сравнение игроков</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content page-container">
+            <div class="container-top-block">
+                <div class="ui divided grid">
+                    <div class="one column row">
+                        <div class="title">Сравнение игроков</div>
+                    </div>
+                    <div class="one column row">
+                        <label class="label">Вид спорта</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="sport_type">
+                            <div class="default text">Выберите вид спорта</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item" data-value="hokey">Хоккей</div>
+                                <div class="item" data-value="football">Футбол</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui divided grid">
+                    <div class="one column row">
+                        <div class="heading">Группа 1</div>
+                        <table class="ui celled small table segment player-select-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Имя</th>
+                                    <th>Лига</th>
+                                    <th>Клуб</th>
+                                    <th>Возраст</th>
+                                    <th>Амплуа</th>
+                                    <th>Контракт</th>
+                                    <th>Рост</th>
+                                    <th>Вес</th>
+                                    <th>Хват</th>
+                                    <th>Клубов</th>
+                                    <th>И</th>
+                                    <th>Ш</th>
+                                    <th>А</th>
+                                    <th>О</th>
+                                    <th>+/-</th>
+                                    <th>Штр</th>
+                                    <th>ШР</th>
+                                    <th>ШБ</th>
+                                    <th>ШМ</th>
+                                    <th>РБ</th>
+                                    <th>БВ</th>
+                                    <th>%БВ</th>
+                                    <th>БВ/И</th>
+                                    <th>Вбр</th>
+                                    <th>ВВбр</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="ui checkbox">
+                                            <input id="player1" type="checkbox">
+                                            <label for="player1">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="player-avatar-block">
+                                            <img src="../static/images/player1.png" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">Коржаков А.</span>
+                                        </div>
+                                    </td>
+                                    <td>КХЛ</td>
+                                    <td>Спартак</td>
+                                    <td>28</td>
+                                    <td>нап</td>
+                                    <td>одност КХЛ</td>
+                                    <td>185</td>
+                                    <td>85</td>
+                                    <td>лев</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>+4</td>
+                                    <td>38</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>31</td>
+                                    <td>6.5</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui checkbox">
+                                            <input id="player1" type="checkbox">
+                                            <label for="player1">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="player-avatar-block">
+                                            <img src="../static/images/player1.png" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">Коржаков А.</span>
+                                        </div>
+                                    </td>
+                                    <td>КХЛ</td>
+                                    <td>Спартак</td>
+                                    <td>28</td>
+                                    <td>нап</td>
+                                    <td>одност КХЛ</td>
+                                    <td>185</td>
+                                    <td>85</td>
+                                    <td>лев</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>+4</td>
+                                    <td>38</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>31</td>
+                                    <td>6.5</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui checkbox">
+                                            <input id="player1" type="checkbox">
+                                            <label for="player1">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="player-avatar-block">
+                                            <img src="../static/images/player1.png" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">Коржаков А.</span>
+                                        </div>
+                                    </td>
+                                    <td>КХЛ</td>
+                                    <td>Спартак</td>
+                                    <td>28</td>
+                                    <td>нап</td>
+                                    <td>одност КХЛ</td>
+                                    <td>185</td>
+                                    <td>85</td>
+                                    <td>лев</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>+4</td>
+                                    <td>38</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>31</td>
+                                    <td>6.5</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui checkbox">
+                                            <input id="player1" type="checkbox">
+                                            <label for="player1">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="player-avatar-block">
+                                            <img src="../static/images/player1.png" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">Коржаков А.</span>
+                                        </div>
+                                    </td>
+                                    <td>КХЛ</td>
+                                    <td>Спартак</td>
+                                    <td>28</td>
+                                    <td>нап</td>
+                                    <td>одност КХЛ</td>
+                                    <td>185</td>
+                                    <td>85</td>
+                                    <td>лев</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>+4</td>
+                                    <td>38</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>31</td>
+                                    <td>6.5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="one column row">
+                        <div class="heading">Группа 2</div>
+                        <table class="ui celled small table segment player-select-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Имя</th>
+                                    <th>Лига</th>
+                                    <th>Клуб</th>
+                                    <th>Возраст</th>
+                                    <th>Амплуа</th>
+                                    <th>Контракт</th>
+                                    <th>Рост</th>
+                                    <th>Вес</th>
+                                    <th>Хват</th>
+                                    <th>Клубов</th>
+                                    <th>И</th>
+                                    <th>Ш</th>
+                                    <th>А</th>
+                                    <th>О</th>
+                                    <th>+/-</th>
+                                    <th>Штр</th>
+                                    <th>ШР</th>
+                                    <th>ШБ</th>
+                                    <th>ШМ</th>
+                                    <th>РБ</th>
+                                    <th>БВ</th>
+                                    <th>%БВ</th>
+                                    <th>БВ/И</th>
+                                    <th>Вбр</th>
+                                    <th>ВВбр</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="ui checkbox">
+                                            <input id="player1" type="checkbox">
+                                            <label for="player1">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="player-avatar-block">
+                                            <img src="../static/images/player1.png" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">Коржаков А.</span>
+                                        </div>
+                                    </td>
+                                    <td>КХЛ</td>
+                                    <td>Спартак</td>
+                                    <td>28</td>
+                                    <td>нап</td>
+                                    <td>одност КХЛ</td>
+                                    <td>185</td>
+                                    <td>85</td>
+                                    <td>лев</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>+4</td>
+                                    <td>38</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>31</td>
+                                    <td>6.5</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ui checkbox">
+                                            <input id="player1" type="checkbox">
+                                            <label for="player1">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="player-avatar-block">
+                                            <img src="../static/images/player1.png" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">Коржаков А.</span>
+                                        </div>
+                                    </td>
+                                    <td>КХЛ</td>
+                                    <td>Спартак</td>
+                                    <td>28</td>
+                                    <td>нап</td>
+                                    <td>одност КХЛ</td>
+                                    <td>185</td>
+                                    <td>85</td>
+                                    <td>лев</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>+4</td>
+                                    <td>38</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>31</td>
+                                    <td>6.5</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

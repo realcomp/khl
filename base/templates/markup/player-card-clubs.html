@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container player-card-short-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section">Игроки</a>
+                <div class="divider"> / </div>
+                <div class="active section">Клубы</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid">
+            <div class="row">
+                <div class="twelve wide column">
+                    <div class="player-card-block">
+                        <img src="../static/images/player-avatar.jpg" width="105" alt="" class="player-card-avatar">
+                        <div class="player-card-desc">
+                            <div class="player-card-name">Ковальчук Илья Валерьевич</div>
+                            <div class="player-card-amplua">Амплуа: нападающий</div>
+                            <ul class="player-card-list">
+                                <li class="player-card-item">Рост: 180 см.</li>
+                                <li class="player-card-item">Вес: 89 кг.</li>
+                                <li class="player-card-item">Хват: правый</li>
+                            </ul>
+                            <ul class="player-card-list player-card-list_nb">
+                                <li class="player-card-item">Дата рождения: 19 марта 1983г.</li>
+                                <li class="player-card-item">Возраст: 24 года 5 месяцев</li>
+                                <li class="player-card-item">Гражданство: Россия</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="align-center">
+                        <a class="ui mini orange button player-like-btn">+мне нравится этот игрок</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+                <a class="item">Краткая информация</a>
+                <a class="item">Спортивные показатели</a>
+                <a class="active item">Клубы</a>
+                <a class="item">Тренеры</a>
+                <a class="item">Партнеры по команде</a>
+                <a class="item">Фотографии</a>
+                <a class="item">Общение</a>
+                <a class="item">Новости</a>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Клубы</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="four wide column">
+                            <ul class="options-list player-clubs-list">
+                                <li class="option-item">
+                                    <a href="#" class="option-link option-link_active">КХЛ: Локомотив (02-06 13-15)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">КХЛ: Адмирал (13-14)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">КХЛ: Динамо М (09-10)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">ВХЛ: Сарыарка (08-09)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">МХЛ: Красная Армия (06-08)</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="twelve wide column">
+                            <div class="graph-controls-block">
+                                <ul class="graph-controls-list">
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Ш</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">А</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">О</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link graph-control-link_active">+/-</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Штр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШР</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШБ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШМ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШО</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШП</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">РБ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">БВ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">%БВ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">БВ/И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Вбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ВВбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">%Вбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ВП/И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">См/И</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <img src="../static/images/player-card-graph.png" alt="" class="indicator-graph">
+                        </div>
+                    </div>
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

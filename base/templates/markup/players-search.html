@@ -1,0 +1,453 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container players-search-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">Игроки</a>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content page-container">
+            <div class="container-top-block">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="title">
+                                <span>Игроки</span>
+                                <div class="sub-title">В базе данных сайта содержатся сведения о более, чем 100 500 игроках за 60 лет.<br>
+                                Вы можете найти нужного Вам по алфавиту или посмотреть рейтинг игроков по двум версиям.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="three wide column">
+                            <div class="column-title">Страна:</div>
+                            <select name="players-search-country" id="players-search-country" class="select players-search-select" multiple="multiple" size="8">
+                                <option value="">Россия</option>
+                                <option value="">США</option>
+                                <option value="">Канада</option>
+                                <option value="">Чехия</option>
+                                <option value="">Австралия</option>
+                                <option value="">Голландия</option>
+                                <option value="">Венгрия</option>
+                                <option value="">Словакия</option>
+                            </select>
+                        </div>
+                        <div class="three wide column">
+                            <div class="column-title">Лига:</div>
+                            <select name="players-search-countryleague" id="players-search-league" class="select players-search-select" multiple="multiple" size="8">
+                                <option value="">КХЛ</option>
+                                <option value="">НХЛ</option>
+                                <option value="">ВХЛ</option>
+                                <option value="">МХЛ</option>
+                                <option value="">МХЛ-А</option>
+                            </select>
+                        </div>
+                        <div class="two wide column">
+                            <div class="column-title">Амплуа:</div>
+                            <div class="ui form">
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>все</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>защитник</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>нападающий</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>вратарь</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <div class="column-title">Гражданство:</div>
+                            <div class="ui form">
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>все</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>Россия</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>иное</label>
+                                    </div>
+                                    <div class="ui selection dropdown dropdown-small-inline">
+                                        <input type="hidden">
+                                        <div class="default text">любое</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" data-value="hokey">ААА</div>
+                                            <div class="item" data-value="football">БББ</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <div class="column-title">Контракт:</div>
+                            <div class="ui form">
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>все</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>ограниченно свободный агент</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>неограниченно свободный агент</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>юниор</label>
+                                    </div>
+                                </div>
+                                <div class="inline">
+                                    <span>на дату</span>
+                                    <input type="text" class="datepicker">
+                                    <i class="calendar icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <div class="align-center">
+                                <a class="ui tiny green button">показать</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="four wide column">
+                            <a href="#" class="option-btn option-btn_active">Сейчас играют</a>
+                            <a href="#" class="option-btn">Все</a>
+                            <ul class="options-list">
+                                <li class="option-item">
+                                    <a href="#" class="option-link option-link_active">сезоны</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">матчи</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">голы</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">передачи</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">очки</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">плюс / минус</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">среднее количество голов за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">среднее количество передач за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">среднее количество очков за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">средний показатель "плюс/минус" за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">SM-индекс</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">CORSI-индекс</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="twelve wide column">
+                            <table class="ui celled table segment player-select-table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Имя</th>
+                                        <th align="center">Амплуа</th>
+                                        <th>Команда</th>
+                                        <th align="center">Возраст</th>
+                                        <th align="center">Гражданство</th>
+                                        <th align="center">Контракт до</th>
+                                        <th align="center">SMI</th>
+                                        <th align="center">CORSI</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            1
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            2
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            3
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            4
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            5
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            6
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            7
+                                        </td>
+                                        <td>
+                                            <div class="player-avatar-block">
+                                                <img src="../static/images/player1.png" width="30" alt="" class="player-avatar">
+                                                <div class="player-info">
+                                                    <span class="player-name">Коржаков</span>
+                                                    <span class="player-name">Игорь</span>
+                                                    <span class="player-country">Россия</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td align="center">вратарь</td>
+                                        <td>
+                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="more-clubs-btn"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                        </td>
+                                        <td align="center">
+                                            27
+                                            <div class="player-desc">14.07.1978</div>
+                                        </td>
+                                        <td align="center">Россия</td>
+                                        <td align="center">
+                                            18.08.2016
+                                            <span class="player-desc">односторонний КХЛ</span>
+                                        </td>
+                                        <td align="center">2837</td>
+                                        <td align="center">3274</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <ul class="team-controls player-controls-block">
+                        <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                        <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                        <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
