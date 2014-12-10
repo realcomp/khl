@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block body %}
+<section class="content">
+    <div class="container">
+        <div class="breadcrumbs">
+        {% if user.is_authenticated %}
+            <div class="ui small breadcrumb">
+                <a class="section">{% trans 'Profile' %}</a>
+            </div>
+        {% endif %}
+            {% include 'partial/search.html' %}
+        </div>
+        {% if request.user.is_authenticated %}
+        <div class="user-card">
+            <div class="user-avatar">
+                <div class="user-avatar-hex1">
+                    <div class="user-avatar-hex2" style="background-image: url({{STATIC_PREFIX}}{{ request.user.avatar }})"></div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-info-name">{{ request.user.fio }}</div>
+                <div class="user-info-surname">{{ request.user.last_name }}</div>
+                <a href="" class="user-change-avatar">{% trans 'change avatar' %}</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+            </div>
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}

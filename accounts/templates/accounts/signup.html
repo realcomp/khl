@@ -1,0 +1,24 @@
+{% extends "accounts/layout.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div class="page-inner-container">
+        <div class="user-page">
+            <div class="ui tabular menu content-tabs">
+                <span class="heading">{% trans 'Signup' %}</span>
+            </div>
+            <form action="" name="profile-edit-form" method="POST" class="ui form contact-form">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="inline field">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <hr class="hr">
+                <button type="submit" class="small ui green button">{% trans 'Signup' %}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

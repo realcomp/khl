@@ -44,6 +44,8 @@ if settings.DEBUG:
 
 urlpatterns += i18n_patterns('',
     url(r'^$', 'base.views.index', name='index'),
+    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+    url(r'^base/', include('base.urls', namespace='base')),
 )
 
 urlpatterns += patterns('',

@@ -2,22 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-09 16:54+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2014-12-10 10:44+0000\n"
+"PO-Revision-Date: 2014-12-10 10:48+0000\n"
+"Last-Translator: Anonymous User <anonymous@user.tld>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Translated-Using: django-rosetta 0.7.4\n"
 
 #: accounts/admin.py:15
 msgid "Personal info"
@@ -31,9 +31,9 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
-#: accounts/apps.py:9 accounts/models.py:71
+#: accounts/apps.py:9 accounts/models.py:73
 msgid "Users"
-msgstr ""
+msgstr "Пользователи"
 
 #: accounts/forms.py:12
 msgid "The two password fields didn't match."
@@ -41,11 +41,11 @@ msgstr ""
 
 #: accounts/forms.py:14
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: accounts/forms.py:15
 msgid "Password confirmation"
-msgstr ""
+msgstr "Подтверждение пароля"
 
 #: accounts/forms.py:17
 msgid "Enter the same password as above, for verification."
@@ -53,7 +53,7 @@ msgstr ""
 
 #: accounts/models.py:35
 msgid "username"
-msgstr ""
+msgstr "имя пользователя"
 
 #: accounts/models.py:37
 msgid "A user with that username already exists."
@@ -81,39 +81,171 @@ msgstr ""
 msgid "date joined"
 msgstr ""
 
-#: accounts/models.py:50
+#: accounts/models.py:51
 msgid "user"
 msgstr ""
 
-#: accounts/models.py:51
+#: accounts/models.py:52
 msgid "users"
 msgstr ""
 
-#: accounts/models.py:65
+#: accounts/models.py:67
 msgid "FIO"
+msgstr "ФИО"
+
+#: accounts/models.py:72
+msgid "User"
+msgstr "Пользователь"
+
+#: accounts/templates/accounts/layout.html:11
+msgid "Profile"
+msgstr "Профиль"
+
+#: accounts/templates/accounts/layout.html:26
+msgid "change avatar"
 msgstr ""
 
-#: accounts/models.py:70
-msgid "User"
-msgstr ""
+#: accounts/templates/accounts/signup.html:8
+#: accounts/templates/accounts/signup.html:20
+#: base/templates/partial/header/top.html:21
+msgid "Signup"
+msgstr "Регистрация"
 
 #: base/apps.py:9
 msgid "Base"
-msgstr ""
+msgstr "Общее"
+
+#: base/templates/partial/footer.html:11
+msgid "About project"
+msgstr "О проекте"
+
+#: base/templates/partial/footer.html:13
+msgid "User Agreement"
+msgstr "Пользовательское соглашение"
+
+#: base/templates/partial/footer.html:14
+msgid "Site rules"
+msgstr "Правила сайта"
+
+#: base/templates/partial/footer.html:15
+msgid "Paid services"
+msgstr "Платные услуги"
+
+#: base/templates/partial/footer.html:16
+msgid "Free services"
+msgstr "Бесплатные услуги"
+
+#: base/templates/partial/footer.html:17
+msgid "Contacts"
+msgstr "Контакты"
+
+#: base/templates/partial/footer.html:21
+msgid "HELP"
+msgstr "ПОМОЩЬ"
+
+#: base/templates/partial/footer.html:23
+msgid "FAQ"
+msgstr "ЧаВо"
+
+#: base/templates/partial/footer.html:24 base/templates/partial/search.html:5
+msgid "Search"
+msgstr "Поиск"
+
+#: base/templates/partial/footer.html:25
+msgid "Support"
+msgstr "Техническая поддержка"
+
+#: base/templates/partial/footer.html:30
+msgid "Social"
+msgstr "Социальные сети"
+
+#: base/templates/partial/footer.html:42
+msgid "For advertisers"
+msgstr "Рекламодателям"
+
+#: base/templates/partial/header/bottom.html:8
+msgid "METRICS"
+msgstr "МЕТРИКИ"
+
+#: base/templates/partial/header/bottom.html:9
+msgid "CLUBS"
+msgstr "КЛУБЫ"
+
+#: base/templates/partial/header/bottom.html:10
+msgid "PROFILE"
+msgstr "ПРОФИЛЬ"
+
+#: base/templates/partial/header/bottom.html:13
+msgid "PRO VERSION"
+msgstr "ПРОФЕССИОНАЛЬНАЯ ВЕРСИЯ"
+
+#: base/templates/partial/header/bottom.html:14
+msgid "CLASSIC VERSION"
+msgstr "ЛЮБИТЕЛЬСКАЯ ВЕРСИЯ"
+
+#: base/templates/partial/header/items.html:2
+#| msgid "Hockey info"
+msgid "Hockey"
+msgstr "Хоккей"
+
+#: base/templates/partial/header/items.html:3
+msgid "Football"
+msgstr "Футбол"
+
+#: base/templates/partial/header/items.html:4
+msgid "Basketball"
+msgstr "Баскетбол"
+
+#: base/templates/partial/header/items.html:5
+msgid "Voleyball"
+msgstr "Волейбол"
+
+#: base/templates/partial/header/items.html:6
+msgid "Boxing"
+msgstr "Бокс"
+
+#: base/templates/partial/header/items.html:7
+msgid "M-1 Mix fights"
+msgstr "Смешанные бои"
+
+#: base/templates/partial/header/items.html:8
+msgid "Muay Thai"
+msgstr "Муай Тай"
+
+#: base/templates/partial/header/top.html:5
+msgid "Sports type"
+msgstr "Виды спорта"
+
+#: base/templates/partial/header/top.html:9
+#: templates/rosetta/languages.html:26 templates/rosetta/profile.html:64
+msgid "All"
+msgstr "Все"
+
+#: base/templates/partial/header/top.html:18
+msgid "Logout"
+msgstr "Выход"
+
+#: base/templates/partial/header/top.html:20
+msgid "Login"
+msgstr "Вход"
+
+#: base/templates/partial/header/top.html:25
+msgid "Language"
+msgstr "Язык"
 
 #: hockeyapp/apps.py:9
 msgid "Hockey info"
-msgstr ""
-
-#: sportomatics/settings.py:56
-msgid "Russian"
-msgstr ""
+msgstr "Хоккей"
 
 #: sportomatics/settings.py:57
-msgid "English"
-msgstr ""
+msgid "Russian"
+msgstr "Русский"
 
-#: sportomatics/settings.py:108
+#: sportomatics/settings.py:58
+msgid "English"
+msgstr "Английский"
+
+#: sportomatics/settings.py:112
 msgid "Translation"
 msgstr ""
 
@@ -128,9 +260,9 @@ msgstr ""
 #: templates/rosetta/languages.html:9
 msgid ""
 "Couldn't load the specified language file. This usually happens when using "
-"the Encrypted Cookies Session Storage backend on Django 1.4 or higher.<br/"
-">Setting ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage' in "
-"your settings file should fix this."
+"the Encrypted Cookies Session Storage backend on Django 1.4 or "
+"higher.<br/>Setting ROSETTA_STORAGE_CLASS = "
+"'rosetta.storage.CacheRosettaStorage' in your settings file should fix this."
 msgstr ""
 
 #: templates/rosetta/languages.html:17
@@ -143,10 +275,6 @@ msgstr ""
 
 #: templates/rosetta/languages.html:23
 msgid "Django"
-msgstr ""
-
-#: templates/rosetta/languages.html:26 templates/rosetta/profile.html:64
-msgid "All"
 msgstr ""
 
 #: templates/rosetta/languages.html:40
@@ -190,8 +318,9 @@ msgstr ""
 #: templates/rosetta/languages.html:71
 #, python-format
 msgid ""
-"Please refer to <a href=\"%(i18n_doc_link)s\">Django's I18N documentation</"
-"a> for a guide on how to set up internationalization for your project."
+"Please refer to <a href=\"%(i18n_doc_link)s\">Django's I18N "
+"documentation</a> for a guide on how to set up internationalization for your"
+" project."
 msgstr ""
 
 #: templates/rosetta/profile.html:11
