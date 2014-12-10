@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load url from future %}
+{% blocktrans %}
+Dear {{user.fio}},
+
+You have registered for a {{site.name}} account with the {{ user.username }} email address.  This will be used to log into your sportomatics account.
+
+Now, please verify your account which will return you to the sportomatics site where you can complete the process.  If the link is not clickable, copy and paste the following URL into your web browser.
+{% endblocktrans %}
+{% blocktrans %}
+To activate this account, please click the following link within the next
+{{ expiration_days }} days:
+{% endblocktrans %}
+http://{{site.domain}}{% url 'registration_activate' activation_key %}
+{% blocktrans %}
+If you encounter any problems, please contact webmaster@sportomatics.ru with the details.
+
+Regards,
+{{ site.name }}
+{% endblocktrans %}
+
+

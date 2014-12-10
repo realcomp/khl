@@ -15,9 +15,9 @@
             </div>
             <div class="ui text right menu">
                 {% if user.is_authenticated %}
-                <a href="{% url 'rest_framework:logout' %}" class="item">{% trans 'Logout' %}</a>
+                <a href="{% url 'auth_logout' %}" class="item">{% trans 'Logout' %}</a>
                 {% else %}
-                <a href="{% url 'rest_framework:login' %}" class="item">{% trans 'Login' %}</a>
+                <a href="{% url 'auth_login' %}" class="item">{% trans 'Login' %}</a>
                 <a href="{% url 'accounts:signup' %}" class="item">{% trans 'Signup' %}</a>
                 {% endif %}
 

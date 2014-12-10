@@ -42,3 +42,7 @@ class UsrChngForm(UserChangeForm):
     class Meta:
         model = User
         readonly_fields = 'username',
+
+
+class RegForm(UsrCrtForm):
+    required_css_class = 'required'

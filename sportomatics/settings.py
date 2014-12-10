@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'wwgwj3gc7al-mwofc6u0xjvi4&@7d&^59mvb=nien887rqjwpb'
 
+SITE_ID = 1
 AUTH_USER_MODEL = 'accounts.User'
 
 DEBUG = True
@@ -21,8 +22,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     'django_select2',
+    'registration',
     'rest_framework',
     'rosetta',
 
@@ -116,6 +119,16 @@ SUIT_CONFIG = {
 
 #session
 SESSION_ENGINE = 'redis_sessions.session'
+
+#registration
+ACCOUNT_ACTIVATION_DAYS = 7
+AUTH_USER_EMAIL_UNIQUE = True
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'no-reply@sportomatics.ru'
 
 #rosetta
 ROSETTA_MESSAGES_PER_PAGE = 30

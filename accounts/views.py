@@ -1,21 +1,13 @@
 #coding: utf-8
-from __future__ import unicode_literals
+from registration.backends.default.views import RegistrationView
 
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.views.generic import FormView
-
-from .forms import UsrCrtForm
+from .forms import RegForm
 
 
-class Signup(FormView):
-    template_name = 'accounts/signup.html'
-    form_class = UsrCrtForm
-    success_url = reverse('index')
+class Signup(RegistrationView):
+    form_class = RegForm
 
-    def form_valid(self, form):
-        _usr = form.save(commit=False)
-        _usr.is_active = False
-        _usr.save()
-        return HttpResponseRedirect(self.get_success_url())
+    def register(self, request, **cleaned_data):
+        cleaned_data['email'] = cleaned_data['username']
+        return super(Signup, self).register(request,**cleaned_data)
 signup = Signup.as_view()

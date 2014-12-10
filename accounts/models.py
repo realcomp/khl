@@ -22,7 +22,7 @@ class BaseUserManager(UserManager):
         user.save(using=self._db)
         return user
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, email=None, password=None, **extra_fields):
         return self._create_user(username, password, False, False,
                                 **extra_fields)
 
@@ -51,13 +51,12 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         abstract = True
-        
+
     def get_full_name(self):
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
+        return self.fio.strip()
     
     def get_short_name(self):
-        return self.first_name
+        return self.fio
     
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
