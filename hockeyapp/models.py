@@ -46,8 +46,8 @@ class Club(TitleBaseModel):
     address = models.ForeignKey(Address, null=True, blank=True)
     coach = models.ForeignKey(Coach, null=True, blank=True)
     players = models.ManyToManyField(Player, null=True, blank=True)
-    opening_dt = models.DateField(_('Founding date'), null=True)
-    closing_dt = models.DateField(_('Closing date'), null=True)
+    opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
+    closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
     logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True)
     site = models.URLField(_('Site'), blank=True)
 
@@ -60,8 +60,8 @@ class AddressClub(models.Model):
     b''' связка адрес - клуб в сезоне '''
     address = models.ForeignKey(Address)
     club = models.ForeignKey(Club)
-    start_date = models.DateField(_('Start date'), null=True)
-    end_date = models.DateField(_('End date'), null=True)
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)
     class Meta:
         verbose_name=_('Club address')
         verbose_name_plural=_('Club addresses')
@@ -74,8 +74,8 @@ class ClubPlayer(models.Model):
     number = models.PositiveIntegerField(_('Number'), default=0)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
-    start_date = models.DateField(_('Start date'), null=True)
-    end_date = models.DateField(_('End date'), null=True)
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)
     __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
     class Meta:
         verbose_name=_('Club player')

@@ -25,6 +25,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 
     'django_select2',
+    'easy_thumbnails',
     'filer',
     'registration',
     'rest_framework',
