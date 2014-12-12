@@ -7,7 +7,6 @@ from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from suit.admin import SortableModelAdmin
 from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget
 
-from .models import Region
 
 class LinkedSelect2(Select2Widget, LinkedSelect):
     minimumResultsForSearch = 10
@@ -24,7 +23,7 @@ class BaseForm(forms.ModelForm):
                 v.widget.attrs['style']='width: 100%;'
 
 
-class BaseAdmin(admin.ModelAdmin):
+class BaseMixin(object):
     form = BaseForm
     formfield_overrides = {
         models.DateField: {'widget': SuitDateWidget},
@@ -33,20 +32,20 @@ class BaseAdmin(admin.ModelAdmin):
         models.OneToOneField: {'widget': LinkedSelect2(select2_options={'width': 'resolve'})},
         models.ManyToManyField: {'widget': Select2MultipleWidget(select2_options={'width': 'resolve'})},
     }
-    def get_list_filter(self, request):
-        return self.get_fields(request)
+
+
+class BaseAdmin(BaseMixin, admin.ModelAdmin):
+    def get_list_filter(self, request, obj=None):  
+        return self.get_fields(request, obj)
         
-    def get_list_display(self, request):
-        return ['id',]+self.get_fields(request)
-    class Media:
-        js = (
-                'js/admin.js',
-        )
+    def get_list_display(self, request, obj=None):
+        return ['id',]+self.get_fields(request, obj)
+
+    #class Media:
+        #js = (
+                #'js/admin.js',
+        #)
 
 
 class BaseAdminwithOrder(SortableModelAdmin, BaseAdmin):
     sortable='order'
-
-
-for model in (Region,):
-    admin.site.register(model, BaseAdmin)

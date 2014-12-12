@@ -25,11 +25,13 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 
     'django_select2',
+    'filer',
     'registration',
     'rest_framework',
     'rosetta',
 
     'accounts',
+    'addresses',
     'base',
     'hockeyapp',
 )
@@ -115,6 +117,7 @@ SUIT_CONFIG = {
         {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
     ),
     'MENU_EXCLUDE': ('sites', 'auth'),
+    'LIST_PER_PAGE': 50,
 }
 
 #session

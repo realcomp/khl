@@ -63,7 +63,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
 
 class User(AbstractUser):
-    fio = models.CharField(_('FIO'), max_length=1024, blank=True)
+    fio = models.CharField(_('Full name'), max_length=1024, blank=True)
     __unicode__ = lambda self: self.username
 
     class Meta:

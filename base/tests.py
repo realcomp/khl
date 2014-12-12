@@ -67,16 +67,6 @@ class BaseTest(FastFixtureTestCase):
 
 
 class BaseAPITest(BaseTest):
-    def test_successfull_registration(self):
-        _postdata = {
-                        'username': 'test1@test.com',
-                        'password1': '12345d',
-                        'password2': '12345d',
-                        'fio': 'test test'
-        }
-        response = self.client.post(reverse('accounts:signup'), data=_postdata)
-        self.assertEqual(response.status_code, 302)
-
     def base_simple_tests(self):
         '''
             test base functionality

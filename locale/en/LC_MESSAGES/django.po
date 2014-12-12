@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-10 10:44+0000\n"
+"POT-Creation-Date: 2014-12-12 13:26+0000\n"
 "PO-Revision-Date: 2014-12-10 10:42+0000\n"
 "Last-Translator: Anonymous User <anonymous@user.tld>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
-#: accounts/apps.py:9 accounts/models.py:73
+#: accounts/apps.py:9 accounts/models.py:72
 msgid "Users"
 msgstr ""
 
@@ -88,30 +88,291 @@ msgstr ""
 msgid "users"
 msgstr ""
 
-#: accounts/models.py:67
-msgid "FIO"
-msgstr " Full name"
+#: accounts/models.py:66
+msgid "Full name"
+msgstr ""
 
-#: accounts/models.py:72
+#: accounts/models.py:71
 msgid "User"
 msgstr ""
 
-#: accounts/templates/accounts/layout.html:11
+#: accounts/templates/registration/activate.html:4
+msgid "Account activation failed."
+msgstr ""
+
+#: accounts/templates/registration/activation_complete.html:3
+msgid "Account Activated"
+msgstr ""
+
+#: accounts/templates/registration/activation_complete.html:6
+msgid "Your account is now activated."
+msgstr ""
+
+#: accounts/templates/registration/activation_complete.html:8
+msgid "You can log in."
+msgstr ""
+
+#: accounts/templates/registration/activation_email.html:6
+msgid "registration"
+msgstr ""
+
+#: accounts/templates/registration/activation_email.html:10
+#, python-format
+msgid ""
+"\n"
+"            Dear %(user.fio)s,\n"
+"\n"
+"            You have registered for a %(site.name)s account with the "
+"%(user.username)s email address.  This will be used to log into your "
+"sportomatics account.\n"
+"\n"
+"            Now, please verify your account which will return you to the "
+"sportomatics site where you can complete the process.  If the link is not "
+"clickable, copy and paste the following URL into your web browser.\n"
+"        "
+msgstr ""
+
+#: accounts/templates/registration/activation_email.html:19
+#, python-format
+msgid ""
+"\n"
+"            To activate this account, please click the following link within "
+"the next\n"
+"            %(expiration_days)s days:\n"
+"        "
+msgstr ""
+
+#: accounts/templates/registration/activation_email.html:30
+#, python-format
+msgid ""
+"\n"
+"            If you encounter any problems, please contact "
+"webmaster@sportomatics.ru with the details.\n"
+"\n"
+"            Regards,\n"
+"            %(site.name)s\n"
+"        "
+msgstr ""
+
+#: accounts/templates/registration/activation_email.txt:3
+#, python-format
+msgid ""
+"\n"
+"Dear %(user.fio)s,\n"
+"\n"
+"You have registered for a %(site.name)s account with the %(user.username)s "
+"email address.  This will be used to log into your sportomatics account.\n"
+"\n"
+"Now, please verify your account which will return you to the sportomatics "
+"site where you can complete the process.  If the link is not clickable, copy "
+"and paste the following URL into your web browser.\n"
+msgstr ""
+
+#: accounts/templates/registration/activation_email.txt:10
+#, python-format
+msgid ""
+"\n"
+"To activate this account, please click the following link within the next\n"
+"%(expiration_days)s days:\n"
+msgstr ""
+
+#: accounts/templates/registration/activation_email.txt:15
+#, python-format
+msgid ""
+"\n"
+"If you encounter any problems, please contact webmaster@sportomatics.ru with "
+"the details.\n"
+"\n"
+"Regards,\n"
+"%(site.name)s\n"
+msgstr ""
+
+#: accounts/templates/registration/activation_email_subject.txt:1
+msgid "Account activation on"
+msgstr ""
+
+#: accounts/templates/registration/layout.html:11
 msgid "Profile"
 msgstr ""
 
-#: accounts/templates/accounts/layout.html:26
+#: accounts/templates/registration/layout.html:26
 msgid "change avatar"
 msgstr ""
 
-#: accounts/templates/accounts/signup.html:8
-#: accounts/templates/accounts/signup.html:20
+#: accounts/templates/registration/login.html:8
+#: accounts/templates/registration/login.html:21
+#: base/templates/partial/header/top.html:20
+msgid "Login"
+msgstr ""
+
+#: accounts/templates/registration/login.html:22
+msgid "Forgot password"
+msgstr ""
+
+#: accounts/templates/registration/password_change_done.html:3
+msgid "Password changed"
+msgstr ""
+
+#: accounts/templates/registration/password_change_done.html:5
+msgid "Password successfully changed!"
+msgstr ""
+
+#: accounts/templates/registration/password_change_form.html:3
+#: accounts/templates/registration/password_change_form.html:8
+msgid "Change password"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_complete.html:3
+msgid "Password reset complete"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_complete.html:6
+msgid "Your password has been reset!"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_complete.html:7
+msgid "You may now"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_complete.html:7
+msgid "log in"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_confirm.html:4
+msgid "Confirm password reset"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_confirm.html:7
+msgid "Enter your new password below to reset your password:"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_confirm.html:11
+msgid "Set password"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_done.html:3
+msgid "Password reset"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_done.html:6
+msgid ""
+"\n"
+"            We have sent you an email with a link to reset your password. "
+"Please check your email and click the link to continue.\n"
+"        "
+msgstr ""
+
+#: accounts/templates/registration/password_reset_email.html:3
+msgid "Greetings"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_email.html:5
+#, python-format
+msgid ""
+"\n"
+"You are receiving this email because you (or someone pretending to be you)\n"
+"requested that your password be reset on the %(domain)s site. If you do not\n"
+"wish to reset your password, please ignore this message.\n"
+"\n"
+"To reset your password, please click the following link, or copy and paste "
+"it\n"
+"into your web browser:\n"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_email.html:15
+#, python-format
+msgid ""
+"\n"
+"Your username, in case you've forgotten: %(user.username)s\n"
+"\n"
+"Best regards,\n"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_form.html:4
+#: accounts/templates/registration/password_reset_form.html:15
+msgid "Reset password"
+msgstr ""
+
+#: accounts/templates/registration/password_reset_form.html:8
+msgid ""
+"\n"
+"    Forgot your password?  Enter your email in the form below and we'll send "
+"you instructions for creating a new one.\n"
+"    "
+msgstr ""
+
+#: accounts/templates/registration/registration_closed.html:4
+msgid "Registration is closed"
+msgstr ""
+
+#: accounts/templates/registration/registration_closed.html:7
+msgid "Sorry, but registration is closed at this moment. Come back later."
+msgstr ""
+
+#: accounts/templates/registration/registration_complete.html:4
+msgid "Activation email sent"
+msgstr ""
+
+#: accounts/templates/registration/registration_complete.html:7
+msgid "Please check your email to complete the registration process."
+msgstr ""
+
+#: accounts/templates/registration/registration_form.html:8
+#: accounts/templates/registration/registration_form.html:20
 #: base/templates/partial/header/top.html:21
 msgid "Signup"
 msgstr ""
 
+#: addresses/models.py:11
+msgid "Country"
+msgstr ""
+
+#: addresses/models.py:12
+msgid "Countries"
+msgstr ""
+
+#: addresses/models.py:17
+msgid "District"
+msgstr ""
+
+#: addresses/models.py:18
+msgid "Districts"
+msgstr ""
+
+#: addresses/models.py:26
+msgid "City"
+msgstr ""
+
+#: addresses/models.py:27
+msgid "Cities"
+msgstr ""
+
+#: addresses/models.py:32
+msgid "Description (rus)"
+msgstr ""
+
+#: addresses/models.py:33
+msgid "Description (en)"
+msgstr ""
+
+#: addresses/models.py:35
+msgid "Address"
+msgstr ""
+
+#: addresses/models.py:36
+msgid "Addresses"
+msgstr ""
+
 #: base/apps.py:9
 msgid "Base"
+msgstr ""
+
+#: base/models.py:17
+msgid "Title (rus)"
+msgstr ""
+
+#: base/models.py:18
+msgid "Title (en)"
 msgstr ""
 
 #: base/templates/partial/footer.html:11
@@ -210,6 +471,10 @@ msgstr ""
 msgid "Muay Thai"
 msgstr ""
 
+#: base/templates/partial/header/items.html:9
+msgid "Biathlon"
+msgstr ""
+
 #: base/templates/partial/header/top.html:5
 msgid "Sports type"
 msgstr ""
@@ -223,10 +488,6 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: base/templates/partial/header/top.html:20
-msgid "Login"
-msgstr ""
-
 #: base/templates/partial/header/top.html:25
 msgid "Language"
 msgstr ""
@@ -235,15 +496,211 @@ msgstr ""
 msgid "Hockey info"
 msgstr ""
 
-#: sportomatics/settings.py:57
+#: hockeyapp/choices.py:7
+msgid "unknown"
+msgstr ""
+
+#: hockeyapp/choices.py:11
+msgid "Goalkeeper"
+msgstr ""
+
+#: hockeyapp/choices.py:12
+msgid "Defender"
+msgstr ""
+
+#: hockeyapp/choices.py:13
+msgid "Offender"
+msgstr ""
+
+#: hockeyapp/choices.py:18
+msgid "Goals"
+msgstr ""
+
+#: hockeyapp/choices.py:19
+msgid "Penalty"
+msgstr ""
+
+#: hockeyapp/choices.py:24
+msgid "EV"
+msgstr ""
+
+#: hockeyapp/choices.py:25
+msgid "POWER PLAYS"
+msgstr ""
+
+#: hockeyapp/choices.py:26
+msgid "EVEN STRENGTH"
+msgstr ""
+
+#: hockeyapp/choices.py:27
+msgid "BULLET"
+msgstr ""
+
+#: hockeyapp/models.py:16
+msgid "Full name (rus)"
+msgstr ""
+
+#: hockeyapp/models.py:17
+msgid "Full name (en)"
+msgstr ""
+
+#: hockeyapp/models.py:25 hockeyapp/models.py:75
+msgid "Line"
+msgstr ""
+
+#: hockeyapp/models.py:29
+msgid "Player"
+msgstr ""
+
+#: hockeyapp/models.py:30
+msgid "Players"
+msgstr ""
+
+#: hockeyapp/models.py:35
+msgid "Coach"
+msgstr ""
+
+#: hockeyapp/models.py:36
+msgid "Coaches"
+msgstr ""
+
+#: hockeyapp/models.py:41
+msgid "Judge"
+msgstr ""
+
+#: hockeyapp/models.py:42
+msgid "Judges"
+msgstr ""
+
+#: hockeyapp/models.py:49
+msgid "Founding date"
+msgstr ""
+
+#: hockeyapp/models.py:50
+msgid "Closing date"
+msgstr ""
+
+#: hockeyapp/models.py:51
+msgid "Logo"
+msgstr ""
+
+#: hockeyapp/models.py:52
+msgid "Site"
+msgstr ""
+
+#: hockeyapp/models.py:55
+msgid "Club"
+msgstr ""
+
+#: hockeyapp/models.py:56
+msgid "Clubs"
+msgstr ""
+
+#: hockeyapp/models.py:63 hockeyapp/models.py:77 hockeyapp/models.py:89
+msgid "Start date"
+msgstr ""
+
+#: hockeyapp/models.py:64 hockeyapp/models.py:78 hockeyapp/models.py:90
+msgid "End date"
+msgstr ""
+
+#: hockeyapp/models.py:66
+msgid "Club address"
+msgstr ""
+
+#: hockeyapp/models.py:67
+msgid "Club addresses"
+msgstr ""
+
+#: hockeyapp/models.py:74
+msgid "Number"
+msgstr ""
+
+#: hockeyapp/models.py:81
+msgid "Club player"
+msgstr ""
+
+#: hockeyapp/models.py:82
+msgid "Club players"
+msgstr ""
+
+#: hockeyapp/models.py:92
+msgid "Club coach"
+msgstr ""
+
+#: hockeyapp/models.py:93
+msgid "Club coaches"
+msgstr ""
+
+#: hockeyapp/models.py:120
+msgid "Match goal entry"
+msgstr ""
+
+#: hockeyapp/models.py:121
+msgid "Match goal entries"
+msgstr ""
+
+#: hockeyapp/models.py:133
+msgid "Match penalty entry"
+msgstr ""
+
+#: hockeyapp/models.py:134
+msgid "Match penalty entries"
+msgstr ""
+
+#: hockeyapp/models.py:140
+msgid "Other site ID"
+msgstr ""
+
+#: hockeyapp/models.py:142
+msgid "Processed time"
+msgstr ""
+
+#: hockeyapp/models.py:147
+msgid "Spectators count"
+msgstr ""
+
+#: hockeyapp/models.py:149
+msgid "Match date"
+msgstr ""
+
+#: hockeyapp/models.py:150
+msgid "Match count"
+msgstr ""
+
+#: hockeyapp/models.py:151
+msgid "Match detail count"
+msgstr ""
+
+#: hockeyapp/models.py:158
+msgid "Line judges"
+msgstr ""
+
+#: hockeyapp/models.py:161
+msgid "Home team"
+msgstr ""
+
+#: hockeyapp/models.py:168
+msgid "Guest team"
+msgstr ""
+
+#: hockeyapp/models.py:175
+msgid "Match"
+msgstr ""
+
+#: hockeyapp/models.py:176
+msgid "Matches"
+msgstr ""
+
+#: sportomatics/settings.py:62
 msgid "Russian"
 msgstr ""
 
-#: sportomatics/settings.py:58
+#: sportomatics/settings.py:63
 msgid "English"
 msgstr ""
 
-#: sportomatics/settings.py:112
+#: sportomatics/settings.py:117
 msgid "Translation"
 msgstr ""
 
@@ -406,3 +863,6 @@ msgid "%(hits)s/%(message_number)s message"
 msgid_plural "%(hits)s/%(message_number)s messages"
 msgstr[0] ""
 msgstr[1] ""
+
+#~ msgid "FIO"
+#~ msgstr " Full name"

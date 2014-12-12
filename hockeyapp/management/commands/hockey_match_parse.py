@@ -2,7 +2,7 @@
 from __future__ import print_function
 from django.core.management import BaseCommand
 
-from hockeyapp.utils import HockeyMatchParser
+from hockeyapp.utils import HockeyMatchParser#, GetPlayerInfo
 
 
 class Command(BaseCommand):
@@ -13,6 +13,8 @@ class Command(BaseCommand):
         matches = int(args[1])
         for matchid in (firstid+i for i in range(matches)):
             HockeyMatchParser().put_data_in_db_from_page(matchid)
+            #print(HockeyMatchParser().get_page(matchid))
             print(matchid,'\tok')
+        #print(GetPlayerInfo().get_page(1))
         return 'done'
         

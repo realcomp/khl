@@ -17,6 +17,7 @@ celery
 
 Django==1.7.1
 djangorestframework
+django-filer
 django-suit
 django-select2
 django-redis-sessions
