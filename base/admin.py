@@ -1,11 +1,17 @@
 #coding: utf-8
+from __future__ import unicode_literals
+
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.db import models
 
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from suit.admin import SortableModelAdmin
 from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget
+
+
+DEFAULT_FORMTABS = (('general', 'General'),)+settings.LANGUAGES
 
 
 class LinkedSelect2(Select2Widget, LinkedSelect):
@@ -35,6 +41,8 @@ class BaseMixin(object):
 
 
 class BaseAdmin(BaseMixin, admin.ModelAdmin):
+    formtabs = DEFAULT_FORMTABS
+    
     def get_list_filter(self, request, obj=None):  
         return self.get_fields(request, obj)
         

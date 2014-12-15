@@ -115,7 +115,7 @@ class MatchGoalHistory(models.Model):
     #guest_five = models.ManyToManyField(ClubPlayer, null=True, blank=True,
                                     #related_name='guestmatchegoalhistory')
     home_five_numbers = models.CharField(max_length=1024, blank=True)
-    home_five_numbers = models.CharField(max_length=1024, blank=True)
+    guest_five_numbers = models.CharField(max_length=1024, blank=True)
     class Meta:
         verbose_name=_('Match goal entry')
         verbose_name_plural=_('Match goal entries')

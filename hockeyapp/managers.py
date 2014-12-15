@@ -11,17 +11,20 @@ CUR_APP = 'hockeyapp' #TODO: remove this
 
 class PlayerManager(models.Manager):
     b''' Менджер игрока '''
-    def get_or_create_player(self, khl_id):
+    def get_or_create_player(self, khl_id, ru_fio=''):
         b''' получаем игрока по id со стороннего ресурса '''
         _player, _crt = self.get_or_create(khl_id=khl_id)
+        data=dict()
         if _crt:
             data = GetPlayerInfo().get_page(khl_id)
             data.pop('khl_id', None)
             for k,v in data.items():
                 if not v:
                     data.pop(k, None)
-            if data:
-                self.filter(pk=_player.pk).update(**data)
+        if not data.get('ru_fio') and ru_fio:
+            data['ru_fio'] = ru_fio 
+        if data:
+            self.filter(pk=_player.pk).update(**data)
         return _player
 
 
@@ -30,10 +33,10 @@ class ManagerMixin(object):
         b''' получить список игроков '''
         return [self._get_player(khl_id) for khl_id in khl_ids]
 
-    def _get_player(self, khl_id):
+    def _get_player(self, khl_id, ru_fio=''):
         b''' получить игрока '''
         model = get_model(CUR_APP, 'Player')
-        return model.objects.get_or_create_player(khl_id=khl_id)
+        return model.objects.get_or_create_player(khl_id=khl_id, ru_fio=ru_fio)
 
     def _get_clubplayers(self, lst, club):
         b''' получить список клубных игроков '''
@@ -41,7 +44,9 @@ class ManagerMixin(object):
 
     def _get_clubplayer(self, data, club):
         b''' получить клубного игрока '''
-        _player = self._get_player(data.pop('khl_id', None))
+        _player = self._get_player( data.pop('khl_id', None),
+                                    ru_fio=data.pop('ru_fio', '')
+        )
         model = get_model(CUR_APP, 'ClubPlayer')
         return model.objects.get_or_create( club=club,
                                             player=_player,

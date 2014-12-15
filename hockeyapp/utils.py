@@ -165,7 +165,7 @@ class HockeyMatchParser(GrabParser):
             _guest_players = self.get_guest_players()
             return {
                     'khl_id': matchid,
-                    'html_body': html_body or '',
+                    #'html_body': html_body or '',
                     'url': self.absolute_url,
                     'ru_title': self.get_match_num(),
                     'spectators': self.get_spectators(),
@@ -268,12 +268,12 @@ class HockeyMatchParser(GrabParser):
 
     def _get_player_data(self, tr, tp):
         b''' берем значения номер, id и тип игрока '''
-        raw_link = tr.cssselect('td.empty_bg')[1]
-        khl_id = raw_link.cssselect('a')[0].attrib['href'].split('/')[-2]
+        _raw_link = tr.xpath('td[@class="empty_bg"]/a')[0]
         res = {
-                'number': tr.cssselect('td.empty_bg > strong')[0].text,
-                'khl_id': khl_id,
-                'line': tp    
+                'number': tr.xpath('td[@class="empty_bg"]/strong')[0].text,
+                'khl_id': _raw_link.attrib.get('href','').split('/')[-2],
+                'line': tp,
+                'ru_fio': _raw_link.text  
         }
         return res
 

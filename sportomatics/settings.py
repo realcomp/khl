@@ -113,6 +113,7 @@ SUIT_CONFIG = {
     'CONFIRM_UNSAVED_CHANGES': True,
     'MENU': (
         {'app': 'accounts',},
+        {'app': 'addresses',},
         {'app': 'base',},
         {'app': 'hockeyapp',},
         {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
