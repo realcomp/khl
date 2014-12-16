@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from base.admin import BaseAdmin, BaseMixin, NoActionMixin
 
-from .models import Player, Coach, Judge, Club, Match
+from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer
 
 
@@ -66,6 +66,21 @@ class MatchAdmin(NoActionMixin, BaseAdmin):
         return ('id',)+self.get_fields(request)
 admin.site.register(Match, MatchAdmin)
 
+
+class CoachClubInline(NoActionMixin, BaseMixin, admin.TabularInline):
+    model = CoachClub
+    extra=0
+
+class AddressClubInline(NoActionMixin, BaseMixin, admin.TabularInline):
+    model = AddressClub
+    extra=0
+
+
+class ClubAdmin(BaseAdmin):
+    inlines = (CoachClubInline, AddressClubInline)
+admin.site.register(Club, ClubAdmin)
+
+
 for model in (Player, Coach, Judge, MatchGoalHistory, MatchPenaltyHistory,
-Club, ClubPlayer):
+ClubPlayer, CoachClub, AddressClub):
     admin.site.register(model, BaseAdmin)

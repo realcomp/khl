@@ -2,6 +2,7 @@
 from __future__ import print_function
 import datetime
 import grab
+import locale
 import re
 
 from django.db.models.loading import get_model
@@ -12,6 +13,9 @@ from .defaults import DEFAULT_EMPTY_PAGE_TEXT, DEFAULT_BODY_XPATH, DEFAULT_URL
 from .defaults import DEFAULT_MATCH_REPORT_DICT
 from .defaults import DEFAULT_PLAYER_URL, DEFAULT_PLAYER_XPATH
 from .defaults import DEFAULT_PLAYER_DATA_DICT, DEFAULT_SITE_URL
+
+
+locale.setlocale(locale.LC_ALL, "ru_RU.UTF-8")
 
 
 class GrabParser(object):
@@ -77,21 +81,6 @@ class GetAllPlayerIDs(GrabParser):
         if self.page_tree is not None:
             return self.page_tree.xpath('//td/div/a/@href')
 
-
-MD = {
-        b'Января': '01',
-        b'Февраля': '02',
-        b'Марта': '03',
-        b'Апреля': '04',
-        b'Мая': '05',
-        b'Июня': '06',
-        b'Июля': '07',
-        b'Августа': '08',
-        b'Сентября': '09',
-        b'Октября': '10',
-        b'Ноября': '11',
-        b'Декабря': '12',
-}
 
 PLAYER_RU_TO_EN = {
         'club': b'Клуб',
@@ -203,10 +192,8 @@ class GetPlayerInfo(GrabParser):
         _xpath = self._get_dynamic_table_value_xpath(_key)
         _res = self._get_value(_key, _xpath)
         if _res:
-            _res = _res[0].strip().encode('utf-8')
-            _m = _res.split()[1]
-            _res = _res.replace(_m, MD.get(_m))
-            return datetime.datetime.strptime(_res, '%d %m %Y')
+            _res = _res[0].strip().lower().encode('utf-8')
+            return datetime.datetime.strptime(_res, '%d %B %Y')
         return ''
 
     def get_weight(self):

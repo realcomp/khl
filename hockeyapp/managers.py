@@ -180,17 +180,23 @@ class MatchManager(ManagerMixin, models.Manager):
         _region = kwargs.pop('region', None)
         _coach = kwargs.pop('coach', None)
         _players = kwargs.pop('players', None)
+        club_model = get_model(CUR_APP, 'club')
+        _club, _crt = club_model.objects.get_or_create(**kwargs)
+        if _players:
+            _khlids = [p.get('khl_id') for p in _players]
+            _club.players.clear()
+            _club.players.add(*self._get_players(_khlids))
         if _region:
             model = get_model('addresses', 'Address')
             _region, _crt = model.objects.get_or_create(ru_title=_region)
             kwargs['address'] =_region
+            model = get_model(CUR_APP, 'AddressClub')
+            model.objects.get_or_create(club=_club, address=_region)
         if _coach:
             kwargs['coach'] = self._get_coach(_coach)
-        model = get_model(CUR_APP, 'club')
-        _club, _crt = model.objects.get_or_create(**kwargs)
-        if _players:
-            _khlids = [p.get('khl_id') for p in _players]
-            _club.players.add(*self._get_players(_khlids))
+            model = get_model(CUR_APP, 'CoachClub')
+            model.objects.get_or_create(club=_club, coach=kwargs['coach'])
+        club_model.objects.filter(pk=_club.pk).update(**kwargs)
         return _club
 
     def _get_judges(self, judges=None):

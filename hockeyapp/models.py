@@ -1,5 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
+import datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -138,6 +140,24 @@ class MatchPenaltyHistory(models.Model):
         verbose_name_plural=_('Match penalty entries')
 
 
+
+
+MD = {
+        b'январь': '01',
+        b'февраль': '02',
+        b'марта': '03',
+        b'апрель': '04',
+        b'маь': '05',
+        b'июнь': '06',
+        b'июль': '07',
+        b'августа': '08',
+        b'сентябрь': '09',
+        b'октябрь': '10',
+        b'ноябрь': '11',
+        b'декабрь': '12',
+}
+
+
 class Match(TitleBaseModel):
     objects = managers.MatchManager()
     #service info
@@ -179,3 +199,15 @@ class Match(TitleBaseModel):
         verbose_name=_('Match')
         verbose_name_plural=_('Matches')
         ordering = '-khl_id',
+
+    @property
+    def python_date(self):
+        if self.date:
+            _dt = self.date.strip().lower()
+            _m = _dt.split(',')[0].split()[1].encode('utf-8')
+            _dt = _dt.replace(_m.decode('utf-8'), MD.get(_m))
+            if self.date.strip().split(',')[-1] != '':
+                mask = '%d %m, %Y, %A, %H:%M'
+            else:
+                mask = '%d %m, %Y, %A,'
+            return datetime.datetime.strptime(_dt.encode('utf-8'), mask)

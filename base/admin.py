@@ -48,7 +48,7 @@ class NoActionMixin(object):
         #return False
     
     def has_delete_permission(self, request, obj=None):
-        return True #False
+        return False
 
 
 class BaseAdmin(BaseMixin, admin.ModelAdmin):
