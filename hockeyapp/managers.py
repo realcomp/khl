@@ -1,31 +1,69 @@
 #coding: utf-8
 from __future__ import unicode_literals
+import requests
+
+from PIL import Image
+from StringIO import StringIO
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models.loading import get_model
 
-from .utils import GetPlayerInfo
+import filer
 
+from .parsers import GetPlayerInfo
 
 CUR_APP = 'hockeyapp' #TODO: remove this
 
 
 class PlayerManager(models.Manager):
     b''' Менджер игрока '''
-    def get_or_create_player(self, khl_id, ru_fio=''):
+    def _get_data(self, khl_id):
+        return GetPlayerInfo().get_page(khl_id)
+
+    def get_or_create_player(self, khl_id, ru_fio='', update=False, data=None):
         b''' получаем игрока по id со стороннего ресурса '''
-        _player, _crt = self.get_or_create(khl_id=khl_id)
-        data=dict()
-        if _crt:
-            data = GetPlayerInfo().get_page(khl_id)
-            data.pop('khl_id', None)
-            for k,v in data.items():
-                if not v:
-                    data.pop(k, None)
-        if not data.get('ru_fio') and ru_fio:
-            data['ru_fio'] = ru_fio 
-        if data:
-            self.filter(pk=_player.pk).update(**data)
+        _player = self.filter(khl_id=khl_id).last()
+        if not _player or update:
+            if not data:
+                data = self._get_data(khl_id)
+            if data:
+                for k,v in data.items():
+                    if not v:
+                        data.pop(k, None)
+                _ava = data.pop('ava_url', None)
+                if _ava:
+                    # создаем фото игрока, если нет в бд
+                    data['photo'] = self._create_photo(khl_id, _ava)
+                if not data.get('ru_fio') and ru_fio:
+                    data['ru_fio'] = ru_fio
+                if update:
+                    self.filter(khl_id=_player.khl_id).update(**data)
+                else:
+                    _player = self.create(**data)
         return _player
+
+    def _create_photo(self, khl_id, ava_url):
+        b'''создаем в БД фото игрока через django-filer
+            в папке players
+        '''
+        response = requests.get(ava_url)
+        if response.status_code == 200:
+            _buffer = StringIO(response.content)
+            img = Image.open(_buffer)
+            img_name = '{}.{}'.format(khl_id,img.format)
+            folder, _crt = filer.models.Folder.objects.get_or_create(name='Player photo')
+            _file, _crt = filer.models.Image.objects.get_or_create(
+                folder=folder,
+                name=img_name,
+                is_public=True
+            )
+            _file.file.save(img_name,
+                            InMemoryUploadedFile(_buffer, "image", img_name, 
+                            None, _buffer.tell(), None)
+            )
+            _file.save()
+            return _file
 
 
 class ManagerMixin(object):
@@ -36,7 +74,9 @@ class ManagerMixin(object):
     def _get_player(self, khl_id, ru_fio=''):
         b''' получить игрока '''
         model = get_model(CUR_APP, 'Player')
-        return model.objects.get_or_create_player(khl_id=khl_id, ru_fio=ru_fio)
+        return model.objects.get_or_create_player(  khl_id=khl_id, 
+                                                    ru_fio=ru_fio,
+                                                    )#update=True)
 
     def _get_clubplayers(self, lst, club):
         b''' получить список клубных игроков '''
@@ -88,7 +128,17 @@ class MatchManager(ManagerMixin, models.Manager):
                 'goals_history': kwargs.pop('goals_history', {}),
                 'penalties_history': kwargs.pop('penalties_history', {}),
         }
-        match, _crt = self.get_or_create(khl_id = kwargs.get('khl_id'))
+        kwargs['home_team']=_match.get('home_team')
+        kwargs['home_coach']=_match.get('home_coach')
+        kwargs['guest_team']=_match.get('guest_team')
+        kwargs['guest_coach']=_match.get('guest_coach')
+
+        match = self.filter(khl_id = kwargs.get('khl_id')).last()
+        if match:
+            self.filter(pk=match.pk).update(**kwargs)
+        else:
+            match = self.create(**kwargs)
+        #relations
         match.judges.add(*(j[0].pk for j in _match.get('judges')))
         match.line_judges.add(*(j[0].pk for j in _match.get('line_judges')))
         match.home_players.add(*self._get_clubplayers(
@@ -99,11 +149,6 @@ class MatchManager(ManagerMixin, models.Manager):
                                                     _match.get('guest_players'),
                                                     _match.get('guest_team')
         ))
-        kwargs['home_team']=_match.get('home_team')
-        kwargs['home_coach']=_match.get('home_coach')
-        kwargs['guest_team']=_match.get('guest_team')
-        kwargs['guest_coach']=_match.get('guest_coach')
-        self.filter(pk=match.pk).update(**kwargs)
         self._create_match_history(match, match_data=_match)
         return match
 

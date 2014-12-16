@@ -1,6 +1,8 @@
 #coding: utf-8
 from __future__ import print_function
+import datetime
 import grab
+import re
 
 from django.db.models.loading import get_model
 
@@ -9,7 +11,7 @@ from .defaults import DEFAULT_KHL_MATCH_PROTOCOL_XPATH, DEFAULT_BODY_NOTEXISTS
 from .defaults import DEFAULT_EMPTY_PAGE_TEXT, DEFAULT_BODY_XPATH, DEFAULT_URL
 from .defaults import DEFAULT_MATCH_REPORT_DICT
 from .defaults import DEFAULT_PLAYER_URL, DEFAULT_PLAYER_XPATH
-from .defaults import DEFAULT_PLAYER_DATA_DICT
+from .defaults import DEFAULT_PLAYER_DATA_DICT, DEFAULT_SITE_URL
 
 
 class GrabParser(object):
@@ -26,8 +28,10 @@ class GrabParser(object):
         _inherit_xpath_dict = self.xpath_dict or {}
         return _xpath+_inherit_xpath_dict.get(key, '')
 
-    def _get_value(self, key):
+    def _get_value(self, key, xpath=None):
         b''' универсальный метод получение значения из DOM через xpath '''
+        if xpath:
+            return self.page_tree.xpath(xpath)
         return self.page_tree.xpath(self._get_value_xpath(key))
 
     def get_page(self, id=None):
@@ -61,6 +65,47 @@ class GrabParser(object):
             return model.objects.get_or_create(**data)
 
 
+class GetAllPlayerIDs(GrabParser):
+    url = DEFAULT_PLAYER_URL
+    absolute_url = url
+    as_get_param = True
+    pk_kwarg = 'letter'
+
+    def get_page(self, id=None):
+        b'''  смотрим список игроков '''
+        self.page_tree = super(GetAllPlayerIDs, self).get_page(id)
+        if self.page_tree is not None:
+            return self.page_tree.xpath('//td/div/a/@href')
+
+
+MD = {
+        b'Января': '01',
+        b'Февраля': '02',
+        b'Марта': '03',
+        b'Апреля': '04',
+        b'Мая': '05',
+        b'Июня': '06',
+        b'Июля': '07',
+        b'Августа': '08',
+        b'Сентября': '09',
+        b'Октября': '10',
+        b'Ноября': '11',
+        b'Декабря': '12',
+}
+
+PLAYER_RU_TO_EN = {
+        'club': b'Клуб',
+        'contract_type': b'Вид контракта',
+        'contract_date_end': b'Контракт до',
+        'number': b'Номер',
+        'line': b'Амплуа',
+        'height': b'Рост',
+        'weight': b'Вес',
+        'grip': b'Хват',
+        'birth_date': b'Дата рождения',
+}
+
+
 class GetPlayerInfo(GrabParser):
     url = DEFAULT_PLAYER_URL
     absolute_url = url
@@ -68,6 +113,17 @@ class GetPlayerInfo(GrabParser):
     body_xpath = DEFAULT_PLAYER_XPATH
     xpath_dict = DEFAULT_PLAYER_DATA_DICT
     model_name = 'Player'
+    stats_indexes =  {
+                        b'Клуб': 1,
+                        b'Вид контракта': 2,
+                        b'Контракт до': 3,
+                        b'Номер': 4,
+                        b'Амплуа': 5,
+                        b'Рост': 6,
+                        b'Вес': 7,
+                        b'Хват': 8,
+                        b'Дата рождения': 9,
+    }
 
     def get_page(self, id=None):
         b'''  смотрим протокол матча '''
@@ -81,33 +137,98 @@ class GetPlayerInfo(GrabParser):
             Забираем данные o игроке через DOM-дерево
         '''
         if self.page_tree is not None:
+            self.update_stats_indexes()
             return {
                     'khl_id': khl_id,
                     #'html_body': html_body or '',
                     'ru_fio': self.get_ru_fio(),
                     'en_fio': self.get_en_fio(),
+                    'ava_url': self.get_photo_url(),
                     'line': self.get_line(),
+                    'birth_date': self.get_birth_date(),
+                    'weight': self.get_weight(),
+                    'height': self.get_height(),
+                    #'grip': self.get_grip(),
             }
 
+    def update_stats_indexes(self):
+        b'''берем индексы данных игрока динамически,
+            так как таблица изменяема от игрока к игроку
+        '''
+        table = self._get_value('stats')
+        for li in table:
+            key = li.text.split(':', 1)[0].encode('utf-8')
+            if self.stats_indexes.get(key):
+                self.stats_indexes[key] = table.index(li)+1
+
+    def _get_dynamic_table_value_xpath(self, key):
+        b''' динамически изменяем xpath '''
+        i = self.stats_indexes.get(PLAYER_RU_TO_EN.get(key))
+        _xpath = self._get_value_xpath(key)
+        _repl = 'ul/li[{}]/b/'.format(i,)
+        return re.sub('ul/li\[\d+\]/b/', _repl, _xpath)
+
+    def get_photo_url(self):
+        b''' возьмем url photo игрока '''
+        _res = self._get_value('photo')[0].attrib.get('style')
+        _res = re.search('url\((.*?)\)', _res).group(1)
+        if _res != '/img/teamplayers_db//.jpg':
+            return DEFAULT_SITE_URL+_res
+
     def get_ru_fio(self):
-        b''' возьмем значение даты матча '''
+        b''' возьмем ФИО игрока '''
         _res = self._get_value('ru_fio')
         return _res[0].strip() if _res else ''
 
     def get_en_fio(self):
-        b''' возьмем значение даты матча '''
+        b''' возьмем Full name игрока '''
         _res = self._get_value('en_fio')
         return _res[0].strip() if _res else ''
 
     def get_line(self):
-        b''' возьмем значение даты матча '''
-        _res = self._get_value('line')
+        b''' возьмем амплуа игрока '''
+        _key = 'line'
+        _xpath = self._get_dynamic_table_value_xpath(_key)
+        _res = self._get_value(_key, _xpath)
         return {
                 '': 0,
                 b'вратарь': 1,
                 b'защитник': 2,
                 b'нападающий': 3,
         }.get(_res[0].strip().encode('utf-8')) if _res else ''
+
+    def get_birth_date(self):
+        b''' возьмем день рождения игрока '''
+        _key = 'birth_date'
+        _xpath = self._get_dynamic_table_value_xpath(_key)
+        _res = self._get_value(_key, _xpath)
+        if _res:
+            _res = _res[0].strip().encode('utf-8')
+            _m = _res.split()[1]
+            _res = _res.replace(_m, MD.get(_m))
+            return datetime.datetime.strptime(_res, '%d %m %Y')
+        return ''
+
+    def get_weight(self):
+        b''' возьмем вес игрока '''
+        _key = 'weight'
+        _xpath = self._get_dynamic_table_value_xpath(_key)
+        _res = self._get_value(_key, _xpath)
+        return _res[0].strip() if _res else ''
+
+    def get_height(self):
+        b''' возьмем рост игрока '''
+        _key = 'height'
+        _xpath = self._get_dynamic_table_value_xpath(_key)
+        _res = self._get_value(_key, _xpath)
+        return _res[0].strip() if _res else ''
+
+    def get_grip(self):
+        b''' возьмем рост игрока '''
+        _key = 'grip'
+        _xpath = self._get_dynamic_table_value_xpath(_key)
+        _res = self._get_value(_key, _xpath)
+        return _res[0].strip() if _res else ''
 
 
 _PARITTYDICT = {
@@ -165,7 +286,7 @@ class HockeyMatchParser(GrabParser):
             _guest_players = self.get_guest_players()
             return {
                     'khl_id': matchid,
-                    #'html_body': html_body or '',
+                    'html_body': html_body or '',
                     'url': self.absolute_url,
                     'ru_title': self.get_match_num(),
                     'spectators': self.get_spectators(),
@@ -253,7 +374,7 @@ class HockeyMatchParser(GrabParser):
                                             ).split('/')[-2],
                 'assist': self._get_assist(tr),
                 'home_five_numbers': tr.xpath('td[9]')[0].text.strip(),
-                'home_five_numbers': tr.xpath('td[10]')[0].text.strip(),
+                'guest_five_numbers': tr.xpath('td[10]')[0].text.strip(),
         }
         return res
 

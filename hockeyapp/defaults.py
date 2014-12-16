@@ -10,7 +10,7 @@ DEFAULT_URL = 'http://mhl.khl.ru/report/272/'
 DEFAULT_BODY_XPATH = DEFAULT_KHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
 
 _MMP_XPATH = '//table[@class="matches_protocol_main"]' #xpath match main protocol
-_MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]//table[@class="matches_penalty"]'
+_MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]//table'
 _MPS_GUEST_XPATH = '//div[@class="matches_player_statistic"]//dl//table[@class="matches_penalty"]'
 
 DEFAULT_MATCH_REPORT_DICT = {
@@ -40,10 +40,17 @@ DEFAULT_MATCH_REPORT_DICT = {
 
 
 #PLAYER INFO
-DEFAULT_PLAYER_URL = 'http://www.khl.ru/players/'
+DEFAULT_SITE_URL =  'http://www.khl.ru'
+DEFAULT_PLAYER_URL = DEFAULT_SITE_URL+'/players/'
 DEFAULT_PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
 DEFAULT_PLAYER_DATA_DICT = {
     'ru_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()',
     'en_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()[preceding-sibling::br]',
-    'line': '/tr[2]/td[@valign="top"]/ul/li[1]/b/text()',
+    'photo': '/tr[@valign="top"]/td[@rowspan="3"]/div',
+    'stats': '/tr[2]/td[@valign="top"]/ul/li',
+    'birth_date': '/tr[2]/td[@valign="top"]/ul/li[8]/b/text()',
+    'weight': '/tr[2]/td[@valign="top"]/ul/li[7]/b/text()',
+    'height': '/tr[2]/td[@valign="top"]/ul/li[6]/b/text()',
+    'line': '/tr[2]/td[@valign="top"]/ul/li[5]/b/text()',
+    'grip': '/tr[2]/td[@valign="top"]/ul/li[9]/b/text()',
 }

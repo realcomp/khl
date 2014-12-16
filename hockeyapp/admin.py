@@ -1,28 +1,28 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from base.admin import BaseAdmin, BaseMixin
+from base.admin import BaseAdmin, BaseMixin, NoActionMixin
 
 from .models import Player, Coach, Judge, Club, Match
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer
 
 
-class GoalEntryInline(BaseMixin, admin.TabularInline):
+class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = MatchGoalHistory
     extra=0
-    fields = (  'parity', 'time', 'period', 'scorer', 'assist',
+    readonly_fields = (  'parity', 'time', 'period', 'assist',
                 'home_five_numbers', 'guest_five_numbers')
-    readonly_fields = fields
+    fields = ('scorer',)+readonly_fields
 
 
-class PenaltyEntryInline(BaseMixin, admin.TabularInline):
+class PenaltyEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = MatchPenaltyHistory
     extra=0
-    fields = 'player', 'ptype', 'time', 'duration'
-    readonly_fields = fields
+    readonly_fields = 'ptype', 'time', 'duration'
+    fields = ('player',)+readonly_fields
 
 
-class MatchAdmin(BaseAdmin):
+class MatchAdmin(NoActionMixin, BaseAdmin):
     suit_form_tabs = (
                 ('general', _('General')),
                 ('hometeam', _('Home team')),

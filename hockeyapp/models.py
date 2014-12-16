@@ -24,6 +24,10 @@ class Player(AbstractMan):
     khl_id = models.PositiveIntegerField(default=0)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
+    birth_date = models.DateField(_('Birth date'), null=True, blank=True)
+    weight = models.CharField(_('Weight'), max_length=32, blank=True)
+    height = models.CharField(_('Height'), max_length=32, blank=True)
+    photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
     class Meta:
         verbose_name=_('Player')
