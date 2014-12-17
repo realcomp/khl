@@ -122,6 +122,9 @@ SUIT_CONFIG = {
     'LIST_PER_PAGE': 50,
 }
 
+#parser
+LAST_PROTOCAL_GAME = 44123
+
 #session
 SESSION_ENGINE = 'redis_sessions.session'
 

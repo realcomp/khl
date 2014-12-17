@@ -69,7 +69,7 @@ class PlayerManager(models.Manager):
 class ManagerMixin(object):
     def _get_players(self, khl_ids):
         b''' получить список игроков '''
-        return [self._get_player(khl_id) for khl_id in khl_ids]
+        return [self._get_player(khl_id) for khl_id in khl_ids if khl_id]
 
     def _get_player(self, khl_id, ru_fio=''):
         b''' получить игрока '''
@@ -109,8 +109,10 @@ class MatchGoalHistoryManager(ManagerMixin, models.Manager):
 class MatchPenaltyHistoryManager(ManagerMixin, models.Manager):
     b''' Мененжер истории нарушений матча '''
     def create_penalty(self, match, **penalty_data):
-        _player = self._get_player(penalty_data.pop('player'))
-        self.create(match=match, player=_player, **penalty_data)
+        _player = penalty_data.pop('player', None)
+        if _player:
+            _player = self._get_player(_player)
+            self.create(match=match, player=_player, **penalty_data)
 
 
 class MatchManager(ManagerMixin, models.Manager):

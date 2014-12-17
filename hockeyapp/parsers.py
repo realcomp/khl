@@ -351,10 +351,14 @@ class HockeyMatchParser(GrabParser):
         res = {
                 'time': tr.xpath('td[@class="time"]/strong')[0].text,
                 'duration': _dur.strip(),
-                'player': tr.xpath('td/a')[0].attrib.get('href',''
-                                            ).split('/')[-2],
                 'ptype': _ptype.strip(),
         }
+        if tr.xpath('td/a'):
+            _player = tr.xpath('td/a')[0].attrib.get('href','///'
+                                                     ).split('/')[-2],
+            if _player:
+                res['player'] = isinstance(_player, tuple) and _player[0]
+
         return res
 
     def get_home_players(self):
