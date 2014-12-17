@@ -2,7 +2,6 @@
 from __future__ import print_function
 import datetime
 import grab
-import locale
 import re
 
 from django.db.models.loading import get_model
@@ -10,12 +9,9 @@ from django.db.models.loading import get_model
 #from django.conf import settings
 from .defaults import DEFAULT_KHL_MATCH_PROTOCOL_XPATH, DEFAULT_BODY_NOTEXISTS
 from .defaults import DEFAULT_EMPTY_PAGE_TEXT, DEFAULT_BODY_XPATH, DEFAULT_URL
-from .defaults import DEFAULT_MATCH_REPORT_DICT, MD
+from .defaults import DEFAULT_MATCH_REPORT_DICT, MD, MDP
 from .defaults import DEFAULT_PLAYER_URL, DEFAULT_PLAYER_XPATH
 from .defaults import DEFAULT_PLAYER_DATA_DICT, DEFAULT_SITE_URL
-
-
-locale.setlocale(locale.LC_ALL, "ru_RU.UTF-8")
 
 
 class GrabParser(object):
@@ -193,7 +189,9 @@ class GetPlayerInfo(GrabParser):
         _res = self._get_value(_key, _xpath)
         if _res:
             _res = _res[0].strip().lower().encode('utf-8')
-            return datetime.datetime.strptime(_res, '%d %B %Y')
+            _m = _res.split()[1]
+            _res = _res.replace(_m, MDP.get(_m).encode('utf-8'))
+            return datetime.datetime.strptime(_res, '%d %m %Y')
         return ''
 
     def get_weight(self):
@@ -310,14 +308,18 @@ class HockeyMatchParser(GrabParser):
     def python_date(self, date):
         b''' парсит дату в datetime object '''
         if date:
-            _dt = date.strip().lower()
-            _m = _dt.split(',')[0].split()[1].encode('utf-8')
-            _dt = _dt.replace(_m.decode('utf-8'), MD.get(_m))
-            if date.strip().split(',')[-1] != '':
-                mask = '%d %m, %Y, %A, %H:%M'
+            _date_dict = date.strip().lower().split(',')
+            _dt = _date_dict[:2]
+            _dt.append(_date_dict[3])
+            _date_dict = _dt
+            _m = _date_dict[0].split()[1].encode('utf-8')
+            _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), MD.get(_m))
+            if _date_dict[-1] != '':
+                mask = '%d %m %Y %H:%M'
             else:
-                mask = '%d %m, %Y, %A,'
-            return datetime.datetime.strptime(_dt.encode('utf-8'), mask)
+                mask = '%d %m %Y'
+            _dt = ''.join(_date_dict).encode('utf-8')
+            return datetime.datetime.strptime(_dt, mask)
 
     def start_date(self, date):
         b''' возвращает дату начала сезона '''

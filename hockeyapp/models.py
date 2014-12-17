@@ -186,11 +186,15 @@ class Match(TitleBaseModel):
     @property
     def python_date(self):
         if self.date:
-            _dt = self.date.strip().lower()
-            _m = _dt.split(',')[0].split()[1].encode('utf-8')
-            _dt = _dt.replace(_m.decode('utf-8'), MD.get(_m))
-            if self.date.strip().split(',')[-1] != '':
-                mask = '%d %m, %Y, %A, %H:%M'
+            _date_dict = self.date.strip().lower().split(',')
+            _dt = _date_dict[:2]
+            _dt.append(_date_dict[3])
+            _date_dict = _dt
+            _m = _date_dict[0].split()[1].encode('utf-8')
+            _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), MD.get(_m))
+            if _date_dict[-1] != '':
+                mask = '%d %m %Y %H:%M'
             else:
-                mask = '%d %m, %Y, %A,'
-            return datetime.datetime.strptime(_dt.encode('utf-8'), mask)
+                mask = '%d %m %Y'
+            _dt = ''.join(_date_dict).encode('utf-8')
+            return datetime.datetime.strptime(_dt, mask)
