@@ -11,6 +11,7 @@ from addresses.models import Address
 from base.models import TitleBaseModel
 
 from .choices import PLAYER_ROLE, PARITY_VALUES
+from .defaults import MD
 from . import managers
 
 
@@ -138,24 +139,6 @@ class MatchPenaltyHistory(models.Model):
     class Meta:
         verbose_name=_('Match penalty entry')
         verbose_name_plural=_('Match penalty entries')
-
-
-
-
-MD = {
-        b'январь': '01',
-        b'февраль': '02',
-        b'марта': '03',
-        b'апрель': '04',
-        b'маь': '05',
-        b'июнь': '06',
-        b'июль': '07',
-        b'августа': '08',
-        b'сентябрь': '09',
-        b'октябрь': '10',
-        b'ноябрь': '11',
-        b'декабрь': '12',
-}
 
 
 class Match(TitleBaseModel):

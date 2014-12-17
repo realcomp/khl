@@ -10,7 +10,7 @@ from django.db.models.loading import get_model
 #from django.conf import settings
 from .defaults import DEFAULT_KHL_MATCH_PROTOCOL_XPATH, DEFAULT_BODY_NOTEXISTS
 from .defaults import DEFAULT_EMPTY_PAGE_TEXT, DEFAULT_BODY_XPATH, DEFAULT_URL
-from .defaults import DEFAULT_MATCH_REPORT_DICT
+from .defaults import DEFAULT_MATCH_REPORT_DICT, MD
 from .defaults import DEFAULT_PLAYER_URL, DEFAULT_PLAYER_XPATH
 from .defaults import DEFAULT_PLAYER_DATA_DICT, DEFAULT_SITE_URL
 
@@ -271,13 +271,14 @@ class HockeyMatchParser(GrabParser):
             _guest_coach = self.get_guest_team_coach()
             _home_players = self.get_home_players()
             _guest_players = self.get_guest_players()
+            _date = self.get_match_date()
             return {
                     'khl_id': matchid,
                     'html_body': html_body or '',
                     'url': self.absolute_url,
                     'ru_title': self.get_match_num(),
                     'spectators': self.get_spectators(),
-                    'date': self.get_match_date(),
+                    'date': _date,
                     'count': self.get_match_count(),
                     'detail_count': self.get_match_detail_count(),
                     'judges': self.get_match_judges(),
@@ -299,9 +300,37 @@ class HockeyMatchParser(GrabParser):
                     'guest_coach': _guest_coach,
                     'guest_players': _guest_players,
                     'goals_history': self.get_goals_history(),
-                    'penalties_history': self.get_penalties_history()
+                    'penalties_history': self.get_penalties_history(),
+                    'season': { 
+                                'start_date':self.start_date(_date),
+                                'end_date': self.end_date(_date),
+                    }
             }
 
+    def python_date(self, date):
+        b''' парсит дату в datetime object '''
+        if date:
+            _dt = date.strip().lower()
+            _m = _dt.split(',')[0].split()[1].encode('utf-8')
+            _dt = _dt.replace(_m.decode('utf-8'), MD.get(_m))
+            if date.strip().split(',')[-1] != '':
+                mask = '%d %m, %Y, %A, %H:%M'
+            else:
+                mask = '%d %m, %Y, %A,'
+            return datetime.datetime.strptime(_dt.encode('utf-8'), mask)
+
+    def start_date(self, date):
+        b''' возвращает дату начала сезона '''
+        _pdt = self.python_date(date)
+        _year = _pdt.year - 1 if _pdt.month < 7 else _pdt.year
+        return datetime.datetime(day=1, month=7, year=_year)
+
+    def end_date(self, date):
+        b''' возвращает дату окончания сезона '''
+        _pdt = self.python_date(date)
+        _year = _pdt.year + 1 if _pdt.month > 6 else _pdt.year
+        return datetime.datetime(day=30, month=6, year=_year)
+        
     def get_penalties_history(self):
         b''' штрафы '''
         penalty_table = self._get_value('penalties_history')[0]

@@ -88,6 +88,7 @@ class ManagerMixin(object):
                                     ru_fio=data.pop('ru_fio', '')
         )
         model = get_model(CUR_APP, 'ClubPlayer')
+        data.update(self._season)
         return model.objects.get_or_create( club=club,
                                             player=_player,
                                             **data)[0]
@@ -116,6 +117,7 @@ class MatchManager(ManagerMixin, models.Manager):
     b''' Мененжер матчей по-умолчанию '''
     def get_or_create_match(self, **kwargs):
         b''' метод взять или создать запись о матче '''
+        self._season = kwargs.pop('season', {})
         _match = {
                 'home_team': self._get_team(**kwargs.pop('home_team', {})),
                 'home_coach': self._get_coach(kwargs.pop('home_coach', {})),
@@ -191,11 +193,17 @@ class MatchManager(ManagerMixin, models.Manager):
             _region, _crt = model.objects.get_or_create(ru_title=_region)
             kwargs['address'] =_region
             model = get_model(CUR_APP, 'AddressClub')
-            model.objects.get_or_create(club=_club, address=_region)
+            model.objects.get_or_create(club=_club, 
+                                        address=_region, 
+                                        **self._season
+            )
         if _coach:
             kwargs['coach'] = self._get_coach(_coach)
             model = get_model(CUR_APP, 'CoachClub')
-            model.objects.get_or_create(club=_club, coach=kwargs['coach'])
+            model.objects.get_or_create(club=_club, 
+                                        coach=kwargs['coach'],
+                                        **self._season
+            )
         club_model.objects.filter(pk=_club.pk).update(**kwargs)
         return _club
 
