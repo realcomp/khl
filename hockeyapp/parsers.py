@@ -363,18 +363,26 @@ class HockeyMatchParser(GrabParser):
 
     def get_home_players(self):
         b''' получаем игроков домашней команды '''
-        res = list()
-        res.extend(self._get_players('home_keepers', 1))
-        res.extend(self._get_players('home_defenders', 2))
-        res.extend(self._get_players('home_offenders', 3))
-        return res
+        _crtg = (   ('home_keepers', 1),
+                    ('home_defenders', 2),
+                    ('home_offenders', 3),
+        )
+        return self._get_players_list(_crtg)
 
     def get_guest_players(self):
         b''' получаем игроков гостевой команды '''
+        _crtg = (   ('guest_keepers', 1),
+                    ('guest_defenders', 2),
+                    ('guest_offenders', 3)
+        )
+        return self._get_players_list(_crtg)
+
+    def _get_players_list(self, crtg):
         res = list()
-        res.extend(self._get_players('guest_keepers', 1))
-        res.extend(self._get_players('guest_defenders', 2))
-        res.extend(self._get_players('guest_offenders', 3))
+        for k,v in crtg:
+            _plrs = self._get_players(k,v)
+            if _plrs:
+                res.extend(_plrs)
         return res
 
     def get_goals_history(self):
@@ -411,20 +419,26 @@ class HockeyMatchParser(GrabParser):
 
     def _get_player_data(self, tr, tp):
         b''' берем значения номер, id и тип игрока '''
-        _raw_link = tr.xpath('td[@class="empty_bg"]/a')[0]
-        res = {
-                'number': tr.xpath('td[@class="empty_bg"]/strong')[0].text,
-                'khl_id': _raw_link.attrib.get('href','').split('/')[-2],
-                'line': tp,
-                'ru_fio': _raw_link.text  
-        }
-        return res
+        _raw_link = tr.xpath('td[@class="empty_bg"]/a')
+        if _raw_link:
+            _raw_link = tr.xpath('td[@class="empty_bg"]/a')[0]
+            res = {
+                    'number': tr.xpath('td[@class="empty_bg"]/strong')[0].text,
+                    'khl_id': _raw_link.attrib.get('href','').split('/')[-2],
+                    'line': tp,
+                    'ru_fio': _raw_link.text  
+            }
+            return res
 
     def _get_players(self, key, tp):
         b''' получаем игроков команды '''
-        plrs_table = self._get_value(key)[0]
-        return (self._get_player_data(tr, tp) for tr in plrs_table.xpath('tr')
-                if tr.attrib.get('class', '') != 'header')
+        plrs_table = self._get_value(key)
+        if plrs_table:
+            #TODO: refact this
+            return (self._get_player_data(tr, tp) for tr 
+                    in plrs_table[0].xpath('tr')
+                    if tr.attrib.get('class', '') != 'header'
+                    and self._get_player_data(tr, tp))
 
     def get_match_num(self):
         b''' возьмем значение номера матча '''
