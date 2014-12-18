@@ -3,6 +3,7 @@ from __future__ import print_function
 import datetime
 import grab
 import re
+import time
 
 from django.db.models.loading import get_model
 
@@ -250,15 +251,19 @@ class HockeyMatchParser(GrabParser):
         b'''  смотрим протокол матча '''
         self.page_tree = super(HockeyMatchParser, self).get_page(id)
         if self.page_tree is not None:
-            body = self.page_tree.xpath(self.match_protocol_xpath)[0]
-            if body.text_content().find(DEFAULT_EMPTY_PAGE_TEXT) == -1:
-                #протокол игры существует
-                body = self.page_tree.xpath(self.body_xpath)[0]
-                body = body.text_content().encode('utf-8')
-                if body.find(DEFAULT_BODY_NOTEXISTS) == -1:
-                    #протокол найден, собираем данные
-                    _html_body = self.g.response.unicode_body()
-                    return self.get_match_all_data(id, html_body=_html_body)
+            if self.page_tree.xpath(self.match_protocol_xpath):
+                body = self.page_tree.xpath(self.match_protocol_xpath)[0]
+                if body.text_content().find(DEFAULT_EMPTY_PAGE_TEXT) == -1:
+                    #протокол игры существует
+                    body = self.page_tree.xpath(self.body_xpath)[0]
+                    body = body.text_content().encode('utf-8')
+                    if body.find(DEFAULT_BODY_NOTEXISTS) == -1:
+                        #протокол найден, собираем данные
+                        _html_body = self.g.response.unicode_body()
+                        return self.get_match_all_data(id, html_body=_html_body)
+                else:
+                    time.sleep(60)
+                    self.get_page(id)
 
     def get_match_all_data(self, matchid=None, html_body=None):
         b''' метод запускается, в случае если протокол игры существует и найден
