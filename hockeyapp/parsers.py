@@ -261,9 +261,9 @@ class HockeyMatchParser(GrabParser):
                         #протокол найден, собираем данные
                         _html_body = self.g.response.unicode_body()
                         return self.get_match_all_data(id, html_body=_html_body)
-                else:
-                    time.sleep(60)
-                    self.get_page(id)
+            else:
+                time.sleep(60)
+                self.get_page(id)
 
     def get_match_all_data(self, matchid=None, html_body=None):
         b''' метод запускается, в случае если протокол игры существует и найден
