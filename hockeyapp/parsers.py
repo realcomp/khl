@@ -35,6 +35,12 @@ class GrabParser(object):
             return self.page_tree.xpath(xpath)
         return self.page_tree.xpath(self._get_value_xpath(key))
 
+    def _get_value_or_blank(self, xpath_val):
+        b'''возвращает либо значение xpath-массива, либо blank '''
+        if len(xpath_val) > 0 and xpath_val[0] and xpath_val[0].text:
+            return xpath_val[0].text.strip()
+        return ''
+
     def get_page(self, id=None):
         b'''  берем DOM страницы  '''
         id = self.url and self.pk_kwarg and id
@@ -353,8 +359,9 @@ class HockeyMatchParser(GrabParser):
         _tds = tr.xpath('td')
         _ptype = _tds[3].text if _tds[3].text else _tds[8].text
         _dur = _tds[2].text if _tds[2].text else _tds[7].text
+        _time = self._get_value_or_blank(tr.xpath('td[@class="time"]/strong'))
         res = {
-                'time': tr.xpath('td[@class="time"]/strong')[0].text,
+                'time': _time,
                 'duration': _dur.strip(),
                 'ptype': _ptype.strip(),
         }
@@ -398,11 +405,10 @@ class HockeyMatchParser(GrabParser):
 
     def _get_goal_data(self, tr):
         b''' данные о заброшенной шайбе '''
-        if tr.xpath('td[5]') and tr.xpath('td[5]')[0].text:
-            _parity = tr.xpath('td[5]')[0].text.strip().encode('utf-8')
-            _parity = _PARITTYDICT.get(_parity,0)
-        else:
-            _parity =0 # unknown parity
+        _parity = _PARITTYDICT.get(
+                    self._get_value_or_blank(tr.xpath('td[5]')).encode('utf-8'),
+                    0
+        )
         res = {
                 'period': tr.xpath('td[2]')[0].text_content().strip(),
                 'time': tr.xpath('td[3]')[0].text.strip(),
@@ -410,11 +416,9 @@ class HockeyMatchParser(GrabParser):
                 'scorer': tr.xpath('td[6]/a')[0].attrib.get('href',''
                                             ).split('/')[-2],
                 'assist': self._get_assist(tr),
+                'home_five_numbers': self._get_value_or_blank(tr.xpath('td[9]')),
+                'guest_five_numbers': self._get_value_or_blank(tr.xpath('td[10]')),
         }
-        if tr.xpath('td[9]') and tr.xpath('td[9]')[0].text:
-            res['home_five_numbers'] = tr.xpath('td[9]')[0].text.strip()
-        if tr.xpath('td[10]') and tr.xpath('td[10]')[0].text:
-            res['guest_five_numbers'] = tr.xpath('td[10]')[0].text.strip()
         return res
 
     def _get_assist(self, tr):
