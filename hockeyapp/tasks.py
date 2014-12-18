@@ -1,7 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
 import logging
-#import time
+import time
 import sys
 
 #from celery.task import periodic_task
@@ -18,7 +18,10 @@ def async_hockey_match_parser(matchid):
     b'''
         Парсер матча.
     '''
-    HockeyMatchParser().put_data_in_db_from_page(matchid)
+    try:
+        HockeyMatchParser().put_data_in_db_from_page(matchid)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
 
 
 @app.task(ignore_result=True)
@@ -29,9 +32,11 @@ def async_hockey_matches_parser(id, matches):
             1. стартовый id матча
             2. Счетчик количества id
     '''
-    for matchid in (id+i for i in range(matches)):
+    for i in range(matches):
+        matchid = id+i
         try:
             async_hockey_match_parser.delay(matchid)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
-        #time.sleep(60)
+        if i%100:
+            time.sleep(60)

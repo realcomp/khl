@@ -1,5 +1,6 @@
 #coding: utf-8
 from __future__ import print_function
+#import time
 from django.core.management import BaseCommand
 
 #from hockeyapp.models import Player
@@ -15,12 +16,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         firstid = int(args[0])
         matches = int(args[1])
-        #for matchid in (firstid+i for i in range(matches)):
-            #async_hockey_match_parser.delay(matchid)
+        #for i in range(matches):
+            #_match_id = firstid+i
+            #async_hockey_match_parser.delay(_match_id)
             #HockeyMatchParser().put_data_in_db_from_page(matchid)
             #HockeyMatchParser().get_page(matchid)
             #print(HockeyMatchParser().get_page(matchid))
-            #print(matchid,'\tok')
+            #print(_match_id,'\tok')
+            #if i%10 == 0:
+                #time.sleep(60)
         #print(GetPlayerInfo().get_page(4202))
         #Player.objects.get_or_create_player(khl_id=4202)
         async_hockey_matches_parser.delay(firstid, matches)
