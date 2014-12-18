@@ -398,9 +398,11 @@ class HockeyMatchParser(GrabParser):
 
     def _get_goal_data(self, tr):
         b''' данные о заброшенной шайбе '''
-        _parity = _PARITTYDICT.get( tr.xpath('td[5]')[0].text.strip(
-                                                            ).encode('utf-8'),
-                                    0)
+        if tr.xpath('td[5]') and tr.xpath('td[5]')[0].text:
+            _parity = tr.xpath('td[5]')[0].text.strip().encode('utf-8')
+            _parity = _PARITTYDICT.get(_parity,0)
+        else:
+            _parity =0 # unknown parity
         res = {
                 'period': tr.xpath('td[2]')[0].text_content().strip(),
                 'time': tr.xpath('td[3]')[0].text.strip(),
@@ -408,9 +410,11 @@ class HockeyMatchParser(GrabParser):
                 'scorer': tr.xpath('td[6]/a')[0].attrib.get('href',''
                                             ).split('/')[-2],
                 'assist': self._get_assist(tr),
-                'home_five_numbers': tr.xpath('td[9]')[0].text.strip(),
-                'guest_five_numbers': tr.xpath('td[10]')[0].text.strip(),
         }
+        if tr.xpath('td[9]') and tr.xpath('td[9]')[0].text:
+            res['home_five_numbers'] = tr.xpath('td[9]')[0].text.strip()
+        if tr.xpath('td[10]') and tr.xpath('td[10]')[0].text:
+            res['guest_five_numbers'] = tr.xpath('td[10]')[0].text.strip()
         return res
 
     def _get_assist(self, tr):
