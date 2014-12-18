@@ -1,5 +1,8 @@
 #coding: utf-8
 from __future__ import unicode_literals
+import logging
+import time
+import sys
 
 #from celery.task import periodic_task
 #from celery.schedules import crontab
@@ -8,10 +11,27 @@ from sportomatics.celery import app
 
 from .parsers import HockeyMatchParser
 
+logger = logging.getLogger('root')
 
-@app.task(ignore_result=True)
+@app.task(ignore_result=True, track_started=True)
 def async_hockey_match_parser(matchid):
     b'''
-        Основная celery функция проверки пользователей.
+        Парсер матча.
     '''
     HockeyMatchParser().put_data_in_db_from_page(matchid)
+
+
+@app.task(ignore_result=True)
+def async_hockey_matches_parser(id, matches):
+    b'''
+        Парсер матчей.
+        Требует два аргумента:
+            1. стартовый id матча
+            2. Счетчик количества id
+    '''
+    for matchid in (id+i for i in range(matches)):
+        try:
+            async_hockey_match_parser.delay(matchid)
+        except Exception, exc:
+            logger.error(exc, exc_info=sys.exc_info())
+        time.sleep(60)

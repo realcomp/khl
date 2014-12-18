@@ -37,7 +37,7 @@ class GrabParser(object):
 
     def _get_value_or_blank(self, xpath_val):
         b'''возвращает либо значение xpath-массива, либо blank '''
-        if len(xpath_val) > 0 and xpath_val[0] and xpath_val[0].text:
+        if xpath_val and xpath_val[0].text:
             return xpath_val[0].text.strip()
         return ''
 
