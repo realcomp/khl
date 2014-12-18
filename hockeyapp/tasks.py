@@ -1,7 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
 import logging
-import time
+#import time
 import sys
 
 #from celery.task import periodic_task
@@ -34,4 +34,4 @@ def async_hockey_matches_parser(id, matches):
             async_hockey_match_parser.delay(matchid)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
-        time.sleep(60)
+        #time.sleep(60)
