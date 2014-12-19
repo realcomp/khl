@@ -22,6 +22,13 @@ class GrabParser(object):
     as_get_param = True
     page_tree = None
     model_name = None
+    html = None
+
+    def __init__(self, html=None):
+        self.html = self.html or html
+
+    def get_html_body(self, html_body=None):
+        return html_body if self.html and html_body else ''
 
     def _get_value_xpath(self, key):
         b''' универсальный метод получение xpath до значения '''
@@ -132,7 +139,7 @@ class GetPlayerInfo(GrabParser):
             self.update_stats_indexes()
             return {
                     'khl_id': khl_id,
-                    #'html_body': html_body or '',
+                    'html_body': self.get_html_body(html_body),
                     'ru_fio': self.get_ru_fio(),
                     'en_fio': self.get_en_fio(),
                     'ava_url': self.get_photo_url(),
@@ -283,7 +290,7 @@ class HockeyMatchParser(GrabParser):
             _date = self.get_match_date()
             return {
                     'khl_id': matchid,
-                    'html_body': html_body or '',
+                    'html_body': self.get_html_body(html_body),
                     'url': self.absolute_url,
                     'ru_title': self.get_match_num(),
                     'spectators': self.get_spectators(),

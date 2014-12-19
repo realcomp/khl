@@ -1,5 +1,5 @@
 #coding: utf-8
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 import logging
 import time
 import sys
@@ -20,6 +20,7 @@ def async_hockey_match_parser(matchid):
     '''
     try:
         HockeyMatchParser().put_data_in_db_from_page(matchid)
+        #HockeyMatchParser(html=False).get_page(matchid)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
@@ -38,5 +39,5 @@ def async_hockey_matches_parser(id, matches):
             async_hockey_match_parser.delay(matchid)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
-        if i%100 ==0:
-            time.sleep(60)
+        #if i%100 == 0:
+        time.sleep(20)

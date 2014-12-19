@@ -22,7 +22,7 @@ class HockeyAppTest(base.tests.BaseTest):
         self.player_data = GetPlayerInfo().get_page(self.player_id)
         self.assertIsNotNone(self.player_data)
         # test match parser
-        self.match_data = HockeyMatchParser().get_page(self.match_id)
+        self.match_data = HockeyMatchParser(html=True).get_page(self.match_id)
         self.assertIsNotNone(self.match_data)
 
     def _create_player(self):

@@ -1,5 +1,5 @@
 #coding: utf-8
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 import requests
 
 from PIL import Image
@@ -71,12 +71,12 @@ class ManagerMixin(object):
         b''' получить список игроков '''
         return [self._get_player(khl_id) for khl_id in khl_ids if khl_id]
 
-    def _get_player(self, khl_id, ru_fio=''):
+    def _get_player(self, khl_id, ru_fio='', update=False):
         b''' получить игрока '''
         model = get_model(CUR_APP, 'Player')
         return model.objects.get_or_create_player(  khl_id=khl_id, 
                                                     ru_fio=ru_fio,
-                                                    )#update=True)
+                                                    update=update)
 
     def _get_clubplayers(self, lst, club):
         b''' получить список клубных игроков '''
@@ -85,7 +85,8 @@ class ManagerMixin(object):
     def _get_clubplayer(self, data, club):
         b''' получить клубного игрока '''
         _player = self._get_player( data.pop('khl_id', None),
-                                    ru_fio=data.pop('ru_fio', '')
+                                    ru_fio=data.pop('ru_fio', ''),
+                                    #update=True,
         )
         model = get_model(CUR_APP, 'ClubPlayer')
         data.update(self._season)
@@ -187,9 +188,12 @@ class MatchManager(ManagerMixin, models.Manager):
         club_model = get_model(CUR_APP, 'club')
         _club, _crt = club_model.objects.get_or_create(**kwargs)
         if _players:
-            _khlids = [p.get('khl_id') for p in _players]
+            _players = [self._get_player(   p.get('khl_id'),
+                                            p.get('ru_fio'),
+                                        ) for p in _players
+            ]
             _club.players.clear()
-            _club.players.add(*self._get_players(_khlids))
+            _club.players.add(*_players)
         if _region:
             model = get_model('addresses', 'Address')
             _region, _crt = model.objects.get_or_create(ru_title=_region)
