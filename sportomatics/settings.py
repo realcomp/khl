@@ -12,7 +12,11 @@ AUTH_USER_MODEL = 'accounts.User'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = (
+                    '141.8.196.179:443',
+                    'dev.sportomatics.ru:443',
+                    'localhost',
+)
 
 INSTALLED_APPS = (
     'suit',
