@@ -46,18 +46,25 @@ class PlayerManager(models.Manager):
     def _create_photo(self, khl_id, ava_url):
         b'''создаем в БД фото игрока через django-filer
             в папке players
+            В асинхронном режиме не рекомендуется использовать get_or_create
         '''
         response = requests.get(ava_url)
         if response.status_code == 200:
             _buffer = StringIO(response.content)
             img = Image.open(_buffer)
             img_name = '{}.{}'.format(khl_id,img.format)
-            folder, _crt = filer.models.Folder.objects.get_or_create(name='Player photo')
-            _file, _crt = filer.models.Image.objects.get_or_create(
-                folder=folder,
-                name=img_name,
-                is_public=True
+            _folder_objects = filer.models.Folder.objects
+            folder = _folder_objects.filter(name='Player photo').last()
+            if not folder:
+                folder = _folder_objects.create(name='Player photo')
+            _file_objects = filer.models.Image.objects
+            data = dict(folder=folder,
+                        name=img_name,
+                        is_public=True
             )
+            _file = _file_objects.filter(**data).last()
+            if not _file:
+                _file = _file_objects.create(**data)
             _file.file.save(img_name,
                             InMemoryUploadedFile(_buffer, "image", img_name, 
                             None, _buffer.tell(), None)
