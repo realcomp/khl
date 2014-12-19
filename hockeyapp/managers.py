@@ -107,9 +107,11 @@ class MatchGoalHistoryManager(ManagerMixin, models.Manager):
     def create_goal(self, match, **goal_data):
         _assist = self._get_players(goal_data.pop('assist',[]))
         _scorer = self._get_player(goal_data.pop('scorer'))
-        entry = self.create(match=match,
-                            scorer=_scorer,
-                            **goal_data)
+        goal_data['match'] = match
+        goal_data['scorer'] = _scorer
+        entry = self.filter(**goal_data).last()
+        if not entry:
+            entry = self.create(**goal_data)
         entry.assist.add(*_assist)
         #entry.home_five.add(*_home_five)
         #entry.guest_five.add(*_guest_five)
@@ -120,7 +122,10 @@ class MatchPenaltyHistoryManager(ManagerMixin, models.Manager):
         _player = penalty_data.pop('player', None)
         if _player:
             _player = self._get_player(_player)
-            self.create(match=match, player=_player, **penalty_data)
+            penalty_data['match'] = match
+            penalty_data['player'] = _player
+            if not self.filter(**penalty_data):
+                self.create(**penalty_data)
 
 
 class MatchManager(ManagerMixin, models.Manager):
