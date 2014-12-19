@@ -39,5 +39,5 @@ def async_hockey_matches_parser(id, matches):
             async_hockey_match_parser.delay(matchid)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
-        if i%100 == 0:
-            time.sleep(120)
+        #if i%100 == 0:
+        #time.sleep(10)
