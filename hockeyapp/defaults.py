@@ -6,6 +6,7 @@ DEFAULT_BODY_NOTEXISTS = b'Протокол не найден'
 DEFAULT_EMPTY_PAGE_TEXT = 'Fatal error'
 DEFAULT_KHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
 DEFAULT_URL = 'http://mhl.khl.ru/report/272/'
+DEFAULT_KHL_SITE_URL =  'http://www.khl.ru'
 
 DEFAULT_BODY_XPATH = DEFAULT_KHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
 
@@ -40,8 +41,7 @@ DEFAULT_MATCH_REPORT_DICT = {
 
 
 #PLAYER INFO
-DEFAULT_SITE_URL =  'http://www.khl.ru'
-DEFAULT_PLAYER_URL = DEFAULT_SITE_URL+'/players/'
+DEFAULT_PLAYER_URL = DEFAULT_KHL_SITE_URL+'/players/'
 DEFAULT_PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
 DEFAULT_PLAYER_DATA_DICT = {
     'ru_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()',
@@ -84,3 +84,7 @@ MDP = {
         b'ноября': '11',
         b'декабря': '12',
 }
+
+#CLUB INFO
+DEFAULT_KHL_CLUB_URL = DEFAULT_KHL_SITE_URL+'/clubs/'
+CLUB_LIST_XPATH = '//div[@class="teams"]//div[@class="team"]//div[@class="icon"]//a/@href'

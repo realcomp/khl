@@ -9,7 +9,7 @@ import sys
 
 from sportomatics.celery import app
 
-from .parsers import HockeyMatchParser
+from . import parsers
 
 logger = logging.getLogger('root')
 
@@ -19,13 +19,14 @@ def async_hockey_match_parser(matchid):
         Парсер матча.
     '''
     try:
-        HockeyMatchParser(html=True).put_data_in_db_from_page(matchid)
-        #HockeyMatchParser(html=False).get_page(matchid)
+        parsers.match.HockeyMatchParser(html=True
+            ).put_data_in_db_from_page(matchid)
+        #parsers.match.HockeyMatchParser(html=False).get_page(matchid)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True)
+@app.task(ignore_result=True, track_started=True)
 def async_hockey_matches_parser(id, matches):
     b'''
         Парсер матчей.

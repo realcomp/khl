@@ -3,7 +3,7 @@ from __future__ import unicode_literals, print_function
 from django.core.management import BaseCommand
 
 from hockeyapp.models import Player
-from hockeyapp.parsers import GetAllPlayerIDs
+from hockeyapp.parsers.player import GetAllPlayerIDs
 
 class Command(BaseCommand):
     help = 'Hockey match parser. Use: ./manage.py get_all_players'

@@ -23,7 +23,7 @@ class AbstractMan(models.Model):
         abstract=True
 
 class Player(AbstractMan):
-    objects = managers.PlayerManager()
+    objects = managers.player.PlayerManager()
     khl_id = models.PositiveIntegerField(default=0)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
@@ -108,7 +108,7 @@ class ClubPlayerMatch(models.Model):
 
 class MatchGoalHistory(models.Model):
     b'''Хранит историю матча. Заброшенные шайбы'''
-    objects = managers.MatchGoalHistoryManager()
+    objects = managers.match.MatchGoalHistoryManager()
     match = models.ForeignKey('hockeyapp.Match')
     parity = models.PositiveSmallIntegerField(choices=PARITY_VALUES, default=0)
     time = models.CharField(max_length=16, blank=True)
@@ -130,7 +130,7 @@ class MatchGoalHistory(models.Model):
 
 class MatchPenaltyHistory(models.Model):
     b'''Хранит историю матча. Заброшенные шайбы'''
-    objects = managers.MatchPenaltyHistoryManager()
+    objects = managers.match.MatchPenaltyHistoryManager()
     match = models.ForeignKey('hockeyapp.Match')
     player = models.ForeignKey(Player, related_name='penaltymatch')
     ptype = models.CharField(max_length=1024, blank=True)
@@ -142,7 +142,7 @@ class MatchPenaltyHistory(models.Model):
 
 
 class Match(TitleBaseModel):
-    objects = managers.MatchManager()
+    objects = managers.match.MatchManager()
     #service info
     khl_id = models.PositiveIntegerField(_('Other site ID'),
                                 max_length=1024, blank=True)

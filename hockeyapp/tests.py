@@ -1,8 +1,8 @@
 #coding: utf-8
 import base.tests
 
+from . import parsers
 from .models import Match, Player
-from .parsers import HockeyMatchParser, GetPlayerInfo
 
 
 class HockeyAppTest(base.tests.BaseTest):
@@ -19,10 +19,12 @@ class HockeyAppTest(base.tests.BaseTest):
     def _check_parsers(self):
         ''' test parsers fucntionality'''
         # test player parser
-        self.player_data = GetPlayerInfo().get_page(self.player_id)
+        self.player_data = parsers.player.GetPlayerInfo(
+                                            ).get_page(self.player_id)
         self.assertIsNotNone(self.player_data)
         # test match parser
-        self.match_data = HockeyMatchParser(html=True).get_page(self.match_id)
+        self.match_data = parsers.match.HockeyMatchParser(html=True
+                                            ).get_page(self.match_id)
         self.assertIsNotNone(self.match_data)
 
     def _create_player(self):

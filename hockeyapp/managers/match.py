@@ -1,77 +1,13 @@
 #coding: utf-8
 from __future__ import unicode_literals, print_function
-import requests
 
-from PIL import Image
-from StringIO import StringIO
+__author__='smirnov.ev'
 
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models.loading import get_model
 
-import filer
 
-from .parsers import GetPlayerInfo
-
-CUR_APP = 'hockeyapp' #TODO: remove this
-
-
-class PlayerManager(models.Manager):
-    b''' Менджер игрока '''
-    def _get_data(self, khl_id):
-        return GetPlayerInfo().get_page(khl_id)
-
-    def get_or_create_player(self, khl_id, ru_fio='', update=False, data=None):
-        b''' получаем игрока по id со стороннего ресурса '''
-        _player = self.filter(khl_id=khl_id).last()
-        if not _player or update:
-            if not data:
-                data = self._get_data(khl_id)
-            if data:
-                for k,v in data.items():
-                    if not v:
-                        data.pop(k, None)
-                _ava = data.pop('ava_url', None)
-                if _ava:
-                    # создаем фото игрока, если нет в бд
-                    data['photo'] = self._create_photo(khl_id, _ava)
-                if not data.get('ru_fio') and ru_fio:
-                    data['ru_fio'] = ru_fio
-                if update:
-                    self.filter(khl_id=_player.khl_id).update(**data)
-                else:
-                    _player = self.create(**data)
-        return _player
-
-    def _create_photo(self, khl_id, ava_url):
-        b'''создаем в БД фото игрока через django-filer
-            в папке players
-            В асинхронном режиме не рекомендуется использовать get_or_create
-        '''
-        response = requests.get(ava_url)
-        if response.status_code == 200:
-            _buffer = StringIO(response.content)
-            img = Image.open(_buffer)
-            img_name = '{}.{}'.format(khl_id,img.format)
-            _folder_objects = filer.models.Folder.objects
-            folder = _folder_objects.filter(name='Player photo').last()
-            if not folder:
-                folder = _folder_objects.create(name='Player photo')
-            _file_objects = filer.models.Image.objects
-            data = dict(folder=folder,
-                        name=img_name,
-                        is_public=True
-            )
-            _file = _file_objects.filter(**data).last()
-            if not _file:
-                _file = _file_objects.create(**data)
-            _file.file.save(img_name,
-                            InMemoryUploadedFile(_buffer, "image", img_name, 
-                            None, _buffer.tell(), None)
-            )
-            _file.save()
-            return _file
-
+CURRENT_APP = __package__.split('.')[0]
 
 class ManagerMixin(object):
     def _get_players(self, khl_ids):
@@ -80,7 +16,7 @@ class ManagerMixin(object):
 
     def _get_player(self, khl_id, ru_fio='', update=False):
         b''' получить игрока '''
-        model = get_model(CUR_APP, 'Player')
+        model = get_model(CURRENT_APP, 'Player')
         return model.objects.get_or_create_player(  khl_id=khl_id, 
                                                     ru_fio=ru_fio,
                                                     update=update)
@@ -95,7 +31,7 @@ class ManagerMixin(object):
                                     ru_fio=data.pop('ru_fio', ''),
                                     #update=True,
         )
-        model = get_model(CUR_APP, 'ClubPlayer')
+        model = get_model(CURRENT_APP, 'ClubPlayer')
         data.update(self._season)
         return model.objects.get_or_create( club=club,
                                             player=_player,
@@ -105,6 +41,7 @@ class ManagerMixin(object):
 class MatchGoalHistoryManager(ManagerMixin, models.Manager):
     b''' Мененжер истории голов матча '''
     def create_goal(self, match, **goal_data):
+        b''' Создаем запись в БД о голе '''
         _assist = self._get_players(goal_data.pop('assist',[]))
         _scorer = self._get_player(goal_data.pop('scorer'))
         goal_data['match'] = match
@@ -116,9 +53,11 @@ class MatchGoalHistoryManager(ManagerMixin, models.Manager):
         #entry.home_five.add(*_home_five)
         #entry.guest_five.add(*_guest_five)
 
+
 class MatchPenaltyHistoryManager(ManagerMixin, models.Manager):
     b''' Мененжер истории нарушений матча '''
     def create_penalty(self, match, **penalty_data):
+        b''' Создаем запись в БД о нарушении '''
         _player = penalty_data.pop('player', None)
         if _player:
             _player = self._get_player(_player)
@@ -176,20 +115,22 @@ class MatchManager(ManagerMixin, models.Manager):
         self._create_penaltymatchhistory(match, match_data.get('penalties_history'))
 
     def _create_goalmatchhistory(self, match, goals_history=None):
+        b''' Создаем по списку записи о голе в матче '''
         goals_history = goals_history or ()
-        model = get_model(CUR_APP, 'MatchGoalHistory')
+        model = get_model(CURRENT_APP, 'MatchGoalHistory')
         for goal in goals_history:
             model.objects.create_goal(match=match,**goal)
 
     def _create_penaltymatchhistory(self, match, penalties_history=None):
+        b''' Создаем по списку записи о нарушении в матче '''
         penalties_history = penalties_history or ()
-        model = get_model(CUR_APP, 'MatchPenaltyHistory')
+        model = get_model(CURRENT_APP, 'MatchPenaltyHistory')
         for penalty in penalties_history:
             model.objects.create_penalty(match=match,**penalty)
 
     def _get_coach(self, coach_ru_fio=''):
         b''' получить тренера '''
-        model = get_model(CUR_APP, 'Coach')
+        model = get_model(CURRENT_APP, 'Coach')
         return model.objects.get_or_create(ru_fio=coach_ru_fio)[0]
 
     def _get_team(self, **kwargs):
@@ -197,7 +138,7 @@ class MatchManager(ManagerMixin, models.Manager):
         _region = kwargs.pop('region', None)
         _coach = kwargs.pop('coach', None)
         _players = kwargs.pop('players', None)
-        club_model = get_model(CUR_APP, 'club')
+        club_model = get_model(CURRENT_APP, 'club')
         _club, _crt = club_model.objects.get_or_create(**kwargs)
         if _players:
             _players = [self._get_player(   p.get('khl_id'),
@@ -210,14 +151,14 @@ class MatchManager(ManagerMixin, models.Manager):
             model = get_model('addresses', 'Address')
             _region, _crt = model.objects.get_or_create(ru_title=_region)
             kwargs['address'] =_region
-            model = get_model(CUR_APP, 'AddressClub')
+            model = get_model(CURRENT_APP, 'AddressClub')
             model.objects.get_or_create(club=_club, 
                                         address=_region, 
                                         **self._season
             )
         if _coach:
             kwargs['coach'] = self._get_coach(_coach)
-            model = get_model(CUR_APP, 'CoachClub')
+            model = get_model(CURRENT_APP, 'CoachClub')
             model.objects.get_or_create(club=_club, 
                                         coach=kwargs['coach'],
                                         **self._season
@@ -228,5 +169,5 @@ class MatchManager(ManagerMixin, models.Manager):
     def _get_judges(self, judges=None):
         b''' получить судей '''
         judges = judges or []
-        model = get_model(CUR_APP, 'Judge')
+        model = get_model(CURRENT_APP, 'Judge')
         return (model.objects.get_or_create(ru_fio=j) for j in judges)

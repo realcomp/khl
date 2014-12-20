@@ -1,0 +1,74 @@
+#coding: utf-8
+from __future__ import unicode_literals, print_function
+
+__author__='smirnov.ev'
+
+import requests
+
+from PIL import Image
+from StringIO import StringIO
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import models
+
+import filer
+
+from .. import parsers
+
+
+class PlayerManager(models.Manager):
+    b''' Менджер игрока '''
+    def _get_data(self, khl_id):
+        b''' Берем данные со стороннего сайта парсером '''
+        return parsers.player.GetPlayerInfo().get_page(khl_id)
+
+    def get_or_create_player(self, khl_id, ru_fio='', update=False, data=None):
+        b''' получаем игрока по id со стороннего ресурса '''
+        _player = self.filter(khl_id=khl_id).last()
+        if not _player or update:
+            if not data:
+                data = self._get_data(khl_id)
+            if data:
+                for k,v in data.items():
+                    if not v:
+                        data.pop(k, None)
+                _ava = data.pop('ava_url', None)
+                if _ava:
+                    # создаем фото игрока, если нет в бд
+                    data['photo'] = self._create_photo(khl_id, _ava)
+                if not data.get('ru_fio') and ru_fio:
+                    data['ru_fio'] = ru_fio
+                if update:
+                    self.filter(khl_id=_player.khl_id).update(**data)
+                else:
+                    _player = self.create(**data)
+        return _player
+
+    def _create_photo(self, khl_id, ava_url):
+        b'''создаем в БД фото игрока через django-filer
+            в папке players
+            В асинхронном режиме не рекомендуется использовать get_or_create
+        '''
+        response = requests.get(ava_url)
+        if response.status_code == 200:
+            _buffer = StringIO(response.content)
+            img = Image.open(_buffer)
+            img_name = '{}.{}'.format(khl_id,img.format)
+            _folder_objects = filer.models.Folder.objects
+            folder = _folder_objects.filter(name='Player photo').last()
+            if not folder:
+                folder = _folder_objects.create(name='Player photo')
+            _file_objects = filer.models.Image.objects
+            data = dict(folder=folder,
+                        name=img_name,
+                        is_public=True
+            )
+            _file = _file_objects.filter(**data).last()
+            if not _file:
+                _file = _file_objects.create(**data)
+            _file.file.save(img_name,
+                            InMemoryUploadedFile(_buffer, "image", img_name, 
+                            None, _buffer.tell(), None)
+            )
+            _file.save()
+            return _file
