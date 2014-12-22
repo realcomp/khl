@@ -4148,3 +4148,192 @@ i.icon {
 .clubs-stats-page .breadcrumbs {
   border-bottom: 1px solid #dedede;
 }
+
+/* line 2638, ../sass/_base.sass */
+.clubs-calendar-page .heading {
+  color: #649791;
+}
+
+/* line 2641, ../sass/_base.sass */
+.calendars-list {
+  *zoom: 1;
+  margin-bottom: 10px;
+}
+/* line 87, ../sass/libs/_mixins.sass */
+.calendars-list:after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+/* line 2644, ../sass/_base.sass */
+.calendars-list .calendar-item {
+  float: left;
+  width: 284px;
+  margin-left: 40px;
+}
+/* line 2648, ../sass/_base.sass */
+.calendars-list .calendar-item:first-child {
+  margin-left: 0;
+}
+
+/* line 2653, ../sass/_base.sass */
+.clubs-calendars-table.ui.table th {
+  background: #8ebd5d;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+}
+/* line 2658, ../sass/_base.sass */
+.clubs-calendars-table.ui.table td {
+  height: 39px;
+  position: relative;
+}
+/* line 2661, ../sass/_base.sass */
+.clubs-calendars-table.ui.table td.cell-calendar-event-other {
+  background: #ffe8c9;
+}
+/* line 2663, ../sass/_base.sass */
+.clubs-calendars-table.ui.table td.cell-calendar-event {
+  background: #dfe8e7;
+  cursor: pointer;
+}
+/* line 2667, ../sass/_base.sass */
+.clubs-calendars-table.ui.table td.cell-calendar-event:hover .calendar-event-popup {
+  display: block;
+}
+/* line 2669, ../sass/_base.sass */
+.clubs-calendars-table .calendar-date {
+  position: absolute;
+  right: 5px;
+  bottom: 2px;
+  color: #000;
+  font-size: 12px;
+}
+/* line 2675, ../sass/_base.sass */
+.clubs-calendars-table .calendar-event-logo {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+/* line 2683, ../sass/_base.sass */
+.calendar-event-popup {
+  display: none;
+  position: absolute;
+  top: 38px;
+  z-index: 10;
+  width: 334px;
+  border: 8px solid #a4c4c1;
+  border-radius: 3px;
+  padding: 20px;
+  background: #fff;
+  margin-left: -180px;
+  cursor: default;
+}
+/* line 2695, ../sass/_base.sass */
+.calendar-event-popup .calendar-popup-title {
+  position: absolute;
+  top: 12px;
+  left: -18px;
+  width: 82px;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  background: #649792;
+  border-radius: 0 3px 3px 0;
+  font-weight: 600;
+}
+/* line 2706, ../sass/_base.sass */
+.calendar-event-popup .calendar-popup-title:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 0;
+  border-color: transparent #518882 transparent transparent;
+}
+/* line 2716, ../sass/_base.sass */
+.calendar-event-popup .hr {
+  margin: 5px 0;
+  height: 2px;
+}
+/* line 2719, ../sass/_base.sass */
+.calendar-event-popup .team-logo {
+  text-align: center;
+}
+/* line 2721, ../sass/_base.sass */
+.calendar-event-popup .team-logo-image {
+  width: 34px;
+}
+/* line 2723, ../sass/_base.sass */
+.calendar-event-popup .team-link {
+  display: inline-block;
+  color: #000;
+  font-weight: 600;
+  text-decoration: underline;
+}
+/* line 2728, ../sass/_base.sass */
+.calendar-event-popup .team-link:hover {
+  text-decoration: none;
+}
+/* line 2730, ../sass/_base.sass */
+.calendar-event-popup .event-details {
+  background: #dfe8e7;
+  padding: 10px 18px;
+  margin: 10px 0;
+  border-radius: 3px;
+}
+/* line 2735, ../sass/_base.sass */
+.calendar-event-popup .event-details a {
+  color: #2c2e2d;
+  text-decoration: underline;
+}
+/* line 2738, ../sass/_base.sass */
+.calendar-event-popup .event-details a:hover {
+  text-decoration: none;
+}
+/* line 2740, ../sass/_base.sass */
+.calendar-event-popup .ui.checkbox {
+  margin-right: 20px;
+}
+/* line 2742, ../sass/_base.sass */
+.calendar-event-popup .heading {
+  text-align: center;
+}
+/* line 2745, ../sass/_base.sass */
+.calendar-event-popup .city-desc p {
+  line-height: 14px;
+}
+/* line 2748, ../sass/_base.sass */
+.calendar-event-popup .team-cities .city {
+  border-top: none;
+  border-bottom: none;
+  padding: 5px 4px;
+}
+/* line 2752, ../sass/_base.sass */
+.calendar-event-popup .team-cities .city:before {
+  content: none;
+}
+/* line 2754, ../sass/_base.sass */
+.calendar-event-popup .team-cities .city:after {
+  content: none;
+}
+/* line 2756, ../sass/_base.sass */
+.calendar-event-popup .how-to-reach {
+  display: inline-block;
+  color: #dd8517;
+  margin-top: 5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: underline;
+}
+/* line 2763, ../sass/_base.sass */
+.calendar-event-popup .how-to-reach:hover {
+  text-decoration: none;
+}
