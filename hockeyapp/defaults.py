@@ -2,19 +2,19 @@
 from __future__ import unicode_literals
 
 # MATCH
-DEFAULT_BODY_NOTEXISTS = b'Протокол не найден'
-DEFAULT_EMPTY_PAGE_TEXT = 'Fatal error'
-DEFAULT_KHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
-DEFAULT_URL = 'http://mhl.khl.ru/report/272/'
-DEFAULT_KHL_SITE_URL =  'http://www.khl.ru'
+BODY_NOTEXISTS = b'Протокол не найден'
+EMPTY_PAGE_TEXT = 'Fatal error'
+KHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
+URL = 'http://mhl.khl.ru/report/272/'
+KHL_SITE_URL =  'http://www.khl.ru'
 
-DEFAULT_BODY_XPATH = DEFAULT_KHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
+BODY_XPATH = KHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
 
 _MMP_XPATH = '//table[@class="matches_protocol_main"]' #xpath match main protocol
 _MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]//table'
 _MPS_GUEST_XPATH = '//div[@class="matches_player_statistic"]//dl//table[@class="matches_penalty"]'
 
-DEFAULT_MATCH_REPORT_DICT = {
+MATCH_REPORT_DICT = {
     'match_num': '//div[@class="games_title"]//p', #номер матча
     'match_date': '//div[@class="games_title"]//p', #дата матча
     'match_count': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[@class="count"]/span/text()',
@@ -41,9 +41,9 @@ DEFAULT_MATCH_REPORT_DICT = {
 
 
 #PLAYER INFO
-DEFAULT_PLAYER_URL = DEFAULT_KHL_SITE_URL+'/players/'
-DEFAULT_PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
-DEFAULT_PLAYER_DATA_DICT = {
+PLAYER_URL = KHL_SITE_URL+'/players/'
+PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
+PLAYER_DATA_DICT = {
     'ru_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()',
     'en_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()[preceding-sibling::br]',
     'photo': '/tr[@valign="top"]/td[@rowspan="3"]/div',
@@ -86,5 +86,24 @@ MDP = {
 }
 
 #CLUB INFO
-DEFAULT_KHL_CLUB_URL = DEFAULT_KHL_SITE_URL+'/clubs/'
+KHL_CLUB_URL = KHL_SITE_URL+'/clubs/'
 CLUB_LIST_XPATH = '//div[@class="teams"]//div[@class="team"]//div[@class="icon"]//a/@href'
+CLUB_INFO_XPATH = '//div[@id="wrapper"]//div[@id="content"]'
+CLUB_DATA_XPATH_DICT = {
+    'logo_url': '//div[@class="clubBlock"]//img[1]/@src',
+    'ru_title': '//div[@class="clubBlock"]//div[@class="info"]//div[@class="header"]/h2/text()',
+    'site': '//div[@class="clubBlock"]//div[@class="info"]//table/tr[1]/td[2]/a[1]/@href',
+    'opening_dt': '//div[@class="clubBlock"]//div[@class="info"]//table/tr[2]/td[1]/text()',
+    'coach': '//div[@class="clubBlock"]//div[@class="info"]//table/tr[2]/td[2]/text()',
+    'contacts': '//div[@class="clubTextBlock"][2]//p',
+}
+
+ARENA_DATA_XPATH_DICT = {
+    'photo_url': '//div[@class="clubPhoto"]//img/@src',
+    'ru_title': '//div[@class="header"][2]//h2/text()',
+    'capacity': '//p[1]/text()',
+    'site': '//p[2]//a/@href',
+    'tickets_url': '//p[3]//a/@href',
+    'contacts': '//p[4]',
+    'contacts_alt': '//p[3]', 
+}

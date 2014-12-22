@@ -31,6 +31,12 @@ class Player(AbstractMan):
     weight = models.CharField(_('Weight'), max_length=32, blank=True)
     height = models.CharField(_('Height'), max_length=32, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+
+    #serviceinfo
+    proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
+    url = models.URLField('URL', blank=True)
+    html_body = models.TextField('Parse HTML', blank=True)
+
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
     class Meta:
         verbose_name=_('Player')
@@ -49,14 +55,45 @@ class Judge(AbstractMan):
         verbose_name_plural=_('Judges')
 
 
+class Arena(TitleBaseModel):
+    objects = managers.arena.ArenaManager()
+    capacity = models.CharField(_('Capacity'), max_length=1024, blank=True)
+    site = models.URLField(_('Site'), blank=True)
+    contacts = models.TextField(_('Contacts'), blank=True)
+    tickets_url = models.URLField(_('Tickets'), blank=True)
+    photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+
+    class Meta:
+        verbose_name=_('Arena')
+        verbose_name_plural=_('Arenas')
+
+
 class Club(TitleBaseModel):
-    address = models.ForeignKey(Address, null=True, blank=True)
-    coach = models.ForeignKey(Coach, null=True, blank=True)
-    players = models.ManyToManyField(Player, null=True, blank=True)
+    objects = managers.club.ClubManager()
     opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
     closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
-    logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True)
+    logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True,
+                            on_delete=models.SET_NULL)
     site = models.URLField(_('Site'), blank=True)
+    contacts = models.TextField(_('Contacts'), blank=True)
+    #relation
+    address = models.ForeignKey(Address, null=True, blank=True,
+                                    on_delete=models.SET_NULL)
+    coach = models.ForeignKey(Coach, null=True, blank=True,
+                                    on_delete=models.SET_NULL)
+    arena = models.ForeignKey(Arena, null=True, blank=True,
+                                    on_delete=models.SET_NULL)
+    players = models.ManyToManyField(Player, null=True, blank=True)
+    farm_club = models.OneToOneField('self', null=True, blank=True,
+                                    on_delete=models.SET_NULL,
+                                    related_name='farmclubparent')
+    junior_club = models.OneToOneField('self', null=True, blank=True,
+                                    on_delete=models.SET_NULL,
+                                    related_name='juniorclubparent')
+    #serviceinfo
+    proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
+    url = models.URLField('URL', blank=True)
+    html_body = models.TextField('Parse HTML', blank=True)
 
     class Meta:
         verbose_name=_('Club')
@@ -98,6 +135,17 @@ class CoachClub(models.Model):
     class Meta:
         verbose_name=_('Club coach')
         verbose_name_plural=_('Club coaches')
+
+
+class LogoClubHistory(models.Model):
+    b''' связка тренер клуб в сезоне '''
+    club = models.ForeignKey(Club)
+    logo = FilerImageField(verbose_name=_('Logo'))
+    start_date = models.DateField(_('Start date'), null=True)
+    end_date = models.DateField(_('End date'), null=True)
+    class Meta:
+        verbose_name=_('Logo Club History')
+        verbose_name_plural=_('Logo Club Histories')
 
 
 class ClubPlayerMatch(models.Model):
@@ -164,16 +212,20 @@ class Match(TitleBaseModel):
                             related_name='matchllinejudges',
                             verbose_name=_('Line judges'))
     home_team = models.ForeignKey(Club, null=True, blank=True,
+                                on_delete=models.SET_NULL,
                                 related_name='homematches',
                                 verbose_name=_('Home team'))
     home_coach = models.ForeignKey(Coach, null=True, blank=True,
+                                    on_delete=models.SET_NULL,
                                     related_name='homematches')
     home_players = models.ManyToManyField(ClubPlayer, null=True, blank=True,
                                     related_name='homematches')
     guest_team = models.ForeignKey(Club, null=True, blank=True,
+                                on_delete=models.SET_NULL,
                                 related_name='guestmatches',
                                 verbose_name=_('Guest team'))
     guest_coach = models.ForeignKey(Coach, null=True, blank=True,
+                                    on_delete=models.SET_NULL,
                                     related_name='guestmatches')
     guest_players = models.ManyToManyField(ClubPlayer, null=True, blank=True,
                                     related_name='guestmatches')

@@ -2,7 +2,7 @@
 import base.tests
 
 from . import parsers
-from .models import Match, Player
+from .models import Match, Player, Arena, Club
 
 
 class HockeyAppTest(base.tests.BaseTest):
@@ -13,6 +13,7 @@ class HockeyAppTest(base.tests.BaseTest):
     def base_test(self):
         ''' base hockeapp test '''
         self._check_parsers()
+        self._create_club()
         self._create_player()
         self._create_match()
 
@@ -26,6 +27,31 @@ class HockeyAppTest(base.tests.BaseTest):
         self.match_data = parsers.match.HockeyMatchParser(html=True
                                             ).get_page(self.match_id)
         self.assertIsNotNone(self.match_data)
+        # test clubs parser
+        self.clublink = parsers.club.GetAllClubURLs().get_page()[0][:-1]
+        self.assertIsNotNone(self.clublink)
+        self.clubinfo = parsers.club.ClubInfo().get_page(self.clublink)
+        self.assertIsNotNone(self.clubinfo)
+
+    def _create_club(self):
+        '''
+            test create club and its arena
+        '''
+        self.assertEqual(Club.objects.count(), 0)
+        #get club
+        print(self.clublink, self.clubinfo['coach'])
+        club = Club.objects.create_or_update_club(self.clublink, 
+                                                data=self.clubinfo)
+        self.assertEqual(Club.objects.count(), 1)
+        #check fields
+        for field in ('ru_title', 'html_body', 'url', 'site', 'contacts'):
+            self.assertNotEqual(getattr(club, field), self.blank)
+        for field in ('proccesed_time', 'coach_id', 'arena_id', 'logo_id'):
+            self.assertIsNotNone(getattr(club, field))
+        #check arena fields
+        for field in ('ru_title', 'site', 'contacts', 'tickets_url'):
+            self.assertNotEqual(getattr(club.arena, field), self.blank)
+        self.assertIsNotNone(getattr(club.arena, 'photo_id'))
 
     def _create_player(self):
         ''' test create player '''

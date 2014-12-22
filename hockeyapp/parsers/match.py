@@ -8,9 +8,7 @@ import time
 
 from django.db.models.loading import get_model
 
-from ..defaults import DEFAULT_KHL_MATCH_PROTOCOL_XPATH, DEFAULT_BODY_NOTEXISTS
-from ..defaults import DEFAULT_EMPTY_PAGE_TEXT, DEFAULT_BODY_XPATH, DEFAULT_URL
-from ..defaults import DEFAULT_MATCH_REPORT_DICT, MD
+from .. import defaults
 
 from . import GrabParser
 
@@ -26,14 +24,14 @@ _PARITTYDICT = {
 
 class HockeyMatchParser(GrabParser):
     b'''Парсер хоккейной статистики матча'''
-    url = DEFAULT_URL
+    url = defaults.URL
     absolute_url = url
     pk_kwarg = 'idgame'
     as_get_param = True
-    match_protocol_xpath = DEFAULT_KHL_MATCH_PROTOCOL_XPATH
+    match_protocol_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
     page_tree = None
-    body_xpath = DEFAULT_BODY_XPATH
-    xpath_dict = DEFAULT_MATCH_REPORT_DICT
+    body_xpath = defaults.BODY_XPATH
+    xpath_dict = defaults.MATCH_REPORT_DICT
     model_name = 'Match'
 
     def put_data_in_db_from_page(self, id=None):
@@ -51,11 +49,11 @@ class HockeyMatchParser(GrabParser):
         if self.page_tree is not None:
             if self.page_tree.xpath(self.match_protocol_xpath):
                 body = self.page_tree.xpath(self.match_protocol_xpath)[0]
-                if body.text_content().find(DEFAULT_EMPTY_PAGE_TEXT) == -1:
+                if body.text_content().find(defaults.EMPTY_PAGE_TEXT) == -1:
                     #протокол игры существует
                     body = self.page_tree.xpath(self.body_xpath)[0]
                     body = body.text_content().encode('utf-8')
-                    if body.find(DEFAULT_BODY_NOTEXISTS) == -1:
+                    if body.find(defaults.BODY_NOTEXISTS) == -1:
                         #протокол найден, собираем данные
                         _html_body = self.g.response.unicode_body()
                         return self.get_match_all_data(id, html_body=_html_body)
@@ -116,7 +114,8 @@ class HockeyMatchParser(GrabParser):
             _dt.append(_date_dict[3])
             _date_dict = _dt
             _m = _date_dict[0].split()[1].encode('utf-8')
-            _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), MD.get(_m))
+            _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
+                                                    defaults.MD.get(_m))
             if _date_dict[-1] != '':
                 mask = '%d %m %Y %H:%M'
             else:

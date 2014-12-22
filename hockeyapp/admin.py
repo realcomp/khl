@@ -4,7 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from base.admin import BaseAdmin, BaseMixin, NoActionMixin
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
-from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer
+from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
+from .models import LogoClubHistory
 
 
 class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
@@ -82,5 +83,5 @@ admin.site.register(Club, ClubAdmin)
 
 
 for model in (Player, Coach, Judge, MatchGoalHistory, MatchPenaltyHistory,
-ClubPlayer, CoachClub, AddressClub):
+ClubPlayer, CoachClub, AddressClub, Arena, LogoClubHistory):
     admin.site.register(model, BaseAdmin)

@@ -6,8 +6,7 @@ __author__='smirnov.ev'
 import datetime
 import re
 
-from ..defaults import MDP, DEFAULT_PLAYER_URL, DEFAULT_PLAYER_XPATH
-from ..defaults import DEFAULT_PLAYER_DATA_DICT, DEFAULT_KHL_SITE_URL
+from .. import defaults
 
 from . import GrabParser
 
@@ -26,7 +25,7 @@ PLAYER_RU_TO_EN = {
 
 
 class GetAllPlayerIDs(GrabParser):
-    url = DEFAULT_PLAYER_URL
+    url = defaults.PLAYER_URL
     absolute_url = url
     as_get_param = True
     pk_kwarg = 'letter'
@@ -39,11 +38,11 @@ class GetAllPlayerIDs(GrabParser):
 
 
 class GetPlayerInfo(GrabParser):
-    url = DEFAULT_PLAYER_URL
+    url = defaults.PLAYER_URL
     absolute_url = url
     as_get_param = False
-    body_xpath = DEFAULT_PLAYER_XPATH
-    xpath_dict = DEFAULT_PLAYER_DATA_DICT
+    body_xpath = defaults.PLAYER_XPATH
+    xpath_dict = defaults.PLAYER_DATA_DICT
     model_name = 'Player'
     stats_indexes =  {
                         b'Клуб': 1,
@@ -105,7 +104,7 @@ class GetPlayerInfo(GrabParser):
         _res = self._get_value('photo')[0].attrib.get('style')
         _res = re.search('url\((.*?)\)', _res).group(1)
         if _res != '/img/teamplayers_db//.jpg':
-            return DEFAULT_KHL_SITE_URL+_res
+            return defaults.KHL_SITE_URL+_res
 
     def get_ru_fio(self):
         b''' возьмем ФИО игрока '''
@@ -137,7 +136,7 @@ class GetPlayerInfo(GrabParser):
         if _res:
             _res = _res[0].strip().lower().encode('utf-8')
             _m = _res.split()[1]
-            _res = _res.replace(_m, MDP.get(_m).encode('utf-8'))
+            _res = _res.replace(_m, defaults.MDP.get(_m).encode('utf-8'))
             return datetime.datetime.strptime(_res, '%d %m %Y')
         return ''
 

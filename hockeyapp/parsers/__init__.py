@@ -15,10 +15,11 @@ class GrabParser(object):
     as_get_param = True
     page_tree = None
     model_name = None
-    html = None
+    html = True
 
-    def __init__(self, html=None):
-        self.html = self.html or html
+    def __init__(self, html=None, absolute_url=None):
+        self.html = html or self.html
+        self.absolute_url = absolute_url or self.absolute_url
 
     def get_html_body(self, html_body=None):
         return html_body if self.html and html_body else ''
@@ -39,6 +40,13 @@ class GrabParser(object):
         b'''возвращает либо значение xpath-массива, либо blank '''
         if xpath_val and xpath_val[0].text:
             return xpath_val[0].text.strip()
+        return ''
+
+    def _get_strip_value(self, key):
+        b'''возвращает первое значение xpath-string-массива, либо blank '''
+        xpath_val = self._get_value(key)
+        if xpath_val and xpath_val[0]:
+            return xpath_val[0].strip()
         return ''
 
     def _get_absolute_url(self, id=None):
