@@ -39,7 +39,6 @@ class HockeyAppTest(base.tests.BaseTest):
         '''
         self.assertEqual(Club.objects.count(), 0)
         #get club
-        print(self.clublink, self.clubinfo['coach'])
         club = Club.objects.create_or_update_club(self.clublink, 
                                                 data=self.clubinfo)
         self.assertEqual(Club.objects.count(), 1)
