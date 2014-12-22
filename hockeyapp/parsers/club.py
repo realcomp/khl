@@ -144,7 +144,7 @@ class ClubInfo(GrabParser):
 
     def get_coach(self):
         b''' Главный тренер клуба '''
-        return self._get_strip_value('coach')
+        return self._get_strip_value('coach').split(':')[1]
 
     def get_contacts(self):
         b''' Контакты клуба '''
