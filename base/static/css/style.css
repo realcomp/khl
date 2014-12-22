@@ -4494,3 +4494,38 @@ i.icon {
 .clubs-photos-page .ui.tabular.menu .item {
   text-transform: uppercase;
 }
+
+/* line 2868, ../sass/_base.sass */
+.clubs-fan-page .sub-heading {
+  color: #649792;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+/* line 2873, ../sass/_base.sass */
+.clubs-fan-page .fan-link-item {
+  font-size: 12px;
+  margin: 7px 0;
+}
+/* line 2876, ../sass/_base.sass */
+.clubs-fan-page .fan-link {
+  color: #649792;
+  text-decoration: none;
+  font-weight: 600;
+}
+/* line 2880, ../sass/_base.sass */
+.clubs-fan-page .fan-link:hover {
+  text-decoration: underline;
+}
+/* line 2882, ../sass/_base.sass */
+.clubs-fan-page .add-fan-link-btn {
+  color: #649792;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 20px;
+  font-size: 13px;
+}
+/* line 2888, ../sass/_base.sass */
+.clubs-fan-page .add-fan-link-btn:hover {
+  text-decoration: underline;
+}
