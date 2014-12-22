@@ -4481,3 +4481,16 @@ i.icon {
   color: #31782a;
   font-weight: 600;
 }
+
+/* line 2860, ../sass/_base.sass */
+.clubs-photos-page .heading {
+  border-bottom: none;
+}
+/* line 2862, ../sass/_base.sass */
+.clubs-photos-page .ui.dropdown > .text {
+  text-transform: uppercase;
+}
+/* line 2864, ../sass/_base.sass */
+.clubs-photos-page .ui.tabular.menu .item {
+  text-transform: uppercase;
+}

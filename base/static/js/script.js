@@ -4,6 +4,7 @@ $(document).ready(function(){
         playerPartnersPopup = $('.player-partners-popup'),
         closePopupBtn = $('.close-popup-btn'),
         playerPhotosMasonry = $('.masonry-player-photos'),
+        playerClubsMasonry = $('.masonry-clubs-photos'),
         playerNewsMasonry = $('.masonry-player-news'),
         playerCardMoreBtn = $('.player-card-more-btn'),
         playerCardListMore = $('.player-card-list-more'),
@@ -19,6 +20,14 @@ $(document).ready(function(){
     $('.payment-block_old').tabs();
     $('.team-calendar').tabs();
     $('.clubs-tabs').tabs();
+    $('.clubs-photos-tabs').tabs();
+
+    $('.clubs-photos-tabs .tab-btn').on('click', function (e) {
+        playerClubsMasonry.masonry({
+            itemSelector: '.item',
+            gutterWidth: 20
+        });
+    });
 
     $(".players-diff-year-slider" ).slider({
         range: true,
@@ -92,6 +101,13 @@ $(document).ready(function(){
 
     playerPhotosMasonry.imagesLoaded(function(){
         playerPhotosMasonry.masonry({
+            itemSelector: '.item',
+            gutterWidth: 20
+        });
+    });
+
+    playerClubsMasonry.imagesLoaded(function(){
+        playerClubsMasonry.masonry({
             itemSelector: '.item',
             gutterWidth: 20
         });
