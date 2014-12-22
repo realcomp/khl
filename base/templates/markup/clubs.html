@@ -20,410 +20,410 @@
         <div class="page-content page-container">
             <div class="page-inner-container">
                 <div class="clubs-tabs">
-                <div class="ui grid">
-                    <div class="row">
-                        <div class="column">
-                            <div class="ui tabular menu content-tabs">
-                                <span class="heading">Все клубы </span>
-                                <div class="ui selection dropdown">
-                                    <input type="hidden" name="season">
-                                    <div class="default text">Выберите сезон</div>
-                                    <i class="dropdown icon"></i>
-                                    <div class="menu">
-                                        <div class="item" data-value="1">СЕЗОН 2014-2015</div>
-                                        <div class="item" data-value="0">СЕЗОН 2013-2014</div>
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui tabular menu content-tabs">
+                                    <span class="heading">Все клубы </span>
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season">
+                                        <div class="default text">Выберите сезон</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" data-value="1">СЕЗОН 2014-2015</div>
+                                            <div class="item" data-value="0">СЕЗОН 2013-2014</div>
+                                        </div>
                                     </div>
+                                    <ul>
+                                        <li><a href="#clubs-all" class="item" data-tab="clubs-all">ВСЕ</a></li>
+                                        <li><a href="#clubs-chl" class="item" data-tab="clubs-chl">КХЛ</a></li>
+                                        <li><a href="#clubs-nhl" class="item" data-tab="clubs-nhl">НХЛ</a></li>
+                                        <li><a href="#clubs-vhl" class="item" data-tab="clubs-vhl">ВХЛ</a></li>
+                                        <li><a href="#clubs-mhl" class="item" data-tab="clubs-mhl">МХЛ</a></li>
+                                        <li><a href="#clubs-mhla" class="item" data-tab="clubs-mhla">МХЛ-А</a></li>
+                                    </ul>
                                 </div>
-                                <ul>
-                                    <li><a href="#clubs-all" class="item" data-tab="clubs-all">ВСЕ</a></li>
-                                    <li><a href="#clubs-chl" class="item" data-tab="clubs-chl">КХЛ</a></li>
-                                    <li><a href="#clubs-nhl" class="item" data-tab="clubs-nhl">НХЛ</a></li>
-                                    <li><a href="#clubs-vhl" class="item" data-tab="clubs-vhl">ВХЛ</a></li>
-                                    <li><a href="#clubs-mhl" class="item" data-tab="clubs-mhl">МХЛ</a></li>
-                                    <li><a href="#clubs-mhla" class="item" data-tab="clubs-mhla">МХЛ-А</a></li>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="four wide column">
+                                <ul class="options-list clubs-countries-menu-list">
+                                    <li class="option-item">
+                                        <a href="#" class="option-link option-link_active">Россия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">США</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Франция</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Бельгия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Германия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Норвегия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Финляндия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Великобритания</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">США</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Франция</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Бельгия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Германия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Норвегия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Финляндия</a>
+                                    </li>
+                                    <li class="option-item">
+                                        <a href="#" class="option-link">Великобритания</a>
+                                    </li>
                                 </ul>
+                                <a href="#" class="show-clubs-countries-menu-btn">полный список <i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="twelve wide column">
+                                <table class="ui celled table segment clubs-table tab" id="clubs-all" data-tab="clubs-all">
+                                    <thead>
+                                        <tr>
+                                            <th width="160">Название</th>
+                                            <th width="130">Город</th>
+                                            <th width="80" class="small-cell">Место в чемпионате</th>
+                                            <th width="165">Домашняя площадка</th>
+                                            <th>Главный тренер</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="ui celled table segment clubs-table tab" id="clubs-chl" data-tab="clubs-chl">
+                                    <thead>
+                                        <tr>
+                                            <th width="160">Название</th>
+                                            <th width="130">Город</th>
+                                            <th width="80" class="small-cell">Место в чемпионате</th>
+                                            <th width="165">Домашняя площадка</th>
+                                            <th>Главный тренер</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="ui celled table segment clubs-table tab" id="clubs-nhl" data-tab="clubs-nhl">
+                                    <thead>
+                                        <tr>
+                                            <th width="160">Название</th>
+                                            <th width="130">Город</th>
+                                            <th width="80" class="small-cell">Место в чемпионате</th>
+                                            <th width="165">Домашняя площадка</th>
+                                            <th>Главный тренер</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="ui celled table segment clubs-table tab" id="clubs-vhl" data-tab="clubs-vhl">
+                                    <thead>
+                                        <tr>
+                                            <th width="160">Название</th>
+                                            <th width="130">Город</th>
+                                            <th width="80" class="small-cell">Место в чемпионате</th>
+                                            <th width="165">Домашняя площадка</th>
+                                            <th>Главный тренер</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="ui celled table segment clubs-table tab" id="clubs-mhl" data-tab="clubs-mhl">
+                                    <thead>
+                                        <tr>
+                                            <th width="160">Название</th>
+                                            <th width="130">Город</th>
+                                            <th width="80" class="small-cell">Место в чемпионате</th>
+                                            <th width="165">Домашняя площадка</th>
+                                            <th>Главный тренер</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="ui celled table segment clubs-table tab" id="clubs-mhla" data-tab="clubs-mhla">
+                                    <thead>
+                                        <tr>
+                                            <th width="160">Название</th>
+                                            <th width="130">Город</th>
+                                            <th width="80" class="small-cell">Место в чемпионате</th>
+                                            <th width="165">Домашняя площадка</th>
+                                            <th>Главный тренер</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a class="clubs-link" href="#">
+                                                    <img src="../static/images/ska-logo.png" alt="" class="club-logo">
+                                                    <span>СКА</span>
+                                                </a>
+                                            </td>
+                                            <td>Москва</td>
+                                            <td align="center">5</td>
+                                            <td><a href="#">МСА Лужники</a></td>
+                                            <td><a href="#">Ефремов Олег</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="four wide column">
-                            <ul class="options-list clubs-countries-menu-list">
-                                <li class="option-item">
-                                    <a href="#" class="option-link option-link_active">Россия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">США</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Франция</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Бельгия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Германия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Норвегия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Финляндия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Великобритания</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">США</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Франция</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Бельгия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Германия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Норвегия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Финляндия</a>
-                                </li>
-                                <li class="option-item">
-                                    <a href="#" class="option-link">Великобритания</a>
-                                </li>
-                            </ul>
-                            <a href="#" class="show-clubs-countries-menu-btn">полный список <i class="triangle down icon"></i></a>
-                        </div>
-                        <div class="twelve wide column">
-                            <table class="ui celled table segment clubs-table tab" id="clubs-all" data-tab="clubs-all">
-                                <thead>
-                                    <tr>
-                                        <th width="160">Название</th>
-                                        <th width="130">Город</th>
-                                        <th width="80" class="small-cell">Место в чемпионате</th>
-                                        <th width="165">Домашняя площадка</th>
-                                        <th>Главный тренер</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="ui celled table segment clubs-table tab" id="clubs-chl" data-tab="clubs-chl">
-                                <thead>
-                                    <tr>
-                                        <th width="160">Название</th>
-                                        <th width="130">Город</th>
-                                        <th width="80" class="small-cell">Место в чемпионате</th>
-                                        <th width="165">Домашняя площадка</th>
-                                        <th>Главный тренер</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="ui celled table segment clubs-table tab" id="clubs-nhl" data-tab="clubs-nhl">
-                                <thead>
-                                    <tr>
-                                        <th width="160">Название</th>
-                                        <th width="130">Город</th>
-                                        <th width="80" class="small-cell">Место в чемпионате</th>
-                                        <th width="165">Домашняя площадка</th>
-                                        <th>Главный тренер</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="ui celled table segment clubs-table tab" id="clubs-vhl" data-tab="clubs-vhl">
-                                <thead>
-                                    <tr>
-                                        <th width="160">Название</th>
-                                        <th width="130">Город</th>
-                                        <th width="80" class="small-cell">Место в чемпионате</th>
-                                        <th width="165">Домашняя площадка</th>
-                                        <th>Главный тренер</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="ui celled table segment clubs-table tab" id="clubs-mhl" data-tab="clubs-mhl">
-                                <thead>
-                                    <tr>
-                                        <th width="160">Название</th>
-                                        <th width="130">Город</th>
-                                        <th width="80" class="small-cell">Место в чемпионате</th>
-                                        <th width="165">Домашняя площадка</th>
-                                        <th>Главный тренер</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table class="ui celled table segment clubs-table tab" id="clubs-mhla" data-tab="clubs-mhla">
-                                <thead>
-                                    <tr>
-                                        <th width="160">Название</th>
-                                        <th width="130">Город</th>
-                                        <th width="80" class="small-cell">Место в чемпионате</th>
-                                        <th width="165">Домашняя площадка</th>
-                                        <th>Главный тренер</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <a class="clubs-link" href="#">
-                                                <img src="../static/images/ska-logo.png" alt="" class="club-logo">
-                                                <span>СКА</span>
-                                            </a>
-                                        </td>
-                                        <td>Москва</td>
-                                        <td align="center">5</td>
-                                        <td><a href="#">МСА Лужники</a></td>
-                                        <td><a href="#">Ефремов Олег</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
-            </div>
                 <hr class="hr">
                 <ul class="team-controls player-controls-block">
                     <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>

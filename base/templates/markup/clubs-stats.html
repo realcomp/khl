@@ -1,0 +1,277 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-stats-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">Хоккей</a>
+                <div class="divider"> / </div>
+                <a class="section">Клубы</a>
+                <div class="divider"> / </div>
+                <a class="section">СКА</a>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="team-info">
+            <div class="team-heading">
+                <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
+                <div class="team-logo"><img src="../static/images/ska-logo.png" alt="Sportomatics" class="team-logo-image"></div>
+                <div class="team-name">СКА <span>(Санкт-Петербург)</span></div>
+            </div>
+            <ul class="info-list">
+                <li class="info-item"><i class="browser icon"></i> Сайт: http://www.ska.ru</li>
+                <li class="info-item"><i class="mail icon"></i> E-mail: pochta@ska.ru</li>
+                <li class="info-item"><i class="phone icon"></i> Тел.: +7 (812) 234 72 37</li>
+            </ul>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+                <a class="item">Состав команды</a>
+                <a class="item">Новости и результаты матчей</a>
+                <a class="item">Календарь игр</a>
+                <a class="active item">Командная статистика</a>
+                <a class="item">Домашняя площадка</a>
+                <a class="item">Фотографии</a>
+                <a class="item">Фан-клуб</a>
+                <a class="item">Форум</a>
+                <a class="item">Магазин</a>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu">
+                                <span class="heading">Командная статистика</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="five wide column">
+                            <a href="#" class="option-btn option-btn_active">сейчас играют</a>
+                            <a href="#" class="option-btn">все</a>
+                            <ul class="options-list clubs-stats-menu-list">
+                                <li class="option-item">
+                                    <a href="#" class="option-link option-link_active">Сезоны</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Матчи</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Голы</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Передачи</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Очки</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Плюс/минус</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Среднее количество голов за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Среднее количество передач за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Среднее количество очков за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Средний показатель "Плюс/минус" за игру</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Матчи (вратари)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Средний коэффициент надежности (вратари)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Победы (вратари)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">"Сухие" матчи (вратари)</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="eleven wide column">
+                            <table class="ui celled table segment clubs-stats-table">
+                                <thead>
+                                    <tr>
+                                        <th width="35"></th>
+                                        <th width="170">Имя</th>
+                                        <th width="78" class="small-cell">Количество сезонов</th>
+                                        <th width="60">SMI</th>
+                                        <th width="60">CORSI</th>
+                                        <th>Сейчас играет за...</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td align="center">1</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">2</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">3</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">4</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">5</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">6</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">7</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">8</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">9</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">10</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">11</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">12</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">13</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">14</td>
+                                        <td>
+                                            <a href="#">Валерий Покровский</a>
+                                        </td>
+                                        <td align="center">3</td>
+                                        <td align="center">225</td>
+                                        <td align="center">125</td>
+                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="align-center">
+                                <a href="#" class="show-other-season-btn">показать еще сезон</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
