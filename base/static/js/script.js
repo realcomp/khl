@@ -61,6 +61,11 @@ $(document).ready(function(){
         generatePagination: false
     });
 
+    $(".clubs-photos-slider").slides({
+        generateNextPrev: false,
+        generatePagination: false
+    });
+
     $(".player-news-slider").slides({
         generateNextPrev: false,
         generatePagination: false
