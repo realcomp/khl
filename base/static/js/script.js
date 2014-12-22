@@ -7,7 +7,9 @@ $(document).ready(function(){
         playerNewsMasonry = $('.masonry-player-news'),
         playerCardMoreBtn = $('.player-card-more-btn'),
         playerCardListMore = $('.player-card-list-more'),
-        moreClubsBtn = $('.more-clubs-btn');
+        moreClubsBtn = $('.more-clubs-btn'),
+        clubsCountriesMenu = $('.clubs-countries-menu-list'),
+        showClubsCountriesMenuBtn = $('.show-clubs-countries-menu-btn');
 
     $('.ui.dropdown').dropdown();
     // $('.tabular .item').tab({history:false});
@@ -16,6 +18,7 @@ $(document).ready(function(){
     $('.payment-block_new').tabs();
     $('.payment-block_old').tabs();
     $('.team-calendar').tabs();
+    $('.clubs-tabs').tabs();
 
     $(".players-diff-year-slider" ).slider({
         range: true,
@@ -113,5 +116,11 @@ $(document).ready(function(){
         e.preventDefault();
         
         $(this).closest('td').toggleClass('show-more-clubs');
+    });
+
+    showClubsCountriesMenuBtn.on('click', function(e) {
+        e.preventDefault();
+        
+        clubsCountriesMenu.toggleClass('clubs-countries-menu-list_all');
     });
 });

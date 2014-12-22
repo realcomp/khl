@@ -3912,3 +3912,128 @@ i.icon {
 .ui.inverted.menu .active.item {
   background: rgba(255, 255, 255, 0.1);
 }
+
+/* line 2485, ../sass/_base.sass */
+.clubs-page .breadcrumbs {
+  border-bottom: none;
+}
+/* line 2487, ../sass/_base.sass */
+.clubs-page .page-inner-container {
+  border-top: 1px dashed #ccc;
+}
+/* line 2490, ../sass/_base.sass */
+.clubs-page .clubs-menu .heading {
+  color: #31782a;
+  font-weight: 600;
+  margin-right: 10px;
+}
+/* line 2494, ../sass/_base.sass */
+.clubs-page .ui.selection.dropdown {
+  margin-right: 10px;
+  padding: 4px 10px;
+}
+/* line 2497, ../sass/_base.sass */
+.clubs-page .ui-tabs-nav {
+  display: inline-block;
+}
+/* line 2500, ../sass/_base.sass */
+.clubs-page .ui.tabular.menu .item {
+  color: #30792a;
+  font-size: 13px;
+}
+/* line 2504, ../sass/_base.sass */
+.clubs-page .ui.tabular.menu .ui-tabs-active .item {
+  border: 1px solid #dcddde;
+  border-radius: 5px 5px 0 0;
+  border-bottom-color: #fff;
+  color: #dd8517;
+}
+/* line 2509, ../sass/_base.sass */
+.clubs-page .player-controls-block {
+  padding-top: 0;
+}
+/* line 2512, ../sass/_base.sass */
+.clubs-page .options-list .option-link {
+  color: #4a9143;
+  text-transform: uppercase;
+}
+/* line 2515, ../sass/_base.sass */
+.clubs-page .options-list .option-link:after {
+  border-color: transparent transparent transparent #79b553;
+}
+/* line 2517, ../sass/_base.sass */
+.clubs-page .options-list .option-link.option-link_active {
+  background: #79b553;
+  color: #fff;
+}
+/* line 2520, ../sass/_base.sass */
+.clubs-page .club-logo {
+  width: 24px;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+/* line 2524, ../sass/_base.sass */
+.clubs-page .clubs-table {
+  vertical-align: top;
+  margin-top: 0;
+}
+/* line 2527, ../sass/_base.sass */
+.clubs-page .clubs-table a {
+  text-decoration: underline;
+  color: #649792;
+}
+/* line 2530, ../sass/_base.sass */
+.clubs-page .clubs-table a:hover {
+  text-decoration: none;
+}
+/* line 2532, ../sass/_base.sass */
+.clubs-page .clubs-table th {
+  background: #3e9139;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+/* line 2537, ../sass/_base.sass */
+.clubs-page .clubs-table .small-cell {
+  text-align: center;
+  font-size: 9px;
+}
+/* line 2540, ../sass/_base.sass */
+.clubs-page .clubs-table .clubs-link {
+  vertical-align: top;
+  line-height: 30px;
+  text-decoration: none;
+}
+/* line 2544, ../sass/_base.sass */
+.clubs-page .clubs-table .clubs-link span {
+  text-decoration: underline;
+}
+/* line 2546, ../sass/_base.sass */
+.clubs-page .clubs-table .clubs-link span:hover {
+  text-decoration: none;
+}
+/* line 2549, ../sass/_base.sass */
+.clubs-page .clubs-countries-menu-list .option-item {
+  display: none;
+}
+/* line 2551, ../sass/_base.sass */
+.clubs-page .clubs-countries-menu-list .option-item:nth-child(-n+8) {
+  display: table;
+}
+/* line 2554, ../sass/_base.sass */
+.clubs-page .clubs-countries-menu-list.clubs-countries-menu-list_all .option-item {
+  display: table;
+}
+/* line 2556, ../sass/_base.sass */
+.clubs-page .show-clubs-countries-menu-btn {
+  font-size: 12px;
+  color: #649693;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 12px;
+}
+/* line 2562, ../sass/_base.sass */
+.clubs-page .show-clubs-countries-menu-btn:hover {
+  text-decoration: none;
+  color: #000;
+}
