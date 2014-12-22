@@ -6,7 +6,8 @@ $(document).ready(function(){
         playerPhotosMasonry = $('.masonry-player-photos'),
         playerNewsMasonry = $('.masonry-player-news'),
         playerCardMoreBtn = $('.player-card-more-btn'),
-        playerCardListMore = $('.player-card-list-more');
+        playerCardListMore = $('.player-card-list-more'),
+        moreClubsBtn = $('.more-clubs-btn');
 
     $('.ui.dropdown').dropdown();
     // $('.tabular .item').tab({history:false});
@@ -106,5 +107,11 @@ $(document).ready(function(){
         e.preventDefault();
 
         playerCardListMore.toggle(300);
+    });
+
+    moreClubsBtn.on('click', function(e) {
+        e.preventDefault();
+        
+        $(this).closest('td').toggleClass('show-more-clubs');
     });
 });

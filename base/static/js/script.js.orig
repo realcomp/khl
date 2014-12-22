@@ -4,7 +4,9 @@ $(document).ready(function(){
         playerPartnersPopup = $('.player-partners-popup'),
         closePopupBtn = $('.close-popup-btn'),
         playerPhotosMasonry = $('.masonry-player-photos'),
-        playerNewsMasonry = $('.masonry-player-news');
+        playerNewsMasonry = $('.masonry-player-news'),
+        playerCardMoreBtn = $('.player-card-more-btn'),
+        playerCardListMore = $('.player-card-list-more');
 
     $('.ui.dropdown').dropdown();
     // $('.tabular .item').tab({history:false});
@@ -45,25 +47,24 @@ $(document).ready(function(){
     $(".players-graph-slider-limits .slider-limits-min").text( $(".players-graph-slider").slider("option", "min"));
     $(".players-graph-slider-limits .slider-limits-max").text( $(".players-graph-slider").slider("option", "max"));
 
-    $(function(){
-        $(".home-main-slider").slides({
-            generateNextPrev: false,
-            generatePagination: false
-        });
+    $(".home-main-slider").slides({
+        generateNextPrev: false,
+        generatePagination: false
     });
 
-    $(function(){
-        $(".player-photos-slider").slides({
-            generateNextPrev: false,
-            generatePagination: false
-        });
+    $(".player-photos-slider").slides({
+        generateNextPrev: false,
+        generatePagination: false
     });
 
-    $(function(){
-        $(".player-news-slider").slides({
-            generateNextPrev: false,
-            generatePagination: false
-        });
+    $(".player-news-slider").slides({
+        generateNextPrev: false,
+        generatePagination: false
+    });
+
+    $(".player-achievement-slider").slides({
+        generateNextPrev: false,
+        generatePagination: false
     });
 
     $( ".datepicker" ).datepicker();
@@ -99,5 +100,11 @@ $(document).ready(function(){
         e.stopPropagation();
         $('#languageselect input[name=language]').val($(this).attr('href').substring(1));
         $('#languageselect').submit();
+    });
+
+    playerCardMoreBtn.on('click', function(e) {
+        e.preventDefault();
+
+        playerCardListMore.toggle(300);
     });
 });
