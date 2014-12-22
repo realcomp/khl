@@ -12,12 +12,9 @@ class ArenaManager(DataCleanMixin, models.Manager):
     b''' Менеджер арены '''
     def create_or_update_arena(self, update=False, data=None):
         b''' Создание или обновление арены '''
-        print(data)
         ru_title = data.get('ru_title', None)
-        print(ru_title)
         if ru_title:
             _arena = self.filter(ru_title=ru_title).last()
-            print(_arena)
             if data:
                 data = self.clean_data(data)
                 _logo = data.pop('photo_url', None)
@@ -29,5 +26,4 @@ class ArenaManager(DataCleanMixin, models.Manager):
                     self.filter(ru_title=ru_title).update(**data)
                 else:
                     _arena = self.create(**data)
-            print(_arena)
             return _arena

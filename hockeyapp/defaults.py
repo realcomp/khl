@@ -100,7 +100,7 @@ CLUB_DATA_XPATH_DICT = {
 
 ARENA_DATA_XPATH_DICT = {
     'photo_url': '//div[@class="clubPhoto"]//img/@src',
-    'ru_title': '//div[@class="header"][2]//h2/text()',
+    'ru_title': '/div[@class="header"]/h2/text()',
     'capacity': '//p[1]/text()',
     'site': '//p[2]//a/@href',
     'tickets_url': '//p[3]//a/@href',
