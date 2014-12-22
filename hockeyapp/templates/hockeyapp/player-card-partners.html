@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container player-card-short-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section">Игроки</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{ fio }}</a>
+                <div class="divider"> / </div>
+                <div class="active section">Партнеры по команде</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui grid">
+            <div class="row">
+                <div class="twelve wide column">
+                    <div class="player-card-block">
+                        <img src="{{ photo }}" width="105" alt="" class="player-card-avatar">
+                        <div class="player-card-desc">
+                            <div class="player-card-name">{{ fio }}</div>
+                            <div class="player-card-amplua">Амплуа: {{ line }}</div>
+                            <ul class="player-card-list">
+                                <li class="player-card-item">Рост: {{ height }} см.</li>
+                                <li class="player-card-item">Вес: {{ weight }} кг.</li>
+                                <li class="player-card-item">Хват: правый</li>
+                            </ul>
+                            <ul class="player-card-list player-card-list_nb">
+                                <li class="player-card-item">Дата рождения: {{ birth_date }}</li>
+                                <li class="player-card-item">Возраст: {{ age.0 }} лет {{ age.1 }} месяцев</li>
+                                <li class="player-card-item">Гражданство: Россия</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="align-center">
+                        <a class="ui mini orange button player-like-btn">+мне нравится этот игрок</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+                <a class="item" href="{% url 'hockeyapp:player-card' pk %}">Краткая информация</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-indicators' pk %}">Спортивные показатели</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
+                <a class="active item" href="{% url 'hockeyapp:player-card-partners' pk %}">Партнеры по команде</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-photos' pk %}">Фотографии</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-communication' pk %}">Общение</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-news' pk %}">Новости</a>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Партнеры по команде</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="four wide column">
+                            <ul class="tabs-list">
+                                <li class="tabs-item">
+                                    <a href="#" class="tabs-link tabs-link_active">Сейчас играют</a>
+                                </li>
+                                <li class="tabs-item">
+                                    <a href="#" class="tabs-link">Все</a>
+                                </li>
+                            </ul>
+                            <ul class="options-list player-partner-menu-list">
+                                <li class="option-item">
+                                    <a href="#" class="option-link option-link_active">Самые старые</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Самые неразлучные</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="twelve wide column">
+                            <div class="partners-block-container">
+                                <div class="partners-block">
+                                    <div class="partners-heading">12 сезонов вместе</div>
+                                    <ul class="player-partners-list">
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="partners-block">
+                                    <div class="partners-heading">5 сезонов вместе</div>
+                                    <ul class="player-partners-list">
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="partners-block">
+                                    <div class="partners-heading">1990: "Кубань" (Краснодар)</div>
+                                    <ul class="player-partners-list">
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-item">
+                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">Акинфеев</div>
+                                                <div class="player-partners-name">Игорь</div>
+                                                <div class="player-partners-country">Россия</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="player-partners-popup popup">
+                                    <a href="#" class="close-popup-btn">&times;</a>
+                                    <div class="player-bio">
+                                        <img src="{{ STATIC_URL }}images/player-avatar.jpg" alt="" class="player-photo">
+                                        <div class="player-info">
+                                            <div class="player-name">Акинфеев</div>
+                                            <div class="player-name">Игорь</div>
+                                            <div class="player-amplua">Амплуа: голкипер</div>
+                                        </div>
+                                    </div>
+                                    <div class="player-clubs">
+                                        <div class="player-club"><a href="#" class="player-club-link">Динамо (Москва)</a> 2008-2011</div>
+                                        <div class="player-club"><a href="#" class="player-club-link">Спартак (Москва)</a> 2011-2013</div>
+                                        <div class="player-club"><span class="player-club-now">Сейчас </span><a href="#" class="player-club-link">ЦСКА (Москва)</a></div>
+                                    </div>
+                                    <div class="player-details">
+                                        <div class="player-details_left">
+                                            <div class="player-detail">Рост: 180 см.</div>
+                                            <div class="player-detail">Вес: 89 кг.</div>
+                                            <div class="player-detail">Хват: правый</div>
+                                        </div>
+                                        <div class="player-details_right">
+                                            <div class="player-detail">Дата рождения: 19 марта 1983 г.</div>
+                                            <div class="player-detail">Возраст: 24 года 5 месяцев</div>
+                                            <div class="player-detail">Гражданство: Россия</div>
+                                        </div>
+                                    </div>
+                                    <div class="player-indexes">
+                                        <div class="player-detail">SM-index: 2323</div>
+                                        <div class="player-detail">Corsi: 9483</div>
+                                    </div>
+                                    <div class="align-center">
+                                        <a href="#" class="player-card-btn">открыть карточку игрока</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

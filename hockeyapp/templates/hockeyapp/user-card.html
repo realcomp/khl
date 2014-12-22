@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ПРОФИЛЬ</a>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-card">
+            <div class="user-avatar">
+                <div class="user-avatar-hex1">
+                    <div class="user-avatar-hex2" style="background-image: url(../static/images/user-avatar.png)"></div>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-info-name">Кристина</div>
+                <div class="user-info-surname">Старикова</div>
+                <a href="#" class="user-change-avatar">сменить фото ></a>
+            </div>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="ui green inverted menu page-menu">
+                <a class="active item">Доступные опции</a>
+                <a class="item">Пакетные предложения</a>
+                <a class="item">История покупок</a>
+                <a class="item">Личные данные</a>
+            </div>
+            <div class="page-inner-container">
+                <div class="user-page">
+                    <div class="ui tabular menu content-tabs">
+                        <span class="heading">Доступные опции</span>
+                    </div>
+                    <div class="user-sport-type">
+                        <label class="user-sport-type-label">Вид спорта</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="sport_type">
+                            <div class="default text">Выберите вид спорта</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item" data-value="hokey">Хоккей</div>
+                                <div class="item" data-value="football">Футбол</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid">
+                        <div class="four column row user-options">
+                            <div class="column">
+                                <div class="user-option">
+                                    <span class="option-icon"><i class="arrow sign right icon"></i></span>
+                                    <span class="option-type">Хоккей</span>
+                                    <span class="option-desc">База данных</span>
+                                    <span class="option-title">«Игроки» Россия</span>
+                                    <span class="option-title">Федерация и Казахстан</span>
+                                    <span class="option-date">Оплачено до 12.12.15</span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="user-option">
+                                    <span class="option-icon"><i class="arrow sign right icon"></i></span>
+                                    <span class="option-type">Хоккей</span>
+                                    <span class="option-desc">База данных</span>
+                                    <span class="option-title">«Игроки» Европа</span>
+                                    <span class="option-date">Оплачено до 12.12.15</span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="user-option">
+                                    <span class="option-icon"><i class="arrow sign right icon"></i></span>
+                                    <span class="option-type">Хоккей</span>
+                                    <span class="option-desc">База данных</span>
+                                    <span class="option-title">«Игроки» Европа</span>
+                                    <span class="option-date">Оплачено до 12.12.15</span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="user-option user-option_empty">
+                                    <i class="add sign icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="four column row user-options">
+                            <div class="column">
+                                <div class="user-option user-option_inactive">
+                                    <span class="bg-lock"><i class="lock icon"></i></span>
+                                    <span class="option-icon"><i class="arrow sign right icon"></i></span>
+                                    <span class="option-type">Хоккей</span>
+                                    <span class="option-desc">База данных</span>
+                                    <span class="option-title">«Игроки» Россия</span>
+                                    <span class="option-title">Федерация и Казахстан</span>
+                                    <span class="option-pay"><a href="" class="option-pay-btn">Оплатить $200</a> для годового доступа</span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="user-option user-option_inactive">
+                                    <span class="bg-lock"><i class="lock icon"></i></span>
+                                    <span class="option-icon"><i class="arrow sign right icon"></i></span>
+                                    <span class="option-type">Хоккей</span>
+                                    <span class="option-desc">База данных</span>
+                                    <span class="option-title">«Игроки» Европа</span>
+                                    <span class="option-pay"><a href="" class="option-pay-btn">Оплатить $200</a> для годового доступа</span>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="user-option user-option_empty">
+                                    <i class="add sign icon"></i>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="user-option user-option_empty">
+                                    <i class="add sign icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -55,10 +55,10 @@ class GrabParser(object):
         '''
         if id:
             if self.as_get_param:
-                _url = '?{0}={1}'.format(self.pk_kwarg,id)
+                _url = b'?{0}={1}'.format(self.pk_kwarg,id)
             else:
-                _url = '{0}/'.format(id,)
-            self.absolute_url = '{0}{1}'.format(self.absolute_url,_url)
+                _url = b'{0}/'.format(id,)
+            self.absolute_url = b'{0}{1}'.format(self.absolute_url,_url)
         return self.absolute_url
 
     def get_page(self, id=None):
