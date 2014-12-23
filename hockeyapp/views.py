@@ -26,11 +26,22 @@ class PlayersSearch(ListView):
 
 class PlayersCompare(TemplateView):
     template_name = 'hockeyapp/player-select.html'
-    # related templates:
-    # players-diff.html
-    # players-diff2.html
-    # players-diff3.html
-    # player-card.html
+
+
+class PlayersCompareCard(TemplateView):
+    template_name = 'hockeyapp/player-card.html'
+
+
+class PlayersCompareDiff(TemplateView):
+    template_name = 'hockeyapp/players-diff.html'
+
+
+class PlayersCompareDiff2(TemplateView):
+    template_name = 'hockeyapp/players-diff2.html'
+
+
+class PlayersCompareDiff3(TemplateView):
+    template_name = 'hockeyapp/players-diff3.html'
 
 
 class PlayerCard(DetailView):
@@ -74,7 +85,7 @@ class PlayerCardNews(PlayerCard):
 class ClubListView(ListView):
     model = Club
     paginate_by = 100
-    template_name = 'hockeyapp/clubs.html'
+    template_name = 'hockeyapp/clubs/clubs.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
@@ -91,7 +102,7 @@ class ClubListView(ListView):
 
 class ClubView(DetailView):
     model = Club
-    template_name = 'hockeyapp/clubs-calendar.html'
+    template_name = 'hockeyapp/clubs/clubs-calendar.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubView, self).get_context_data(**kwargs)
@@ -100,16 +111,16 @@ class ClubView(DetailView):
 
 
 class ClubHomeView(ClubView):
-    template_name = 'hockeyapp/clubs-home.html'
+    template_name = 'hockeyapp/clubs/clubs-home.html'
 
 
 class ClubFanZoneView(ClubView):
-    template_name = 'hockeyapp/clubs-fan.html'
+    template_name = 'hockeyapp/clubs/clubs-fan.html'
 
 
 class ClubPhotosView(ClubView):
-    template_name = 'hockeyapp/clubs-photos.html'
+    template_name = 'hockeyapp/clubs/clubs-photos.html'
 
 
 class ClubStatsView(ClubView):
-    template_name = 'hockeyapp/clubs-stats.html'
+    template_name = 'hockeyapp/clubs/clubs-stats.html'
