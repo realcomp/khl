@@ -21,11 +21,11 @@ class ManagerMixin(object):
                                                     ru_fio=ru_fio,
                                                     update=update)
 
-    def _get_clubplayers(self, lst, club):
+    def _get_clubplayers(self, lst, club, match=None):
         b''' получить список клубных игроков '''
-        return [self._get_clubplayer(data, club) for data in lst]
+        return [self._get_clubplayer(data, club, match) for data in lst]
 
-    def _get_clubplayer(self, data, club):
+    def _get_clubplayer(self, data, club, match=None):
         b''' получить клубного игрока '''
         _player = self._get_player( data.pop('khl_id', None),
                                     ru_fio=data.pop('ru_fio', ''),
@@ -33,9 +33,25 @@ class ManagerMixin(object):
         )
         model = get_model(CURRENT_APP, 'ClubPlayer')
         data.update(self._season)
-        return model.objects.get_or_create( club=club,
-                                            player=_player,
-                                            **data)[0]
+        #TODO: update or create player statistics
+        stats = data.pop('stats', None)
+        #########################################
+        _clubplayer, _crt = model.objects.get_or_create(club=club,
+                                                        player=_player,
+                                                        **data)
+        if match and _clubplayer and stats:
+            self._create_clubplayer_stats( match=match, data=stats,
+                                            clubplayer=_clubplayer)
+        return _clubplayer
+
+    def _create_clubplayer_stats(self, match=None, clubplayer=None, data=None):
+        b''' Создание общей статистики игрока в матче '''
+        model = get_model(CURRENT_APP, 'ClubPlayerMatch')
+        obj = model.objects.filter(match=match, clubplayer=clubplayer).last()
+        if not obj:
+            data['match'] = match
+            data['clubplayer'] = clubplayer
+            model.objects.create(**data)
 
 
 class MatchGoalHistoryManager(ManagerMixin, models.Manager):
@@ -99,11 +115,13 @@ class MatchManager(ManagerMixin, models.Manager):
         match.line_judges.add(*(j[0].pk for j in _match.get('line_judges')))
         match.home_players.add(*self._get_clubplayers(
                                                     _match.get('home_players'),
-                                                    _match.get('home_team')
+                                                    _match.get('home_team'),
+                                                    match = match,
         ))
         match.guest_players.add(*self._get_clubplayers(
                                                     _match.get('guest_players'),
-                                                    _match.get('guest_team')
+                                                    _match.get('guest_team'),
+                                                    match = match,
         ))
         self._create_match_history(match, match_data=_match)
         return match

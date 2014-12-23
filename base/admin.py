@@ -68,3 +68,22 @@ class BaseAdmin(BaseMixin, admin.ModelAdmin):
 
 class BaseAdminwithOrder(SortableModelAdmin, BaseAdmin):
     sortable='order'
+
+
+class DynamicDisplayFilterMixin(object):
+    def get_list_filter(self, request):
+        if self.list_filter:
+            return self.list_filter
+        if self.list_display:
+            return self.list_display   
+        return self.get_fields(request)
+        
+    def get_list_display(self, request):
+        if self.list_display:
+            return self.list_display
+        return ('id',)+self.get_fields(request)
+        
+
+class NoFilterAdmin(BaseAdmin):
+    def get_list_filter(self, request, obj=None):  
+        return

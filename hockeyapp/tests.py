@@ -2,7 +2,7 @@
 import base.tests
 
 from . import parsers
-from .models import Match, Player, Arena, Club
+from .models import Match, Player, Club
 
 
 class HockeyAppTest(base.tests.BaseTest):
@@ -13,9 +13,12 @@ class HockeyAppTest(base.tests.BaseTest):
     def base_test(self):
         ''' base hockeapp test '''
         self._check_parsers()
+        #creates
         self._create_club()
         self._create_player()
         self._create_match()
+        #updates
+        self._update_match()
 
     def _check_parsers(self):
         ''' test parsers fucntionality'''
@@ -86,6 +89,30 @@ class HockeyAppTest(base.tests.BaseTest):
         self.assertEqual(Match.objects.count(), 1)
         #check fields
         self.assertEqual(match.khl_id, khlid)
+        for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
+        'detail_count'):
+            self.assertNotEqual(getattr(match, field), self.blank)
+        for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
+        'guest_team_id', 'guest_coach_id'):
+            self.assertIsNotNone(getattr(match, field))
+        #check relations
+        self.assertEqual(match.matchgoalhistory_set.count(), 12)
+        self.assertEqual(match.matchpenaltyhistory_set.count(), 21)
+        self.assertEqual(match.clubplayermatch_set.count(), 44)
+        self.assertEqual(match.judges.count(), 1)
+        self.assertEqual(match.line_judges.count(), 2)
+        self.assertEqual(match.home_players.count(), 22)
+        self.assertEqual(match.guest_players.count(), 22)
+
+    def _update_match(self):
+        '''
+            test update match
+        '''
+        #get and update match
+        match = Match.objects.get(khl_id=self.match_id)
+        parser = parsers.match.HockeyMatchParser
+        match = parser().update_model_object(match)
+        #check fields
         for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
         'detail_count'):
             self.assertNotEqual(getattr(match, field), self.blank)

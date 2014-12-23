@@ -6,6 +6,8 @@ __author__='smirnov.ev'
 import datetime
 import time
 
+from lxml.html import fromstring
+
 from django.db.models.loading import get_model
 
 from .. import defaults
@@ -34,11 +36,12 @@ class HockeyMatchParser(GrabParser):
     xpath_dict = defaults.MATCH_REPORT_DICT
     model_name = 'Match'
 
-    def put_data_in_db_from_page(self, id=None):
+    def put_data_in_db_from_page(self, id=None, data=None):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
-        ''' 
-        data = self.get_page(id)
+        '''
+        if not data:
+            data = self.get_page(id)
         if data and self.model_name:
             model = get_model('hockeyapp', self.model_name)
             return model.objects.get_or_create_match(**data)
@@ -60,6 +63,20 @@ class HockeyMatchParser(GrabParser):
             else:
                 time.sleep(60)
                 self.get_page(id)
+
+    def get_page_from_db(self, obj):
+        b''' Парсинг html из ДБ '''
+        if obj:
+            html_body = obj.html_body
+            self.page_tree = fromstring(html_body)
+            return self.get_match_all_data(obj.khl_id, html_body)
+        else:
+            return self.get_page(obj.khl_id)
+
+    def update_model_object(self, obj):
+        b''' Обновляем данные о матче '''
+        data = self.get_page_from_db(obj)
+        return self.put_data_in_db_from_page(obj.khl_id, data)
 
     def get_match_all_data(self, matchid=None, html_body=None):
         b''' метод запускается, в случае если протокол игры существует и найден
@@ -153,8 +170,8 @@ class HockeyMatchParser(GrabParser):
         _time = self._get_value_or_blank(tr.xpath('td[@class="time"]/strong'))
         res = {
                 'time': _time,
-                'duration': _dur.strip(),
-                'ptype': _ptype.strip(),
+                'duration': _dur.strip() if _dur else '',
+                'ptype': _ptype.strip() if _ptype else '',
         }
         if tr.xpath('td/a'):
             _player = tr.xpath('td/a')[0].attrib.get('href','///'
@@ -221,7 +238,7 @@ class HockeyMatchParser(GrabParser):
             res.append(tr.xpath('td[8]/a')[0].attrib.get('href').split('/')[-2])
         return set(res)
 
-    def _get_player_data(self, tr, tp):
+    def _get_player_data(self, tr, line_type):
         b''' берем значения номер, id и тип игрока '''
         _raw_link = tr.xpath('td[@class="empty_bg"]/a')
         if _raw_link:
@@ -229,20 +246,49 @@ class HockeyMatchParser(GrabParser):
             res = {
                     'number': tr.xpath('td[@class="empty_bg"]/strong')[0].text,
                     'khl_id': _raw_link.attrib.get('href','').split('/')[-2],
-                    'line': tp,
-                    'ru_fio': _raw_link.text  
+                    'line': line_type,
+                    'ru_fio': _raw_link.text,
+                    'stats': self._get_player_match_stats_by_line(tr, line_type)
             }
             return res
 
-    def _get_players(self, key, tp):
+    def _get_players(self, key, line_type):
         b''' получаем игроков команды '''
         plrs_table = self._get_value(key)
         if plrs_table:
             #TODO: refact this
-            return (self._get_player_data(tr, tp) for tr 
+            return (self._get_player_data(tr, line_type) for tr 
                     in plrs_table[0].xpath('tr')
                     if tr.attrib.get('class', '') != 'header'
-                    and self._get_player_data(tr, tp))
+                    and self._get_player_data(tr, line_type))
+
+    def _get_player_match_stats_by_line(self, tr, line_type):
+        b''' суммарная статистика игрока в матче '''
+        if line_type > 1:
+            return {
+                    'plus_minus': tr.xpath('td[7]/text()')[0],
+                    'penalty_time': tr.xpath('td[9]/text()')[0],
+                    'ev_goals': tr.xpath('td[9]/text()')[0],
+                    'pp_goals': tr.xpath('td[10]/text()')[0],
+                    'es_goals': tr.xpath('td[11]/text()')[0],
+                    'overtime_goals': tr.xpath('td[12]/text()')[0],
+                    'win_goals': tr.xpath('td[13]/text()')[0],
+                    'bullet_goals': tr.xpath('td[14]/text()')[0],
+                    'shots': tr.xpath('td[15]/text()')[0],
+                    'pis': tr.xpath('td[16]/text()')[0],
+                    'faceoff': tr.xpath('td[17]/text()')[0],
+                    'winfaceoff': tr.xpath('td[18]/text()')[0],
+                    'winfaceoff_p': tr.xpath('td[19]/text()')[0],
+            }
+        else:
+            return {
+                    'shots': tr.xpath('td[7]/text()')[0],
+                    'loose_goals': tr.xpath('td[8]/text()')[0],
+                    'saves': tr.xpath('td[9]/text()')[0],
+                    'saves_p': tr.xpath('td[10]/text()')[0],
+                    'sf': tr.xpath('td[11]/text()')[0],
+                    'gamingtime': tr.xpath('td[15]/text()')[0],
+            }
 
     def get_match_num(self):
         b''' возьмем значение номера матча '''

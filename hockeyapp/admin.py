@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
-from base.admin import BaseAdmin, BaseMixin, NoActionMixin
+from base.admin import BaseAdmin, BaseMixin, NoActionMixin, NoFilterAdmin
+from base.admin import DynamicDisplayFilterMixin
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
-from .models import LogoClubHistory
+from .models import LogoClubHistory, ClubPlayerMatch
 
 
 class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
@@ -23,7 +24,7 @@ class PenaltyEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     fields = ('player',)+readonly_fields
 
 
-class MatchAdmin(NoActionMixin, BaseAdmin):
+class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     suit_form_tabs = (
                 ('general', _('General')),
                 ('hometeam', _('Home team')),
@@ -53,35 +54,34 @@ class MatchAdmin(NoActionMixin, BaseAdmin):
     inlines = (GoalEntryInline, PenaltyEntryInline)
     list_display = 'khl_id', 'ru_title', 'url', 'spectators', 'date', 'count'
     readonly_fields = 'home_players', 'guest_players', 'judges', 'line_judges'
-
-    def get_list_filter(self, request):
-        if self.list_filter:
-            return self.list_filter
-        if self.list_display:
-            return self.list_display   
-        return self.get_fields(request)
-        
-    def get_list_display(self, request):
-        if self.list_display:
-            return self.list_display
-        return ('id',)+self.get_fields(request)
 admin.site.register(Match, MatchAdmin)
+
+
+class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+    list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
+                    'height', 'url',)
+admin.site.register(Player, PlayerAdmin)
 
 
 class CoachClubInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = CoachClub
     extra=0
 
-class AddressClubInline(NoActionMixin, BaseMixin, admin.TabularInline):
+class AddressClubInline(BaseMixin, admin.TabularInline):
     model = AddressClub
     extra=0
 
 
-class ClubAdmin(BaseAdmin):
+class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (CoachClubInline, AddressClubInline)
+    list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address'
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Player, Coach, Judge, MatchGoalHistory, MatchPenaltyHistory,
-ClubPlayer, CoachClub, AddressClub, Arena, LogoClubHistory):
+for model in (Coach, Judge, Arena, AddressClub, ClubPlayer, CoachClub):
     admin.site.register(model, BaseAdmin)
+
+
+for model in (MatchGoalHistory, MatchPenaltyHistory, LogoClubHistory,
+ClubPlayerMatch):
+    admin.site.register(model, NoFilterAdmin)
