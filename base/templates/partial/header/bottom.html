@@ -7,7 +7,7 @@
         <div class="ui secondary menu user-card-menu">
             <a class="active item">{% trans 'METRICS' %}</a>
             <a class="item">{% trans 'CLUBS' %}</a>
-            <a href="" class="item">{% trans 'PROFILE' %}</a>
+            <a href="{% url 'accounts:profile' %}" class="item">{% trans 'PROFILE' %}</a>
         </div>
         <div class="ui link list">
             <a class="item prof-version">{% trans 'PRO VERSION' %}</a>

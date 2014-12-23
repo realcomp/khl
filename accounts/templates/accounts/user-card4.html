@@ -19,33 +19,33 @@
         <div class="user-card">
             <div class="user-avatar">
                 <div class="user-avatar-hex1">
-                    <div class="user-avatar-hex2" style="background-image: url(../static/images/user-avatar.png)"></div>
+                    <div class="user-avatar-hex2" style="background-image: url({{ STATIC_URL }}images/user-avatar.png)"></div>
                 </div>
             </div>
             <div class="user-info">
-                <div class="user-info-name">Кристина</div>
-                <div class="user-info-surname">Старикова</div>
+                <div class="user-info-name">{{ fio }}</div>
+                <!-- <div class="user-info-surname">Старикова</div> -->
                 <a href="#" class="user-change-avatar">сменить фото ></a>
             </div>
         </div>
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
-                <a class="item">Доступные опции</a>
-                <a class="item">Пакетные предложения</a>
-                <a class="item">История покупок</a>
-                <a class="active item">Личные данные</a>
+                <a class="item" href="{% url 'accounts:profile' %}">Доступные опции</a>
+                <a class="item" href="{% url 'accounts:profile-offers' %}">Пакетные предложения</a>
+                <a class="item" href="{% url 'accounts:profile-history' %}">История покупок</a>
+                <a class="active item" href="{% url 'accounts:profile-private' %}">Личные данные</a>
             </div>
             <div class="page-inner-container">
                 <div class="user-page">
                     <div class="ui tabular menu content-tabs">
                         <span class="heading">Личные данные</span>
                     </div>
-                    <form action="#" name="profile-edit-form" method="POST" class="ui form contact-form">
+                    <form action="" name="profile-edit-form" method="POST" class="ui form contact-form">
                         <div class="inline field">
                             <label>Ваш логин:</label>
-                            <a class="ui teal label">Negnay</a>
-                            <span class="profile-register-date">Дата регистрации: 15 июля 2014г.</span>
+                            <a class="ui teal label">{{ username }}</a>
+                            <span class="profile-register-date">Дата регистрации: {{ date_joined }}</span>
                         </div>
                         <div class="inline field">
                             <label>Пароль:</label>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="inline field">
                             <label>E-mail:</label>
-                            <input type="text" name="email">
+                            <input type="text" name="email" value="{{ email }}">
                             <div class="ui checkbox">
                                 <input type="checkbox" name="news">
                                 <label>получать рассылку новостей с сайта</label>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="inline field">
                             <label>Имя Фамилия:</label>
-                            <input type="text" name="email">
+                            <input type="text" name="fio" value="{{ fio }}">
                             <div class="ui checkbox">
                                 <input type="checkbox" name="hide_name">
                                 <label>скрывать имя в "Любительской версии"</label>
@@ -73,7 +73,7 @@
                             <label>Изменить фотографию</label>
                         </div>
                         <div class="avatar-upload-block">
-                            <img src="../static/images/avatar-sample.png" width="97" alt="sample avatar" class="avatar-sample-image">
+                            <img src="{{ STATIC_URL }}images/avatar-sample.png" width="97" alt="sample avatar" class="avatar-sample-image">
                             <div class="avatar-upload-controls">
                                 <input type="file" class="file-input" name="avatar" id="avatar">
                                 <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
@@ -81,7 +81,9 @@
                             </div>
                         </div>
                         <hr class="hr">
-                        <button type="submit" class="small ui green button">Сохранить изменения</button>
+                        <!-- <button type="submit" class="small ui green button">Сохранить изменения</button> -->
+                        {% csrf_token %}
+                        <input type="submit" class="small ui green button" value="Сохранить изменения" />
                     </form>
                 </div>
             </div>
