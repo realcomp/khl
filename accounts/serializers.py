@@ -21,7 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         return obj.date_joined and obj.date_joined.strftime('%d %B %Y')
 
     class Meta(object):
-        fields = 'id', 'username', 'email', 'fio', 'date_joined'
+        fields = 'pk', 'username', 'email', 'fio', 'date_joined'
         model = get_user_model()
 
 
@@ -33,6 +33,6 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     #     super(ProfileUpdateSerializer, self).update(instance, validated_data)
 
     class Meta(object):
-        fields = 'id', 'email', 'fio'#, 'password'
+        fields = 'pk', 'email', 'fio'#, 'password'
         model = get_user_model()
-        read_only_fields = 'id',
+        read_only_fields = 'pk',

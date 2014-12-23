@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 
 {% block body %}
 <section class="content">
@@ -20,28 +20,17 @@
                 </div>
             </div>
         </div>
-        <div class="team-info">
-            <div class="team-heading">
-                <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
-                <div class="team-logo"><img src="../static/images/ska-logo.png" alt="Sportomatics" class="team-logo-image"></div>
-                <div class="team-name">СКА <span>(Санкт-Петербург)</span></div>
-            </div>
-            <ul class="info-list">
-                <li class="info-item"><i class="browser icon"></i> Сайт: http://www.ska.ru</li>
-                <li class="info-item"><i class="mail icon"></i> E-mail: pochta@ska.ru</li>
-                <li class="info-item"><i class="phone icon"></i> Тел.: +7 (812) 234 72 37</li>
-            </ul>
-        </div>
+        {% include "hockeyapp/club/info.html" %}
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
                 <a class="item">Состав команды</a>
                 <a class="item">Новости и результаты матчей</a>
-                <a class="item">Календарь игр</a>
-                <a class="item">Командная статистика</a>
-                <a class="active item">Домашняя площадка</a>
-                <a class="item">Фотографии</a>
-                <a class="item">Фан-клуб</a>
+                <a class="item" href="{% url 'hockeyapp:club' pk %}">Календарь игр</a>
+                <a class="item" href="{% url 'hockeyapp:club-stats' pk %}">Командная статистика</a>
+                <a class="active item" href="{% url 'hockeyapp:club-home' pk %}">Домашняя площадка</a>
+                <a class="item" href="{% url 'hockeyapp:club-photos' pk %}">Фотографии</a>
+                <a class="item" href="{% url 'hockeyapp:club-fanzone' pk %}">Фан-клуб</a>
                 <a class="item">Форум</a>
                 <a class="item">Магазин</a>
             </div>
@@ -180,7 +169,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -203,7 +192,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -220,7 +209,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">10</span>
                                     </td>
                                     <td>
@@ -239,7 +228,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -262,7 +251,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -279,7 +268,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">14</span>
                                     </td>
                                     <td>
@@ -313,7 +302,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -336,7 +325,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -353,7 +342,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">23</span>
                                     </td>
                                     <td>
@@ -433,7 +422,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -456,7 +445,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -473,7 +462,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">10</span>
                                     </td>
                                     <td>
@@ -492,7 +481,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -515,7 +504,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -532,7 +521,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">14</span>
                                     </td>
                                     <td>
@@ -566,7 +555,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -589,7 +578,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -606,7 +595,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">23</span>
                                     </td>
                                     <td>
@@ -686,7 +675,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -709,7 +698,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -726,7 +715,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">10</span>
                                     </td>
                                     <td>
@@ -745,7 +734,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -768,7 +757,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -785,7 +774,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">14</span>
                                     </td>
                                     <td>
@@ -819,7 +808,7 @@
                                             <div class="calendar-popup-title">Выездной матч</div>
                                             <hr class="hr">
                                             <div class="team-logo">
-                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo-image">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
                                             </div>
                                             <div class="align-center">
                                                 <a href="#" class="team-link">Нефтехимик (Уфа)</a>
@@ -842,7 +831,7 @@
                                             <div class="team-cities">
                                                 <div class="city">
                                                     <div class="city-photos">
-                                                        <img src="../static/images/stadium.jpg" alt="" class="city-photo">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
@@ -859,7 +848,7 @@
                                                 <a href="#" class="how-to-reach">Как добраться</a>
                                             </div>
                                         </div>
-                                        <img src="../static/images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
                                         <span class="calendar-date">23</span>
                                     </td>
                                     <td>

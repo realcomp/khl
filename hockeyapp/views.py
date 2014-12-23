@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import DetailView, ListView, TemplateView
 
-from .serializers import PlayerCardSerializer
-from .models import Player
+from .serializers import (
+    ClubListSerializer, ClubSerializer, PlayerCardSerializer)
+from .models import Club, Player
 
 
 class PlayersSearch(ListView):
@@ -68,3 +69,47 @@ class PlayerCardCommunication(PlayerCard):
 
 class PlayerCardNews(PlayerCard):
     template_name = 'hockeyapp/player-card-news.html'
+
+
+class ClubListView(ListView):
+    model = Club
+    paginate_by = 100
+    template_name = 'hockeyapp/clubs.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ClubListView, self).get_context_data(**kwargs)
+        qs = self.get_queryset()
+        page_size = self.get_paginate_by(qs)
+        paginator, page, object_list, has_other_pages = self.paginate_queryset(
+            qs, page_size)
+        context.update({
+            'count': qs.count(),
+            'results': ClubListSerializer(object_list, many=True).data,
+        })
+        return context
+
+
+class ClubView(DetailView):
+    model = Club
+    template_name = 'hockeyapp/clubs-calendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ClubView, self).get_context_data(**kwargs)
+        context.update(ClubSerializer(self.get_object()).data)
+        return context
+
+
+class ClubHomeView(ClubView):
+    template_name = 'hockeyapp/clubs-home.html'
+
+
+class ClubFanZoneView(ClubView):
+    template_name = 'hockeyapp/clubs-fan.html'
+
+
+class ClubPhotosView(ClubView):
+    template_name = 'hockeyapp/clubs-photos.html'
+
+
+class ClubStatsView(ClubView):
+    template_name = 'hockeyapp/clubs-stats.html'
