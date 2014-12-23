@@ -154,13 +154,17 @@ class HockeyMatchParser(GrabParser):
         
     def get_penalties_history(self):
         b''' штрафы '''
-        penalty_table = self._get_value('penalties_history')[0]
-        return [self._get_penalty_data(tr) for tr in penalty_table.xpath('tr')
-                if tr.attrib.get('class', '') not in (  'header', 
-                                                        'report',
-                                                        'first_row',
-                                                    )
-        ]
+        penalty_table = self._get_value('penalties_history')
+        if penalty_table:
+            lst = penalty_table[0].xpath('tr')
+            return [self._get_penalty_data(tr) for tr in lst
+                    if tr.attrib.get('class', '') not in (  'header', 
+                                                            'report',
+                                                            'first_row',
+                                                        )
+            ]
+        else:
+            return list()
 
     def _get_penalty_data(self, tr):
         b''' данные о штрафе '''
@@ -207,9 +211,12 @@ class HockeyMatchParser(GrabParser):
 
     def get_goals_history(self):
         b''' заброшенные шайбы '''
-        goals_table = self._get_value('goals_history')[0]
-        return [self._get_goal_data(tr) for tr in goals_table.xpath('tr')
-                if tr.attrib.get('class', '') != 'header']
+        goals_table = self._get_value('goals_history')
+        if goals_table:
+            return [self._get_goal_data(tr) for tr in goals_table[0].xpath('tr')
+                    if tr.attrib.get('class', '') != 'header']
+        else:
+            return list()
 
     def _get_goal_data(self, tr):
         b''' данные о заброшенной шайбе '''

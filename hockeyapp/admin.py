@@ -81,7 +81,11 @@ admin.site.register(Club, ClubAdmin)
 for model in (Coach, Judge, Arena, AddressClub, ClubPlayer, CoachClub):
     admin.site.register(model, BaseAdmin)
 
+admin.site.register(LogoClubHistory, NoFilterAdmin)
 
-for model in (MatchGoalHistory, MatchPenaltyHistory, LogoClubHistory,
-ClubPlayerMatch):
-    admin.site.register(model, NoFilterAdmin)
+
+class HasMatchObjAdmin(NoFilterAdmin):
+    readonly_fields = 'match',
+
+for model in (MatchGoalHistory, MatchPenaltyHistory, ClubPlayerMatch):
+    admin.site.register(model, HasMatchObjAdmin)
