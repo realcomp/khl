@@ -155,43 +155,31 @@ class ClubPlayerMatch(models.Model):
     '''
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
-    plus_minus = models.CharField('+/-', max_length=8,
-                                                        null=True, blank=True)
-    penalty_time = models.CharField(_('Penalty Time'), max_length=8,
-                                                        null=True, blank=True)
-    ev_goals = models.CharField(_('EV Goals'), max_length=8,
-                                                        null=True, blank=True)
-    pp_goals = models.CharField(_('Power Play Goals'), max_length=8,
-                                                        null=True, blank=True)
-    es_goals = models.CharField(_('Even Strength Goals'), max_length=8,
-                                                        null=True, blank=True)
-    overtime_goals = models.CharField(_('Overtime Goals'), max_length=8,
-                                                        null=True, blank=True)
-    win_goals = models.CharField(_('Win Goals'), max_length=8,
-                                                        null=True, blank=True)
-    bullet_goals = models.CharField(_('Win Bullet Goals'), max_length=8,
-                                                        null=True, blank=True)
-    shots = models.CharField(_('Shots count'), max_length=8,
-                                                        null=True, blank=True)
-    pis = models.CharField(_('Percentage of Implemented Shots'), max_length=8,
-                                                        null=True, blank=True)
-    faceoff = models.CharField(_('Face-off'), max_length=8,
-                                                        null=True, blank=True)
-    winfaceoff = models.CharField(_('Face-off Wins'), max_length=8,
-                                                        null=True, blank=True)
-    winfaceoff_p = models.CharField(_('Face-off Wins Percentage'), max_length=8,
-                                                        null=True, blank=True)
+    plus_minus = models.CharField('+/-', max_length=8, blank=True)
+    penalty_time = models.CharField(_('Penalty Time'), max_length=8, blank=True)
+    ev_goals = models.CharField(_('EV Goals'), max_length=8, blank=True)
+    pp_goals = models.CharField(_('Power Play Goals'), max_length=8, blank=True)
+    es_goals = models.CharField(_('Even Strength Goals'),
+                                max_length=8, blank=True)
+    overtime_goals = models.CharField(_('Overtime Goals'),
+                                max_length=8, blank=True)
+    win_goals = models.CharField(_('Win Goals'), max_length=8,  blank=True)
+    bullet_goals = models.CharField(_('Win Bullet Goals'), 
+                                max_length=8, blank=True)
+    shots = models.CharField(_('Shots count'), max_length=8, blank=True)
+    pis = models.CharField(_('Percentage of Implemented Shots'),
+                                max_length=8, blank=True)
+    faceoff = models.CharField(_('Face-off'), max_length=8, blank=True)
+    winfaceoff = models.CharField(_('Face-off Wins'), max_length=8, blank=True)
+    winfaceoff_p = models.CharField(_('Face-off Wins Percentage'),
+                                max_length=8, blank=True)
     #keeper stats
-    loose_goals = models.CharField(_('Loose Goals'), max_length=8,
-                                                        null=True, blank=True)
-    saves = models.CharField(_('Saves Goals'), max_length=8,
-                                                        null=True, blank=True)
-    saves_p = models.CharField(_('Saves Goals Percentage'), max_length=8,
-                            null=True,blank=True)
-    sf = models.CharField(_('Safety Factor'), max_length=8,
-                                                        null=True, blank=True)
-    gamingtime = models.CharField(_('Gaming time'), max_length=8,
-                                                        null=True, blank=True)
+    loose_goals = models.CharField(_('Loose Goals'), max_length=8,  blank=True)
+    saves = models.CharField(_('Saves Goals'), max_length=8, blank=True)
+    saves_p = models.CharField(_('Saves Goals Percentage'),
+                                max_length=8, blank=True)
+    sf = models.CharField(_('Safety Factor'), max_length=8, blank=True)
+    gamingtime = models.CharField(_('Gaming time'), max_length=8, blank=True)
 
     class Meta:
         verbose_name=_('Club Player History Match')
