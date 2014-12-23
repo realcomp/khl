@@ -5,9 +5,7 @@ from . import views
 
 
 urlpatterns = [
-    # players summary
-    url(r'^players/search/$', views.PlayersSearch.as_view(),
-        name='players-search'),
+    # metrics
     url(r'^players/compare/$', views.PlayersCompare.as_view(),
         name='players-compare'),
     url(r'^players/compare/card/$', views.PlayersCompareCard.as_view(),
@@ -18,24 +16,26 @@ urlpatterns = [
         name='players-compare-diff2'),
     url(r'^players/compare/diff3/$', views.PlayersCompareDiff3.as_view(),
         name='players-compare-diff3'),
-    # player's info
-    url(r'^player/(?P<pk>\d+)/$', views.PlayerCard.as_view(),
+    # players
+    url(r'^players/$', views.PlayersSearch.as_view(),
+        name='players-search'),
+    url(r'^players/(?P<pk>\d+)/$', views.PlayerCard.as_view(),
         name='player-card'),
-    url(r'^player/(?P<pk>\d+)/indicators/$',
+    url(r'^players/(?P<pk>\d+)/indicators/$',
         views.PlayerCardIndicators.as_view(),
         name='player-card-indicators'),
-    url(r'^player/(?P<pk>\d+)/clubs/$', views.PlayerCardClubs.as_view(),
+    url(r'^players/(?P<pk>\d+)/clubs/$', views.PlayerCardClubs.as_view(),
         name='player-card-clubs'),
-    url(r'^player/(?P<pk>\d+)/coaches/$', views.PlayerCardCoaches.as_view(),
+    url(r'^players/(?P<pk>\d+)/coaches/$', views.PlayerCardCoaches.as_view(),
         name='player-card-coaches'),
-    url(r'^player/(?P<pk>\d+)/partners/$', views.PlayerCardPartners.as_view(),
+    url(r'^players/(?P<pk>\d+)/partners/$', views.PlayerCardPartners.as_view(),
         name='player-card-partners'),
-    url(r'^player/(?P<pk>\d+)/photos/$', views.PlayerCardPhotos.as_view(),
+    url(r'^players/(?P<pk>\d+)/photos/$', views.PlayerCardPhotos.as_view(),
         name='player-card-photos'),
-    url(r'^player/(?P<pk>\d+)/communication/$',
+    url(r'^players/(?P<pk>\d+)/communication/$',
         views.PlayerCardCommunication.as_view(),
         name='player-card-communication'),
-    url(r'^player/(?P<pk>\d+)/news/$', views.PlayerCardNews.as_view(),
+    url(r'^players/(?P<pk>\d+)/news/$', views.PlayerCardNews.as_view(),
         name='player-card-news'),
     # clubs
     url(r'^clubs/$', views.ClubListView.as_view(), name='club-list'),

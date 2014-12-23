@@ -46,7 +46,7 @@ class PlayersCompareDiff3(TemplateView):
 
 class PlayerCard(DetailView):
     model = Player
-    template_name = 'hockeyapp/player-card-short.html'
+    template_name = 'hockeyapp/players/player-card-short.html'
 
     def get_context_data(self, **kwargs):
         context = super(PlayerCard, self).get_context_data(**kwargs)
@@ -55,31 +55,31 @@ class PlayerCard(DetailView):
 
 
 class PlayerCardIndicators(PlayerCard):
-    template_name = 'hockeyapp/player-card-indicators.html'
+    template_name = 'hockeyapp/players/player-card-indicators.html'
 
 
 class PlayerCardClubs(PlayerCard):
-    template_name = 'hockeyapp/player-card-clubs.html'
+    template_name = 'hockeyapp/players/player-card-clubs.html'
 
 
 class PlayerCardCoaches(PlayerCard):
-    template_name = 'hockeyapp/player-card-coaches.html'
+    template_name = 'hockeyapp/players/player-card-coaches.html'
 
 
 class PlayerCardPartners(PlayerCard):
-    template_name = 'hockeyapp/player-card-partners.html'
+    template_name = 'hockeyapp/players/player-card-partners.html'
 
 
 class PlayerCardPhotos(PlayerCard):
-    template_name = 'hockeyapp/player-card-photos.html'
+    template_name = 'hockeyapp/players/player-card-photos.html'
 
 
 class PlayerCardCommunication(PlayerCard):
-    template_name = 'hockeyapp/player-card-communication.html'
+    template_name = 'hockeyapp/players/player-card-communication.html'
 
 
 class PlayerCardNews(PlayerCard):
-    template_name = 'hockeyapp/player-card-news.html'
+    template_name = 'hockeyapp/players/player-card-news.html'
 
 
 class ClubListView(ListView):
