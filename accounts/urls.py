@@ -1,5 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('accounts.views',
-    url(r'^signup/$', 'signup', name='signup'),
-)
+from . import views
+
+
+urlpatterns = [
+    url(r'^signup/$', views.Signup.as_view(), name='signup'),
+]
