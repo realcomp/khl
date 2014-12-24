@@ -9,7 +9,7 @@ from .models import Club, Player
 class PlayersSearch(ListView):
     model = Player
     paginate_by = 100
-    template_name = 'hockeyapp/players-search.html'
+    template_name = 'hockeyapp/players/players-search.html'
 
     def get_context_data(self, **kwargs):
         context = super(PlayersSearch, self).get_context_data(**kwargs)
@@ -22,26 +22,6 @@ class PlayersSearch(ListView):
             'results': PlayerCardSerializer(object_list, many=True).data,
         })
         return context
-
-
-class PlayersCompare(TemplateView):
-    template_name = 'hockeyapp/player-select.html'
-
-
-class PlayersCompareCard(TemplateView):
-    template_name = 'hockeyapp/player-card.html'
-
-
-class PlayersCompareDiff(TemplateView):
-    template_name = 'hockeyapp/players-diff.html'
-
-
-class PlayersCompareDiff2(TemplateView):
-    template_name = 'hockeyapp/players-diff2.html'
-
-
-class PlayersCompareDiff3(TemplateView):
-    template_name = 'hockeyapp/players-diff3.html'
 
 
 class PlayerCard(DetailView):
@@ -124,3 +104,23 @@ class ClubPhotosView(ClubView):
 
 class ClubStatsView(ClubView):
     template_name = 'hockeyapp/clubs/clubs-stats.html'
+
+
+class MetricsPlayers(TemplateView):
+    template_name = 'hockeyapp/metrics/player-select.html'
+
+
+class MetricsPlayerCard(PlayerCard):
+    template_name = 'hockeyapp/metrics/player-card.html'
+
+
+class MetricsPlayersCompare(TemplateView):
+    template_name = 'hockeyapp/metrics/players-diff.html'
+
+
+class MetricsPlayersCompare2(TemplateView):
+    template_name = 'hockeyapp/metrics/players-diff2.html'
+
+
+class MetricsPlayersCompare3(TemplateView):
+    template_name = 'hockeyapp/metrics/players-diff3.html'

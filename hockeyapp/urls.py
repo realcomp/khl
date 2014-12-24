@@ -6,16 +6,16 @@ from . import views
 
 urlpatterns = [
     # metrics
-    url(r'^players/compare/$', views.PlayersCompare.as_view(),
-        name='players-compare'),
-    url(r'^players/compare/card/$', views.PlayersCompareCard.as_view(),
-        name='players-compare-card'),
-    url(r'^players/compare/diff/$', views.PlayersCompareDiff.as_view(),
-        name='players-compare-diff'),
-    url(r'^players/compare/diff2/$', views.PlayersCompareDiff2.as_view(),
-        name='players-compare-diff2'),
-    url(r'^players/compare/diff3/$', views.PlayersCompareDiff3.as_view(),
-        name='players-compare-diff3'),
+    url(r'^metrics/players/$', views.MetricsPlayers.as_view(),
+        name='metrics-players'),
+    url(r'^metrics/players/(?P<pk>\d+)/$', views.MetricsPlayerCard.as_view(),
+        name='metrics-player-card'),
+    url(r'^metrics/players/compare/$', views.MetricsPlayersCompare.as_view(),
+        name='metrics-compare'),
+    url(r'^metrics/players/compare2/$', views.MetricsPlayersCompare2.as_view(),
+        name='metrics-compare2'),
+    url(r'^metrics/players/compare3/$', views.MetricsPlayersCompare3.as_view(),
+        name='metrics-compare3'),
     # players
     url(r'^players/$', views.PlayersSearch.as_view(),
         name='players-search'),

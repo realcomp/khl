@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "hockeyapp/metrics/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -30,7 +30,7 @@
                     <div class="row player-card-top">
                         <div class="six wide column">
                             <div class="player-card-block">
-                                <img src="../static/images/player-avatar.jpg" width="222" alt="" class="player-card-avatar">
+                                <img src="{{ STATIC_URL }}images/player-avatar.jpg" width="222" alt="" class="player-card-avatar">
                                 <div class="player-card-desc">
                                     <div class="player-card-name">Ковальчук</div>
                                     <div class="player-card-name">Илья</div>
@@ -283,7 +283,7 @@
                     </div>
                     <div class="one column row">
                         <div class="column">
-                            <img src="../static/images/player-card-graph.png" width="944" alt="">
+                            <img src="{{ STATIC_URL }}images/player-card-graph.png" width="944" alt="">
                         </div>
                     </div>
                 </div>

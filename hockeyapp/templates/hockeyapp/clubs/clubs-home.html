@@ -37,13 +37,13 @@
             <div class="page-inner-container">
                 <div class="heading">Домашняя площадка</div>
                 <div class="stadium-block">
-                    <img src="http://lorempixel.com/456/312/sports/" alt="" class="stadium-photo">
+                    <img src="{{ arena.photo }}" alt="" class="stadium-photo">
                     <div class="stadium-desc">
-                        <div class="stadium-title">УКРК "Арена"</div>
+                        <div class="stadium-title">{{ arena.title }}</div>
                         <div class="stadium-info">УКРК "Арена 2000" (Универсальный культурно-развлекательный комплекс "Арена 2000. Локомотив")[2] - универсальный культурно-спортивный комплекс российского города Ярославля. Открыт в 2001 году. Расположен в Красноперекопском районе города в жилом районе Нефтестрой.</div>
                         <ul class="stadium-info-list">
                             <li class="stadium-info-item">
-                                <span>Официальное название:</span> "Уфа-Арена" / "Ufa-Arena"
+                                <span>Официальное название:</span> "{{ arena.title }}"
                             </li>
                             <li class="stadium-info-item">
                                 <span>Адрес:</span> Уфа, ул.Ленина, 114
@@ -55,10 +55,10 @@
                                 <span>Открыт:</span> 27 августа 2007г.
                             </li>
                             <li class="stadium-info-item">
-                                <span>Вместимость:</span> 2970 человек
+                                <span>Вместимость:</span> {{ arena.capacity }}
                             </li>
                             <li class="stadium-info-item">
-                                <span>Сайт:</span> www.arena2000.ru
+                                <span>Сайт:</span> {{ arena.site }}
                             </li>
                         </ul>
                     </div>

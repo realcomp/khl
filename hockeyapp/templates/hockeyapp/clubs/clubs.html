@@ -113,12 +113,12 @@
                                             <td>
                                                 <a class="clubs-link" href="{% url 'hockeyapp:club' club.pk %}">
                                                     <img src="{{ club.logo }}" alt="" class="club-logo">
-                                                    <span>СКА</span>
+                                                    <span>{{ club.title }}</span>
                                                 </a>
                                             </td>
                                             <td>Москва</td>
                                             <td align="center">5</td>
-                                            <td><a href="#">{{ club.arena.pk }}</a></td>
+                                            <td><a href="{% url 'hockeyapp:club-home' club.pk %}">{{ club.arena.title }}</a></td>
                                             <td><a href="#">{{ club.coach.fio }}</a></td>
                                         </tr>
                                         {% endfor %}

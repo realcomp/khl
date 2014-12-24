@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "hockeyapp/metrics/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -48,7 +48,7 @@
                                     </div>
                                 </div>
                                 <div class="graph-block-right">
-                                    <img src="../static/images/graph-block-image.png" alt="" class="graph-block-image">
+                                    <img src="{{ STATIC_URL }}images/graph-block-image.png" alt="" class="graph-block-image">
                                     <div class="graph-block-desc">Выберите данные для оси X</div>
                                     <div class="ui selection dropdown">
                                         <input type="hidden" name="season">
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                                 <div class="graph-block-right">
-                                    <img src="../static/images/graph-block-image.png" alt="" class="graph-block-image">
+                                    <img src="{{ STATIC_URL }}images/graph-block-image.png" alt="" class="graph-block-image">
                                     <div class="graph-block-desc">Выберите данные для оси X</div>
                                     <div class="ui selection dropdown">
                                         <input type="hidden" name="season">
@@ -107,7 +107,7 @@
                             <ul class="players-list">
                                 <li class="player-item">
                                     <div class="player-avatar-block">
-                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
                                         <span class="player-line"></span>
                                     </div>
                                     <div class="player-name">Кержаков</div>
@@ -118,7 +118,7 @@
                                 </li>
                                 <li class="player-item">
                                     <div class="player-avatar-block">
-                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
                                         <span class="player-line"></span>
                                     </div>
                                     <div class="player-name">Кержаков</div>
@@ -129,7 +129,7 @@
                                 </li>
                                 <li class="player-item">
                                     <div class="player-avatar-block">
-                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
                                         <span class="player-line"></span>
                                     </div>
                                     <div class="player-name">Кержаков</div>
@@ -140,7 +140,7 @@
                                 </li>
                                 <li class="player-item">
                                     <div class="player-avatar-block">
-                                        <img src="../static/images/player1.png" width="48" alt="" class="player-avatar">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
                                         <span class="player-line"></span>
                                     </div>
                                     <div class="player-name">Кержаков</div>
@@ -153,7 +153,7 @@
                             <a href="#" class="player-add-btn">+ Добавить игрока</a>
                         </div>
                         <div class="twelve wide column">
-                            <img class="player-diff-graph" src="../static/images/player-diff.jpg" alt="" width="660">
+                            <img class="player-diff-graph" src="{{ STATIC_URL }}images/player-diff.jpg" alt="" width="660">
                         </div>
                     </div>
                     <ul class="team-controls player-controls-block">

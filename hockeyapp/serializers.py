@@ -19,6 +19,17 @@ class AbstractManSerializer(serializers.ModelSerializer):
         return obj.en_fio
 
 
+class TitleBaseSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        # TODO: get current language
+        language = 'ru'
+        if hasattr(obj, '%s_title' % language):
+            return getattr(obj, '%s_title' % language)
+        return obj.en_title
+
+
 class PlayerCardSerializer(AbstractManSerializer):
     photo = fields.ReadOnlyField(source='photo.url')
     line = fields.ReadOnlyField(source='get_line_display')
@@ -52,21 +63,19 @@ class PlayerCardSerializer(AbstractManSerializer):
 
 class CoachSerializer(AbstractManSerializer):
     class Meta(object):
-        fields = (
-            'pk', 'fio')
+        fields = 'pk', 'fio'
         model = Coach
 
 
-class ArenaSerializer(serializers.ModelSerializer):
-    logo = fields.ReadOnlyField(source='photo.url')
+class ArenaSerializer(TitleBaseSerializer):
+    photo = fields.ReadOnlyField(source='photo.url')
 
     class Meta(object):
-        fields = (
-            'pk', 'logo')
+        fields = 'pk', 'title', 'photo', 'capacity', 'site'
         model = Arena
 
 
-class ClubListSerializer(serializers.ModelSerializer):
+class ClubListSerializer(TitleBaseSerializer):
     logo = fields.ReadOnlyField(source='logo.url')
     # address
     coach = CoachSerializer()
@@ -77,7 +86,7 @@ class ClubListSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         fields = (
-            'pk', 'logo', 'site', 'contacts', 'coach', 'arena')
+            'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena')
         model = Club
 
 
