@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "hockeyapp/metrics/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -30,7 +30,7 @@
                     <div class="row player-card-top">
                         <div class="six wide column">
                             <div class="player-card-block">
-                                <img src="../static/images/player-avatar.jpg" width="222" alt="" class="player-card-avatar">
+                                <img src="{{ STATIC_URL }}images/player-avatar.jpg" width="222" alt="" class="player-card-avatar">
                                 <div class="player-card-desc">
                                     <div class="player-card-name">Ковальчук</div>
                                     <div class="player-card-name">Илья</div>
@@ -45,12 +45,19 @@
                                         <li class="player-card-item">Возраст: 24 года 5 месяцев</li>
                                         <li class="player-card-item">Гражданство: Россия</li>
                                     </ul>
+                                    <ul class="player-card-list player-card-list-more">
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                    </ul>
                                     <a href="#" class="player-card-more-btn">подробнее<i class="triangle down icon"></i></a>
                                 </div>
                             </div>
                         </div>
                         <div class="six wide column">
-                            <div class="to-favorites">+ в избранних</div>
+                            <div class="to-favorites">+ в избранных</div>
                             <div class="sub-heading"><i class="pencil icon"></i>Примечания</div>
                             <div class="player-comment-block">
                                 <textarea name="comment" id="" rows="12" class="player-comment" placeholder="Запишите любые комментарии (индивидуальные особенности, контакты агента, номер телефона и т.п.). Данные видны только Вам."></textarea>
@@ -59,39 +66,72 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui grid">
-                    <div class="four column row user-options">
-                        <div class="column">
+                <div class="player-achievement-slider">
+                    <div class="slides_container">
+                        <div>
                             <div class="player-achievement">
                                 <span class="achievement-icon">5</span>
                                 <span class="achievement-title">Клубы<br>по сезонам</span>
-                                <span class="achievement-item">КХЛ: Локомотив (13-14)</span>
-                                <span class="achievement-item">КХЛ: Адмирал (12-13)</span>
-                                <span class="achievement-item">КХЛ: Динамо (09-10)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Локомотив</a> (13-14)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Адмирал</a> (12-13)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Динамо</a> (09-10)</span>
                                 <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                                <div class="achievement-hidden-block">
+                                    <span class="achievement-item">КХЛ: <a href="#">Локомотив</a> (13-14)</span>
+                                    <span class="achievement-item">КХЛ: <a href="#">Адмирал</a> (12-13)</span>
+                                    <span class="achievement-item">КХЛ: <a href="#">Динамо</a> (09-10)</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="column">
                             <div class="player-achievement player-achievement_mod-2">
                                 <span class="achievement-icon">7</span>
                                 <span class="achievement-title">Тренеры<br>по времени работы</span>
-                                <span class="achievement-item">Светлов А.С (13-14)</span>
-                                <span class="achievement-item">Романцев О.П. (12-13)</span>
-                                <span class="achievement-item">Александров П.И. (09-10)</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
                                 <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
                             </div>
-                        </div>
-                        <div class="column">
                             <div class="player-achievement player-achievement_mod-3">
                                 <span class="achievement-icon">42</span>
                                 <span class="achievement-title">Партнеры<br>по командам</span>
-                                <span class="achievement-item">Светлов А.С (13-14)</span>
-                                <span class="achievement-item">Романцев О.П. (12-13)</span>
-                                <span class="achievement-item">Александров П.И. (09-10)</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-4">
+                                <span class="achievement-icon">8</span>
+                                <span class="achievement-title">Награды<br>и достижения</span>
+                                <span class="achievement-item">Кубок НХЛ (2012г.)</span>
+                                <span class="achievement-item">Заслуж. мастер спорта (2011г.)</span>
+                                <span class="achievement-item">ЧМ Серебро (2010г.)</span>
                                 <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
                             </div>
                         </div>
-                        <div class="column">
+                        <div>
+                            <div class="player-achievement">
+                                <span class="achievement-icon">5</span>
+                                <span class="achievement-title">Клубы<br>по сезонам</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Локомотив</a> (13-14)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Адмирал</a> (12-13)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Динамо</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-2">
+                                <span class="achievement-icon">7</span>
+                                <span class="achievement-title">Тренеры<br>по времени работы</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-3">
+                                <span class="achievement-icon">42</span>
+                                <span class="achievement-title">Партнеры<br>по командам</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
                             <div class="player-achievement player-achievement_mod-4">
                                 <span class="achievement-icon">8</span>
                                 <span class="achievement-title">Награды<br>и достижения</span>
@@ -102,6 +142,8 @@
                             </div>
                         </div>
                     </div>
+                    <a href="#" class="prev"><i class="chevron circle left icon"></i></a>
+                    <a href="#" class="next"><i class="chevron circle right icon"></i></a>
                 </div>
                 <div class="diff-block">
                     <div class="ui divided grid">
@@ -182,7 +224,7 @@
                                         <a href="#" class="graph-control-link">Ш</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">А</a>
+                                        <a href="#" class="graph-control-link graph-control-link_active">А</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">О</a>
@@ -241,7 +283,7 @@
                     </div>
                     <div class="one column row">
                         <div class="column">
-                            <img src="../static/images/player-card-graph.png" width="944" alt="">
+                            <img src="{{ STATIC_URL }}images/player-card-graph.png" width="944" alt="">
                         </div>
                     </div>
                 </div>

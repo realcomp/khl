@@ -18,14 +18,16 @@
         <![endif]-->
     </head>
     <body>
-        {% include "partial/header.html" %}
+        {% block header %}
+            {% include "partial/header.html" %}
+        {% endblock %}
 
         {% block body %}
         <section class="content">
-            
+
         </section>
         {% endblock %}
-        
+
         {% include "partial/footer.html" %}
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "accounts/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -19,22 +19,22 @@
         <div class="user-card">
             <div class="user-avatar">
                 <div class="user-avatar-hex1">
-                    <div class="user-avatar-hex2" style="background-image: url(../static/images/user-avatar.png)"></div>
+                    <div class="user-avatar-hex2" style="background-image: url({{ STATIC_URL }}images/user-avatar.png)"></div>
                 </div>
             </div>
             <div class="user-info">
-                <div class="user-info-name">Кристина</div>
-                <div class="user-info-surname">Старикова</div>
+                <div class="user-info-name">{{ fio }}</div>
+                <!-- <div class="user-info-surname">Старикова</div> -->
                 <a href="#" class="user-change-avatar">сменить фото ></a>
             </div>
         </div>
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
-                <a class="item">Доступные опции</a>
-                <a class="item">Пакетные предложения</a>
-                <a class="active item">История покупок</a>
-                <a class="item">Личные данные</a>
+                <a class="item" href="{% url 'accounts:profile' %}">Доступные опции</a>
+                <a class="item" href="{% url 'accounts:profile-offers' %}">Пакетные предложения</a>
+                <a class="active item" href="{% url 'accounts:profile-history' %}">История покупок</a>
+                <a class="item" href="{% url 'accounts:profile-private' %}">Личные данные</a>
             </div>
             <div class="page-inner-container">
                 <div class="user-page">

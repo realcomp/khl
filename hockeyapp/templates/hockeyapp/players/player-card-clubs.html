@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "hockeyapp/players/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -7,11 +7,11 @@
             <div class="ui small breadcrumb">
                 <a class="section">ХОККЕЙ</a>
                 <div class="divider"> / </div>
-                <a class="section">Игроки</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
                 <div class="divider"> / </div>
                 <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{ fio }}</a>
                 <div class="divider"> / </div>
-                <div class="active section">Тренеры</div>
+                <div class="active section">Клубы</div>
             </div>
             <div class="search-block">
                 <div class="item">
@@ -22,41 +22,14 @@
                 </div>
             </div>
         </div>
-        <div class="ui grid">
-            <div class="row">
-                <div class="twelve wide column">
-                    <div class="player-card-block">
-                        <img src="{{ photo }}" width="105" alt="" class="player-card-avatar">
-                        <div class="player-card-desc">
-                            <div class="player-card-name">{{ fio }}</div>
-                            <div class="player-card-amplua">Амплуа: {{ line }}</div>
-                            <ul class="player-card-list">
-                                <li class="player-card-item">Рост: {{ height }} см.</li>
-                                <li class="player-card-item">Вес: {{ weight }} кг.</li>
-                                <li class="player-card-item">Хват: правый</li>
-                            </ul>
-                            <ul class="player-card-list player-card-list_nb">
-                                <li class="player-card-item">Дата рождения: {{ birth_date }}</li>
-                                <li class="player-card-item">Возраст: {{ age.0 }} лет {{ age.1 }} месяцев</li>
-                                <li class="player-card-item">Гражданство: Россия</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="align-center">
-                        <a class="ui mini orange button player-like-btn">+мне нравится этот игрок</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% include "hockeyapp/players/card.html" %}
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
                 <a class="item" href="{% url 'hockeyapp:player-card' pk %}">Краткая информация</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-indicators' pk %}">Спортивные показатели</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
-                <a class="active item" href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
+                <a class="active item" href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-partners' pk %}">Партнеры по команде</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-photos' pk %}">Фотографии</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-communication' pk %}">Общение</a>
@@ -67,7 +40,7 @@
                     <div class="row">
                         <div class="column">
                             <div class="ui tabular menu content-tabs">
-                                <span class="heading">Тренеры</span>
+                                <span class="heading">Клубы</span>
                             </div>
                         </div>
                     </div>
@@ -75,19 +48,19 @@
                         <div class="four wide column">
                             <ul class="options-list player-clubs-list">
                                 <li class="option-item">
-                                    <a href="#" class="option-link option-link_active">Светлов Сергей (4 года 7 мес.)</a>
+                                    <a href="#" class="option-link option-link_active">КХЛ: Локомотив (02-06 13-15)</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">Романцев Олег (2 года 7 мес.)</a>
+                                    <a href="#" class="option-link">КХЛ: Адмирал (13-14)</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">Капелло Фабио (11 мес.)</a>
+                                    <a href="#" class="option-link">КХЛ: Динамо М (09-10)</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">Тихонов Виктор (7 мес.)</a>
+                                    <a href="#" class="option-link">ВХЛ: Сарыарка (08-09)</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">Знарок Олег (3 мес.)</a>
+                                    <a href="#" class="option-link">МХЛ: Красная Армия (06-08)</a>
                                 </li>
                             </ul>
                         </div>

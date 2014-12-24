@@ -5,9 +5,12 @@
         <a href="/" class="logo"><img src="{{STATIC_PREFIX}}images/logo.png" alt="Sportomatics" class="logo-image"></a>
 
         <div class="ui secondary menu user-card-menu">
-            <a class="active item">{% trans 'METRICS' %}</a>
-            <a class="item">{% trans 'CLUBS' %}</a>
-            <a href="" class="item">{% trans 'PROFILE' %}</a>
+            <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}item"
+               href="{% url 'hockeyapp:metrics-players' %}">{% trans 'METRICS' %}</a>
+            <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
+               href="{% url 'hockeyapp:club-list' %}">{% trans 'CLUBS' %}</a>
+            <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}item"
+               href="{% url 'accounts:profile' %}">{% trans 'PROFILE' %}</a>
         </div>
         <div class="ui link list">
             <a class="item prof-version">{% trans 'PRO VERSION' %}</a>

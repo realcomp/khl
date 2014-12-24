@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "hockeyapp/players/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -7,11 +7,11 @@
             <div class="ui small breadcrumb">
                 <a class="section">ХОККЕЙ</a>
                 <div class="divider"> / </div>
-                <a class="section">Игроки</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
                 <div class="divider"> / </div>
                 <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{ fio }}</a>
                 <div class="divider"> / </div>
-                <div class="active section">Спортивные показатели</div>
+                <div class="active section">Тренеры</div>
             </div>
             <div class="search-block">
                 <div class="item">
@@ -22,41 +22,14 @@
                 </div>
             </div>
         </div>
-        <div class="ui grid">
-            <div class="row">
-                <div class="twelve wide column">
-                    <div class="player-card-block">
-                        <img src="{{ photo }}" width="105" alt="" class="player-card-avatar">
-                        <div class="player-card-desc">
-                            <div class="player-card-name">{{ fio }}</div>
-                            <div class="player-card-amplua">Амплуа: {{ line }}</div>
-                            <ul class="player-card-list">
-                                <li class="player-card-item">Рост: {{ height }} см.</li>
-                                <li class="player-card-item">Вес: {{ weight }} кг.</li>
-                                <li class="player-card-item">Хват: правый</li>
-                            </ul>
-                            <ul class="player-card-list player-card-list_nb">
-                                <li class="player-card-item">Дата рождения: {{ birth_date }}</li>
-                                <li class="player-card-item">Возраст: {{ age.0 }} лет {{ age.1 }} месяцев</li>
-                                <li class="player-card-item">Гражданство: Россия</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="align-center">
-                        <a class="ui mini orange button player-like-btn">+мне нравится этот игрок</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% include "hockeyapp/players/card.html" %}
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
                 <a class="item" href="{% url 'hockeyapp:player-card' pk %}">Краткая информация</a>
-                <a class="active item" href="{% url 'hockeyapp:player-card-indicators' pk %}">Спортивные показатели</a>
+                <a class="item" href="{% url 'hockeyapp:player-card-indicators' pk %}">Спортивные показатели</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
+                <a class="active item" href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-partners' pk %}">Партнеры по команде</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-photos' pk %}">Фотографии</a>
                 <a class="item" href="{% url 'hockeyapp:player-card-communication' pk %}">Общение</a>
@@ -67,43 +40,35 @@
                     <div class="row">
                         <div class="column">
                             <div class="ui tabular menu content-tabs">
-                                <span class="heading">Спортивные показатели</span>
+                                <span class="heading">Тренеры</span>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="three wide column">
-                            <div class="players-compare-title">Сравнить<br>с ...</div>
-                            <ul class="players-compare-list">
-                                <li class="players-compare-item">
-                                    <a href="#" class="players-compare-link">
-                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="players-compare-photo">
-                                        <span class="player-compare-name">Кержаков</span>
-                                        <span class="player-compare-name">Александр</span>
-                                    </a>
+                        <div class="four wide column">
+                            <ul class="options-list player-clubs-list">
+                                <li class="option-item">
+                                    <a href="#" class="option-link option-link_active">Светлов Сергей (4 года 7 мес.)</a>
                                 </li>
-                                <li class="players-compare-item">
-                                    <a href="#" class="players-compare-link">
-                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="players-compare-photo">
-                                        <span class="player-compare-name">Кержаков</span>
-                                        <span class="player-compare-name">Александр</span>
-                                    </a>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Романцев Олег (2 года 7 мес.)</a>
                                 </li>
-                                <li class="players-compare-item">
-                                    <a href="#" class="players-compare-link">
-                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="players-compare-photo">
-                                        <span class="player-compare-name">Кержаков</span>
-                                        <span class="player-compare-name">Александр</span>
-                                    </a>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Капелло Фабио (11 мес.)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Тихонов Виктор (7 мес.)</a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="#" class="option-link">Знарок Олег (3 мес.)</a>
                                 </li>
                             </ul>
-                            <a href="#" class="players-compare-player-add">+ добавить игрока</a>
                         </div>
-                        <div class="ten wide column">
+                        <div class="twelve wide column">
                             <div class="graph-controls-block">
                                 <ul class="graph-controls-list">
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link graph-control-link_active">И</a>
+                                        <a href="#" class="graph-control-link">И</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">Ш</a>
@@ -115,7 +80,7 @@
                                         <a href="#" class="graph-control-link">О</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">+/-</a>
+                                        <a href="#" class="graph-control-link graph-control-link_active">+/-</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">Штр</a>
@@ -164,37 +129,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <ul class="indicators-list">
-                                <li class="indicator-item"><a href="#" class="indicator-link">График</a></li>
-                                <li class="indicator-item"><a href="#" class="indicator-link">Таблица</a></li>
-                            </ul>
                             <img src="{{ STATIC_URL }}images/player-card-graph.png" alt="" class="indicator-graph">
-                        </div>
-                        <div class="three wide column">
-                            <div class="players-compare-title">Похожие<br>игроки</div>
-                            <ul class="players-compare-list">
-                                <li class="players-compare-item">
-                                    <a href="#" class="players-compare-link">
-                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="players-compare-photo">
-                                        <span class="player-compare-name">Кержаков</span>
-                                        <span class="player-compare-name">Александр</span>
-                                    </a>
-                                </li>
-                                <li class="players-compare-item">
-                                    <a href="#" class="players-compare-link">
-                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="players-compare-photo">
-                                        <span class="player-compare-name">Кержаков</span>
-                                        <span class="player-compare-name">Александр</span>
-                                    </a>
-                                </li>
-                                <li class="players-compare-item">
-                                    <a href="#" class="players-compare-link">
-                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="players-compare-photo">
-                                        <span class="player-compare-name">Кержаков</span>
-                                        <span class="player-compare-name">Александр</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>

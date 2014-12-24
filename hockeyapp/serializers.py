@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from rest_framework import fields, serializers
 
-from .models import Player
+from .models import Coach, Arena, Club, Player
 
 
 class AbstractManSerializer(serializers.ModelSerializer):
@@ -18,8 +18,16 @@ class AbstractManSerializer(serializers.ModelSerializer):
             return getattr(obj, '%s_fio' % language)
         return obj.en_fio
 
-    class Meta(object):
-        model = Player
+
+class TitleBaseSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        # TODO: get current language
+        language = 'ru'
+        if hasattr(obj, '%s_title' % language):
+            return getattr(obj, '%s_title' % language)
+        return obj.en_title
 
 
 class PlayerCardSerializer(AbstractManSerializer):
@@ -46,7 +54,41 @@ class PlayerCardSerializer(AbstractManSerializer):
     def get_khl_url(self, obj):
         return 'http://www.khl.ru/players/%s/' % obj.khl_id
 
-    class Meta(AbstractManSerializer.Meta):
+    class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
             'photo', 'khl_url', 'birth_date_short')
+        model = Player
+
+
+class CoachSerializer(AbstractManSerializer):
+    class Meta(object):
+        fields = 'pk', 'fio'
+        model = Coach
+
+
+class ArenaSerializer(TitleBaseSerializer):
+    photo = fields.ReadOnlyField(source='photo.url')
+
+    class Meta(object):
+        fields = 'pk', 'title', 'photo', 'capacity', 'site'
+        model = Arena
+
+
+class ClubListSerializer(TitleBaseSerializer):
+    logo = fields.ReadOnlyField(source='logo.url')
+    # address
+    coach = CoachSerializer()
+    arena = ArenaSerializer()
+    # players
+    # farm_club
+    # junior_club
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena')
+        model = Club
+
+
+class ClubSerializer(ClubListSerializer):
+    pass
