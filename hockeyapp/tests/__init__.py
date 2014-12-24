@@ -1,8 +1,8 @@
 #coding: utf-8
 import base.tests
 
-from . import parsers
-from .models import Match, Player, Club
+from .. import parsers
+from ..models import Match, Player, Club
 
 
 class HockeyAppTest(base.tests.BaseTest):
