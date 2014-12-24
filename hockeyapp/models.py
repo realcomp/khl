@@ -148,6 +148,70 @@ class LogoClubHistory(models.Model):
         verbose_name_plural=_('Logo Club Histories')
 
 
+class AdvancedPlayerStats(models.Model):
+    b''' Дополнительная статистика по игроку в матче '''
+    shots_1th = models.CharField(_('1th period Shots'),
+                                    max_length=16, blank=True)
+    shots_2nd = models.CharField(_('2nd period Shots'),
+                                    max_length=16, blank=True)
+    shots_3th = models.CharField(_('3th period Shots'),
+                                    max_length=16, blank=True)
+    shots_all = models.CharField(_('All periods Shots'),
+                                    max_length=16, blank=True)
+    faceoff_1th = models.CharField(_('1th period Faceoffs'),
+                                    max_length=16, blank=True)
+    faceoff_2nd = models.CharField(_('2nd period Faceoffs'),
+                                    max_length=16, blank=True)
+    faceoff_3th = models.CharField(_('3th period Faceoffs'),
+                                    max_length=16, blank=True)
+    faceoff_all = models.CharField(_('All periods Faceoffs'),
+                                    max_length=16, blank=True)
+    change_count_1th = models.CharField(_('1th period change count'),
+                                    max_length=16, blank=True)
+    gamingtime_1th = models.CharField(_('1th period time in game'),
+                                    max_length=16, blank=True)
+    change_count_2nd = models.CharField(_('2nd period change count'),
+                                    max_length=16, blank=True)
+    gamingtime_2nd = models.CharField(_('2nd period change count'),
+                                    max_length=16, blank=True)
+    change_count_3th = models.CharField(_('3th period change count'),
+                                    max_length=16, blank=True)
+    gamingtime_3th = models.CharField(_('3th period time in game'),
+                                    max_length=16, blank=True)
+    change_count_all = models.CharField(_('All periods change count'),
+                                    max_length=16, blank=True)
+    gamingtime_all = models.CharField(_('All periods time in game'),
+                                    max_length=16, blank=True)
+    block_1th = models.CharField(_('1th period blocks'),
+                                    max_length=16, blank=True)
+    hit_1th = models.CharField(_('1th period hits'),
+                                    max_length=16, blank=True)
+    foul_1th = models.CharField(_('1th period fouls'),
+                                    max_length=16, blank=True)
+    block_2nd = models.CharField(_('2nd period blocks'),
+                                    max_length=16, blank=True)
+    hit_2nd = models.CharField(_('2nd period hits'),
+                                    max_length=16, blank=True)
+    foul_2nd = models.CharField(_('2nd period fouls'),
+                                    max_length=16, blank=True)
+    block_3th = models.CharField(_('3th period blocks'),
+                                    max_length=16, blank=True)
+    hit_3th = models.CharField(_('3th period hits'),
+                                    max_length=16, blank=True)
+    foul_3th = models.CharField(_('3th period fouls'),
+                                    max_length=16, blank=True)
+    block_all = models.CharField(_('All periods blocks'),
+                                    max_length=16, blank=True)
+    hit_all = models.CharField(_('All periods hits'),
+                                    max_length=16, blank=True)
+    foul_all = models.CharField(_('All periods fouls'),
+                                    max_length=16, blank=True)
+
+    class Meta:
+        verbose_name=_('Player Stats')
+        verbose_name_plural=_('Players Stats')
+
+
 class ClubPlayerMatch(models.Model):
     b'''
         связка игрок в клубе в сезоне с матчем в сезоне
@@ -180,6 +244,9 @@ class ClubPlayerMatch(models.Model):
                                 max_length=8, blank=True)
     sf = models.CharField(_('Safety Factor'), max_length=8, blank=True)
     gamingtime = models.CharField(_('Gaming time'), max_length=8, blank=True)
+
+    adv_stats = models.OneToOneField(AdvancedPlayerStats,
+                                    null=True, blank=True)
 
     class Meta:
         verbose_name=_('Club Player History Match')

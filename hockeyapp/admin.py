@@ -6,7 +6,7 @@ from base.admin import DynamicDisplayFilterMixin
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
-from .models import LogoClubHistory, ClubPlayerMatch
+from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 
 
 class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
@@ -24,7 +24,7 @@ class PenaltyEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     fields = ('player',)+readonly_fields
 
 
-class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
+class MatchAdmin(NoActionMixin, NoFilterAdmin):
     suit_form_tabs = (
                 ('general', _('General')),
                 ('hometeam', _('Home team')),
@@ -54,6 +54,11 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (GoalEntryInline, PenaltyEntryInline)
     list_display = 'khl_id', 'ru_title', 'url', 'spectators', 'date', 'count'
     readonly_fields = 'home_players', 'guest_players', 'judges', 'line_judges'
+
+    def get_list_display(self, request):
+        if self.list_display:
+            return self.list_display
+        return ('id',)+self.get_fields(request)
 admin.site.register(Match, MatchAdmin)
 
 
@@ -78,7 +83,7 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Coach, Judge, Arena, AddressClub, ClubPlayer, CoachClub):
+for model in (Coach, Judge, Arena, AddressClub, ClubPlayer, CoachClub,):
     admin.site.register(model, BaseAdmin)
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
@@ -87,5 +92,12 @@ admin.site.register(LogoClubHistory, NoFilterAdmin)
 class HasMatchObjAdmin(NoFilterAdmin):
     readonly_fields = 'match',
 
-for model in (MatchGoalHistory, MatchPenaltyHistory, ClubPlayerMatch):
+for model in (MatchGoalHistory, MatchPenaltyHistory):
     admin.site.register(model, HasMatchObjAdmin)
+
+
+class ClubPlayerMatchAdmin(NoFilterAdmin):
+    readonly_fields = 'match', 'clubplayer'
+admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
+
+admin.site.register(AdvancedPlayerStats)

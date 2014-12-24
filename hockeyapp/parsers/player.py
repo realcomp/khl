@@ -101,10 +101,12 @@ class GetPlayerInfo(GrabParser):
 
     def get_photo_url(self):
         b''' возьмем url photo игрока '''
-        _res = self._get_value('photo')[0].attrib.get('style')
-        _res = re.search('url\((.*?)\)', _res).group(1)
-        if _res != '/img/teamplayers_db//.jpg':
-            return defaults.KHL_SITE_URL+_res
+        _res = self._get_value('photo')
+        if _res:
+            _res = _res[0].attrib.get('style')
+            _res = re.search('url\((.*?)\)', _res).group(1)
+            if _res != '/img/teamplayers_db//.jpg':
+                return defaults.KHL_SITE_URL+_res
 
     def get_ru_fio(self):
         b''' возьмем ФИО игрока '''

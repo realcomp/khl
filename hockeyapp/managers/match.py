@@ -33,25 +33,35 @@ class ManagerMixin(object):
         )
         model = get_model(CURRENT_APP, 'ClubPlayer')
         data.update(self._season)
-        #TODO: update or create player statistics
         stats = data.pop('stats', None)
-        #########################################
+        adv_stats = data.pop('adv_stats', None)
         _clubplayer, _crt = model.objects.get_or_create(club=club,
                                                         player=_player,
                                                         **data)
         if match and _clubplayer and stats:
-            self._create_clubplayer_stats( match=match, data=stats,
-                                            clubplayer=_clubplayer)
+            cpm = self._create_clubplayer_stats(match=match, data=stats,
+                                                clubplayer=_clubplayer)
+            if cpm and adv_stats:
+                self._create_clubplayer_adv_stats(cpm, adv_stats)
         return _clubplayer
 
     def _create_clubplayer_stats(self, match=None, clubplayer=None, data=None):
         b''' Создание общей статистики игрока в матче '''
         model = get_model(CURRENT_APP, 'ClubPlayerMatch')
         obj = model.objects.filter(match=match, clubplayer=clubplayer).last()
-        if not obj:
+        if obj:
+            return obj
+        else:
             data['match'] = match
             data['clubplayer'] = clubplayer
-            model.objects.create(**data)
+            return model.objects.create(**data)
+
+    def _create_clubplayer_adv_stats(self, clubplayermatch=None, data=None):
+        b''' Создание  дополнительной статистики игрока в матче '''
+        model = get_model(CURRENT_APP, 'AdvancedPlayerStats')
+        obj = model.objects.create(**data)
+        clubplayermatch.adv_stats = obj
+        clubplayermatch.save(update_fields=['adv_stats'])
 
 
 class MatchGoalHistoryManager(ManagerMixin, models.Manager):

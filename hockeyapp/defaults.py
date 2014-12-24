@@ -37,6 +37,60 @@ MATCH_REPORT_DICT = {
     'goals_history': '//table[@class="matches_goals"]',
     'penalties_history': '//table[@class="matches_penalty"]',
 }
+
+MATCH_ADV_STATS_URL = 'http://text.khl.ru/text/'
+MATCH_ADV_STATS_XPATH = '//div[@id="wrapper"]/div[@class="grey-block"]/div[@class="tabs-block"]'
+MATCH_ADV_STATC_DICT = {
+    'home_team': {
+                    'shots': '/div[@class="box"][2]/table/tr/td[1]/table/tr[@class]',
+                    'faceoff': '/div[@class="box"][3]/table/tr/td[1]/table/tr[@class]',
+                    'gamingtime': '/div[@class="box"][4]/table/tr/td[1]/table//tbody/tr[@class]',
+                    'extra': '/div[@class="box"][6]/table/tr/td[1]/table/tr/tbody',
+
+    },
+    'guest_team': {
+                    'shots': '/div[@class="box"][2]/table/tr/td[3]/table/tr[@class]',
+                    'faceoff': '/div[@class="box"][3]/table/tr/td[3]/table/tr[@class]',
+                    'gamingtime': '/div[@class="box"][4]/table/tr/td[3]/table/tbody/tr[@class]',
+                    'extra': '/div[@class="box"][6]/table/tr/td[2]/table/tbody/tr',
+    }
+}
+MATCH_PLAYER_SHOTS = {
+                    'shots_1th': 'td[2]/text()',
+                    'shots_2nd': 'td[3]/text()',
+                    'shots_3th': 'td[4]/text()',
+                    'shots_all': 'td[5]/text()',
+}
+MATCH_PLAYER_FACEOFFS = {
+                    'faceoff_1th': 'td[2]/text()',
+                    'faceoff_2nd': 'td[3]/text()',
+                    'faceoff_3th': 'td[4]/text()',
+                    'faceoff_all': 'td[5]/text()',
+}
+MATCH_PLAYER_GAMINGTIMES = {
+                    'change_count_1th': 'td[2]/text()',
+                    'gamingtime_1th': 'td[3]/text()',
+                    'change_count_2nd': 'td[4]/text()',
+                    'gamingtime_2nd': 'td[5]/text()',
+                    'change_count_3th': 'td[6]/text()',
+                    'gamingtime_3th': 'td[7]/text()',
+                    'change_count_all': 'td[8]/text()',
+                    'gamingtime_all': 'td[9]/text()',
+}
+MATCH_PLAYER_EXTRAS = {
+                    'block_1th': 'td[2]/text()',
+                    'hit_1th': 'td[3]/text()',
+                    'foul_1th': 'td[4]/text()',
+                    'block_2nd': 'td[5]/text()',
+                    'hit_2nd': 'td[6]/text()',
+                    'foul_2nd': 'td[7]/text()',
+                    'block_3th': 'td[8]/text()',
+                    'hit_3th': 'td[9]/text()',
+                    'foul_3th': 'td[10]/text()',
+                    'block_all': 'td[11]/text()',
+                    'hit_all': 'td[12]/text()',
+                    'foul_all': 'td[13]/text()',
+}
 #----------
 
 

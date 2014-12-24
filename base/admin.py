@@ -35,7 +35,7 @@ class BaseMixin(object):
         models.DateField: {'widget': SuitDateWidget},
         models.DateTimeField: {'widget': SuitSplitDateTimeWidget},
         models.ForeignKey: {'widget': LinkedSelect},
-        models.OneToOneField: {'widget': LinkedSelect2(select2_options={'width': 'resolve'})},
+        models.OneToOneField: {'widget': LinkedSelect},
         models.ManyToManyField: {'widget': Select2MultipleWidget(select2_options={'width': 'resolve'})},
     }
 

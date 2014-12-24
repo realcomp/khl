@@ -49,7 +49,7 @@ class GrabParser(object):
             return xpath_val[0].strip()
         return ''
 
-    def _get_absolute_url(self, id=None):
+    def _get_absolute_url(self, id=None, slash=True):
         b'''определяем url страницы
             По-умолчанию: self.absolute_url = self.url
         '''
@@ -57,14 +57,14 @@ class GrabParser(object):
             if self.as_get_param:
                 _url = b'?{0}={1}'.format(self.pk_kwarg,id)
             else:
-                _url = b'{0}/'.format(id,)
+                _url = b'{0}{1}'.format(id,'/' if slash else '')
             self.absolute_url = b'{0}{1}'.format(self.absolute_url,_url)
         return self.absolute_url
 
-    def get_page(self, id=None):
+    def get_page(self, id=None, slash=True):
         b'''  берем DOM страницы  '''
         if self.url and self.pk_kwarg:
-            self._get_absolute_url(id)
+            self._get_absolute_url(id, slash)
             self.g = grab.Grab(url=self.absolute_url)
             # забираем ответ от ресурса
             try:

@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 __author__='smirnov.ev'
 
 import datetime
+import re
 import time
 
 from lxml.html import fromstring
@@ -22,6 +23,73 @@ _PARITTYDICT = {
             b'бул.': 4,
             b'': 0,
         }
+##teams = self.page_tree.xpath('//head/script[6]/text()')[0].split('\r\n')[5].split('var gamePlayers = ')[1]
+
+
+class AdvancedHockeyMatchParser(GrabParser):
+    b''' Парсер дополнительной статистики матча из текстовой трансляции '''
+    url = defaults.MATCH_ADV_STATS_URL
+    absolute_url = url
+    as_get_param = False
+    match_protocol_xpath = defaults.MATCH_ADV_STATS_XPATH
+    body_xpath = defaults.MATCH_ADV_STATS_XPATH
+    xpath_dict = defaults.MATCH_ADV_STATC_DICT
+    result_dict = None
+
+    def get_page(self, id=None):
+        b'''  смотрим протокол матча '''
+        if id:
+            id = '{0}.{1}'.format(id,'html')
+        self.page_tree=super(AdvancedHockeyMatchParser, self).get_page(id,False)
+        if self.page_tree is not None:
+            if self.page_tree.xpath(self.match_protocol_xpath):
+                body = self.page_tree.xpath(self.match_protocol_xpath)[0]
+                self.result_dict = self.get_adv_stats()
+                return self.result_dict
+
+    def get_adv_stats(self):
+        b''' Словарь статистики команд '''
+        res = {
+                'hp': self._get_team_players(self.xpath_dict['home_team']),
+                'gp': self._get_team_players(self.xpath_dict['guest_team']),
+        }
+        return res
+
+    def _get_team_players(self, xpath_dict):
+        b''' Словарь статистики команды '''
+        res = self._get_extra_stats(xpath_dict['shots'], 
+                                    defaults.MATCH_PLAYER_SHOTS
+        )
+        for key,xpathes in (
+                            ('faceoff',defaults.MATCH_PLAYER_FACEOFFS,),
+                            ('gamingtime', defaults.MATCH_PLAYER_GAMINGTIMES),
+                            ('extra', defaults.MATCH_PLAYER_EXTRAS),
+
+        ):
+            self._get_extra_stats(  
+                                xpath_dict[key],
+                                xpathes,
+                                res
+            )
+        return res
+
+    def _get_player_number(self, val):
+        b''' Номер игрока '''
+        _res = re.findall(r'\d+', val)
+        return _res[0] if _res else None
+
+    def _get_extra_stats(self, xpath, xpath_dict, res=None):
+        b''' Универсальный метод получения статистики из таблиц '''
+        trs = self.page_tree.xpath(self.body_xpath+xpath)
+        res = res or dict()
+        for tr in trs:
+            num = self._get_player_number(tr.xpath('td[1]')[0].text_content())
+            if num:
+                _d = res.get(num) or dict()
+                for k,v in xpath_dict.items():
+                    _d[k] = tr.xpath(v)[0] if tr.xpath(v) else ''
+                res[num] = _d
+        return res
 
 
 class HockeyMatchParser(GrabParser):
@@ -35,6 +103,7 @@ class HockeyMatchParser(GrabParser):
     body_xpath = defaults.BODY_XPATH
     xpath_dict = defaults.MATCH_REPORT_DICT
     model_name = 'Match'
+    adv_stats = None
 
     def put_data_in_db_from_page(self, id=None, data=None):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
@@ -78,17 +147,24 @@ class HockeyMatchParser(GrabParser):
         data = self.get_page_from_db(obj)
         return self.put_data_in_db_from_page(obj.khl_id, data)
 
+    def _get_adv_stats(self, matchid):
+        b''' Дополнительная статитстика по игрокам '''
+        if matchid:
+            self.adv_stats = AdvancedHockeyMatchParser().get_page(matchid)
+
+
     def get_match_all_data(self, matchid=None, html_body=None):
         b''' метод запускается, в случае если протокол игры существует и найден
             Забираем данные из протокола игры через DOM-дерево
         '''
         if self.page_tree is not None:
+            self._get_adv_stats(matchid)
             _home_coach = self.get_home_team_coach()
             _guest_coach = self.get_guest_team_coach()
             _home_players = self.get_home_players()
             _guest_players = self.get_guest_players()
             _date = self.get_match_date()
-            return {
+            res = {
                     'khl_id': matchid,
                     'html_body': self.get_html_body(html_body),
                     'url': self.absolute_url,
@@ -122,6 +198,7 @@ class HockeyMatchParser(GrabParser):
                                 'end_date': self.end_date(_date),
                     }
             }
+            return res
 
     def python_date(self, date):
         b''' парсит дату в datetime object '''
@@ -191,7 +268,7 @@ class HockeyMatchParser(GrabParser):
                     ('home_defenders', 2),
                     ('home_offenders', 3),
         )
-        return self._get_players_list(_crtg)
+        return self._get_players_list(_crtg, adv_stats_key='hp')
 
     def get_guest_players(self):
         b''' получаем игроков гостевой команды '''
@@ -199,12 +276,12 @@ class HockeyMatchParser(GrabParser):
                     ('guest_defenders', 2),
                     ('guest_offenders', 3)
         )
-        return self._get_players_list(_crtg)
+        return self._get_players_list(_crtg, adv_stats_key='gp')
 
-    def _get_players_list(self, crtg):
+    def _get_players_list(self, crtg, adv_stats_key=''):
         res = list()
         for k,v in crtg:
-            _plrs = self._get_players(k,v)
+            _plrs = self._get_players(k,v, adv_stats_key)
             if _plrs:
                 res.extend(_plrs)
         return res
@@ -245,26 +322,30 @@ class HockeyMatchParser(GrabParser):
             res.append(tr.xpath('td[8]/a')[0].attrib.get('href').split('/')[-2])
         return set(res)
 
-    def _get_player_data(self, tr, line_type):
+    def _get_player_data(self, tr, line_type, adv_stats_key=''):
         b''' берем значения номер, id и тип игрока '''
         _raw_link = tr.xpath('td[@class="empty_bg"]/a')
         if _raw_link:
             _raw_link = tr.xpath('td[@class="empty_bg"]/a')[0]
+            _num = tr.xpath('td[@class="empty_bg"]/strong')[0].text
             res = {
-                    'number': tr.xpath('td[@class="empty_bg"]/strong')[0].text,
+                    'number': _num,
                     'khl_id': _raw_link.attrib.get('href','').split('/')[-2],
                     'line': line_type,
                     'ru_fio': _raw_link.text,
-                    'stats': self._get_player_match_stats_by_line(tr, line_type)
+                    'stats': self._get_player_match_stats_by_line(tr,line_type),
             }
+            if self.adv_stats:
+                res['adv_stats'] = self.adv_stats.get(adv_stats_key,{}
+                                                ).get(_num)
             return res
 
-    def _get_players(self, key, line_type):
+    def _get_players(self, key, line_type, ask=''):
         b''' получаем игроков команды '''
         plrs_table = self._get_value(key)
         if plrs_table:
             #TODO: refact this
-            return (self._get_player_data(tr, line_type) for tr 
+            return (self._get_player_data(tr, line_type, ask) for tr 
                     in plrs_table[0].xpath('tr')
                     if tr.attrib.get('class', '') != 'header'
                     and self._get_player_data(tr, line_type))

@@ -41,6 +41,7 @@ class UsrCrtForm(forms.ModelForm):
 class UsrChngForm(UserChangeForm):
     class Meta:
         model = User
+        fields= '__all__'
         readonly_fields = 'username',
 
 
