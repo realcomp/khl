@@ -12,16 +12,16 @@ from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = MatchGoalHistory
     extra=0
-    readonly_fields = (  'parity', 'time', 'period', 'assist',
-                'home_five_numbers', 'guest_five_numbers')
-    fields = ('scorer',)+readonly_fields
+    readonly_fields = ( 'scorer', 'parity', 'time', 'period', 'assist',
+                        'home_five_numbers', 'guest_five_numbers')
+    fields = readonly_fields
 
 
 class PenaltyEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = MatchPenaltyHistory
     extra=0
-    readonly_fields = 'ptype', 'time', 'duration'
-    fields = ('player',)+readonly_fields
+    readonly_fields = 'player', 'ptype', 'time', 'duration'
+    fields = readonly_fields
 
 
 class MatchAdmin(NoActionMixin, NoFilterAdmin):
