@@ -219,6 +219,7 @@ class ClubPlayerMatch(models.Model):
     '''
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
+    adv_stats = models.OneToOneField(AdvancedPlayerStats, null=True, blank=True)
     plus_minus = models.CharField('+/-', max_length=8, blank=True)
     penalty_time = models.CharField(_('Penalty Time'), max_length=8, blank=True)
     ev_goals = models.CharField(_('EV Goals'), max_length=8, blank=True)
@@ -244,9 +245,6 @@ class ClubPlayerMatch(models.Model):
                                 max_length=8, blank=True)
     sf = models.CharField(_('Safety Factor'), max_length=8, blank=True)
     gamingtime = models.CharField(_('Gaming time'), max_length=8, blank=True)
-
-    adv_stats = models.OneToOneField(AdvancedPlayerStats,
-                                    null=True, blank=True)
 
     class Meta:
         verbose_name=_('Club Player History Match')
