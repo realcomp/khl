@@ -30,7 +30,8 @@ class City(TitleBaseModel):
 class Address(TitleBaseModel):
     city = models.ForeignKey(City, null=True, blank=True)
     ru_description = models.TextField(_('Description (rus)'), blank=True)
-    ru_description = models.TextField(_('Description (en)'), blank=True)
+    en_description = models.TextField(_('Description (en)'), blank=True)
+
     class Meta:
         verbose_name=_('Address')
         verbose_name_plural=_('Addresses')

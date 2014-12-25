@@ -13,13 +13,15 @@ class PlayersSearch(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PlayersSearch, self).get_context_data(**kwargs)
+        context['request'] = self.request
         qs = self.get_queryset()
         page_size = self.get_paginate_by(qs)
         paginator, page, object_list, has_other_pages = self.paginate_queryset(
             qs, page_size)
         context.update({
             'count': qs.count(),
-            'results': PlayerCardSerializer(object_list, many=True).data,
+            'results': PlayerCardSerializer(
+                object_list, many=True, context=context).data,
         })
         return context
 
@@ -30,7 +32,9 @@ class PlayerCard(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PlayerCard, self).get_context_data(**kwargs)
-        context.update(PlayerCardSerializer(self.get_object()).data)
+        context['request'] = self.request
+        context.update(PlayerCardSerializer(
+            self.get_object(), context=context).data)
         return context
 
 
@@ -69,13 +73,15 @@ class ClubListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
+        context['request'] = self.request
         qs = self.get_queryset()
         page_size = self.get_paginate_by(qs)
         paginator, page, object_list, has_other_pages = self.paginate_queryset(
             qs, page_size)
         context.update({
             'count': qs.count(),
-            'results': ClubListSerializer(object_list, many=True).data,
+            'results': ClubListSerializer(
+                object_list, many=True, context=context).data,
         })
         return context
 
@@ -86,7 +92,9 @@ class ClubView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ClubView, self).get_context_data(**kwargs)
-        context.update(ClubSerializer(self.get_object()).data)
+        context['request'] = self.request
+        context.update(ClubSerializer(
+            self.get_object(), context=context).data)
         return context
 
 

@@ -95,6 +95,14 @@ class Club(TitleBaseModel):
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
 
+    @property
+    def current_address(self):
+        if self.addressclub_set.exists():
+            active = self.addressclub_set.filter(end_date__isnull=True)
+            if active.exists():
+                return active.latest('start_date').address
+            return self.addressclub_set.latest('end_date').address
+
     class Meta:
         verbose_name=_('Club')
         verbose_name_plural=_('Clubs')
