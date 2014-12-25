@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 from hockeyapp.models import Player
 from hockeyapp.parsers.player import GetAllPlayerIDs
 
+
 class Command(BaseCommand):
     help = 'Hockey match parser. Use: ./manage.py get_all_players'
 
@@ -15,6 +16,5 @@ class Command(BaseCommand):
             ids.extend([elem.split('/')[2] for elem in lst_link])
         for khl_id in set(ids):
             Player.objects.get_or_create_player(khl_id=khl_id)
-            print(khl_id,'\tok')
+            print(khl_id, '\tok')
         return 'done'
-        

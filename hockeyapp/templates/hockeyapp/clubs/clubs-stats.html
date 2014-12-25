@@ -105,146 +105,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for player in all_players %}
                                     <tr>
-                                        <td align="center">1</td>
+                                        <td align="center">{{ forloop.counter }}</td>
                                         <td>
-                                            <a href="#">Валерий Покровский</a>
+                                            <a href="{% url 'hockeyapp:player-card' player.pk %}">{{ player.fio }}</a>
                                         </td>
                                         <td align="center">3</td>
                                         <td align="center">225</td>
                                         <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">2</td>
                                         <td>
-                                            <a href="#">Валерий Покровский</a>
+                                            <a href="{% if player.club %}{% url 'hockeyapp:club' player.club.pk %}{% endif %}">
+                                                {{ player.club.title }}
+                                                {% if player.club.address.title %}
+                                                    ({{ player.club.address.title }})
+                                                {% endif %}
+                                            </a>
                                         </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
                                     </tr>
-                                    <tr>
-                                        <td align="center">3</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">4</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">5</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">6</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">7</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">8</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">9</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">10</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">11</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">12</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">13</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center">14</td>
-                                        <td>
-                                            <a href="#">Валерий Покровский</a>
-                                        </td>
-                                        <td align="center">3</td>
-                                        <td align="center">225</td>
-                                        <td align="center">125</td>
-                                        <td><a href="#">Сарыарка (Нефтеюганск)</a></td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                             <div class="align-center">

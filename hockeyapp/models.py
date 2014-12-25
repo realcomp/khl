@@ -38,6 +38,11 @@ class Player(AbstractMan):
     html_body = models.TextField('Parse HTML', blank=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
+
+    @property
+    def club(self):
+        return self.club_set.latest('pk')
+
     class Meta:
         verbose_name=_('Player')
         verbose_name_plural=_('Players')
@@ -96,12 +101,9 @@ class Club(TitleBaseModel):
     html_body = models.TextField('Parse HTML', blank=True)
 
     @property
-    def current_address(self):
-        if self.addressclub_set.exists():
-            active = self.addressclub_set.filter(end_date__isnull=True)
-            if active.exists():
-                return active.latest('start_date').address
-            return self.addressclub_set.latest('end_date').address
+    def all_players(self):
+        player_ids = self.clubplayer_set.values_list('player_id', flat=True)
+        return Player.objects.filter(pk__in=player_ids)
 
     class Meta:
         verbose_name=_('Club')
