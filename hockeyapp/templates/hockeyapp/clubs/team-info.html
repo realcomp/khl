@@ -2,7 +2,11 @@
     <div class="team-heading">
         <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
         <div class="team-logo"><img src="{{ logo }}" alt="Sportomatics" class="team-logo-image"></div>
-        <div class="team-name">{{ title }} <span>(Санкт-Петербург)</span></div>
+        <div class="team-name">{{ title }}
+            {% if current_address.title %}
+                <span>({{ current_address.title }})</span>
+            {% endif %}
+        </div>
     </div>
     <ul class="info-list">
         <li class="info-item"><i class="browser icon"></i> Сайт: {{ site }}</li>

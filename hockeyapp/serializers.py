@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from dateutil import relativedelta
 
 from django.utils import timezone
@@ -8,26 +10,26 @@ from rest_framework import fields, serializers
 from .models import Coach, Arena, Club, Player
 
 
-class AbstractManSerializer(serializers.ModelSerializer):
+class LangDepSerializer(serializers.ModelSerializer):
+    '''
+    Language-Dependent Serializer
+    '''
+    def _get_field(self, obj, field_name):
+        request = self.context['request']
+        get_field_name = lambda lang: '%s_%s' % (lang, field_name)
+        if hasattr(obj, get_field_name(request.LANGUAGE_CODE)):
+            return getattr(obj, get_field_name(request.LANGUAGE_CODE))
+        return getattr(obj, get_field_name('en'))
+
+
+class AbstractManSerializer(LangDepSerializer):
     fio = serializers.SerializerMethodField()
-
-    def get_fio(self, obj):
-        # TODO: get current language
-        language = 'ru'
-        if hasattr(obj, '%s_fio' % language):
-            return getattr(obj, '%s_fio' % language)
-        return obj.en_fio
+    get_fio = lambda self, obj: self._get_field(obj, 'fio')
 
 
-class TitleBaseSerializer(serializers.ModelSerializer):
+class TitleBaseSerializer(LangDepSerializer):
     title = serializers.SerializerMethodField()
-
-    def get_title(self, obj):
-        # TODO: get current language
-        language = 'ru'
-        if hasattr(obj, '%s_title' % language):
-            return getattr(obj, '%s_title' % language)
-        return obj.en_title
+    get_title = lambda self, obj: self._get_field(obj, 'title')
 
 
 class PlayerCardSerializer(AbstractManSerializer):
@@ -71,22 +73,29 @@ class ArenaSerializer(TitleBaseSerializer):
     photo = fields.ReadOnlyField(source='photo.url')
 
     class Meta(object):
-        fields = 'pk', 'title', 'photo', 'capacity', 'site'
+        fields = 'pk', 'title', 'photo', 'capacity', 'site', 'contacts'
+        model = Arena
+
+
+class AddressSerializer(TitleBaseSerializer):
+    class Meta(object):
+        fields = 'pk', 'title'
         model = Arena
 
 
 class ClubListSerializer(TitleBaseSerializer):
     logo = fields.ReadOnlyField(source='logo.url')
-    # address
     coach = CoachSerializer()
     arena = ArenaSerializer()
     # players
     # farm_club
     # junior_club
+    current_address = AddressSerializer()
 
     class Meta(object):
         fields = (
-            'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena')
+            'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
+            'current_address')
         model = Club
 
 

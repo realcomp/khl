@@ -7,9 +7,9 @@
             <div class="ui small breadcrumb">
                 <a class="section">Хоккей</a>
                 <div class="divider"> / </div>
-                <a class="section">Клубы</a>
+                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
                 <div class="divider"> / </div>
-                <a class="section">СКА</a>
+                <a class="section" href="{% url 'hockeyapp:club' pk %}">{{ title }}</a>
             </div>
             <div class="search-block">
                 <div class="item">

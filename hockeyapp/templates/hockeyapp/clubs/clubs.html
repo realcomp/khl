@@ -5,7 +5,7 @@
     <div class="container clubs-page">
         <div class="breadcrumbs">
             <div class="ui small breadcrumb">
-                <a class="section">Все клубы</a>
+                <a class="section" href="{% url 'hockeyapp:club-list' %}">Все клубы</a>
             </div>
             <div class="search-block">
                 <div class="item">
@@ -116,7 +116,7 @@
                                                     <span>{{ club.title }}</span>
                                                 </a>
                                             </td>
-                                            <td>Москва</td>
+                                            <td>{{ club.current_address.title }}</td>
                                             <td align="center">5</td>
                                             <td><a href="{% url 'hockeyapp:club-home' club.pk %}">{{ club.arena.title }}</a></td>
                                             <td><a href="#">{{ club.coach.fio }}</a></td>
