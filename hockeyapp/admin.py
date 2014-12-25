@@ -12,16 +12,18 @@ from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = MatchGoalHistory
     extra=0
-    readonly_fields = ( 'scorer', 'parity', 'time', 'period', 'assist',
+    readonly_fields = ( 'parity', 'time', 'period',
                         'home_five_numbers', 'guest_five_numbers')
-    fields = readonly_fields
+    raw_id_fields = ('scorer', 'assist',)
+    fields = raw_id_fields+readonly_fields
 
 
 class PenaltyEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
     model = MatchPenaltyHistory
     extra=0
-    readonly_fields = 'player', 'ptype', 'time', 'duration'
-    fields = readonly_fields
+    readonly_fields = 'ptype', 'time', 'duration'
+    raw_id_fields = ('player',)
+    fields = raw_id_fields+readonly_fields
 
 
 class MatchAdmin(NoActionMixin, NoFilterAdmin):
@@ -53,7 +55,8 @@ class MatchAdmin(NoActionMixin, NoFilterAdmin):
 
     inlines = (GoalEntryInline, PenaltyEntryInline)
     list_display = 'khl_id', 'ru_title', 'url', 'spectators', 'date', 'count'
-    readonly_fields = 'home_players', 'guest_players', 'judges', 'line_judges'
+    readonly_fields = 'home_players', 'guest_players',
+    raw_id_fields = 'judges', 'line_judges'
 
     def get_list_display(self, request):
         if self.list_display:
@@ -97,7 +100,8 @@ for model in (MatchGoalHistory, MatchPenaltyHistory):
 
 
 class ClubPlayerMatchAdmin(NoFilterAdmin):
-    readonly_fields = 'match', 'clubplayer'
+    raw_id_fields = 'match', 'clubplayer', 'adv_stats'
+    #readonly_fields = 'match', 'clubplayer', 'adv_stats'
 admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
 admin.site.register(AdvancedPlayerStats)

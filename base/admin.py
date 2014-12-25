@@ -34,9 +34,15 @@ class BaseMixin(object):
     formfield_overrides = {
         models.DateField: {'widget': SuitDateWidget},
         models.DateTimeField: {'widget': SuitSplitDateTimeWidget},
-        models.ForeignKey: {'widget': LinkedSelect},
-        models.OneToOneField: {'widget': LinkedSelect},
-        models.ManyToManyField: {'widget': Select2MultipleWidget(select2_options={'width': 'resolve'})},
+        models.ForeignKey: {
+            'widget': LinkedSelect2(select2_options={'minimumInputLength': 3})
+        },
+        models.OneToOneField: {
+            'widget': LinkedSelect2(select2_options={'minimumInputLength': 3})
+        },
+        models.ManyToManyField: {
+            'widget': Select2MultipleWidget(select2_options={'width': 'resolve'})
+        },
     }
 
 
