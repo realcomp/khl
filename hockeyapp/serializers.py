@@ -33,6 +33,20 @@ class TitleBaseSerializer(LangDepSerializer):
     get_title = lambda self, obj: self._get_field(obj, 'title')
 
 
+class AddressSerializer(TitleBaseSerializer):
+    class Meta(object):
+        fields = 'pk', 'title'
+        model = Arena
+
+
+class PlayerClubSerializer(TitleBaseSerializer):
+    address = AddressSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'title', 'address'
+        model = Club
+
+
 class PlayerCardSerializer(AbstractManSerializer):
     photo = fields.ReadOnlyField(source='photo.url')
     line = fields.ReadOnlyField(source='get_line_display')
@@ -40,6 +54,8 @@ class PlayerCardSerializer(AbstractManSerializer):
     birth_date_short = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     khl_url = serializers.SerializerMethodField()
+    club = PlayerClubSerializer()
+    previous_clubs = PlayerClubSerializer(many=True)
 
     def get_birth_date(self, obj):
         return obj.birth_date and obj.birth_date.strftime('%d %B %Y')
@@ -60,7 +76,7 @@ class PlayerCardSerializer(AbstractManSerializer):
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
-            'photo', 'khl_url', 'birth_date_short')
+            'photo', 'khl_url', 'birth_date_short', 'club', 'previous_clubs')
         model = Player
 
 
@@ -75,12 +91,6 @@ class ArenaSerializer(TitleBaseSerializer):
 
     class Meta(object):
         fields = 'pk', 'title', 'photo', 'capacity', 'site', 'contacts'
-        model = Arena
-
-
-class AddressSerializer(TitleBaseSerializer):
-    class Meta(object):
-        fields = 'pk', 'title'
         model = Arena
 
 

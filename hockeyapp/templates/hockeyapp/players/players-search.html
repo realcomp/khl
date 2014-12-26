@@ -237,35 +237,28 @@
                                         </td>
                                         <td align="center">{{ player.line }}</td>
                                         <td>
-                                            <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
+                                            <a href="#" class="club-link">
+                                                {{ player.club.title }}
+                                                {% if player.club.address.title %}
+                                                    ({{ player.club.address.title }})
+                                                {% endif %}
+                                            </a>
+                                            {% if player.previous_clubs %}
                                             <ul class="club-link-list">
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="club-link">СКА (Санкт-Петербург)</a>
-                                                </li>
+                                                {% for club in player.previous_clubs %}
+                                                    <li>
+                                                        <a href="#" class="club-link">
+                                                            {{ club.title }}
+                                                            {% if club.address.title %}
+                                                                ({{ club.address.title }})
+                                                            {% endif %}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
                                             </ul>
                                             <a href="#" class="more-clubs-btn more-clubs-btn_open"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
                                             <a href="#" class="more-clubs-btn more-clubs-btn_close"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
+                                            {% endif %}
                                         </td>
                                        <td align="center">
                                             {{ player.age.0 }}

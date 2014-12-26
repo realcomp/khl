@@ -2,12 +2,20 @@
 
 from rest_framework import generics, permissions
 
-from ..serializers import UserVersionSerializer
+from ..serializers import ProfileSerializer, ProfileVersionSerializer
 
 
-class UserVersionView(generics.RetrieveUpdateAPIView):
+class ProfileVersionView(generics.RetrieveUpdateAPIView):
     permission_classes = permissions.IsAuthenticated,
-    serializer_class = UserVersionSerializer
+    serializer_class = ProfileVersionSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+class ProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes = permissions.IsAuthenticated,
+    serializer_class = ProfileSerializer
 
     def get_object(self):
         return self.request.user

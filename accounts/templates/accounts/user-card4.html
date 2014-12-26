@@ -2,7 +2,8 @@
 
 {% block body %}
 <section class="content">
-    <div class="container">
+    <div class="container"
+         ng-controller="ProfileController as ProfileCtrl">
         <div class="breadcrumbs">
             <div class="ui small breadcrumb">
                 <a class="section">ПРОФИЛЬ</a>
@@ -19,13 +20,22 @@
         <div class="user-card">
             <div class="user-avatar">
                 <div class="user-avatar-hex1">
-                    <div class="user-avatar-hex2" style="background-image: url({{ STATIC_URL }}images/user-avatar.png)"></div>
+                    <div class="user-avatar-hex2"
+                         style="background-image: url({{ request.user.avatar.url }})">
+                    </div>
                 </div>
             </div>
             <div class="user-info">
-                <div class="user-info-name">{{ fio }}</div>
-                <!-- <div class="user-info-surname">Старикова</div> -->
-                <a href="#" class="user-change-avatar">сменить фото ></a>
+                {% verbatim %}
+                    <div class="user-info-name">{{ ProfileCtrl.user.fio }}</div>
+                {% endverbatim %}
+                <!-- <div class="user-info-surname"></div> -->
+                <input type="file" class="file-input" name="avatar" id="user-info-avatar"
+                       onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
+                <label for="user-info-avatar" class="user-change-avatar">
+                    сменить фото
+                </label>
+                <!-- <a href="#" class="user-change-avatar">сменить фото</a> -->
             </div>
         </div>
 
@@ -41,7 +51,9 @@
                     <div class="ui tabular menu content-tabs">
                         <span class="heading">Личные данные</span>
                     </div>
-                    <form action="" name="profile-edit-form" method="POST" class="ui form contact-form">
+                    <form name="profile-edit-form" method="POST" class="ui form contact-form"
+                          ng-init="ProfileCtrl.csrf_token = '{{ csrf_token }}'"
+                          ng-submit="ProfileCtrl.save()">
                         <div class="inline field">
                             <label>Ваш логин:</label>
                             <a class="ui teal label">{{ username }}</a>
@@ -54,7 +66,8 @@
                         </div>
                         <div class="inline field">
                             <label>E-mail:</label>
-                            <input type="text" name="email" value="{{ email }}">
+                            <input type="text" name="email" value="{{ email }}"
+                                   ng-model="ProfileCtrl.user.email">
                             <div class="ui checkbox">
                                 <input type="checkbox" name="news">
                                 <label>получать рассылку новостей с сайта</label>
@@ -62,7 +75,8 @@
                         </div>
                         <div class="inline field">
                             <label>Имя Фамилия:</label>
-                            <input type="text" name="fio" value="{{ fio }}">
+                            <input type="text" name="fio" value="{{ fio }}"
+                                   ng-model="ProfileCtrl.user.fio">
                             <div class="ui checkbox">
                                 <input type="checkbox" name="hide_name">
                                 <label>скрывать имя в "Любительской версии"</label>
@@ -73,9 +87,11 @@
                             <label>Изменить фотографию</label>
                         </div>
                         <div class="avatar-upload-block">
-                            <img src="{{ STATIC_URL }}images/avatar-sample.png" width="97" alt="sample avatar" class="avatar-sample-image">
+                            <img alt="sample avatar" class="avatar-image" width="97" id="id_avatar"
+                                 src="{{ request.user.avatar.url }}">
                             <div class="avatar-upload-controls">
-                                <input type="file" class="file-input" name="avatar" id="avatar">
+                                <input type="file" class="file-input" name="avatar" id="avatar"
+                                       onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
                                 <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
                                 <div class="avatar-upload-desc">Формат фото: jpg, jpeg, png</div>
                             </div>

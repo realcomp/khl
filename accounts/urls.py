@@ -5,8 +5,13 @@ from .views import api
 
 
 urlpatterns = [
-    url(r'^api/user/version/$', api.UserVersionView.as_view(),
-        name='user-version'),
+    # TODO: move to separate namespace
+    # REST API
+    url(r'^api/profile/version/$', api.ProfileVersionView.as_view(),
+        name='profile-version-api'),
+    url(r'^api/profile/$', api.ProfileView.as_view(),
+        name='profile-api'),
+    # Django CBV's'
     url(r'^signup/$', views.Signup.as_view(), name='signup'),
     url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
     url(r'^profile/offers/$', views.ProfileOffersView.as_view(),

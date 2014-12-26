@@ -13,9 +13,10 @@ class UserAdmin(DefaultUserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': (
-                                            'fio',
-                                            'is_active',
-                                )}),
+            'fio',
+            'is_active',
+            'avatar',
+        )}),
         (_('Permissions'), {'fields': ('is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),

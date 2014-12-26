@@ -8,6 +8,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from filer.fields.image import FilerImageField
+
 from . import choices
 
 
@@ -69,6 +71,7 @@ class User(AbstractUser):
     version = models.CharField(
         _('Account version'), max_length=8, default='CLASSIC',
         choices=choices.ACCOUNT_VERSIONS)
+    avatar = FilerImageField(verbose_name=_('Avatar'), null=True, blank=True)
 
     __unicode__ = lambda self: self.username
 

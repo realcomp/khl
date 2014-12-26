@@ -43,6 +43,16 @@ class Player(AbstractMan):
     def club(self):
         return self.club_set.latest('pk')
 
+    @property
+    def previous_clubs(self):
+        previous_club_ids = self.clubplayer_set.values_list(
+            'club_id', flat=True)
+        current_club_ids = self.club_set.values_list('id', flat=True)
+        return (
+            Club.objects
+            .exclude(pk__in=current_club_ids)
+            .filter(pk__in=previous_club_ids))
+
     class Meta:
         verbose_name=_('Player')
         verbose_name_plural=_('Players')
