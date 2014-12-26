@@ -79,6 +79,9 @@ class ClubListView(ListView):
         paginator, page, object_list, has_other_pages = self.paginate_queryset(
             qs, page_size)
         context.update({
+            'club_types': (
+                'clubs-all', 'clubs-chl', 'clubs-nhl', 'clubs-vhl',
+                'clubs-mhl', 'clubs-mhla'),
             'count': qs.count(),
             'results': ClubListSerializer(
                 object_list, many=True, context=context).data,

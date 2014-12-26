@@ -15,11 +15,12 @@ class LangDepSerializer(serializers.ModelSerializer):
     Language-Dependent Serializer
     '''
     def _get_field(self, obj, field_name):
-        request = self.context['request']
-        get_field_name = lambda lang: '%s_%s' % (lang, field_name)
-        if hasattr(obj, get_field_name(request.LANGUAGE_CODE)):
-            return getattr(obj, get_field_name(request.LANGUAGE_CODE))
-        return getattr(obj, get_field_name('en'))
+        request = self.context.get('request')
+        get_field_name = lambda lang: '%s_%s' % (lang or 'en', field_name)
+        lang = request and request.LANGUAGE_CODE
+        if hasattr(obj, get_field_name(lang)):
+            return getattr(obj, get_field_name(lang))
+        return getattr(obj, get_field_name(None))
 
 
 class AbstractManSerializer(LangDepSerializer):
@@ -90,14 +91,30 @@ class ClubListSerializer(TitleBaseSerializer):
     # players
     # farm_club
     # junior_club
-    current_address = AddressSerializer()
+    address = AddressSerializer()
 
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
-            'current_address')
+            'address')
         model = Club
 
 
+class ClubPlayerSerializer(AbstractManSerializer):
+    line = fields.ReadOnlyField(source='get_line_display')
+    club = ClubListSerializer()
+
+    class Meta(object):
+        fields = (
+            'pk', 'fio', 'line', 'club')
+        model = Player
+
+
 class ClubSerializer(ClubListSerializer):
-    pass
+    all_players = ClubPlayerSerializer(many=True)
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
+            'address', 'all_players')
+        model = Club
