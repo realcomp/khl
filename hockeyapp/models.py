@@ -51,7 +51,7 @@ class Player(AbstractMan):
         return (
             Club.objects
             .exclude(pk__in=current_club_ids)
-            .filter(pk__in=previous_club_ids))
+            .filter(pk__in=previous_club_ids)[:8])
 
     class Meta:
         verbose_name=_('Player')

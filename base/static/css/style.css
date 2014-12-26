@@ -1717,6 +1717,10 @@ i.icon {
   margin-top: 10px;
   display: inline-block;
 }
+.player-select-table .player-name a {
+    color: #000;
+    /* text-decoration: none; */
+}
 /* line 1064, ../sass/_base.sass */
 .player-select-table .ui.checkbox .box, .player-select-table .ui.checkbox label {
   padding-left: 0;

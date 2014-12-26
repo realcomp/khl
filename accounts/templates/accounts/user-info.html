@@ -1,0 +1,34 @@
+<div class="breadcrumbs">
+    <div class="ui small breadcrumb">
+        <a class="section">ПРОФИЛЬ</a>
+    </div>
+    <div class="search-block">
+        <div class="item">
+            <div class="ui icon input">
+                <input type="text" placeholder="Search...">
+                <i class="search link icon"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="user-card">
+    <div class="user-avatar">
+        <div class="user-avatar-hex1">
+            <div class="user-avatar-hex2"
+                 style="background-image: url({{ request.user.avatar.url|default:"/static/images/avatar-sample.png" }})">
+            </div>
+        </div>
+    </div>
+    <div class="user-info">
+        {% verbatim %}
+            <div class="user-info-name">{{ ProfileCtrl.user.fio }}</div>
+        {% endverbatim %}
+        <!-- <div class="user-info-surname"></div> -->
+        <input type="file" class="file-input" name="avatar" id="user-info-avatar"
+               onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
+        <label for="user-info-avatar" class="user-change-avatar">
+            сменить фото
+        </label>
+        <!-- <a href="#" class="user-change-avatar">сменить фото</a> -->
+    </div>
+</div>

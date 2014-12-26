@@ -2,32 +2,10 @@
 
 {% block body %}
 <section class="content">
-    <div class="container">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section">ПРОФИЛЬ</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-avatar">
-                <div class="user-avatar-hex1">
-                    <div class="user-avatar-hex2" style="background-image: url({{ STATIC_URL }}images/user-avatar.png)"></div>
-                </div>
-            </div>
-            <div class="user-info">
-                <div class="user-info-name">{{ fio }}</div>
-                <!-- <div class="user-info-surname">Старикова</div> -->
-                <a href="#" class="user-change-avatar">сменить фото ></a>
-            </div>
-        </div>
+    <div class="container"
+         ng-controller="ProfileController as ProfileCtrl"
+         ng-init="ProfileCtrl.user.fio = '{{ request.user.fio }}'">
+        {% include "accounts/user-info.html" %}
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">

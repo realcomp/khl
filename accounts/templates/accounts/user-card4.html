@@ -3,41 +3,9 @@
 {% block body %}
 <section class="content">
     <div class="container"
-         ng-controller="ProfileController as ProfileCtrl">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section">ПРОФИЛЬ</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="user-card">
-            <div class="user-avatar">
-                <div class="user-avatar-hex1">
-                    <div class="user-avatar-hex2"
-                         style="background-image: url({{ request.user.avatar.url }})">
-                    </div>
-                </div>
-            </div>
-            <div class="user-info">
-                {% verbatim %}
-                    <div class="user-info-name">{{ ProfileCtrl.user.fio }}</div>
-                {% endverbatim %}
-                <!-- <div class="user-info-surname"></div> -->
-                <input type="file" class="file-input" name="avatar" id="user-info-avatar"
-                       onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
-                <label for="user-info-avatar" class="user-change-avatar">
-                    сменить фото
-                </label>
-                <!-- <a href="#" class="user-change-avatar">сменить фото</a> -->
-            </div>
-        </div>
+         ng-controller="ProfileController as ProfileCtrl"
+         ng-init="ProfileCtrl.user.fio = '{{ request.user.fio }}'">
+        {% include "accounts/user-info.html" %}
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
@@ -87,8 +55,11 @@
                             <label>Изменить фотографию</label>
                         </div>
                         <div class="avatar-upload-block">
-                            <img alt="sample avatar" class="avatar-image" width="97" id="id_avatar"
-                                 src="{{ request.user.avatar.url }}">
+                            <img alt="sample avatar" class="avatar-image" id="id_avatar"
+                                 src="/static/images/avatar-sample.png"
+                                 {% verbatim %}
+                                 ng-src="{{ ProfileCtrl.user.avatar }}">
+                                 {% endverbatim%}
                             <div class="avatar-upload-controls">
                                 <input type="file" class="file-input" name="avatar" id="avatar"
                                        onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">

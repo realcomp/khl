@@ -227,37 +227,44 @@
                                         <td>
                                             <div class="player-avatar-block">
                                                 <a href="{% url 'hockeyapp:player-card' player.pk %}">
-                                                <img src="{{ player.photo }}" width="30" alt="" class="player-avatar"></a>
+                                                    <img src="{{ player.photo|default:"" }}" width="30" alt="" class="player-avatar">
+                                                </a>
                                                 <div class="player-info">
-                                                    <span class="player-name">{{ player.fio }}</span>
-                                                    <!-- <span class="player-name"></span> -->
+                                                    <span class="player-name">
+                                                        <a href="{% url 'hockeyapp:player-card' player.pk %}">
+                                                            {{ player.fio }}
+                                                        </a>
+                                                    </span>
+                                                    <span class="player-name">&nbsp;</span>
                                                     <span class="player-country">Россия</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td align="center">{{ player.line }}</td>
                                         <td>
-                                            <a href="#" class="club-link">
-                                                {{ player.club.title }}
-                                                {% if player.club.address.title %}
-                                                    ({{ player.club.address.title }})
-                                                {% endif %}
-                                            </a>
+                                            {% if player.club %}
+                                                <a href="{% url 'hockeyapp:club' player.club.pk %}" class="club-link">
+                                                    {{ player.club.title }}
+                                                    {% if player.club.address.title %}
+                                                        ({{ player.club.address.title }})
+                                                    {% endif %}
+                                                </a>
+                                            {% endif %}
                                             {% if player.previous_clubs %}
-                                            <ul class="club-link-list">
-                                                {% for club in player.previous_clubs %}
-                                                    <li>
-                                                        <a href="#" class="club-link">
-                                                            {{ club.title }}
-                                                            {% if club.address.title %}
-                                                                ({{ club.address.title }})
-                                                            {% endif %}
-                                                        </a>
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                            <a href="#" class="more-clubs-btn more-clubs-btn_open"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
-                                            <a href="#" class="more-clubs-btn more-clubs-btn_close"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
+                                                <ul class="club-link-list">
+                                                    {% for club in player.previous_clubs %}
+                                                        <li>
+                                                            <a href="{% url 'hockeyapp:club' club.pk %}" class="club-link">
+                                                                {{ club.title }}
+                                                                {% if club.address.title %}
+                                                                    ({{ club.address.title }})
+                                                                {% endif %}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                                <a href="#" class="more-clubs-btn more-clubs-btn_open"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                                <a href="#" class="more-clubs-btn more-clubs-btn_close"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
                                             {% endif %}
                                         </td>
                                        <td align="center">
@@ -272,6 +279,7 @@
                                         <td align="center">2837</td>
                                         <td align="center">3274</td>
                                     </tr>
+                                    </a>
                                     {% endfor %}
                                 </tbody>
                             </table>
