@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
 
-from addresses.models import Address
+from addresses.models import Address, Country
 from base.models import TitleBaseModel
 
 from .choices import PLAYER_ROLE, PARITY_VALUES
@@ -73,6 +73,14 @@ class Arena(TitleBaseModel):
         verbose_name_plural=_('Arenas')
 
 
+class League(TitleBaseModel):
+    country = models.ForeignKey(Country, null=True, blank=True,
+                                    on_delete=models.SET_NULL)
+    class Meta:
+        verbose_name=_('League')
+        verbose_name_plural=_('Leagues')
+
+
 class Club(TitleBaseModel):
     objects = managers.club.ClubManager()
     opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
@@ -89,6 +97,7 @@ class Club(TitleBaseModel):
     arena = models.ForeignKey(Arena, null=True, blank=True,
                                     on_delete=models.SET_NULL)
     players = models.ManyToManyField(Player, null=True, blank=True)
+    league = models.ForeignKey(League, null=True, blank=True)
     farm_club = models.OneToOneField('self', null=True, blank=True,
                                     on_delete=models.SET_NULL,
                                     related_name='farmclubparent')
@@ -116,9 +125,22 @@ class AddressClub(models.Model):
     club = models.ForeignKey(Club)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+
     class Meta:
         verbose_name=_('Club address')
         verbose_name_plural=_('Club addresses')
+
+
+class LeagueClub(models.Model):
+    b''' связка лига - клуб в сезоне '''
+    league = models.ForeignKey(League)
+    club = models.ForeignKey(Club)
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)
+
+    class Meta:
+        verbose_name=_('Club league')
+        verbose_name_plural=_('Club leagues')
 
 
 class ClubPlayer(models.Model):

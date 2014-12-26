@@ -7,6 +7,7 @@ from base.admin import DynamicDisplayFilterMixin
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
+from .models import League, LeagueClub
 
 
 class GoalEntryInline(NoActionMixin, BaseMixin, admin.TabularInline):
@@ -82,11 +83,12 @@ class AddressClubInline(BaseMixin, admin.TabularInline):
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (CoachClubInline, AddressClubInline)
-    list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address'
+    list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address', 'league'
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Coach, Judge, Arena, AddressClub, ClubPlayer, CoachClub,):
+for model in (Arena, Coach, Judge, League, AddressClub, LeagueClub, ClubPlayer,
+CoachClub,):
     admin.site.register(model, BaseAdmin)
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)

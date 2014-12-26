@@ -22,11 +22,11 @@ class LinkedSelect2(Select2Widget, LinkedSelect):
 class BaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(BaseForm, self).__init__(*args, **kwargs)
-        for k,v in self.fields.items():
-            if self.fields[k].required:
-                v.widget.attrs['required']='required'
-            if k in ('title', 'desc'):
-                v.widget.attrs['style']='width: 100%;'
+        #for k,v in self.fields.items():
+            #if self.fields[k].required:
+                #v.widget.attrs['required']='required'
+            #if k in ('title', 'desc'):
+                #v.widget.attrs['style']='width: 100%;'
 
 
 class BaseMixin(object):
@@ -35,10 +35,10 @@ class BaseMixin(object):
         models.DateField: {'widget': SuitDateWidget},
         models.DateTimeField: {'widget': SuitSplitDateTimeWidget},
         models.ForeignKey: {
-            'widget': LinkedSelect2(select2_options={'minimumInputLength': 3})
+            'widget': LinkedSelect2
         },
         models.OneToOneField: {
-            'widget': LinkedSelect2(select2_options={'minimumInputLength': 3})
+            'widget': LinkedSelect2
         },
         models.ManyToManyField: {
             'widget': Select2MultipleWidget(select2_options={'width': 'resolve'})
