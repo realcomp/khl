@@ -2,9 +2,9 @@
 from django.views.generic import DetailView, UpdateView
 from registration.backends.default.views import RegistrationView
 
-from .forms import RegForm
-from .mixins import LoginReqMixin, ProfileMixin
-from .serializers import ProfileUpdateSerializer
+from ..forms import RegForm
+from ..mixins import LoginReqMixin, ProfileMixin
+from ..serializers import ProfileUpdateSerializer
 
 
 class Signup(RegistrationView):

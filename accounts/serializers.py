@@ -14,6 +14,12 @@ class RegistrationSer(serializers.ModelSerializer):
         read_only_fields = 'id',
 
 
+class UserVersionSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        fields = 'pk', 'version'
+        model = get_user_model()
+
+
 class ProfileSerializer(serializers.ModelSerializer):
     date_joined = serializers.SerializerMethodField()
 

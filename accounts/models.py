@@ -8,6 +8,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from . import choices
+
 
 class BaseUserManager(UserManager):
     def _create_user(   self, username, password,
@@ -64,6 +66,10 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
 class User(AbstractUser):
     fio = models.CharField(_('Full name'), max_length=1024, blank=True)
+    version = models.CharField(
+        _('Account version'), max_length=8, default='CLASSIC',
+        choices=choices.ACCOUNT_VERSIONS)
+
     __unicode__ = lambda self: self.username
 
     class Meta:

@@ -325,6 +325,9 @@ i.icon {
   color: #fff;
   background: #649792;
 }
+.bottom-line .ui.menu.user-card-menu.hidden {
+    display: none;
+}
 /* line 145, ../sass/_base.sass */
 .bottom-line .ui.list {
   display: inline-block;
@@ -335,19 +338,23 @@ i.icon {
   margin-right: 25px;
 }
 /* line 152, ../sass/_base.sass */
-.bottom-line .ui.list a.item.prof-version {
+.bottom-line .ui.list a.item.simple-version.active,
+.bottom-line .ui.list a.item.prof-version.active {
   color: #e48b21;
 }
 /* line 154, ../sass/_base.sass */
-.bottom-line .ui.list a.item.prof-version:hover {
+.bottom-line .ui.list a.item.simple-version.active:hover,
+.bottom-line .ui.list a.item.prof-version.active:hover {
   color: #649791;
 }
 /* line 156, ../sass/_base.sass */
-.bottom-line .ui.list a.item.simple-version {
+.bottom-line .ui.list a.item.simple-version,
+.bottom-line .ui.list a.item.prof-version {
   color: #649791;
 }
 /* line 158, ../sass/_base.sass */
-.bottom-line .ui.list a.item.simple-version:hover {
+.bottom-line .ui.list a.item.simple-version:hover,
+.bottom-line .ui.list a.item.prof-version:hover {
   color: #e48b21;
 }
 

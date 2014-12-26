@@ -1,10 +1,13 @@
 {% load static i18n %}
 {% get_static_prefix as STATIC_PREFIX %}
-<div class="bottom-line">
+<div class="bottom-line"
+     ng-controller="UserVersionController as UVCtrl"
+     ng-init="UVCtrl.user.version = '{{ request.user.version|default:"CLASSIC" }}'; UVCtrl.csrf_token = '{{ csrf_token|escapejs }}'">
     <div class="container">
         <a href="/" class="logo"><img src="{{STATIC_PREFIX}}images/logo.png" alt="Sportomatics" class="logo-image"></a>
 
-        <div class="ui secondary menu user-card-menu">
+        <div class="{% if request.user.version != 'PRO' %}hidden{% endif %} ui secondary menu user-card-menu"
+             ng-class="{ hidden:UVCtrl.user.version != 'PRO' }">
             <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}item"
                href="{% url 'hockeyapp:metrics-players' %}">{% trans 'METRICS' %}</a>
             <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
@@ -12,9 +15,27 @@
             <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}item"
                href="{% url 'accounts:profile' %}">{% trans 'PROFILE' %}</a>
         </div>
+        <div class="ui secondary menu user-card-menu {% if request.user.version != 'CLASSIC' %}hidden{% endif %}"
+             ng-class="{ hidden:UVCtrl.user.version != 'CLASSIC' }">
+            <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
+               href="{% url 'hockeyapp:club-list' %}">{% trans 'CLUBS' %}</a>
+            <a class="{% if user_card_menu_active == 'players' %}active {% endif %}item"
+               href="{% url 'hockeyapp:players-search' %}">{% trans 'PLAYERS' %}</a>
+            <a class="{% if user_card_menu_active == 'fan-zone' %}active {% endif %}item"
+               href="#">{% trans 'FAN-ZONE' %}</a>
+        </div>
+
         <div class="ui link list">
-            <a class="item prof-version">{% trans 'PRO VERSION' %}</a>
-            <a class="item simple-version">{% trans 'CLASSIC VERSION' %}</a>
+            <a class="item prof-version"
+               ng-click="UVCtrl.setVersion('PRO')"
+               ng-class="{ active:UVCtrl.user.version == 'PRO' }">
+                {% trans 'PRO VERSION' %}
+            </a>
+            <a class="item simple-version"
+               ng-click="UVCtrl.setVersion('CLASSIC')"
+               ng-class="{ active:UVCtrl.user.version == 'CLASSIC' }">
+                {% trans 'CLASSIC VERSION' %}
+            </a>
         </div>
     </div>
 </div>

@@ -115,7 +115,7 @@
                                         <tr>
                                             <td>
                                                 <a class="clubs-link" href="{% url 'hockeyapp:club' club.pk %}">
-                                                    <img src="{{ club.logo }}" alt="" class="club-logo">
+                                                    <img src="{{ club.logo|default:"" }}" alt="" class="club-logo">
                                                     <span>{{ club.title }}</span>
                                                 </a>
                                             </td>
