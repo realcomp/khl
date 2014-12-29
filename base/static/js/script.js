@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     var playerPartnersLink = $('.player-partners-link'),
+        playerPopupBtn = $('.player-popup-btn'),
         playerPartnersPopup = $('.player-partners-popup'),
         closePopupBtn = $('.close-popup-btn'),
         playerPhotosMasonry = $('.masonry-player-photos'),
@@ -21,6 +22,10 @@ $(document).ready(function(){
     $('.team-calendar').tabs();
     $('.clubs-tabs').tabs();
     $('.clubs-photos-tabs').tabs();
+    $('.clubs-team-tabs').tabs();
+    $('.team-view-type-tabs').tabs();
+    $('.season-last-tabs').tabs();
+    $('.season-prev-tabs').tabs();
 
     $('.clubs-photos-tabs .tab-btn').on('click', function (e) {
         playerClubsMasonry.masonry({
@@ -90,6 +95,16 @@ $(document).ready(function(){
     playerPartnersLink.on('click', function(e) {
         e.preventDefault();
 
+        playerPartnersPopup.show(300);
+    });
+
+    playerPopupBtn.on('click', function(e) {
+        e.preventDefault();
+
+        playerPartnersPopup.css({
+            top: e.pageY,
+            left: e.pageX
+        });
         playerPartnersPopup.show(300);
     });
 
