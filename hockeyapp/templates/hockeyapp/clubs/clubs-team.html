@@ -83,289 +83,349 @@
                                             <tbody>
                                                 <tr>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.0 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.0.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D0</span>
                                                             <img src="{{ current_defender_players.0.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.0.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.1 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.1.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D1</span>
                                                             <img src="{{ current_defender_players.1.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.1.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.2 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.2.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D2</span>
                                                             <img src="{{ current_defender_players.2.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.2.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.3 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.3.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D3</span>
                                                             <img src="{{ current_defender_players.3.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.3.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.0 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.0.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F0</span>
                                                             <img src="{{ current_offender_players.0.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.0.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-goalkeeper">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_goalkeeper_players.0 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_goalkeeper_players.0.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">G0</span>
                                                             <img src="{{ current_goalkeeper_players.0.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_goalkeeper_players.0.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.4 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.4.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D4</span>
                                                             <img src="{{ current_defender_players.4.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.4.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.1 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.1.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F1</span>
                                                             <img src="{{ current_offender_players.1.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.1.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.2 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.2.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F2</span>
                                                             <img src="{{ current_offender_players.2.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.2.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.3 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.3.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F3</span>
                                                             <img src="{{ current_offender_players.3.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.3.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.4 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.4.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F4</span>
                                                             <img src="{{ current_offender_players.4.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.4.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-goalkeeper"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.5 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.5.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D5</span>
                                                             <img src="{{ current_defender_players.5.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.5.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.6 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.6.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D6</span>
                                                             <img src="{{ current_defender_players.6.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.6.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.5 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.5.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F5</span>
                                                             <img src="{{ current_offender_players.5.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.5.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.6 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.6.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F6</span>
                                                             <img src="{{ current_offender_players.6.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.6.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.7 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.7.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F7</span>
                                                             <img src="{{ current_offender_players.7.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.7.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-goalkeeper">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_goalkeeper_players.1 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_goalkeeper_players.1.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">G1</span>
                                                             <img src="{{ current_goalkeeper_players.1.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_goalkeeper_players.1.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.7 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.7.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D7</span>
                                                             <img src="{{ current_defender_players.7.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.7.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.8 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.8.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F8</span>
                                                             <img src="{{ current_offender_players.8.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.8.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.9 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.9.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F9</span>
                                                             <img src="{{ current_offender_players.9.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.9.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.10 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.10.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F10</span>
                                                             <img src="{{ current_offender_players.10.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.10.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.11 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.11.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F11</span>
                                                             <img src="{{ current_offender_players.11.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.11.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-goalkeeper"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.8 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.8.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D8</span>
                                                             <img src="{{ current_defender_players.8.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.8.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.9 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.9.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D9</span>
                                                             <img src="{{ current_defender_players.9.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.9.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.12 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.12.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F12</span>
                                                             <img src="{{ current_offender_players.12.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.12.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.13 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.13.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F13</span>
                                                             <img src="{{ current_offender_players.13.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.13.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_offender_players.14 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.14.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">F14</span>
                                                             <img src="{{ current_offender_players.14.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_offender_players.14.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-goalkeeper">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_goalkeeper_players.2 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_goalkeeper_players.2.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">G2</span>
                                                             <img src="{{ current_goalkeeper_players.2.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_goalkeeper_players.2.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
-                                                        <a href="#" class="team-player-photo-link">
+                                                        {% if current_defender_players.10 %}
+                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.10.pk %}" class="team-player-photo-link">
                                                             <span class="team-player-number">D10</span>
                                                             <img src="{{ current_defender_players.10.photo }}" alt="" class="team-player-photo">
                                                             <span class="team-player-name">{{ current_defender_players.10.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-trainer">
+                                                        {% if coach %}
                                                         <a href="#" class="team-player-photo-link">
                                                             <span class="team-player-number">C</span>
                                                             <!-- <img src="{{ coach.photo }}" alt="" class="team-player-photo"> -->
                                                             <span class="team-player-name">{{ coach.fio }}</span>
                                                             <span class="team-player-name"></span>
                                                         </a>
+                                                        {% endif %}
                                                     </td>
                                                     <td class="cell-trainer"></td>
                                                     <td class="cell-trainer">
                                                         <!-- <a href="#" class="team-player-photo-link"> -->
                                                         <!--     <span class="team-player-number">22</span> -->
-                                                        <!--     <img src="../static/images/player1.png" alt="" class="team-player-photo"> -->
+                                                        <!--     <img src="{{ STATIC_URL }}images/player1.png" alt="" class="team-player-photo"> -->
                                                         <!--     <span class="team-player-name"></span> -->
                                                         <!--     <span class="team-player-name"></span> -->
                                                         <!-- </a> -->
@@ -374,7 +434,7 @@
                                                     <td class="cell-trainer">
                                                         <!-- <a href="#" class="team-player-photo-link"> -->
                                                         <!--     <span class="team-player-number">22</span> -->
-                                                        <!--     <img src="../static/images/player1.png" alt="" class="team-player-photo"> -->
+                                                        <!--     <img src="{{ STATIC_URL }}images/player1.png" alt="" class="team-player-photo"> -->
                                                         <!--     <span class="team-player-name"></span> -->
                                                         <!--     <span class="team-player-name"></span> -->
                                                         <!-- </a> -->
@@ -383,7 +443,7 @@
                                                     <td class="cell-trainer">
                                                         <!-- <a href="#" class="team-player-photo-link"> -->
                                                         <!--     <span class="team-player-number">22</span> -->
-                                                        <!--     <img src="../static/images/player1.png" alt="" class="team-player-photo"> -->
+                                                        <!--     <img src="{{ STATIC_URL }}images/player1.png" alt="" class="team-player-photo"> -->
                                                         <!--     <span class="team-player-name"></span> -->
                                                         <!--     <span class="team-player-name"></span> -->
                                                         <!-- </a> -->
@@ -415,7 +475,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -423,7 +483,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -431,7 +491,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -439,7 +499,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -447,7 +507,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -455,7 +515,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -465,7 +525,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -473,7 +533,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -481,7 +541,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -489,7 +549,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -497,7 +557,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -507,7 +567,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -515,7 +575,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -523,7 +583,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -531,7 +591,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -539,7 +599,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -547,7 +607,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -557,7 +617,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -565,7 +625,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -573,7 +633,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -581,7 +641,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -589,7 +649,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -604,7 +664,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -612,7 +672,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -620,7 +680,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -628,7 +688,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -636,7 +696,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -644,7 +704,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -654,7 +714,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -662,7 +722,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -670,7 +730,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -678,7 +738,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -686,7 +746,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -701,7 +761,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -709,7 +769,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -717,7 +777,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -725,7 +785,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -733,7 +793,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -741,7 +801,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -755,7 +815,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -763,7 +823,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -771,7 +831,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -779,7 +839,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -787,7 +847,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -795,7 +855,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -821,7 +881,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -829,7 +889,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -837,7 +897,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -845,7 +905,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -853,7 +913,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -861,7 +921,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -871,7 +931,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -879,7 +939,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -887,7 +947,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -895,7 +955,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -903,7 +963,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -913,7 +973,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -921,7 +981,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -929,7 +989,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -937,7 +997,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -945,7 +1005,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -953,7 +1013,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -963,7 +1023,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -971,7 +1031,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -979,7 +1039,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -987,7 +1047,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -995,7 +1055,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1010,7 +1070,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1018,7 +1078,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1026,7 +1086,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1034,7 +1094,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1042,7 +1102,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1050,7 +1110,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1060,7 +1120,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1068,7 +1128,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1076,7 +1136,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1084,7 +1144,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1092,7 +1152,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1107,7 +1167,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1115,7 +1175,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1123,7 +1183,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1131,7 +1191,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1139,7 +1199,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1147,7 +1207,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1161,7 +1221,7 @@
                                                     <tr>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1169,7 +1229,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1177,7 +1237,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1185,7 +1245,7 @@
                                                         <td class="cell-defender"></td>
                                                         <td class="cell-defender">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1193,7 +1253,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-forward">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1201,7 +1261,7 @@
                                                         <td class="cell-forward"></td>
                                                         <td class="cell-goalkeeper">
                                                             <a href="#" class="team-player-team-link">
-                                                                <img src="../static/images/ska-logo.png" alt="" class="team-logo">
+                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
                                                                 <span class="team-name">СКА</span>
                                                                 <span class="team-city">(Москва)</span>
                                                             </a>
@@ -1685,7 +1745,7 @@
                     <div class="player-partners-popup popup">
                         <a href="#" class="close-popup-btn">×</a>
                         <div class="player-bio">
-                            <img src="../static/images/player-avatar.jpg" alt="" class="player-photo">
+                            <img src="{{ STATIC_URL }}images/player-avatar.jpg" alt="" class="player-photo">
                             <div class="player-info">
                                 <div class="player-name">Акинфеев</div>
                                 <div class="player-name">Игорь</div>
