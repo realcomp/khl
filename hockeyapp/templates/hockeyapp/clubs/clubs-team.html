@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "hockeyapp/clubs/base.html" %}
 
 {% block body %}
 <section class="content">
@@ -7,9 +7,9 @@
             <div class="ui small breadcrumb">
                 <a class="section">Хоккей</a>
                 <div class="divider"> / </div>
-                <a class="section">Клубы</a>
+                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
                 <div class="divider"> / </div>
-                <a class="section">СКА</a>
+                <a class="section" href="{% url 'hockeyapp:club' pk %}">{{ title }}</a>
             </div>
             <div class="search-block">
                 <div class="item">
@@ -20,28 +20,17 @@
                 </div>
             </div>
         </div>
-        <div class="team-info">
-            <div class="team-heading">
-                <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
-                <div class="team-logo"><img src="../static/images/ska-logo.png" alt="Sportomatics" class="team-logo-image"></div>
-                <div class="team-name">СКА <span>(Санкт-Петербург)</span></div>
-            </div>
-            <ul class="info-list">
-                <li class="info-item"><i class="browser icon"></i> Сайт: http://www.ska.ru</li>
-                <li class="info-item"><i class="mail icon"></i> E-mail: pochta@ska.ru</li>
-                <li class="info-item"><i class="phone icon"></i> Тел.: +7 (812) 234 72 37</li>
-            </ul>
-        </div>
+        {% include "hockeyapp/clubs/team-info.html" %}
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
-                <a class="active item">Состав команды</a>
+                <a class="item active" href="{% url 'hockeyapp:club' pk %}">Состав команды</a>
                 <a class="item">Новости и результаты матчей</a>
-                <a class="item">Календарь игр</a>
-                <a class="item">Командная статистика</a>
-                <a class="item">Домашняя площадка</a>
-                <a class="item">Фотографии</a>
-                <a class="item">Фан-клуб</a>
+                <a class="item" href="{% url 'hockeyapp:club-calendar' pk %}">Календарь игр</a>
+                <a class="item" href="{% url 'hockeyapp:club-stats' pk %}">Командная статистика</a>
+                <a class="item" href="{% url 'hockeyapp:club-home' pk %}">Домашняя площадка</a>
+                <a class="item" href="{% url 'hockeyapp:club-photos' pk %}">Фотографии</a>
+                <a class="item" href="{% url 'hockeyapp:club-fanzone' pk %}">Фан-клуб</a>
                 <a class="item">Форум</a>
                 <a class="item">Магазин</a>
             </div>
@@ -95,55 +84,55 @@
                                                 <tr>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D0</span>
+                                                            <img src="{{ current_defender_players.0.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.0.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D1</span>
+                                                            <img src="{{ current_defender_players.1.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.1.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D2</span>
+                                                            <img src="{{ current_defender_players.2.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.2.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D3</span>
+                                                            <img src="{{ current_defender_players.3.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.3.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F0</span>
+                                                            <img src="{{ current_offender_players.0.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.0.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-goalkeeper">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">G0</span>
+                                                            <img src="{{ current_goalkeeper_players.0.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_goalkeeper_players.0.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -151,46 +140,46 @@
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D4</span>
+                                                            <img src="{{ current_defender_players.4.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.4.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F1</span>
+                                                            <img src="{{ current_offender_players.1.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.1.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F2</span>
+                                                            <img src="{{ current_offender_players.2.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.2.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F3</span>
+                                                            <img src="{{ current_offender_players.3.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.3.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F4</span>
+                                                            <img src="{{ current_offender_players.4.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.4.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-goalkeeper"></td>
@@ -198,55 +187,55 @@
                                                 <tr>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D5</span>
+                                                            <img src="{{ current_defender_players.5.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.5.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D6</span>
+                                                            <img src="{{ current_defender_players.6.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.6.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F5</span>
+                                                            <img src="{{ current_offender_players.5.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.5.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F6</span>
+                                                            <img src="{{ current_offender_players.6.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.6.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F7</span>
+                                                            <img src="{{ current_offender_players.7.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.7.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-goalkeeper">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">G1</span>
+                                                            <img src="{{ current_goalkeeper_players.1.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_goalkeeper_players.1.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -254,46 +243,46 @@
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D7</span>
+                                                            <img src="{{ current_defender_players.7.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.7.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F8</span>
+                                                            <img src="{{ current_offender_players.8.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.8.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F9</span>
+                                                            <img src="{{ current_offender_players.9.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.9.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F10</span>
+                                                            <img src="{{ current_offender_players.10.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.10.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F11</span>
+                                                            <img src="{{ current_offender_players.11.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.11.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-goalkeeper"></td>
@@ -301,55 +290,55 @@
                                                 <tr>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D8</span>
+                                                            <img src="{{ current_defender_players.8.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.8.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D9</span>
+                                                            <img src="{{ current_defender_players.9.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.9.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F12</span>
+                                                            <img src="{{ current_offender_players.12.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.12.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F13</span>
+                                                            <img src="{{ current_offender_players.13.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.13.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-forward">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">F14</span>
+                                                            <img src="{{ current_offender_players.14.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_offender_players.14.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-forward"></td>
                                                     <td class="cell-goalkeeper">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">G2</span>
+                                                            <img src="{{ current_goalkeeper_players.2.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_goalkeeper_players.2.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -357,47 +346,47 @@
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-defender">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">D10</span>
+                                                            <img src="{{ current_defender_players.10.photo }}" alt="" class="team-player-photo">
+                                                            <span class="team-player-name">{{ current_defender_players.10.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-defender"></td>
                                                     <td class="cell-trainer">
                                                         <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
+                                                            <span class="team-player-number">C</span>
+                                                            <!-- <img src="{{ coach.photo }}" alt="" class="team-player-photo"> -->
+                                                            <span class="team-player-name">{{ coach.fio }}</span>
+                                                            <span class="team-player-name"></span>
                                                         </a>
                                                     </td>
                                                     <td class="cell-trainer"></td>
                                                     <td class="cell-trainer">
-                                                        <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
-                                                        </a>
+                                                        <!-- <a href="#" class="team-player-photo-link"> -->
+                                                        <!--     <span class="team-player-number">22</span> -->
+                                                        <!--     <img src="../static/images/player1.png" alt="" class="team-player-photo"> -->
+                                                        <!--     <span class="team-player-name"></span> -->
+                                                        <!--     <span class="team-player-name"></span> -->
+                                                        <!-- </a> -->
                                                     </td>
                                                     <td class="cell-trainer"></td>
                                                     <td class="cell-trainer">
-                                                        <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
-                                                        </a>
+                                                        <!-- <a href="#" class="team-player-photo-link"> -->
+                                                        <!--     <span class="team-player-number">22</span> -->
+                                                        <!--     <img src="../static/images/player1.png" alt="" class="team-player-photo"> -->
+                                                        <!--     <span class="team-player-name"></span> -->
+                                                        <!--     <span class="team-player-name"></span> -->
+                                                        <!-- </a> -->
                                                     </td>
                                                     <td class="cell-trainer"></td>
                                                     <td class="cell-trainer">
-                                                        <a href="#" class="team-player-photo-link">
-                                                            <span class="team-player-number">22</span>
-                                                            <img src="../static/images/player1.png" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">Кержаков</span>
-                                                            <span class="team-player-name">Александр</span>
-                                                        </a>
+                                                        <!-- <a href="#" class="team-player-photo-link"> -->
+                                                        <!--     <span class="team-player-number">22</span> -->
+                                                        <!--     <img src="../static/images/player1.png" alt="" class="team-player-photo"> -->
+                                                        <!--     <span class="team-player-name"></span> -->
+                                                        <!--     <span class="team-player-name"></span> -->
+                                                        <!-- </a> -->
                                                     </td>
                                                     <td class="cell-goalkeeper"></td>
                                                 </tr>

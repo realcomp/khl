@@ -113,18 +113,24 @@ class ClubListSerializer(TitleBaseSerializer):
 class ClubPlayerSerializer(AbstractManSerializer):
     line = fields.ReadOnlyField(source='get_line_display')
     club = ClubListSerializer()
+    photo = fields.ReadOnlyField(source='photo.url')
 
     class Meta(object):
         fields = (
-            'pk', 'fio', 'line', 'club')
+            'pk', 'fio', 'line', 'club', 'photo')
         model = Player
 
 
 class ClubSerializer(ClubListSerializer):
     all_players = ClubPlayerSerializer(many=True)
+    current_offender_players = ClubPlayerSerializer(many=True)
+    current_defender_players = ClubPlayerSerializer(many=True)
+    current_goalkeeper_players = ClubPlayerSerializer(many=True)
+    coach = CoachSerializer()
 
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
-            'address', 'all_players')
+            'address', 'all_players', 'current_offender_players',
+            'current_defender_players', 'current_goalkeeper_players', 'coach')
         model = Club

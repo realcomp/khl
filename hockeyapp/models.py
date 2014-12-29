@@ -124,9 +124,21 @@ class Club(TitleBaseModel):
         player_ids = self.clubplayer_set.values_list('player_id', flat=True)
         return Player.objects.filter(pk__in=player_ids)
 
+    @property
+    def current_offender_players(self):
+        return self.players.filter(line=3)
+
+    @property
+    def current_defender_players(self):
+        return self.players.filter(line=2)
+
+    @property
+    def current_goalkeeper_players(self):
+        return self.players.filter(line=1)
+
     class Meta:
-        verbose_name=_('Club')
-        verbose_name_plural=_('Clubs')
+        verbose_name = _('Club')
+        verbose_name_plural = _('Clubs')
 
 
 class AddressClub(models.Model):

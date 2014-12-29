@@ -40,6 +40,8 @@ urlpatterns = [
     # clubs
     url(r'^clubs/$', views.ClubListView.as_view(), name='club-list'),
     url(r'^clubs/(?P<pk>\d+)/$', views.ClubView.as_view(), name='club'),
+    url(r'^clubs/(?P<pk>\d+)/calendar/$', views.ClubCalendarView.as_view(),
+        name='club-calendar'),
     url(r'^clubs/(?P<pk>\d+)/stats/$', views.ClubStatsView.as_view(),
         name='club-stats'),
     url(r'^clubs/(?P<pk>\d+)/home/$', views.ClubHomeView.as_view(),

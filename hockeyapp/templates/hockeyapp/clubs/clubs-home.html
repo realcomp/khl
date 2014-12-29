@@ -24,9 +24,9 @@
 
         <div class="page-content page-container">
             <div class="ui green inverted menu page-menu">
-                <a class="item">Состав команды</a>
+                <a class="item" href="{% url 'hockeyapp:club' pk %}">Состав команды</a>
                 <a class="item">Новости и результаты матчей</a>
-                <a class="item" href="{% url 'hockeyapp:club' pk %}">Календарь игр</a>
+                <a class="item" href="{% url 'hockeyapp:club-calendar' pk %}">Календарь игр</a>
                 <a class="item" href="{% url 'hockeyapp:club-stats' pk %}">Командная статистика</a>
                 <a class="active item" href="{% url 'hockeyapp:club-home' pk %}">Домашняя площадка</a>
                 <a class="item" href="{% url 'hockeyapp:club-photos' pk %}">Фотографии</a>

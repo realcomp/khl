@@ -91,7 +91,7 @@ class ClubListView(ListView):
 
 class ClubView(DetailView):
     model = Club
-    template_name = 'hockeyapp/clubs/clubs-calendar.html'
+    template_name = 'hockeyapp/clubs/clubs-team.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubView, self).get_context_data(**kwargs)
@@ -99,6 +99,10 @@ class ClubView(DetailView):
         context.update(ClubSerializer(
             self.get_object(), context=context).data)
         return context
+
+
+class ClubCalendarView(ClubView):
+    template_name = 'hockeyapp/clubs/clubs-calendar.html'
 
 
 class ClubHomeView(ClubView):
