@@ -1,5 +1,6 @@
 {% load i18n %}
-<a class="active item">{% trans 'Hockey' %}</a>
+<a class="active item" href="{% url 'hockeyapp:club-list' %}">{% trans 'Hockey' %}</a>
+{% comment %}
 <a class="item">{% trans 'Football' %}</a>
 <a class="item">{% trans 'Basketball' %}</a>
 <a class="item">{% trans 'Voleyball' %}</a>
@@ -7,3 +8,4 @@
 <a class="item">{% trans 'M-1 Mix fights' %}</a>
 <a class="item">{% trans 'Muay Thai' %}</a>
 <a class="item">{% trans 'Biathlon' %}</a>
+{% endcomment %}

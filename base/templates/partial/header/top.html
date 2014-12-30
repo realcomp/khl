@@ -5,6 +5,7 @@
             <div class="header item">{% trans 'Sports type' %}:</div>
             {% include 'partial/header/items.html' %}
 
+            {% comment %}
             <div class="ui dropdown item">
                 {% trans 'All' %}
                 <i class="dropdown icon"></i>
@@ -13,6 +14,8 @@
                     {% include 'partial/header/items.html' %}
                 </div>
             </div>
+            {% endcomment %}
+
             <div class="ui text right menu">
                 {% if user.is_authenticated %}
                 <a href="{% url 'auth_logout' %}" class="item">{% trans 'Logout' %}</a>
