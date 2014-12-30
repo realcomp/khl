@@ -75,4 +75,15 @@
         };
     }]);
 
+    app.controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
+        this.show = function() {
+            var self = this,
+            params = $('#PlayersSearchForm').serialize();
+            // TODO: replace url
+            $http.get('/en/hockey/api/players/?' + params)
+            .success(function(data) {
+            });
+        };
+    }]);
+
 })();

@@ -2,9 +2,15 @@
 from django.conf.urls import url
 
 from . import views
+from .views import api
 
 
 urlpatterns = [
+    # TODO: move to separate namespace
+    # REST API
+    url(r'^api/players/$', api.PlayersSearch.as_view(),
+        name='players-search-api'),
+    # Django CBV's'
     # metrics
     url(r'^metrics/players/$', views.MetricsPlayers.as_view(),
         name='metrics-players'),

@@ -19,6 +19,7 @@
 
         <div class="page-content page-container">
             <div class="container-top-block">
+                <form id="PlayersSearchForm" ng-controller="PlayersSearchController as PlayersSearchCtrl">
                 <div class="ui grid">
                     <div class="row">
                         <div class="column">
@@ -58,25 +59,25 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="line" value="[1,2,3]">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="line" value="[2]">
                                         <label>защитник</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="line" value="[3]">
                                         <label>нападающий</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="line" value="[1]">
                                         <label>вратарь</label>
                                     </div>
                                 </div>
@@ -152,11 +153,13 @@
                     <div class="row">
                         <div class="column">
                             <div class="align-center">
-                                <a class="ui tiny green button">показать</a>
+                                <a class="ui tiny green button"
+                                   ng-click="PlayersSearchCtrl.show()">показать</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
             <div class="page-inner-container">
                 <div class="ui grid">

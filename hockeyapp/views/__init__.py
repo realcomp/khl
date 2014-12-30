@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import DetailView, ListView, TemplateView
 
-from .serializers import (
+from ..serializers import (
     ClubListSerializer, ClubSerializer, PlayerCardSerializer)
-from .models import Club, Player
+from ..models import Club, Player
 
 
 class PlayersSearch(ListView):
