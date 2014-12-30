@@ -17,9 +17,10 @@
             </div>
         </div>
 
-        <div class="page-content page-container">
+        <div class="page-content page-container"
+             ng-controller="PlayersSearchController as PlayersSearchCtrl">
             <div class="container-top-block">
-                <form id="PlayersSearchForm" ng-controller="PlayersSearchController as PlayersSearchCtrl">
+                <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
                 <div class="ui grid">
                     <div class="row">
                         <div class="column">
@@ -154,7 +155,7 @@
                         <div class="column">
                             <div class="align-center">
                                 <a class="ui tiny green button"
-                                   ng-click="PlayersSearchCtrl.show()">показать</a>
+                                   ng-click="PlayersSearchCtrl.search()">показать</a>
                             </div>
                         </div>
                     </div>
@@ -222,21 +223,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for player in results %}
-                                    <tr>
+                                    {% verbatim %}
+                                    <tr ng-repeat="player in PlayersSearchCtrl.data.results">
                                         <td>
-                                            {{ forloop.counter }}
+                                            {{ $index + 1 }}
                                         </td>
                                         <td>
                                             <div class="player-avatar-block">
-                                                <a href="{% url 'hockeyapp:player-card' player.pk %}">
-                                                    <img src="{{ player.photo|default:"" }}" width="30" alt="" class="player-avatar">
-                                                </a>
+                                                <a href="{{ player.url }}"><img ng-src="{{ player.photo }}" width="30" alt="" class="player-avatar"></a>
                                                 <div class="player-info">
                                                     <span class="player-name">
-                                                        <a href="{% url 'hockeyapp:player-card' player.pk %}">
-                                                            {{ player.fio }}
-                                                        </a>
+                                                        <a href="{{ player.url }}">{{ player.fio }}</a>
                                                     </span>
                                                     <span class="player-name">&nbsp;</span>
                                                     <span class="player-country">Россия</span>
@@ -245,33 +242,32 @@
                                         </td>
                                         <td align="center">{{ player.line }}</td>
                                         <td>
-                                            {% if player.club %}
-                                                <a href="{% url 'hockeyapp:club' player.club.pk %}" class="club-link">
-                                                    {{ player.club.title }}
-                                                    {% if player.club.address.title %}
-                                                        ({{ player.club.address.title }})
-                                                    {% endif %}
-                                                </a>
-                                            {% endif %}
-                                            {% if player.previous_clubs %}
-                                                <ul class="club-link-list">
-                                                    {% for club in player.previous_clubs %}
-                                                        <li>
-                                                            <a href="{% url 'hockeyapp:club' club.pk %}" class="club-link">
-                                                                {{ club.title }}
-                                                                {% if club.address.title %}
-                                                                    ({{ club.address.title }})
-                                                                {% endif %}
-                                                            </a>
-                                                        </li>
-                                                    {% endfor %}
+                                            <a href="{{ player.club.url }}" class="club-link"
+                                               ng-show="player.club">
+                                                {{ player.club.title }}
+                                                <span ng-show="player.club.address.title">
+                                                    ({{ player.club.address.title }})
+                                                </span>
+                                            </a>
+                                            <div ng-show="player.previous_clubs.length > 0">
+                                                <ul class="club-link-list hidden">
+                                                    <li ng-repeat="club in player.previous_clubs">
+                                                        <a href="{{ club.url }}" class="club-link">
+                                                            {{ club.title }}
+                                                            <span ng-show="club.address.title">
+                                                                ({{ club.address.title }})
+                                                            </span>
+                                                        </a>
+                                                    </li>
                                                 </ul>
-                                                <a href="#" class="more-clubs-btn more-clubs-btn_open"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
-                                                <a href="#" class="more-clubs-btn more-clubs-btn_close"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
-                                            {% endif %}
+                                                <a class="more-clubs-btn more-clubs-btn_open"
+                                                   onclick="angular.element(this).scope().moreClubs(this)"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                                <a class="more-clubs-btn more-clubs-btn_close"
+                                                   onclick="angular.element(this).scope().moreClubs(this)"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
+                                            </div>
                                         </td>
                                        <td align="center">
-                                            {{ player.age.0 }}
+                                            {{ player.age[0] }}
                                             <div class="player-desc">{{ player.birth_date_short }}</div>
                                         </td>
                                         <td align="center">Россия</td>
@@ -282,7 +278,7 @@
                                         <td align="center">2837</td>
                                         <td align="center">3274</td>
                                     </tr>
-                                    {% endfor %}
+                                    {% endverbatim %}
                                 </tbody>
                             </table>
                         </div>

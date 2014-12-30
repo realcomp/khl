@@ -76,12 +76,27 @@
     }]);
 
     app.controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
-        this.show = function() {
+        var self = this,
+        url = $('#PlayersSearchForm').attr('action');
+
+        self.data = {};
+
+        $http.get(url)
+        .success(function(data) {
+            self.data = data;
+        });
+
+        $scope.moreClubs = function(e) {
+            $(e).closest('td').toggleClass('show-more-clubs')
+        };
+
+        this.search = function() {
             var self = this,
             params = $('#PlayersSearchForm').serialize();
             // TODO: replace url
-            $http.get('/en/hockey/api/players/?' + params)
+            $http.get(url + '?' + params)
             .success(function(data) {
+                self.data = data;
             });
         };
     }]);

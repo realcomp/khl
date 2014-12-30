@@ -41,9 +41,10 @@ class AddressSerializer(TitleBaseSerializer):
 
 class PlayerClubSerializer(TitleBaseSerializer):
     address = AddressSerializer()
+    url = fields.ReadOnlyField(source='get_absolute_url')
 
     class Meta(object):
-        fields = 'pk', 'title', 'address'
+        fields = 'pk', 'title', 'address', 'url'
         model = Club
 
 
@@ -56,6 +57,7 @@ class PlayerCardSerializer(AbstractManSerializer):
     khl_url = serializers.SerializerMethodField()
     club = PlayerClubSerializer()
     previous_clubs = PlayerClubSerializer(many=True)
+    url = fields.ReadOnlyField(source='get_absolute_url')
 
     def get_birth_date(self, obj):
         return obj.birth_date and obj.birth_date.strftime('%d %B %Y')
@@ -76,7 +78,8 @@ class PlayerCardSerializer(AbstractManSerializer):
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
-            'photo', 'khl_url', 'birth_date_short', 'club', 'previous_clubs')
+            'photo', 'khl_url', 'birth_date_short', 'club', 'previous_clubs',
+            'url',)
         model = Player
 
 

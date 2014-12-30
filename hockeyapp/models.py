@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import datetime
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -52,6 +53,10 @@ class Player(AbstractMan):
             Club.objects
             .exclude(pk__in=current_club_ids)
             .filter(pk__in=previous_club_ids)[:8])
+
+    def get_absolute_url(self):
+        if self.pk:
+            return reverse('hockeyapp:player-card', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name=_('Player')
@@ -135,6 +140,10 @@ class Club(TitleBaseModel):
     @property
     def current_goalkeeper_players(self):
         return self.players.filter(line=1)
+
+    def get_absolute_url(self):
+        if self.pk:
+            return reverse('hockeyapp:club', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = _('Club')
