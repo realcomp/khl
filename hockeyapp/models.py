@@ -4,6 +4,7 @@ import datetime
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -23,8 +24,9 @@ class AbstractMan(models.Model):
     class Meta:
         abstract=True
 
+
 class Player(AbstractMan):
-    objects = managers.player.PlayerManager()
+    objects = managers.player.PlayerQuerySet.as_manager()
     khl_id = models.PositiveIntegerField(default=0)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
@@ -131,8 +133,7 @@ class Club(TitleBaseModel):
 
     @property
     def all_players(self):
-        player_ids = self.clubplayer_set.values_list('player_id', flat=True)
-        return Player.objects.filter(pk__in=player_ids)
+        Player.objects.by_season(self)
 
     @property
     def current_offender_players(self):

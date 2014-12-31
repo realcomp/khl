@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 import json
 import operator
 
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics, permissions
 
 from ..serializers import PlayerCardSerializer, ClubListSerializer
@@ -20,11 +22,17 @@ class PlayersSearch(generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(PlayersSearch, self).filter_queryset(qs)
+        club = None
         if 'line' in self.request.GET:
             # union of sets
             values = reduce(operator.or_, map(set, map(
                 json.loads, self.request.GET.getlist('line'))))
             qs = qs.filter(line__in=values)
+        if 'club' in self.request.GET:
+            club = get_object_or_404(Club, pk=self.request.GET['club'])
+        if 'season' in self.request.GET and club:
+            season = json.loads(self.request.GET['season'])
+            qs = qs.by_season(club, season)
         return qs
 
 

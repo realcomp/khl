@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
+import datetime
 import requests
 
 from PIL import Image
@@ -10,13 +11,14 @@ from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models import Q
 
 import filer
 
 from .. import parsers
 
 
-class PlayerManager(models.Manager):
+class PlayerQuerySet(models.QuerySet):
     b''' Менджер игрока '''
     def _get_data(self, khl_id):
         b''' Берем данные со стороннего сайта парсером '''
@@ -72,3 +74,20 @@ class PlayerManager(models.Manager):
             )
             _file.save()
             return _file
+
+    def by_season(self, club, season=None):
+        '''
+        :param season: season years ('2014', '2015')
+        :type season: tuple
+        '''
+        club_players = club.clubplayer_set
+        if season:
+            # october 1
+            season_start = datetime.date(year=season[0], month=10, day=1)
+            # april 1
+            season_end = datetime.date(year=season[1], month=4, day=1)
+            q_start = Q(start_date__lte=season_start)
+            q_end = Q(end_date__gte=season_end) | Q(end_date__isnull=True)
+            club_players = club_players.filter(q_start & q_end)
+        player_ids = club_players.values_list('player_id', flat=True)
+        return self.filter(pk__in=player_ids)
