@@ -137,5 +137,6 @@ class ClubSerializer(ClubListSerializer):
         fields = (
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
             'address', 'all_players', 'current_offender_players',
-            'current_defender_players', 'current_goalkeeper_players', 'coach')
+            'current_defender_players', 'current_goalkeeper_players', 'coach',
+            'url')
         model = Club
