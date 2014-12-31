@@ -6,7 +6,7 @@ import operator
 
 from rest_framework import generics, permissions
 
-from ..serializers import PlayerCardSerializer
+from ..serializers import PlayerCardSerializer, ClubListSerializer
 from ..models import Club, Player
 
 
@@ -25,4 +25,20 @@ class PlayersSearch(generics.ListAPIView):
             values = reduce(operator.or_, map(set, map(
                 json.loads, self.request.GET.getlist('line'))))
             qs = qs.filter(line__in=values)
+        return qs
+
+
+class ClubList(generics.ListAPIView):
+    paginate_by = 100
+    permission_classes = permissions.IsAuthenticated,
+    serializer_class = ClubListSerializer
+
+    def get_queryset(self):
+        return Club.objects.all()
+
+    def filter_queryset(self, qs):
+        qs = super(ClubList, self).filter_queryset(qs)
+        if 'order_by' in self.request.GET:
+            qs = qs.order_by(
+                self.request.GET['order_by'] % self.request.LANGUAGE_CODE)
         return qs

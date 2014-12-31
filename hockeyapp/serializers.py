@@ -91,9 +91,10 @@ class CoachSerializer(AbstractManSerializer):
 
 class ArenaSerializer(TitleBaseSerializer):
     photo = fields.ReadOnlyField(source='photo.url')
+    url = fields.ReadOnlyField(source='get_absolute_url')
 
     class Meta(object):
-        fields = 'pk', 'title', 'photo', 'capacity', 'site', 'contacts'
+        fields = 'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url'
         model = Arena
 
 
@@ -105,11 +106,12 @@ class ClubListSerializer(TitleBaseSerializer):
     # farm_club
     # junior_club
     address = AddressSerializer()
+    url = fields.ReadOnlyField(source='get_absolute_url')
 
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
-            'address')
+            'address', 'url')
         model = Club
 
 

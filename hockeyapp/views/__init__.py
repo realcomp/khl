@@ -6,24 +6,8 @@ from ..serializers import (
 from ..models import Club, Player
 
 
-class PlayersSearch(ListView):
-    model = Player
-    paginate_by = 100
+class PlayersSearch(TemplateView):
     template_name = 'hockeyapp/players/players-search.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(PlayersSearch, self).get_context_data(**kwargs)
-        context['request'] = self.request
-        qs = self.get_queryset()
-        page_size = self.get_paginate_by(qs)
-        paginator, page, object_list, has_other_pages = self.paginate_queryset(
-            qs, page_size)
-        context.update({
-            'count': qs.count(),
-            'results': PlayerCardSerializer(
-                object_list, many=True, context=context).data,
-        })
-        return context
 
 
 class PlayerCard(DetailView):
@@ -66,25 +50,15 @@ class PlayerCardNews(PlayerCard):
     template_name = 'hockeyapp/players/player-card-news.html'
 
 
-class ClubListView(ListView):
-    model = Club
-    paginate_by = 100
+class ClubListView(TemplateView):
     template_name = 'hockeyapp/clubs/clubs.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
-        context['request'] = self.request
-        qs = self.get_queryset()
-        page_size = self.get_paginate_by(qs)
-        paginator, page, object_list, has_other_pages = self.paginate_queryset(
-            qs, page_size)
         context.update({
             'club_types': (
                 'clubs-all', 'clubs-chl', 'clubs-nhl', 'clubs-vhl',
                 'clubs-mhl', 'clubs-mhla'),
-            'count': qs.count(),
-            'results': ClubListSerializer(
-                object_list, many=True, context=context).data,
         })
         return context
 

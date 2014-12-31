@@ -17,8 +17,10 @@
             </div>
         </div>
 
-        <div class="page-content page-container">
+        <div class="page-content page-container"
+             ng-controller="ClubListController as ClubListCtrl">
             <div class="page-inner-container">
+                <form id="ClubListForm" action="{% url 'hockeyapp:club-list-api' %}">
                 <div class="clubs-tabs">
                     <div class="ui grid">
                         <div class="row">
@@ -101,30 +103,60 @@
                                 <table class="ui celled table segment clubs-table tab" id="{{ club_type }}" data-tab="{{ club_type }}">
                                     <thead>
                                         <tr>
-                                            <th width="160">Название</th>
-                                            <th width="130">Город</th>
-                                            <th width="80" class="small-cell">Место в чемпионате</th>
-                                            <th width="165">Домашняя площадка</th>
-                                            <th>Главный тренер</th>
+                                            <th width="160">
+                                                <input type="radio" id="club-list-head-1" class="hidden"
+                                                       name="order_by" value="%s_title" checked="checked"
+                                                       ng-model="clublisthead"
+                                                       ng-change="ClubListCtrl.list()" />
+                                                <label for="club-list-head-1">Название</label>
+                                            </th>
+                                            <th width="130">
+                                                <input type="radio" id="club-list-head-2" class="hidden"
+                                                       name="order_by" value="address__%s_title"
+                                                       ng-model="clublisthead"
+                                                       ng-change="ClubListCtrl.list()" />
+                                                <label for="club-list-head-2">Город</label>
+                                            </th>
+                                            <th width="80" class="small-cell">
+                                                <input type="radio" id="club-list-head-3" class="hidden"
+                                                       name="order_by" value="%s_title" {# not implemented #}
+                                                       ng-model="clublisthead"
+                                                       ng-change="ClubListCtrl.list()" />
+                                                <label for="club-list-head-3">Место в чемпионате</label>
+                                            </th>
+                                            <th width="165">
+                                                <input type="radio" id="club-list-head-4" class="hidden"
+                                                       name="order_by" value="arena__%s_title"
+                                                       ng-model="clublisthead"
+                                                       ng-change="ClubListCtrl.list()" />
+                                                <label for="club-list-head-4">Домашняя площадка</label>
+                                            </th>
+                                            <th>
+                                                <input type="radio" id="club-list-head-5" class="hidden"
+                                                       name="order_by" value="coach__%s_fio"
+                                                       ng-model="clublisthead"
+                                                       ng-change="ClubListCtrl.list()" />
+                                                <label for="club-list-head-5">Главный тренер</label>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {# test only, will be replaced with real filters #}
                                         {% if club_type == "clubs-all" or club_type == "clubs-chl" %}
-                                        {% for club in results %}
-                                        <tr>
+                                        {% verbatim %}
+                                        <tr ng-repeat="club in ClubListCtrl.data.results">
                                             <td>
-                                                <a class="clubs-link" href="{% url 'hockeyapp:club' club.pk %}">
-                                                    <img src="{{ club.logo|default:"" }}" alt="" class="club-logo">
+                                                <a class="clubs-link" href="{{ club.url }}">
+                                                    <img ng-src="{{ club.logo }}" alt="" class="club-logo">
                                                     <span>{{ club.title }}</span>
                                                 </a>
                                             </td>
                                             <td>{{ club.address.title }}</td>
                                             <td align="center">5</td>
-                                            <td><a href="{% url 'hockeyapp:club-home' club.pk %}">{{ club.arena.title }}</a></td>
+                                            <td><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
                                             <td><a href="#">{{ club.coach.fio }}</a></td>
                                         </tr>
-                                        {% endfor %}
+                                        {% endverbatim %}
                                         {% endif %}
                                     </tbody>
                                 </table>
@@ -133,6 +165,7 @@
                         </div>
                     </div>
                 </div>
+                </form>
                 <hr class="hr">
                 <ul class="team-controls player-controls-block">
                     <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>

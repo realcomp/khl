@@ -10,6 +10,8 @@ urlpatterns = [
     # REST API
     url(r'^api/players/$', api.PlayersSearch.as_view(),
         name='players-search-api'),
+    url(r'^api/clubs/$', api.ClubList.as_view(),
+        name='club-list-api'),
     # Django CBV's'
     # metrics
     url(r'^metrics/players/$', views.MetricsPlayers.as_view(),

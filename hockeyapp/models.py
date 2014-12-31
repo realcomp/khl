@@ -83,6 +83,11 @@ class Arena(TitleBaseModel):
     tickets_url = models.URLField(_('Tickets'), blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
 
+    def get_absolute_url(self):
+        if self.pk:
+            club = self.club_set.latest('pk')
+            return reverse('hockeyapp:club-home', kwargs={'pk': club.pk})
+
     class Meta:
         verbose_name=_('Arena')
         verbose_name_plural=_('Arenas')

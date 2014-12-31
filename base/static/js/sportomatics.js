@@ -78,13 +78,7 @@
     app.controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
         var self = this,
         url = $('#PlayersSearchForm').attr('action');
-
         self.data = {};
-
-        $http.get(url)
-        .success(function(data) {
-            self.data = data;
-        });
 
         $scope.moreClubs = function(e) {
             $(e).closest('td').toggleClass('show-more-clubs')
@@ -93,12 +87,28 @@
         this.search = function() {
             var self = this,
             params = $('#PlayersSearchForm').serialize();
-            // TODO: replace url
             $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
             });
         };
+        this.search();
+    }]);
+
+    app.controller('ClubListController', ['$http', function($http) {
+        var self = this,
+        url = $('#ClubListForm').attr('action');
+        self.data = {};
+
+        this.list = function() {
+            var self = this,
+            params = $('#ClubListForm').serialize();
+            $http.get(url + '?' + params)
+            .success(function(data) {
+                self.data = data;
+            });
+        };
+        this.list();
     }]);
 
 })();
