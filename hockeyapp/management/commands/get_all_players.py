@@ -15,6 +15,7 @@ class Command(BaseCommand):
             lst_link = GetAllPlayerIDs().get_page(id=char)
             ids.extend([elem.split('/')[2] for elem in lst_link])
         for khl_id in set(ids):
-            Player.objects.get_or_create_player(khl_id=khl_id)
-            print(khl_id, '\tok')
+            print(khl_id, end='')
+            Player.objects.get_or_create_player(khl_id=khl_id, update=True)
+            print('\tok')
         return 'done'

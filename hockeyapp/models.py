@@ -4,7 +4,6 @@ import datetime
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -28,12 +27,22 @@ class AbstractMan(models.Model):
 class Player(AbstractMan):
     objects = managers.player.PlayerQuerySet.as_manager()
     khl_id = models.PositiveIntegerField(default=0)
+    contract_type = models.CharField(_('Contract type'),
+                                            max_length=32, blank=True)
+    contract_to = models.DateField(_('Contract to'), null=True, blank=True)
+    number = models.CharField(_('Number'), max_length=32, blank=True)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
-    birth_date = models.DateField(_('Birth date'), null=True, blank=True)
     weight = models.CharField(_('Weight'), max_length=32, blank=True)
     height = models.CharField(_('Height'), max_length=32, blank=True)
+    grip = models.CharField(_('Grip'), max_length=32, blank=True)
+    birth_date = models.DateField(_('Birth date'), null=True, blank=True)
+    death_date = models.DateField(_('Death date'), null=True, blank=True)
+    citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
+                                            on_delete=models.SET_NULL,
+                                            null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+    wiki_page = models.URLField('Wiki page URL', blank=True)
 
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
@@ -44,17 +53,16 @@ class Player(AbstractMan):
 
     @property
     def club(self):
-        return self.club_set.latest('pk')
+        return self.club_set.all().last()
 
     @property
     def previous_clubs(self):
         previous_club_ids = self.clubplayer_set.values_list(
             'club_id', flat=True)
         current_club_ids = self.club_set.values_list('id', flat=True)
-        return (
-            Club.objects
-            .exclude(pk__in=current_club_ids)
-            .filter(pk__in=previous_club_ids)[:8])
+        return Club.objects.exclude(pk__in=current_club_ids
+                          ).filter(pk__in=previous_club_ids
+                          )[:8]
 
     def get_absolute_url(self):
         if self.pk:
@@ -189,10 +197,22 @@ class ClubPlayer(models.Model):
                                             choices=PLAYER_ROLE)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+
     __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
+
     class Meta:
         verbose_name=_('Club player')
         verbose_name_plural=_('Club players')
+
+    @property
+    def admin_link(self):
+        if self.pk:
+            return reverse('admin:hockeyapp_clubplayer_change',args=(self.pk,),)
+
+    def admin_link_html_render(self):
+        if self.admin_link:
+            return '<a href="{}">{}</a>'.format(self.admin_link, self.pk)
+    admin_link_html_render.short_description = _('Link')
 
 
 class CoachClub(models.Model):

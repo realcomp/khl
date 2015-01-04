@@ -7,7 +7,7 @@ from ..models import Match, Player, Club
 
 class HockeyAppTest(base.tests.BaseTest):
     blank = ''
-    player_id = 4202
+    player_id = 3582
     match_id = 42100
 
     def base_test(self):
@@ -66,13 +66,14 @@ class HockeyAppTest(base.tests.BaseTest):
         )
         self.assertEqual(Player.objects.filter(khl_id=khlid).count(), 1)
         #check fields
+        for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
+            'height', 'weight', 'contract_type', 'contract_to', 'number',
+            'grip', 'birth_date', 'citizenship', 'wiki_page',
+        ):
+            self.assertNotEqual(getattr(player, field), self.blank)
+        for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
+            self.assertIsNotNone(getattr(player, field))
         self.assertEqual(player.khl_id, khlid)
-        self.assertNotEqual(player.ru_fio, self.blank)
-        self.assertIsNotNone(player.line)
-        self.assertNotEqual(player.birth_date, self.blank)
-        self.assertNotEqual(player.height, self.blank)
-        self.assertNotEqual(player.weight, self.blank)
-        self.assertIsNotNone(player.photo)
         #update
         player = Player.objects.get_or_create_player(khl_id=khlid)
         self.assertEqual(Player.objects.filter(khl_id=khlid).count(), 1)

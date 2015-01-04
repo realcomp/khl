@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, TemplateView
 
-from ..serializers import (
-    ClubListSerializer, ClubSerializer, PlayerCardSerializer)
+from ..serializers import ClubSerializer, PlayerCardSerializer
 from ..models import Club, Player
 
 

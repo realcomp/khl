@@ -66,7 +66,14 @@ class MatchAdmin(NoActionMixin, NoFilterAdmin):
 admin.site.register(Match, MatchAdmin)
 
 
+class ClubPlayerInline(NoActionMixin, BaseMixin, admin.TabularInline):
+    model = ClubPlayer
+    extra=0
+    readonly_fields = ('club', 'number', 'line', 'start_date', 'end_date',
+                        'admin_link_html_render',)
+
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+    inlines = (ClubPlayerInline, )
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url',)
 admin.site.register(Player, PlayerAdmin)
@@ -87,11 +94,27 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Arena, Coach, Judge, League, AddressClub, LeagueClub, ClubPlayer,
-CoachClub,):
+for model in (Arena, Coach, Judge, League, AddressClub, LeagueClub, CoachClub,):
     admin.site.register(model, BaseAdmin)
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
+
+
+class ClubPlayerMatchInline(NoActionMixin, BaseMixin, admin.TabularInline):
+    model = ClubPlayerMatch
+    extra = 0
+    raw_id_fields = 'adv_stats', 'match'
+    #_field_names = model._meta.get_all_field_names()
+    readonly_fields = ( 'bullet_goals', 'clubplayer', 'es_goals', 'ev_goals',
+                        'faceoff', 'gamingtime', 'loose_goals',
+                        'overtime_goals', 'penalty_time', 'pis', 'plus_minus',
+                        'pp_goals', 'saves', 'saves_p', 'sf', 'shots',
+                        'win_goals', 'winfaceoff', 'winfaceoff_p'
+                    )
+
+class ClubPlayerAdmin(BaseAdmin):
+    inlines = (ClubPlayerMatchInline, )
+admin.site.register(ClubPlayer, ClubPlayerAdmin)
 
 
 class HasMatchObjAdmin(NoFilterAdmin):

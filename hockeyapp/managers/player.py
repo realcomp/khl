@@ -15,11 +15,13 @@ from django.db.models import Q
 
 import filer
 
+from addresses.models import Country
+
 from .. import parsers
 
 
 class PlayerQuerySet(models.QuerySet):
-    b''' Менджер игрока '''
+    b''' Менеджер игрока '''
     def _get_data(self, khl_id):
         b''' Берем данные со стороннего сайта парсером '''
         return parsers.player.GetPlayerInfo().get_page(khl_id)
@@ -31,6 +33,7 @@ class PlayerQuerySet(models.QuerySet):
             if not data:
                 data = self._get_data(khl_id)
             if data:
+                data.pop('club', None)
                 for k,v in data.items():
                     if not v:
                         data.pop(k, None)
@@ -38,9 +41,13 @@ class PlayerQuerySet(models.QuerySet):
                 if _ava:
                     # создаем фото игрока, если нет в бд
                     data['photo'] = self._create_photo(khl_id, _ava)
+                _citizenship = data.pop('citizenship', None)
+                if _citizenship:
+                    _func = Country.objects.get_or_create
+                    data['citizenship'], _crt = _func(ru_title = _citizenship)
                 if not data.get('ru_fio') and ru_fio:
                     data['ru_fio'] = ru_fio
-                if update:
+                if update and _player:
                     self.filter(khl_id=_player.khl_id).update(**data)
                 else:
                     _player = self.create(**data)
@@ -83,6 +90,9 @@ class PlayerQuerySet(models.QuerySet):
         club_players = club.clubplayer_set
         if season:
             # october 1
+            # матчи и в сентябре бывают
+            # практический во всех видах спорта сезон начинается 1 июля
+            # и заканчивается 30 июня. РУСЛАН ПОПРАВЬ
             season_start = datetime.date(year=season[0], month=10, day=1)
             # april 1
             season_end = datetime.date(year=season[1], month=4, day=1)

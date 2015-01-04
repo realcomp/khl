@@ -102,11 +102,19 @@ PLAYER_DATA_DICT = {
     'en_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()[preceding-sibling::br]',
     'photo': '/tr[@valign="top"]/td[@rowspan="3"]/div',
     'stats': '/tr[2]/td[@valign="top"]/ul/li',
-    'birth_date': '/tr[2]/td[@valign="top"]/ul/li[8]/b/text()',
-    'weight': '/tr[2]/td[@valign="top"]/ul/li[7]/b/text()',
-    'height': '/tr[2]/td[@valign="top"]/ul/li[6]/b/text()',
+    'club': '/tr[2]/td[@valign="top"]/ul/li[1]/b/text()',
+    'contract_type': '/tr[2]/td[@valign="top"]/ul/li[2]/b/text()',
+    'contract_to': '/tr[2]/td[@valign="top"]/ul/li[3]/b/text()',
+    'number': '/tr[2]/td[@valign="top"]/ul/li[4]/b/text()',
     'line': '/tr[2]/td[@valign="top"]/ul/li[5]/b/text()',
-    'grip': '/tr[2]/td[@valign="top"]/ul/li[9]/b/text()',
+    'height': '/tr[2]/td[@valign="top"]/ul/li[6]/b/text()',
+    'weight': '/tr[2]/td[@valign="top"]/ul/li[7]/b/text()',
+    'grip': '/tr[2]/td[@valign="top"]/ul/li[8]/b/text()',
+    'birth_date': '/tr[2]/td[@valign="top"]/ul/li[9]/b/text()',
+    'birth_date_alt': '/tr[2]/td[@valign="top"]/ul/li[4]/b/text()',
+    'death_date': '/tr[2]/td[@valign="top"]/ul/li[9]/b/text()',
+    'citizenship': '/tr[2]/td[@valign="top"]/ul/li[11]/b/text()',
+    'all': '/tr[2]/td[@valign="top"]/ul/b/text()',
 }
 
 MD = {

@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 __author__='smirnov.ev'
 
 import grab
+import time
 
 from django.db.models.loading import get_model
 
@@ -61,16 +62,22 @@ class GrabParser(object):
             self.absolute_url = b'{0}{1}'.format(self.absolute_url,_url)
         return self.absolute_url
 
-    def get_page(self, id=None, slash=True):
+    def get_page(self, id=None, slash=True, count=None):
         b'''  берем DOM страницы  '''
         if self.url and self.pk_kwarg:
             self._get_absolute_url(id, slash)
             self.g = grab.Grab(url=self.absolute_url)
             # забираем ответ от ресурса
+            count = count or 0
             try:
                 self.g.go(self.absolute_url)
             except grab.error.GrabNetworkError: 
                 self.g = None
+            except grab.error.GrabConnectionError:
+                if count < 3:
+                    count+=1
+                    time.sleep(60)
+                    return self.get_page(id, slash, count)
             if self.g and self.g.response.code == 200:
                 # страница доступна
                 self.page_tree = self.g.tree

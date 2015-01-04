@@ -43,7 +43,7 @@ class AdvancedHockeyMatchParser(GrabParser):
         self.page_tree=super(AdvancedHockeyMatchParser, self).get_page(id,False)
         if self.page_tree is not None:
             if self.page_tree.xpath(self.match_protocol_xpath):
-                body = self.page_tree.xpath(self.match_protocol_xpath)[0]
+                #body = self.page_tree.xpath(self.match_protocol_xpath)[0]
                 self.result_dict = self.get_adv_stats()
                 return self.result_dict
 
