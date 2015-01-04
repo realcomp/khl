@@ -42,7 +42,7 @@ class Player(AbstractMan):
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
-    wiki_page = models.URLField('Wiki page URL', blank=True)
+    wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
 
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
