@@ -10,6 +10,7 @@ import sys
 from sportomatics.celery import app
 
 from . import parsers
+from . import models
 
 logger = logging.getLogger('root')
 
@@ -42,3 +43,14 @@ def async_hockey_matches_parser(id, matches):
             logger.error(exc, exc_info=sys.exc_info())
         #if i%100 == 0:
         #time.sleep(10)
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_hockey_player_update(id):
+    b'''
+        Обновление инфо о игроке
+    '''
+    try:
+        models.Player.objects.get_or_create_player(khl_id=id, update=True)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
