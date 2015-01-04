@@ -93,7 +93,7 @@ class GetPlayerInfo(GrabParser):
                     'death_date': self.get_death_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio']),
+            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
             self.clear_stats_indexes()
             return _res
 
