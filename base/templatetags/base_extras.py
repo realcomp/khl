@@ -10,6 +10,8 @@ register = template.Library()
 def translate_url(context, url, language):
     request = context.get('request')
     if request:
+        if request.path == '/':
+            return '/%s/' % language
         return re.sub(
             r'^/%s/' % request.LANGUAGE_CODE,
             '/%s/' % language, url)

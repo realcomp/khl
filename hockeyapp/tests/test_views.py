@@ -43,9 +43,6 @@ class ViewsTestCase(TestCase):
         response = self.client.get(
             reverse('hockeyapp:players-search'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context_data['count'], 1)
-        self.assertEqualPlayer(
-            response.context_data['results'][0], self.player)
 
     def test_player_card(self):
         response = self.client.get(

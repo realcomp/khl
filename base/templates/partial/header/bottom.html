@@ -6,6 +6,7 @@
     <div class="container">
         <a href="/" class="logo"><img src="{{STATIC_PREFIX}}images/logo.png" alt="Sportomatics" class="logo-image"></a>
 
+        {% if request.user.is_authenticated %}
         <div class="{% if request.user.version != 'PRO' %}hidden{% endif %} ui secondary menu user-card-menu"
              ng-class="{ hidden:UVCtrl.user.version != 'PRO' }">
             <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}item"
@@ -24,7 +25,6 @@
             <a class="{% if user_card_menu_active == 'fan-zone' %}active {% endif %}item"
                href="#">{% trans 'FAN-ZONE' %}</a>
         </div>
-
         <div class="ui link list">
             <a class="item prof-version"
                ng-click="UVCtrl.setVersion('PRO')"
@@ -37,5 +37,15 @@
                 {% trans 'CLASSIC VERSION' %}
             </a>
         </div>
+        {% else %}
+        <div class="ui secondary menu user-card-menu">
+            <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}item"
+               href="{% url 'hockeyapp:metrics-players' %}">{% trans 'METRICS' %}</a>
+            <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
+               href="{% url 'hockeyapp:club-list' %}">{% trans 'CLUBS' %}</a>
+            <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}item"
+               href="{% url 'accounts:profile' %}">{% trans 'PROFILE' %}</a>
+        </div>
+        {% endif %}
     </div>
 </div>
