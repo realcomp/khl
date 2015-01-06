@@ -24,6 +24,7 @@ django-suit
 django-select2
 django-redis-sessions
 django-registration-redux
+django-relatives
 django-rosetta
 
 #development

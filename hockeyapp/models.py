@@ -335,6 +335,8 @@ class ClubPlayerMatch(models.Model):
     sf = models.CharField(_('Safety Factor'), max_length=8, blank=True)
     gamingtime = models.CharField(_('Gaming time'), max_length=8, blank=True)
 
+    __unicode__ = lambda self: '{}'.format(self.match or self.pk,)
+
     class Meta:
         verbose_name=_('Club Player History Match')
         verbose_name_plural=_('Club Player Histories in Matches')
@@ -357,6 +359,9 @@ class MatchGoalHistory(models.Model):
                                     #related_name='guestmatchegoalhistory')
     home_five_numbers = models.CharField(max_length=1024, blank=True)
     guest_five_numbers = models.CharField(max_length=1024, blank=True)
+
+    __unicode__ = lambda self: '{}'.format(self.pk,)
+
     class Meta:
         verbose_name=_('Match goal entry')
         verbose_name_plural=_('Match goal entries')
@@ -370,6 +375,9 @@ class MatchPenaltyHistory(models.Model):
     ptype = models.CharField(max_length=1024, blank=True)
     time = models.CharField(max_length=32, blank=True)
     duration = models.CharField(max_length=32, blank=True)
+
+    __unicode__ = lambda self: '{}'.format(self.pk,)
+
     class Meta:
         verbose_name=_('Match penalty entry')
         verbose_name_plural=_('Match penalty entries')
@@ -436,3 +444,11 @@ class Match(TitleBaseModel):
                 mask = '%d %m %Y'
             _dt = ''.join(_date_dict).encode('utf-8')
             return datetime.datetime.strptime(_dt, mask)
+
+    def __unicode__(self):
+        if self.count and self.date and self.home_team and self.guest_team:
+            return '{} {} {} ({})'.format(self.home_team,
+                                        self.count,
+                                        self.guest_team,
+                                        self.date)
+        return self.ru_title

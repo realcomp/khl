@@ -93,3 +93,9 @@ class DynamicDisplayFilterMixin(object):
 class NoFilterAdmin(BaseAdmin):
     def get_list_filter(self, request, obj=None):  
         return
+
+
+class TabularInlineReadOnly(NoActionMixin, BaseMixin, admin.TabularInline):
+    extra=0
+    max_num=0
+    can_delete=False

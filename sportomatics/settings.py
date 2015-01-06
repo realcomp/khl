@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'filer',
     'registration',
+    'relatives',
     'rest_framework',
     'rosetta',
 
