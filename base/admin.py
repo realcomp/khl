@@ -12,7 +12,7 @@ from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget
 
 
 DEFAULT_FORMTABS = (('general', 'General'),)+settings.LANGUAGES
-
+select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}
 
 class LinkedSelect2(Select2Widget, LinkedSelect):
     minimumResultsForSearch = 10
@@ -35,13 +35,13 @@ class BaseMixin(object):
         models.DateField: {'widget': SuitDateWidget},
         models.DateTimeField: {'widget': SuitSplitDateTimeWidget},
         models.ForeignKey: {
-            'widget': LinkedSelect2
+            'widget': LinkedSelect2(select2_options=select2_options)
         },
         models.OneToOneField: {
-            'widget': LinkedSelect2
+            'widget': LinkedSelect2(select2_options=select2_options)
         },
         models.ManyToManyField: {
-            'widget': Select2MultipleWidget(select2_options={'width': 'resolve'})
+            'widget': Select2MultipleWidget(select2_options=select2_options)
         },
     }
 

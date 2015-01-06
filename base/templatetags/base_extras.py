@@ -1,7 +1,13 @@
 import re
 
 from django import template
+from django.contrib.admin.util import lookup_field
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import ForeignKey, ManyToManyField
+from django.core.urlresolvers import NoReverseMatch
+from django.utils.safestring import mark_safe
 
+from suit.templatetags.suit_tags import admin_url
 
 register = template.Library()
 
@@ -15,15 +21,6 @@ def translate_url(context, url, language):
         return re.sub(
             r'^/%s/' % request.LANGUAGE_CODE,
             '/%s/' % language, url)
-
-
-from django.contrib.admin.util import lookup_field
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import ForeignKey, ManyToManyField
-from django.core.urlresolvers import NoReverseMatch
-from django.utils.safestring import mark_safe
-
-from suit.templatetags.suit_tags import admin_url
 
 
 @register.filter

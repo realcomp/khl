@@ -19,6 +19,9 @@ from . import managers
 class AbstractMan(models.Model):
     ru_fio = models.CharField(_('Full name (rus)'), max_length=4096, blank=True)
     en_fio = models.CharField(_('Full name (en)'), max_length=4096, blank=True)
+    birth_date = models.DateField(_('Birth date'), null=True, blank=True)
+    death_date = models.DateField(_('Death date'), null=True, blank=True)
+    wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
     __unicode__ = lambda self: self.ru_fio
     class Meta:
         abstract=True
@@ -36,13 +39,10 @@ class Player(AbstractMan):
     weight = models.CharField(_('Weight'), max_length=32, blank=True)
     height = models.CharField(_('Height'), max_length=32, blank=True)
     grip = models.CharField(_('Grip'), max_length=32, blank=True)
-    birth_date = models.DateField(_('Birth date'), null=True, blank=True)
-    death_date = models.DateField(_('Death date'), null=True, blank=True)
     citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
-    wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
 
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
@@ -74,12 +74,20 @@ class Player(AbstractMan):
 
 
 class Coach(AbstractMan):
+    citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
+                                            on_delete=models.SET_NULL,
+                                            null=True, blank=True)
+    photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
     class Meta:
         verbose_name=_('Coach')
         verbose_name_plural=_('Coaches')
 
 
 class Judge(AbstractMan):
+    citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
+                                            on_delete=models.SET_NULL,
+                                            null=True, blank=True)
+    photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
     class Meta:
         verbose_name=_('Judge')
         verbose_name_plural=_('Judges')
@@ -171,6 +179,8 @@ class AddressClub(models.Model):
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
 
+    __unicode__ = lambda self: '{0} ({1})'.format(self.address, self.club)
+
     class Meta:
         verbose_name=_('Club address')
         verbose_name_plural=_('Club addresses')
@@ -182,7 +192,9 @@ class LeagueClub(models.Model):
     club = models.ForeignKey(Club)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
-
+    
+    __unicode__ = lambda self: '{0} ({1})'.format(self.league, self.club)
+    
     class Meta:
         verbose_name=_('Club league')
         verbose_name_plural=_('Club leagues')
@@ -221,6 +233,9 @@ class CoachClub(models.Model):
     club = models.ForeignKey(Club)
     start_date = models.DateField(_('Start date'), null=True)
     end_date = models.DateField(_('End date'), null=True)
+
+    __unicode__ = lambda self: '{0} ({1})'.format(self.coach, self.club)
+
     class Meta:
         verbose_name=_('Club coach')
         verbose_name_plural=_('Club coaches')
@@ -295,6 +310,11 @@ class AdvancedPlayerStats(models.Model):
                                     max_length=16, blank=True)
     foul_all = models.CharField(_('All periods fouls'),
                                     max_length=16, blank=True)
+
+    __unicode__ = lambda self: '{} {}'.format(
+                                        self.clubplayermatch.clubplayer or '',
+                                        self.clubplayermatch or self.pk,
+    )
 
     class Meta:
         verbose_name=_('Player Stats')
@@ -423,6 +443,9 @@ class Match(TitleBaseModel):
                                     related_name='guestmatches')
     guest_players = models.ManyToManyField(ClubPlayer, null=True, blank=True,
                                     related_name='guestmatches')
+
+    league = models.ForeignKey(League, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
 
     class Meta:
         verbose_name=_('Match')

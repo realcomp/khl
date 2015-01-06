@@ -25,13 +25,14 @@ class PenaltyEntryInline(TabularInlineReadOnly):
     fields = readonly_fields
 
 
-class MatchAdmin(NoActionMixin, NoFilterAdmin):
+class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     suit_form_tabs = (
                 ('general', _('General')),
                 ('hometeam', _('Home team')),
                 ('guestteam', _('Guest team')),
                 ('servinfo', _('Service Info')),
     )
+    list_filter = ('ru_title', 'home_team', 'guest_team', 'date', 'league')
     fieldsets = (
         (None, {
             'classes': ('suit-tab suit-tab-general',),
@@ -82,13 +83,21 @@ admin.site.register(Player, PlayerAdmin)
 
 class CoachClubInline(TabularInlineReadOnly):
     model = CoachClub
+    readonly_fields = ( object_link, 'coach', 'club', 'start_date', 'end_date')
+    fields = readonly_fields
 
-class AddressClubInline(BaseMixin, admin.TabularInline):
+class AddressClubInline(TabularInlineReadOnly):
     model = AddressClub
+    readonly_fields = ( object_link, 'club', 'start_date', 'end_date')
+    fields = readonly_fields
 
+class LeagueClubInline(TabularInlineReadOnly):
+    model = LeagueClub
+    readonly_fields = ( object_link, 'club', 'start_date', 'end_date')
+    fields = readonly_fields
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
-    inlines = (CoachClubInline, AddressClubInline)
+    inlines = (CoachClubInline, AddressClubInline, LeagueClubInline)
     list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address', 'league'
 admin.site.register(Club, ClubAdmin)
 
