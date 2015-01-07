@@ -243,16 +243,17 @@
                                         <td align="center">{{ player.line }}</td>
                                         <td>
                                             <a href="{{ player.club.url }}" class="club-link"
-                                               ng-show="player.club">
-                                                {{ player.club.title }}
-                                                <span ng-show="player.club.address.title">
-                                                    ({{ player.club.address.title }})
+                                               ng-show="player.last_clubs.length > 0">
+                                                {{ player.last_clubs[0].title }}
+                                                <span ng-show="player.last_clubs[0].address.title">
+                                                    ({{ player.last_clubs[0].address.title }})
                                                 </span>
                                             </a>
-                                            <div ng-show="player.previous_clubs.length > 0">
+                                            <div ng-show="player.last_clubs.length > 1">
                                                 <ul class="club-link-list hidden">
-                                                    <li ng-repeat="club in player.previous_clubs">
-                                                        <a href="{{ club.url }}" class="club-link">
+                                                    <li ng-repeat="club in player.last_clubs">
+                                                        <a href="{{ club.url }}" class="club-link"
+                                                           ng-hide="$first">
                                                             {{ club.title }}
                                                             <span ng-show="club.address.title">
                                                                 ({{ club.address.title }})
@@ -261,7 +262,7 @@
                                                     </li>
                                                 </ul>
                                                 <a class="more-clubs-btn more-clubs-btn_open"
-                                                   onclick="angular.element(this).scope().moreClubs(this)"><span>показать еще 8 команд</span><i class="triangle down icon"></i></a>
+                                                   onclick="angular.element(this).scope().moreClubs(this)"><span>показать еще {{ player.last_clubs.length - 1 }} команд</span><i class="triangle down icon"></i></a>
                                                 <a class="more-clubs-btn more-clubs-btn_close"
                                                    onclick="angular.element(this).scope().moreClubs(this)"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
                                             </div>
@@ -270,10 +271,10 @@
                                             {{ player.age[0] }}
                                             <div class="player-desc">{{ player.birth_date_short }}</div>
                                         </td>
-                                        <td align="center">Россия</td>
+                                        <td align="center">{{ player.citizenship.title }}</td>
                                         <td align="center">
-                                            18.08.2016
-                                            <span class="player-desc">односторонний КХЛ</span>
+                                            {{ player.contract_to }}
+                                            <span class="player-desc">{{ player.contract_type }}</span>
                                         </td>
                                         <td align="center">2837</td>
                                         <td align="center">3274</td>

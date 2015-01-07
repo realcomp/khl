@@ -15,7 +15,7 @@
                     <ul class="player-card-list player-card-list_nb">
                         <li class="player-card-item">{% trans 'Birth date' %}: {{ birth_date }}</li>
                         <li class="player-card-item">{% trans 'Age' %}: {{ age.0 }} {% trans 'years' %} {{ age.1 }} {% trans 'months' %}</li>
-                        <li class="player-card-item">{% trans 'Citizenship' %}: {{ citizenship|default:"" }}</li>
+                        <li class="player-card-item">{% trans 'Citizenship' %}: {{ citizenship.title|default:"" }}</li>
                     </ul>
                 </div>
             </div>

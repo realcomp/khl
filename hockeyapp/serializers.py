@@ -57,16 +57,22 @@ class PlayerClubSerializer(TitleBaseSerializer):
 
 
 class PlayerCardSerializer(AbstractManSerializer):
-    photo = fields.ReadOnlyField(source='photo.url')
-    line = fields.ReadOnlyField(source='get_line_display')
+    photo = serializers.ReadOnlyField(source='photo.url')
+    line = serializers.ReadOnlyField(source='get_line_display')
+    contract_type = serializers.ReadOnlyField(
+        source='get_contract_type_display')
+    contract_to = serializers.SerializerMethodField()
     birth_date = serializers.SerializerMethodField()
     birth_date_short = serializers.SerializerMethodField()
     age = serializers.SerializerMethodField()
     khl_url = serializers.SerializerMethodField()
     club = PlayerClubSerializer()
-    previous_clubs = PlayerClubSerializer(many=True)
-    url = fields.ReadOnlyField(source='get_absolute_url')
+    last_clubs = PlayerClubSerializer(many=True)
+    url = serializers.ReadOnlyField(source='get_absolute_url')
     citizenship = CountrySerializer()
+
+    def get_contract_to(self, obj):
+        return obj.contract_to and obj.contract_to.strftime('%d.%m.%Y')
 
     def get_birth_date(self, obj):
         return obj.birth_date and obj.birth_date.strftime('%d %B %Y')
@@ -87,8 +93,9 @@ class PlayerCardSerializer(AbstractManSerializer):
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
-            'photo', 'khl_url', 'birth_date_short', 'club', 'previous_clubs',
-            'url', 'citizenship', 'grip')
+            'photo', 'khl_url', 'birth_date_short', 'club', 'last_clubs',
+            'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
+            'contract_to')
         model = Player
 
 

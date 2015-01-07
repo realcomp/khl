@@ -57,12 +57,10 @@ class Player(AbstractMan):
         return self.club_set.all().last()
 
     @property
-    def previous_clubs(self):
+    def last_clubs(self):
         previous_club_ids = self.clubplayer_set.values_list(
             'club_id', flat=True)
-        current_club_ids = self.club_set.values_list('id', flat=True)
-        return Club.objects.exclude(pk__in=current_club_ids
-                          ).filter(pk__in=previous_club_ids
+        return Club.objects.filter(pk__in=previous_club_ids
                           )[:8]
 
     def get_absolute_url(self):
