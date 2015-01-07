@@ -4,7 +4,7 @@
      ng-controller="UserVersionController as UVCtrl"
      ng-init="UVCtrl.user.version = '{{ request.user.version|default:"CLASSIC" }}'; UVCtrl.csrf_token = '{{ csrf_token|escapejs }}'">
     <div class="container">
-        <a href="/" class="logo"><img src="{{STATIC_PREFIX}}images/logo.png" alt="Sportomatics" class="logo-image"></a>
+        <a href="{% url 'index' %}" class="logo"><img src="{{STATIC_PREFIX}}images/logo.png" alt="Sportomatics" class="logo-image"></a>
 
         {% if request.user.is_authenticated %}
         <div class="{% if request.user.version != 'PRO' %}hidden{% endif %} ui secondary menu user-card-menu"
@@ -39,12 +39,12 @@
         </div>
         {% else %}
         <div class="ui secondary menu user-card-menu">
-            <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}item"
-               href="{% url 'hockeyapp:metrics-players' %}">{% trans 'METRICS' %}</a>
             <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
                href="{% url 'hockeyapp:club-list' %}">{% trans 'CLUBS' %}</a>
-            <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}item"
-               href="{% url 'accounts:profile' %}">{% trans 'PROFILE' %}</a>
+            <a class="{% if user_card_menu_active == 'players' %}active {% endif %}item"
+               href="{% url 'hockeyapp:players-search' %}">{% trans 'PLAYERS' %}</a>
+            <a class="{% if user_card_menu_active == 'fan-zone' %}active {% endif %}item"
+               href="#">{% trans 'FAN-ZONE' %}</a>
         </div>
         {% endif %}
     </div>
