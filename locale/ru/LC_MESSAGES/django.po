@@ -528,15 +528,15 @@ msgstr ""
 
 #: hockeyapp/choices.py:11
 msgid "Goalkeeper"
-msgstr ""
+msgstr "Вратарь"
 
 #: hockeyapp/choices.py:12
 msgid "Defender"
-msgstr ""
+msgstr "Защитник"
 
 #: hockeyapp/choices.py:13
 msgid "Offender"
-msgstr ""
+msgstr "Нападающий"
 
 #: hockeyapp/choices.py:18
 msgid "Goals"

@@ -28,6 +28,9 @@ class PlayersSearch(generics.ListAPIView):
             values = reduce(operator.or_, map(set, map(
                 json.loads, self.request.GET.getlist('line'))))
             qs = qs.filter(line__in=values)
+        if 'citizenship' in self.request.GET:
+            citizenship = self.request.GET.getlist('citizenship')
+            qs = qs.filter(citizenship__in=citizenship)
         if 'club' in self.request.GET:
             club = get_object_or_404(Club, pk=self.request.GET['club'])
         if 'season' in self.request.GET and club:

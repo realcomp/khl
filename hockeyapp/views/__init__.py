@@ -1,12 +1,22 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import DetailView, TemplateView
 
-from ..serializers import ClubSerializer, PlayerCardSerializer
+from addresses.models import Country
+
+from ..serializers import (
+    CountrySerializer, ClubSerializer, PlayerCardSerializer)
 from ..models import Club, Player
 
 
 class PlayersSearch(TemplateView):
     template_name = 'hockeyapp/players/players-search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayersSearch, self).get_context_data(**kwargs)
+        context['request'] = self.request
+        context['countries'] = CountrySerializer(
+            Country.objects.all(), many=True, context=context).data
+        return context
 
 
 class PlayerCard(DetailView):
