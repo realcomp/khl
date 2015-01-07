@@ -62,8 +62,9 @@ def async_temp_match_update(match_id):
         Обновление инфо о матче в дб
     '''
     try:
-        match = models.Match.objects.get(match_id)
-        match.date = match.python_date
-        match.save(update_fields=('date',))
+        match = models.Match.objects.get(id=match_id)
+        if not match.date:
+            match.date = match.python_date
+            match.save(update_fields=('date',))
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
