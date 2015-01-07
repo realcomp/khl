@@ -57,12 +57,13 @@ def async_hockey_player_update(id):
 
 
 @app.task(ignore_result=True, track_started=True)
-def async_temp_match_update(match):
+def async_temp_match_update(match_id):
     b'''
         Обновление инфо о матче в дб
     '''
     try:
+        match = models.Match.objects.get(match_id)
         match.date = match.python_date
-        match.save()
+        match.save(update_fields=('date',))
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
