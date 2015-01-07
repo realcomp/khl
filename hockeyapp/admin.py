@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from daterange_filter.filter import DateRangeFilter
 from relatives.utils import object_link
 
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
@@ -32,7 +33,9 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
                 ('guestteam', _('Guest team')),
                 ('servinfo', _('Service Info')),
     )
-    list_filter = ('ru_title', 'home_team', 'guest_team', 'date', 'league')
+    list_filter = ( 'ru_title', 'home_team', 'guest_team', 'league',
+                    ('date', DateRangeFilter),
+    )
     fieldsets = (
         (None, {
             'classes': ('suit-tab suit-tab-general',),

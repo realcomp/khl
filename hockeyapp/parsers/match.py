@@ -170,7 +170,7 @@ class HockeyMatchParser(GrabParser):
                     'url': self.absolute_url,
                     'ru_title': self.get_match_num(),
                     'spectators': self.get_spectators(),
-                    'date': _date,
+                    'date': self.python_date(_date),
                     'count': self.get_match_count(),
                     'detail_count': self.get_match_detail_count(),
                     'judges': self.get_match_judges(),

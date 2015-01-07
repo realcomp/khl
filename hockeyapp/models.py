@@ -420,7 +420,8 @@ class Match(TitleBaseModel):
     #main info
     spectators = models.CharField(_('Spectators count'), max_length=1024,
                                     blank=True)
-    date = models.CharField(_('Match date'), max_length=1024, blank=True)
+    date_str = models.CharField(_('Match date'), max_length=1024, blank=True)
+    date = models.DateTimeField(_('Match date'), null=True, blank=True)
     count = models.CharField(_('Match count'), max_length=1024, blank=True)
     detail_count = models.CharField(_('Match detail count'), 
                                     max_length=1024, blank=True)
@@ -459,8 +460,8 @@ class Match(TitleBaseModel):
 
     @property
     def python_date(self):
-        if self.date:
-            _date_dict = self.date.strip().lower().split(',')
+        if self.date_str:
+            _date_dict = self.date_str.strip().lower().split(',')
             _dt = _date_dict[:2]
             _dt.append(_date_dict[3])
             _date_dict = _dt

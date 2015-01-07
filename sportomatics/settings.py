@@ -28,6 +28,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    'daterange_filter',
     'django_select2',
     'easy_thumbnails',
     'filer',

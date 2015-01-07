@@ -18,6 +18,7 @@ celery
 
 
 Django==1.7.1
+django-daterange-filter
 djangorestframework
 django-filer
 django-suit
