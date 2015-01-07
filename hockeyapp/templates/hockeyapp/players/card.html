@@ -10,12 +10,12 @@
                     <ul class="player-card-list">
                         <li class="player-card-item">{% trans 'Height' %}: {{ height }} см.</li>
                         <li class="player-card-item">{% trans 'Weight' %}: {{ weight }} кг.</li>
-                        <li class="player-card-item">{% trans 'Grip' %}: правый</li>
+                        <li class="player-card-item">{% trans 'Grip' %}: {{ grip }}</li>
                     </ul>
                     <ul class="player-card-list player-card-list_nb">
                         <li class="player-card-item">{% trans 'Birth date' %}: {{ birth_date }}</li>
                         <li class="player-card-item">{% trans 'Age' %}: {{ age.0 }} {% trans 'years' %} {{ age.1 }} {% trans 'months' %}</li>
-                        <li class="player-card-item">{% trans 'Citizenship' %}: Россия</li>
+                        <li class="player-card-item">{% trans 'Citizenship' %}: {{ citizenship|default:"" }}</li>
                     </ul>
                 </div>
             </div>

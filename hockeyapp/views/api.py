@@ -14,7 +14,7 @@ from ..models import Club, Player
 
 class PlayersSearch(generics.ListAPIView):
     paginate_by = 100
-    permission_classes = permissions.IsAuthenticated,
+    # permission_classes = permissions.IsAuthenticated,
     serializer_class = PlayerCardSerializer
 
     def get_queryset(self):
@@ -38,7 +38,7 @@ class PlayersSearch(generics.ListAPIView):
 
 class ClubList(generics.ListAPIView):
     paginate_by = 100
-    permission_classes = permissions.IsAuthenticated,
+    # permission_classes = permissions.IsAuthenticated,
     serializer_class = ClubListSerializer
 
     def get_queryset(self):
