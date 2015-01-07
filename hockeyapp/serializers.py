@@ -7,6 +7,8 @@ from django.utils import timezone
 
 from rest_framework import fields, serializers
 
+from addresses.models import Address, Country
+
 from .models import Coach, Arena, Club, Player
 
 
@@ -36,7 +38,13 @@ class TitleBaseSerializer(LangDepSerializer):
 class AddressSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
-        model = Arena
+        model = Address
+
+
+class CountrySerializer(TitleBaseSerializer):
+    class Meta(object):
+        fields = 'pk', 'title'
+        model = Country
 
 
 class PlayerClubSerializer(TitleBaseSerializer):
@@ -58,6 +66,7 @@ class PlayerCardSerializer(AbstractManSerializer):
     club = PlayerClubSerializer()
     previous_clubs = PlayerClubSerializer(many=True)
     url = fields.ReadOnlyField(source='get_absolute_url')
+    citizenship = CountrySerializer()
 
     def get_birth_date(self, obj):
         return obj.birth_date and obj.birth_date.strftime('%d %B %Y')
@@ -79,7 +88,7 @@ class PlayerCardSerializer(AbstractManSerializer):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
             'photo', 'khl_url', 'birth_date_short', 'club', 'previous_clubs',
-            'url',)
+            'url', 'citizenship', 'grip')
         model = Player
 
 
