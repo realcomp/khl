@@ -102,11 +102,14 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Arena, Coach, Judge, League, AddressClub, LeagueClub, CoachClub,):
+for model in (Arena, Judge, League, AddressClub, LeagueClub, CoachClub,):
     admin.site.register(model, BaseAdmin)
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
 
+class CoachAdmin(BaseAdmin):
+    inlines = (CoachClubInline,)
+admin.site.register(Coach, CoachAdmin)
 
 class ClubPlayerMatchInline(TabularInlineReadOnly):
     model = ClubPlayerMatch
