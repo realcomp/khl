@@ -3,13 +3,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from relatives.utils import object_link
 
-from base.admin import BaseAdmin, BaseMixin, NoActionMixin, NoFilterAdmin
+from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
-from .models import League, LeagueClub
+from .models import League, LeagueClub, PlayerCitizenship
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -74,8 +74,12 @@ class ClubPlayerInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'club', 'number', 'line', 'start_date',
                         'end_date',)
 
+class PlayerCitizenshipInline(TabularInlineReadOnly):
+    model = PlayerCitizenship
+    readonly_fields = ( object_link, 'start_date', 'end_date',)
+
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
-    inlines = (ClubPlayerInline, )
+    inlines = (ClubPlayerInline, PlayerCitizenshipInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url',)
 admin.site.register(Player, PlayerAdmin)

@@ -26,3 +26,10 @@ PARITY_VALUES = (
     (3, _('EVEN STRENGTH')),
     (4, _('BULLET')),
 )
+
+CONTRACT_TYPE = (
+    ('', ''),
+    (b'Двусторонний КХЛ/МХЛ', _('Two-sided KHL/MHL')),
+    (b'Двусторонний КХЛ/ВХЛ', _('Two-sided KHL/VHL')),
+    (b'Односторонний КХЛ', _('One-sided KHL')),
+)

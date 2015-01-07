@@ -11,7 +11,7 @@ from filer.fields.image import FilerImageField
 from addresses.models import Address, Country
 from base.models import TitleBaseModel
 
-from .choices import PLAYER_ROLE, PARITY_VALUES
+from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE
 from .defaults import MD
 from . import managers
 
@@ -31,6 +31,7 @@ class Player(AbstractMan):
     objects = managers.player.PlayerQuerySet.as_manager()
     khl_id = models.PositiveIntegerField(default=0)
     contract_type = models.CharField(_('Contract type'),
+                                        choices=CONTRACT_TYPE,
                                             max_length=32, blank=True)
     contract_to = models.DateField(_('Contract to'), null=True, blank=True)
     number = models.CharField(_('Number'), max_length=32, blank=True)
@@ -71,6 +72,20 @@ class Player(AbstractMan):
     class Meta:
         verbose_name=_('Player')
         verbose_name_plural=_('Players')
+
+
+class PlayerCitizenship(models.Model):
+    b''' связка игрок - гражданство '''
+    player = models.ForeignKey(Player)
+    citizenship = models.ForeignKey(Country)
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)
+
+    __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.citizenship)
+
+    class Meta:
+        verbose_name=_('Player citizenship')
+        verbose_name_plural=_('Players citizenships')
 
 
 class Coach(AbstractMan):
@@ -215,16 +230,6 @@ class ClubPlayer(models.Model):
     class Meta:
         verbose_name=_('Club player')
         verbose_name_plural=_('Club players')
-
-    @property
-    def admin_link(self):
-        if self.pk:
-            return reverse('admin:hockeyapp_clubplayer_change',args=(self.pk,),)
-
-    def admin_link_html_render(self):
-        if self.admin_link:
-            return '<a href="{}">{}</a>'.format(self.admin_link, self.pk)
-    admin_link_html_render.short_description = _('Link')
 
 
 class CoachClub(models.Model):
