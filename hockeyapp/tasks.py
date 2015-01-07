@@ -54,3 +54,15 @@ def async_hockey_player_update(id):
         models.Player.objects.get_or_create_player(khl_id=id, update=True)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_temp_match_update(match):
+    b'''
+        Обновление инфо о матче в дб
+    '''
+    try:
+        match.date = match.python_date
+        match.save()
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
