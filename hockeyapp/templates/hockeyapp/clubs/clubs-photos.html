@@ -23,17 +23,7 @@
         {% include "hockeyapp/clubs/team-info.html" %}
 
         <div class="page-content page-container">
-            <div class="ui green inverted menu page-menu">
-                <a class="item" href="{% url 'hockeyapp:club' pk %}">Состав команды</a>
-                <a class="item">Новости и результаты матчей</a>
-                <a class="item" href="{% url 'hockeyapp:club-calendar' pk %}">Календарь игр</a>
-                <a class="item" href="{% url 'hockeyapp:club-stats' pk %}">Командная статистика</a>
-                <a class="item" href="{% url 'hockeyapp:club-home' pk %}">Домашняя площадка</a>
-                <a class="active item" href="{% url 'hockeyapp:club-photos' pk %}">Фотографии</a>
-                <a class="item" href="{% url 'hockeyapp:club-fanzone' pk %}">Фан-клуб</a>
-                <a class="item">Форум</a>
-                <a class="item">Магазин</a>
-            </div>
+            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-photos" %}
             <div class="page-inner-container">
                 <div class="clubs-photos-tabs">
                     <div class="ui grid">

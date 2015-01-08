@@ -8,6 +8,34 @@ from ..serializers import (
 from ..models import Club, Player
 
 
+class Index(TemplateView):
+    def get_template_names(self):
+        version = 'CLASSIC'
+        if self.request.user.is_authenticated():
+            version = self.request.user.version
+        return ['hockeyapp/index-%s.html' % version.lower()]
+
+index = Index.as_view()
+
+
+def get_index_by_version(version):
+    class IndexVersion(TemplateView):
+        template_name = 'hockeyapp/index-%s.html' % version.lower()
+
+        def get(self, request, *args, **kwargs):
+            if self.request.user.is_authenticated():
+                if self.request.user.version != version:
+                    self.request.user.version = version
+                    self.request.user.save(update_fields=['version'])
+            return super(IndexVersion, self).get(
+                self, request, *args, **kwargs)
+
+    return IndexVersion
+
+IndexClassic = get_index_by_version('CLASSIC')
+IndexPro = get_index_by_version('PRO')
+
+
 class PlayersSearch(TemplateView):
     template_name = 'hockeyapp/players/players-search.html'
 

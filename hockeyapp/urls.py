@@ -13,6 +13,12 @@ urlpatterns = [
     url(r'^api/clubs/$', api.ClubList.as_view(),
         name='club-list-api'),
     # Django CBV's'
+    url(r'^$', views.Index.as_view(),
+        name='index'),
+    url(r'^classic/$', views.IndexClassic.as_view(),
+        name='index-classic'),
+    url(r'^pro/$', views.IndexPro.as_view(),
+        name='index-pro'),
     # metrics
     url(r'^metrics/players/$', views.MetricsPlayers.as_view(),
         name='metrics-players'),

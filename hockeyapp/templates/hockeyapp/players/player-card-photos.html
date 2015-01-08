@@ -25,16 +25,7 @@
         {% include "hockeyapp/players/card.html" %}
 
         <div class="page-content page-container">
-            <div class="ui green inverted menu page-menu">
-                <a class="item" href="{% url 'hockeyapp:player-card' pk %}">Краткая информация</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-indicators' pk %}">Спортивные показатели</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-partners' pk %}">Партнеры по команде</a>
-                <a class="active item" href="{% url 'hockeyapp:player-card-photos' pk %}">Фотографии</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-communication' pk %}">Общение</a>
-                <a class="item" href="{% url 'hockeyapp:player-card-news' pk %}">Новости</a>
-            </div>
+            {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-photos" %}
             <div class="page-inner-container">
                 <div class="ui grid">
                     <div class="row">

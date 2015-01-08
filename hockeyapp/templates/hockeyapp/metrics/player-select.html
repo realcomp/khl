@@ -20,8 +20,10 @@
                 </div>
             </div>
         </div>
-        
-        <div class="page-content page-container">
+
+        <div class="page-content page-container"
+             ng-controller="PlayersSearchController as PlayersSearchCtrl">
+            <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
             <div class="container-top-block">
                 <div class="ui divided grid">
                     <div class="one column row">
@@ -81,7 +83,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                {% verbatim %}
+                                <tr ng-repeat="player in PlayersSearchCtrl.data.results">
                                     <td>
                                         <div class="ui checkbox">
                                             <input id="player1" type="checkbox">
@@ -90,8 +93,10 @@
                                     </td>
                                     <td>
                                         <div class="player-avatar-block">
-                                            <img src="{{ STATIC_URL }}images/player1.png" width="24" alt="" class="player-avatar">
-                                            <span class="player-name">Коржаков А.</span>
+                                            <img ng-src="{{ player.photo }}" width="24" alt="" class="player-avatar">
+                                            <span class="player-name">
+                                                <a href="{{ player.url }}">{{ player.fio }}</a>
+                                            </span>
                                         </div>
                                     </td>
                                     <td>КХЛ</td>
@@ -119,120 +124,7 @@
                                     <td>31</td>
                                     <td>6.5</td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <div class="ui checkbox">
-                                            <input id="player1" type="checkbox">
-                                            <label for="player1">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="player-avatar-block">
-                                            <img src="{{ STATIC_URL }}images/player1.png" width="24" alt="" class="player-avatar">
-                                            <span class="player-name">Коржаков А.</span>
-                                        </div>
-                                    </td>
-                                    <td>КХЛ</td>
-                                    <td>Спартак</td>
-                                    <td>28</td>
-                                    <td>нап</td>
-                                    <td>одност КХЛ</td>
-                                    <td>185</td>
-                                    <td>85</td>
-                                    <td>лев</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>+4</td>
-                                    <td>38</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>31</td>
-                                    <td>6.5</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="ui checkbox">
-                                            <input id="player1" type="checkbox">
-                                            <label for="player1">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="player-avatar-block">
-                                            <img src="{{ STATIC_URL }}images/player1.png" width="24" alt="" class="player-avatar">
-                                            <span class="player-name">Коржаков А.</span>
-                                        </div>
-                                    </td>
-                                    <td>КХЛ</td>
-                                    <td>Спартак</td>
-                                    <td>28</td>
-                                    <td>нап</td>
-                                    <td>одност КХЛ</td>
-                                    <td>185</td>
-                                    <td>85</td>
-                                    <td>лев</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>+4</td>
-                                    <td>38</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>31</td>
-                                    <td>6.5</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="ui checkbox">
-                                            <input id="player1" type="checkbox">
-                                            <label for="player1">&nbsp;</label>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="player-avatar-block">
-                                            <img src="{{ STATIC_URL }}images/player1.png" width="24" alt="" class="player-avatar">
-                                            <span class="player-name">Коржаков А.</span>
-                                        </div>
-                                    </td>
-                                    <td>КХЛ</td>
-                                    <td>Спартак</td>
-                                    <td>28</td>
-                                    <td>нап</td>
-                                    <td>одност КХЛ</td>
-                                    <td>185</td>
-                                    <td>85</td>
-                                    <td>лев</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>12</td>
-                                    <td>+4</td>
-                                    <td>38</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>0</td>
-                                    <td>31</td>
-                                    <td>6.5</td>
-                                </tr>
+                                {% endverbatim %}
                             </tbody>
                         </table>
                         <div class="table-control-btns">
@@ -364,6 +256,7 @@
                     <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
                 </ul>
             </div>
+            </form>
         </div>
     </div>
 </section>
