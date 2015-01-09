@@ -131,6 +131,7 @@ class ClubPlayerMatchInline(TabularInlineReadOnly):
 class ClubPlayerAdmin(BaseAdmin):
     inlines = (ClubPlayerMatchInline, )
     linked_readonly_fields = ('player',)
+    readonly_fields = linked_readonly_fields
 admin.site.register(ClubPlayer, ClubPlayerAdmin)
 
 
@@ -142,8 +143,8 @@ for model in (MatchGoalHistory, MatchPenaltyHistory):
 
 
 class ClubPlayerMatchAdmin(NoFilterAdmin):
-    raw_id_fields = 'match', 'clubplayer', 'adv_stats'
-    #readonly_fields = 'match', 'clubplayer', 'adv_stats'
+    linked_readonly_fields = ('match', 'clubplayer', 'adv_stats')
+    readonly_fields = linked_readonly_fields
 admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
 admin.site.register(AdvancedPlayerStats)
