@@ -4,9 +4,9 @@
     <div class="container">
         <div class="ui text menu">
             <div class="header item">{% trans 'Sports type' %}:</div>
-            {% include 'partial/header/items.html' %}
+            <a class="active item" href="{% url 'hockeyapp:index' %}">{% trans 'Hockey' %}</a>
+            {#% include 'partial/header/items.html' %#}
 
-            {% comment %}
             <div class="ui dropdown item">
                 {% trans 'All' %}
                 <i class="dropdown icon"></i>
@@ -15,7 +15,6 @@
                     {% include 'partial/header/items.html' %}
                 </div>
             </div>
-            {% endcomment %}
 
             <div class="ui text right menu">
                 {% if user.is_authenticated %}

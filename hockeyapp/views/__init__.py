@@ -12,28 +12,38 @@ class Index(TemplateView):
     def get_template_names(self):
         version = 'CLASSIC'
         if self.request.user.is_authenticated():
+
+            # TODO: remove it when index template will be competed
+            if self.request.user.version == 'PRO':
+                return ['hockeyapp/metrics/player-select.html']
+
             version = self.request.user.version
         return ['hockeyapp/index-%s.html' % version.lower()]
 
 index = Index.as_view()
 
 
-def get_index_by_version(version):
-    class IndexVersion(TemplateView):
-        template_name = 'hockeyapp/index-%s.html' % version.lower()
+class IndexClassic(TemplateView):
+    version = 'CLASSIC'
 
-        def get(self, request, *args, **kwargs):
-            if self.request.user.is_authenticated():
-                if self.request.user.version != version:
-                    self.request.user.version = version
-                    self.request.user.save(update_fields=['version'])
-            return super(IndexVersion, self).get(
-                self, request, *args, **kwargs)
+    def get_template_names(self):
+        return ['hockeyapp/index-%s.html' % self.version.lower()]
 
-    return IndexVersion
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated():
+            if self.request.user.version != self.version:
+                self.request.user.version = self.version
+                self.request.user.save(update_fields=['version'])
+        return super(IndexClassic, self).get(
+            self, request, *args, **kwargs)
 
-IndexClassic = get_index_by_version('CLASSIC')
-IndexPro = get_index_by_version('PRO')
+
+class IndexPro(IndexClassic):
+    version = 'PRO'
+
+    # TODO: remove it when index template will be competed
+    def get_template_names(self):
+        return ['hockeyapp/metrics/player-select.html']
 
 
 class PlayersSearch(TemplateView):
