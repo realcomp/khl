@@ -138,7 +138,7 @@ class ClubPlayerSerializer(AbstractManSerializer):
 
     class Meta(object):
         fields = (
-            'pk', 'fio', 'line', 'club', 'photo')
+            'pk', 'fio', 'line', 'club', 'photo', 'number')
         model = Player
 
 
