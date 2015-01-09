@@ -130,6 +130,7 @@ class ClubPlayerMatchInline(TabularInlineReadOnly):
 
 class ClubPlayerAdmin(BaseAdmin):
     inlines = (ClubPlayerMatchInline, )
+    linked_readonly_fields = ('player',)
 admin.site.register(ClubPlayer, ClubPlayerAdmin)
 
 
