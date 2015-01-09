@@ -3,7 +3,7 @@ import re
 from django import template
 from django.contrib.admin.util import lookup_field
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import ForeignKey, ManyToManyField
+from django.db.models import ForeignKey, ManyToManyField, OneToOneField
 from django.core.urlresolvers import NoReverseMatch
 from django.utils.safestring import mark_safe
 
@@ -48,14 +48,15 @@ def fcfl(admin_field):
                                               admin_field.model_admin)
     except ObjectDoesNotExist:
         fieldtype = None
-    if isinstance(fieldtype, ForeignKey):
-        try:
-            url = admin_url(value)
-        except NoReverseMatch:
-            url = None
-        if url:
-            displayed = "<a href='%s'>%s</a>" % (url, displayed)
-    elif isinstance(fieldtype, ManyToManyField) and admin_field.is_readonly:
-        urls = ["<a href='{}'>{}</a>".format(admin_url(v), v) for v in value.all()]
-        displayed = ", ".join(urls)
+    if value:
+        if isinstance(fieldtype, (ForeignKey, OneToOneField)):
+            try:
+                url = admin_url(value)
+            except NoReverseMatch:
+                url = None
+            if url:
+                displayed = "<a href='%s'>%s</a>" % (url, displayed)
+        elif isinstance(fieldtype, ManyToManyField) and admin_field.is_readonly:
+            urls = ["<a href='{}'>{}</a>".format(admin_url(v), v) for v in value.all()]
+            displayed = ", ".join(urls)
     return mark_safe(displayed)
