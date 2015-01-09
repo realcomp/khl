@@ -4,12 +4,15 @@ from __future__ import print_function, unicode_literals
 __author__='smirnov.ev'
 
 import datetime
+import json
 import re
 import time
 
 from lxml.html import fromstring
 
 from django.db.models.loading import get_model
+
+from base.utils import str2int_safe, str2sec_safe
 
 from .. import defaults
 
@@ -23,7 +26,6 @@ _PARITTYDICT = {
             b'бул.': 4,
             b'': 0,
         }
-##teams = self.page_tree.xpath('//head/script[6]/text()')[0].split('\r\n')[5].split('var gamePlayers = ')[1]
 
 
 class AdvancedHockeyMatchParser(GrabParser):
@@ -34,7 +36,7 @@ class AdvancedHockeyMatchParser(GrabParser):
     match_protocol_xpath = defaults.MATCH_ADV_STATS_XPATH
     body_xpath = defaults.MATCH_ADV_STATS_XPATH
     xpath_dict = defaults.MATCH_ADV_STATC_DICT
-    result_dict = None
+    teams = None
 
     def get_page(self, id=None):
         b'''  смотрим протокол матча '''
@@ -43,22 +45,25 @@ class AdvancedHockeyMatchParser(GrabParser):
         self.page_tree=super(AdvancedHockeyMatchParser, self).get_page(id,False)
         if self.page_tree is not None:
             if self.page_tree.xpath(self.match_protocol_xpath):
-                #body = self.page_tree.xpath(self.match_protocol_xpath)[0]
-                self.result_dict = self.get_adv_stats()
-                return self.result_dict
+                _html_body = self.g.response.unicode_body()
+                return self.get_adv_stats(_html_body)
 
-    def get_adv_stats(self):
+    def get_adv_stats(self, html_body=None):
         b''' Словарь статистики команд '''
         res = {
                 'hp': self._get_team_players(self.xpath_dict['home_team']),
                 'gp': self._get_team_players(self.xpath_dict['guest_team']),
+                #'html_body': self.get_html_body(html_body),
         }
+        self._get_player_fivers(res)
         return res
 
     def _get_team_players(self, xpath_dict):
         b''' Словарь статистики команды '''
         res = self._get_extra_stats(xpath_dict['shots'], 
-                                    defaults.MATCH_PLAYER_SHOTS
+                                    defaults.MATCH_PLAYER_SHOTS,
+                                    text_content=True,
+                                    table_name = 'shots',
         )
         for key,xpathes in (
                             ('faceoff',defaults.MATCH_PLAYER_FACEOFFS,),
@@ -69,7 +74,8 @@ class AdvancedHockeyMatchParser(GrabParser):
             self._get_extra_stats(  
                                 xpath_dict[key],
                                 xpathes,
-                                res
+                                res,
+                                table_name=key
             )
         return res
 
@@ -78,7 +84,8 @@ class AdvancedHockeyMatchParser(GrabParser):
         _res = re.findall(r'\d+', val)
         return _res[0] if _res else None
 
-    def _get_extra_stats(self, xpath, xpath_dict, res=None):
+    def _get_extra_stats(self, xpath, xpath_dict, res=None, text_content=False,
+                        table_name=''):
         b''' Универсальный метод получения статистики из таблиц '''
         trs = self.page_tree.xpath(self.body_xpath+xpath)
         res = res or dict()
@@ -87,10 +94,46 @@ class AdvancedHockeyMatchParser(GrabParser):
             if num:
                 _d = res.get(num) or dict()
                 for k,v in xpath_dict.items():
-                    _d[k] = tr.xpath(v)[0] if tr.xpath(v) else ''
+                    if tr.xpath(v):
+                        if table_name == 'shots':
+                            # убираем strong из верстки
+                            _value = tr.xpath(v)[0].text_content().strip()
+                        else:
+                            _value = tr.xpath(v)[0].strip()
+                            if table_name in ('gamingtime', 'extra'):
+                                if table_name in k:
+                                    # пересчет игрового времени в секунды
+                                    _value = str2sec_safe(_value)
+                                else:
+                                    # строка в целое число
+                                    _value = str2int_safe(_value)
+                        _d[k] = _value
                 res[num] = _d
         return res
 
+    def _get_player_fivers(self, res):
+        b'''Обновляем статистику игроков по номеру, добавляем пятерку,
+            в которой заявлен игрок.
+        '''
+        if not self.teams:
+            try:
+                _teams = self.page_tree.xpath('//head/script[6]/text()'
+                                )[0].split('\r\n'
+                                )[5].split('var gamePlayers = '
+                                )[1][:-1].replace('\'','"')
+                _teams = json.loads(_teams)
+                if _teams and isinstance(_teams, dict):
+                    self.teams = {}
+                    self.teams['hp'] = _teams.get('A')
+                    self.teams['gp'] = _teams.get('B')
+            except: pass
+        for team_name, team in self.teams.items():
+            for num in team.keys():
+                player = res.get(team_name,{}).get(num)
+                fiver = team.get(num, [0,0,0,0])[-1]
+                if player and fiver:
+                    player['fiver'] = str2int_safe(fiver)
+        self.teams = None
 
 class HockeyMatchParser(GrabParser):
     b'''Парсер хоккейной статистики матча'''

@@ -59,10 +59,14 @@ class ManagerMixin(object):
     def _create_clubplayer_adv_stats(self, clubplayermatch=None, data=None):
         b''' Создание  дополнительной статистики игрока в матче '''
         model = get_model(CURRENT_APP, 'AdvancedPlayerStats')
-        obj = model.objects.create(**data)
-        clubplayermatch.adv_stats = obj
-        clubplayermatch.save(update_fields=['adv_stats'])
-
+        try:
+            obj = model.objects.create(**data)
+            clubplayermatch.adv_stats = obj
+            clubplayermatch.save(update_fields=['adv_stats'])
+        except ValueError:
+            print(clubplayermatch.pk)
+            print(data)
+            raise ValueError
 
 class MatchGoalHistoryManager(ManagerMixin, models.Manager):
     b''' Мененжер истории голов матча '''

@@ -33,3 +33,11 @@ CONTRACT_TYPE = (
     (b'Двусторонний КХЛ/ВХЛ', _('Two-sided KHL/VHL')),
     (b'Односторонний КХЛ', _('One-sided KHL')),
 )
+
+FIVER_VALUES = (
+    DEFAULT_STATUS,
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+)

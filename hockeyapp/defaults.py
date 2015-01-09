@@ -45,7 +45,7 @@ MATCH_ADV_STATC_DICT = {
                     'shots': '/div[@class="box"][2]/table/tr/td[1]/table/tr[@class]',
                     'faceoff': '/div[@class="box"][3]/table/tr/td[1]/table/tr[@class]',
                     'gamingtime': '/div[@class="box"][4]/table/tr/td[1]/table//tbody/tr[@class]',
-                    'extra': '/div[@class="box"][6]/table/tr/td[1]/table/tr/tbody',
+                    'extra': '/div[@class="box"][6]/table/tr/td[1]/table/tbody/tr',
 
     },
     'guest_team': {
@@ -56,10 +56,10 @@ MATCH_ADV_STATC_DICT = {
     }
 }
 MATCH_PLAYER_SHOTS = {
-                    'shots_1th': 'td[2]/text()',
-                    'shots_2nd': 'td[3]/text()',
-                    'shots_3th': 'td[4]/text()',
-                    'shots_all': 'td[5]/text()',
+                    'shots_1th': 'td[2]', #/text()',
+                    'shots_2nd': 'td[3]', #/text()',
+                    'shots_3th': 'td[4]', #/text()',
+                    'shots_all': 'td[5]', #/text()',
 }
 MATCH_PLAYER_FACEOFFS = {
                     'faceoff_1th': 'td[2]/text()',

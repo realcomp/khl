@@ -11,7 +11,7 @@ from filer.fields.image import FilerImageField
 from addresses.models import Address, Country
 from base.models import TitleBaseModel
 
-from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE
+from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from .defaults import MD
 from . import managers
 
@@ -257,6 +257,8 @@ class LogoClubHistory(models.Model):
 
 class AdvancedPlayerStats(models.Model):
     b''' Дополнительная статистика по игроку в матче '''
+    fiver = models.PositiveSmallIntegerField(_('Fiver'), null=True,
+                                            choices=FIVER_VALUES)
     shots_1th = models.CharField(_('1th period Shots'),
                                     max_length=16, blank=True)
     shots_2nd = models.CharField(_('2nd period Shots'),
@@ -273,51 +275,54 @@ class AdvancedPlayerStats(models.Model):
                                     max_length=16, blank=True)
     faceoff_all = models.CharField(_('All periods Faceoffs'),
                                     max_length=16, blank=True)
-    change_count_1th = models.CharField(_('1th period change count'),
-                                    max_length=16, blank=True)
-    gamingtime_1th = models.CharField(_('1th period time in game'),
-                                    max_length=16, blank=True)
-    change_count_2nd = models.CharField(_('2nd period change count'),
-                                    max_length=16, blank=True)
-    gamingtime_2nd = models.CharField(_('2nd period change count'),
-                                    max_length=16, blank=True)
-    change_count_3th = models.CharField(_('3th period change count'),
-                                    max_length=16, blank=True)
-    gamingtime_3th = models.CharField(_('3th period time in game'),
-                                    max_length=16, blank=True)
-    change_count_all = models.CharField(_('All periods change count'),
-                                    max_length=16, blank=True)
-    gamingtime_all = models.CharField(_('All periods time in game'),
-                                    max_length=16, blank=True)
-    block_1th = models.CharField(_('1th period blocks'),
-                                    max_length=16, blank=True)
-    hit_1th = models.CharField(_('1th period hits'),
-                                    max_length=16, blank=True)
-    foul_1th = models.CharField(_('1th period fouls'),
-                                    max_length=16, blank=True)
-    block_2nd = models.CharField(_('2nd period blocks'),
-                                    max_length=16, blank=True)
-    hit_2nd = models.CharField(_('2nd period hits'),
-                                    max_length=16, blank=True)
-    foul_2nd = models.CharField(_('2nd period fouls'),
-                                    max_length=16, blank=True)
-    block_3th = models.CharField(_('3th period blocks'),
-                                    max_length=16, blank=True)
-    hit_3th = models.CharField(_('3th period hits'),
-                                    max_length=16, blank=True)
-    foul_3th = models.CharField(_('3th period fouls'),
-                                    max_length=16, blank=True)
-    block_all = models.CharField(_('All periods blocks'),
-                                    max_length=16, blank=True)
-    hit_all = models.CharField(_('All periods hits'),
-                                    max_length=16, blank=True)
-    foul_all = models.CharField(_('All periods fouls'),
-                                    max_length=16, blank=True)
+    change_count_1th = models.PositiveSmallIntegerField(
+                                    _('1th period change count'), null=True)
+    gamingtime_1th = models.PositiveIntegerField(
+                                    _('1th period time in game'),null=True)
+    change_count_2nd = models.PositiveSmallIntegerField(
+                                    _('2nd period change count'), null=True)
+    gamingtime_2nd = models.PositiveIntegerField(
+                                    _('2nd period change count'),null=True)
+    change_count_3th = models.PositiveIntegerField(
+                                    _('3th period change count'),null=True)
+    gamingtime_3th = models.PositiveIntegerField(
+                                    _('3th period time in game'),null=True)
+    change_count_all = models.PositiveIntegerField(
+                                    _('All periods change count'),null=True)
+    gamingtime_all = models.PositiveIntegerField(
+                                    _('All periods time in game'),null=True)
+    block_1th = models.PositiveIntegerField(
+                                    _('1th period blocks'),null=True)
+    hit_1th = models.PositiveIntegerField(
+                                    _('1th period hits'),null=True)
+    foul_1th = models.PositiveIntegerField(
+                                    _('1th period fouls'),null=True)
+    block_2nd = models.PositiveIntegerField(
+                                    _('2nd period blocks'),null=True)
+    hit_2nd = models.PositiveIntegerField(
+                                    _('2nd period hits'),null=True)
+    foul_2nd = models.PositiveIntegerField(
+                                    _('2nd period fouls'),null=True)
+    block_3th = models.PositiveIntegerField(
+                                    _('3th period blocks'),null=True)
+    hit_3th = models.PositiveIntegerField(
+                                    _('3th period hits'),null=True)
+    foul_3th = models.PositiveIntegerField(
+                                    _('3th period fouls'),null=True)
+    block_all = models.PositiveIntegerField(
+                                    _('All periods blocks'),null=True)
+    hit_all = models.PositiveIntegerField(
+                                    _('All periods hits'),null=True)
+    foul_all = models.PositiveIntegerField(
+                                    _('All periods fouls'),null=True)
 
-    __unicode__ = lambda self: '{} {}'.format(
-                                        self.clubplayermatch.clubplayer or '',
-                                        self.clubplayermatch or self.pk,
-    )
+    def __unicode__ (self):
+        if self.clubplayermatch:
+            return '{} {}'.format(
+                                    self.clubplayermatch.clubplayer or '',
+                                    self.clubplayermatch or self.pk,
+                                )
+        return self.pk
 
     class Meta:
         verbose_name=_('Player Stats')
