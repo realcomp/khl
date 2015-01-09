@@ -1,19 +1,14 @@
-{% extends "accounts/base.html" %}
+{% extends "accounts/profile/base.html" %}
 
 {% block body %}
 <section class="content">
     <div class="container"
          ng-controller="ProfileController as ProfileCtrl"
          ng-init="ProfileCtrl.user.fio = '{{ request.user.fio }}'">
-        {% include "accounts/user-info.html" %}
+        {% include "accounts/profile/user-info.html" %}
 
         <div class="page-content page-container">
-            <div class="ui green inverted menu page-menu">
-                <a class="active item" href="{% url 'accounts:profile' %}">Доступные опции</a>
-                <a class="item" href="{% url 'accounts:profile-offers' %}">Пакетные предложения</a>
-                <a class="item" href="{% url 'accounts:profile-history' %}">История покупок</a>
-                <a class="item" href="{% url 'accounts:profile-private' %}">Личные данные</a>
-            </div>
+            {% include "accounts/profile/menu.html" with profile_menu_active="profile-options" %}
             <div class="page-inner-container">
                 <div class="user-page">
                     <div class="ui tabular menu content-tabs">

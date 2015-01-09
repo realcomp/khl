@@ -1,0 +1,12 @@
+<div class="ui green inverted menu page-menu">
+    <a class="{% if profile_menu_active == 'profile-private' %}active {% endif %}item"
+       href="{% url 'accounts:profile-private' %}">Личные данные</a>
+    {% if request.user.version == 'PRO' %}
+        <a class="{% if profile_menu_active == 'profile-options' %}active {% endif %}item"
+           href="{% url 'accounts:profile-options' %}">Доступные опции</a>
+        <a class="{% if profile_menu_active == 'profile-offers' %}active {% endif %}item"
+           href="{% url 'accounts:profile-offers' %}">Пакетные предложения</a>
+        <a class="{% if profile_menu_active == 'profile-history' %}active {% endif %}item"
+           href="{% url 'accounts:profile-history' %}">История покупок</a>
+    {% endif %}
+</div>

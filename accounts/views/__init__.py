@@ -14,17 +14,17 @@ class Signup(RegistrationView):
         return super(Signup, self).register(request, **cleaned_data)
 
 
-class ProfileView(LoginReqMixin, ProfileMixin, DetailView):
-    template_name = 'accounts/user-card.html'
+class ProfileOptionsView(LoginReqMixin, ProfileMixin, DetailView):
+    template_name = 'accounts/profile/user-card.html'
 
 
 class ProfileOffersView(LoginReqMixin, ProfileMixin, DetailView):
-    template_name = 'accounts/user-card2.html'
+    template_name = 'accounts/profile/user-card2.html'
 
 
 class ProfileHistoryView(LoginReqMixin, ProfileMixin, DetailView):
-    template_name = 'accounts/user-card3.html'
+    template_name = 'accounts/profile/user-card3.html'
 
 
 class ProfilePrivateView(LoginReqMixin, ProfileMixin, DetailView):
-    template_name = 'accounts/user-card4.html'
+    template_name = 'accounts/profile/user-card4.html'
