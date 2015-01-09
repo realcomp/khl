@@ -1,4 +1,5 @@
 {% extends "accounts/profile/base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -12,7 +13,7 @@
             <div class="page-inner-container">
                 <div class="user-page">
                     <div class="ui tabular menu content-tabs">
-                        <span class="heading">Доступные опции</span>
+                        <span class="heading">{% trans 'Available options' %}</span>
                     </div>
                     <div class="user-sport-type">
                         <label class="user-sport-type-label">Вид спорта</label>

@@ -19,6 +19,6 @@ urlpatterns = [
         name='profile-offers'),
     url(r'^profile/history/$', views.ProfileHistoryView.as_view(),
         name='profile-history'),
-    url(r'^profile/options/$', views.ProfilePrivateView.as_view(),
+    url(r'^profile/options/$', views.ProfileOptionsView.as_view(),
         name='profile-options'),
 ]
