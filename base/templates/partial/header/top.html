@@ -29,7 +29,8 @@
                     <div class="menu">
                         {% get_language_info_list for LANGUAGES as languages %}
                         {% for language in languages %}
-                            <a href="{% translate_url request.path language.code %}" class="item">{{ language.name_local }}</a>
+                            <a href="{% translate_url request.path language.code %}"
+                               class="item {% if language.code == request.LANGUAGE_CODE %}active{% endif %}">{{ language.name_local }}</a>
                         {% endfor%}
                     </div>
                     <form action="{% url 'set_language' %}" method="post" id="languageselect" style="block:none;">
