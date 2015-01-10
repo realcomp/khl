@@ -157,6 +157,13 @@ ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 #social
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
+
 try:
     from local_settings import *
 except ImportError:
