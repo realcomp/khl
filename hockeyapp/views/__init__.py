@@ -163,9 +163,5 @@ class MetricsPlayersCompare(TemplateView):
     template_name = 'hockeyapp/metrics/players-diff.html'
 
 
-class MetricsPlayersCompare2(TemplateView):
-    template_name = 'hockeyapp/metrics/players-diff2.html'
-
-
-class MetricsPlayersCompare3(TemplateView):
+class MetricsPlayersCompareGraph(TemplateView):
     template_name = 'hockeyapp/metrics/players-diff3.html'

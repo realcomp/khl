@@ -94,10 +94,6 @@
         url = $('#MetricsPlayersForm').attr('action');
         self.data = {};
 
-        // $scope.moreClubs = function(e) {
-        //     $(e).closest('td').toggleClass('show-more-clubs')
-        // };
-
         this.search = function() {
             var self = this,
             params = $('#MetricsPlayersForm').serialize();
@@ -107,6 +103,15 @@
             });
         };
         this.search();
+    }]);
+
+    app.controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
+        this.graph_type = 'linear';
+        this.data = {};
+
+        this.setGraphType = function(type) {
+            this.graph_type = type;
+        };
     }]);
 
 })();

@@ -28,10 +28,9 @@ urlpatterns = [
         name='metrics-player-card'),
     url(r'^metrics/players/compare/$', views.MetricsPlayersCompare.as_view(),
         name='metrics-compare'),
-    url(r'^metrics/players/compare2/$', views.MetricsPlayersCompare2.as_view(),
-        name='metrics-compare2'),
-    url(r'^metrics/players/compare3/$', views.MetricsPlayersCompare3.as_view(),
-        name='metrics-compare3'),
+    url(r'^metrics/players/compare/graph/$',
+        views.MetricsPlayersCompareGraph.as_view(),
+        name='metrics-compare-graph'),
     # players
     url(r'^players/$', views.PlayersSearch.as_view(),
         name='players-search'),

@@ -7,7 +7,7 @@
             <div class="ui small breadcrumb">
                 <a class="section">ХОККЕЙ</a>
                 <div class="divider"> / </div>
-                <a class="section">Метрики</a>
+                <a class="section" href="{% url 'hockeyapp:metrics-players' %}">Метрики</a>
                 <div class="divider"> / </div>
                 <div class="active section">Сравнение игроков</div>
             </div>
@@ -22,6 +22,7 @@
         </div>
         
         <div class="page-content page-container">
+            <form ng-controller="MetricsCompareController as MetricsCompareCtrl">
             <div class="diff-block">
                 <div class="ui divided grid">
                     <div class="one column row">
@@ -63,21 +64,23 @@
                                 <div class="grouped inline fields">
                                     <div class="field">
                                         <div class="ui radio checkbox">
-                                            <input type="radio" name="graph_type" checked="checked">
-                                            <label>Линейные графики</label>
+                                            <input type="radio" id="graph_type_linear" name="graph_type" checked="checked"
+                                                   ng-click="MetricsCompareCtrl.setGraphType('linear')">
+                                            <label for="graph_type_linear">Линейные графики</label>
                                         </div>
                                     </div>
                                     <div class="field">
                                         <div class="ui radio checkbox">
-                                            <input type="radio" name="graph_type">
-                                            <label>Лепестковые диаграммы</label>
+                                            <input type="radio" id="graph_type_skill" name="graph_type"
+                                                   ng-click="MetricsCompareCtrl.setGraphType('skill')">
+                                            <label for="graph_type_skill">Лепестковые диаграммы</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="column">
-                            <a href="#" class="graph-builder-btn">построитель графиков<i class="right arrow icon"></i></a>
+                            <a href="{% url 'hockeyapp:metrics-compare-graph' %}" class="graph-builder-btn">построитель графиков<i class="right arrow icon"></i></a>
                         </div>
                     </div>
                 </div>
@@ -155,7 +158,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui grid">
+                {# linear #}
+                <div class="ui grid" ng-show="MetricsCompareCtrl.graph_type == 'linear'">
                     <div class="row players-controls">
                         <div class="four wide column">
                             <ul class="players-list">
@@ -216,7 +220,65 @@
                         <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
                     </ul>
                 </div>
+                {# skill #}
+                <div class="ui grid" ng-show="MetricsCompareCtrl.graph_type == 'skill'">
+                    <div class="row players-controls">
+                        <div class="four wide column">
+                            <ul class="players-list">
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                            </ul>
+                            <a href="#" class="player-add-btn">+ Добавить игрока</a>
+                        </div>
+                        <div class="nine wide column">
+                            <img class="player-diff-graph" src="{{ STATIC_URL }}images/player-diff2.jpg" alt="" width="660">
+                        </div>
+                        <div class="three wide column">
+                            <div class="player-diff-slider slider-vertical">
+                                <div class="player-slider-heading">Выбрать год:</div>
+                                <div class="slider-vertical-block">
+                                    <p class="slider-desc">
+                                        <input type="text" class="slider-input players-graph-year" id="players-graph-year" readonly>
+                                    </p>
+                                    <div class="players-graph-slider">
+                                        <div class="players-graph-year-slider"></div>
+                                    </div>
+                                    <p class="slider-limits players-graph-slider-limits">
+                                        <span class="slider-limits-max"></span>
+                                        <span class="slider-limits-min"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="team-controls player-controls-block">
+                        <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                        <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                        <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                    </ul>
+                </div>
             </div>
+            </form>
         </div>
     </div>
 </section>
