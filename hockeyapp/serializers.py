@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from dateutil import relativedelta
 
+from django.core.urlresolvers import reverse
 from django.utils import timezone
 
 from rest_framework import fields, serializers
@@ -56,17 +57,28 @@ class PlayerClubSerializer(TitleBaseSerializer):
         model = Club
 
 
-class PlayerCardSerializer(AbstractManSerializer):
+class BasePlayerCardSerializer(AbstractManSerializer):
+    club = PlayerClubSerializer()
     photo = serializers.ReadOnlyField(source='photo.url')
-    line = serializers.ReadOnlyField(source='get_line_display')
+    age = serializers.SerializerMethodField()
+    photo = serializers.ReadOnlyField(source='photo.url')
     contract_type = serializers.ReadOnlyField(
         source='get_contract_type_display')
+
+    def get_age(self, obj):
+        if obj.birth_date:
+            delta = relativedelta.relativedelta(
+                timezone.now().date(), obj.birth_date)
+            return delta.years, delta.months
+        return None, None
+
+
+class PlayerCardSerializer(BasePlayerCardSerializer):
+    line = serializers.ReadOnlyField(source='get_line_display')
     contract_to = serializers.SerializerMethodField()
     birth_date = serializers.SerializerMethodField()
     birth_date_short = serializers.SerializerMethodField()
-    age = serializers.SerializerMethodField()
     khl_url = serializers.SerializerMethodField()
-    club = PlayerClubSerializer()
     last_clubs = PlayerClubSerializer(many=True)
     url = serializers.ReadOnlyField(source='get_absolute_url')
     citizenship = CountrySerializer()
@@ -79,13 +91,6 @@ class PlayerCardSerializer(AbstractManSerializer):
 
     def get_birth_date_short(self, obj):
         return obj.birth_date and obj.birth_date.strftime('%d.%m.%Y')
-
-    def get_age(self, obj):
-        if obj.birth_date:
-            delta = relativedelta.relativedelta(
-                timezone.now().date(), obj.birth_date)
-            return delta.years, delta.months
-        return None, None
 
     def get_khl_url(self, obj):
         return 'http://www.khl.ru/players/%s/' % obj.khl_id
@@ -156,3 +161,24 @@ class ClubSerializer(ClubListSerializer):
             'current_defender_players', 'current_goalkeeper_players', 'coach',
             'url')
         model = Club
+
+
+class MetricsPlayerSerializer(BasePlayerCardSerializer):
+    url = serializers.SerializerMethodField()
+    line = serializers.SerializerMethodField()
+    grip = serializers.SerializerMethodField()
+
+    def get_url(self, obj):
+        return reverse('hockeyapp:metrics-player-card', kwargs={'pk': obj.pk})
+
+    def get_line(self, obj):
+        return obj.get_line_display().lower()[:3]
+
+    def get_grip(self, obj):
+        return obj.grip.lower()[:3]
+
+    class Meta(object):
+        fields = (
+            'pk', 'url', 'fio', 'club', 'line', 'photo', 'grip',
+            'contract_type', 'height', 'weight', 'age')
+        model = Player

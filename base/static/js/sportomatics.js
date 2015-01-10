@@ -89,4 +89,24 @@
         this.list();
     }]);
 
+    app.controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {
+        var self = this,
+        url = $('#MetricsPlayersForm').attr('action');
+        self.data = {};
+
+        // $scope.moreClubs = function(e) {
+        //     $(e).closest('td').toggleClass('show-more-clubs')
+        // };
+
+        this.search = function() {
+            var self = this,
+            params = $('#MetricsPlayersForm').serialize();
+            $http.get(url + '?' + params)
+            .success(function(data) {
+                self.data = data;
+            });
+        };
+        this.search();
+    }]);
+
 })();

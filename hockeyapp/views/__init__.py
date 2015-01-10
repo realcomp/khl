@@ -4,7 +4,8 @@ from django.views.generic import DetailView, TemplateView
 from addresses.models import Country
 
 from ..serializers import (
-    CountrySerializer, ClubSerializer, PlayerCardSerializer)
+    CountrySerializer, ClubSerializer, PlayerCardSerializer,
+    MetricsPlayerSerializer)
 from ..models import Club, Player
 
 
@@ -147,7 +148,15 @@ class MetricsPlayers(TemplateView):
 
 
 class MetricsPlayerCard(PlayerCard):
+    model = Player
     template_name = 'hockeyapp/metrics/player-card.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MetricsPlayerCard, self).get_context_data(**kwargs)
+        context['request'] = self.request
+        context.update(PlayerCardSerializer(
+            self.get_object(), context=context).data)
+        return context
 
 
 class MetricsPlayersCompare(TemplateView):

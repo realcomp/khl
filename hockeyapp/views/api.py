@@ -6,9 +6,10 @@ import operator
 
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics, permissions
+from rest_framework import generics
 
-from ..serializers import PlayerCardSerializer, ClubListSerializer
+from ..serializers import (
+    PlayerCardSerializer, ClubListSerializer, MetricsPlayerSerializer)
 from ..models import Club, Player
 
 
@@ -53,3 +54,12 @@ class ClubList(generics.ListAPIView):
             qs = qs.order_by(
                 self.request.GET['order_by'] % self.request.LANGUAGE_CODE)
         return qs
+
+
+class MetricsPlayers(generics.ListAPIView):
+    paginate_by = 100
+    # permission_classes = permissions.IsAuthenticated,
+    serializer_class = MetricsPlayerSerializer
+
+    def get_queryset(self):
+        return Player.objects.all()

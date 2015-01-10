@@ -22,8 +22,8 @@
         </div>
 
         <div class="page-content page-container"
-             ng-controller="PlayersSearchController as PlayersSearchCtrl">
-            <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
+             ng-controller="MetricsPlayersController as MetricsPlayersCtrl">
+            <form id="MetricsPlayersForm" action="{% url 'hockeyapp:metrics-list-api' %}">
             <div class="container-top-block">
                 <div class="ui divided grid">
                     <div class="one column row">
@@ -84,7 +84,7 @@
                             </thead>
                             <tbody>
                                 {% verbatim %}
-                                <tr ng-repeat="player in PlayersSearchCtrl.data.results">
+                                <tr ng-repeat="player in MetricsPlayersCtrl.data.results">
                                     <td>
                                         <div class="ui checkbox">
                                             <input id="player1" type="checkbox">
@@ -100,13 +100,13 @@
                                         </div>
                                     </td>
                                     <td>КХЛ</td>
-                                    <td>Спартак</td>
-                                    <td>28</td>
-                                    <td>нап</td>
-                                    <td>одност КХЛ</td>
-                                    <td>185</td>
-                                    <td>85</td>
-                                    <td>лев</td>
+                                    <td>{{ player.club.title }}</td>
+                                    <td>{{ player.age[0] }}</td>
+                                    <td>{{ player.line }}</td>
+                                    <td>{{ player.contract_type }}</td>
+                                    <td>{{ player.height }}</td>
+                                    <td>{{ player.weight }}</td>
+                                    <td>{{ player.grip }}</td>
                                     <td>12</td>
                                     <td>12</td>
                                     <td>12</td>
