@@ -234,6 +234,7 @@ class CoachClub(models.Model):
     b''' связка тренер клуб в сезоне '''
     coach = models.ForeignKey(Coach)
     club = models.ForeignKey(Club)
+    head = models.BooleanField(_('Head coach'), default=True)
     start_date = models.DateField(_('Start date'), null=True)
     end_date = models.DateField(_('End date'), null=True)
 
@@ -278,19 +279,19 @@ class AdvancedPlayerStats(models.Model):
     change_count_1th = models.PositiveSmallIntegerField(
                                     _('1th period change count'), null=True)
     gamingtime_1th = models.PositiveIntegerField(
-                                    _('1th period time in game'),null=True)
+                                    _('1th period time in game, sec'),null=True)
     change_count_2nd = models.PositiveSmallIntegerField(
                                     _('2nd period change count'), null=True)
     gamingtime_2nd = models.PositiveIntegerField(
-                                    _('2nd period change count'),null=True)
+                                    _('2nd period time in game, sec'),null=True)
     change_count_3th = models.PositiveIntegerField(
                                     _('3th period change count'),null=True)
     gamingtime_3th = models.PositiveIntegerField(
-                                    _('3th period time in game'),null=True)
+                                    _('3th period time in game, sec'),null=True)
     change_count_all = models.PositiveIntegerField(
                                     _('All periods change count'),null=True)
     gamingtime_all = models.PositiveIntegerField(
-                                    _('All periods time in game'),null=True)
+                                    _('All periods time in game, sec'),null=True)
     block_1th = models.PositiveIntegerField(
                                     _('1th period blocks'),null=True)
     hit_1th = models.PositiveIntegerField(

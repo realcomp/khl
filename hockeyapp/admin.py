@@ -90,7 +90,8 @@ admin.site.register(Player, PlayerAdmin)
 
 class CoachClubInline(TabularInlineReadOnly):
     model = CoachClub
-    readonly_fields = ( object_link, 'coach', 'club', 'start_date', 'end_date')
+    readonly_fields = ( object_link, 'coach', 'club', 'head',
+                        'start_date', 'end_date')
     fields = readonly_fields
 
 class AddressClubInline(TabularInlineReadOnly):
