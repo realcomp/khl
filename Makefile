@@ -28,5 +28,5 @@ deploy:
 	git pull origin master
 	pip install -r requirments.txt
 	python manage.py migrate
-	python manage.py makedoc
+	python manage.py compilemessages
 	python manage.py collectstatic --no-post-process --noinput

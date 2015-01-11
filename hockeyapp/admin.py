@@ -33,8 +33,8 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
                 ('guestteam', _('Guest team')),
                 ('servinfo', _('Service Info')),
     )
-    list_filter = ( 'ru_title', 'home_team', 'guest_team', 'league',
-                    ('date', DateRangeFilter),
+    list_filter = ( ('date', DateRangeFilter),
+                    'ru_title', 'home_team', 'guest_team', 'league',                    
     )
     fieldsets = (
         (None, {
@@ -84,7 +84,11 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (ClubPlayerInline, PlayerCitizenshipInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
-                    'height', 'url',)
+                    'height', 'url',
+    )
+    list_filter = ( ('birth_date', DateRangeFilter),
+                    'khl_id', 'ru_fio', 'line', 'weight', 'height',
+    )
 admin.site.register(Player, PlayerAdmin)
 
 
@@ -107,6 +111,8 @@ class LeagueClubInline(TabularInlineReadOnly):
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (CoachClubInline, AddressClubInline, LeagueClubInline)
     list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address', 'league'
+    linked_m2m_readonly_fields = ('players',)
+    readonly_fields = linked_m2m_readonly_fields
 admin.site.register(Club, ClubAdmin)
 
 
