@@ -4739,3 +4739,10 @@ i.icon {
 .hidden {
     display: none;
 }
+th a {
+    color: #ffffff;
+    text-decoration: none;
+}
+th a:hover {
+    text-decoration: underline;
+}

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 from django.views.generic import DetailView, TemplateView
 
 from addresses.models import Country
@@ -55,6 +57,8 @@ class PlayersSearch(TemplateView):
         context['request'] = self.request
         context['countries'] = CountrySerializer(
             Country.objects.all(), many=True, context=context).data
+        context['russia'] = CountrySerializer(
+            Country.objects.filter(ru_title=b'Россия').get(), context=context).data
         return context
 
 

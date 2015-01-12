@@ -19,8 +19,8 @@
 
         <div class="page-content page-container"
              ng-controller="PlayersSearchController as PlayersSearchCtrl">
+            <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
             <div class="container-top-block">
-                <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
                 <div class="ui grid">
                     <div class="row">
                         <div class="column">
@@ -34,7 +34,7 @@
                     <div class="row">
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
-                            <select name="citizenship" id="players-search-country" class="select players-search-select" multiple="multiple" size="8">
+                            <select name="citizenship_off" id="players-search-country" class="select players-search-select" multiple="multiple" size="8">
                                 {% for country in countries %}
                                     <option value="{{ country.pk }}">{{ country.title }}</option>
                                 {% endfor %}
@@ -55,25 +55,29 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[1,2,3]">
+                                        <input type="checkbox" name="line" value="[0,1,2,3]" checked="checked"
+                                               onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[2]">
+                                        <input type="checkbox" name="line" value="[2]"
+                                               onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>защитник</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[3]">
+                                        <input type="checkbox" name="line" value="[3]"
+                                               onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>нападающий</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[1]">
+                                        <input type="checkbox" name="line" value="[1]"
+                                               onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>вратарь</label>
                                     </div>
                                 </div>
@@ -84,28 +88,32 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="citizenship" value="" checked="checked"
+                                               onchange="angular.element(this).scope().citizenshipCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
-                                        <label>Россия</label>
+                                        <input type="checkbox" name="citizenship" value="{{ russia.pk }}"
+                                               onchange="angular.element(this).scope().citizenshipCheck(this)">
+                                        <label>{{ russia.title }}</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="citizenship_other_active"
+                                               onchange="angular.element(this).scope().citizenshipCheck(this)">
                                         <label>иное</label>
                                     </div>
                                     <div class="ui selection dropdown dropdown-small-inline">
-                                        <input type="hidden">
+                                        <input type="hidden" name="citizenship_other">
                                         <div class="default text">любое</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
-                                            <div class="item" data-value="hokey">ААА</div>
-                                            <div class="item" data-value="football">БББ</div>
+                                            {% for country in countries %}
+                                                <div class="item" data-value="{{ country.pk }}">{{ country.title }}</div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +163,6 @@
                         </div>
                     </div>
                 </div>
-                </form>
             </div>
             <div class="page-inner-container">
                 <div class="ui grid">
@@ -203,18 +210,29 @@
                             </ul>
                         </div>
                         <div class="twelve wide column">
-                            <table class="ui celled table segment player-select-table">
+                            <table class="ui celled table segment player-select-table"
+                                   ng-show="PlayersSearchCtrl.data.results">
                                 <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Имя</th>
-                                        <th align="center">Амплуа</th>
-                                        <th>Команда</th>
-                                        <th align="center">Возраст</th>
-                                        <th align="center">Гражданство</th>
-                                        <th align="center">Контракт до</th>
-                                        <th align="center">SMI</th>
-                                        <th align="center">CORSI</th>
+                                        <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == '%s_fio' }">
+                                            <a href="" ng-click="PlayersSearchCtrl.search('%s_fio')">Имя</a>
+                                        </th>
+                                        <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'club__%s_title' }">
+                                            <a href="" ng-click="PlayersSearchCtrl.search('club__%s_title')">Команда</a>
+                                        </th>
+                                        <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'birth_date' }">
+                                            <a href="" ng-click="PlayersSearchCtrl.search('birth_date')">Возраст</a>
+                                        </th>
+                                        <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'contract_to' }">
+                                            <a href="" ng-click="PlayersSearchCtrl.search('contract_to')">Контракт до</a>
+                                        </th>
+                                        <th align="center">
+                                            <a href="" ng-click="PlayersSearchCtrl.search()">SMI</a>
+                                        </th>
+                                        <th align="center">
+                                            <a href="" ng-click="PlayersSearchCtrl.search()">CORSI</a>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -230,12 +248,11 @@
                                                     <span class="player-name">
                                                         <a href="{{ player.url }}">{{ player.fio }}</a>
                                                     </span>
-                                                    <span class="player-name">&nbsp;</span>
+                                                    <span class="player-name">{{ player.line|lowercase }}</span>
                                                     <span class="player-country">{{ player.citizenship.title }}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td align="center">{{ player.line }}</td>
                                         <td>
                                             <a href="{{ player.last_clubs[0].url }}" class="club-link"
                                                ng-show="player.last_clubs.length > 0">
@@ -266,7 +283,6 @@
                                             {{ player.age[0] }}
                                             <div class="player-desc">{{ player.birth_date_short }}</div>
                                         </td>
-                                        <td align="center">{{ player.citizenship.title }}</td>
                                         <td align="center">
                                             {{ player.contract_to }}
                                             <span class="player-desc">{{ player.contract_type }}</span>
@@ -277,6 +293,20 @@
                                     {% endverbatim %}
                                 </tbody>
                             </table>
+                            <div style="text-align: center">
+                                <img src="{{ STATIC_URL }}images/loader-large.gif"
+                                     ng-show="PlayersSearchCtrl.loader">
+                                <a class="option-btn" href=""
+                                   ng-click="PlayersSearchCtrl.next()"
+                                   ng-show="!PlayersSearchCtrl.loader && PlayersSearchCtrl.data.next">
+                                    показать еще 50</a>
+                                {% verbatim %}
+                                <a class="option-btn" href=""
+                                   ng-click="PlayersSearchCtrl.next(true)"
+                                   ng-show="!PlayersSearchCtrl.loader && PlayersSearchCtrl.data.next">
+                                    показать все {{ PlayersSearchCtrl.data.count }}</a>
+                                {% endverbatim %}
+                            </div>
                         </div>
                     </div>
                     <ul class="team-controls player-controls-block">
@@ -285,6 +315,7 @@
                         <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
                     </ul>
                 </div>
+            </form>
             </div>
         </div>
     </div>

@@ -54,22 +54,83 @@
     }]);
 
     app.controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
-        var self = this,
-        url = $('#PlayersSearchForm').attr('action');
-        self.data = {};
+        var url = $('#PlayersSearchForm').attr('action');
+        this.data = {};
+        this.order_by = '%s_fio';
+        this.order_by_reversed = false;
+        this.loader = false;
 
         $scope.moreClubs = function(e) {
             $(e).closest('td').toggleClass('show-more-clubs')
         };
 
-        this.search = function() {
+        $scope.lineCheck = function(e) {
+            var isAll = $(e).attr('value') === '[0,1,2,3]',
+            uncheck = function() {
+                if ((isAll && $(this).attr('value') !== '[0,1,2,3]') ||
+                    (!isAll && $(this).attr('value') === '[0,1,2,3]')) {
+                    $(this).attr('checked', false);
+                }
+            };
+            if ($(e).is(':checked')) {
+                $('input[name="line"]').each(uncheck);
+            }
+        }
+
+        $scope.citizenshipCheck = function(e) {
+            var isAll = $(e).attr('name') === 'citizenship' && $(e).attr('value') === '',
+            uncheck = function() {
+                if ((isAll && $(this).attr('value') !== '') ||
+                    (!isAll && $(this).attr('value') === '')) {
+                    $(this).attr('checked', false);
+                }
+            };
+            if ($(e).is(':checked')) {
+                $('input[name="citizenship"]').each(uncheck);
+                $('input[name="citizenship_other_active"]').each(uncheck);
+            }
+        }
+
+        this.search = function(order_by) {
             var self = this,
             params = $('#PlayersSearchForm').serialize();
+            if (order_by) {
+                if (self.order_by === order_by) { // same field -> reverse
+                    self.order_by_reversed = !self.order_by_reversed;
+                } else { // other field -> reset
+                    self.order_by_reversed = false;
+                }
+                self.order_by = order_by;
+            }
+            params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
+            self.data = {};
+            self.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
+                self.loader = false;
             });
         };
+
+        this.next = function(isAll) {
+            var self = this,
+            url = self.data.next;
+            if (isAll) {
+                url = url.replace(/&page=\d+$/, '&paginate_by=' + self.data.count);
+            }
+            self.loader = true;
+            $http.get(url)
+            .success(function(data) {
+                if (isAll) {
+                    self.data = data;
+                } else {
+                    self.data.next = data.next;
+                    self.data.results = self.data.results.concat(data.results);
+                }
+                self.loader = false;
+            });
+        }
+
         this.search();
     }]);
 
