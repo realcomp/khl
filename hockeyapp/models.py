@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
-from base.models import TitleBaseModel
+from base.models import TitleBaseModel, AdminLinkMixin
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from .defaults import MD
@@ -199,7 +199,7 @@ class AddressClub(models.Model):
         verbose_name_plural=_('Club addresses')
 
 
-class LeagueClub(models.Model):
+class LeagueClub(AdminLinkMixin, models.Model):
     b''' связка лига - клуб в сезоне '''
     league = models.ForeignKey(League)
     club = models.ForeignKey(Club)
@@ -464,6 +464,7 @@ class Match(TitleBaseModel):
 
     @property
     def python_date(self):
+        #deprecated
         if self.date_str:
             _date_dict = self.date_str.strip().lower().split(',')
             _dt = _date_dict[:2]

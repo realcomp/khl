@@ -124,6 +124,11 @@ SUIT_CONFIG = {
         {'app': 'addresses',},
         {'app': 'base',},
         {'app': 'hockeyapp',},
+        {
+            'label': _('Club leagues add form'), 
+            'icon':'icon-globe', 
+            'url': '/admin/hockeyapp/leagueclub_multi_add/'
+        },
         {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
     ),
     'MENU_EXCLUDE': ('sites', 'auth'),
