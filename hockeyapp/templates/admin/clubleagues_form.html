@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify suit_tags admin_urls %}
+{% load url from future %}
+{% load admin_urls %}
+
+{% block title %}
+    {% trans 'Club leagues add form' %}
+{% endblock%}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+{% url 'admin:jsi18n' as jsi18nurl %}
+<script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
+{% endblock %}
+
+{% block content %}
+<form method="post"  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %} action="{% url 'hockeyapp.views.admin.clubleagues_add' %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">{% trans 'Submit' %}</button>
+
+    {{form.media}}
+</form>
+{% endblock %}

@@ -9,6 +9,8 @@ import sys
 
 from sportomatics.celery import app
 
+from base.utils import str2int_safe
+
 from . import parsers
 from . import models
 
@@ -63,8 +65,10 @@ def async_temp_match_update(match_id):
     '''
     try:
         match = models.Match.objects.get(id=match_id)
-        if not match.date:
-            match.date = match.python_date
-            match.save(update_fields=('date',))
+        if not match.spectators and match.spectators_str:
+            match.spectators = str2int_safe(match.spectators_str.strip(
+                                                            ).split()[0]
+            )
+            match.save(update_fields=('spectators',))
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())

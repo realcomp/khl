@@ -434,7 +434,7 @@ class HockeyMatchParser(GrabParser):
     def get_spectators(self):
         b''' возьмем значение посещаемости '''
         _res = self._get_value('match_spectators')
-        return _res[0].text.split(':')[1] if _res else ''
+        return str2int_safe(_res[0].split(':')[1].strip().split()[0])
 
     def get_home_team(self):
         b''' получаем имя домашней команды '''

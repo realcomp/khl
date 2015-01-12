@@ -5,7 +5,7 @@ from . import views
 from .views import api
 
 
-urlpatterns = [
+urlpatterns = (
     # TODO: move to separate namespace
     # REST API
     url(r'^api/players/$', api.PlayersSearch.as_view(),
@@ -65,4 +65,4 @@ urlpatterns = [
         name='club-photos'),
     url(r'^clubs/(?P<pk>\d+)/fanzone/$', views.ClubFanZoneView.as_view(),
         name='club-fanzone'),
-]
+)

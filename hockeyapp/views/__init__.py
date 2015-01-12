@@ -7,7 +7,7 @@ from addresses.models import Country
 
 from ..serializers import (
     CountrySerializer, ClubSerializer, PlayerCardSerializer,
-    MetricsPlayerSerializer)
+)
 from ..models import Club, Player
 
 
@@ -22,7 +22,6 @@ class Index(TemplateView):
 
             version = self.request.user.version
         return ['hockeyapp/index-%s.html' % version.lower()]
-
 index = Index.as_view()
 
 

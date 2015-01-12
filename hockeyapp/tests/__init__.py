@@ -90,11 +90,10 @@ class HockeyAppTest(base.tests.BaseTest):
         self.assertEqual(Match.objects.count(), 1)
         #check fields
         self.assertEqual(match.khl_id, khlid)
-        for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
-        'detail_count'):
+        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
-        'guest_team_id', 'guest_coach_id'):
+        'guest_team_id', 'guest_coach_id', 'spectators'):
             self.assertIsNotNone(getattr(match, field))
         #check relations
         self.assertEqual(match.matchgoalhistory_set.count(), 8)

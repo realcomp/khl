@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -6,6 +7,7 @@ from relatives.utils import object_link
 
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
+from base.admin import Select2MultipleWidget, select2_options
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
@@ -34,13 +36,13 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
                 ('servinfo', _('Service Info')),
     )
     list_filter = ( ('date', DateRangeFilter),
-                    'ru_title', 'home_team', 'guest_team', 'league',                    
+                    'ru_title', 'home_team', 'guest_team', 'league',               
     )
     fieldsets = (
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
-                        'judges', 'line_judges')
+                        'spectators', 'judges', 'line_judges')
         }),
         (None, {
             'classes': ('suit-tab suit-tab-hometeam',),
@@ -110,9 +112,15 @@ class LeagueClubInline(TabularInlineReadOnly):
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (CoachClubInline, AddressClubInline, LeagueClubInline)
-    list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address', 'league'
+    list_display = ('ru_title', 'site', 'url', 'arena', 'coach', 'address',
+                    'league',
+    )
     linked_m2m_readonly_fields = ('players',)
     readonly_fields = linked_m2m_readonly_fields
+    list_editable = 'league',
+    select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
+                        'junior_club',
+    )
 admin.site.register(Club, ClubAdmin)
 
 

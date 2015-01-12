@@ -1,5 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
+
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -11,6 +13,18 @@ class LocaleAttrMixin(object):
             cd = request.LANGUAGE_CODE
         _attr = hasattr(self, cd+'_'+attr) and getattr(self, cd+'_'+attr)
         return _attr or hasattr(self, attr) and getattr(self, attr)
+
+
+class AdminLinkMixin(object):
+    def admin_change_link(self):
+        if self.pk:
+            info = (self._meta.app_label, self._meta.module_name)
+            return reverse("admin:%s_%s_change" % info, args=[self.pk])
+
+    @classmethod
+    def admin_list_link(cls):
+        return reverse("admin:{}_{}_changelist".format( cls._meta.app_label,
+                                                        cls._meta.module_name))
         
 
 class TitleBaseModel(models.Model):
