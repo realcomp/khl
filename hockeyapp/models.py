@@ -58,10 +58,16 @@ class Player(AbstractMan):
 
     @property
     def last_clubs(self):
-        previous_club_ids = self.clubplayer_set.values_list(
-            'club_id', flat=True)
-        return Club.objects.filter(pk__in=previous_club_ids
-                          )[:8]
+        last_club_ids = list(
+            self.clubplayer_set
+            .exclude(club=self.club_set.last())  # exclude current club
+            .order_by('-end_date')
+            .values_list('club_id', flat=True))
+        clubs = list(Club.objects.filter(pk__in=last_club_ids))
+        clubs.sort(key=lambda x: last_club_ids.index(x.pk))
+        if self.club_set.exists():
+            clubs.insert(0, self.club_set.last())
+        return clubs
 
     def get_absolute_url(self):
         if self.pk:
