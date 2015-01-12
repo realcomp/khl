@@ -112,10 +112,15 @@ class LeagueClubInline(TabularInlineReadOnly):
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (CoachClubInline, AddressClubInline, LeagueClubInline)
-    list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address', 'league'
+    list_display = ('ru_title', 'site', 'url', 'arena', 'coach', 'address',
+                    'league',
+    )
     linked_m2m_readonly_fields = ('players',)
     readonly_fields = linked_m2m_readonly_fields
-    list_editable = ('league',)
+    list_editable = 'league',
+    select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
+                        'junior_club',
+    )
 admin.site.register(Club, ClubAdmin)
 
 
