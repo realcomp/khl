@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -6,6 +7,7 @@ from relatives.utils import object_link
 
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
+from base.admin import Select2MultipleWidget, select2_options
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
@@ -113,6 +115,7 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     list_display = 'ru_title', 'site', 'url', 'arena', 'coach', 'address', 'league'
     linked_m2m_readonly_fields = ('players',)
     readonly_fields = linked_m2m_readonly_fields
+    list_editable = ('league',)
 admin.site.register(Club, ClubAdmin)
 
 
