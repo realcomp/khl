@@ -422,7 +422,8 @@ class Match(TitleBaseModel):
     html_body = models.TextField('Parse HTML', blank=True)
 
     #main info
-    spectators = models.CharField(_('Spectators count'), max_length=1024,
+    spectators = models.PositiveIntegerField(_('Spectators count'), null=True)
+    spectators_str = models.CharField(_('Spectators count'), max_length=1024,
                                     blank=True)
     date_str = models.CharField(_('Match date'), max_length=1024, blank=True)
     date = models.DateTimeField(_('Match date'), null=True, blank=True)
@@ -461,23 +462,6 @@ class Match(TitleBaseModel):
         verbose_name=_('Match')
         verbose_name_plural=_('Matches')
         ordering = '-khl_id',
-
-    @property
-    def python_date(self):
-        #deprecated
-        if self.date_str:
-            _date_dict = self.date_str.strip().lower().split(',')
-            _dt = _date_dict[:2]
-            _dt.append(_date_dict[3])
-            _date_dict = _dt
-            _m = _date_dict[0].split()[1].encode('utf-8')
-            _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), MD.get(_m))
-            if _date_dict[-1] != '':
-                mask = '%d %m %Y %H:%M'
-            else:
-                mask = '%d %m %Y'
-            _dt = ''.join(_date_dict).encode('utf-8')
-            return datetime.datetime.strptime(_dt, mask)
 
     def __unicode__(self):
         if self.count and self.date and self.home_team and self.guest_team:

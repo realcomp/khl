@@ -36,13 +36,13 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
                 ('servinfo', _('Service Info')),
     )
     list_filter = ( ('date', DateRangeFilter),
-                    'ru_title', 'home_team', 'guest_team', 'league',                    
+                    'ru_title', 'home_team', 'guest_team', 'league',               
     )
     fieldsets = (
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
-                        'judges', 'line_judges')
+                        'spectators', 'judges', 'line_judges')
         }),
         (None, {
             'classes': ('suit-tab suit-tab-hometeam',),
