@@ -95,3 +95,13 @@ def async_temp_stats_plr_update(id):
         obj.save()
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_all_cmps_update():
+    try:
+        cpms = models.ClubPlayerMatch.objects.all().values_list('id', flat=True)
+        for id in cpms:
+            async_temp_stats_plr_update.delay(id)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())

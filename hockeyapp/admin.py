@@ -34,8 +34,8 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
                 ('guestteam', _('Guest team')),
                 ('servinfo', _('Service Info')),
     )
-    list_filter = ( ('date', DateRangeFilter),
-                    'ru_title', 'home_team', 'guest_team', 'league',               
+    list_filter = ( 'ru_title', 'home_team', 'guest_team', 'league',
+                    ('date', DateRangeFilter),
     )
     fieldsets = (
         (None, {
@@ -87,8 +87,8 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url',
     )
-    list_filter = ( ('birth_date', DateRangeFilter),
-                    'khl_id', 'ru_fio', 'line', 'weight', 'height',
+    list_filter = ( 'khl_id', 'ru_fio', 'line', 'weight', 'height',
+                    ('birth_date', DateRangeFilter),
     )
 admin.site.register(Player, PlayerAdmin)
 
@@ -159,6 +159,12 @@ for model in (MatchGoalHistory, MatchPenaltyHistory):
 class ClubPlayerMatchAdmin(NoFilterAdmin):
     linked_readonly_fields = ('match', 'clubplayer', 'adv_stats')
     readonly_fields = linked_readonly_fields
+    list_display = linked_readonly_fields
+
+    def get_list_display(self, request):
+        if self.list_display:
+            return self.list_display
+        return ('id',)+self.get_fields(request)
 admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
 admin.site.register(AdvancedPlayerStats)

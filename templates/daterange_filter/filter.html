@@ -1,0 +1,20 @@
+{% load i18n admin_static %}
+</br>
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/widgets.css" %}" />
+<style>
+.calendarbox, .clockbox {
+/* Make sure the calendar widget popover displays in front of the sidebar */
+z-index: 1100;
+margin-left: -251px;
+}
+.datetimeshortcuts a{
+/* Make text for "Today" a bit smaller so it appears on one line. */
+font-size: 8pt;
+}
+</style>
+<b>{% blocktrans with filter_title=title %} By {{ filter_title }} {% endblocktrans %}</b>:&nbsp;
+<form method="GET" action="">
+    {{ spec.form.media }}
+    {{ spec.form }}
+    <input type="reset" value="{% trans "Clear" %}" class="btn btn-high btn-info">
+</form>

@@ -56,15 +56,15 @@ class Player(AbstractMan):
 
     @property
     def last_clubs(self):
-        last_club_ids = list(
+        last_club_ids = set(
             self.clubplayer_set
-            .exclude(club=self.club_set.last())  # exclude current club
+            .exclude(club=self.club)  # exclude current club
             .order_by('-end_date')
             .values_list('club_id', flat=True))
         clubs = list(Club.objects.filter(pk__in=last_club_ids))
         clubs.sort(key=lambda x: last_club_ids.index(x.pk))
         if self.club_set.exists():
-            clubs.insert(0, self.club_set.last())
+            clubs.insert(0, self.club)
         return clubs
 
     def get_absolute_url(self):
@@ -363,23 +363,23 @@ class ClubPlayerMatch(models.Model):
                                 max_length=8, blank=True)
     shots = models.PositiveSmallIntegerField(_('Shots count'), null=True)
     shots_str = models.CharField(_('Shots count'), max_length=8, blank=True)
-    pis = models.FloatField(_('Percentage of Implemented Shots'), null=True)
-    pis_str = models.CharField(_('Percentage of Implemented Shots'),
+    pis = models.FloatField(_('Implemented Shots, %'), null=True)
+    pis_str = models.CharField(_('Implemented Shots, %'),
                                 max_length=8, blank=True)
     faceoff = models.PositiveSmallIntegerField(_('Face-off'), null=True)
     faceoff_str = models.CharField(_('Face-off'), max_length=8, blank=True)
     winfaceoff = models.PositiveSmallIntegerField(_('Face-off Wins'), null=True)
     winfaceoff_str = models.CharField(_('Face-off Wins'), max_length=8, blank=True)
-    winfaceoff_p = models.FloatField(_('Face-off Wins Percentage'), null=True)
-    winfaceoff_p_str = models.CharField(_('Face-off Wins Percentage'),
+    winfaceoff_p = models.FloatField(_('Face-off Wins , %'), null=True)
+    winfaceoff_p_str = models.CharField(_('Face-off Wins , %'),
                                 max_length=8, blank=True)
     #keeper stats
     loose_goals = models.PositiveSmallIntegerField(_('Loose Goals'), null=True)
     loose_goals_str = models.CharField(_('Loose Goals'), max_length=8,  blank=True)
     saves = models.PositiveSmallIntegerField(_('Saves Goals'), null=True)
     saves_str = models.CharField(_('Saves Goals'), max_length=8, blank=True)
-    saves_p = models.FloatField(_('Saves Goals Percentage'), null=True)
-    saves_p_str = models.CharField(_('Saves Goals Percentage'),
+    saves_p = models.FloatField(_('Saves Goals , %'), null=True)
+    saves_p_str = models.CharField(_('Saves Goals , %'),
                                 max_length=8, blank=True)
     sf = models.FloatField(_('Safety Factor'), null=True)
     sf_str = models.CharField(_('Safety Factor'), max_length=8, blank=True)

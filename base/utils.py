@@ -26,6 +26,8 @@ def str2sec_safe(string):
     # return: 210
     # type: int
     try:
+        if string == '60:00': return 3600
+        if str2int_safe(string) == 0: return 0
         func = datetime.datetime.strptime
         return int((func(string, '%M:%S')-func('0','%S')).total_seconds())
     except:

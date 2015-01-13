@@ -9,19 +9,38 @@
 
 {% block extrahead %}
 {{ block.super }}
-<script type="text/javascript" src="/static/admin/js/core.js"></script>
-<script type="text/javascript" src="/static/admin/js/jquery.js"></script>
-<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="{% static "admin/js/core.js" %}"></script>
+<script type="text/javascript" src="{% static "admin/js/jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "admin/js/jquery.init.js" %}"></script>
 {% url 'admin:jsi18n' as jsi18nurl %}
 <script type="text/javascript" src="{{ jsi18nurl|default:"../../../jsi18n/" }}"></script>
+{{form.media}}
 {% endblock %}
 
 {% block content %}
-<form method="post"  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %} action="{% url 'hockeyapp.views.admin.clubleagues_add' %}">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">{% trans 'Submit' %}</button>
+<div id="content-main" class="inner-two-columns">
+    <form method="post"  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %} action="{% url 'hockeyapp.views.admin.clubleagues_add' %}" class="form-horizontal">
+        {% csrf_token %}
+        <div class="tab-content tab-content-main">
+            {% if errors %}
+            <div class="alert alert-error">
+                {% blocktrans count counter=errors|length %}Please correct the error below.{% plural %} Please correct the errors below.{% endblocktrans %}
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
 
-    {{form.media}}
-</form>
+            {% block field_sets %}
+                {% for field in form %}
+                    <div class="control-group form-row field-username">
+                        <div>
+                            <div class="control-label">{{field.label}}</div>
+                            <div class="controls">{{field}}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endblock %}
+            <button type="submit" class="btn btn-high btn-info">{% trans 'Submit' %}</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
