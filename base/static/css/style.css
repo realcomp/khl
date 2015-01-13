@@ -4739,10 +4739,13 @@ i.icon {
 .hidden {
     display: none;
 }
-th a {
+th a, .clubs-page .clubs-table th a {
     color: #ffffff;
     text-decoration: none;
 }
-th a:hover {
+th a:hover, .clubs-page .clubs-table th a:hover {
     text-decoration: underline;
+}
+.clubs-page .clubs-table th.column-sort {
+  background: #378331;
 }

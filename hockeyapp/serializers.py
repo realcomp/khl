@@ -106,7 +106,7 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
             'photo', 'khl_url', 'birth_date_short', 'club', 'last_clubs',
             'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
-            'contract_to')
+            'contract_to', 'number')
         model = Player
 
 

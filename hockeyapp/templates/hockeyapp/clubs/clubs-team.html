@@ -1290,7 +1290,7 @@
                                             <tbody>
                                                 <tr ng-repeat="player in PlayersSearchCtrl.data.results">
                                                     {% verbatim %}
-                                                    <td align="center">#</td>
+                                                    <td align="center">{{ player.number }}</td>
                                                     <td>{{ player.line }}</td>
                                                     <td><a href="{{ player.url }}" class="player-popup-btn">{{ player.fio }}</a></td>
                                                     <td align="center">{{ player.birth_date_short }}</td>

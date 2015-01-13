@@ -1,6 +1,27 @@
 (function() {
     var app = angular.module('Sportomatics', []);
 
+    var next = function($http) {
+        return function(isAll) {
+            var self = this,
+            url = self.data.next;
+            if (isAll) {
+                url = url.replace(/&page=\d+$/, '&paginate_by=' + self.data.count);
+            }
+            self.loader = true;
+            $http.get(url)
+            .success(function(data) {
+                if (isAll) {
+                    self.data = data;
+                } else {
+                    self.data.next = data.next;
+                    self.data.results = self.data.results.concat(data.results);
+                }
+                self.loader = false;
+            });
+        };
+    };
+
     app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
         var self = this;
 
@@ -112,24 +133,7 @@
             });
         };
 
-        this.next = function(isAll) {
-            var self = this,
-            url = self.data.next;
-            if (isAll) {
-                url = url.replace(/&page=\d+$/, '&paginate_by=' + self.data.count);
-            }
-            self.loader = true;
-            $http.get(url)
-            .success(function(data) {
-                if (isAll) {
-                    self.data = data;
-                } else {
-                    self.data.next = data.next;
-                    self.data.results = self.data.results.concat(data.results);
-                }
-                self.loader = false;
-            });
-        }
+        this.next = next($http);
 
         this.search();
     }]);
@@ -137,16 +141,34 @@
     app.controller('ClubListController', ['$http', function($http) {
         var self = this,
         url = $('#ClubListForm').attr('action');
-        self.data = {};
+        this.data = {};
+        this.order_by = '%s_title';
+        this.order_by_reversed = false;
+        this.loader = false;
 
-        this.list = function() {
+        this.list = function(order_by) {
             var self = this,
             params = $('#ClubListForm').serialize();
+            if (order_by) {
+                if (self.order_by === order_by) { // same field -> reverse
+                    self.order_by_reversed = !self.order_by_reversed;
+                } else { // other field -> reset
+                    self.order_by_reversed = false;
+                }
+                self.order_by = order_by;
+            }
+            params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
+            self.data = {};
+            self.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
+                self.loader = false;
             });
         };
+
+        this.next = next($http);
+
         this.list();
     }]);
 

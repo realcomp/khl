@@ -10,22 +10,18 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
 
+from .mixins import PaginationMixin
 from ..serializers import (
     PlayerCardSerializer, ClubListSerializer, MetricsPlayerSerializer)
 from ..models import Club, Player, ClubPlayer
 
 
-class PlayersSearch(generics.ListAPIView):
+class PlayersSearch(PaginationMixin, generics.ListAPIView):
     # permission_classes = permissions.IsAuthenticated,
     serializer_class = PlayerCardSerializer
 
     def get_queryset(self):
         return Player.objects.all()
-
-    def get_paginate_by(self):
-        if 'paginate_by' in self.request.GET:
-            return int(self.request.GET['paginate_by'])
-        return 50
 
     def filter_queryset(self, qs):
         qs = super(PlayersSearch, self).filter_queryset(qs)
@@ -56,12 +52,12 @@ class PlayersSearch(generics.ListAPIView):
                 field = field % self.request.LANGUAGE_CODE
             qs = qs.order_by(field)
         # get clubs
-        club_players = (
+        club_players = qs.values_list('id', 'club')
+        club_players2 = (
             ClubPlayer.objects
             .filter(player__in=qs)
             .order_by('-end_date')
             .values_list('player_id', 'club_id'))
-        club_players2 = qs.values_list('id', 'club')
         clubs = {
             club.pk: club
             for club in Club.objects
@@ -70,7 +66,7 @@ class PlayersSearch(generics.ListAPIView):
                 Q(pk__in=zip(*club_players2)[1]))}
         self.players_clubs = {}
         for player_id, club_id in filter(
-                lambda x: x[1], itertools.chain(club_players2, club_players)):
+                lambda x: x[1], itertools.chain(club_players, club_players2)):
             if player_id not in self.players_clubs:
                 self.players_clubs[player_id] = []
             if clubs[club_id] not in self.players_clubs[player_id]:
@@ -78,8 +74,7 @@ class PlayersSearch(generics.ListAPIView):
         return qs
 
 
-class ClubList(generics.ListAPIView):
-    paginate_by = 100
+class ClubList(PaginationMixin, generics.ListAPIView):
     # permission_classes = permissions.IsAuthenticated,
     serializer_class = ClubListSerializer
 

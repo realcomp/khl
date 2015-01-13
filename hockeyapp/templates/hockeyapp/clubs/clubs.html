@@ -103,40 +103,20 @@
                                 <table class="ui celled table segment clubs-table tab" id="{{ club_type }}" data-tab="{{ club_type }}">
                                     <thead>
                                         <tr>
-                                            <th width="160">
-                                                <input type="radio" id="club-list-head-1" class="hidden"
-                                                       name="order_by" value="%s_title" checked="checked"
-                                                       ng-model="clublisthead"
-                                                       ng-change="ClubListCtrl.list()" />
-                                                <label for="club-list-head-1">Название</label>
+                                            <th width="160" ng-class="{ 'column-sort':ClubListCtrl.order_by == '%s_title' }">
+                                                <a href="" ng-click="ClubListCtrl.list('%s_title')">Название</a>
                                             </th>
-                                            <th width="130">
-                                                <input type="radio" id="club-list-head-2" class="hidden"
-                                                       name="order_by" value="address__%s_title"
-                                                       ng-model="clublisthead"
-                                                       ng-change="ClubListCtrl.list()" />
-                                                <label for="club-list-head-2">Город</label>
+                                            <th width="130" ng-class="{ 'column-sort':ClubListCtrl.order_by == 'address__%s_title' }">
+                                                <a href="" ng-click="ClubListCtrl.list('address__%s_title')">Город</a>
                                             </th>
-                                            <th width="80" class="small-cell">
-                                                <input type="radio" id="club-list-head-3" class="hidden"
-                                                       name="order_by" value="%s_title" {# not implemented #}
-                                                       ng-model="clublisthead"
-                                                       ng-change="ClubListCtrl.list()" />
-                                                <label for="club-list-head-3">Место в чемпионате</label>
+                                            <th width="80" ng-class="{ 'column-sort':ClubListCtrl.order_by == '%s_title__' }"> {# not implemented #}
+                                                <a href="" ng-click="ClubListCtrl.list('%s_title')">Место в чемпионате</a>
                                             </th>
-                                            <th width="165">
-                                                <input type="radio" id="club-list-head-4" class="hidden"
-                                                       name="order_by" value="arena__%s_title"
-                                                       ng-model="clublisthead"
-                                                       ng-change="ClubListCtrl.list()" />
-                                                <label for="club-list-head-4">Домашняя площадка</label>
+                                            <th width="165" ng-class="{ 'column-sort':ClubListCtrl.order_by == 'arena__%s_title' }">
+                                                <a href="" ng-click="ClubListCtrl.list('arena__%s_title')">Домашняя площадка</a>
                                             </th>
-                                            <th>
-                                                <input type="radio" id="club-list-head-5" class="hidden"
-                                                       name="order_by" value="coach__%s_fio"
-                                                       ng-model="clublisthead"
-                                                       ng-change="ClubListCtrl.list()" />
-                                                <label for="club-list-head-5">Главный тренер</label>
+                                            <th ng-class="{ 'column-sort':ClubListCtrl.order_by == 'coach__%s_fio' }">
+                                                <a href="" ng-click="ClubListCtrl.list('coach__%s_fio')">Главный тренер</a>
                                             </th>
                                         </tr>
                                     </thead>
@@ -161,6 +141,20 @@
                                     </tbody>
                                 </table>
                                 {% endfor %}
+                                <div style="text-align: center">
+                                    <img src="{{ STATIC_URL }}images/loader-large.gif"
+                                         ng-show="ClubListCtrl.loader">
+                                    <a class="option-btn" href=""
+                                       ng-click="ClubListCtrl.next()"
+                                       ng-show="!ClubListCtrl.loader && ClubListCtrl.data.next">
+                                        показать еще 50</a>
+                                    {% verbatim %}
+                                    <a class="option-btn" href=""
+                                       ng-click="ClubListCtrl.next(true)"
+                                       ng-show="!ClubListCtrl.loader && ClubListCtrl.data.next">
+                                        показать все {{ ClubListCtrl.data.count }}</a>
+                                    {% endverbatim %}
+                                </div>
                             </div>
                         </div>
                     </div>
