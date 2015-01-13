@@ -1,6 +1,5 @@
 #coding: utf-8
 from __future__ import unicode_literals
-import datetime
 
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -12,7 +11,6 @@ from addresses.models import Address, Country
 from base.models import TitleBaseModel, AdminLinkMixin
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
-from .defaults import MD
 from . import managers
 
 
@@ -338,31 +336,49 @@ class ClubPlayerMatch(models.Model):
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
     adv_stats = models.OneToOneField(AdvancedPlayerStats, null=True, blank=True)
-    plus_minus = models.CharField('+/-', max_length=8, blank=True)
-    penalty_time = models.CharField(_('Penalty Time'), max_length=8, blank=True)
-    ev_goals = models.CharField(_('EV Goals'), max_length=8, blank=True)
-    pp_goals = models.CharField(_('Power Play Goals'), max_length=8, blank=True)
-    es_goals = models.CharField(_('Even Strength Goals'),
+    plus_minus = models.SmallIntegerField('+/-', null=True)
+    plus_minus_str = models.CharField('+/-', max_length=8, blank=True)
+    penalty_time = models.PositiveIntegerField(_('Penalty Time, sec'), null=True)
+    penalty_time_str = models.CharField(_('Penalty Time'), max_length=8, blank=True)
+    ev_goals = models.PositiveSmallIntegerField(_('EV Goals'), null=True)
+    ev_goals_str = models.CharField(_('EV Goals'), max_length=8, blank=True)
+    pp_goals = models.PositiveSmallIntegerField(_('Power Play Goals'), null=True)
+    pp_goals_str = models.CharField(_('Power Play Goals'), max_length=8, blank=True)
+    es_goals = models.PositiveSmallIntegerField(_('Even Strength Goals'), null=True)
+    es_goals_str = models.CharField(_('Even Strength Goals'),
                                 max_length=8, blank=True)
-    overtime_goals = models.CharField(_('Overtime Goals'),
+    overtime_goals = models.PositiveSmallIntegerField(_('Overtime Goals'), null=True)
+    overtime_goals_str = models.CharField(_('Overtime Goals'),
                                 max_length=8, blank=True)
-    win_goals = models.CharField(_('Win Goals'), max_length=8,  blank=True)
-    bullet_goals = models.CharField(_('Win Bullet Goals'), 
+    win_goals = models.PositiveSmallIntegerField(_('Win Goals'), null=True)
+    win_goals_str = models.CharField(_('Win Goals'), max_length=8,  blank=True)
+    bullet_goals = models.PositiveSmallIntegerField(_('Win Bullet Goals'), null=True)
+    bullet_goals_str = models.CharField(_('Win Bullet Goals'), 
                                 max_length=8, blank=True)
-    shots = models.CharField(_('Shots count'), max_length=8, blank=True)
-    pis = models.CharField(_('Percentage of Implemented Shots'),
+    shots = models.PositiveSmallIntegerField(_('Shots count'), null=True)
+    shots_str = models.CharField(_('Shots count'), max_length=8, blank=True)
+    pis = models.FloatField(_('Percentage of Implemented Shots'), null=True)
+    pis_str = models.CharField(_('Percentage of Implemented Shots'),
                                 max_length=8, blank=True)
-    faceoff = models.CharField(_('Face-off'), max_length=8, blank=True)
-    winfaceoff = models.CharField(_('Face-off Wins'), max_length=8, blank=True)
-    winfaceoff_p = models.CharField(_('Face-off Wins Percentage'),
+    faceoff = models.PositiveSmallIntegerField(_('Face-off'), null=True)
+    faceoff_str = models.CharField(_('Face-off'), max_length=8, blank=True)
+    winfaceoff = models.PositiveSmallIntegerField(_('Face-off Wins'), null=True)
+    winfaceoff_str = models.CharField(_('Face-off Wins'), max_length=8, blank=True)
+    winfaceoff_p = models.FloatField(_('Face-off Wins Percentage'), null=True)
+    winfaceoff_p_str = models.CharField(_('Face-off Wins Percentage'),
                                 max_length=8, blank=True)
     #keeper stats
-    loose_goals = models.CharField(_('Loose Goals'), max_length=8,  blank=True)
-    saves = models.CharField(_('Saves Goals'), max_length=8, blank=True)
-    saves_p = models.CharField(_('Saves Goals Percentage'),
+    loose_goals = models.PositiveSmallIntegerField(_('Loose Goals'), null=True)
+    loose_goals_str = models.CharField(_('Loose Goals'), max_length=8,  blank=True)
+    saves = models.PositiveSmallIntegerField(_('Saves Goals'), null=True)
+    saves_str = models.CharField(_('Saves Goals'), max_length=8, blank=True)
+    saves_p = models.FloatField(_('Saves Goals Percentage'), null=True)
+    saves_p_str = models.CharField(_('Saves Goals Percentage'),
                                 max_length=8, blank=True)
-    sf = models.CharField(_('Safety Factor'), max_length=8, blank=True)
-    gamingtime = models.CharField(_('Gaming time'), max_length=8, blank=True)
+    sf = models.FloatField(_('Safety Factor'), null=True)
+    sf_str = models.CharField(_('Safety Factor'), max_length=8, blank=True)
+    gamingtime = models.PositiveIntegerField(_('Gaming time'), null=True)
+    gamingtime_str = models.CharField(_('Gaming time'), max_length=8, blank=True)
 
     __unicode__ = lambda self: '{}'.format(self.match or self.pk,)
 

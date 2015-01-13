@@ -12,7 +12,7 @@ from lxml.html import fromstring
 
 from django.db.models.loading import get_model
 
-from base.utils import str2int_safe, str2sec_safe
+from base.utils import str2int_safe, str2float_safe, str2sec_safe
 
 from .. import defaults
 
@@ -397,28 +397,28 @@ class HockeyMatchParser(GrabParser):
         b''' суммарная статистика игрока в матче '''
         if line_type > 1:
             return {
-                    'plus_minus': tr.xpath('td[7]/text()')[0],
+                    'plus_minus': str2int_safe(tr.xpath('td[7]/text()')[0]),
                     'penalty_time': tr.xpath('td[9]/text()')[0],
-                    'ev_goals': tr.xpath('td[9]/text()')[0],
-                    'pp_goals': tr.xpath('td[10]/text()')[0],
-                    'es_goals': tr.xpath('td[11]/text()')[0],
-                    'overtime_goals': tr.xpath('td[12]/text()')[0],
-                    'win_goals': tr.xpath('td[13]/text()')[0],
-                    'bullet_goals': tr.xpath('td[14]/text()')[0],
-                    'shots': tr.xpath('td[15]/text()')[0],
-                    'pis': tr.xpath('td[16]/text()')[0],
-                    'faceoff': tr.xpath('td[17]/text()')[0],
-                    'winfaceoff': tr.xpath('td[18]/text()')[0],
-                    'winfaceoff_p': tr.xpath('td[19]/text()')[0],
+                    'ev_goals': str2int_safe(tr.xpath('td[9]/text()')[0]),
+                    'pp_goals': str2int_safe(tr.xpath('td[10]/text()')[0]),
+                    'es_goals': str2int_safe(tr.xpath('td[11]/text()')[0]),
+                    'overtime_goals': str2int_safe(tr.xpath('td[12]/text()')[0]),
+                    'win_goals': str2int_safe(tr.xpath('td[13]/text()')[0]),
+                    'bullet_goals': str2int_safe(tr.xpath('td[14]/text()')[0]),
+                    'shots': str2int_safe(tr.xpath('td[15]/text()')[0]),
+                    'pis': str2float_safe(tr.xpath('td[16]/text()')[0]),
+                    'faceoff': str2int_safe(tr.xpath('td[17]/text()')[0]),
+                    'winfaceoff': str2int_safe(tr.xpath('td[18]/text()')[0]),
+                    'winfaceoff_p': str2float_safe(tr.xpath('td[19]/text()')[0]),
             }
         else:
             return {
-                    'shots': tr.xpath('td[7]/text()')[0],
-                    'loose_goals': tr.xpath('td[8]/text()')[0],
-                    'saves': tr.xpath('td[9]/text()')[0],
-                    'saves_p': tr.xpath('td[10]/text()')[0],
-                    'sf': tr.xpath('td[11]/text()')[0],
-                    'gamingtime': tr.xpath('td[15]/text()')[0],
+                    'shots': str2int_safe(tr.xpath('td[7]/text()')[0]),
+                    'loose_goals': str2int_safe(tr.xpath('td[8]/text()')[0]),
+                    'saves': str2int_safe(tr.xpath('td[9]/text()')[0]),
+                    'saves_p': str2float_safe(tr.xpath('td[10]/text()')[0]),
+                    'sf': str2float_safe(tr.xpath('td[11]/text()')[0]),
+                    'gamingtime': str2sec_safe(tr.xpath('td[15]/text()')[0]),
             }
 
     def get_match_num(self):

@@ -13,6 +13,13 @@ def str2int_safe(string):
         return None
 
 
+def str2float_safe(string):
+    try:
+        return float(string)
+    except ValueError:
+        return None
+
+
 def str2sec_safe(string):
     # string: '4:35'
     # type: str

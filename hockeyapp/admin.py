@@ -1,4 +1,4 @@
-from django import forms
+
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -7,7 +7,6 @@ from relatives.utils import object_link
 
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
-from base.admin import Select2MultipleWidget, select2_options
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
