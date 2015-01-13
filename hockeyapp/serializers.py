@@ -10,7 +10,7 @@ from rest_framework import fields, serializers
 
 from addresses.models import Address, Country
 
-from .models import Coach, Arena, Club, Player
+from .models import Coach, Arena, Club, Player, League
 
 
 class LangDepSerializer(serializers.ModelSerializer):
@@ -46,6 +46,19 @@ class CountrySerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
         model = Country
+
+
+class LeagueSerializer(TitleBaseSerializer):
+    class Meta(object):
+        fields = 'pk', 'title'
+        model = League
+
+
+class CountryLeaguesSerializer(CountrySerializer):
+    league_set = LeagueSerializer(many=True)
+
+    class Meta(CountrySerializer.Meta):
+        fields = 'pk', 'title', 'league_set'
 
 
 class PlayerClubSerializer(TitleBaseSerializer):

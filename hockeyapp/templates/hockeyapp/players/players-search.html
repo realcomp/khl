@@ -32,24 +32,29 @@
                         </div>
                     </div>
                     <div class="row">
+                        <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
+                        {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
-                            <select name="citizenship_off" id="players-search-country" class="select players-search-select" multiple="multiple" size="8">
-                                {% for country in countries %}
-                                    <option value="{{ country.pk }}">{{ country.title }}</option>
-                                {% endfor %}
+                            <select name="country" id="players-search-country"
+                                    class="select players-search-select" multiple="multiple" size="8"
+                                    ng-model="PlayersSearchCtrl.countries_selected">
+                                <option value="{{ country.pk }}"
+                                        ng-repeat="country in PlayersSearchCtrl.countries">
+                                    {{ country.title }}
+                                </option>
                             </select>
                         </div>
                         <div class="three wide column">
                             <div class="column-title">Лига:</div>
-                            <select name="players-search-countryleague" id="players-search-league" class="select players-search-select" multiple="multiple" size="8">
-                                <option value="">КХЛ</option>
-                                <option value="">НХЛ</option>
-                                <option value="">ВХЛ</option>
-                                <option value="">МХЛ</option>
-                                <option value="">МХЛ-А</option>
+                            <select name="league" id="players-search-league" class="select players-search-select" multiple="multiple" size="8">
+                                <option value="{{ league.pk }}"
+                                        ng-repeat="league in PlayersSearchCtrl.getLeagues(PlayersSearchCtrl.countries_selected)">
+                                    {{ league.title }}
+                                </option>
                             </select>
                         </div>
+                        {% endverbatim %}
                         <div class="two wide column">
                             <div class="column-title">Амплуа:</div>
                             <div class="ui form">

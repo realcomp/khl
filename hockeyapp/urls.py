@@ -8,6 +8,8 @@ from .views import api
 urlpatterns = (
     # TODO: move to separate namespace
     # REST API
+    url(r'^api/leagues/$', api.LeagueList.as_view(),
+        name='league-list-api'),
     url(r'^api/players/$', api.PlayersSearch.as_view(),
         name='players-search-api'),
     url(r'^api/clubs/$', api.ClubList.as_view(),

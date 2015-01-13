@@ -80,6 +80,8 @@
         this.order_by = '%s_fio';
         this.order_by_reversed = false;
         this.loader = false;
+        this.countries = {};
+        this.countries_selected = [];
 
         $scope.moreClubs = function(e) {
             $(e).closest('td').toggleClass('show-more-clubs')
@@ -96,7 +98,7 @@
             if ($(e).is(':checked')) {
                 $('input[name="line"]').each(uncheck);
             }
-        }
+        };
 
         $scope.citizenshipCheck = function(e) {
             var isAll = $(e).attr('name') === 'citizenship' && $(e).attr('value') === '',
@@ -110,7 +112,32 @@
                 $('input[name="citizenship"]').each(uncheck);
                 $('input[name="citizenship_other_active"]').each(uncheck);
             }
-        }
+        };
+
+        this.getCountries = function() {
+            var self = this,
+            url = $('#LeagueListLink').attr('href');
+            if (url) {
+                $http.get(url)
+                .success(function(data) {
+                    self.countries = data;
+                });
+            }
+        };
+
+        this.getLeagues = function(countries_selected) {
+            var self = this,
+            result = [];
+            $.each(countries_selected, function() {
+                var pk = this;
+                $.each(self.countries, function() {
+                    if (this.pk == pk) {
+                        result = result.concat(this.league_set);
+                    }
+                });
+            });
+            return result;
+        };
 
         this.search = function(order_by) {
             var self = this,
@@ -135,6 +162,7 @@
 
         this.next = next($http);
 
+        this.getCountries();
         this.search();
     }]);
 
