@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import itertools
 import json
 import operator
 
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
 
 from ..serializers import (
     PlayerCardSerializer, ClubListSerializer, MetricsPlayerSerializer)
-from ..models import Club, Player
+from ..models import Club, Player, ClubPlayer
 
 
 class PlayersSearch(generics.ListAPIView):
@@ -53,6 +55,26 @@ class PlayersSearch(generics.ListAPIView):
             if '%s' in field:
                 field = field % self.request.LANGUAGE_CODE
             qs = qs.order_by(field)
+        # get clubs
+        club_players = (
+            ClubPlayer.objects
+            .filter(player__in=qs)
+            .order_by('-end_date')
+            .values_list('player_id', 'club_id'))
+        club_players2 = qs.values_list('id', 'club')
+        clubs = {
+            club.pk: club
+            for club in Club.objects
+            .filter(
+                Q(pk__in=zip(*club_players)[1]) |
+                Q(pk__in=zip(*club_players2)[1]))}
+        self.players_clubs = {}
+        for player_id, club_id in filter(
+                lambda x: x[1], itertools.chain(club_players2, club_players)):
+            if player_id not in self.players_clubs:
+                self.players_clubs[player_id] = []
+            if clubs[club_id] not in self.players_clubs[player_id]:
+                self.players_clubs[player_id].append(clubs[club_id])
         return qs
 
 

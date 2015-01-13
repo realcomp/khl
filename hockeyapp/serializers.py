@@ -79,7 +79,8 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
     birth_date = serializers.SerializerMethodField()
     birth_date_short = serializers.SerializerMethodField()
     khl_url = serializers.SerializerMethodField()
-    last_clubs = PlayerClubSerializer(many=True)
+    # last_clubs = PlayerClubSerializer(many=True)
+    last_clubs = serializers.SerializerMethodField()
     url = serializers.ReadOnlyField(source='get_absolute_url')
     citizenship = CountrySerializer()
 
@@ -94,6 +95,11 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
 
     def get_khl_url(self, obj):
         return 'http://www.khl.ru/players/%s/' % obj.khl_id
+
+    def get_last_clubs(self, obj):
+        players_clubs = getattr(self.context['view'], 'players_clubs', {})
+        return PlayerClubSerializer(
+            players_clubs.get(obj.pk), many=True, context=self.context).data
 
     class Meta(object):
         fields = (
