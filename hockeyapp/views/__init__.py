@@ -57,7 +57,7 @@ class PlayersSearch(TemplateView):
         context['countries'] = CountrySerializer(
             Country.objects.all(), many=True, context=context).data
         context['russia'] = CountrySerializer(
-            Country.objects.filter(ru_title=b'Россия').get(), context=context).data
+            Country.objects.filter(ru_title=b'Россия').last(), context=context).data
         return context
 
 
