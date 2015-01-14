@@ -18,6 +18,11 @@ urlpatterns = patterns('',
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', name='sitemap_xml'),
 )
 
+if 'autocomplete_light' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('',
+        url(r'^autocomplete/', include('autocomplete_light.urls')),
+    )
+
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += patterns('',
         url(r'^rosetta/', include('rosetta.urls')),

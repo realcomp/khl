@@ -3,14 +3,15 @@
 
 {# Additional <head> content here, some extra meta tags or favicon #}
 {% block extrahead %}
-    {% include 'autocomplete_light/static.html' %}
+    {# include 'autocomplete_light/static.html' #}
+    <script src="{% static 'js/jquery-ui.min.js' %}" type="text/javascript"></script>
 {% endblock %}
 
 
 {# Additional CSS includes #}
-{#{% block extrastyle %}#}
-{#  <link rel="stylesheet" type="text/css" href="{% static 'css/my_project.css' %}" media="all">#}
-{#{% endblock %}#}
+{% block extrastyle %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}" media="all">
+{% endblock %}
 
 
 {# Additional JS files in footer, right before </body> #}

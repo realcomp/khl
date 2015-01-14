@@ -1,10 +1,10 @@
-
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
 from daterange_filter.filter import DateRangeFilter
 from relatives.utils import object_link
 
+from base.admin import AutocompleteFieldFilter, SimpleRangeFilter
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
 
@@ -87,7 +87,11 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url',
     )
-    list_filter = ( 'khl_id', 'ru_fio', 'line', 'weight', 'height',
+    list_filter = ( ('khl_id', AutocompleteFieldFilter), 
+                    ('ru_fio', AutocompleteFieldFilter),
+                    'line', 
+                    ('weight', SimpleRangeFilter),
+                    ('height', SimpleRangeFilter),
                     ('birth_date', DateRangeFilter),
     )
 admin.site.register(Player, PlayerAdmin)

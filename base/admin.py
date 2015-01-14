@@ -4,8 +4,12 @@ from __future__ import unicode_literals
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin.utils import reverse_field_path
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
+#import autocomplete_light
+from django_select2.fields import Select2ChoiceField
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from suit.admin import SortableModelAdmin
 from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget
@@ -99,3 +103,59 @@ class TabularInlineReadOnly(NoActionMixin, BaseMixin, admin.TabularInline):
     extra=0
     max_num=0
     can_delete=False
+
+
+class AutocompleteFieldFilter(admin.filters.ChoicesFieldListFilter):
+    template = 'admin/autocomplete_filter.html'
+
+
+class FromToForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        field_name = kwargs.pop('field_name')
+        placeholder = kwargs.pop('placeholder', field_name)
+        super(FromToForm, self).__init__(*args, **kwargs)
+        widget = forms.widgets.TextInput
+        placeholder_from = '{} {}'.format(placeholder, _('From'))
+        self.fields['%s__gte' % field_name] = forms.CharField(
+                label='',
+                widget = widget(attrs={'placeholder': placeholder_from}),
+                required=False)
+        placeholder_to = '{} {}'.format(placeholder, _('To'))
+        self.fields['%s__lte' % field_name] = forms.CharField(
+                label='',
+                widget = widget(attrs={'placeholder': placeholder_to}),
+                required=False)
+
+
+class SimpleRangeFilter(admin.filters.FieldListFilter):
+    template = 'admin/simplerange_filter.html'
+
+    def __init__(self, field, request, params, model, model_admin, field_path):
+        self.lookup_kwarg_since = '%s__gte' % field_path
+        self.lookup_kwarg_upto = '%s__lte' % field_path
+        super(SimpleRangeFilter, self).__init__(
+            field, request, params, model, model_admin, field_path)
+        self.placeholder = self.title
+        self.form = self.get_form(request)
+
+    def choices(self, cl):
+        return []
+
+    def expected_parameters(self):
+        return [self.lookup_kwarg_since, self.lookup_kwarg_upto]
+
+    def get_form(self, request):
+        return FromToForm(  data=self.used_parameters,
+                            field_name=self.field_path,
+                            placeholder=self.placeholder
+        )
+
+    def queryset(self, request, queryset):
+        if self.form.is_valid():
+            # get no null params
+            filter_params = dict(filter(lambda x: bool(x[1]),
+                                        self.form.cleaned_data.items()))
+            return queryset.filter(**filter_params)
+        else:
+            return queryset
+admin.filters.FieldListFilter.register( lambda f: True, SimpleRangeFilter)
