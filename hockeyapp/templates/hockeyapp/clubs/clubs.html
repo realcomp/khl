@@ -22,8 +22,10 @@
             <div class="page-inner-container">
                 <form id="ClubListForm" action="{% url 'hockeyapp:club-list-api' %}">
                 <div class="clubs-tabs">
+                    <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
                     <div class="ui grid">
                         <div class="row">
+                            {% verbatim %}
                             <div class="column">
                                 <div class="ui tabular menu content-tabs">
                                     <span class="heading">Все клубы </span>
@@ -37,66 +39,39 @@
                                         </div>
                                     </div>
                                     <ul>
-                                        <li><a href="#clubs-all" class="item" data-tab="clubs-all">ВСЕ</a></li>
-                                        <li><a href="#clubs-chl" class="item" data-tab="clubs-chl">КХЛ</a></li>
-                                        <li><a href="#clubs-nhl" class="item" data-tab="clubs-nhl">НХЛ</a></li>
-                                        <li><a href="#clubs-vhl" class="item" data-tab="clubs-vhl">ВХЛ</a></li>
-                                        <li><a href="#clubs-mhl" class="item" data-tab="clubs-mhl">МХЛ</a></li>
-                                        <li><a href="#clubs-mhla" class="item" data-tab="clubs-mhla">МХЛ-А</a></li>
+                                        <li class="ui-state-default ui-corner-top"
+                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.league_selected == null }">
+                                            <a href="#clubs-all" class="item" data-tab="clubs-all"
+                                               ng-click="ClubListCtrl.league_selected = null">ВСЕ</a>
+                                        </li>
+                                        <li class="ui-state-default ui-corner-top"
+                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.league_selected == league.pk }"
+                                            ng-repeat="league in ClubListCtrl.getLeagues(ClubListCtrl.countries, [ClubListCtrl.countries_selected])"
+                                            role="tab" tabindex="{{ league.pk }}">
+                                            <a href="#clubs-{{ league.pk }}" class="item"
+                                               data-tab="clubs-{{ league.pk }}"
+                                               ng-click="ClubListCtrl.league_selected = league.pk">{{ league.title }}</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
+                            {% endverbatim %}
                         </div>
                         <div class="row">
                             <div class="four wide column">
+                                {% verbatim %}
                                 <ul class="options-list clubs-countries-menu-list">
-                                    <li class="option-item">
-                                        <a href="#" class="option-link option-link_active">Россия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">США</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Франция</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Бельгия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Германия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Норвегия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Финляндия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Великобритания</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">США</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Франция</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Бельгия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Германия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Норвегия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Финляндия</a>
-                                    </li>
-                                    <li class="option-item">
-                                        <a href="#" class="option-link">Великобритания</a>
+                                    <li class="option-item" ng-repeat="country in ClubListCtrl.countries">
+                                        <label href="#" class="option-link"
+                                               ng-class="{ 'option-link_active':ClubListCtrl.countries_selected == country.pk }">
+                                            {{ country.title }}
+                                            <input class="hidden" type="radio" value="{{ country.pk }}"
+                                                   ng-model="ClubListCtrl.countries_selected" />
+                                        </label>
                                     </li>
                                 </ul>
                                 <a href="#" class="show-clubs-countries-menu-btn">полный список <i class="triangle down icon"></i></a>
+                                {% endverbatim %}
                             </div>
                             <div class="twelve wide column">
                                 {% for club_type in club_types %}
