@@ -105,9 +105,9 @@ class TabularInlineReadOnly(NoActionMixin, BaseMixin, admin.TabularInline):
     can_delete=False
 
 
-class AutocompleteFieldFilter(admin.filters.ChoicesFieldListFilter):
+class AutocompleteFieldFilter(admin.filters.AllValuesFieldListFilter):
     template = 'admin/autocomplete_filter.html'
-
+admin.filters.FieldListFilter.register( lambda f: True, AutocompleteFieldFilter)
 
 class FromToForm(forms.Form):
     def __init__(self, *args, **kwargs):
