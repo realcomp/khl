@@ -19,7 +19,6 @@ ALLOWED_HOSTS = [
 ]
 
 INSTALLED_APPS = (
-    'autocomplete_light',
     'suit',
     'autocomplete_light',
     'django.contrib.admin',
