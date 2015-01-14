@@ -23,13 +23,16 @@
     };
 
     var getCountries = function($http) {
-        return  function() {
+        return function() {
             var self = this,
             url = $('#LeagueListLink').attr('href');
             if (url) {
                 $http.get(url)
                 .success(function(data) {
                     self.countries = data;
+                    if (self.countries.length) {
+                        self.countries_selected = self.countries[0].pk;
+                    }
                 });
             }
         };
@@ -183,7 +186,7 @@
         this.order_by_reversed = false;
         this.loader = false;
         this.countries = {};
-        this.countries_selected = 2;
+        this.countries_selected = [];
         this.leagues_selected = '';
 
         $scope.resetLeaguesSelected = function(e) {

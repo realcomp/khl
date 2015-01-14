@@ -4758,6 +4758,3 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     background-color: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
-[type=radio]:checked ~ label.option-link {
-    background: #ff0000;
-}
