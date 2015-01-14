@@ -175,7 +175,7 @@
         this.search();
     }]);
 
-    app.controller('ClubListController', ['$http', function($http) {
+    app.controller('ClubListController', ['$http', '$scope', function($http, $scope) {
         var self = this,
         url = $('#ClubListForm').attr('action');
         this.data = {};
@@ -184,6 +184,11 @@
         this.loader = false;
         this.countries = {};
         this.countries_selected = 2;
+        this.leagues_selected = '';
+
+        $scope.resetLeaguesSelected = function(e) {
+            self.leagues_selected = '';
+        };
 
         this.getCountries = getCountries($http);
         this.getLeagues = getLeagues;

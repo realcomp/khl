@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -25,7 +26,6 @@
                     <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
                     <div class="ui grid">
                         <div class="row">
-                            {% verbatim %}
                             <div class="column">
                                 <div class="ui tabular menu content-tabs">
                                     <span class="heading">Все клубы </span>
@@ -40,30 +40,36 @@
                                     </div>
                                     <ul>
                                         <li class="ui-state-default ui-corner-top"
-                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.league_selected == null }">
-                                            <a href="#clubs-all" class="item" data-tab="clubs-all"
-                                               ng-click="ClubListCtrl.league_selected = null">ВСЕ</a>
+                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.leagues_selected == '' }">
+                                            <label class="item">
+                                                <input id="clubs-all" class="hidden" type="radio" value=""
+                                                       ng-model="ClubListCtrl.leagues_selected" />
+                                                {% trans 'ALL' %}
+                                            </label>
                                         </li>
+                                        {% verbatim %}
                                         <li class="ui-state-default ui-corner-top"
-                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.league_selected == league.pk }"
-                                            ng-repeat="league in ClubListCtrl.getLeagues(ClubListCtrl.countries, [ClubListCtrl.countries_selected])"
-                                            role="tab" tabindex="{{ league.pk }}">
-                                            <a href="#clubs-{{ league.pk }}" class="item"
-                                               data-tab="clubs-{{ league.pk }}"
-                                               ng-click="ClubListCtrl.league_selected = league.pk">{{ league.title }}</a>
+                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.leagues_selected == league.pk }"
+                                            ng-repeat="league in ClubListCtrl.getLeagues(ClubListCtrl.countries, [ClubListCtrl.countries_selected])">
+                                            <label class="item">
+                                                <input class="hidden" type="radio" value="{{ league.pk }}"
+                                                       ng-model="ClubListCtrl.leagues_selected" />
+                                                {{ league.title }}
+                                            </label>
                                         </li>
+                                        {% endverbatim %}
                                     </ul>
                                 </div>
                             </div>
-                            {% endverbatim %}
                         </div>
                         <div class="row">
                             <div class="four wide column">
                                 {% verbatim %}
                                 <ul class="options-list clubs-countries-menu-list">
                                     <li class="option-item" ng-repeat="country in ClubListCtrl.countries">
-                                        <label href="#" class="option-link"
-                                               ng-class="{ 'option-link_active':ClubListCtrl.countries_selected == country.pk }">
+                                        <label class="option-link"
+                                               ng-class="{ 'option-link_active':ClubListCtrl.countries_selected == country.pk }"
+                                               onclick="angular.element(this).scope().resetLeaguesSelected(this)">
                                             {{ country.title }}
                                             <input class="hidden" type="radio" value="{{ country.pk }}"
                                                    ng-model="ClubListCtrl.countries_selected" />
@@ -74,8 +80,7 @@
                                 {% endverbatim %}
                             </div>
                             <div class="twelve wide column">
-                                {% for club_type in club_types %}
-                                <table class="ui celled table segment clubs-table tab" id="{{ club_type }}" data-tab="{{ club_type }}">
+                                <table class="ui celled table segment clubs-table">
                                     <thead>
                                         <tr>
                                             <th width="160" ng-class="{ 'column-sort':ClubListCtrl.order_by == '%s_title' }">
@@ -96,8 +101,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {# test only, will be replaced with real filters #}
-                                        {% if club_type == "clubs-all" or club_type == "clubs-chl" %}
                                         {% verbatim %}
                                         <tr ng-repeat="club in ClubListCtrl.data.results">
                                             <td>
@@ -112,10 +115,8 @@
                                             <td><a href="#">{{ club.coach.fio }}</a></td>
                                         </tr>
                                         {% endverbatim %}
-                                        {% endif %}
                                     </tbody>
                                 </table>
-                                {% endfor %}
                                 <div style="text-align: center">
                                     <img src="{{ STATIC_URL }}images/loader-large.gif"
                                          ng-show="ClubListCtrl.loader">
