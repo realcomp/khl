@@ -6,7 +6,7 @@
         var $this = $("input[name={{ field_name }}]");
         $this.autocomplete({ source: data });
         $this.change(function() {
-            $("select[data-name={{ field_name }}] > option[value=" + $this.val() + "]").attr("selected",true);
+            $("select[data-name={{ field_name }}] > option[value='" + $this.val() + "']").attr("selected",true);
         });
     });
 </script>
