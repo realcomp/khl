@@ -49,7 +49,7 @@
                             <div class="column-title">Лига:</div>
                             <select name="league" id="players-search-league" class="select players-search-select" multiple="multiple" size="8">
                                 <option value="{{ league.pk }}"
-                                        ng-repeat="league in PlayersSearchCtrl.getLeagues(PlayersSearchCtrl.countries_selected)">
+                                        ng-repeat="league in PlayersSearchCtrl.getLeagues(PlayersSearchCtrl.countries, PlayersSearchCtrl.countries_selected)">
                                     {{ league.title }}
                                 </option>
                             </select>

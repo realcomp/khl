@@ -22,6 +22,32 @@
         };
     };
 
+    var getCountries = function($http) {
+        return  function() {
+            var self = this,
+            url = $('#LeagueListLink').attr('href');
+            if (url) {
+                $http.get(url)
+                .success(function(data) {
+                    self.countries = data;
+                });
+            }
+        };
+    };
+
+    var getLeagues = function(countries, countries_selected) {
+        result = [];
+        $.each(countries_selected, function() {
+            var pk = this;
+            $.each(countries, function() {
+                if (this.pk == pk) {
+                    result = result.concat(this.league_set);
+                }
+            });
+        });
+        return result;
+    };
+
     app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
         var self = this;
 
@@ -119,34 +145,8 @@
             block.children('.player-avatar-block-popup').show();
         };
 
-        $scope.hidePopup = function(e) {
-            $(e).hide();
-        };
-
-        this.getCountries = function() {
-            var self = this,
-            url = $('#LeagueListLink').attr('href');
-            if (url) {
-                $http.get(url)
-                .success(function(data) {
-                    self.countries = data;
-                });
-            }
-        };
-
-        this.getLeagues = function(countries_selected) {
-            var self = this,
-            result = [];
-            $.each(countries_selected, function() {
-                var pk = this;
-                $.each(self.countries, function() {
-                    if (this.pk == pk) {
-                        result = result.concat(this.league_set);
-                    }
-                });
-            });
-            return result;
-        };
+        this.getCountries = getCountries($http);
+        this.getLeagues = getLeagues;
 
         this.search = function(order_by) {
             var self = this,
@@ -182,6 +182,11 @@
         this.order_by = '%s_title';
         this.order_by_reversed = false;
         this.loader = false;
+        this.countries = {};
+        this.countries_selected = 2;
+
+        this.getCountries = getCountries($http);
+        this.getLeagues = getLeagues;
 
         this.list = function(order_by) {
             var self = this,
@@ -206,6 +211,7 @@
 
         this.next = next($http);
 
+        this.getCountries();
         this.list();
     }]);
 
