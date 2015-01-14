@@ -107,7 +107,7 @@ class TabularInlineReadOnly(NoActionMixin, BaseMixin, admin.TabularInline):
 
 class AutocompleteFieldFilter(admin.filters.AllValuesFieldListFilter):
     template = 'admin/autocomplete_filter.html'
-admin.filters.FieldListFilter.register( lambda f: True, AutocompleteFieldFilter)
+
 
 class FromToForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -158,4 +158,4 @@ class SimpleRangeFilter(admin.filters.FieldListFilter):
             return queryset.filter(**filter_params)
         else:
             return queryset
-admin.filters.FieldListFilter.register( lambda f: True, SimpleRangeFilter)
+#admin.filters.FieldListFilter.register( lambda f: True, SimpleRangeFilter)

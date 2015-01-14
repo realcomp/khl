@@ -1,17 +1,26 @@
 {% load i18n %}
-<input data-name="{{ field_name }}" type="text" placeholder="{{ title|capfirst }}" name="{{ field_name }}" class="auto-width search-filter{% if spec.lookup_val or spec.used_parameters %} active{% endif %}">
+<input type="text" placeholder="{{ title|capfirst }}" data-name="{{ field_name }}">
+<ul data-name="{{ field_name }}" style="display:none;">
+  {% for choice in choices %}
+  <li data-value="{{choice.val}}"><a href="{{choice.query_string}}"></a></li>
+  {% endfor %}
+</ul>
 <script type="text/javascript">
     jQuery(document).ready(function($) {
         var data = [{% for choice in choices  %}"{{choice.val}}",{% endfor %}]
-        var $this = $("input[name={{ field_name }}]");
+        var value = {% for choice in choices  %}{% if choice.selected%}"{{choice.val}}"{%endif%}{% endfor %}
+        var $this = $("input[data-name={{ field_name }}]");
+        $this.val(value);
         $this.autocomplete({ source: data });
         $this.change(function() {
-            $("select[data-name={{ field_name }}] > option[value='" + $this.val() + "']").attr("selected",true);
+          window.location = $("ul[data-name='{{ field_name }}'] > li[data-value='"+$this.val()+"'] > a").attr('href');
         });
     });
 </script>
+{% comment %}
 <select data-name="{{ field_name }}" class="auto-width search-filter{% if spec.lookup_val or spec.used_parameters %} active{% endif %}" style="display:none;">
   {% for choice in choices %}
       <option{% if choice.additional %} data-additional="{{ choice.additional }}"{% endif %} data-name="{{ choice.name }}" value="{{ choice.val }}" {{ choice.selected|yesno:' selected="selected",' }}>{% if choice.selected %}{{ title|capfirst }}: {% endif %}{{ choice.display }}</option>
   {% endfor %}
 </select>
+{% endcomment %}
