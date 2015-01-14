@@ -4747,5 +4747,14 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     text-decoration: underline;
 }
 .clubs-page .clubs-table th.column-sort {
-  background: #378331;
+    background: #378331;
+}
+.player-avatar-block-popup {
+    position: absolute;
+    z-index: 9999;
+    color: #000000;
+    /* font-size:10px; */
+    width: 500px;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }

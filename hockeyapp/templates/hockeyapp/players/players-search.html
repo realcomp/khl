@@ -241,14 +241,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% verbatim %}
                                     <tr ng-repeat="player in PlayersSearchCtrl.data.results">
                                         <td>
-                                            {{ $index + 1 }}
+                                            {% verbatim %}
+                                                {{ $index + 1 }}
+                                            {% endverbatim %}
                                         </td>
                                         <td>
                                             <div class="player-avatar-block">
-                                                <a href="{{ player.url }}"><img ng-src="{{ player.photo }}" width="30" alt="" class="player-avatar"></a>
+                                                <div class="player-avatar-block-popup" style="display: none;"
+                                                     onmouseout="$(this).hide()">
+                                                    {% include 'hockeyapp/players/players-search-popup.html' %}
+                                                </div>
+                                                {% verbatim %}
+                                                <a href="{{ player.url }}"><img ng-src="{{ player.photo }}" width="30" alt="" class="player-avatar"
+                                                                                onmouseenter="angular.element(this).scope().showPopup(this)"></a>
                                                 <div class="player-info">
                                                     <span class="player-name">
                                                         <a href="{{ player.url }}">{{ player.fio }}</a>
@@ -256,8 +263,10 @@
                                                     <span class="player-name">{{ player.line|lowercase }}</span>
                                                     <span class="player-country">{{ player.citizenship.title }}</span>
                                                 </div>
+                                                {% endverbatim %}
                                             </div>
                                         </td>
+                                        {% verbatim %}
                                         <td>
                                             <a href="{{ player.last_clubs[0].url }}" class="club-link"
                                                ng-show="player.last_clubs.length > 0">
@@ -294,8 +303,8 @@
                                         </td>
                                         <td align="center">2837</td>
                                         <td align="center">3274</td>
+                                        {% endverbatim %}
                                     </tr>
-                                    {% endverbatim %}
                                 </tbody>
                             </table>
                             <div style="text-align: center">

@@ -114,6 +114,15 @@
             }
         };
 
+        $scope.showPopup = function(e) {
+            var block = $(e).closest('.player-avatar-block');
+            block.children('.player-avatar-block-popup').show();
+        };
+
+        $scope.hidePopup = function(e) {
+            $(e).hide();
+        };
+
         this.getCountries = function() {
             var self = this,
             url = $('#LeagueListLink').attr('href');
