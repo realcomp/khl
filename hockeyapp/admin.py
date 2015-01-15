@@ -135,8 +135,12 @@ class ArenaPhotosInline(admin.TabularInline):
     model = ArenaPhotos
     extra=0
 
-class ArenaAdmin(BaseAdmin):
+class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (ArenaPhotosInline,)
+    list_filter = ('ru_title', 'country', 'league',
+                    ('capacity', SimpleRangeFilter),
+    )
+    list_display = ('ru_title', 'country', 'league', 'capacity')
 admin.site.register(Arena, ArenaAdmin)
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)

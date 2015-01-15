@@ -80,8 +80,9 @@ class ArenaInfo(GrabParser):
 
     def get_capacity(self):
         b''' Вместимость арены клуба '''
-        _value = self._get_strip_value('capacity').split(':')[1].strip()
-        return str2int_safe(_value.split(b'зрителей')[0].replace(' ', ''))
+        _value = self._get_strip_value('capacity'
+                    ).split(':')[1].strip().encode('utf-8')
+        return str2int_safe(_value.split(b'зрител')[0].replace(' ', ''))
 
 
 class ClubInfo(GrabParser):
