@@ -143,6 +143,19 @@
             }
         };
 
+        $scope.contractCheck = function(e) {
+            var isAll = $(e).attr('value') === '',
+            uncheck = function() {
+                if ((isAll && $(this).attr('value') !== '') ||
+                    (!isAll && $(this).attr('value') === '')) {
+                    $(this).attr('checked', false);
+                }
+            };
+            if ($(e).is(':checked')) {
+                $('input[name="contract"]').each(uncheck);
+            }
+        };
+
         $scope.showPopup = function(e) {
             var block = $(e).closest('.player-avatar-block');
             block.children('.player-avatar-block-popup').show();

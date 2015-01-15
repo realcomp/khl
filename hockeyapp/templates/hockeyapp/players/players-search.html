@@ -129,25 +129,29 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="contract" value="" checked="checked"
+                                               onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="contract" value="limited"
+                                               onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>ограниченно свободный агент</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="contract" value="unlimited"
+                                               onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>неограниченно свободный агент</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox">
+                                        <input type="checkbox" name="contract" value="junior"
+                                               onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>юниор</label>
                                     </div>
                                 </div>
