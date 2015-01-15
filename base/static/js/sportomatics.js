@@ -189,6 +189,12 @@
         this.countries_selected = [];
         this.leagues_selected = '';
 
+        $scope.setSeason = function(e) {
+            // turn missing braces back
+            $(e).attr('value', '[' + $(e).val() + ']');
+            self.list();
+        };
+
         this.getCountries = getCountries($http);
         this.getLeagues = getLeagues;
 

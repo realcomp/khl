@@ -9,6 +9,7 @@ from ..serializers import (
     CountrySerializer, ClubSerializer, PlayerCardSerializer,
 )
 from ..models import Club, Player
+from ..utils import get_season_end_date
 
 
 class Index(TemplateView):
@@ -106,10 +107,10 @@ class ClubListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
+        year = get_season_end_date().year
         context.update({
-            'club_types': (
-                'clubs-all', 'clubs-chl', 'clubs-nhl', 'clubs-vhl',
-                'clubs-mhl', 'clubs-mhla'),
+            'seasons': map(
+                lambda x: (x - 1, x), range(year, year - 10, -1)),
         })
         return context
 

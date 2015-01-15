@@ -102,21 +102,30 @@ class ClubList(PaginationMixin, generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(ClubList, self).filter_queryset(qs)
+
         if 'order_by' in self.request.GET:
             field = self.request.GET['order_by']
             if '%s' in field:
                 field = field % self.request.LANGUAGE_CODE
             qs = qs.order_by(field)
+
         country = Country.objects.filter(ru_title=b'Россия').last()
         if 'country' in self.request.GET:
             country = get_object_or_404(
                 Country, pk=self.request.GET['country'])
         if country:
-            qs = qs.filter(leagueclub__league__country_id=country)
+            qs = qs.filter(leagueclub__league__country_id=country).distinct()
+
         if 'league' in self.request.GET:
             league = self.request.GET['league']
             if league:
-                qs = qs.filter(leagueclub__league_id=league)
+                qs = qs.filter(leagueclub__league_id=league).distinct()
+
+        if 'season' in self.request.GET:
+            season = self.request.GET['season']
+            if season:
+                qs = qs.by_season(json.loads(season)).distinct()
+
         return qs
 
 

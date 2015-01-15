@@ -148,7 +148,7 @@ class League(TitleBaseModel):
 
 
 class Club(TitleBaseModel):
-    objects = managers.club.ClubManager()
+    objects = managers.club.ClubQuerySet.as_manager()
     opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
     closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
     logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True,
