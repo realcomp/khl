@@ -4,12 +4,12 @@ from __future__ import unicode_literals
 from django import forms
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.admin.utils import reverse_field_path
+#from django.contrib.admin.utils import reverse_field_path
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 #import autocomplete_light
-from django_select2.fields import Select2ChoiceField
+#from django_select2.fields import Select2ChoiceField
 from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from suit.admin import SortableModelAdmin
 from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget

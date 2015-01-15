@@ -112,11 +112,15 @@ class Judge(AbstractMan):
 
 class Arena(TitleBaseModel):
     objects = managers.arena.ArenaManager()
-    capacity = models.CharField(_('Capacity'), max_length=1024, blank=True)
+    capacity = models.PositiveIntegerField(_('Capacity'), null=True)
+    capacity_str = models.CharField(_('Capacity'), max_length=1024, blank=True)
     site = models.URLField(_('Site'), blank=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     tickets_url = models.URLField(_('Tickets'), blank=True)
-    photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+    photo = FilerImageField(verbose_name=_('Main photo'), null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True,
+                                verbose_name=Country._meta.verbose_name,)
+    league = models.ForeignKey('League', null=True, blank=True)
 
     def get_absolute_url(self):
         if self.pk:
@@ -126,6 +130,11 @@ class Arena(TitleBaseModel):
     class Meta:
         verbose_name=_('Arena')
         verbose_name_plural=_('Arenas')
+
+
+class ArenaPhotos(models.Model):
+    photo = FilerImageField(verbose_name=_('Photo'))
+    arena = models.ForeignKey(Arena, verbose_name=Arena._meta.verbose_name)
 
 
 class League(TitleBaseModel):

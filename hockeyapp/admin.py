@@ -11,7 +11,7 @@ from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
-from .models import League, LeagueClub, PlayerCitizenship
+from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -127,8 +127,17 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Arena, Judge, League, AddressClub, LeagueClub, CoachClub,):
+for model in (Judge, League, AddressClub, LeagueClub, CoachClub,):
     admin.site.register(model, BaseAdmin)
+
+
+class ArenaPhotosInline(admin.TabularInline):
+    model = ArenaPhotos
+    extra=0
+
+class ArenaAdmin(BaseAdmin):
+    inlines = (ArenaPhotosInline,)
+admin.site.register(Arena, ArenaAdmin)
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
 

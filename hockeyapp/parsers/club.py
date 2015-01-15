@@ -6,6 +6,8 @@ import datetime
 
 from django.db.models.loading import get_model
 
+from base.utils import str2int_safe
+
 from .. import defaults
 
 from . import GrabParser
@@ -78,7 +80,8 @@ class ArenaInfo(GrabParser):
 
     def get_capacity(self):
         b''' Вместимость арены клуба '''
-        return self._get_strip_value('capacity').split(':')[1].strip()
+        _value = self._get_strip_value('capacity').split(':')[1].strip()
+        return str2int_safe(_value.split(b'зрителей')[0].replace(' ', ''))
 
 
 class ClubInfo(GrabParser):
