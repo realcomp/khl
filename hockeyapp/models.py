@@ -20,6 +20,7 @@ class AbstractMan(models.Model):
     birth_date = models.DateField(_('Birth date'), null=True, blank=True)
     death_date = models.DateField(_('Death date'), null=True, blank=True)
     wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
+    khl_id = models.PositiveIntegerField(default=0, null=True)
     __unicode__ = lambda self: self.ru_fio
     class Meta:
         abstract=True
@@ -27,7 +28,6 @@ class AbstractMan(models.Model):
 
 class Player(AbstractMan):
     objects = managers.player.PlayerQuerySet.as_manager()
-    khl_id = models.PositiveIntegerField(default=0)
     contract_type = models.CharField(_('Contract type'),
                                         choices=CONTRACT_TYPE,
                                             max_length=32, blank=True)
