@@ -114,6 +114,8 @@ class Arena(TitleBaseModel):
     objects = managers.arena.ArenaManager()
     capacity = models.PositiveIntegerField(_('Capacity'), null=True)
     capacity_str = models.CharField(_('Capacity'), max_length=1024, blank=True)
+    coords = models.CharField(_('Latitude and Longitude'),
+                                max_length=1024, blank=True)
     site = models.URLField(_('Site'), blank=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     tickets_url = models.URLField(_('Tickets'), blank=True)
