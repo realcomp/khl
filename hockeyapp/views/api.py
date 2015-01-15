@@ -107,6 +107,16 @@ class ClubList(PaginationMixin, generics.ListAPIView):
             if '%s' in field:
                 field = field % self.request.LANGUAGE_CODE
             qs = qs.order_by(field)
+        country = Country.objects.filter(ru_title=b'Россия').last()
+        if 'country' in self.request.GET:
+            country = get_object_or_404(
+                Country, pk=self.request.GET['country'])
+        if country:
+            qs = qs.filter(leagueclub__league__country_id=country)
+        if 'league' in self.request.GET:
+            league = self.request.GET['league']
+            if league:
+                qs = qs.filter(leagueclub__league_id=league)
         return qs
 
 

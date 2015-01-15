@@ -189,12 +189,13 @@
         this.countries_selected = [];
         this.leagues_selected = '';
 
-        $scope.resetLeaguesSelected = function(e) {
-            self.leagues_selected = '';
-        };
-
         this.getCountries = getCountries($http);
         this.getLeagues = getLeagues;
+
+        this.setCountry = function() {
+            this.leagues_selected = '';
+            this.list();
+        };
 
         this.list = function(order_by) {
             var self = this,
@@ -207,7 +208,8 @@
                 }
                 self.order_by = order_by;
             }
-            params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
+            params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by +
+                '&league=' + self.leagues_selected;
             self.data = {};
             self.loader = true;
             $http.get(url + '?' + params)

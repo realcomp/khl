@@ -42,7 +42,7 @@
                                         <li class="ui-state-default ui-corner-top"
                                             ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.leagues_selected == '' }">
                                             <label class="item">
-                                                <input id="clubs-all" class="hidden" name="league" type="radio" value=""
+                                                <input id="clubs-all" class="hidden" type="radio" value=""
                                                        ng-model="ClubListCtrl.leagues_selected"
                                                        ng-change="ClubListCtrl.list()" />
                                                 {% trans 'ALL' %}
@@ -53,7 +53,7 @@
                                             ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.leagues_selected == league.pk }"
                                             ng-repeat="league in ClubListCtrl.getLeagues(ClubListCtrl.countries, [ClubListCtrl.countries_selected])">
                                             <label class="item">
-                                                <input class="hidden" type="radio" name="league" value="{{ league.pk }}"
+                                                <input class="hidden" type="radio" value="{{ league.pk }}"
                                                        ng-model="ClubListCtrl.leagues_selected"
                                                        ng-change="ClubListCtrl.list()" />
                                                 {{ league.title }}
@@ -70,12 +70,11 @@
                                 <ul class="options-list clubs-countries-menu-list">
                                     <li class="option-item" ng-repeat="country in ClubListCtrl.countries">
                                         <label class="option-link"
-                                               ng-class="{ 'option-link_active':ClubListCtrl.countries_selected == country.pk }"
-                                               onclick="angular.element(this).scope().resetLeaguesSelected(this)">
+                                               ng-class="{ 'option-link_active':ClubListCtrl.countries_selected == country.pk }">
                                             {{ country.title }}
                                             <input class="hidden" type="radio" name="country" value="{{ country.pk }}"
                                                    ng-model="ClubListCtrl.countries_selected"
-                                                   ng-change="ClubListCtrl.list()" />
+                                                   ng-change="ClubListCtrl.setCountry()" />
                                         </label>
                                     </li>
                                 </ul>
