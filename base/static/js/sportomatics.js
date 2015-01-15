@@ -104,7 +104,16 @@
     }]);
 
     app.controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
-        var url = $('#PlayersSearchForm').attr('action');
+        var url = $('#PlayersSearchForm').attr('action'),
+        getUnchecker = function(isDefault, defaultValue) {
+            return function() {
+                if ((isDefault && $(this).attr('value') !== defaultValue) ||
+                    (!isDefault && $(this).attr('value') === defaultValue)) {
+                    $(this).attr('checked', false);
+                }
+            };
+        };
+
         this.data = {};
         this.order_by = '%s_fio';
         this.order_by_reversed = false;
@@ -117,42 +126,26 @@
         };
 
         $scope.lineCheck = function(e) {
-            var isAll = $(e).attr('value') === '[0,1,2,3]',
-            uncheck = function() {
-                if ((isAll && $(this).attr('value') !== '[0,1,2,3]') ||
-                    (!isAll && $(this).attr('value') === '[0,1,2,3]')) {
-                    $(this).attr('checked', false);
-                }
-            };
+            var defaultValue = '[0,1,2,3]',
+            isDefault;
+            isDefault = $(e).attr('value') === defaultValue;
             if ($(e).is(':checked')) {
-                $('input[name="line"]').each(uncheck);
+                $('input[name="line"]').each(getUnchecker(isDefault, defaultValue));
             }
         };
 
         $scope.citizenshipCheck = function(e) {
-            var isAll = $(e).attr('name') === 'citizenship' && $(e).attr('value') === '',
-            uncheck = function() {
-                if ((isAll && $(this).attr('value') !== '') ||
-                    (!isAll && $(this).attr('value') === '')) {
-                    $(this).attr('checked', false);
-                }
-            };
+            var isDefault = $(e).attr('name') === 'citizenship' && $(e).attr('value') === '';
             if ($(e).is(':checked')) {
-                $('input[name="citizenship"]').each(uncheck);
-                $('input[name="citizenship_other_active"]').each(uncheck);
+                $('input[name="citizenship"]').each(getUnchecker(isDefault, ''));
+                $('input[name="citizenship_other_active"]').each(getUnchecker(isDefault, ''));
             }
         };
 
         $scope.contractCheck = function(e) {
-            var isAll = $(e).attr('value') === '',
-            uncheck = function() {
-                if ((isAll && $(this).attr('value') !== '') ||
-                    (!isAll && $(this).attr('value') === '')) {
-                    $(this).attr('checked', false);
-                }
-            };
+            var isDefault = $(e).attr('value') === '';
             if ($(e).is(':checked')) {
-                $('input[name="contract"]').each(uncheck);
+                $('input[name="contract"]').each(getUnchecker(isDefault, ''));
             }
         };
 
