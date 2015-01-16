@@ -179,10 +179,12 @@ class ClubPlayerMatchInline(TabularInlineReadOnly):
                     )
     fields = readonly_fields
 
-class ClubPlayerAdmin(BaseAdmin):
+class ClubPlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (ClubPlayerMatchInline, )
     linked_readonly_fields = ('player',)
     readonly_fields = linked_readonly_fields
+    list_filter = ('club', 'line', 'number', 'season')
+    list_display = ('id', 'player')+list_filter
 admin.site.register(ClubPlayer, ClubPlayerAdmin)
 
 
