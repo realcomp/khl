@@ -4,16 +4,18 @@ from __future__ import unicode_literals, print_function
 __author__='smirnov.ev'
 
 from django.db import models
+from django.db.models import Q
 from django.db.models.loading import get_model
 
 from .. import parsers
 
 from . import DataCleanMixin
+from ..utils import get_season_start_date, get_season_end_date
 
 CURRENT_APP = __package__.split('.')[0]
 
 
-class ClubManager(DataCleanMixin, models.Manager):
+class ClubQuerySet(DataCleanMixin, models.QuerySet):
     b''' Менеджер клуба '''
     def _get_data(self, url):
         b''' Берем данные со стороннего сайта парсером '''
@@ -50,3 +52,18 @@ class ClubManager(DataCleanMixin, models.Manager):
                     else:
                         _club = self.create(**data)
             return _club
+
+    def by_season(self, season):
+        '''
+        :param season: season years ('2014', '2015')
+        :type season: tuple
+        '''
+        season_start = get_season_start_date(year=season[0])
+        season_end = get_season_end_date(year=season[1])
+        q_start = (
+            Q(leagueclub__start_date__lte=season_start) |
+            Q(leagueclub__start_date__isnull=True))
+        q_end = (
+            Q(leagueclub__end_date__gte=season_end) |
+            Q(leagueclub__end_date__isnull=True))
+        return self.filter(q_start & q_end)

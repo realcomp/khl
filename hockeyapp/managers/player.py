@@ -17,6 +17,7 @@ import filer
 
 from addresses.models import Country
 
+from ..utils import get_season_start_date, get_season_end_date
 from .. import parsers
 
 
@@ -89,13 +90,8 @@ class PlayerQuerySet(models.QuerySet):
         '''
         club_players = club.clubplayer_set
         if season:
-            # october 1
-            # матчи и в сентябре бывают
-            # практический во всех видах спорта сезон начинается 1 июля
-            # и заканчивается 30 июня. РУСЛАН ПОПРАВЬ
-            season_start = datetime.date(year=season[0], month=10, day=1)
-            # april 1
-            season_end = datetime.date(year=season[1], month=4, day=1)
+            season_start = get_season_start_date(year=season[0])
+            season_end = get_season_end_date(year=season[1])
             q_start = Q(start_date__lte=season_start)
             q_end = Q(end_date__gte=season_end) | Q(end_date__isnull=True)
             club_players = club_players.filter(q_start & q_end)
