@@ -12,14 +12,14 @@ from rest_framework import generics
 
 from addresses.models import Country
 
-from .mixins import PaginationMixin
+from .mixins import PaginationMixin, OrderMixin
 from ..serializers import (
     PlayerCardSerializer, ClubListSerializer, MetricsPlayerSerializer,
     CountryLeaguesSerializer)
 from ..models import Club, Player, ClubPlayer
 
 
-class PlayersSearch(PaginationMixin, generics.ListAPIView):
+class PlayersSearch(PaginationMixin, OrderMixin, generics.ListAPIView):
     # permission_classes = permissions.IsAuthenticated,
     serializer_class = PlayerCardSerializer
 
@@ -28,13 +28,14 @@ class PlayersSearch(PaginationMixin, generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(PlayersSearch, self).filter_queryset(qs)
-        club = None
-        citizenship = []
+
         if 'line' in self.request.GET:
             # union of sets
             values = reduce(operator.or_, map(set, map(
                 json.loads, self.request.GET.getlist('line'))))
             qs = qs.filter(line__in=values)
+
+        citizenship = []
         if 'citizenship' in self.request.GET:
             citizenship += filter(
                 None, self.request.GET.getlist('citizenship'))
@@ -44,11 +45,15 @@ class PlayersSearch(PaginationMixin, generics.ListAPIView):
                 None, self.request.GET.getlist('citizenship_other'))
         if citizenship:
             qs = qs.filter(citizenship__in=citizenship)
+
+        club = None
         if 'club' in self.request.GET:
             club = get_object_or_404(Club, pk=self.request.GET['club'])
+
         if 'season' in self.request.GET and club:
             season = json.loads(self.request.GET['season'])
             qs = qs.by_season(club, season)
+
         if 'league' in self.request.GET:
             leagues = self.request.GET.getlist('league')
             # qs = (
@@ -57,11 +62,7 @@ class PlayersSearch(PaginationMixin, generics.ListAPIView):
             #         Q(clubplayer__club__leagueclub__league_id__in=leagues))
             #     .distinct())
             qs = qs.filter(club__leagueclub__league_id__in=leagues)
-        if 'order_by' in self.request.GET:
-            field = self.request.GET['order_by']
-            if '%s' in field:
-                field = field % self.request.LANGUAGE_CODE
-            qs = qs.order_by(field)
+
         # get clubs
         club_players = qs.values_list('id', 'club')
         club_players2 = (
@@ -93,7 +94,7 @@ class LeagueList(generics.ListAPIView):
         return Country.objects.exclude(league__isnull=True)
 
 
-class ClubList(PaginationMixin, generics.ListAPIView):
+class ClubList(PaginationMixin, OrderMixin, generics.ListAPIView):
     # permission_classes = permissions.IsAuthenticated,
     serializer_class = ClubListSerializer
 
@@ -102,12 +103,6 @@ class ClubList(PaginationMixin, generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(ClubList, self).filter_queryset(qs)
-
-        if 'order_by' in self.request.GET:
-            field = self.request.GET['order_by']
-            if '%s' in field:
-                field = field % self.request.LANGUAGE_CODE
-            qs = qs.order_by(field)
 
         country = Country.objects.filter(ru_title=b'Россия').last()
         if 'country' in self.request.GET:

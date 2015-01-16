@@ -237,6 +237,36 @@
         this.list();
     }]);
 
+    app.controller('ClubTeamController', ['$http', '$scope', function($http, $scope) {
+        var url = $('#ClubTeamForm').attr('action'),
+        getUnchecker = function(isDefault, defaultValue) {
+            return function() {
+                if ((isDefault && $(this).attr('value') !== defaultValue) ||
+                    (!isDefault && $(this).attr('value') === defaultValue)) {
+                    $(this).attr('checked', false);
+                }
+            };
+        };
+
+        this.data = {};
+        this.loader = false;
+
+        this.search = function(order_by) {
+            var self = this,
+            params = $('#ClubTeamForm').serialize();
+            params = params + '&order_by=["line","%s_fio"]';
+            self.data = {};
+            self.loader = true;
+            $http.get(url + '?' + params)
+            .success(function(data) {
+                self.data = data;
+                self.loader = false;
+            });
+        };
+
+        this.search();
+    }]);
+
     app.controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {
         var self = this,
         url = $('#MetricsPlayersForm').attr('action');

@@ -1269,8 +1269,8 @@
 
 
                                     <div id="team-tables" data-tab="team-tables"
-                                         ng-controller="PlayersSearchController as PlayersSearchCtrl">
-                                        <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
+                                         ng-controller="ClubTeamController as ClubTeamCtrl">
+                                        <form id="ClubTeamForm" action="{% url 'hockeyapp:players-search-api' %}">
                                         <input type="hidden" name="club" value="{{ pk }}">
                                         <input type="hidden" name="season" value="[2013, 2014]">
                                         <div class="heading">Сезон 2013-2014</div>
@@ -1288,7 +1288,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="player in PlayersSearchCtrl.data.results">
+                                                <tr ng-repeat="player in ClubTeamCtrl.data.results">
                                                     {% verbatim %}
                                                     <td align="center">{{ player.number }}</td>
                                                     <td>{{ player.line }}</td>
