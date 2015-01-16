@@ -76,7 +76,7 @@ admin.site.register(Match, MatchAdmin)
 class ClubPlayerInline(TabularInlineReadOnly):
     model = ClubPlayer
     readonly_fields = ( object_link, 'club', 'number', 'line', 'start_date',
-                        'end_date',)
+                        'end_date', 'season')
 
 class PlayerCitizenshipInline(TabularInlineReadOnly):
     model = PlayerCitizenship
@@ -100,17 +100,17 @@ admin.site.register(Player, PlayerAdmin)
 class CoachClubInline(TabularInlineReadOnly):
     model = CoachClub
     readonly_fields = ( object_link, 'coach', 'club', 'head',
-                        'start_date', 'end_date')
+                        'start_date', 'end_date', 'season')
     fields = readonly_fields
 
 class AddressClubInline(TabularInlineReadOnly):
     model = AddressClub
-    readonly_fields = ( object_link, 'club', 'start_date', 'end_date')
+    readonly_fields = ( object_link, 'club', 'start_date', 'end_date', 'season')
     fields = readonly_fields
 
 class LeagueClubInline(TabularInlineReadOnly):
     model = LeagueClub
-    readonly_fields = ( object_link, 'club', 'start_date', 'end_date')
+    readonly_fields = ( object_link, 'club', 'start_date', 'end_date', 'season')
     fields = readonly_fields
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):

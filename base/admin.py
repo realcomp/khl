@@ -14,6 +14,8 @@ from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from suit.admin import SortableModelAdmin
 from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget
 
+from .models import Season
+
 
 DEFAULT_FORMTABS = (('general', 'General'),)+settings.LANGUAGES
 select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}
@@ -159,3 +161,5 @@ class SimpleRangeFilter(admin.filters.FieldListFilter):
         else:
             return queryset
 #admin.filters.FieldListFilter.register( lambda f: True, SimpleRangeFilter)
+
+admin.site.register(Season, BaseAdmin)

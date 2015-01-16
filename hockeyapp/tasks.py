@@ -1,7 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals, print_function
 import logging
-#import time
+import datetime
 import sys
 
 #from celery.task import periodic_task
@@ -104,5 +104,31 @@ def async_all_cmps_update():
                                             ).values_list('id', flat=True)
         for id in cpms:
             async_temp_stats_plr_update.delay(id)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def add_season_for_all():
+    try:
+        def update_obj(obj):
+            data = dict(
+                start_date=datetime.date(day=1,month=7,year=obj.start_date.year), 
+                end_date=datetime.date(day=30,month=6,year=obj.end_date.year)
+            )
+            season, _crt = models.Season.objects.get_or_create_season(**data)
+            obj.season = season
+            obj.save(update_fields=('season',))
+
+        for obj in models.AddressClub.objects.all():
+            update_obj(obj)
+        for obj in models.LeagueClub.objects.all():
+            update_obj(obj)
+        for obj in models.ClubPlayer.objects.all():
+            update_obj(obj)
+        for obj in models.CoachClub.objects.all():
+            update_obj(obj)
+        for obj in models.LogoClubHistory.objects.all():
+            update_obj(obj)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())

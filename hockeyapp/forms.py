@@ -22,7 +22,7 @@ class ClubleaguesAddForm(forms.ModelForm):
     )
     class Meta:
         model = LeagueClub
-        fields = 'league', 'start_date', 'end_date'
+        fields = 'league', 'season'
         widgets = {
             'league': LinkedSelect2(select2_options=select2_options),
             'start_date': SuitDateWidget,

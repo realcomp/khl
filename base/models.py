@@ -5,6 +5,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from .managers import SeasonManager
+
 
 class LocaleAttrMixin(object):
     def get_locale_attr(self, attr, request=None):
@@ -33,3 +35,9 @@ class TitleBaseModel(models.Model):
     __unicode__ = lambda self: self.ru_title
     class Meta:
         abstract=True
+
+
+class Season(TitleBaseModel):
+    objects = SeasonManager()
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)

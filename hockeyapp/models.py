@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
-from base.models import TitleBaseModel, AdminLinkMixin
+from base.models import TitleBaseModel, AdminLinkMixin, Season
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from . import managers
@@ -209,6 +209,8 @@ class AddressClub(models.Model):
     club = models.ForeignKey(Club)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+    season = models.ForeignKey( Season, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
 
     __unicode__ = lambda self: '{0} ({1})'.format(self.address, self.club)
 
@@ -223,6 +225,8 @@ class LeagueClub(AdminLinkMixin, models.Model):
     club = models.ForeignKey(Club)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+    season = models.ForeignKey( Season, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
     
     __unicode__ = lambda self: '{0} ({1})'.format(self.league, self.club)
     
@@ -240,6 +244,8 @@ class ClubPlayer(models.Model):
                                             choices=PLAYER_ROLE)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+    season = models.ForeignKey( Season, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
 
     __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
 
@@ -255,6 +261,8 @@ class CoachClub(models.Model):
     head = models.BooleanField(_('Head coach'), default=True)
     start_date = models.DateField(_('Start date'), null=True)
     end_date = models.DateField(_('End date'), null=True)
+    season = models.ForeignKey( Season, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
 
     __unicode__ = lambda self: '{0} ({1})'.format(self.coach, self.club)
 
@@ -264,11 +272,13 @@ class CoachClub(models.Model):
 
 
 class LogoClubHistory(models.Model):
-    b''' связка тренер клуб в сезоне '''
+    b''' связка лого клуб в сезоне '''
     club = models.ForeignKey(Club)
     logo = FilerImageField(verbose_name=_('Logo'))
     start_date = models.DateField(_('Start date'), null=True)
     end_date = models.DateField(_('End date'), null=True)
+    season = models.ForeignKey( Season, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
     class Meta:
         verbose_name=_('Logo Club History')
         verbose_name_plural=_('Logo Club Histories')

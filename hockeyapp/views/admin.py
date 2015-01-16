@@ -17,7 +17,11 @@ class ClubleaguesAddView(FormView):
 
     def form_valid(self, form):
         clubs = form.cleaned_data.pop('clubs', list())
+        season = form.cleaned_data['season']
         for club in clubs:
-            LeagueClub.objects.get_or_create(club=club, **form.cleaned_data)
+            LeagueClub.objects.get_or_create(club=club,
+                                             start_date=season.start_date,
+                                             end_date=season.end_date,
+                                             **form.cleaned_data)
         return super(ClubleaguesAddView, self).form_valid(form)
 clubleagues_add = ClubleaguesAddView.as_view()

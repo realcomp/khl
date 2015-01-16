@@ -102,6 +102,8 @@ class MatchManager(ManagerMixin, models.Manager):
     def get_or_create_match(self, **kwargs):
         b''' метод взять или создать запись о матче '''
         self._season = kwargs.pop('season', {})
+        sm = get_model('base', 'Season')
+        self._season['season'], _crt = sm.objects.get_or_create_season(**self._season)
         _match = {
                 'home_team': self._get_team(**kwargs.pop('home_team', {})),
                 'home_coach': self._get_coach(kwargs.pop('home_coach', {})),
