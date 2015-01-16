@@ -480,8 +480,12 @@ class HockeyMatchParser(GrabParser):
         b''' получаем судей матча '''
         _res = self._get_value('match_judges')
         if _res:
-            _res = _res[0].text_content().strip().split('\n')
-            return [j.strip() for j in _res[1:]]
+            _res = _res[0].text_content().strip().split('          ')
+        if _res:
+            if len(_res) < 3:
+                return [_res[1].strip()]
+            else:
+                return [_res[1].strip(), _res[3].strip()]
         return ''
 
     def get_match_line_judges(self):

@@ -467,7 +467,7 @@ class Match(TitleBaseModel):
                             related_name='matchjudges',
                             verbose_name=Judge._meta.verbose_name_plural)
     line_judges = models.ManyToManyField(Judge, null=True, blank=True,
-                            related_name='matchllinejudges',
+                            related_name='matchlinejudges',
                             verbose_name=_('Line judges'))
     home_team = models.ForeignKey(Club, null=True, blank=True,
                                 on_delete=models.SET_NULL,
