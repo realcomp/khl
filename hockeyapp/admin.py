@@ -127,7 +127,7 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (Judge, League, AddressClub, LeagueClub, CoachClub,):
+for model in (League, AddressClub, LeagueClub, CoachClub,):
     admin.site.register(model, BaseAdmin)
 
 
@@ -142,6 +142,26 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     )
     list_display = ('ru_title', 'country', 'league', 'capacity')
 admin.site.register(Arena, ArenaAdmin)
+
+
+class JudgeMatchesInline(TabularInlineReadOnly):
+    model = Match.judges.through
+    verbose_name=Judge._meta.verbose_name_plural
+    readonly_fields = ('match',)
+    linked_readonly_fields = ('match',)
+    fields = linked_readonly_fields
+
+class LineJudgeMatchesInline(TabularInlineReadOnly):
+    model = Match.line_judges.through
+    verbose_name=_('Line judges')
+    readonly_fields = ('match',)
+    linked_readonly_fields = ('match',)
+    fields = linked_readonly_fields
+
+class JudgeAdmin(BaseAdmin):
+    inlines = (JudgeMatchesInline,LineJudgeMatchesInline)
+admin.site.register(Judge, JudgeAdmin)
+
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
 
