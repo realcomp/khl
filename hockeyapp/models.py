@@ -155,6 +155,8 @@ class Club(TitleBaseModel):
                             on_delete=models.SET_NULL)
     site = models.URLField(_('Site'), blank=True)
     contacts = models.TextField(_('Contacts'), blank=True)
+    style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
+
     #relation
     address = models.ForeignKey(Address, null=True, blank=True,
                                     on_delete=models.SET_NULL)
@@ -170,6 +172,7 @@ class Club(TitleBaseModel):
     junior_club = models.OneToOneField('self', null=True, blank=True,
                                     on_delete=models.SET_NULL,
                                     related_name='juniorclubparent')
+
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)

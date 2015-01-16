@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        {{ object.style }}
+    </style>
+{% endblock %}
+
+
 {% block header %}
     {% include "partial/header.html" with user_card_menu_active="clubs" %}
 {% endblock %}
