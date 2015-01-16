@@ -112,13 +112,14 @@ def async_all_cmps_update():
 def add_season_for_all():
     try:
         def update_obj(obj):
-            data = dict(
-                start_date=datetime.date(day=1,month=7,year=obj.start_date.year), 
-                end_date=datetime.date(day=30,month=6,year=obj.end_date.year)
-            )
-            season, _crt = models.Season.objects.get_or_create_season(**data)
-            obj.season = season
-            obj.save(update_fields=('season',))
+            if obj.start_date and obj.end_date:
+                data = dict(
+                    start_date=datetime.date(day=1,month=7,year=obj.start_date.year), 
+                    end_date=datetime.date(day=30,month=6,year=obj.end_date.year)
+                )
+                season, _crt = models.Season.objects.get_or_create_season(**data)
+                obj.season = season
+                obj.save(update_fields=('season',))
 
         for obj in models.AddressClub.objects.all():
             update_obj(obj)
