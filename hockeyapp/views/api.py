@@ -14,8 +14,11 @@ from addresses.models import Country
 
 from .mixins import PaginationMixin, OrderMixin
 from ..serializers import (
-    PlayerCardSerializer, ClubListSerializer, MetricsPlayerSerializer,
-    CountryLeaguesSerializer)
+    CountryLeaguesSerializer,
+    PlayerCardSerializer,
+    ClubSerializer, ClubListSerializer,
+    MetricsPlayerSerializer,
+)
 from ..models import Club, Player, ClubPlayer
 
 
@@ -122,6 +125,13 @@ class ClubList(PaginationMixin, OrderMixin, generics.ListAPIView):
                 qs = qs.by_season(json.loads(season)).distinct()
 
         return qs
+
+
+class ClubDetail(generics.RetrieveAPIView):
+    serializer_class = ClubSerializer
+
+    def get_queryset(self):
+        return Club.objects.all()
 
 
 class MetricsPlayers(generics.ListAPIView):

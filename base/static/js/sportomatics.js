@@ -249,9 +249,37 @@
         };
 
         this.data = {};
+        this.table = {};
+        this.table_index = [ // table indexes, null is an empty filler
+            // row 1
+            [['defender', 0], ['defender', null], ['defender', 1], ['defender', null],
+             ['defender', 2], ['defender', null], ['defender', 3],
+             ['forward', null], ['forward', 0], ['forward', null],
+             ['goalkeeper', 0]],
+            // row 2
+            [['defender', null], ['defender', 4], ['defender', null],
+             ['forward', 1], ['forward', null], ['forward', 2], ['forward', null],
+             ['forward', 3], ['forward', null], ['forward', 4],
+             ['goalkeeper', null]],
+            // row 3
+            [['defender', 5], ['defender', null], ['defender', 6],
+             ['forward', null], ['forward', 5], ['forward', null], ['forward', 6],
+             ['forward', null], ['forward', 7], ['forward', null],
+             ['goalkeeper', 1]],
+            // row 4
+            [['defender', null], ['defender', 7], ['defender', null],
+             ['forward', 8], ['forward', null], ['forward', 9], ['forward', null],
+             ['forward', 10], ['forward', null], ['forward', 11],
+             ['goalkeeper', null]],
+            // row 5
+            [['defender', 8], ['defender', null], ['defender', 9],
+             ['trainer', null], ['trainer', 0], ['trainer', null], ['trainer', 1],
+             ['trainer', null], ['trainer', 2], ['trainer', null],
+             ['goalkeeper', 2]],
+        ];
         this.loader = false;
 
-        this.search = function(order_by) {
+        this.list = function() {
             var self = this,
             params = $('#ClubTeamForm').serialize();
             params = params + '&order_by=["line","%s_fio"]';
@@ -260,11 +288,15 @@
             $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
+                self.table['goalkeeper'] = self.data.current_goalkeeper_players;
+                self.table['defender'] = self.data.current_defender_players;
+                self.table['forward'] = self.data.current_offender_players;
+                self.table['trainer'] = [self.data.coach];
                 self.loader = false;
             });
         };
 
-        this.search();
+        this.list();
     }]);
 
     app.controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {

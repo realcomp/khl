@@ -25,7 +25,9 @@
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club" %}
             <div class="page-inner-container">
-                <div class="clubs-team-tabs">
+                <div class="clubs-team-tabs"
+                     ng-controller="ClubTeamController as ClubTeamCtrl">
+                    <form id="ClubTeamForm" action="{% url 'hockeyapp:club-detail-api' pk %}">
                     <div class="ui grid">
                         <div class="row">
                             <div class="column">
@@ -62,7 +64,8 @@
                                     </ul>
 
                                     <div id="team-photos" data-tab="team-photos">
-                                        <table class="clubs-team-photos-table">
+                                        <table class="clubs-team-photos-table"
+                                               ng-show="ClubTeamCtrl.data.all_players">
                                             <thead>
                                                 <tr>
                                                     <th class="cell-defender" colspan="7">защитники</th>
@@ -71,375 +74,25 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.0 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.0.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.0.number }}</span>
-                                                            <img src="{{ current_defender_players.0.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.0.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.1 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.1.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.1.number }}</span>
-                                                            <img src="{{ current_defender_players.1.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.1.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.2 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.2.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.2.number }}</span>
-                                                            <img src="{{ current_defender_players.2.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.2.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.3 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.3.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.3.number }}</span>
-                                                            <img src="{{ current_defender_players.3.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.3.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.0 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.0.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.0.number }}</span>
-                                                            <img src="{{ current_offender_players.0.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.0.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-goalkeeper">
-                                                        {% if current_goalkeeper_players.0 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_goalkeeper_players.0.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_goalkeeper_players.0.number }}</span>
-                                                            <img src="{{ current_goalkeeper_players.0.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_goalkeeper_players.0.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.4 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.4.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.4.number }}</span>
-                                                            <img src="{{ current_defender_players.4.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.4.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.1 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.1.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.1.number }}</span>
-                                                            <img src="{{ current_offender_players.1.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.1.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.2 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.2.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.2.number }}</span>
-                                                            <img src="{{ current_offender_players.2.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.2.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.3 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.3.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.3.number }}</span>
-                                                            <img src="{{ current_offender_players.3.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.3.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.4 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.4.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.4.number }}</span>
-                                                            <img src="{{ current_offender_players.4.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.4.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-goalkeeper"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.5 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.5.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.5.number }}</span>
-                                                            <img src="{{ current_defender_players.5.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.5.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.6 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.6.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.6.number }}</span>
-                                                            <img src="{{ current_defender_players.6.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.6.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.5 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.5.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.5.number }}</span>
-                                                            <img src="{{ current_offender_players.5.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.5.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.6 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.6.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.6.number }}</span>
-                                                            <img src="{{ current_offender_players.6.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.6.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.7 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.7.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.7.number }}</span>
-                                                            <img src="{{ current_offender_players.7.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.7.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-goalkeeper">
-                                                        {% if current_goalkeeper_players.1 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_goalkeeper_players.1.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_goalkeeper_players.1.number }}</span>
-                                                            <img src="{{ current_goalkeeper_players.1.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_goalkeeper_players.1.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.7 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.7.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.7.number }}</span>
-                                                            <img src="{{ current_defender_players.7.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.7.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.8 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.8.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.8.number }}</span>
-                                                            <img src="{{ current_offender_players.8.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.8.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.9 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.9.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.9.number }}</span>
-                                                            <img src="{{ current_offender_players.9.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.9.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.10 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.10.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.10.number }}</span>
-                                                            <img src="{{ current_offender_players.10.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.10.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.11 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.11.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.11.number }}</span>
-                                                            <img src="{{ current_offender_players.11.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.11.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-goalkeeper"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.8 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.8.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.8.number }}</span>
-                                                            <img src="{{ current_defender_players.8.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.8.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.9 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.9.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.9.number }}</span>
-                                                            <img src="{{ current_defender_players.9.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.9.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.12 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.12.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.12.number }}</span>
-                                                            <img src="{{ current_offender_players.12.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.12.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.13 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.13.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.13.number }}</span>
-                                                            <img src="{{ current_offender_players.13.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.13.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-forward">
-                                                        {% if current_offender_players.14 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_offender_players.14.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_offender_players.14.number }}</span>
-                                                            <img src="{{ current_offender_players.14.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_offender_players.14.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-forward"></td>
-                                                    <td class="cell-goalkeeper">
-                                                        {% if current_goalkeeper_players.2 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_goalkeeper_players.2.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_goalkeeper_players.2.number }}</span>
-                                                            <img src="{{ current_goalkeeper_players.2.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_goalkeeper_players.2.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-defender">
-                                                        {% if current_defender_players.10 %}
-                                                        <a href="{% url 'hockeyapp:player-card' current_defender_players.10.pk %}" class="team-player-photo-link">
-                                                            <span class="team-player-number">{{ current_defender_players.10.number }}</span>
-                                                            <img src="{{ current_defender_players.10.photo }}" alt="" class="team-player-photo">
-                                                            <span class="team-player-name">{{ current_defender_players.10.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-defender"></td>
-                                                    <td class="cell-trainer">
-                                                        {% if coach %}
-                                                        <a href="#" class="team-player-photo-link">
-                                                            <!-- <span class="team-player-number"></span> -->
-                                                            <!-- <img src="{{ coach.photo }}" alt="" class="team-player-photo"> -->
-                                                            <span class="team-player-name">{{ coach.fio }}</span>
-                                                            <span class="team-player-name"></span>
-                                                        </a>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="cell-trainer"></td>
-                                                    <td class="cell-trainer">
-                                                        <!-- <a href="#" class="team-player-photo-link"> -->
-                                                        <!--     <span class="team-player-number">22</span> -->
-                                                        <!--     <img src="{{ STATIC_URL }}images/player1.png" alt="" class="team-player-photo"> -->
-                                                        <!--     <span class="team-player-name"></span> -->
-                                                        <!--     <span class="team-player-name"></span> -->
-                                                        <!-- </a> -->
-                                                    </td>
-                                                    <td class="cell-trainer"></td>
-                                                    <td class="cell-trainer">
-                                                        <!-- <a href="#" class="team-player-photo-link"> -->
-                                                        <!--     <span class="team-player-number">22</span> -->
-                                                        <!--     <img src="{{ STATIC_URL }}images/player1.png" alt="" class="team-player-photo"> -->
-                                                        <!--     <span class="team-player-name"></span> -->
-                                                        <!--     <span class="team-player-name"></span> -->
-                                                        <!-- </a> -->
-                                                    </td>
-                                                    <td class="cell-trainer"></td>
-                                                    <td class="cell-trainer">
-                                                        <!-- <a href="#" class="team-player-photo-link"> -->
-                                                        <!--     <span class="team-player-number">22</span> -->
-                                                        <!--     <img src="{{ STATIC_URL }}images/player1.png" alt="" class="team-player-photo"> -->
-                                                        <!--     <span class="team-player-name"></span> -->
-                                                        <!--     <span class="team-player-name"></span> -->
-                                                        <!-- </a> -->
-                                                    </td>
-                                                    <td class="cell-goalkeeper"></td>
-                                                </tr>
+                                                {% verbatim %}
+                                                    <tr ng-repeat="row in ClubTeamCtrl.table_index">
+                                                        <td ng-repeat="cell in row"
+                                                            class="cell-{{ cell[0] }}">
+                                                            <a class="team-player-photo-link"
+                                                               href="{{ ClubTeamCtrl.table[cell[0]][cell[1]].url }}"
+                                                               ng-show="cell[0] && ClubTeamCtrl.table[cell[0]][cell[1]]">
+                                                                <span class="team-player-number"
+                                                                      ng-show="ClubTeamCtrl.table[cell[0]][cell[1]].number">
+                                                                    {{ ClubTeamCtrl.table[cell[0]][cell[1]].number }}
+                                                                </span>
+                                                                <img ng-src="{{ ClubTeamCtrl.table[cell[0]][cell[1]].photo || '/static/images/nophoto.gif' }}" alt="" class="team-player-photo">
+                                                                <span class="team-player-name">
+                                                                    {{ ClubTeamCtrl.table[cell[0]][cell[1]].fio }}</span>
+                                                                <span class="team-player-name"></span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endverbatim %}
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -449,6 +102,10 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                        <div style="text-align: center">
+                                            <img src="{{ STATIC_URL }}images/loader-large.gif"
+                                                 ng-show="ClubTeamCtrl.loader">
+                                        </div>
 
                                         <div class="season-tabs season-last-tabs">
                                             <div class="ui tabular menu content-tabs">
@@ -1267,12 +924,8 @@
                                         </div>
                                     </div>
 
-
-                                    <div id="team-tables" data-tab="team-tables"
-                                         ng-controller="ClubTeamController as ClubTeamCtrl">
-                                        <form id="ClubTeamForm" action="{% url 'hockeyapp:players-search-api' %}">
-                                        <input type="hidden" name="club" value="{{ pk }}">
-                                        <input type="hidden" name="season" value="[2013, 2014]">
+                                    <div id="team-tables" data-tab="team-tables">
+                                        <input type="hidden" name="season" value="">
                                         <div class="heading">Сезон 2013-2014</div>
                                         <table class="ui celled table segment clubs-team-table">
                                             <thead>
@@ -1288,10 +941,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="player in ClubTeamCtrl.data.results">
+                                                <tr ng-repeat="player in ClubTeamCtrl.data.all_players">
                                                     {% verbatim %}
                                                     <td align="center">{{ player.number }}</td>
-                                                    <td>{{ player.line }}</td>
+                                                    <td>{{ player.line_display }}</td>
                                                     <td><a href="{{ player.url }}" class="player-popup-btn">{{ player.fio }}</a></td>
                                                     <td align="center">{{ player.birth_date_short }}</td>
                                                     <td>Россия</td>
@@ -1367,6 +1020,7 @@
                             <a href="#" class="player-card-btn">открыть карточку игрока</a>
                         </div>
                     </div>
+                    </form>
                 </div>
                 <hr class="hr">
                 <ul class="team-controls player-controls-block">

@@ -180,19 +180,19 @@ class Club(TitleBaseModel):
 
     @property
     def all_players(self):
-        Player.objects.by_season(self)
+        return self.players.order_by('line', 'number')
 
     @property
     def current_offender_players(self):
-        return self.players.filter(line=3)
+        return self.players.filter(line=3).order_by('number')
 
     @property
     def current_defender_players(self):
-        return self.players.filter(line=2)
+        return self.players.filter(line=2).order_by('number')
 
     @property
     def current_goalkeeper_players(self):
-        return self.players.filter(line=1)
+        return self.players.filter(line=1).order_by('number')
 
     def get_absolute_url(self):
         if self.pk:
