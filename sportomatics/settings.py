@@ -14,6 +14,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = [
                     '141.8.196.179:443',
+                    '94.23.21.186',
                     '.sportomatics.ru',
                     'localhost',
 ]
