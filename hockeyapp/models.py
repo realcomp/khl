@@ -161,7 +161,11 @@ class Club(TitleBaseModel):
     address = models.ForeignKey(Address, null=True, blank=True,
                                     on_delete=models.SET_NULL)
     coach = models.ForeignKey(Coach, null=True, blank=True,
+                    related_name='headcoachclubs', verbose_name=_('Head Coach'),
                                     on_delete=models.SET_NULL)
+    coaches = models.ManyToManyField(Coach, null=True, blank=True,
+                    related_name='helpcoachclubs', verbose_name=_('Help coaches')
+    )
     arena = models.ForeignKey(Arena, null=True, blank=True,
                                     on_delete=models.SET_NULL)
     players = models.ManyToManyField(Player, null=True, blank=True)
@@ -177,6 +181,8 @@ class Club(TitleBaseModel):
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
+
+    __unicode__ = lambda self: '{} ({})'.format(self.ru_title, self.address)
 
     @property
     def all_players(self):
