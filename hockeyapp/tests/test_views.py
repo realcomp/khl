@@ -19,6 +19,8 @@ class ViewsTestCase(TestCase):
         'birth_date': datetime.date(year=2000, month=12, day=31),
         'weight': '80',
         'height': '180',
+        'grip': 'left',
+        'number': '666',
     }
 
     def setUp(self):
@@ -29,11 +31,14 @@ class ViewsTestCase(TestCase):
         self.assertEqual(context['pk'], obj.pk)
         # TODO: set language
         self.assertEqual(context['fio'], obj.ru_fio)
-        self.assertEqual(context['line'], obj.get_line_display())
+        self.assertEqual(context['line'], obj.line)
+        self.assertEqual(context['line_display'], obj.get_line_display())
         self.assertEqual(context['birth_date'], '31 December 2000')
         # self.assertEqual(context['age'], (13, 11))
         self.assertEqual(context['weight'], obj.weight)
         self.assertEqual(context['height'], obj.height)
+        self.assertEqual(context['grip'], obj.grip)
+        self.assertEqual(context['number'], obj.number)
         self.assertEqual(
             context['khl_url'],
             'http://www.khl.ru/players/%s/' % obj.khl_id)
@@ -43,6 +48,12 @@ class ViewsTestCase(TestCase):
         response = self.client.get(
             reverse('hockeyapp:players-search'))
         self.assertEqual(response.status_code, 200)
+
+    def test_players_search_api(self):
+        response = self.client.get(
+            reverse('hockeyapp:players-search-api'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualPlayer(response.data['results'][0], self.player)
 
     def test_player_card(self):
         response = self.client.get(
