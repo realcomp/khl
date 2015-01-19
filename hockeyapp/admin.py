@@ -12,6 +12,7 @@ from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
+from .models import AddressClubPhotos
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -128,7 +129,7 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
-for model in (League, AddressClub, LeagueClub, CoachClub,):
+for model in (League, LeagueClub, CoachClub,):
     admin.site.register(model, BaseAdmin)
 
 
@@ -143,6 +144,17 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     )
     list_display = ('ru_title', 'country', 'league', 'capacity')
 admin.site.register(Arena, ArenaAdmin)
+
+
+class AddressClubPhotosInline(admin.TabularInline):
+    model = AddressClubPhotos
+    extra=0
+
+class AddressClubAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+    inlines = (AddressClubPhotosInline,)
+    list_filter = ('club', 'address', 'season',)
+    list_display = list_filter+('postaddress', 'email')
+admin.site.register(AddressClub, AddressClubAdmin)
 
 
 class JudgeMatchesInline(TabularInlineReadOnly):
