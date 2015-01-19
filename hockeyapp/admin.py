@@ -12,7 +12,7 @@ from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
-from .models import AddressClubPhotos
+from .models import AddressClubPhotos, Name
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -83,10 +83,11 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
     model = PlayerCitizenship
     readonly_fields = ( object_link, 'start_date', 'end_date',)
 
+
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (ClubPlayerInline, PlayerCitizenshipInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
-                    'height', 'url',
+                    'height', 'url', 'ru_name', 'ru_lastname',
     )
     list_filter = ( ('khl_id', AutocompleteFieldFilter), 
                     ('ru_fio', AutocompleteFieldFilter),
@@ -220,3 +221,57 @@ class ClubPlayerMatchAdmin(NoFilterAdmin):
 admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
 admin.site.register(AdvancedPlayerStats)
+
+
+def import_names(modeladmin, request, queryset):
+    def update_or_create_name(**kwargs):
+        try:
+            name = Name.objects.get(
+                ru_name=kwargs['ru_name'], en_name=kwargs['en_name'])
+        except Name.DoesNotExist as e:
+            name = Name.objects.create(
+                ru_name=kwargs['ru_name'], en_name=kwargs['en_name'],
+                type=kwargs['type'])
+        finally:
+            return name
+
+    players = (
+        Player.objects
+        .exclude(ru_name__isnull=True)
+        .exclude(en_name__isnull=True))
+    for ru_name, en_name in players.values_list('ru_name', 'en_name'):
+        name = update_or_create_name(ru_name=ru_name, en_name=en_name, type=0)
+    for ru_name, en_name in players.values_list('ru_lastname', 'en_lastname'):
+        name = update_or_create_name(ru_name=ru_name, en_name=en_name, type=1)
+
+import_names.short_description = _('Import Names')
+
+
+def export_names(modeladmin, request, queryset):
+    def swap_names(player):
+        ''' swaps first and last names '''
+        ru_name, ru_lastname = player.ru_name, player.ru_lastname
+        player.ru_name, player.ru_lastname = ru_lastname, ru_name
+        en_name, en_lastname = player.en_name, player.en_lastname
+        player.en_name, player.en_lastname = en_lastname, en_name
+
+    names = queryset.filter(type=0)  # first names
+    for player in Player.objects.filter(
+            ru_lastname__in=names.values_list('ru_name')):
+        swap_names(player)
+        player.save()
+    names = queryset.filter(type=1)  # last names
+    for player in Player.objects.filter(
+            ru_name__in=names.values_list('ru_name')):
+        swap_names(player)
+        player.save()
+
+export_names.short_description = _('Export Names')
+
+
+class NameAdmin(admin.ModelAdmin):
+    actions = import_names, export_names
+    list_display = 'type', 'ru_name', 'en_name'
+    list_filter = 'type',
+    search_fields = 'ru_name', 'en_name'
+admin.site.register(Name, NameAdmin)

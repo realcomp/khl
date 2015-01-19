@@ -16,12 +16,24 @@ from . import managers
 
 class AbstractMan(models.Model):
     ru_fio = models.CharField(_('Full name (rus)'), max_length=4096, blank=True)
+    ru_name = models.CharField(_('Name (rus)'), max_length=4096, blank=True, null=True)
+    ru_lastname = models.CharField(_('Last name (rus)'), max_length=4096, blank=True, null=True)
     en_fio = models.CharField(_('Full name (en)'), max_length=4096, blank=True)
+    en_name = models.CharField(_('Name (en)'), max_length=4096, blank=True, null=True)
+    en_lastname = models.CharField(_('Last name (en)'), max_length=4096, blank=True, null=True)
     birth_date = models.DateField(_('Birth date'), null=True, blank=True)
     death_date = models.DateField(_('Death date'), null=True, blank=True)
     wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
     khl_id = models.PositiveIntegerField(default=0, null=True)
     __unicode__ = lambda self: self.ru_fio
+
+    def save(self, **kwargs):
+        if self.ru_fio and (not self.ru_name or not self.ru_lastname):
+            self.ru_name, sep, self.ru_lastname = self.ru_fio.partition(' ')
+        if self.en_fio and (not self.en_name or not self.en_lastname):
+            self.en_name, sep, self.en_lastname = self.en_fio.partition(' ')
+        super(AbstractMan, self).save(**kwargs)
+
     class Meta:
         abstract=True
 
@@ -543,3 +555,22 @@ class Match(TitleBaseModel):
                                         self.guest_team,
                                         self.date)
         return self.ru_title
+
+
+class Name(models.Model):
+    b'''Словарь имен/фамилий'''
+    type = models.SmallIntegerField(choices=(
+        (0, (_('First Name'))),
+        (1, (_('Last Name'))),
+    ))
+    ru_name = models.CharField(
+        _('Name (rus)'), max_length=4096, blank=True)
+    en_name = models.CharField(
+        _('Name (en)'), max_length=4096, blank=True)
+
+    def __unicode__(self):
+        return '%s: %s / %s' % (self.type, self.ru_name, self.en_name)
+
+    class Meta(object):
+        verbose_name=_('Name')
+        verbose_name_plural=_('Names')
