@@ -38,16 +38,23 @@ class PlayersSearch(PaginationMixin, OrderMixin, generics.ListAPIView):
                 json.loads, self.request.GET.getlist('line'))))
             qs = qs.filter(line__in=values)
 
-        citizenship = []
+        q_citizenship = None
         if 'citizenship' in self.request.GET:
-            citizenship += filter(
-                None, self.request.GET.getlist('citizenship'))
+            citizenship = filter(None, self.request.GET.getlist('citizenship'))
+            if citizenship:
+                q = Q(citizenship__in=citizenship)
+                q_citizenship = (q_citizenship | q) if q_citizenship else q
         if ('citizenship_other' in self.request.GET and
                 'citizenship_other_active' in self.request.GET):
-            citizenship += filter(
+            citizenship_other = filter(
                 None, self.request.GET.getlist('citizenship_other'))
-        if citizenship:
-            qs = qs.filter(citizenship__in=citizenship)
+            if citizenship_other:
+                q = Q(citizenship__in=citizenship_other)
+            else:
+                q = ~Q(citizenship__ru_title=b'Россия')
+            q_citizenship = (q_citizenship | q) if q_citizenship else q
+        if q_citizenship:
+            qs = qs.filter(q_citizenship)
 
         club = None
         if 'club' in self.request.GET:

@@ -55,10 +55,15 @@ class PlayersSearch(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(PlayersSearch, self).get_context_data(**kwargs)
         context['request'] = self.request
+        countries = (
+            Country.objects
+            .exclude(ru_title=b'Россия')
+            .order_by('%s_title' % self.request.LANGUAGE_CODE))
         context['countries'] = CountrySerializer(
-            Country.objects.all(), many=True, context=context).data
+            countries, many=True, context=context).data
         context['russia'] = CountrySerializer(
-            Country.objects.filter(ru_title=b'Россия').last(), context=context).data
+            Country.objects.filter(ru_title=b'Россия').last(),
+            context=context).data
         return context
 
 
