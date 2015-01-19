@@ -31,5 +31,4 @@ deploy:
 	python manage.py compilemessages
 	python manage.py collectstatic --no-post-process --noinput
 	sudo service nginx reload
-	sudo service uwsgi reload
 	sudo supervisorctl restart sportomatics
