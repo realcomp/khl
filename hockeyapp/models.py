@@ -218,11 +218,32 @@ class AddressClub(models.Model):
     season = models.ForeignKey( Season, null=True, blank=True,
                                 on_delete=models.SET_NULL,)
 
+    postaddress = models.TextField(_('Post address'), blank=True)
+    office_phone = models.CharField(_('Office phone'),
+                                    max_length=255, blank=True)
+    contact_name = models.CharField(_('Contact name'),
+                                    max_length=255, blank=True)
+    contact_phone = models.CharField(_('Contact phone'),
+                                    max_length=255, blank=True)
+    contact_post = models.CharField(_('Contact post'),
+                                    max_length=255, blank=True)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(_('Phone'), max_length=255, blank=True)
+    coords = models.CharField(_('Latitude and Longitude'),
+                                max_length=1024, blank=True)
+    photo = FilerImageField(verbose_name=_('Main photo'), null=True, blank=True)
+
     __unicode__ = lambda self: '{0} ({1})'.format(self.address, self.club)
 
     class Meta:
         verbose_name=_('Club address')
         verbose_name_plural=_('Club addresses')
+
+
+class AddressClubPhotos(models.Model):
+    photo = FilerImageField(verbose_name=_('Photo'))
+    addressclub = models.ForeignKey(AddressClub, 
+                                    verbose_name=AddressClub._meta.verbose_name)
 
 
 class LeagueClub(AdminLinkMixin, models.Model):
