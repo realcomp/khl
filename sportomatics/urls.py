@@ -12,6 +12,7 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/hockeyapp/leagueclub_multi_add/$', 'hockeyapp.views.admin.clubleagues_add'),
+    url(r'^admin/hockeyapp/matchparser_form/$', 'hockeyapp.views.admin.matchparser_form'),
     url(r'^jsi18n/(?P<packages>\S+?)/$', 'django.views.i18n.javascript_catalog'),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^select2/', include('django_select2.urls')),

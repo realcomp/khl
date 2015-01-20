@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 
 from django.views.generic import FormView
 
-from ..forms import ClubleaguesAddForm
-from ..models import LeagueClub
+from ..forms import ClubleaguesAddForm, MatchParserForm
+from ..models import LeagueClub, Match
+from hockeyapp.tasks import async_hockey_matches_parser
 
 
 class ClubleaguesAddView(FormView):
@@ -25,3 +26,22 @@ class ClubleaguesAddView(FormView):
                                              **form.cleaned_data)
         return super(ClubleaguesAddView, self).form_valid(form)
 clubleagues_add = ClubleaguesAddView.as_view()
+
+
+class MatchParserFormView(FormView):
+    b''' Форма асинхронной обработки протоколов матча с сайта mhl.ru'''
+    form_class = MatchParserForm
+    template_name = 'admin/matchparser_form.html'
+
+    def get_success_url(self):
+        return Match.admin_list_link()
+
+    def form_valid(self, form):
+        from_id = form.cleaned_data['from_id']
+        to_id = form.cleaned_data.get('to_id')
+        count = form.cleaned_data.get('count')
+        if not count:
+            count = to_id-from_id+1 if to_id else 1
+        async_hockey_matches_parser.delay(from_id, count)
+        return super(MatchParserFormView, self).form_valid(form)
+matchparser_form = MatchParserFormView.as_view()

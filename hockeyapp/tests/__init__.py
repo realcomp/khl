@@ -8,7 +8,7 @@ from ..models import Match, Player, Club
 class HockeyAppTest(base.tests.BaseTest):
     blank = ''
     player_id = 3582
-    match_id = 42100
+    match_id = 44367
 
     def base_test(self):
         ''' base hockeapp test '''
@@ -96,13 +96,13 @@ class HockeyAppTest(base.tests.BaseTest):
         'guest_team_id', 'guest_coach_id', 'spectators'):
             self.assertIsNotNone(getattr(match, field))
         #check relations
-        self.assertEqual(match.matchgoalhistory_set.count(), 8)
-        self.assertEqual(match.matchpenaltyhistory_set.count(), 9)
-        self.assertEqual(match.clubplayermatch_set.count(), 41)
-        self.assertEqual(match.judges.count(), 2)
-        self.assertEqual(match.line_judges.count(), 2)
-        self.assertEqual(match.home_players.count(), 21)
-        self.assertEqual(match.guest_players.count(), 20)
+        self.assertEqual(match.matchgoalhistory_set.count(), 7)
+        self.assertEqual(match.matchpenaltyhistory_set.count(), 16)
+        self.assertEqual(match.clubplayermatch_set.count(), 44)
+        self.assertEqual(match.judges.count(), 1)
+        self.assertEqual(match.line_judges.count(), 1)
+        self.assertEqual(match.home_players.count(), 22)
+        self.assertEqual(match.guest_players.count(), 22)
 
     def _update_match(self):
         '''
@@ -120,10 +120,10 @@ class HockeyAppTest(base.tests.BaseTest):
         'guest_team_id', 'guest_coach_id'):
             self.assertIsNotNone(getattr(match, field))
         #check relations
-        self.assertEqual(match.matchgoalhistory_set.count(), 8)
-        self.assertEqual(match.matchpenaltyhistory_set.count(), 9)
-        self.assertEqual(match.clubplayermatch_set.count(), 41)
-        self.assertEqual(match.judges.count(), 2)
-        self.assertEqual(match.line_judges.count(), 2)
-        self.assertEqual(match.home_players.count(), 21)
-        self.assertEqual(match.guest_players.count(), 20)
+        self.assertEqual(match.matchgoalhistory_set.count(), 7)
+        self.assertEqual(match.matchpenaltyhistory_set.count(), 16)
+        self.assertEqual(match.clubplayermatch_set.count(), 44)
+        self.assertEqual(match.judges.count(), 1)
+        self.assertEqual(match.line_judges.count(), 1)
+        self.assertEqual(match.home_players.count(), 22)
+        self.assertEqual(match.guest_players.count(), 22)

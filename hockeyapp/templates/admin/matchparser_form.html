@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static admin_modify suit_tags admin_urls %}
+{% load url from future %}
+{% load admin_urls %}
+
+{% block title %}
+    {% trans 'Match parser form' %}
+{% endblock%}
+
+{% block content %}
+<div id="content-main" class="inner-two-columns">
+    <form method="post"  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %} action="{% url 'hockeyapp.views.admin.matchparser_form' %}" class="form-horizontal">
+        {% csrf_token %}
+        <div class="tab-content tab-content-main">
+            {% if errors %}
+            <div class="alert alert-error">
+                {% blocktrans count counter=errors|length %}Please correct the error below.{% plural %} Please correct the errors below.{% endblocktrans %}
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            {% block field_sets %}
+                {% for field in form %}
+                    <div class="control-group form-row field-username">
+                        <div>
+                            <div class="control-label">{{field.label}}</div>
+                            <div class="controls">
+                                {{field}}
+                                <div class="inline error errors">{{field.errors}}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endblock %}
+            <button type="submit" class="btn btn-high btn-info">{% trans 'Submit' %}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

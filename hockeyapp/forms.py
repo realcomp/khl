@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.utils.translation import ugettext_lazy as _
 
 from suit.widgets import SuitDateWidget
 
@@ -28,3 +29,9 @@ class ClubleaguesAddForm(forms.ModelForm):
             'start_date': SuitDateWidget,
             'end_date': SuitDateWidget,
         }
+
+
+class MatchParserForm(forms.Form):
+    from_id = forms.IntegerField(_('From match khl id'), min_value=43)
+    to_id = forms.IntegerField(_('To match khl id'), min_value=43, required=False)
+    count = forms.IntegerField(_('Count matches'), min_value=1, required=False)

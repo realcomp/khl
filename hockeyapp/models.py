@@ -497,7 +497,7 @@ class MatchPenaltyHistory(models.Model):
         verbose_name_plural=_('Match penalty entries')
 
 
-class Match(TitleBaseModel):
+class Match(AdminLinkMixin, TitleBaseModel):
     objects = managers.match.MatchManager()
     #service info
     khl_id = models.PositiveIntegerField(_('Other site ID'),

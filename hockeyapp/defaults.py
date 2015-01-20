@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 # MATCH
 BODY_NOTEXISTS = b'Протокол не найден'
+BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
 EMPTY_PAGE_TEXT = 'Fatal error'
 KHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
 URL = 'http://mhl.khl.ru/report/272/'

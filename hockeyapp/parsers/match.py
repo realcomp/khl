@@ -168,7 +168,10 @@ class HockeyMatchParser(GrabParser):
                     #протокол игры существует
                     body = self.page_tree.xpath(self.body_xpath)[0]
                     body = body.text_content().encode('utf-8')
-                    if body.find(defaults.BODY_NOTEXISTS) == -1:
+                    check = (   body.find(defaults.BODY_NOTEXISTS) == -1 and
+                                body.find(defaults.BODY_NOTEXISTS_ALT) == -1
+                    )
+                    if check:
                         #протокол найден, собираем данные
                         _html_body = self.g.response.unicode_body()
                         return self.get_match_all_data(id, html_body=_html_body)
