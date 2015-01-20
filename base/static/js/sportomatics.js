@@ -115,7 +115,7 @@
         };
 
         this.data = {};
-        this.order_by = '%s_fio';
+        this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
         this.order_by_reversed = false;
         this.loader = false;
         this.countries = {};

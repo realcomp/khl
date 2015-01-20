@@ -28,7 +28,11 @@ class LangDepSerializer(serializers.ModelSerializer):
 
 class AbstractManSerializer(LangDepSerializer):
     fio = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
+    lastname = serializers.SerializerMethodField()
     get_fio = lambda self, obj: self._get_field(obj, 'fio')
+    get_name = lambda self, obj: self._get_field(obj, 'name')
+    get_lastname = lambda self, obj: self._get_field(obj, 'lastname')
 
 
 class TitleBaseSerializer(LangDepSerializer):
@@ -119,7 +123,7 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
             'photo', 'khl_url', 'birth_date_short', 'club', 'last_clubs',
             'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
-            'contract_to', 'number', 'line_display')
+            'contract_to', 'number', 'line_display', 'name', 'lastname')
         model = Player
 
 
