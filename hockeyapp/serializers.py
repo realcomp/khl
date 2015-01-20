@@ -138,7 +138,9 @@ class ArenaSerializer(TitleBaseSerializer):
     url = fields.ReadOnlyField(source='get_absolute_url')
 
     class Meta(object):
-        fields = 'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url'
+        fields = (
+            'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url',
+            'coords')
         model = Arena
 
 
