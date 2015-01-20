@@ -129,7 +129,7 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
 
 class CoachSerializer(AbstractManSerializer):
     class Meta(object):
-        fields = 'pk', 'fio'
+        fields = 'pk', 'fio', 'name', 'lastname'
         model = Coach
 
 
@@ -167,7 +167,8 @@ class ClubPlayerSerializer(BasePlayerCardSerializer):
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'line_display', 'club', 'photo', 'number',
-            'birth_date', 'birth_date_short', 'contract_type', 'age', 'url')
+            'birth_date', 'birth_date_short', 'contract_type', 'age', 'url',
+            'name', 'lastname')
         model = Player
 
 
@@ -204,5 +205,6 @@ class MetricsPlayerSerializer(BasePlayerCardSerializer):
     class Meta(object):
         fields = (
             'pk', 'url', 'fio', 'club', 'line', 'photo', 'grip',
-            'contract_type', 'height', 'weight', 'age')
+            'contract_type', 'height', 'weight', 'age', 'name', 'lastname',
+            'birth_date', 'birth_date_short')
         model = Player

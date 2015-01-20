@@ -36,20 +36,24 @@
                         {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
-                            <select name="country" id="players-search-country"
+                            <select id="players-search-country"
                                     class="select players-search-select" multiple="multiple" size="8"
                                     ng-model="PlayersSearchCtrl.countries_selected">
                                 <option value="{{ country.pk }}"
-                                        ng-repeat="country in PlayersSearchCtrl.countries">
+                                        ng-repeat="country in PlayersSearchCtrl.countries"
+                                        ng-selected="$index === 0">
                                     {{ country.title }}
                                 </option>
                             </select>
                         </div>
                         <div class="three wide column">
                             <div class="column-title">Лига:</div>
-                            <select name="league" id="players-search-league" class="select players-search-select" multiple="multiple" size="8">
+                            <select id="players-search-league"
+                                    class="select players-search-select" multiple="multiple" size="8"
+                                    ng-model="PlayersSearchCtrl.leagues_selected">
                                 <option value="{{ league.pk }}"
-                                        ng-repeat="league in PlayersSearchCtrl.getLeagues(PlayersSearchCtrl.countries, PlayersSearchCtrl.countries_selected)">
+                                        ng-repeat="league in PlayersSearchCtrl.getLeagues(PlayersSearchCtrl.countries, PlayersSearchCtrl.countries_selected)"
+                                        ng-selected="$index === 0">
                                     {{ league.title }}
                                 </option>
                             </select>
