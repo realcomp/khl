@@ -256,7 +256,8 @@
     }]);
 
     app.controller('ClubTeamController', ['$http', '$scope', function($http, $scope) {
-        var url = $('#ClubTeamForm').attr('action'),
+        var self = this,
+        url = $('#ClubTeamForm').attr('action'),
         getUnchecker = function(isDefault, defaultValue) {
             return function() {
                 if ((isDefault && $(this).attr('value') !== defaultValue) ||
@@ -265,6 +266,11 @@
                 }
             };
         };
+
+        $scope.setSeason = function(e) {
+            // $(e).attr('value', '[' + $(e).val() + ']');
+            self.list();
+        }
 
         this.data = {};
         this.table = {};
@@ -294,6 +300,11 @@
              ['trainer', null], ['trainer', 0], ['trainer', null], ['trainer', 1],
              ['trainer', null], ['trainer', 2], ['trainer', null],
              ['goalkeeper', 2]],
+            // row 6
+            [['defender', null], ['defender', 10], ['defender', null],
+             ['trainer', 3], ['trainer', null], ['trainer', 4], ['trainer', null],
+             ['trainer', 5], ['trainer', null], ['trainer', 6],
+             ['goalkeeper', null]],
         ];
         this.loader = false;
 
@@ -306,10 +317,10 @@
             $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
-                self.table['goalkeeper'] = self.data.current_goalkeeper_players;
-                self.table['defender'] = self.data.current_defender_players;
-                self.table['forward'] = self.data.current_offender_players;
-                self.table['trainer'] = [self.data.coach];
+                self.table['goalkeeper'] = self.data.goalkeeper_players;
+                self.table['defender'] = self.data.defender_players;
+                self.table['forward'] = self.data.offender_players;
+                self.table['trainer'] = self.data.coaches;
                 self.loader = false;
             });
         };

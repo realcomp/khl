@@ -34,12 +34,15 @@
                                 <div class="ui tabular menu content-tabs">
                                     <span class="heading">Состав команды на</span>
                                     <div class="ui selection dropdown">
-                                        <input type="hidden" name="season">
-                                        <div class="default text">Выберите сезон</div>
+                                        <input type="hidden" name="season" value="{{ seasons.0.pk }}"
+                                               ng-model="ClubTeamCtrl.season"
+                                               onchange="angular.element(this).scope().setSeason(this)">
+                                        <div class="default text">{{ seasons.0.label }}</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
-                                            <div class="item" data-value="1">СЕЗОН 2014-2015</div>
-                                            <div class="item" data-value="0">СЕЗОН 2013-2014</div>
+                                            {% for season in seasons %}
+                                                <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                     <ul>
@@ -925,7 +928,7 @@
                                     </div>
 
                                     <div id="team-tables" data-tab="team-tables">
-                                        <input type="hidden" name="season" value="">
+                                        <input type="hidden" name="seasonz" value="">
                                         <div class="heading">Сезон 2013-2014</div>
                                         <table class="ui celled table segment clubs-team-table">
                                             <thead>
