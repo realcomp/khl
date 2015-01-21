@@ -308,6 +308,28 @@
         ];
         this.loader = false;
 
+        this.getPerson = function(cell) {
+            if (this.table && cell && Array.isArray(cell)) {
+                row = this.table[cell[0]];
+                if (row) {
+                    return this.table[cell[0]][cell[1]];
+                }
+            }
+        }
+
+        this.isVisible = function(person) {
+            switch (this.status) {
+                default:
+                    return true;
+                case 'joined':
+                    return person.is_joined;
+                case 'left':
+                    return person.is_left;
+                case 'legionnaire':
+                    return person.is_legionnaire;
+            }
+        };
+
         this.list = function() {
             var self = this,
             params = $('#ClubTeamForm').serialize();

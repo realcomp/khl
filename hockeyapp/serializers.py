@@ -166,56 +166,127 @@ class ClubListSerializer(TitleBaseSerializer):
 class ClubPlayerSerializer(BasePlayerCardSerializer):
     line_display = fields.ReadOnlyField(source='get_line_display')
     club = ClubListSerializer()
-    photo = fields.ReadOnlyField(source='photo.url')
+    photo = serializers.ReadOnlyField(source='photo.url')
+    is_joined = serializers.ReadOnlyField()
+    is_left = serializers.ReadOnlyField()
 
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'line_display', 'club', 'photo', 'number',
             'birth_date', 'birth_date_short', 'contract_type', 'age', 'url',
-            'name', 'lastname')
+            'name', 'lastname', 'is_joined', 'is_left', 'is_legionnaire')
         model = Player
 
 
+class ClubCoachSerializer(CoachSerializer):
+    is_joined = serializers.ReadOnlyField()
+    is_left = serializers.ReadOnlyField()
+
+    class Meta(object):
+        fields = 'pk', 'fio', 'name', 'lastname', 'is_joined', 'is_left'
+        model = Player
+
+
+class SeasonSerializer(TitleBaseSerializer):
+    label = serializers.SerializerMethodField()
+
+    def get_label(self, obj):
+        return '%s %s-%s' % (
+            _('SEASON'), obj.start_date.year, obj.end_date.year)
+
+    class Meta(object):
+        fields = 'pk', 'title', 'label'
+        model = Season
+
+
 class ClubSerializer(ClubListSerializer):
+    seasons = SeasonSerializer(many=True)
+    prev_season = serializers.SerializerMethodField()
     all_players = serializers.SerializerMethodField()
     offender_players = serializers.SerializerMethodField()
     defender_players = serializers.SerializerMethodField()
     goalkeeper_players = serializers.SerializerMethodField()
     coaches = serializers.SerializerMethodField()
 
-    def _get_players(self, obj, **params):
-        request = self.context.get('request')
-        clubplayers = obj.clubplayer_set.filter(
-            season_id=request.GET.get('season'))
-        if params:
-            clubplayers = clubplayers.filter(**params)
-        players = (
-            Player.objects
-            .filter(pk__in=clubplayers.values_list('player_id')))
+    _seasons_selected = None
+    _players = None
+    _coaches = None
+
+    def _get_seasons(self, obj):
+        if not self._seasons_selected:
+            request = self.context.get('request')
+            try:
+                season = obj.seasons.get(pk=request.GET.get('season'))
+            except Season.DoesNotExist:
+                season = obj.seasons[0]
+            self._seasons_selected = (
+                obj.get_prev_season(season) or season,
+                season,
+                obj.get_next_season(season) or season,
+            )
+        return self._seasons_selected
+
+    def get_prev_season(self, obj):
+        return SeasonSerializer(
+            self._get_seasons(obj)[0], context=self.context).data
+
+    def _get_players(self, obj):
+        if self._players:
+            return self._players
+        clubplayers = map(
+            lambda x: obj.clubplayer_set.filter(season=x),
+            self._get_seasons(obj))
+        players = map(
+            lambda x: set(Player.objects.filter(clubplayer__in=x)),
+            clubplayers)
+        joined = players[1] - players[0]  # joined club in current season
+        left = players[1] - players[2]  # left club in next season
+        self._players = players[1]  # middle one is the current season
+        for player in self._players:
+            player.is_joined = player in joined
+            player.is_left = player in left
+        return self._players
+
+    def _get_coaches(self, obj):
+        if self._coaches:
+            return self._coaches
+        clubcoaches = map(
+            lambda x: obj.coachclub_set.filter(season=x),
+            self._get_seasons(obj))
+        coaches = map(
+            lambda x: set(Coach.objects.filter(coachclub__in=x)),
+            clubcoaches)
+        joined = coaches[1] - coaches[0]  # joined club in current season
+        left = coaches[1] - coaches[2]  # left club in next season
+        self._coaches = coaches[1]  # middle one is the current season
+        for coach in self._coaches:
+            coach.is_joined = coach in joined
+            coach.is_left = coach in left
+        return self._coaches
+
+    def get_all_players(self, obj):
+        players = self._get_players(obj)
         return ClubPlayerSerializer(
             players, context=self.context, many=True).data
 
-    def get_all_players(self, obj):
-        return self._get_players(obj)
-
     def get_offender_players(self, obj):
-        return self._get_players(obj, line=3)
+        players = filter(lambda x: x.line == 3, self._get_players(obj))
+        return ClubPlayerSerializer(
+            players, context=self.context, many=True).data
 
     def get_defender_players(self, obj):
-        return self._get_players(obj, line=2)
+        players = filter(lambda x: x.line == 2, self._get_players(obj))
+        return ClubPlayerSerializer(
+            players, context=self.context, many=True).data
 
     def get_goalkeeper_players(self, obj):
-        return self._get_players(obj, line=1)
+        players = filter(lambda x: x.line == 1, self._get_players(obj))
+        return ClubPlayerSerializer(
+            players, context=self.context, many=True).data
 
     def get_coaches(self, obj):
-        request = self.context.get('request')
-        coaches = (
-            Coach.objects
-            .filter(
-                pk__in=obj.coachclub_set
-                .filter(season_id=request.GET.get('season'))
-                .values_list('coach_id')))
-        return CoachSerializer(
+        coaches = self._get_coaches(obj)
+        return ClubCoachSerializer(
             coaches, context=self.context, many=True).data
 
     class Meta(object):
@@ -223,7 +294,7 @@ class ClubSerializer(ClubListSerializer):
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
             'address', 'all_players', 'offender_players',
             'defender_players', 'goalkeeper_players', 'coaches',
-            'url')
+            'url', 'seasons', 'prev_season')
         model = Club
 
 
@@ -247,14 +318,3 @@ class MetricsPlayerSerializer(BasePlayerCardSerializer):
             'contract_type', 'height', 'weight', 'age', 'name', 'lastname',
             'birth_date', 'birth_date_short')
         model = Player
-
-
-class SeasonSerializer(TitleBaseSerializer):
-    label = serializers.SerializerMethodField()
-
-    def get_label(self, obj):
-        return '%s %s-%s' % (_('SEASON'), obj.start_date.year, obj.end_date.year)
-
-    class Meta(object):
-        fields = 'pk', 'title', 'label'
-        model = Season
