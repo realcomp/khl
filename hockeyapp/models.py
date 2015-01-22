@@ -79,6 +79,10 @@ class Player(AbstractMan):
             clubs.insert(0, self.club)
         return clubs
 
+    @property
+    def is_legionnaire(self):
+        return self.citizenship and (self.citizenship.en_title != 'Russia')
+
     def get_absolute_url(self):
         if self.pk:
             return reverse('hockeyapp:player-card', kwargs={'pk': self.pk})
@@ -215,6 +219,25 @@ class Club(TitleBaseModel):
     def get_absolute_url(self):
         if self.pk:
             return reverse('hockeyapp:club', kwargs={'pk': self.pk})
+
+    @property
+    def seasons(self):
+        return (
+            Season.objects
+            .filter(pk__in=self.clubplayer_set.values_list('season_id'))
+            .order_by('-start_date'))
+
+    def get_prev_season(self, season):
+        seasons = list(reversed(self.seasons))
+        i = seasons.index(season)
+        if i > 0:
+            return seasons[i - 1]
+
+    def get_next_season(self, season):
+        seasons = list(reversed(self.seasons))
+        i = seasons.index(season)
+        if i < len(seasons) - 1:
+            return seasons[i + 1]
 
     class Meta:
         verbose_name = _('Club')
