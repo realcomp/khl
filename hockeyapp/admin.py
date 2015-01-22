@@ -202,11 +202,17 @@ class ClubPlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
 admin.site.register(ClubPlayer, ClubPlayerAdmin)
 
 
-class HasMatchObjAdmin(NoFilterAdmin):
-    readonly_fields = 'match',
+class MatchGoalHistoryAdmin(NoFilterAdmin):
+    linked_readonly_fields = 'match', 'scorer',
+    linked_m2m_readonly_fields = 'assist',
+    readonly_fields = linked_readonly_fields + linked_m2m_readonly_fields
+admin.site.register(MatchGoalHistory, MatchGoalHistoryAdmin)
 
-for model in (MatchGoalHistory, MatchPenaltyHistory):
-    admin.site.register(model, HasMatchObjAdmin)
+
+class MatchPenaltyHistoryAdmin(NoFilterAdmin):
+    linked_readonly_fields = 'match', 'player',
+    readonly_fields = linked_readonly_fields
+admin.site.register(MatchPenaltyHistory, MatchPenaltyHistoryAdmin)
 
 
 class ClubPlayerMatchAdmin(NoFilterAdmin):

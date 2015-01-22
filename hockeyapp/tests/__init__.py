@@ -8,7 +8,8 @@ from ..models import Match, Player, Club
 class HockeyAppTest(base.tests.BaseTest):
     blank = ''
     player_id = 3582
-    match_id = 44367
+    mhl_match_id = 44367
+    khl_match_id = 42100
 
     def base_test(self):
         ''' base hockeapp test '''
@@ -16,9 +17,11 @@ class HockeyAppTest(base.tests.BaseTest):
         #creates
         self._create_club()
         self._create_player()
-        self._create_match()
+        self._create_mhl_match()
+        self._create_khl_match()
         #updates
-        self._update_match()
+        self._update_mhl_match()
+        self._update_khl_match()
 
     def _check_parsers(self):
         ''' test parsers fucntionality'''
@@ -26,10 +29,14 @@ class HockeyAppTest(base.tests.BaseTest):
         self.player_data = parsers.player.GetPlayerInfo(
                                             ).get_page(self.player_id)
         self.assertIsNotNone(self.player_data)
-        # test match parser
-        self.match_data = parsers.match.HockeyMatchParser(html=True
-                                            ).get_page(self.match_id)
-        self.assertIsNotNone(self.match_data)
+        # test mhl match parser
+        self.mhl_match_data = parsers.match.HockeyMHLMatchParser(html=True
+                                                ).get_page(self.mhl_match_id)
+        self.assertIsNotNone(self.mhl_match_data)
+        # test khl match parser
+        self.khl_match_data = parsers.match.HockeyKHLMatchParser(html=True
+                                                ).get_page(self.khl_match_id)
+        self.assertIsNotNone(self.khl_match_data)
         # test clubs parser
         self.clublink = parsers.club.GetAllClubURLs().get_page()[0][:-1]
         self.assertIsNotNone(self.clublink)
@@ -79,14 +86,14 @@ class HockeyAppTest(base.tests.BaseTest):
         self.assertEqual(Player.objects.filter(khl_id=khlid).count(), 1)
         self.assertNotEqual(player.ru_fio, self.blank)
 
-    def _create_match(self):
+    def _create_mhl_match(self):
         '''
-            test create match
+            test create mhl match
         '''
         self.assertEqual(Match.objects.count(), 0)
         #get first match
-        khlid = self.match_id
-        match = Match.objects.get_or_create_match(**self.match_data)
+        khlid = self.mhl_match_id
+        match = Match.objects.get_or_create_match(**self.mhl_match_data)
         self.assertEqual(Match.objects.count(), 1)
         #check fields
         self.assertEqual(match.khl_id, khlid)
@@ -104,13 +111,13 @@ class HockeyAppTest(base.tests.BaseTest):
         self.assertEqual(match.home_players.count(), 22)
         self.assertEqual(match.guest_players.count(), 22)
 
-    def _update_match(self):
+    def _update_mhl_match(self):
         '''
-            test update match
+            test update mhl match
         '''
         #get and update match
-        match = Match.objects.get(khl_id=self.match_id)
-        parser = parsers.match.HockeyMatchParser
+        match = Match.objects.get(khl_id=self.mhl_match_id)
+        parser = parsers.match.HockeyMHLMatchParser
         match = parser().update_model_object(match)
         #check fields
         for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
@@ -127,3 +134,53 @@ class HockeyAppTest(base.tests.BaseTest):
         self.assertEqual(match.line_judges.count(), 1)
         self.assertEqual(match.home_players.count(), 22)
         self.assertEqual(match.guest_players.count(), 22)
+
+
+    def _create_khl_match(self):
+        '''
+            test create khl match
+        '''
+        self.assertEqual(Match.objects.count(), 1)
+        #get first match
+        khlid = self.khl_match_id
+        match = Match.objects.get_or_create_match(**self.khl_match_data)
+        self.assertEqual(Match.objects.count(), 2)
+        #check fields
+        self.assertEqual(match.khl_id, khlid)
+        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count'):
+            self.assertNotEqual(getattr(match, field), self.blank)
+        for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
+        'guest_team_id', 'guest_coach_id', 'spectators'):
+            self.assertIsNotNone(getattr(match, field))
+        #check relations
+        self.assertEqual(match.matchgoalhistory_set.count(), 8)
+        self.assertEqual(match.matchpenaltyhistory_set.count(), 9)
+        self.assertEqual(match.clubplayermatch_set.count(), 41)
+        self.assertEqual(match.judges.count(), 2)
+        self.assertEqual(match.line_judges.count(), 2)
+        self.assertEqual(match.home_players.count(), 21)
+        self.assertEqual(match.guest_players.count(), 20)
+
+    def _update_khl_match(self):
+        '''
+            test update khl match
+        '''
+        #get and update match
+        match = Match.objects.get(khl_id=self.khl_match_id)
+        parser = parsers.match.HockeyKHLMatchParser
+        match = parser().update_model_object(match)
+        #check fields
+        for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
+        'detail_count'):
+            self.assertNotEqual(getattr(match, field), self.blank)
+        for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
+        'guest_team_id', 'guest_coach_id'):
+            self.assertIsNotNone(getattr(match, field))
+        #check relations
+        self.assertEqual(match.matchgoalhistory_set.count(), 8)
+        self.assertEqual(match.matchpenaltyhistory_set.count(), 9)
+        self.assertEqual(match.clubplayermatch_set.count(), 41)
+        self.assertEqual(match.judges.count(), 2)
+        self.assertEqual(match.line_judges.count(), 2)
+        self.assertEqual(match.home_players.count(), 21)
+        self.assertEqual(match.guest_players.count(), 20)

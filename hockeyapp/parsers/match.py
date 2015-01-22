@@ -15,6 +15,7 @@ from django.db.models.loading import get_model
 from base.utils import str2int_safe, str2float_safe, str2sec_safe
 
 from .. import defaults
+from ..utils import khl_string_data2python_obj_safe
 
 from . import GrabParser
 
@@ -135,16 +136,17 @@ class AdvancedHockeyMatchParser(GrabParser):
                     player['fiver'] = str2int_safe(fiver)
         self.teams = None
 
-class HockeyMatchParser(GrabParser):
-    b'''Парсер хоккейной статистики матча'''
-    url = defaults.URL
+
+class HockeyMHLMatchParser(GrabParser):
+    b'''Парсер хоккейной статистики матча с сайта МХЛ'''
+    url = defaults.MHL_URL
     absolute_url = url
     pk_kwarg = 'idgame'
     as_get_param = True
-    match_protocol_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
+    match_protocol_xpath = defaults.MHL_MATCH_PROTOCOL_XPATH
     page_tree = None
-    body_xpath = defaults.BODY_XPATH
-    xpath_dict = defaults.MATCH_REPORT_DICT
+    body_xpath = defaults.MHL_BODY_XPATH
+    xpath_dict = defaults.MHL_MATCH_REPORT_DICT
     model_name = 'Match'
     adv_stats = None
 
@@ -160,16 +162,16 @@ class HockeyMatchParser(GrabParser):
 
     def get_page(self, id=None):
         b'''  смотрим протокол матча '''
-        self.page_tree = super(HockeyMatchParser, self).get_page(id)
+        self.page_tree = super(HockeyMHLMatchParser, self).get_page(id)
         if self.page_tree is not None:
             if self.page_tree.xpath(self.match_protocol_xpath):
                 body = self.page_tree.xpath(self.match_protocol_xpath)[0]
-                if body.text_content().find(defaults.EMPTY_PAGE_TEXT) == -1:
+                if body.text_content().find(defaults.MHL_EMPTY_PAGE_TEXT) == -1:
                     #протокол игры существует
                     body = self.page_tree.xpath(self.body_xpath)[0]
                     body = body.text_content().encode('utf-8')
-                    check = (   body.find(defaults.BODY_NOTEXISTS) == -1 and
-                                body.find(defaults.BODY_NOTEXISTS_ALT) == -1
+                    check = (   body.find(defaults.MHL_BODY_NOTEXISTS) == -1 and
+                                body.find(defaults.MHL_BODY_NOTEXISTS_ALT) == -1
                     )
                     if check:
                         #протокол найден, собираем данные
@@ -197,7 +199,6 @@ class HockeyMatchParser(GrabParser):
         b''' Дополнительная статитстика по игрокам '''
         if matchid:
             self.adv_stats = AdvancedHockeyMatchParser().get_page(matchid)
-
 
     def get_match_all_data(self, matchid=None, html_body=None):
         b''' метод запускается, в случае если протокол игры существует и найден
@@ -246,7 +247,7 @@ class HockeyMatchParser(GrabParser):
             }
             return res
 
-    def python_date(self, date):
+    def python_date(self, date, month_dict = defaults.MD):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
@@ -255,7 +256,7 @@ class HockeyMatchParser(GrabParser):
             _date_dict = _dt
             _m = _date_dict[0].split()[1].encode('utf-8')
             _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
-                                                    defaults.MD.get(_m))
+                                                    month_dict.get(_m))
             if _date_dict[-1] != '':
                 mask = '%d %m %Y %H:%M'
             else:
@@ -381,7 +382,7 @@ class HockeyMatchParser(GrabParser):
                     'ru_fio': _raw_link.text,
                     'stats': self._get_player_match_stats_by_line(tr,line_type),
             }
-            if self.adv_stats:
+            if self.adv_stats and adv_stats_key:
                 res['adv_stats'] = self.adv_stats.get(adv_stats_key,{}
                                                 ).get(_num)
             return res
@@ -401,7 +402,7 @@ class HockeyMatchParser(GrabParser):
         if line_type > 1:
             return {
                     'plus_minus': str2int_safe(tr.xpath('td[7]/text()')[0]),
-                    'penalty_time': tr.xpath('td[9]/text()')[0],
+                    'penalty_time': tr.xpath('td[8]/text()')[0],
                     'ev_goals': str2int_safe(tr.xpath('td[9]/text()')[0]),
                     'pp_goals': str2int_safe(tr.xpath('td[10]/text()')[0]),
                     'es_goals': str2int_safe(tr.xpath('td[11]/text()')[0]),
@@ -427,12 +428,12 @@ class HockeyMatchParser(GrabParser):
     def get_match_num(self):
         b''' возьмем значение номера матча '''
         _res = self._get_value('match_num')
-        return _res[0].text.split('.')[0] if _res else ''
+        return _res[0].strip().split('.')[0] if _res else ''
 
     def get_match_date(self):
         b''' возьмем значение даты матча '''
         _res = self._get_value('match_date')
-        return _res[0].text.split('.')[1] if _res else ''
+        return _res[0].strip().split('.')[1] if _res else ''
 
     def get_spectators(self):
         b''' возьмем значение посещаемости '''
@@ -442,12 +443,12 @@ class HockeyMatchParser(GrabParser):
     def get_home_team(self):
         b''' получаем имя домашней команды '''
         _res = self._get_value('home_team')
-        return _res[0].text.strip() if _res else ''
+        return _res[0].strip() if _res else ''
 
     def get_home_team_region(self):
         b''' получаем регион домашней команды '''
         _res = self._get_value('home_team_region')
-        return _res[0].text[1:-1] if _res else ''
+        return _res[0].strip()[1:-1] if _res else ''
 
     def get_home_team_coach(self):
         b''' получаем тренера домашней команды '''
@@ -457,12 +458,12 @@ class HockeyMatchParser(GrabParser):
     def get_guest_team(self):
         b''' получаем имя гостевой команды '''
         _res = self._get_value('guest_team')
-        return _res[0].text.strip() if _res else ''
+        return _res[0].strip() if _res else ''
 
     def get_guest_team_region(self):
         b''' получаем регион гостевой команды '''
         _res = self._get_value('guest_team_region')
-        return _res[0].text[1:-1] if _res else ''
+        return _res[0].strip()[1:-1] if _res else ''
 
     def get_guest_team_coach(self):
         b''' получаем тренера гостевой команды '''
@@ -498,3 +499,208 @@ class HockeyMatchParser(GrabParser):
             _res = _res[0].text_content().strip().split('\n')
             return [j.strip() for j in _res[1:]]
         return ''
+
+################################################################################
+################################################################################
+################################################################################
+
+
+class HockeyKHLMatchParser(HockeyMHLMatchParser):
+    b'''Парсер хоккейной статистики матча с сайта КХЛ'''
+    url = defaults.KHL_MATCH_URL
+    absolute_url = url
+    pk_kwarg = 'id'
+    as_get_param = False
+    match_protocol_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
+    body_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
+    xpath_dict = defaults.KHL_MATCH_REPORT_DICT
+
+    def get_page(self, id=None):
+        b'''  смотрим протокол матча '''
+        _id = str(id)+'/protocol'
+        self.page_tree = GrabParser.get_page(self, _id)
+        if self.page_tree is not None:
+            if self.page_tree.xpath(self.match_protocol_xpath):
+                body = self.page_tree.xpath(self.match_protocol_xpath)[0]
+                if body.text_content().strip():
+                    #протокол игры существует
+                    #протокол найден, собираем данные
+                    _html_body = self.g.response.unicode_body()
+                    return self.get_match_all_data( html_body=_html_body,
+                                                    matchid=id)
+            else:
+                time.sleep(60)
+                self.get_page(id)
+
+    def get_spectators(self):
+        b''' возьмем значение посещаемости '''
+        _res = self._get_value('match_spectators')
+        return str2int_safe(_res[0].strip().split()[0])
+
+    def python_date(self, date, month_dict = defaults.MDP):
+        b''' парсит дату в datetime object '''
+        if date:
+            _date_dict = date.strip().lower().split(',')
+            _dt = _date_dict[:1]
+            _dt.append(_date_dict[2])
+            _date_dict = _dt
+            _m = _date_dict[0].split()[1].encode('utf-8')
+            _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
+                                                    month_dict.get(_m))
+            if _date_dict[-1] != '':
+                mask = '%d %m %Y %H:%M'
+            else:
+                mask = '%d %m %Y'
+            _dt = ''.join(_date_dict).encode('utf-8')
+            return datetime.datetime.strptime(_dt, mask)
+
+    def get_match_judges(self):
+        b''' получаем судей матча '''
+        _res = self._get_value('match_judges')
+        if _res:
+            _res = _res[0].split(',')
+            return [j.strip() for j in _res]
+        return ''
+
+    def get_match_line_judges(self):
+        b''' получаем линейных судей матча '''
+        _res = self._get_value('match_line_judges')
+        if _res:
+            _res = _res[0].split(',')
+            return [j.strip() for j in _res]
+        return ''
+
+    def get_home_team_coach(self):
+        b''' получаем тренера домашней команды '''
+        _res = self._get_value('home_team_coach')
+        return _res[0].split(':')[1].strip() if _res else ''
+
+    def get_guest_team_coach(self):
+        b''' получаем тренера гостевой команды '''
+        _res = self._get_value('guest_team_coach')
+        return _res[0].split(':')[1].strip() if _res else ''
+
+    def get_goals_history(self):
+        b''' заброшенные шайбы '''
+        goals_data = self._get_value('goals_history')
+        if goals_data:
+            goals_data = khl_string_data2python_obj_safe(goals_data[0])
+            return [self._get_goal_data(item) for item in goals_data]
+        else:
+            return list()
+
+    def _get_goal_data(self, item):
+        b''' данные о заброшенной шайбе '''
+        _parity = _PARITTYDICT.get(item[4].encode('utf-8'),0)
+        res = {
+                'period': item[1].strip(),
+                'time': item[2].strip(),
+                'parity': _parity,
+                'scorer': fromstring(item[5]).attrib.get('href',''
+                                            ).split('/')[-2],
+                'assist': self._get_assist(item),
+                'home_five_numbers': self._get_five_numbers(item[8]),
+                'guest_five_numbers': self._get_five_numbers(item[9]),
+        }
+        return res
+
+    def _get_assist(self, item):
+        b''' ассистенты '''
+        res = []
+        for i in item[6],item[7]:
+            if i:
+                res.append(fromstring(i).attrib.get('href','').split('/')[-2])
+        return set(res)
+
+    def _get_five_numbers(self, string):
+        b''' игроки на поле при заброшенной шайбе '''
+        return ','.join([fromstring(i).text for i in string.split(',')
+                                            if i and fromstring(i).text
+            ])
+
+    def get_penalties_history(self):
+        b''' штрафы '''
+        penalty_table = self._get_value('penalties_history')
+        if penalty_table:
+            lst = penalty_table[0].xpath('tbody/tr')
+            return [self._get_penalty_data(tr) for tr in lst
+                    if tr.attrib.get('class', '') not in ('group',)
+            ]
+        else:
+            return list()
+
+    def _get_penalty_data(self, tr):
+        b''' данные о штрафе '''
+        _tds = tr.xpath('td')
+        if _tds[0].text:
+            _ptype = _tds[3].text
+            _dur = _tds[2].text
+            _time = _tds[0].text
+        else:
+            _ptype = _tds[4].text
+            _dur = _tds[3].text
+            _time = _tds[1].text
+        res = {
+                'time': _time.strip() if _time else '',
+                'duration': _dur.strip() if _dur else '',
+                'ptype': _ptype.strip() if _ptype else '',
+        }
+        if tr.xpath('td/a'):
+            _player = tr.xpath('td/a')[0].attrib.get('href','///'
+                                                     ).split('/')[-2],
+            if _player:
+                res['player'] = isinstance(_player, tuple) and _player[0]
+        return res
+
+
+    def _get_players(self, key, line_type, ask=''):
+        b''' получаем игроков команды '''
+        plrs_data = self._get_value(key)
+        if plrs_data:
+            plrs_data = khl_string_data2python_obj_safe(plrs_data[0])
+            return (self._get_player_data(item, line_type, ask) for item in plrs_data)
+
+    def _get_player_data(self, item, line_type, adv_stats_key=''):
+        b''' берем значения номер, id и тип игрока '''
+        _num = fromstring(item[0]).text.strip()
+        _plr = item[1] if item[1][-1]=='>' else item[1].split('</a>')[0]+'</a>'
+        res = {
+                'number': _num,
+                'khl_id': fromstring(_plr).attrib.get('href','///'
+                                                    ).split('/')[-2],
+                'line': line_type,
+                'ru_fio': fromstring(_plr).text.strip(),
+                'stats': self._get_player_match_stats_by_line(item,line_type),
+        }
+        if self.adv_stats and adv_stats_key:
+            res['adv_stats'] = self.adv_stats.get(adv_stats_key,{}
+                                            ).get(_num)
+        return res
+
+    def _get_player_match_stats_by_line(self, item, line_type):
+        b''' суммарная статистика игрока в матче '''
+        if line_type > 1:
+            return {
+                    'plus_minus': str2int_safe(item[6]),
+                    'penalty_time': item[7],
+                    'ev_goals': str2int_safe(item[8]),
+                    'pp_goals': str2int_safe(item[9]),
+                    'es_goals': str2int_safe(item[10]),
+                    'overtime_goals': str2int_safe(item[11]),
+                    'win_goals': str2int_safe(item[12]),
+                    'bullet_goals': str2int_safe(item[13]),
+                    'shots': str2int_safe(item[14]),
+                    'pis': str2float_safe(item[15]),
+                    'faceoff': str2int_safe(item[16]),
+                    'winfaceoff': str2int_safe(item[17]),
+                    'winfaceoff_p': str2float_safe(item[18]),
+            }
+        else:
+            return {
+                    'shots': str2int_safe(item[6]),
+                    'loose_goals': str2int_safe(item[7]),
+                    'saves': str2int_safe(item[8]),
+                    'saves_p': str2float_safe(item[9]),
+                    'sf': str2float_safe(item[10]),
+                    'gamingtime': str2sec_safe(item[15]),
+            }

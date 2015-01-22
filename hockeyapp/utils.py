@@ -1,4 +1,5 @@
 import datetime
+import json
 
 
 def get_season_start_date(year=None):
@@ -35,3 +36,13 @@ def get_season_end_date(year=None):
         else:  # so should be next year then
             return datetime.date(year=year + 1, month=MONTH, day=DAY)
     return datetime.date(year=year, month=MONTH, day=DAY)
+
+
+def khl_string_data2python_obj_safe(string):
+    try:
+        string = string.split('\n')[1].split(' = ')[1][:-1]
+        if string[-2] == ',':
+            string = string[:-2]+string[-1]
+        return json.loads(string)
+    except:
+        return None

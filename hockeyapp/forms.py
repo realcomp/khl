@@ -14,7 +14,7 @@ from .models import Club, LeagueClub
 
 class ClubleaguesAddForm(forms.ModelForm):
     clubs = forms.ModelMultipleChoiceField(
-                queryset=Club.objects.filter(league__isnull=True),
+                queryset=Club.objects.all().order_by('ru_title'),
                 widget=FilteredSelectMultiple(
                                     verbose_name=Club._meta.verbose_name_plural,
                                     is_stacked=False,
@@ -31,7 +31,14 @@ class ClubleaguesAddForm(forms.ModelForm):
         }
 
 
+PARSERS = (
+            (1, _('MHL parser')),
+            (2, _('KHL parser')),
+            #(3, _('VHL parser')),
+)
+
 class MatchParserForm(forms.Form):
+    parser_id = forms.ChoiceField(label=_('Parser'), choices=PARSERS)
     from_id = forms.IntegerField(_('From match khl id'), min_value=43)
     to_id = forms.IntegerField(_('To match khl id'), min_value=43, required=False)
     count = forms.IntegerField(_('Count matches'), min_value=1, required=False)

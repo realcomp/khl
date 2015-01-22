@@ -1,36 +1,73 @@
 #coding: utf-8
 from __future__ import unicode_literals
 
-# MATCH
-BODY_NOTEXISTS = b'Протокол не найден'
-BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
-EMPTY_PAGE_TEXT = 'Fatal error'
-KHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
-URL = 'http://mhl.khl.ru/report/272/'
-KHL_SITE_URL =  'http://www.khl.ru'
 
-BODY_XPATH = KHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
+# KHL MATCH ####################################################################
+KHL_SITE_URL =  'http://www.khl.ru'
+KHL_MATCH_URL = KHL_SITE_URL+'/game/266/'
+KHL_MATCH_PROTOCOL_XPATH = '//div[@id="wrapper"]/div[@id="content"]'
+KHL_BODY_NOTEXISTS = b'Протокол не найден'
+KHL_BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
+KHL_EMPTY_PAGE_TEXT = 'Fatal error'
+
+_MMP_XPATH = '/div[@class="gameHeader"]' #xpath match main protocol
+_MPS_HOME_XPATH = '/div[@class="gameTabs"]/div[@class="section"][3]'
+_MPS_GUEST_XPATH = '/div[@class="gameTabs"]/div[@class="section"][4]'
+KHL_MATCH_REPORT_DICT = {
+    'match_num': '//div[@class="header"]/h2/text()', #номер матча
+    'match_date':  '//div[@class="header"]/h2/text()', #дата матча
+    'match_count': _MMP_XPATH+'/div[@class="time"]/div[@class="time-preview"]/div[@class="counter"]/b/text()',
+    'match_detail_count': _MMP_XPATH+'/div[@class="time"]/div[@class="time-preview"]/div[2]/text()',
+    'match_judges': _MMP_XPATH+'/table[@class="info"]/tr[2]/td[2]/text()',
+    'match_line_judges': _MMP_XPATH+'/table[@class="info"]/tr[3]/td[2]/text()',
+    'match_spectators': _MMP_XPATH+'/table[@class="info"]/tr[1]/td[2]/text()',
+    'home_team': _MMP_XPATH+'/div[@class="teamName left"]/div[@class="name"]/text()',
+    'home_team_region': _MMP_XPATH+'/div[@class="teamName left"]/div[@class="name"]/span[1]/text()',
+    'home_team_coach': _MMP_XPATH+'/div[@class="teamName left"]/div[@class="name"]/span[@class="trainer"]/text()',
+    'home_keepers': _MPS_HOME_XPATH+'/script[1]/text()',
+    'home_defenders': _MPS_HOME_XPATH+'/script[2]/text()',
+    'home_offenders': _MPS_HOME_XPATH+'/script[3]/text()',
+    'guest_team': _MMP_XPATH+'/div[@class="teamName"]/div[@class="name"]/text()',
+    'guest_team_region': _MMP_XPATH+'/div[@class="teamName"]/div[@class="name"]/span[1]/text()',
+    'guest_team_coach': _MMP_XPATH+'/div[@class="teamName"]/div[@class="name"]/span[@class="trainer"]/text()',
+    'guest_keepers': _MPS_GUEST_XPATH+'/script[1]/text()',
+    'guest_defenders': _MPS_GUEST_XPATH+'/script[2]/text()',
+    'guest_offenders': _MPS_GUEST_XPATH+'/script[3]/text()',
+    'goals_history': '/div[@class="gameTabs"]/script/text()',
+    'penalties_history': '/div[@class="gameTabs"]/div[@class="section"]/div[@class="dataTables_wrapper"]/table[@class="dataTable stripe compact row-border hl no-footer"]',
+}
+################################################################################
+
+
+# MHL MATCH ####################################################################
+MHL_BODY_NOTEXISTS = b'Протокол не найден'
+MHL_BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
+MHL_EMPTY_PAGE_TEXT = 'Fatal error'
+MHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
+MHL_URL = 'http://mhl.khl.ru/report/272/'
+
+MHL_BODY_XPATH = MHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
 
 _MMP_XPATH = '//table[@class="matches_protocol_main"]' #xpath match main protocol
 _MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]//table'
 _MPS_GUEST_XPATH = '//div[@class="matches_player_statistic"]//dl//table[@class="matches_penalty"]'
 
-MATCH_REPORT_DICT = {
-    'match_num': '//div[@class="games_title"]//p', #номер матча
-    'match_date': '//div[@class="games_title"]//p', #дата матча
+MHL_MATCH_REPORT_DICT = {
+    'match_num': '//div[@class="games_title"]/p/text()', #номер матча
+    'match_date': '//div[@class="games_title"]/p/text()', #дата матча
     'match_count': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[@class="count"]/span/text()',
     'match_detail_count': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/div[@class="detail_count"]/text()',
     'match_judges': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[2]',
     'match_line_judges': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[3]',
     'match_spectators': '//div[@class="games_title"]//p[@class="games_title_more"]/text()',
-    'home_team': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="first_column"]/h2',
-    'home_team_region': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="first_column"]/p/strong',
+    'home_team': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="first_column"]/h2/text()',
+    'home_team_region': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="first_column"]/p/strong/text()',
     'home_team_coach': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="first_column"]/p/text()',
     'home_keepers': _MPS_HOME_XPATH+'[1]',
     'home_defenders': _MPS_HOME_XPATH+'[2]',
     'home_offenders': _MPS_HOME_XPATH+'[3]',
-    'guest_team': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="right_column"]/h2',
-    'guest_team_region': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="right_column"]/p/strong',
+    'guest_team': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="right_column"]/h2/text()',
+    'guest_team_region': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="right_column"]/p/strong/text()',
     'guest_team_coach': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="right_column"]/p/text()',
     'guest_keepers': _MPS_GUEST_XPATH+'[1]',
     'guest_defenders': _MPS_GUEST_XPATH+'[2]',
@@ -38,7 +75,10 @@ MATCH_REPORT_DICT = {
     'goals_history': '//table[@class="matches_goals"]',
     'penalties_history': '//table[@class="matches_penalty"]',
 }
+################################################################################
 
+
+#KHL Match Advanced DATA INFO
 MATCH_ADV_STATS_URL = 'http://text.khl.ru/text/'
 MATCH_ADV_STATS_XPATH = '//div[@id="wrapper"]/div[@class="grey-block"]/div[@class="tabs-block"]'
 MATCH_ADV_STATC_DICT = {
@@ -95,7 +135,7 @@ MATCH_PLAYER_EXTRAS = {
 #----------
 
 
-#PLAYER INFO
+#KHL PLAYER INFO
 PLAYER_URL = KHL_SITE_URL+'/players/'
 PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
 PLAYER_DATA_DICT = {
@@ -148,7 +188,7 @@ MDP = {
         b'декабря': '12',
 }
 
-#CLUB INFO
+#KHL CLUB INFO
 KHL_CLUB_URL = KHL_SITE_URL+'/clubs/'
 CLUB_LIST_XPATH = '//div[@class="teams"]//div[@class="team"]//div[@class="icon"]//a/@href'
 CLUB_INFO_XPATH = '//div[@id="wrapper"]//div[@id="content"]'

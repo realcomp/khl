@@ -17,30 +17,34 @@ from . import models
 logger = logging.getLogger('root')
 
 @app.task(ignore_result=True, track_started=True)
-def async_hockey_match_parser(matchid):
+def async_hockey_match_parser(parser_id, matchid):
     b'''
         Парсер матча.
     '''
     try:
-        parsers.match.HockeyMatchParser(html=True
-            ).put_data_in_db_from_page(matchid)
-        #parsers.match.HockeyMatchParser(html=False).get_page(matchid)
+        parser = {  b'1': parsers.match.HockeyMHLMatchParser,
+                    b'2': parsers.match.HockeyKHLMatchParser,
+                    #b'3': parsers.match.HockeyVHLMatchParser,
+        }.get(parser_id, parsers.match.HockeyMHLMatchParser)
+        parser(html=True).put_data_in_db_from_page(matchid)
+        #parsers.match.HockeyMHLMatchParser(html=False).get_page(matchid)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
 
 @app.task(ignore_result=True, track_started=True)
-def async_hockey_matches_parser(id, matches):
+def async_hockey_matches_parser(parser_id, match_id, matches):
     b'''
         Парсер матчей.
-        Требует два аргумента:
-            1. стартовый id матча
-            2. Счетчик количества id
+        Требует три аргумента:
+            1. id парсера
+            2. стартовый match_id матча
+            3. Счетчик количества match_id
     '''
     for i in range(matches):
-        matchid = id+i
+        matchid = match_id+i
         try:
-            async_hockey_match_parser.delay(matchid)
+            async_hockey_match_parser.delay(parser_id, matchid)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
         #if i%100 == 0:
