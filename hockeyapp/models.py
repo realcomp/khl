@@ -8,13 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
-from base.models import TitleBaseModel, AdminLinkMixin, Season
+from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from . import managers
 
 
-class AbstractMan(models.Model):
+class AbstractMan(LocaleAttrMixin, models.Model):
     ru_fio = models.CharField(_('Full name (rus)'), max_length=4096, blank=True)
     ru_name = models.CharField(_('Name (rus)'), max_length=4096, blank=True, null=True)
     ru_lastname = models.CharField(_('Last name (rus)'), max_length=4096, blank=True, null=True)
@@ -199,6 +199,13 @@ class Club(TitleBaseModel):
     html_body = models.TextField('Parse HTML', blank=True)
 
     __unicode__ = lambda self: '{} ({})'.format(self.ru_title, self.address)
+
+    def get_title_verbose(self, request=None):
+        title = self.get_locale_attr('title', request=request)
+        if self.address:
+            title += ' (%s)' % self.address.get_locale_attr(
+                'title', request=request)
+        return title
 
     @property
     def all_players(self):

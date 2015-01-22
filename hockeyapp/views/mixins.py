@@ -16,10 +16,13 @@ class OrderMixin(object):
         qs = super(OrderMixin, self).filter_queryset(qs)
         if 'order_by' in self.request.GET:
             field = self.request.GET['order_by']
-            if field.lstrip('-').startswith('[') and field.endswith(']'):
+            is_array = (
+                field.lstrip('-').startswith('[') and
+                field.endswith(']'))
+            if is_array:
                 fields = json.loads(field.lstrip('-'))
             else:
-                fields = [field]
+                fields = [field.lstrip('-')]
             fields = map(
                 lambda f: ('-' if field.startswith('-') else '') + (f % self.request.LANGUAGE_CODE if '%s' in f else f),
                 fields)

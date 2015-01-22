@@ -267,14 +267,7 @@
             };
         };
 
-        $scope.setSeason = function(e) {
-            // $(e).attr('value', '[' + $(e).val() + ']');
-            self.list();
-        }
-
-        this.data = {};
-        this.table = {};
-        this.table_index = [ // table indexes, null is an empty filler
+        self.TABLE_INDEX = [ // table indexes, null is an empty filler
             // row 1
             [['defender', 0], ['defender', null], ['defender', 1], ['defender', null],
              ['defender', 2], ['defender', null], ['defender', 3],
@@ -306,19 +299,55 @@
              ['trainer', 5], ['trainer', null], ['trainer', 6],
              ['goalkeeper', null]],
         ];
-        this.loader = false;
 
-        this.getPerson = function(cell) {
-            if (this.table && cell && Array.isArray(cell)) {
-                row = this.table[cell[0]];
+        self.COMPARE_TABLE_INDEX = [ // table indexes, null is an empty filler
+            // row 1
+            [['club', 0], ['club', null], ['club', 1], ['club', null],
+             ['club', 2], ['club', null], ['club', 3], ['club', null],
+             ['club', 4], ['club', null], ['club', 5]],
+            // row 1
+            [['club', null], ['club', 6], ['club', null], ['club', 7],
+             ['club', null], ['club', 8], ['club', null], ['club', 9],
+             ['club', null], ['club', 10],  ['club', null]],
+            // row 3
+            [['club', 11], ['club', null], ['club', 12], ['club', null],
+             ['club', 13], ['club', null], ['club', 14], ['club', null],
+             ['club', 15], ['club', null], ['club', 16]],
+            // row 4
+            [['club', null], ['club', 17], ['club', null], ['club', 18],
+             ['club', null], ['club', 19], ['club', null], ['club', 20],
+             ['club', null], ['club', 21],  ['club', null]],
+            // row 5
+            [['club', 22], ['club', null], ['club', 23], ['club', null],
+             ['club', 24], ['club', null], ['club', 25], ['club', null],
+             ['club', 26], ['club', null], ['club', 27]],
+            // row 6
+            [['club', null], ['club', 28], ['club', null], ['club', 29],
+             ['club', null], ['club', 30], ['club', null], ['club', 31],
+             ['club', null], ['club', 32],  ['club', null]]
+        ];
+
+        self.current_season = {};
+        self.previous_seasons = {
+            'seasons': []
+        };
+
+        $scope.setSeason = function(e) {
+            self.list(self.compare);
+        }
+
+        self.getPerson = function(season, cell) {
+            if (season.table && cell && Array.isArray(cell)) {
+                row = season.table[cell[0]];
                 if (row) {
-                    return this.table[cell[0]][cell[1]];
+                    return season.table[cell[0]][cell[1]];
                 }
             }
         }
 
-        this.isVisible = function(person) {
-            switch (this.status) {
+        self.isVisible = function(season, cell) {
+            var person = this.getPerson(season, cell);
+            switch (self.status) {
                 default:
                     return true;
                 case 'joined':
@@ -330,24 +359,64 @@
             }
         };
 
-        this.list = function() {
-            var self = this,
-            params = $('#ClubTeamForm').serialize();
-            params = params + '&order_by=["line","%s_fio"]';
-            self.data = {};
-            self.loader = true;
+        self.getTable = function(data) {
+            return {
+                'goalkeeper': data.goalkeeper_players,
+                'defender': data.defender_players,
+                'forward': data.offender_players,
+                'trainer': data.coaches
+            }
+        }
+
+        self.list = function(callback) {
+            var params = $('#ClubTeamForm').serialize();
+            self.current_season = {};
+            self.previous_seasons = {
+                'seasons': []
+            };
+            self.current_season.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
-                self.data = data;
-                self.table['goalkeeper'] = self.data.goalkeeper_players;
-                self.table['defender'] = self.data.defender_players;
-                self.table['forward'] = self.data.offender_players;
-                self.table['trainer'] = self.data.coaches;
-                self.loader = false;
+                self.current_season.data = data;
+                self.current_season.table = self.getTable(data);
+                self.current_season.loader = false;
+                if (typeof callback === 'function') {
+                    callback();
+                }
             });
         };
 
-        this.list();
+        this.compare = function() {
+            var url = $('#ClubTeamCompareLink').attr('href'),
+            params, i;
+            if (self.previous_seasons.seasons.length) {
+                i = self.previous_seasons.seasons.length - 1;
+                params = 'season=' + self.previous_seasons.seasons[i].data.prev_season.pk;
+            } else {
+                params = 'season=' + self.current_season.data.season.pk;
+            }
+            self.previous_seasons.loader = true;
+            $http.get(url + '?' + params)
+            .success(function(data) {
+                var season = {};
+                season.data = data;
+                season.league = 'khl';
+                season.table = {
+                    'club': data.clubs
+                };
+                self.previous_seasons.seasons.push(season);
+                self.previous_seasons.loader = false;
+            });
+        };
+
+        this.isLastSeason = function() {
+            if (self.previous_seasons.seasons.length) {
+                i = self.previous_seasons.seasons.length - 1;
+                return self.previous_seasons.seasons[i].data.prev_season === null;
+            }
+        };
+
+        this.list(this.compare);
     }]);
 
     app.controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {

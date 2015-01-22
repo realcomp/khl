@@ -13,13 +13,14 @@ from rest_framework import generics
 from addresses.models import Country
 
 from .mixins import PaginationMixin, OrderMixin
+from ..models import Club, Player, ClubPlayer
 from ..serializers import (
     CountryLeaguesSerializer,
     PlayerCardSerializer,
-    ClubSerializer, ClubListSerializer,
+    ClubListSerializer,
     MetricsPlayerSerializer,
 )
-from ..models import Club, Player, ClubPlayer
+from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 
 
 class PlayersSearch(PaginationMixin, OrderMixin, generics.ListAPIView):
@@ -134,8 +135,15 @@ class ClubList(PaginationMixin, OrderMixin, generics.ListAPIView):
         return qs
 
 
-class ClubDetail(generics.RetrieveAPIView):
-    serializer_class = ClubSerializer
+class ClubTeam(generics.RetrieveAPIView):
+    serializer_class = ClubTeamSerializer
+
+    def get_queryset(self):
+        return Club.objects.all()
+
+
+class ClubTeamCompare(generics.RetrieveAPIView):
+    serializer_class = ClubTeamCompareSerializer
 
     def get_queryset(self):
         return Club.objects.all()

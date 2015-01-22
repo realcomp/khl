@@ -27,9 +27,9 @@ class AdminLinkMixin(object):
     def admin_list_link(cls):
         return reverse("admin:{}_{}_changelist".format( cls._meta.app_label,
                                                         cls._meta.module_name))
-        
 
-class TitleBaseModel(models.Model):
+
+class TitleBaseModel(LocaleAttrMixin, models.Model):
     ru_title = models.CharField(_('Title (rus)'), max_length=1024, blank=True)
     en_title = models.CharField(_('Title (en)'), max_length=1024, blank=True)
     __unicode__ = lambda self: self.ru_title

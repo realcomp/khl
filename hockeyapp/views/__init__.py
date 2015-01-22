@@ -6,10 +6,11 @@ from django.views.generic import DetailView, TemplateView
 from addresses.models import Country
 from base.models import Season
 
+from ..models import Club, Player
 from ..serializers import (
-    CountrySerializer, ClubSerializer, PlayerCardSerializer, SeasonSerializer
+    CountrySerializer, SeasonSerializer, PlayerCardSerializer,
+    ClubListSerializer,
 )
-from ..models import Club, Player, ClubPlayer
 from ..utils import get_season_end_date
 
 
@@ -136,7 +137,7 @@ class ClubView(DetailView):
             .order_by('-start_date'))
         context['seasons'] = SeasonSerializer(
             seasons, context=context, many=True).data
-        context.update(ClubSerializer(
+        context.update(ClubListSerializer(
             self.get_object(), context=context).data)
         return context
 
