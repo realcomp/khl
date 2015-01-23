@@ -1,5 +1,11 @@
 {% extends "hockeyapp/clubs/base.html" %}
 
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}hockey/js/clubs-team.js"></script>
+{% endblock %}
+
+{% block ngapp %}SportomaticsClubsTeam{% endblock %}
+
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-team-page">
@@ -27,7 +33,7 @@
             <div class="page-inner-container">
                 <div class="clubs-team-tabs"
                      ng-controller="ClubTeamController as ClubTeamCtrl">
-                    <form id="ClubTeamForm" action="{% url 'hockeyapp:club-detail-api' pk %}">
+                    <form id="ClubTeamForm" action="{% url 'hockeyapp:club-team-api' pk %}">
                     <div class="ui grid">
                         <div class="row">
                             <div class="column">
@@ -47,13 +53,13 @@
                                     </div>
                                     <ul>
                                         <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                               ng-click="ClubTeamCtrl.status = 'all'">Все</a></li>
+                                               ng-click="ClubTeamCtrl.players.status = 'all'">Все</a></li>
                                         <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                               ng-click="ClubTeamCtrl.status = 'joined'">Пришли в этом сезоне</a></li>
+                                               ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли в этом сезоне</a></li>
                                         <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                               ng-click="ClubTeamCtrl.status = 'left'">Ушли в этом сезоне</a></li>
+                                               ng-click="ClubTeamCtrl.players.status = 'left'">Ушли в этом сезоне</a></li>
                                         <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                               ng-click="ClubTeamCtrl.status = 'legionnaire'">Легионеры</a></li>
+                                               ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Легионеры</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -72,7 +78,7 @@
 
                                     <div id="team-photos" data-tab="team-photos">
                                         <table class="clubs-team-photos-table"
-                                               ng-show="ClubTeamCtrl.data.all_players">
+                                               ng-show="ClubTeamCtrl.players.data">
                                             <thead>
                                                 <tr>
                                                     <th class="cell-defender" colspan="7">защитники</th>
@@ -82,19 +88,19 @@
                                             </thead>
                                             <tbody>
                                                 {% verbatim %}
-                                                    <tr ng-repeat="row in ClubTeamCtrl.table_index">
-                                                        <td ng-repeat="cell in row"
-                                                            class="cell-{{ cell[0] }}">
+                                                    <tr ng-repeat="row in ClubTeamCtrl.PLAYERS_TABLE">
+                                                        <td ng-repeat="cell_id in row"
+                                                            class="cell-{{ cell_id[0] }}">
                                                             <a class="team-player-photo-link"
-                                                               href="{{ ClubTeamCtrl.getPerson(cell).url }}"
-                                                               ng-show="cell[0] && ClubTeamCtrl.getPerson(cell) && ClubTeamCtrl.isVisible(ClubTeamCtrl.getPerson(cell))">
+                                                               href="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).url }}"
+                                                               ng-show="cell_id[0] && ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id) && ClubTeamCtrl.isVisible(ClubTeamCtrl.players, cell_id)">
                                                                 <span class="team-player-number"
-                                                                      ng-show="ClubTeamCtrl.getPerson(cell).number">
-                                                                    {{ ClubTeamCtrl.getPerson(cell).number }}
+                                                                      ng-show="ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number">
+                                                                    {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number }}
                                                                 </span>
-                                                                <img ng-src="{{ ClubTeamCtrl.getPerson(cell).photo || '/static/images/nophoto.gif' }}" alt="" class="team-player-photo">
+                                                                <img ng-src="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).photo || '/static/images/nophoto.gif' }}" alt="" class="team-player-photo">
                                                                 <span class="team-player-name">
-                                                                    {{ ClubTeamCtrl.getPerson(cell).fio }}</span>
+                                                                    {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).fio }}</span>
                                                                 <span class="team-player-name"></span>
                                                             </a>
                                                         </td>
@@ -111,213 +117,65 @@
                                         </table>
                                         <div style="text-align: center">
                                             <img src="{{ STATIC_URL }}images/loader-large.gif"
-                                                 ng-show="ClubTeamCtrl.loader">
+                                                 ng-show="ClubTeamCtrl.players.loader">
                                         </div>
 
-                                        <div class="season-tabs season-last-tabs">
+                                        <a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
+                                        <div class="season-tabs season-last-tabs"
+                                             ng-repeat="clubs in ClubTeamCtrl.clubs.clubs">
                                             <div class="ui tabular menu content-tabs">
                                                 {% verbatim %}
-                                                <span class="heading">{{ ClubTeamCtrl.data.prev_season.label }}</span>
-                                                <ul>
-                                                    <li><a href="#leagues-all" class="item tab-btn" data-tab="leagues-all">КХЛ: 22 игрока</a></li>
-                                                    <li><a href="#leagues-all" class="item tab-btn" data-tab="leagues-all">ВХЛ: 3 игрока</a></li>
-                                                    <li><a href="#leagues-all" class="item tab-btn" data-tab="leagues-all">НХЛ: 2 игрока</a></li>
-                                                    <li><a href="#leagues-all" class="item tab-btn" data-tab="leagues-all">АХЛ: 1 игрок</a></li>
+                                                <span class="heading">{{ clubs.data.prev_season.label }}</span>
+                                                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                                    <li class="ui-state-default ui-corner-top"
+                                                        ng-class="{ 'ui-tabs-active ui-state-active':clubs.league === 'khl' }">
+                                                        <a href="#khl" class="item tab-btn ui-tabs-anchor" data-tab="khl"
+                                                           ng-click="clubs.league = 'khl'">КХЛ: 22 игрока</a></li>
+                                                    <li class="ui-state-default ui-corner-top"
+                                                        ng-class="{ 'ui-tabs-active ui-state-active':clubs.league === 'vhl' }">
+                                                        <a href="#khl" class="item tab-btn ui-tabs-anchor" data-tab="khl"
+                                                           ng-click="clubs.league = 'vhl'">ВХЛ: 3 игрока</a></li>
+                                                    <li class="ui-state-default ui-corner-top"
+                                                        ng-class="{ 'ui-tabs-active ui-state-active':clubs.league === 'nhl' }">
+                                                        <a href="#khl" class="item tab-btn ui-tabs-anchor" data-tab="khl"
+                                                           ng-click="clubs.league = 'nhl'">НХЛ: 2 игрока</a></li>
+                                                    <li class="ui-state-default ui-corner-top"
+                                                        ng-class="{ 'ui-tabs-active ui-state-active':clubs.league === 'ahl' }">
+                                                        <a href="#khl" class="item tab-btn ui-tabs-anchor" data-tab="khl"
+                                                           ng-click="clubs.league = 'ahl'">АХЛ: 1 игрок</a></li>
                                                 </ul>
                                                 {% endverbatim %}
                                             </div>
                                             <table class="clubs-team-logos-table" id="leagues-all" data-tab="leagues-all">
                                                 <tbody>
-                                                    <tr>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-goalkeeper">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
+                                                {% verbatim %}
+                                                    <tr ng-repeat="row in ClubTeamCtrl.CLUBS_TABLE">
+                                                        <td ng-repeat="cell_id in row"
+                                                            class="cell-{{ cell_id[0] }}">
+                                                            <a class="team-player-photo-link"
+                                                               href="{{ ClubTeamCtrl.getCell(clubs, cell_id).url }}"
+                                                               ng-show="cell_id[0] && ClubTeamCtrl.getCell(clubs, cell_id) && ClubTeamCtrl.isVisible(clubs, cell_id)">
+                                                                <img alt="" class="team-player-photo"
+                                                                     ng-src="{{ ClubTeamCtrl.getCell(clubs, cell_id).logo }}">
+                                                                <span class="team-player-name">
+                                                                    {{ ClubTeamCtrl.getCell(clubs, cell_id).title_verbose }}</span>
+                                                                <span class="team-player-name"></span>
                                                             </a>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-goalkeeper"></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-goalkeeper">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-defender">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-defender"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-forward"></td>
-                                                        <td class="cell-forward">
-                                                            <a href="#" class="team-player-team-link">
-                                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo">
-                                                                <span class="team-name">СКА</span>
-                                                                <span class="team-city">(Москва)</span>
-                                                            </a>
-                                                        </td>
-                                                        <td class="cell-goalkeeper"></td>
-                                                    </tr>
+                                                {% endverbatim %}
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <div style="text-align: center">
+                                            <img src="{{ STATIC_URL }}images/loader-large.gif"
+                                                 ng-show="ClubTeamCtrl.clubs.loader">
+                                        </div>
 
                                         <div class="align-center">
-                                            <a href="#" class="more-seasons-btn">Показать еще сезон</a>
+                                            <a href="" class="more-seasons-btn"
+                                               ng-click="ClubTeamCtrl.compare()"
+                                               ng-show="ClubTeamCtrl.clubs.getLastClub().data.prev_season">Показать еще сезон</a>
                                         </div>
                                     </div>
 

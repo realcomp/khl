@@ -14,8 +14,10 @@ urlpatterns = (
         name='players-search-api'),
     url(r'^api/clubs/$', api.ClubList.as_view(),
         name='club-list-api'),
-    url(r'^api/clubs/(?P<pk>\d+)/$', api.ClubDetail.as_view(),
-        name='club-detail-api'),
+    url(r'^api/clubs/(?P<pk>\d+)/$', api.ClubTeam.as_view(),
+        name='club-team-api'),
+    url(r'^api/clubs/(?P<pk>\d+)/compare/$', api.ClubTeamCompare.as_view(),
+        name='club-team-compare-api'),
     url(r'^api/metrics/$', api.MetricsPlayers.as_view(),
         name='metrics-list-api'),
     # Django CBV's'

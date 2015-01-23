@@ -279,20 +279,14 @@
                                         <td>
                                             <a href="{{ player.last_clubs[0].url }}" class="club-link"
                                                ng-show="player.last_clubs.length > 0">
-                                                {{ player.last_clubs[0].title }}
-                                                <span ng-show="player.last_clubs[0].address.title">
-                                                    ({{ player.last_clubs[0].address.title }})
-                                                </span>
+                                                {{ player.last_clubs[0].title_verbose }}
                                             </a>
                                             <div ng-show="player.last_clubs.length > 1">
                                                 <ul class="club-link-list hidden">
                                                     <li ng-repeat="club in player.last_clubs">
                                                         <a href="{{ club.url }}" class="club-link"
                                                            ng-hide="$first">
-                                                            {{ club.title }}
-                                                            <span ng-show="club.address.title">
-                                                                ({{ club.address.title }})
-                                                            </span>
+                                                            {{ club.title_verbose }}
                                                         </a>
                                                     </li>
                                                 </ul>
