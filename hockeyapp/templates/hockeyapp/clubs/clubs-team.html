@@ -131,11 +131,11 @@
                                                 <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                                     <li class="ui-state-default ui-corner-top"
                                                         ng-class="{ 'ui-tabs-active ui-state-active':clubs.league === league }"
-                                                        ng-repeat="league in clubs.leagues.values()">
-                                                        <a href="" class="item tab-btn ui-tabs-anchor" data-tab="khl"
-                                                           ng-click="clubs.league = league">
+                                                        ng-repeat="league in clubs.data.leagues">
+                                                        <a href="" class="item tab-btn ui-tabs-anchor" data-tab="league"
+                                                           ng-click="clubs.league = league; clubs.table.club = league.clubs">
                                                             {% verbatim %}
-                                                                {{ league.league.title || 'Unknown' }}: {{ league.count }}
+                                                                {{ league.title }}: {{ league.clubs.length }}
                                                             {% endverbatim %}
                                                             {% trans 'players' %}
                                                         </a>
@@ -150,11 +150,12 @@
                                                             class="cell-{{ cell_id[0] }}">
                                                             <a class="team-player-photo-link"
                                                                href="{{ ClubTeamCtrl.getCell(clubs, cell_id).url }}"
-                                                               ng-show="ClubTeamCtrl.isClubVisible(clubs, cell_id)">
+                                                               ng-show="ClubTeamCtrl.getCell(clubs, cell_id)">
                                                                 <img alt="" class="team-player-photo"
-                                                                     ng-src="{{ ClubTeamCtrl.getCell(clubs, cell_id).logo }}">
+                                                                     ng-src="{{ ClubTeamCtrl.getCell(clubs, cell_id).logo || '/static/images/avatar-sample.png' }}">
                                                                 <span class="team-player-name">
-                                                                    {{ ClubTeamCtrl.getCell(clubs, cell_id).title_verbose }}</span>
+                                                                    {{ ClubTeamCtrl.getCell(clubs, cell_id).title_verbose }}
+                                                                </span>
                                                                 <span class="team-player-name"></span>
                                                             </a>
                                                         </td>

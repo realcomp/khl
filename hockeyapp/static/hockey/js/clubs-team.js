@@ -108,42 +108,6 @@
             }
         };
 
-        self.isClubVisible = function(table, cell_id) {
-            var cell = this.getCell(table, cell_id);
-            if (cell) {
-                return table.league.league === cell.league;
-            } else {
-                return false;
-            }
-        };
-
-        self.getLeagues = function(clubs) {
-            var leagues = {
-                'values': function() {
-                    var values = [], key;
-                    for (var key in this) {
-                        if (this.hasOwnProperty(key) && typeof this[key] !== 'function') {
-                            values.push(this[key]);
-                        }
-                    }
-                    return values;
-                }
-            }, i, pk;
-            for (i = 0; i < clubs.length; i++) {
-                if (clubs[i].league) {
-                    pk = clubs[i].league.pk;
-                } else {
-                    pk = 'unknown';
-                }
-                if (!leagues['id_' + pk]) {
-                    leagues['id_' + pk] = {};
-                }
-                leagues['id_' + pk].league = clubs[i].league
-                leagues['id_' + pk].count = (leagues['id_' + pk].count | 0) + 1
-            }
-            return leagues;
-        };
-
         self.list = function(callback) {
             var params = $('#ClubTeamForm').serialize();
             self.players.data = null;
@@ -179,14 +143,12 @@
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
-                leagues = self.getLeagues(data.clubs);
                 self.clubs.clubs.push({
                     'data': data,
                     'table': {
-                        'club': data.clubs,
+                        'club': data.leagues[0].clubs,
                     },
-                    'league': leagues.values()[0],
-                    'leagues': leagues
+                    'league': data.leagues[0]
                 });
                 self.clubs.loader = false;
             });
