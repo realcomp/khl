@@ -65,16 +65,7 @@
              ['club', null], ['club', 32],  ['club', null]]
         ];
 
-        self.players = {
-            'getPreviousSeason': function(season) {
-                var i;
-                for (i = 0; i < this.data.seasons.length; i++) {
-                    if (this.data.seasons[i].pk === season.pk) {
-                        return this.data.seasons[i + 1];
-                    }
-                }
-            }
-        };
+        self.players = {};
         self.clubs = {
             'getLastClub': function() {
                 if (this.clubs.length) {
@@ -89,26 +80,68 @@
         }
 
         self.getCell = function(table, cell_id) {
-            if (table.table && cell_id && Array.isArray(cell_id)) {
-                row = table.table[cell_id[0]];
-                if (row) {
-                    return table.table[cell_id[0]][cell_id[1]];
+            var group;
+            if (table.table && cell_id && Array.isArray(cell_id) && cell_id[1] !== null) {
+                group = table.table[cell_id[0]];
+                if (group) {
+                    return group[cell_id[1]];
                 }
             }
         }
 
-        self.isVisible = function(table, cell_id) {
-            var cell = this.getCell(table, cell_id);
-            switch (self.players.status) {
-                default:
-                    return true;
-                case 'joined':
-                    return person.is_joined;
-                case 'left':
-                    return person.is_left;
-                case 'legionnaire':
-                    return person.is_legionnaire;
+        self.isPersonVisible = function(table, cell_id) {
+            var cell;
+            cell = this.getCell(table, cell_id);
+            if (cell) {
+                switch (self.players.status) {
+                    default:
+                        return true;
+                    case 'joined':
+                        return cell.is_joined;
+                    case 'left':
+                        return cell.is_left;
+                    case 'legionnaire':
+                        return cell.is_legionnaire;
+                }
+            } else {
+                return false;
             }
+        };
+
+        self.isClubVisible = function(table, cell_id) {
+            var cell = this.getCell(table, cell_id);
+            if (cell) {
+                return table.league.league === cell.league;
+            } else {
+                return false;
+            }
+        };
+
+        self.getLeagues = function(clubs) {
+            var leagues = {
+                'values': function() {
+                    var values = [], key;
+                    for (var key in this) {
+                        if (this.hasOwnProperty(key) && typeof this[key] !== 'function') {
+                            values.push(this[key]);
+                        }
+                    }
+                    return values;
+                }
+            }, i, pk;
+            for (i = 0; i < clubs.length; i++) {
+                if (clubs[i].league) {
+                    pk = clubs[i].league.pk;
+                } else {
+                    pk = 'unknown';
+                }
+                if (!leagues['id_' + pk]) {
+                    leagues['id_' + pk] = {};
+                }
+                leagues['id_' + pk].league = clubs[i].league
+                leagues['id_' + pk].count = (leagues['id_' + pk].count | 0) + 1
+            }
+            return leagues;
         };
 
         self.list = function(callback) {
@@ -135,22 +168,25 @@
 
         this.compare = function() {
             var url = $('#ClubTeamCompareLink').attr('href'),
-            params = 'season=' + self.players.data.season.pk,
-            club = self.clubs.getLastClub();
+            params = 'source_season=' + self.players.data.season.pk,
+            club = self.clubs.getLastClub(),
+            leagues;
             if (club) {
-                params += '&prev_season=' + self.players.getPreviousSeason(club.data.prev_season).pk;
+                params += '&season=' + club.data.prev_season.pk;
             } else {
-                params += '&prev_season=' + self.players.data.prev_season.pk;
+                params += '&season=' + self.players.data.prev_season.pk;
             }
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
+                leagues = self.getLeagues(data.clubs);
                 self.clubs.clubs.push({
                     'data': data,
-                    'league': 'khl',
                     'table': {
-                        'club': data.clubs
-                    }
+                        'club': data.clubs,
+                    },
+                    'league': leagues.values()[0],
+                    'leagues': leagues
                 });
                 self.clubs.loader = false;
             });
