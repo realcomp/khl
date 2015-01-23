@@ -3,7 +3,6 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
-import datetime
 import requests
 
 from PIL import Image

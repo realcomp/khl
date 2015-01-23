@@ -658,12 +658,22 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
                 res['player'] = isinstance(_player, tuple) and _player[0]
         return res
 
+    def _get_khl_string_data(self, key):
+        return {
+                'home_keepers': 0,
+                'home_defenders': 1,
+                'home_offenders': 2,
+                'guest_keepers': 3,
+                'guest_defenders': 4,
+                'guest_offenders': 5,
+        }.get(key)
 
     def _get_players(self, key, line_type, ask=''):
         b''' получаем игроков команды '''
         plrs_data = self._get_value(key)
         if plrs_data:
-            plrs_data = khl_string_data2python_obj_safe(plrs_data[0])
+            place = self._get_khl_string_data(key)
+            plrs_data = khl_string_data2python_obj_safe(plrs_data[place])
             return (self._get_player_data(item, line_type, ask) for item in plrs_data)
 
     def _get_player_data(self, item, line_type, adv_stats_key=''):
@@ -700,6 +710,7 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
                     'faceoff': str2int_safe(item[16]),
                     'winfaceoff': str2int_safe(item[17]),
                     'winfaceoff_p': str2float_safe(item[18]),
+                    'gamingtime': str2sec_safe(item[20]),
             }
         else:
             return {
