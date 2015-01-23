@@ -34,7 +34,7 @@ class ClubleaguesAddForm(forms.ModelForm):
 PARSERS = (
             (1, _('MHL parser')),
             (2, _('KHL parser')),
-            #(3, _('VHL parser')),
+            (3, _('VHL parser')),
 )
 
 class MatchParserForm(forms.Form):

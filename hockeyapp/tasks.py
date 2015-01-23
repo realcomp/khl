@@ -24,7 +24,7 @@ def async_hockey_match_parser(parser_id, matchid):
     try:
         parser = {  b'1': parsers.match.HockeyMHLMatchParser,
                     b'2': parsers.match.HockeyKHLMatchParser,
-                    #b'3': parsers.match.HockeyVHLMatchParser,
+                    b'3': parsers.match.HockeyVHLMatchParser,
         }.get(parser_id, parsers.match.HockeyMHLMatchParser)
         parser(html=True).put_data_in_db_from_page(matchid)
         #parsers.match.HockeyMHLMatchParser(html=False).get_page(matchid)

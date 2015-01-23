@@ -78,6 +78,42 @@ MHL_MATCH_REPORT_DICT = {
 ################################################################################
 
 
+# VHL MATCH ####################################################################
+VHL_SITE_URL =  'http://www.vhlru.ru'
+VHL_MATCH_URL = VHL_SITE_URL+'/report/269/'
+VHL_MATCH_PROTOCOL_XPATH = '//div[@id="page_wrap"]/div[@class="center"]/div[@id="content"]/div[@class="lcol"]'
+VHL_BODY_NOTEXISTS = b'Протокол не найден'
+VHL_BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
+VHL_EMPTY_PAGE_TEXT = 'Fatal error'
+
+_MMP_XPATH = '/table[@class="matches_protocol_main"]' #xpath match main protocol
+_MPS_HOME_XPATH = '/div[@class="matches_player_statistic"]/table'
+_MPS_GUEST_XPATH = '/div[@class="matches_player_statistic"]/dl/table[@class="tablesorter matches_penalty"]'
+VHL_MATCH_REPORT_DICT = {
+    'match_num': '//div[@class="games_title"]/p/text()', #номер матча
+    'match_date': '//div[@class="games_title"]/p/text()', #дата матча
+    'match_count': _MMP_XPATH+'/tr[@class="first_row"]/td[@class="main_column"]/p[@class="count"]/span/text()',
+    'match_detail_count': _MMP_XPATH+'/tr[@class="first_row"]/td[@class="main_column"]/div[@class="detail_count"]/text()',
+    'match_judges': _MMP_XPATH+'/tr[2]/td[@class="treners"][2]/p',
+    'match_line_judges': _MMP_XPATH+'/tr[2]/td[@class="treners"][2]',
+    'match_spectators': '//div[@class="games_title"]//p[@class="games_title_more"]/text()',
+    'home_team': _MMP_XPATH+'/tr[@class="first_row"]/td[1]/a/text()',
+    'home_team_region': _MMP_XPATH+'/tr[@class="first_row"]/td[1]/div/strong/text()',
+    'home_team_coach': _MMP_XPATH+'/tr[2]/td[@class="treners"][1]',
+    'home_keepers': _MPS_HOME_XPATH+'[1]',
+    'home_defenders': _MPS_HOME_XPATH+'[2]',
+    'home_offenders': _MPS_HOME_XPATH+'[3]',
+    'guest_team': _MMP_XPATH+'/tr[@class="first_row"]/td[3]/a/text()',
+    'guest_team_region': _MMP_XPATH+'/tr[@class="first_row"]/td[3]/div/strong/text()',
+    'guest_team_coach': _MMP_XPATH+'/tr[2]/td[@class="treners"][3]',
+    'guest_keepers': _MPS_GUEST_XPATH+'[1]',
+    'guest_defenders': _MPS_GUEST_XPATH+'[2]',
+    'guest_offenders': _MPS_GUEST_XPATH+'[3]',
+    'goals_history': '/table[@class="tablesorter matches_goals"]',
+    'penalties_history': '/table[@class="tablesorter matches_penalty"]',
+}
+################################################################################
+
 #KHL Match Advanced DATA INFO
 MATCH_ADV_STATS_URL = 'http://text.khl.ru/text/'
 MATCH_ADV_STATS_XPATH = '//div[@id="wrapper"]/div[@class="grey-block"]/div[@class="tabs-block"]'
@@ -186,6 +222,21 @@ MDP = {
         b'октября': '10',
         b'ноября': '11',
         b'декабря': '12',
+}
+
+MD_EN = {
+        b'january': '01',
+        b'february': '02',
+        b'march': '03',
+        b'april': '04',
+        b'may': '05',
+        b'june': '06',
+        b'july': '07',
+        b'august': '08',
+        b'september': '09',
+        b'october': '10',
+        b'november': '11',
+        b'december': '12',
 }
 
 #KHL CLUB INFO
