@@ -21,7 +21,7 @@
         {% block extrahead %}
         {% endblock %}
     </head>
-    <body ng-app="Sportomatics">
+    <body ng-app="{% block ngapp %}Sportomatics{% endblock %}">
         {% block header %}
             {% include "partial/header.html" %}
         {% endblock %}

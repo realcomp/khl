@@ -48,6 +48,7 @@ class BaseClubTeamSerializer(BaseClubSerializer):
     _coaches = None
 
     def _get_seasons(self, obj):
+        ''' returns (prev, current, next) '''
         if not self._seasons_selected:
             request = self.context.get('request')
             try:
@@ -102,7 +103,7 @@ class BaseClubTeamSerializer(BaseClubSerializer):
     def get_prev_season(self, obj):
         seasons = self._get_seasons(obj)
         season = None
-        if seasons[0].pk != seasons[1].pk:
+        if (seasons[0] and seasons[0].pk) != (seasons[1] and seasons[1].pk):
             season = seasons[0]
         return SeasonSerializer(season, context=self.context).data
 
@@ -152,15 +153,35 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
 class ClubTeamCompareSerializer(BaseClubTeamSerializer):
     clubs = serializers.SerializerMethodField()
 
+    def _get_seasons(self, obj):
+        ''' returns (prev, current, next) '''
+        if not self._seasons_selected:
+            request = self.context.get('request')
+            try:
+                season = obj.seasons.get(pk=request.GET.get('season'))
+            except Season.DoesNotExist:
+                season = obj.seasons[0]
+            try:
+                prev_season = obj.seasons.get(pk=request.GET.get('prev_season'))
+            except Season.DoesNotExist:
+                prev_season = None
+            self._seasons_selected = (
+                prev_season,
+                season,
+                obj.get_next_season(season) or season,
+            )
+        return self._seasons_selected
+
     def _get_clubs(self, obj):
         current_players = self._get_players(obj)
         season = self._get_seasons(obj)[0]  # previous season
-        clubplayers = (
-            ClubPlayer.objects
-            .filter(player__in=current_players, season=season)
-            .order_by('club'))
-        # we need duplicates
-        return map(operator.attrgetter('club'), clubplayers)
+        if season:
+            clubplayers = (
+                ClubPlayer.objects
+                .filter(player__in=current_players, season=season)
+                .order_by('club'))
+            # we need duplicates
+            return map(operator.attrgetter('club'), clubplayers)
 
     def get_clubs(self, obj):
         clubs = self._get_clubs(obj)
