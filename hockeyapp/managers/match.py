@@ -55,6 +55,7 @@ class ManagerMixin(object):
         else:
             data['match'] = match
             data['clubplayer'] = clubplayer
+            print(data)
             return model.objects.create(**data)
 
     def _create_clubplayer_adv_stats(self, clubplayermatch=None, data=None,
