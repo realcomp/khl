@@ -130,6 +130,15 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
 admin.site.register(Club, ClubAdmin)
 
 
+class ScheduleAdmin(BaseAdmin):
+    linked_readonly_fields = ('match', 'home_team', 'guest_team')
+    readonly_fields = linked_readonly_fields
+    list_filter = ( 'league', 'home_team', 'guest_team', 'season',
+                    ('date', DateRangeFilter))
+    list_display = ('khl_id', 'league', 'home_team', 'guest_team',
+                    'season', 'date',)
+admin.site.register(Schedule, ScheduleAdmin)
+
 for model in (League, LeagueClub, CoachClub,):
     admin.site.register(model, BaseListAdmin)
 
@@ -227,13 +236,6 @@ class ClubPlayerMatchAdmin(NoFilterAdmin):
 admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
 admin.site.register(AdvancedPlayerStats)
-
-class ScheduleAdmin(NoFilterAdmin):
-    linked_readonly_fields = ('match', 'home_team', 'guest_team')
-    readonly_fields = linked_readonly_fields
-    #list_filter = ('league', ('date', DateRangeFilter))
-    #list_display = ('id', 'khl_id')+list_filter
-admin.site.register(Schedule, ScheduleAdmin)
 
 def import_names(modeladmin, request, queryset):
     def update_or_create_name(**kwargs):
