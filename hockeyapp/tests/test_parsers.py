@@ -18,13 +18,15 @@ class HockeyAppTest(base.tests.BaseTest):
         #creates
         self._create_club()
         self._create_player()
+        schedule = parsers.schedule.KHLScheduleParser()
+        schedule.put_data_in_db_from_page(266)
         self._create_mhl_match()
         self._create_khl_match()
         self._create_vhl_match()
         #updates
-        self._update_mhl_match()
-        self._update_khl_match()
-        self._update_vhl_match()
+        #self._update_mhl_match()
+        #self._update_khl_match()
+        #self._update_vhl_match()
 
     def _check_parsers(self):
         ''' test parsers fucntionality'''

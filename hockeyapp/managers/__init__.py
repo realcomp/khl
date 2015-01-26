@@ -6,8 +6,12 @@ import requests
 from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.db import models
+from django.db.models.loading import get_model
 
 import filer
+
+CURRENT_APP = __package__.split('.')[0]
 
 
 class DataCleanMixin(object):
@@ -46,6 +50,33 @@ class DataCleanMixin(object):
             )
             _file.save()
             return _file
+
+
+class ScheduleManager(models.Manager):
+    b''' Мененжер календаря матчей по-умолчанию '''
+    def create_schedule(self, **kwargs):
+        b''' метод взять или создать записи о матчах '''
+        _season = kwargs.pop('season', {})
+        _league = kwargs.pop('league', 'KHL')
+        sm = get_model('base', 'Season')
+        _season, _crt = sm.objects.get_or_create_season(**_season)
+        league_model = get_model(CURRENT_APP, 'League')
+        _league, _crt = league_model.objects.get_or_create(en_title=_league)
+        for m in kwargs.get('matches',):
+            _match = self.filter(khl_id = m.get('khl_id')).last()
+            m['league'] = _league
+            m['season'] = _season
+            m['home_team'] = self._get_team(m.pop('home_team', None))
+            m['guest_team'] = self._get_team(m.pop('guest_team', None))
+            if _match:
+                self.filter(pk=_match.pk).update(**m)
+            else:
+                self.create(**m)
+
+    def _get_team(self, ru_title):
+        club_model = get_model(CURRENT_APP, 'club')
+        _club, _crt = club_model.objects.get_or_create(ru_title=ru_title)
+        return _club
 
 
 from . import arena, club, match, player

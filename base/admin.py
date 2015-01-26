@@ -66,6 +66,7 @@ class NoActionMixin(object):
 class BaseAdmin(BaseMixin, admin.ModelAdmin):
     formtabs = DEFAULT_FORMTABS
     
+class BaseListAdmin(BaseAdmin):
     def get_list_filter(self, request, obj=None):  
         return self.get_fields(request, obj)
         

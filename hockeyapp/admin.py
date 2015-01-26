@@ -5,14 +5,14 @@ from daterange_filter.filter import DateRangeFilter
 from relatives.utils import object_link
 
 from base.admin import AutocompleteFieldFilter, SimpleRangeFilter
-from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin
+from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin, BaseListAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
 
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
-from .models import AddressClubPhotos, Name
+from .models import AddressClubPhotos, Name, Schedule
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -28,7 +28,7 @@ class PenaltyEntryInline(TabularInlineReadOnly):
     fields = readonly_fields
 
 
-class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
+class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     suit_form_tabs = (
                 ('general', _('General')),
                 ('hometeam', _('Home team')),
@@ -84,7 +84,7 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'start_date', 'end_date',)
 
 
-class PlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (ClubPlayerInline, PlayerCitizenshipInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
@@ -115,7 +115,7 @@ class LeagueClubInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'club', 'start_date', 'end_date', 'season')
     fields = readonly_fields
 
-class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
+class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (CoachClubInline, AddressClubInline, LeagueClubInline)
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
@@ -126,19 +126,19 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseAdmin):
     )
     fields = (  'ru_title', 'en_title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
-                'farm_club', 'junior_club', 'site', 'style')
+                'farm_club', 'junior_club', 'site', 'players', 'style')
 admin.site.register(Club, ClubAdmin)
 
 
 for model in (League, LeagueClub, CoachClub,):
-    admin.site.register(model, BaseAdmin)
+    admin.site.register(model, BaseListAdmin)
 
 
 class ArenaPhotosInline(admin.TabularInline):
     model = ArenaPhotos
     extra=0
 
-class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+class ArenaAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (ArenaPhotosInline,)
     list_filter = ('ru_title', 'country', 'league',
                     ('capacity', SimpleRangeFilter),
@@ -151,7 +151,7 @@ class AddressClubPhotosInline(admin.TabularInline):
     model = AddressClubPhotos
     extra=0
 
-class AddressClubAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+class AddressClubAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (AddressClubPhotosInline,)
     list_filter = ('club', 'address', 'season',)
     list_display = list_filter+('postaddress', 'email')
@@ -172,14 +172,14 @@ class LineJudgeMatchesInline(TabularInlineReadOnly):
     linked_readonly_fields = ('match',)
     fields = linked_readonly_fields
 
-class JudgeAdmin(BaseAdmin):
+class JudgeAdmin(BaseListAdmin):
     inlines = (JudgeMatchesInline,LineJudgeMatchesInline)
 admin.site.register(Judge, JudgeAdmin)
 
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
 
-class CoachAdmin(BaseAdmin):
+class CoachAdmin(BaseListAdmin):
     inlines = (CoachClubInline,)
 admin.site.register(Coach, CoachAdmin)
 
@@ -193,7 +193,7 @@ class ClubPlayerMatchInline(TabularInlineReadOnly):
                     )
     fields = readonly_fields
 
-class ClubPlayerAdmin(DynamicDisplayFilterMixin, BaseAdmin):
+class ClubPlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (ClubPlayerMatchInline, )
     linked_readonly_fields = ('player',)
     readonly_fields = linked_readonly_fields
@@ -228,6 +228,12 @@ admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
 admin.site.register(AdvancedPlayerStats)
 
+class ScheduleAdmin(NoFilterAdmin):
+    linked_readonly_fields = ('match', 'home_team', 'guest_team')
+    readonly_fields = linked_readonly_fields
+    #list_filter = ('league', ('date', DateRangeFilter))
+    #list_display = ('id', 'khl_id')+list_filter
+admin.site.register(Schedule, ScheduleAdmin)
 
 def import_names(modeladmin, request, queryset):
     def update_or_create_name(**kwargs):
