@@ -3,7 +3,8 @@
 
     app.controller('ClubTeamController', ['$http', '$scope', function($http, $scope) {
         var self = this,
-        url = $('#ClubTeamForm').attr('action');
+        url = $('#ClubTeamForm').attr('action'),
+        popup = {};
 
         self.PLAYERS_TABLE = [ // table indexes, null is an empty filler
             // row 1
@@ -77,6 +78,17 @@
 
         $scope.setSeason = function(e) {
             self.list(self.compare);
+        }
+
+        $scope.showPopup = function(e, event) {
+            var popup = $('.player-partners-popup:hidden');
+            // if (popup) {
+            //     self.popup = self.getCell(self.players, this.cell_id);
+            //     $('.player-partners-popup:hidden').show(500).offset({
+            //         left: event.pageX,
+            //         top: event.pageY
+            //     });
+            // }
         }
 
         self.getCell = function(table, cell_id) {
