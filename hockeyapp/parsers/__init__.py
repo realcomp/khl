@@ -92,4 +92,4 @@ class GrabParser(object):
             model = get_model('hockeyapp', self.model_name)
             return model.objects.get_or_create(**data)
 
-from . import player, match, club
+from . import player, match, club, schedule

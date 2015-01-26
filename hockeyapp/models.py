@@ -587,6 +587,34 @@ class Match(AdminLinkMixin, TitleBaseModel):
         return self.ru_title
 
 
+class Schedule(TitleBaseModel):
+    objects = managers.ScheduleManager()
+    khl_id = models.PositiveIntegerField(_('Other site ID'),
+                                max_length=1024, blank=True)
+    date = models.DateTimeField(_('Match date'), null=True, blank=True)
+    is_championship = models.BooleanField(_('Is championship'), default=True)
+    is_playoff = models.BooleanField(_('Is playoff'), default=False)
+    #relations
+    season = models.ForeignKey(Season, null=True, blank=True)
+    league = models.ForeignKey(League, null=True, blank=True)
+    match = models.OneToOneField(Match, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
+    home_team = models.ForeignKey(Club, null=True, blank=True,
+                                on_delete=models.SET_NULL,
+                                related_name='schedule_homematches',
+                                verbose_name=_('Home team'))
+    guest_team = models.ForeignKey(Club, null=True, blank=True,
+                                on_delete=models.SET_NULL,
+                                related_name='schedule_guestmatches',
+                                verbose_name=_('Guest team'))
+    processed = models.BooleanField(default=False)
+    proccesed_time = models.DateTimeField(_('Processed time'),
+                                            null=True, blank=True)
+    class Meta:
+        verbose_name=_('League Schedule')
+        verbose_name_plural=_('League Schedules')
+        ordering = 'date',
+
 class Name(models.Model):
     b'''Словарь имен/фамилий'''
     type = models.SmallIntegerField(choices=(
