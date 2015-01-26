@@ -99,7 +99,9 @@
                                                                       ng-show="ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number">
                                                                     {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number }}
                                                                 </span>
-                                                                <img ng-src="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).photo || '/static/images/nophoto.gif' }}" alt="" class="team-player-photo">
+                                                                <img alt="" class="team-player-photo"
+                                                                     onmouseover="angular.element(this).scope().showPopup(this, event);"
+                                                                     ng-src="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).photo || '/static/images/nophoto.gif' }}">
                                                                 <span class="team-player-name">
                                                                     {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).fio }}</span>
                                                                 <span class="team-player-name"></span>
@@ -222,12 +224,21 @@
 
                     <div class="player-partners-popup popup">
                         <a href="#" class="close-popup-btn">×</a>
-                        <div class="player-bio">
-                            <img src="{{ STATIC_URL }}images/player-avatar.jpg" alt="" class="player-photo">
+                        <div class="player-bio"
+                             ng-show="ClubTeamCtrl.popup">
+                            {% verbatim %}
+                                <img alt="" class="player-photo"
+                                     ng-src="{{ ClubTeamCtrl.popup.photo || '/static/images/nophoto.gif' }}">
+                            {% endverbatim %}
                             <div class="player-info">
-                                <div class="player-name">Акинфеев</div>
-                                <div class="player-name">Игорь</div>
-                                <div class="player-amplua">Амплуа: голкипер</div>
+                                {% verbatim %}
+                                    <div class="player-name">{{ ClubTeamCtrl.popup.fio }}</div>
+                                {% endverbatim %}
+                                <div class="player-amplua">{% trans 'Line' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.line_display }}
+                                    {% endverbatim %}
+                                </div>
                             </div>
                         </div>
                         <div class="player-clubs">
