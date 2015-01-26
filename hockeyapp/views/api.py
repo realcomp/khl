@@ -11,9 +11,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
 from addresses.models import Country
+from base.models import Season
 
 from .mixins import PaginationMixin, OrderMixin
-from ..models import Club, Player, ClubPlayer
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
 from ..serializers import (
     CountryLeaguesSerializer,
     PlayerCardSerializer,
@@ -21,6 +22,7 @@ from ..serializers import (
     MetricsPlayerSerializer,
 )
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
+from ..serializers.players import ClubPlayerMatchSerilizer
 
 
 class PlayersSearch(PaginationMixin, OrderMixin, generics.ListAPIView):
@@ -96,6 +98,27 @@ class PlayersSearch(PaginationMixin, OrderMixin, generics.ListAPIView):
             if clubs[club_id] not in self.players_clubs[player_id]:
                 self.players_clubs[player_id].append(clubs[club_id])
         return qs
+
+
+class PlayerCardIndicators(generics.ListAPIView):
+    serializer_class = ClubPlayerMatchSerilizer
+
+    def get_queryset(self):
+        return ClubPlayerMatch.objects.all()
+
+    def filter_queryset(self, qs):
+        qs = super(PlayerCardIndicators, self).filter_queryset(qs)
+
+        clubplayers = (
+            ClubPlayer.objects
+            .filter(player_id=self.kwargs.get('player_id', 0)))
+
+        if 'season' in self.request.GET:
+            season = get_object_or_404(
+                Season, pk=self.request.GET['season'])
+            clubplayers = clubplayers.filter(season=season)
+
+        return qs.filter(clubplayer__in=clubplayers).order_by('match__date')
 
 
 class LeagueList(generics.ListAPIView):

@@ -481,6 +481,9 @@ class ClubPlayerMatch(models.Model):
 
     __unicode__ = lambda self: '{}'.format(self.match or self.pk,)
 
+    def match_date(self):
+        return self.match.date
+
     class Meta:
         verbose_name=_('Club Player History Match')
         verbose_name_plural=_('Club Player Histories in Matches')
