@@ -126,7 +126,7 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     )
     fields = (  'ru_title', 'en_title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
-                'farm_club', 'junior_club', 'site', 'players')
+                'farm_club', 'junior_club', 'site', 'players', 'style')
 admin.site.register(Club, ClubAdmin)
 
 

@@ -17,11 +17,11 @@ class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):
 
 
 class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
-    adv_stats = AdvancedPlayerStatsSerializer()
+    # adv_stats = AdvancedPlayerStatsSerializer()
 
     class Meta(object):
         fields = (
-            'pk', 'match_date', 'adv_stats',
+            'pk', 'match_date', #'adv_stats',
             'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
             'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis',
             'faceoff', 'winfaceoff', 'winfaceoff_p', 'loose_goals',
