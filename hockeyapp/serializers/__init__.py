@@ -142,6 +142,7 @@ class BasePlayerCardSerializer(AbstractManSerializer):
     birth_date = serializers.SerializerMethodField()
     birth_date_short = serializers.SerializerMethodField()
     url = serializers.ReadOnlyField(source='get_absolute_url')
+    citizenship = CountrySerializer()
 
     def get_age(self, obj):
         if obj.birth_date:
@@ -163,7 +164,6 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
     khl_url = serializers.SerializerMethodField()
     # last_clubs = PlayerClubSerializer(many=True)
     last_clubs = serializers.SerializerMethodField()
-    citizenship = CountrySerializer()
 
     def get_contract_to(self, obj):
         return obj.contract_to and obj.contract_to.strftime('%d.%m.%Y')

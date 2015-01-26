@@ -30,7 +30,8 @@ class ClubPlayerSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'fio', 'line', 'line_display', 'club', 'photo', 'number',
             'birth_date', 'birth_date_short', 'contract_type', 'age', 'url',
-            'name', 'lastname', 'is_joined', 'is_left', 'is_legionnaire')
+            'name', 'lastname', 'is_joined', 'is_left', 'is_legionnaire',
+            'contract_to', 'citizenship')
         model = Player
 
 
@@ -110,7 +111,7 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
         return self._coaches
 
     def get_all_players(self, obj):
-        players = self._get_players(obj)
+        players = sorted(list(self._get_players(obj)), key=lambda x: x.line)
         return ClubPlayerSerializer(
             players, context=self.context, many=True).data
 

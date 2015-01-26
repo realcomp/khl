@@ -193,23 +193,24 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="player in ClubTeamCtrl.data.all_players">
+                                                <tr ng-repeat="player in ClubTeamCtrl.players.data.all_players">
                                                     {% verbatim %}
-                                                    <td align="center">{{ player.number }}</td>
-                                                    <td>{{ player.line_display }}</td>
-                                                    <td><a href="{{ player.url }}" class="player-popup-btn">{{ player.fio }}</a></td>
-                                                    <td align="center">{{ player.birth_date_short }}</td>
-                                                    <td>Россия</td>
-                                                    <td align="center">21.09.2015</td>
-                                                    <td align="center">256789</td>
-                                                    <td align="center">12345</td>
+                                                        <td align="center">{{ player.number }}</td>
+                                                        <td>{{ player.line_display }}</td>
+                                                        <td><a href="{{ player.url }}" class="player-popup-btn">{{ player.fio }}</a></td>
+                                                        <td align="center">{{ player.birth_date_short }}</td>
+                                                        <td>{{ player.citizenship && player.citizenship.title }}</td>
+                                                        <td align="center">{{ player.contract_to }}</td>
+                                                        <td align="center">256789</td>
+                                                        <td align="center">12345</td>
                                                     {% endverbatim %}
                                                 </tr>
                                             </tbody>
                                         </table>
                                         </form>
 
-                                        <div class="align-center">
+                                        <div class="align-center"
+                                             ng-show="ClubTeamCtrl.players.data.prev_season">
                                             <a href="#" class="more-seasons-btn">Показать еще сезон</a>
                                         </div>
                                     </div>
