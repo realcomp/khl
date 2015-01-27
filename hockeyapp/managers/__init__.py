@@ -68,7 +68,7 @@ class ScheduleManager(models.Manager):
             m['season'] = _season
             m['home_team'] = self._get_team(m.pop('home_team', None))
             m['guest_team'] = self._get_team(m.pop('guest_team', None))
-            if _match:
+            if _match and _match.ru_title == m.get('ru_title'):
                 self.filter(pk=_match.pk).update(**m)
             else:
                 self.create(**m)
