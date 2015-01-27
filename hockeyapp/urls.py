@@ -10,8 +10,12 @@ urlpatterns = (
     # REST API
     url(r'^api/leagues/$', api.LeagueList.as_view(),
         name='league-list-api'),
-    url(r'^api/players/$', api.PlayersSearch.as_view(),
+    url(r'^api/players/$',
+        api.PlayersSearch.as_view({'get': 'list'}),
         name='players-search-api'),
+    url(r'^api/players/(?P<pk>\d+)/$',
+        api.PlayersSearch.as_view({'get': 'retrieve'}),
+        name='player-card-api'),
     url(r'^api/players/(?P<player_id>\d+)/indicators/$',
         api.PlayerCardIndicators.as_view(),
         name='player-card-indicators-api'),

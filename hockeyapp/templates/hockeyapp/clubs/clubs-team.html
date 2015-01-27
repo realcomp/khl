@@ -137,7 +137,7 @@
                                                         <a href="" class="item tab-btn ui-tabs-anchor" data-tab="league"
                                                            ng-click="clubs.league = league; clubs.table.club = league.clubs">
                                                             {% verbatim %}
-                                                                {{ league.title }}: {{ league.clubs.length }}
+                                                                {{ league.title }}: {{ league.clubs_count }}
                                                             {% endverbatim %}
                                                             {% trans 'players' %}
                                                         </a>
@@ -223,9 +223,9 @@
                     </div>
 
                     <div class="player-partners-popup popup">
+                        <a href="{% url 'hockeyapp:player-card-api' 0 %}" class="hidden" id="PlayerCardLink">×</a>
                         <a href="#" class="close-popup-btn">×</a>
-                        <div class="player-bio"
-                             ng-show="ClubTeamCtrl.popup">
+                        <div class="player-bio" ng-show="ClubTeamCtrl.popup">
                             {% verbatim %}
                                 <img alt="" class="player-photo"
                                      ng-src="{{ ClubTeamCtrl.popup.photo || '/static/images/nophoto.gif' }}">
@@ -241,29 +241,72 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="player-clubs">
-                            <div class="player-club"><a href="#" class="player-club-link">Динамо (Москва)</a> 2008-2011</div>
-                            <div class="player-club"><a href="#" class="player-club-link">Спартак (Москва)</a> 2011-2013</div>
-                            <div class="player-club"><span class="player-club-now">Сейчас </span><a href="#" class="player-club-link">ЦСКА (Москва)</a></div>
+                        <div class="player-clubs" ng-show="ClubTeamCtrl.popup.last_clubs.length">
+                            <div class="player-club"
+                                 ng-repeat="club in ClubTeamCtrl.popup.last_clubs">
+                                {% verbatim %}
+                                    <span class="player-club-now"
+                                          ng-show="$index === 0">Сейчас</span>
+                                    <a href="{{ club.url }}" class="player-club-link">
+                                        {{ club.title_verbose }}
+                                    </a>
+                                {% endverbatim %}
+                            </div>
                         </div>
-                        <div class="player-details">
+                        <div class="player-details" ng-show="ClubTeamCtrl.popup">
                             <div class="player-details_left">
-                                <div class="player-detail">Рост: 180 см.</div>
-                                <div class="player-detail">Вес: 89 кг.</div>
-                                <div class="player-detail">Хват: правый</div>
+                                <div class="player-detail">{% trans 'Height' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.height }} см.
+                                    {% endverbatim %}
+                                </div>
+                                <div class="player-detail">{% trans 'Weight' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.weight }} кг.
+                                    {% endverbatim %}
+                                </div>
+                                <div class="player-detail">{% trans 'Grip' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.grip }}
+                                    {% endverbatim %}
+                                </div>
                             </div>
                             <div class="player-details_right">
-                                <div class="player-detail">Дата рождения: 19 марта 1983 г.</div>
-                                <div class="player-detail">Возраст: 24 года 5 месяцев</div>
-                                <div class="player-detail">Гражданство: Россия</div>
+                                <div class="player-detail">{% trans 'Birth date' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.birth_date }}
+                                    {% endverbatim %}
+                                </div>
+                                <div class="player-detail">{% trans 'Age' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.age[0] }}
+                                    {% endverbatim %}
+                                    года
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.age[1] }}
+                                    {% endverbatim %}
+                                    месяцев
+                                </div>
+                                <div class="player-detail">{% trans 'Citizenship' %}:
+                                    {% verbatim %}
+                                        {{ ClubTeamCtrl.popup.citizenship.title }}
+                                    {% endverbatim %}
+                                </div>
                             </div>
                         </div>
-                        <div class="player-indexes">
+                        <div class="player-indexes" ng-show="ClubTeamCtrl.popup">
                             <div class="player-detail">SM-index: 2323</div>
                             <div class="player-detail">Corsi: 9483</div>
                         </div>
-                        <div class="align-center">
-                            <a href="#" class="player-card-btn">открыть карточку игрока</a>
+                        <div class="align-center" ng-show="ClubTeamCtrl.popup">
+                            {% verbatim %}
+                                <a href="{{ ClubTeamCtrl.popup.url }}" class="player-card-btn">
+                                    открыть карточку игрока
+                                </a>
+                            {% endverbatim %}
+                        </div>
+                        <div style="text-align: center" ng-hide="ClubTeamCtrl.popup">
+                            <img src="{{ STATIC_URL }}images/loader-large.gif">
                         </div>
                     </div>
                     </form>

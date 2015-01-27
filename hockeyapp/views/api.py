@@ -8,7 +8,7 @@ import operator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics
+from rest_framework import generics, viewsets
 
 from addresses.models import Country
 from base.models import Season
@@ -25,7 +25,8 @@ from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import ClubPlayerMatchSerilizer
 
 
-class PlayersSearch(PaginationMixin, OrderMixin, generics.ListAPIView):
+class PlayersSearch(
+        PaginationMixin, OrderMixin, viewsets.ReadOnlyModelViewSet):
     # permission_classes = permissions.IsAuthenticated,
     serializer_class = PlayerCardSerializer
 
