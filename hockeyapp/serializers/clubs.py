@@ -154,9 +154,10 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
 
 class LeagueClubsListSerializer(LeagueSerializer):
     clubs = ClubLightListSerializer(many=True)
+    clubs_count = serializers.IntegerField()
 
     class Meta(object):
-        fields = 'pk', 'title', 'clubs'
+        fields = 'pk', 'title', 'clubs', 'clubs_count'
         model = League
 
 
@@ -226,7 +227,11 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
                 leagues[league.pk] = league
                 if not hasattr(league, 'clubs'):
                     league.clubs = []
-                league.clubs.append(club)
+                if not hasattr(league, 'clubs_count'):
+                    league.clubs_count = 0
+                if club not in league.clubs:
+                    league.clubs.append(club)
+                league.clubs_count += 1
             return leagues.values()
 
     def get_leagues(self, obj):
