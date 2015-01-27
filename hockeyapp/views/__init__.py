@@ -8,7 +8,8 @@ from base.models import Season
 
 from ..models import Club, Player
 from ..serializers import (
-    CountrySerializer, SeasonSerializer, PlayerCardSerializer,
+    CountrySerializer, SeasonSerializer,
+    PlayerCardSerializer, PlayerCardDetailSerializer,
     ClubListSerializer,
 )
 from ..utils import get_season_end_date
@@ -76,7 +77,7 @@ class PlayerCard(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PlayerCard, self).get_context_data(**kwargs)
         context['request'] = self.request
-        context.update(PlayerCardSerializer(
+        context.update(PlayerCardDetailSerializer(
             self.get_object(), context=context).data)
         return context
 

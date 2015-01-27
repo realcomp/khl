@@ -1,4 +1,5 @@
 {% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -41,71 +42,73 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Сезоны</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Seasons' %}</td>
+                                        <td align="center">{{ seasons_count }}</td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Матчи</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Matches' %}</td>
+                                        <td align="center">{{ matches_count }}</td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Голы</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Goals' %}</td>
+                                        <td align="center">{{ goals_count }}</td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Передачи</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Transfers' %}</td>
+                                        <td align="center"></td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Очки</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Scored' %}</td>
+                                        <td align="center">{{ scored_count }}</td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    {% comment %}
+                                    <tr>
+                                        <td>{% trans 'Plus/minus' %}</td>
+                                        <td align="center"></td>
+                                        <td align="center">
+                                            <a href="#" class="player-place-link">23</a>
+                                        </td>
+                                    </tr>
+                                    {% endcomment %}
+                                    <tr>
+                                        <td>{% trans 'Average goals count per game' %}</td>
+                                        <td align="center">{{ goals_avg|floatformat:2 }}</td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Плюс/минус</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Average transfers count per game' %}</td>
+                                        <td align="center"></td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Среднее количество голов за игру</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Average score count per game' %}</td>
+                                        <td align="center">{{ scored_avg|floatformat:2 }}</td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Среднее количество передач за игру</td>
-                                        <td align="center">12</td>
-                                        <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Среднее количество очков за игру</td>
-                                        <td align="center">12</td>
-                                        <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Средний показатель "плюс/минус" за игру</td>
-                                        <td align="center">12</td>
+                                        <td>{% trans 'Average "plus/minus" per game' %}</td>
+                                        <td align="center">{{ plus_minus_avg|floatformat:2 }}</td>
                                         <td align="center">
                                             <a href="#" class="player-place-link">23</a>
                                         </td>

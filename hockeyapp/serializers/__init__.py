@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from dateutil import relativedelta
 
 from django.core.urlresolvers import reverse
+from django.db.models import Avg, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -12,7 +13,7 @@ from rest_framework import serializers
 from addresses.models import Address, Country
 from base.models import Season
 
-from ..models import Coach, Arena, Club, Player, League
+from ..models import Coach, Arena, Club, Player, League, ClubPlayerMatch
 
 
 class LangDepSerializer(serializers.ModelSerializer):
@@ -185,6 +186,73 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
         model = Player
 
 
+class PlayerCardDetailSerializer(PlayerCardSerializer):
+    seasons_count = serializers.SerializerMethodField()
+    matches_count = serializers.SerializerMethodField()
+    goals_count = serializers.SerializerMethodField()
+    scored_count = serializers.SerializerMethodField()
+    goals_avg = serializers.SerializerMethodField()
+    scored_avg = serializers.SerializerMethodField()
+    plus_minus_avg = serializers.SerializerMethodField()
+
+    _clubplayermatches = None
+
+    def _get_clubplayermatches(self, obj):
+        if self._clubplayermatches is None:
+            clubplayers = obj.clubplayer_set.values_list('pk', flat=True)
+            self._clubplayermatches = (
+                ClubPlayerMatch.objects
+                .filter(clubplayer__in=clubplayers)
+                .distinct())
+        return self._clubplayermatches
+
+    def get_seasons_count(self, obj):
+        pks = obj.clubplayer_set.values_list('season_id', flat=True)
+        return Season.objects.filter(pk__in=pks).distinct().count()
+
+    def get_matches_count(self, obj):
+        return self._get_clubplayermatches(obj).count()
+
+    def get_goals_count(self, obj):
+        goal_fields = (
+            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')
+        sums = self._get_clubplayermatches(obj).aggregate(
+            *map(Sum, goal_fields))
+        return sum(filter(None, sums.values()))
+
+    def get_scored_count(self, obj):
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Sum('shots')).get('shots__sum', 0))
+
+    def get_goals_avg(self, obj):
+        goal_fields = (
+            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')
+        sums = self._get_clubplayermatches(obj).aggregate(
+            *map(Avg, goal_fields))
+        return sum(filter(None, sums.values()))
+
+    def get_scored_avg(self, obj):
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Avg('shots')).get('shots__avg', 0))
+
+    def get_plus_minus_avg(self, obj):
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Avg('plus_minus')).get('plus_minus__avg', 0))
+
+    class Meta(object):
+        fields = (
+            'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
+            'photo', 'khl_url', 'birth_date_short', 'club', 'last_clubs',
+            'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
+            'contract_to', 'number', 'line_display', 'name', 'lastname',
+            'seasons_count', 'matches_count', 'goals_count', 'scored_count',
+            'goals_avg', 'scored_avg', 'plus_minus_avg')
+        model = Player
+
+
 class MetricsPlayerSerializer(BasePlayerCardSerializer):
     url = serializers.SerializerMethodField()
     line = serializers.SerializerMethodField()
@@ -203,5 +271,5 @@ class MetricsPlayerSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'url', 'fio', 'club', 'line', 'photo', 'grip',
             'contract_type', 'height', 'weight', 'age', 'name', 'lastname',
-            'birth_date', 'birth_date_short')
+            'birth_date', 'birth_date_short', 'citizenship')
         model = Player
