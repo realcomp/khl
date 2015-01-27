@@ -126,3 +126,143 @@ class KHLScheduleParser(GrabParser):
         _pdt = date
         _year = _pdt.year + 1 if _pdt.month > 6 else _pdt.year
         return datetime.datetime(day=30, month=6, year=_year)
+################################################################################
+################################################################################
+################################################################################
+
+
+class VHLScheduleParser(KHLScheduleParser):
+    b''' Парсер расписания матчей ВХЛ '''
+    model_name = 'Schedule'
+    url = defaults.VHL_SITE_URL
+    absolute_url = url+'/calendar/??/season/0/'
+    as_get_param = False
+    body_xpath = defaults.VHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
+    match_protocol_xpath = body_xpath
+    xpath_dict = {
+                    'matches': "/div[@class='matches_list']/table[@class='uni_table matches']/tr"
+    }
+    mxd = {
+                    'ru_title': 'td[@class="col_number left"]/text()',
+                    'ru_title_alt': 'td[@class="col_number left"]/p/text()',
+                    'date': 'td[@class="date"]/h4/text()',
+                    'home_team': 'td[@class="col_team left"]/a[1]/text()',
+                    'guest_team': 'td[@class="col_team left"]/a[2]/text()',
+                    'home_team_alt': 'td[@class="col_team left"]/a/b/text()',
+                    'guest_team_alt': 'td[@class="col_team left"]/a/b/text()',
+                    'khl_id': 'td[@class="col_online"]/a/@href',
+    }
+
+    def get_calendar(self, html_body=None):
+        b''' Словарь календаря '''
+        res = super(VHLScheduleParser, self).get_calendar(html_body)
+        res['league'] = 'VHL'
+        return res
+
+    def get_matches(self):
+        data = self._get_value('matches')
+        res = []
+        for tr in data:
+            if tr.attrib.get('class') != 'header':
+                date = tr.xpath(self.mxd['date'])[0].strip()
+                date = datetime.datetime.strptime(date, '%d.%m.%y')
+                for mcapsula in tr.xpath("td[@class='number']/table/tr"):
+                    match = self._get_match_info(mcapsula, date)
+                    res.append(match)
+        self.date = match['date']
+        return res
+
+    def _get_match_info(self, mcapsula, date):
+        if mcapsula.xpath(self.mxd['home_team']):
+            home_team = mcapsula.xpath(self.mxd['home_team'])[0]
+            guest_team = mcapsula.xpath(self.mxd['guest_team_alt'])
+            if guest_team:
+                guest_team = guest_team[0]
+            else:
+                guest_team = mcapsula.xpath(self.mxd['guest_team'])[0]
+        else:
+            home_team = mcapsula.xpath(self.mxd['home_team_alt'])[0]
+            guest_team = mcapsula.xpath(self.mxd['guest_team'])
+            if guest_team:
+                guest_team = guest_team[0]
+            else:
+                guest_team = mcapsula.xpath(self.mxd['guest_team_alt'])[0]
+        match = {
+            'ru_title': self._get_title(mcapsula),
+            'date': date,
+            'home_team': home_team,
+            'guest_team': guest_team,
+            'khl_id': str2int_safe(self._get_khl_id(mcapsula)),
+        }
+        return match
+
+    def _get_title(self, mcapsula):
+        if mcapsula.xpath(self.mxd['ru_title']):
+            return mcapsula.xpath(self.mxd['ru_title'])[0]
+        else:
+            return mcapsula.xpath(self.mxd['ru_title_alt'])[0]
+
+    def _get_khl_id(self, mcapsula):
+        khl_id = mcapsula.xpath(self.mxd['khl_id'])
+        return khl_id[0].split('/')[4].split('.')[0] if khl_id else ''
+################################################################################
+################################################################################
+################################################################################
+
+
+class MHLScheduleParser(VHLScheduleParser):
+    b''' Парсер расписания матчей MХЛ '''
+    model_name = 'Schedule'
+    url = defaults.MHL_SITE_URL
+    absolute_url = url+'calendar/??/0/'
+    as_get_param = False
+    body_xpath = defaults.MHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
+    match_protocol_xpath = body_xpath
+    xpath_dict = {
+                    'matches': "/div[@class='matches_list']/table[@class='matches_table']/tr"
+    }
+    mxd = {
+                    'ru_title': 'td[@class="col_number"]/text()',
+                    'ru_title_alt': 'td[@class="col_number"]/p/text()',
+                    'date': 'td[@class="date"]/h4/text()',
+                    'home_team': 'td[@class="col_team"]/a[1]/text()',
+                    'guest_team': 'td[@class="col_team"]/a[2]/text()',
+                    'home_team_alt': 'td[@class="col_team"]/a/b/text()',
+                    'guest_team_alt': 'td[@class="col_team"]/a/b/text()',
+                    'khl_id': 'td[@class="col_online"]/a/@href',
+    }
+
+    def get_calendar(self, html_body=None):
+        b''' Словарь календаря '''
+        res = super(MHLScheduleParser, self).get_calendar(html_body)
+        res['league'] = 'MHL'
+        return res
+################################################################################
+################################################################################
+################################################################################
+
+
+class MHL2ScheduleParser(MHLScheduleParser):
+    b''' Парсер расписания матчей MХЛ-2 '''
+    model_name = 'Schedule'
+    url = 'http://mhl2.khl.ru'
+    absolute_url = url+'/calendar/??/0/'
+    as_get_param = False
+    body_xpath = '//div[@id="wrapper"]/div[@class="content"]/div[@class="leftBlockInside"]/div[@class="second_content"]'
+    match_protocol_xpath = body_xpath
+    mxd = {
+                    'ru_title': 'td[@class="col_number"]/text()',
+                    'ru_title_alt': 'td[@class="col_number"]/p/text()',
+                    'date': 'td[@class="date"]/h4/text()',
+                    'home_team': 'td[@class="col_team"]/a[1]/text()',
+                    'guest_team': 'td[@class="col_team"]/a[2]/text()',
+                    'home_team_alt': 'td[@class="col_team"]/a/strong/b/text()',
+                    'guest_team_alt': 'td[@class="col_team"]/a/strong/b/text()',
+                    'khl_id': 'td[@class="col_online"]/a/@href',
+    }
+
+    def get_calendar(self, html_body=None):
+        b''' Словарь календаря '''
+        res = super(MHL2ScheduleParser, self).get_calendar(html_body)
+        res['league'] = 'MHL-2'
+        return res

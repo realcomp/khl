@@ -36,6 +36,7 @@ KHL_MATCH_REPORT_DICT = {
 
 
 # MHL MATCH ####################################################################
+MHL_SITE_URL = 'http://mhl.khl.ru/'
 MHL_BODY_NOTEXISTS = b'Протокол не найден'
 MHL_BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
 MHL_EMPTY_PAGE_TEXT = 'Fatal error'

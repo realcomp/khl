@@ -533,8 +533,7 @@ class MatchPenaltyHistory(models.Model):
 class Match(AdminLinkMixin, TitleBaseModel):
     objects = managers.match.MatchManager()
     #service info
-    khl_id = models.PositiveIntegerField(_('Other site ID'),
-                                max_length=1024, blank=True)
+    khl_id = models.PositiveIntegerField(_('Other site ID'), null=True)
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
@@ -592,8 +591,7 @@ class Match(AdminLinkMixin, TitleBaseModel):
 
 class Schedule(TitleBaseModel):
     objects = managers.ScheduleManager()
-    khl_id = models.PositiveIntegerField(_('Other site ID'),
-                                max_length=1024, blank=True)
+    khl_id = models.PositiveIntegerField(_('Other site ID'), null=True,)
     date = models.DateTimeField(_('Match date'), null=True, blank=True)
     is_championship = models.BooleanField(_('Is championship'), default=True)
     is_playoff = models.BooleanField(_('Is playoff'), default=False)
