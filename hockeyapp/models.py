@@ -481,6 +481,7 @@ class ClubPlayerMatch(models.Model):
 
     __unicode__ = lambda self: '{}'.format(self.match or self.pk,)
 
+    @property
     def match_date(self):
         return self.match.date
 

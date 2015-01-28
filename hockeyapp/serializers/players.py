@@ -1,3 +1,5 @@
+from functools import partial
+
 from rest_framework import serializers
 
 from ..models import AdvancedPlayerStats, ClubPlayerMatch
@@ -18,12 +20,23 @@ class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):
 
 class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
     # adv_stats = AdvancedPlayerStatsSerializer()
+    match_date = serializers.SerializerMethodField()
+    goals = serializers.SerializerMethodField()
+
+    def get_match_date(self, obj):
+        return obj.match_date.strftime('%d.%m.%Y %H:%M')
+
+    def get_goals(self, obj):
+        return sum(map(
+            partial(getattr, obj),
+            ('ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')))
 
     class Meta(object):
         fields = (
             'pk', 'match_date', #'adv_stats',
+            'plus_minus',
             'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
             'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis',
             'faceoff', 'winfaceoff', 'winfaceoff_p', 'loose_goals',
-            'saves', 'saves_p', 'sf', 'gamingtime')
+            'saves', 'saves_p', 'sf', 'gamingtime', 'goals')
         model = ClubPlayerMatch

@@ -1,4 +1,5 @@
 {% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -26,7 +27,8 @@
 
         <div class="page-content page-container">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-indicators" %}
-            <div class="page-inner-container">
+            <div class="page-inner-container"
+                 ng-controller="PlayerCardIndicatorsController as PlayerCardIndicatorsCtrl">
                 <div class="ui grid">
                     <div class="row">
                         <div class="column">
@@ -67,34 +69,46 @@
                             <div class="graph-controls-block">
                                 <ul class="graph-controls-list">
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link graph-control-link_active">И</a>
+                                        <a href="#" class="graph-control-link">И</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">Ш</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'goals'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('goals')">Ш</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">А</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">О</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'shots'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('shots')">О</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">+/-</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'plus_minus'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('plus_minus')">+/-</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">Штр</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'penalty_time'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('penalty_time')">Штр</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">ШР</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">ШБ</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'bullet_goals'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('bullet_goals')">ШБ</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">ШМ</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">ШО</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'overtime_goals'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('overtime_goals')">ШО</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">ШП</a>
@@ -129,10 +143,55 @@
                                 </ul>
                             </div>
                             <ul class="indicators-list">
-                                <li class="indicator-item"><a href="#" class="indicator-link">График</a></li>
-                                <li class="indicator-item"><a href="#" class="indicator-link">Таблица</a></li>
+                                <li class="indicator-item">
+                                    <a href="" class="indicator-link"
+                                       ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('graph')">График</a>
+                                </li>
+                                <li class="indicator-item">
+                                    <a href="" class="indicator-link"
+                                       ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('table')">Таблица</a>
+                                </li>
                             </ul>
-                            <img src="{{ STATIC_URL }}images/player-card-graph.png" alt="" class="indicator-graph">
+                            <a id="IndicatorsLink" class="hidden"
+                               href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph'">
+                                <img src="{{ STATIC_URL }}images/player-card-graph.png" alt="" class="indicator-graph">
+                            </div>
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table'">
+                                <table class="ui celled table segment player-select-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Дата/время</th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'goals'">
+                                                {% trans 'Goals' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'bullet_goals'">
+                                                {% trans 'Bullet Goals' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'overtime_goals'">
+                                                {% trans 'Overtime Goals' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'plus_minus'">
+                                                {% trans 'Plus/minus' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'penalty_time'">
+                                                {% trans 'Penalty time' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'shots'">
+                                                {% trans 'Scored' %}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% verbatim %}
+                                            <tr ng-repeat="row in PlayerCardIndicatorsCtrl.data">
+                                                <td>{{ row.match_date }}</td>
+                                                <td>{{ row[PlayerCardIndicatorsCtrl.field] }}</td>
+                                            </tr>
+                                        {% endverbatim %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="three wide column">
                             <div class="players-compare-title">Похожие<br>игроки</div>

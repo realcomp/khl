@@ -255,6 +255,35 @@
         this.list();
     }]);
 
+    app.controller('PlayerCardIndicatorsController', ['$http', '$scope', function($http, $scope) {
+        var self = this,
+        url = $('#IndicatorsLink').attr('href');
+
+        this.indicators_type = 'graph';
+        this.field = 'goals';
+        this.data = {};
+
+        this.setIndicatorsType = function(type) {
+            this.indicators_type = type;
+        };
+
+        this.setField = function(field) {
+            this.field = field;
+        }
+
+        this.list = function(order_by) {
+            self.data = {};
+            self.loader = true;
+            $http.get(url)
+            .success(function(data) {
+                self.data = data;
+                self.loader = false;
+            });
+        };
+
+        this.list();
+    }]);
+
     app.controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {
         var self = this,
         url = $('#MetricsPlayersForm').attr('action');
