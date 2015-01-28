@@ -114,13 +114,19 @@
                                         <a href="#" class="graph-control-link">ШП</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">РБ</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'bullet_goals'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('bullet_goals')">РБ</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">БВ</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'shots'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('shots')">БВ</a>
                                     </li>
                                     <li class="graph-control-item">
-                                        <a href="#" class="graph-control-link">%БВ</a>
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'pis'}"
+                                           ng-click="PlayerCardIndicatorsCtrl.setField('pis')">%БВ</a>
                                     </li>
                                     <li class="graph-control-item">
                                         <a href="#" class="graph-control-link">БВ/И</a>
@@ -166,7 +172,7 @@
                                                 {% trans 'Goals' %}
                                             </th>
                                             <th ng-show="PlayerCardIndicatorsCtrl.field === 'bullet_goals'">
-                                                {% trans 'Bullet Goals' %}
+                                                {% trans 'Win Bullet Goals' %}
                                             </th>
                                             <th ng-show="PlayerCardIndicatorsCtrl.field === 'overtime_goals'">
                                                 {% trans 'Overtime Goals' %}
@@ -178,7 +184,10 @@
                                                 {% trans 'Penalty time' %}
                                             </th>
                                             <th ng-show="PlayerCardIndicatorsCtrl.field === 'shots'">
-                                                {% trans 'Scored' %}
+                                                {% trans 'Shots count' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'pis'">
+                                                {% trans 'Implemented Shots, %' %}
                                             </th>
                                         </tr>
                                     </thead>
