@@ -180,8 +180,7 @@ class MatchManager(ManagerMixin, models.Manager):
                                             p.get('ru_fio'),
                                         ) for p in _players
             ]
-            _club.players.clear()
-            _club.players.add(*_players)
+            _club.players = list(_players)
         if _region:
             model = get_model('addresses', 'Address')
             _region, _crt = model.objects.get_or_create(ru_title=_region)
