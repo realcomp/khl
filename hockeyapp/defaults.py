@@ -72,6 +72,39 @@ MHL_MATCH_REPORT_DICT = {
 ################################################################################
 
 
+# MHL-2 MATCH ####################################################################
+MHL2_SITE_URL = 'http://mhl2.khl.ru/'
+MHL2_MATCH_PROTOCOL_XPATH = '//div[@id="wrapper"]/div[@class="content"]/div[@class="leftBlockInside"]/div[@class="second_content"]'
+MHL2_URL = MHL2_SITE_URL+'report/274/'
+MHL2_BODY_XPATH = MHL2_MATCH_PROTOCOL_XPATH+'/div[@style="background:url(/img/pl_bg.png)"]'
+_MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]/table[@class="universal_table"]'
+_MPS_GUEST_XPATH = '//div[@class="matches_player_statistic"]/dl/table[@class="universal_table"]'
+MHL2_MATCH_REPORT_DICT = {
+    'match_num': '//div[@class="games_title"]/p/text()', #номер матча
+    'match_date': '//div[@class="games_title"]/p/text()', #дата матча
+    'match_count': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[@class="count"]/span/text()',
+    'match_detail_count': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/div[@class="detail_count"]/text()',
+    'match_judges': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[2]',
+    'match_line_judges': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="main_column"]/p[3]',
+    'match_spectators': '//div[@class="games_title"]//p[@class="games_title_more"]/text()',
+    'home_team': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="main_column"]/h2/text()',
+    'home_team_region': _MMP_XPATH+'[1]/tr[@class="first_row"]/td[@class="main_column"]/p/strong/text()',
+    'home_team_coach': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="first_column"]/p/text()',
+    'home_keepers': _MPS_HOME_XPATH+'[1]',
+    'home_defenders': _MPS_HOME_XPATH+'[2]',
+    'home_offenders': _MPS_HOME_XPATH+'[3]',
+    'guest_team': _MMP_XPATH+'[1]/tr[@class="first_row"][2]/td[@class="main_column"]/h2/text()',
+    'guest_team_region': _MMP_XPATH+'[1]/tr[@class="first_row"][2]/td[@class="main_column"]/p/strong/text()',
+    'guest_team_coach': _MMP_XPATH+'[2]/tr[@class="second_row"]/td[@class="right_column"]/p/text()',
+    'guest_keepers': _MPS_GUEST_XPATH+'[1]',
+    'guest_defenders': _MPS_GUEST_XPATH+'[2]',
+    'guest_offenders': _MPS_GUEST_XPATH+'[3]',
+    'goals_history': '//table[@class="matches_goals"]',
+    'penalties_history': '//table[@class="matches_penalty"]',
+}
+################################################################################
+
+
 # VHL MATCH ####################################################################
 VHL_SITE_URL =  'http://www.vhlru.ru'
 VHL_MATCH_URL = VHL_SITE_URL+'/report/269/'

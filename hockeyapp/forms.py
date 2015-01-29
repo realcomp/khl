@@ -35,6 +35,7 @@ PARSERS = (
             (1, _('MHL parser')),
             (2, _('KHL parser')),
             (3, _('VHL parser')),
+            (4, _('MHL-2 parser')),
 )
 
 class MatchParserForm(forms.Form):
@@ -42,3 +43,4 @@ class MatchParserForm(forms.Form):
     from_id = forms.IntegerField(_('From match khl id'), min_value=43)
     to_id = forms.IntegerField(_('To match khl id'), min_value=43, required=False)
     count = forms.IntegerField(_('Count matches'), min_value=1, required=False)
+    update = forms.BooleanField(_('Update from db cache'))

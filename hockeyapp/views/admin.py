@@ -41,8 +41,9 @@ class MatchParserFormView(FormView):
         to_id = form.cleaned_data.get('to_id')
         count = form.cleaned_data.get('count')
         parser_id = form.cleaned_data.get('parser_id')
+        update = form.cleaned_data.get('update')
         if not count:
             count = to_id-from_id+1 if to_id else 1
-        async_hockey_matches_parser.delay(parser_id, from_id, count)
+        async_hockey_matches_parser.delay(parser_id, from_id, count or 1,update)
         return super(MatchParserFormView, self).form_valid(form)
 matchparser_form = MatchParserFormView.as_view()

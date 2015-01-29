@@ -198,7 +198,8 @@ class HockeyMHLMatchParser(GrabParser):
     def update_model_object(self, obj):
         b''' Обновляем данные о матче '''
         data = self.get_page_from_db(obj)
-        return self.put_data_in_db_from_page(obj.khl_id, data)
+        if data:
+            return self.put_data_in_db_from_page(obj.khl_id, data)
 
     def _get_adv_stats(self, matchid):
         b''' Дополнительная статитстика по игрокам '''
@@ -517,6 +518,35 @@ class HockeyMHLMatchParser(GrabParser):
 ################################################################################
 
 
+class HockeyMHL2MatchParser(HockeyMHLMatchParser):
+    b'''Парсер хоккейной статистики матча с сайта МХЛ-2'''
+    url = defaults.MHL2_URL
+    absolute_url = url
+    match_protocol_xpath = defaults.MHL2_MATCH_PROTOCOL_XPATH
+    body_xpath = defaults.MHL2_BODY_XPATH
+    xpath_dict = defaults.MHL2_MATCH_REPORT_DICT
+
+    def python_date(self, date, month_dict = defaults.MD):
+        b''' парсит дату в datetime object '''
+        if date:
+            _date_dict = date.strip().lower().split(',')
+            _dt = _date_dict[:1]
+            _dt.append(_date_dict[2])
+            _date_dict = _dt
+            _m = _date_dict[0].split()[1].encode('utf-8')
+            _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
+                                                    month_dict.get(_m))
+            if _date_dict[-1] != '':
+                mask = '%d %m %Y %H:%M'
+            else:
+                mask = '%d %m %Y'
+            _dt = ''.join(_date_dict).encode('utf-8')
+            return datetime.datetime.strptime(_dt, mask)
+################################################################################
+################################################################################
+################################################################################
+
+
 class HockeyKHLMatchParser(HockeyMHLMatchParser):
     b'''Парсер хоккейной статистики матча с сайта КХЛ'''
     url = defaults.KHL_MATCH_URL
@@ -787,10 +817,3 @@ class HockeyVHLMatchParser(HockeyMHLMatchParser):
             _res = _res[0].text_content().strip()
             return _res.split(':')[1].strip()
         return ''
-################################################################################
-################################################################################
-################################################################################
-
-
-class HockeyMHL2MatchParser(HockeyMHLMatchParser):
-    b'''Парсер хоккейной статистики матча с сайта МХЛ-2'''

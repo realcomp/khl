@@ -10,7 +10,8 @@ class Command(BaseCommand):
             parsers:
                     1 - MHL parser,
                     2 - KHL parser,
-                    3 - VHL parser.
+                    3 - VHL parser,
+                    4 - MHL-2 parser.
     '''
 
     def handle(self, *args, **options):
