@@ -541,7 +541,8 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
             else:
                 mask = '%d %m %Y'
             _dt = ''.join(_date_dict).encode('utf-8')
-            return datetime.datetime.strptime(_dt, mask)
+            _dt = datetime.datetime.strptime(_dt, mask)
+            return timezone.make_aware(_dt, current_tz)
 ################################################################################
 ################################################################################
 ################################################################################
@@ -594,7 +595,8 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
             else:
                 mask = '%d %m %Y'
             _dt = ''.join(_date_dict).encode('utf-8')
-            return datetime.datetime.strptime(_dt, mask)
+            _dt = datetime.datetime.strptime(_dt, mask)
+            return timezone.make_aware(_dt, current_tz)
 
     def get_match_judges(self):
         b''' получаем судей матча '''
@@ -792,7 +794,8 @@ class HockeyVHLMatchParser(HockeyMHLMatchParser):
             else:
                 mask = '%d %m %Y'
             _dt = ''.join(_date_dict).encode('utf-8')
-            return datetime.datetime.strptime(_dt, mask)
+            _dt = datetime.datetime.strptime(_dt, mask)
+            return timezone.make_aware(_dt, current_tz)
 
     def get_match_line_judges(self):
         b''' получаем линейных судей матча '''
