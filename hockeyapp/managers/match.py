@@ -51,6 +51,7 @@ class ManagerMixin(object):
         model = get_model(CURRENT_APP, 'ClubPlayerMatch')
         obj = model.objects.filter(match=match, clubplayer=clubplayer).last()
         if obj:
+            model.objects.filter(pk=obj.pk).update(**data)
             return obj
         else:
             data['match'] = match
