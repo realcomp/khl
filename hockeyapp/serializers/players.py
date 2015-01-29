@@ -1,4 +1,8 @@
+# -*- coding: utf-8 -*-
 from functools import partial
+from operator import itemgetter
+
+from django.db.models import Sum
 
 from rest_framework import serializers
 
@@ -19,24 +23,80 @@ class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):
 
 
 class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
-    # adv_stats = AdvancedPlayerStatsSerializer()
-    match_date = serializers.SerializerMethodField()
+    count = serializers.SerializerMethodField()
+    date = serializers.DateTimeField()
+    plus_minus = serializers.SerializerMethodField()
+    penalty_time = serializers.SerializerMethodField()
+    ev_goals = serializers.SerializerMethodField()
+    pp_goals = serializers.SerializerMethodField()
+    es_goals = serializers.SerializerMethodField()
+    overtime_goals = serializers.SerializerMethodField()
+    win_goals = serializers.SerializerMethodField()
+    bullet_goals = serializers.SerializerMethodField()
+    shots = serializers.SerializerMethodField()
+    pis = serializers.SerializerMethodField()
+    faceoff = serializers.SerializerMethodField()
+    winfaceoff = serializers.SerializerMethodField()
+    winfaceoff_p = serializers.SerializerMethodField()
     goals = serializers.SerializerMethodField()
+    score = serializers.SerializerMethodField()
 
-    def get_match_date(self, obj):
-        return obj.match_date.strftime('%d.%m.%Y %H:%M')
+    def get_count(self, obj):
+        return obj.count()
+
+    def get_plus_minus(self, obj):
+        return obj._aggregate.get('plus_minus__sum') or 0
+
+    def get_penalty_time(self, obj):
+        return obj._aggregate.get('penalty_time__sum') or 0
+
+    def get_ev_goals(self, obj):
+        return obj._aggregate.get('ev_goals__sum') or 0
+
+    def get_pp_goals(self, obj):
+        return obj._aggregate.get('pp_goals__sum') or 0
+
+    def get_es_goals(self, obj):
+        return obj._aggregate.get('es_goals__sum') or 0
+
+    def get_overtime_goals(self, obj):
+        return obj._aggregate.get('overtime_goals__sum') or 0
+
+    def get_win_goals(self, obj):
+        return obj._aggregate.get('win_goals__sum') or 0
+
+    def get_bullet_goals(self, obj):
+        return obj._aggregate.get('bullet_goals__sum') or 0
+
+    def get_shots(self, obj):
+        return obj._aggregate.get('shots__sum') or 0
+
+    def get_pis(self, obj):
+        return obj._aggregate.get('pis__sum') or 0
+
+    def get_faceoff(self, obj):
+        return obj._aggregate.get('faceoff__sum') or 0
+
+    def get_winfaceoff(self, obj):
+        return obj._aggregate.get('winfaceoff__sum') or 0
+
+    def get_winfaceoff_p(self, obj):
+        return obj._aggregate.get('winfaceoff_p__sum') or 0
 
     def get_goals(self, obj):
-        return sum(map(
-            partial(getattr, obj),
-            ('ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')))
+        return sum(map(lambda x: obj._aggregate.get(x) or 0, (
+            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')))
+
+    def get_score(self, obj):
+        # TODO: добавить передачи к сумме
+        return sum(map(lambda x: obj._aggregate.get(x) or 0, (
+            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')))
 
     class Meta(object):
         fields = (
-            'pk', 'match_date', #'adv_stats',
-            'plus_minus',
-            'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
+            'count', 'date',
+            'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
             'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis',
-            'faceoff', 'winfaceoff', 'winfaceoff_p', 'loose_goals',
-            'saves', 'saves_p', 'sf', 'gamingtime', 'goals')
+            'faceoff', 'winfaceoff', 'winfaceoff_p',
+            'goals', 'score')
         model = ClubPlayerMatch

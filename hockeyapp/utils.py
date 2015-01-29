@@ -1,6 +1,8 @@
 import datetime
 import json
 
+from django.utils import timezone
+
 
 def get_season_start_date(year=None):
     '''
@@ -46,3 +48,22 @@ def khl_string_data2python_obj_safe(string):
         return json.loads(string)
     except:
         return None
+
+
+def month_range(datetime_start, datetime_end):
+    '''
+    Split datetime interval by month
+    '''
+    d = timezone.datetime(
+        year=datetime_start.year, month=datetime_start.month, day=1,
+        tzinfo=datetime_start.tzinfo)
+    while d < datetime_end:
+        month = d.month + 1
+        year = d.year
+        if month == 13:
+            month = 1
+            year += 1
+        yield d
+        d = timezone.datetime(
+            year=year, month=month, day=1, tzinfo=datetime_start.tzinfo)
+    yield datetime_end

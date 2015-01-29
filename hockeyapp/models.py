@@ -434,11 +434,18 @@ class AdvancedPlayerStats(models.Model):
         verbose_name_plural=_('Players Stats')
 
 
+
+# class ClubPlayerMatchQuerySet(models.QuerySet):
+#     def plus_minus(self):
+#         return self.aggregate(models.Sum('plus_minus')).get('plus_minus__sum', 0)
+
+
 class ClubPlayerMatch(models.Model):
     b'''
         связка игрок в клубе в сезоне с матчем в сезоне
         По сути статистика игрока в каждом матче
     '''
+    # objects = ClubPlayerMatchQuerySet.as_manager()
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
     adv_stats = models.OneToOneField(AdvancedPlayerStats, null=True, blank=True)
@@ -473,8 +480,8 @@ class ClubPlayerMatch(models.Model):
     faceoff_str = models.CharField(_('Face-off'), max_length=8, blank=True)
     winfaceoff = models.PositiveSmallIntegerField(_('Face-off Wins'), null=True)
     winfaceoff_str = models.CharField(_('Face-off Wins'), max_length=8, blank=True)
-    winfaceoff_p = models.FloatField(_('Face-off Wins , %'), null=True)
-    winfaceoff_p_str = models.CharField(_('Face-off Wins , %'),
+    winfaceoff_p = models.FloatField(_('Face-off Wins, %'), null=True)
+    winfaceoff_p_str = models.CharField(_('Face-off Wins, %'),
                                 max_length=8, blank=True)
     #khl adv stats
     gamingtime = models.PositiveIntegerField(_('Time in game, sec'),null=True)

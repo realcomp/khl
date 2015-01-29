@@ -13,8 +13,11 @@ class LocaleAttrMixin(object):
         cd = 'ru'
         if request and request.LANGUAGE_CODE:
             cd = request.LANGUAGE_CODE
-        _attr = hasattr(self, cd+'_'+attr) and getattr(self, cd+'_'+attr)
-        return _attr or hasattr(self, attr) and getattr(self, attr)
+        if hasattr(self, '%s_%s' % (cd, attr)):
+            return getattr(self, '%s_%s' % (cd, attr))
+        elif getattr(self, '%s_%s' % ('ru', attr)):
+            return getattr(self, '%s_%s' % ('ru', attr))
+        return getattr(self, attr)
 
 
 class AdminLinkMixin(object):
