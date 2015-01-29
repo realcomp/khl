@@ -484,7 +484,6 @@ class ClubPlayerMatch(models.Model):
     winfaceoff_p_str = models.CharField(_('Face-off Wins, %'),
                                 max_length=8, blank=True)
     #khl adv stats
-    gamingtime = models.PositiveIntegerField(_('Time in game, sec'),null=True)
     change_count = models.PositiveIntegerField(_('Change count'),null=True)
     hits = models.PositiveIntegerField(_('Hits'),null=True)
     blocks = models.PositiveIntegerField(_('Blocks'),null=True)
