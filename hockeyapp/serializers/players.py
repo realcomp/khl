@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-from functools import partial
-from operator import itemgetter
-
-from django.db.models import Sum
-
 from rest_framework import serializers
 
 from ..models import AdvancedPlayerStats, ClubPlayerMatch
@@ -23,80 +18,56 @@ class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):
 
 
 class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
+    '''
+    Serializer for QuerySet instances with aggregated values
+    '''
+    class AggregateSumField(serializers.ReadOnlyField):
+        def get_attribute(self, instance):
+            # defined in view
+            return instance._aggregate
+
+        def to_representation(self, value):
+            return value.get('%s__sum' % self.field_name) or 0
+
+
+    class AggregateAvgField(serializers.ReadOnlyField):
+        def get_attribute(self, instance):
+            # defined in view
+            return instance._aggregate
+
+        def to_representation(self, value):
+            return value.get(self.field_name) or 0
+
     count = serializers.SerializerMethodField()
     date = serializers.DateTimeField()
-    plus_minus = serializers.SerializerMethodField()
-    penalty_time = serializers.SerializerMethodField()
-    ev_goals = serializers.SerializerMethodField()
-    pp_goals = serializers.SerializerMethodField()
-    es_goals = serializers.SerializerMethodField()
-    overtime_goals = serializers.SerializerMethodField()
-    win_goals = serializers.SerializerMethodField()
-    bullet_goals = serializers.SerializerMethodField()
-    shots = serializers.SerializerMethodField()
-    pis = serializers.SerializerMethodField()
-    faceoff = serializers.SerializerMethodField()
-    winfaceoff = serializers.SerializerMethodField()
-    winfaceoff_p = serializers.SerializerMethodField()
-    goals = serializers.SerializerMethodField()
-    score = serializers.SerializerMethodField()
+    goals = AggregateSumField()
+    assists = AggregateSumField()
+    points = AggregateSumField()
+    plus_minus = AggregateSumField()
+    penalty_time = AggregateSumField()
+    ev_goals = AggregateSumField()
+    pp_goals = AggregateSumField()
+    es_goals = AggregateSumField()
+    overtime_goals = AggregateSumField()
+    win_goals = AggregateSumField()
+    bullet_goals = AggregateSumField()
+    shots = AggregateSumField()
+    pis__avg = AggregateAvgField()
+    faceoff = AggregateSumField()
+    winfaceoff = AggregateSumField()
+    winfaceoff_p__avg = AggregateAvgField()
+    shots__avg = AggregateAvgField()
+    gamingtime__avg = AggregateAvgField()
+    change_count__avg = AggregateAvgField()
 
     def get_count(self, obj):
         return obj.count()
 
-    def get_plus_minus(self, obj):
-        return obj._aggregate.get('plus_minus__sum') or 0
-
-    def get_penalty_time(self, obj):
-        return obj._aggregate.get('penalty_time__sum') or 0
-
-    def get_ev_goals(self, obj):
-        return obj._aggregate.get('ev_goals__sum') or 0
-
-    def get_pp_goals(self, obj):
-        return obj._aggregate.get('pp_goals__sum') or 0
-
-    def get_es_goals(self, obj):
-        return obj._aggregate.get('es_goals__sum') or 0
-
-    def get_overtime_goals(self, obj):
-        return obj._aggregate.get('overtime_goals__sum') or 0
-
-    def get_win_goals(self, obj):
-        return obj._aggregate.get('win_goals__sum') or 0
-
-    def get_bullet_goals(self, obj):
-        return obj._aggregate.get('bullet_goals__sum') or 0
-
-    def get_shots(self, obj):
-        return obj._aggregate.get('shots__sum') or 0
-
-    def get_pis(self, obj):
-        return obj._aggregate.get('pis__sum') or 0
-
-    def get_faceoff(self, obj):
-        return obj._aggregate.get('faceoff__sum') or 0
-
-    def get_winfaceoff(self, obj):
-        return obj._aggregate.get('winfaceoff__sum') or 0
-
-    def get_winfaceoff_p(self, obj):
-        return obj._aggregate.get('winfaceoff_p__sum') or 0
-
-    def get_goals(self, obj):
-        return sum(map(lambda x: obj._aggregate.get(x) or 0, (
-            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')))
-
-    def get_score(self, obj):
-        # TODO: добавить передачи к сумме
-        return sum(map(lambda x: obj._aggregate.get(x) or 0, (
-            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')))
-
     class Meta(object):
         fields = (
-            'count', 'date',
+            'count', 'date', 'goals', 'assists', 'points',
             'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
-            'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis',
-            'faceoff', 'winfaceoff', 'winfaceoff_p',
-            'goals', 'score')
+            'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis__avg',
+            'faceoff', 'winfaceoff', 'winfaceoff_p__avg',
+            'shots__avg', 'gamingtime__avg', 'change_count__avg')
         model = ClubPlayerMatch
