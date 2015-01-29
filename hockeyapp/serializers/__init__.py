@@ -191,8 +191,10 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
     matches_count = serializers.SerializerMethodField()
     goals_count = serializers.SerializerMethodField()
     scored_count = serializers.SerializerMethodField()
+    assisted_count = serializers.SerializerMethodField()
     goals_avg = serializers.SerializerMethodField()
     scored_avg = serializers.SerializerMethodField()
+    assisted_avg = serializers.SerializerMethodField()
     plus_minus_avg = serializers.SerializerMethodField()
 
     _clubplayermatches = None
@@ -214,33 +216,39 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
         return self._get_clubplayermatches(obj).count()
 
     def get_goals_count(self, obj):
-        goal_fields = (
-            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')
-        sums = self._get_clubplayermatches(obj).aggregate(
-            *map(Sum, goal_fields))
-        return sum(filter(None, sums.values()))
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Sum('goals')).get('goals__sum')) or 0
 
     def get_scored_count(self, obj):
         return (
             self._get_clubplayermatches(obj)
-            .aggregate(Sum('shots')).get('shots__sum', 0))
+            .aggregate(Sum('shots')).get('shots__sum')) or 0
+
+    def get_assisted_count(self, obj):
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Sum('assists')).get('assists__sum')) or 0
 
     def get_goals_avg(self, obj):
-        goal_fields = (
-            'ev_goals', 'pp_goals', 'es_goals', 'overtime_goals')
-        sums = self._get_clubplayermatches(obj).aggregate(
-            *map(Avg, goal_fields))
-        return sum(filter(None, sums.values()))
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Avg('goals')).get('goals__avg')) or 0
 
     def get_scored_avg(self, obj):
         return (
             self._get_clubplayermatches(obj)
-            .aggregate(Avg('shots')).get('shots__avg', 0))
+            .aggregate(Avg('shots')).get('shots__avg')) or 0
+
+    def get_assisted_avg(self, obj):
+        return (
+            self._get_clubplayermatches(obj)
+            .aggregate(Avg('assists')).get('assists__avg')) or 0
 
     def get_plus_minus_avg(self, obj):
         return (
             self._get_clubplayermatches(obj)
-            .aggregate(Avg('plus_minus')).get('plus_minus__avg', 0))
+            .aggregate(Avg('plus_minus')).get('plus_minus__avg')) or 0
 
     class Meta(object):
         fields = (
@@ -248,8 +256,10 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'photo', 'khl_url', 'birth_date_short', 'club', 'last_clubs',
             'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
             'contract_to', 'number', 'line_display', 'name', 'lastname',
-            'seasons_count', 'matches_count', 'goals_count', 'scored_count',
-            'goals_avg', 'scored_avg', 'plus_minus_avg')
+            'seasons_count', 'matches_count',
+            'goals_count', 'scored_count', 'assisted_count',
+            'goals_avg', 'scored_avg', 'assisted_avg',
+            'plus_minus_avg')
         model = Player
 
 
