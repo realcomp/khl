@@ -18,8 +18,8 @@ celery
 
 
 Django==1.7.1
-django-atomic-celery==1.1.2
-django-atomic-signals==1.1.0
+#django-atomic-celery==1.1.2
+#django-atomic-signals==1.1.0
 django-autocomplete-light
 django-daterange-filter
 djangorestframework
