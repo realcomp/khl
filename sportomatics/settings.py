@@ -30,6 +30,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    #'django_atomic_signals',
+    #'django_atomic_celery',
+
     'daterange_filter',
     'django_select2',
     'easy_thumbnails',
