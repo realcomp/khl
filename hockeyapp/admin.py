@@ -194,10 +194,9 @@ admin.site.register(Coach, CoachAdmin)
 
 class ClubPlayerMatchInline(TabularInlineReadOnly):
     model = ClubPlayerMatch
-    readonly_fields = ( object_link, 'bullet_goals', 'clubplayer', 'es_goals',
-                        'ev_goals', 'faceoff',  'gamingtime', 'loose_goals',
-                        'overtime_goals', 'penalty_time', 'pis', 'plus_minus',
-                        'pp_goals', 'saves', 'saves_p', 'sf', 'shots',
+    readonly_fields = ( object_link, 'clubplayer', 'goals', 'assists', 'points',
+                        'faceoff',  'gamingtime', 'loose_goals', 'penalty_time',
+                        'pis', 'plus_minus', 'saves', 'saves_p', 'sf', 'shots',
                         'win_goals', 'winfaceoff', 'winfaceoff_p'
                     )
     fields = readonly_fields

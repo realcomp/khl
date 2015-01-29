@@ -11,6 +11,8 @@ import time
 from lxml.html import fromstring
 
 from django.db.models.loading import get_model
+from django.utils import timezone
+current_tz = timezone.get_current_timezone()
 
 from base.utils import str2int_safe, str2float_safe, str2sec_safe
 
@@ -189,9 +191,9 @@ class HockeyMHLMatchParser(GrabParser):
         if obj.html_body:
             html_body = obj.html_body
             self.page_tree = fromstring(html_body)
-            return self.get_match_all_data(obj.khl_id, html_body)
-        else:
-            return self.get_page(obj.khl_id)
+            return self.get_match_all_data(obj.khl_id, html_body, obj.url)
+        #else:
+            #return self.get_page(obj.khl_id)
 
     def update_model_object(self, obj):
         b''' Обновляем данные о матче '''
@@ -203,7 +205,7 @@ class HockeyMHLMatchParser(GrabParser):
         if matchid:
             self.adv_stats = AdvancedHockeyMatchParser().get_page(matchid)
 
-    def get_match_all_data(self, matchid=None, html_body=None):
+    def get_match_all_data(self, matchid=None, html_body=None, url=None):
         b''' метод запускается, в случае если протокол игры существует и найден
             Забираем данные из протокола игры через DOM-дерево
         '''
@@ -217,7 +219,7 @@ class HockeyMHLMatchParser(GrabParser):
             res = {
                     'khl_id': matchid,
                     'html_body': self.get_html_body(html_body),
-                    'url': self.absolute_url,
+                    'url': url if url else self.absolute_url,
                     'ru_title': self.get_match_num(),
                     'spectators': self.get_spectators(),
                     'date': self.python_date(_date),
@@ -265,7 +267,8 @@ class HockeyMHLMatchParser(GrabParser):
             else:
                 mask = '%d %m %Y'
             _dt = ''.join(_date_dict).encode('utf-8')
-            return datetime.datetime.strptime(_dt, mask)
+            _dt = datetime.datetime.strptime(_dt, mask)
+            return timezone.make_aware(_dt, current_tz)
 
     def start_date(self, date):
         b''' возвращает дату начала сезона '''
@@ -408,8 +411,11 @@ class HockeyMHLMatchParser(GrabParser):
         b''' суммарная статистика игрока в матче '''
         if line_type > 1:
             return {
+                    'goals': str2int_safe(tr.xpath('td[4]/text()')[0]),
+                    'assists': str2int_safe(tr.xpath('td[5]/text()')[0]),
+                    'points': str2int_safe(tr.xpath('td[6]/text()')[0]),
                     'plus_minus': str2int_safe(tr.xpath('td[7]/text()')[0]),
-                    'penalty_time': tr.xpath('td[8]/text()')[0],
+                    'penalty_time': str2int_safe(tr.xpath('td[8]/text()')[0]),
                     'ev_goals': str2int_safe(tr.xpath('td[9]/text()')[0]),
                     'pp_goals': str2int_safe(tr.xpath('td[10]/text()')[0]),
                     'es_goals': str2int_safe(tr.xpath('td[11]/text()')[0]),
@@ -697,8 +703,11 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
         b''' суммарная статистика игрока в матче '''
         if line_type > 1:
             return {
+                    'goals': str2int_safe(item[3]),
+                    'assists': str2int_safe(item[4]),
+                    'points': str2int_safe(item[5]),
                     'plus_minus': str2int_safe(item[6]),
-                    'penalty_time': item[7],
+                    'penalty_time': str2int_safe(item[7]),
                     'ev_goals': str2int_safe(item[8]),
                     'pp_goals': str2int_safe(item[9]),
                     'es_goals': str2int_safe(item[10]),
@@ -710,7 +719,11 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
                     'faceoff': str2int_safe(item[16]),
                     'winfaceoff': str2int_safe(item[17]),
                     'winfaceoff_p': str2float_safe(item[18]),
-                    'gamingtime': str2sec_safe(item[20]),
+                    'gamingtime': str2sec_safe(item[19]),
+                    'change_count': str2int_safe(item[20]),
+                    'hits': str2int_safe(item[21]),
+                    'blocks': str2int_safe(item[22]),
+                    'fouls': str2int_safe(item[23]),
             }
         else:
             return {
@@ -774,3 +787,10 @@ class HockeyVHLMatchParser(HockeyMHLMatchParser):
             _res = _res[0].text_content().strip()
             return _res.split(':')[1].strip()
         return ''
+################################################################################
+################################################################################
+################################################################################
+
+
+class HockeyMHL2MatchParser(HockeyMHLMatchParser):
+    b'''Парсер хоккейной статистики матча с сайта МХЛ-2'''

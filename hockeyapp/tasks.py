@@ -79,6 +79,21 @@ def async_temp_match_update(match_id):
 
 
 @app.task(ignore_result=True, track_started=True)
+def mhl_matches_update():
+    b'''
+        Обновление инфо о матчах в дб
+    '''
+    try:
+        matches = models.Match.objects.filter(html_body__isnull=False
+                                     ).filter(url__startswith='http://mhl.khl.ru/report/272/?idgame=')
+        for m in matches:
+            parser = parsers.match.HockeyMHLMatchParser
+            parser().update_model_object(m)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
 def async_temp_stats_plr_update(id):
     b'''
         Обновление инфо о статистике игрока

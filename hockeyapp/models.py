@@ -62,6 +62,13 @@ class Player(AbstractMan):
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
+    def save(self, **kwargs):
+        if self.pk and not self.line:
+            #смотрим амплуа игрока из истории 
+            if self.clubplayer_set.exists():
+                self.line = self.clubplayer_set.all().last().line
+        super(Player, self).save(**kwargs)
+
     @property
     def club(self):
         return self.club_set.all().last()
@@ -435,9 +442,12 @@ class ClubPlayerMatch(models.Model):
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
     adv_stats = models.OneToOneField(AdvancedPlayerStats, null=True, blank=True)
+    goals = models.SmallIntegerField(_('Goals'), null=True)
+    assists = models.SmallIntegerField(_('Assists'), null=True)
+    points = models.SmallIntegerField(_('Points'), null=True)
     plus_minus = models.SmallIntegerField('+/-', null=True)
     plus_minus_str = models.CharField('+/-', max_length=8, blank=True)
-    penalty_time = models.PositiveIntegerField(_('Penalty Time, sec'), null=True)
+    penalty_time = models.PositiveIntegerField(_('Penalty Time'), null=True)
     penalty_time_str = models.CharField(_('Penalty Time'), max_length=8, blank=True)
     ev_goals = models.PositiveSmallIntegerField(_('EV Goals'), null=True)
     ev_goals_str = models.CharField(_('EV Goals'), max_length=8, blank=True)
@@ -466,6 +476,12 @@ class ClubPlayerMatch(models.Model):
     winfaceoff_p = models.FloatField(_('Face-off Wins , %'), null=True)
     winfaceoff_p_str = models.CharField(_('Face-off Wins , %'),
                                 max_length=8, blank=True)
+    #khl adv stats
+    gamingtime = models.PositiveIntegerField(_('Time in game, sec'),null=True)
+    change_count = models.PositiveIntegerField(_('Change count'),null=True)
+    hits = models.PositiveIntegerField(_('Hits'),null=True)
+    blocks = models.PositiveIntegerField(_('Blocks'),null=True)
+    fouls = models.PositiveIntegerField(_('Fouls'),null=True)
     #keeper stats
     loose_goals = models.PositiveSmallIntegerField(_('Loose Goals'), null=True)
     loose_goals_str = models.CharField(_('Loose Goals'), max_length=8,  blank=True)
