@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
 import itertools
 import json
 import operator
 
-from django.db.models import Q
+from django.db.models import Q, Max, Min, Sum
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, viewsets
@@ -23,6 +24,7 @@ from ..serializers import (
 )
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import ClubPlayerMatchSerilizer
+from ..utils import month_range
 
 
 class PlayersSearch(
@@ -119,7 +121,27 @@ class PlayerCardIndicators(generics.ListAPIView):
                 Season, pk=self.request.GET['season'])
             clubplayers = clubplayers.filter(season=season)
 
-        return qs.filter(clubplayer__in=clubplayers).order_by('match__date')
+        qs = qs.filter(clubplayer__in=clubplayers)
+
+        # group by month
+        min_max = qs.aggregate(Min('match__date'), Max('match__date'))
+        start_date = min_max.get('match__date__min')
+        end_date = min_max.get('match__date__max')
+        if start_date and end_date:
+            qss = []
+            dates = list(month_range(start_date, end_date))
+            for i in range(len(dates) - 1):
+                month_qs = qs.filter(
+                    match__date__gt=dates[i],
+                    match__date__lte=dates[i + 1])
+                month_qs.date = dates[i]
+                month_qs._aggregate = month_qs.aggregate(*map(Sum, (
+                    'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
+                    'es_goals', 'overtime_goals', 'win_goals', 'bullet_goals',
+                    'shots', 'pis', 'faceoff', 'winfaceoff', 'winfaceoff_p')))
+                qss.append(month_qs)
+            return qss
+        return []
 
 
 class LeagueList(generics.ListAPIView):
