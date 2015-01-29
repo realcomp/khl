@@ -27,6 +27,7 @@ def async_hockey_match_parser(parser_id, matchid, update=False):
                     b'3': parsers.match.HockeyVHLMatchParser,
                     b'4': parsers.match.HockeyMHL2MatchParser,
         }.get(parser_id, parsers.match.HockeyMHLMatchParser)
+        print(parser)
         if update:
             m = models.Match.objects.get(khl_id=matchid)
             parser().update_model_object(m)
