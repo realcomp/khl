@@ -6,7 +6,7 @@ import itertools
 import json
 import operator
 
-from django.db.models import Q, Max, Min, Sum
+from django.db.models import Avg, Q, Max, Min, Sum
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, viewsets
@@ -135,10 +135,16 @@ class PlayerCardIndicators(generics.ListAPIView):
                     match__date__gt=dates[i],
                     match__date__lte=dates[i + 1])
                 month_qs.date = dates[i]
-                month_qs._aggregate = month_qs.aggregate(*map(Sum, (
-                    'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
-                    'es_goals', 'overtime_goals', 'win_goals', 'bullet_goals',
-                    'shots', 'pis', 'faceoff', 'winfaceoff', 'winfaceoff_p')))
+                month_qs._aggregate = month_qs.aggregate(*itertools.chain(
+                    map(Sum, (
+                        'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
+                        'es_goals', 'overtime_goals', 'win_goals',
+                        'bullet_goals', 'shots', 'faceoff',
+                        'winfaceoff', 'winfaceoff_p')),
+                    map(Avg, (
+                        'shots', 'pis', 'winfaceoff_p', 'gamingtime',
+                        'change_count')),
+                ))
                 qss.append(month_qs)
             return qss
         return []
