@@ -169,6 +169,11 @@
                                            ng-click="PlayerCardIndicatorsCtrl.setField('change_count__avg')">См/И</a>
                                     </li>
                                 </ul>
+                                <select ng-model="PlayerCardIndicatorsCtrl.group_by"
+                                        ng-change="PlayerCardIndicatorsCtrl.list()">
+                                    <option value="month">{% trans 'by month' %}</option>
+                                    <option value="season">{% trans 'by season' %}</option>
+                                </select>
                             </div>
                             <ul class="indicators-list">
                                 <li class="indicator-item">
@@ -189,7 +194,12 @@
                                 <table class="ui celled table segment player-select-table">
                                     <thead>
                                         <tr>
-                                            <th>Дата</th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.group_by === 'month'">
+                                                {% trans 'Date' %}
+                                            </th>
+                                            <th ng-show="PlayerCardIndicatorsCtrl.group_by === 'season'">
+                                                {% trans 'Season' %}
+                                            </th>
                                             <th ng-show="PlayerCardIndicatorsCtrl.field === 'count'">
                                                 {% trans 'Matches' %}
                                             </th>
@@ -255,7 +265,12 @@
                                     <tbody>
                                         {% verbatim %}
                                             <tr ng-repeat="row in PlayerCardIndicatorsCtrl.data">
-                                                <td>{{ row.date|date:'MM.yyyy' }}</td>
+                                                <td ng-show="PlayerCardIndicatorsCtrl.group_by === 'month'">
+                                                    {{ row.date|date:'MM.yyyy' }}
+                                                </td>
+                                                <td ng-show="PlayerCardIndicatorsCtrl.group_by === 'season'">
+                                                    {{ row.season.label }}
+                                                </td>
                                                 <td>{{ row[PlayerCardIndicatorsCtrl.field] }}</td>
                                             </tr>
                                         {% endverbatim %}

@@ -261,6 +261,7 @@
 
         this.indicators_type = 'graph';
         this.field = 'goals';
+        this.group_by = 'month';
         this.data = {};
 
         this.setIndicatorsType = function(type) {
@@ -274,7 +275,7 @@
         this.list = function(order_by) {
             self.data = {};
             self.loader = true;
-            $http.get(url)
+            $http.get(url + '?group_by=' + self.group_by)
             .success(function(data) {
                 self.data = data;
                 self.loader = false;

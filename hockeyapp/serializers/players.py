@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
+from . import SeasonSerializer
 from ..models import AdvancedPlayerStats, ClubPlayerMatch
 
 
@@ -29,7 +30,6 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         def to_representation(self, value):
             return value.get('%s__sum' % self.field_name) or 0
 
-
     class AggregateAvgField(serializers.ReadOnlyField):
         def get_attribute(self, instance):
             # defined in view
@@ -40,6 +40,7 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
 
     count = serializers.SerializerMethodField()
     date = serializers.DateTimeField()
+    season = SeasonSerializer()
     goals = AggregateSumField()
     assists = AggregateSumField()
     points = AggregateSumField()
@@ -65,7 +66,7 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
 
     class Meta(object):
         fields = (
-            'count', 'date', 'goals', 'assists', 'points',
+            'count', 'date', 'season', 'goals', 'assists', 'points',
             'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
             'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis__avg',
             'faceoff', 'winfaceoff', 'winfaceoff_p__avg',

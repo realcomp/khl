@@ -106,6 +106,17 @@ class PlayersSearch(
 class PlayerCardIndicators(generics.ListAPIView):
     serializer_class = ClubPlayerMatchSerilizer
 
+    def _get_aggregate(self, qs):
+        return qs.aggregate(*itertools.chain(
+            map(Sum, (
+                'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
+                'es_goals', 'overtime_goals', 'win_goals', 'bullet_goals',
+                'shots', 'faceoff', 'winfaceoff', 'winfaceoff_p')),
+            map(Avg, (
+                'shots', 'pis', 'winfaceoff_p', 'gamingtime',
+                'change_count')),
+        ))
+
     def get_queryset(self):
         return ClubPlayerMatch.objects.all()
 
@@ -123,30 +134,35 @@ class PlayerCardIndicators(generics.ListAPIView):
 
         qs = qs.filter(clubplayer__in=clubplayers)
 
-        # group by month
-        min_max = qs.aggregate(Min('match__date'), Max('match__date'))
-        start_date = min_max.get('match__date__min')
-        end_date = min_max.get('match__date__max')
-        if start_date and end_date:
+        if self.request.GET.get('group_by') == 'season':
+            seasons = (
+                Season.objects
+                .filter(pk__in=clubplayers.values_list('season_id'))
+                .order_by('start_date'))
             qss = []
-            dates = list(month_range(start_date, end_date))
-            for i in range(len(dates) - 1):
-                month_qs = qs.filter(
-                    match__date__gt=dates[i],
-                    match__date__lte=dates[i + 1])
-                month_qs.date = dates[i]
-                month_qs._aggregate = month_qs.aggregate(*itertools.chain(
-                    map(Sum, (
-                        'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
-                        'es_goals', 'overtime_goals', 'win_goals',
-                        'bullet_goals', 'shots', 'faceoff',
-                        'winfaceoff', 'winfaceoff_p')),
-                    map(Avg, (
-                        'shots', 'pis', 'winfaceoff_p', 'gamingtime',
-                        'change_count')),
-                ))
-                qss.append(month_qs)
+            for season in seasons:
+                season_qs = qs.filter(clubplayer__season=season)
+                season_qs.date = None
+                season_qs.season = season
+                season_qs._aggregate = self._get_aggregate(season_qs)
+                qss.append(season_qs)
             return qss
+        else:  # group by month (by default)
+            min_max = qs.aggregate(Min('match__date'), Max('match__date'))
+            start_date = min_max.get('match__date__min')
+            end_date = min_max.get('match__date__max')
+            if start_date and end_date:
+                qss = []
+                dates = list(month_range(start_date, end_date))
+                for i in range(len(dates) - 1):
+                    month_qs = qs.filter(
+                        match__date__gt=dates[i],
+                        match__date__lte=dates[i + 1])
+                    month_qs.date = dates[i]
+                    month_qs.season = None
+                    month_qs._aggregate = self._get_aggregate(month_qs)
+                    qss.append(month_qs)
+                return qss
         return []
 
 

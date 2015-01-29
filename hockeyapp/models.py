@@ -434,18 +434,11 @@ class AdvancedPlayerStats(models.Model):
         verbose_name_plural=_('Players Stats')
 
 
-
-# class ClubPlayerMatchQuerySet(models.QuerySet):
-#     def plus_minus(self):
-#         return self.aggregate(models.Sum('plus_minus')).get('plus_minus__sum', 0)
-
-
 class ClubPlayerMatch(models.Model):
     b'''
         связка игрок в клубе в сезоне с матчем в сезоне
         По сути статистика игрока в каждом матче
     '''
-    # objects = ClubPlayerMatchQuerySet.as_manager()
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
     adv_stats = models.OneToOneField(AdvancedPlayerStats, null=True, blank=True)
