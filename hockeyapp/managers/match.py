@@ -176,12 +176,12 @@ class MatchManager(ManagerMixin, models.Manager):
         club_model = get_model(CURRENT_APP, 'club')
         _club, _crt = club_model.objects.get_or_create(**kwargs)
         if _players:
-            _players = list([self._get_player(  p.get('khl_id'),
+            _players = set([self._get_player(   p.get('khl_id'),
                                                 p.get('ru_fio'),
                                             ) for p in _players
             ])
-            if _players != list(_club.players.all()):
-                _club.players = list(_players)
+            if _players != set(_club.players.all()):
+                _club.players = _players
         if _region:
             model = get_model('addresses', 'Address')
             _region, _crt = model.objects.get_or_create(ru_title=_region)
