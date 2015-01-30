@@ -190,7 +190,7 @@
                             </ul>
                             <a id="IndicatorsLink" class="hidden"
                                href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
-                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph'">
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.length">
                                 <img src="{{ STATIC_URL }}images/player-card-graph.png" alt="" class="indicator-graph">
                             </div>
                             <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table' && PlayerCardIndicatorsCtrl.data.length">
