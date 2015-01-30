@@ -3,8 +3,9 @@ from operator import attrgetter
 
 from rest_framework import serializers
 
-from . import SeasonSerializer, BaseClubSerializer
-from ..models import AdvancedPlayerStats, ClubPlayerMatch, Club, LeagueClub
+from . import SeasonSerializer, BaseClubSerializer, CoachSerializer
+from ..models import (
+    AdvancedPlayerStats, ClubPlayerMatch, Club, LeagueClub, Coach)
 
 
 class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):
@@ -99,3 +100,15 @@ class PlayerCardClubsSerializer(BaseClubSerializer):
         fields = (
             'pk', 'title', 'logo', 'url', 'seasons_title')
         model = Club
+
+
+class PlayerCardCoachesSerializer(CoachSerializer):
+    years_months = serializers.SerializerMethodField()
+
+    def get_years_months(self, obj):
+        total_months = obj.total_days / 30
+        return [total_months / 12, total_months % 12]
+
+    class Meta(object):
+        fields = 'pk', 'fio', 'name', 'lastname', 'years_months'
+        model = Coach

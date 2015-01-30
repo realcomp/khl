@@ -12,7 +12,8 @@ from ..serializers import (
     PlayerCardSerializer, PlayerCardDetailSerializer,
     ClubListSerializer,
 )
-from ..serializers.players import PlayerCardClubsSerializer
+from ..serializers.players import (
+    PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
 from ..utils import get_season_end_date
 
 
@@ -127,13 +128,12 @@ class PlayerCardCoaches(PlayerCard):
                 pk = clubcoach.coach_id
                 if pk not in coaches:
                     coaches[pk] = clubcoach.coach
-                if not hasattr(coaches[pk], 'total_months'):
-                    coaches[pk].total_months = 0
+                if not hasattr(coaches[pk], 'total_days'):
+                    coaches[pk].total_days = 0
                 duration = clubcoach.end_date - clubcoach.start_date
-                coaches[pk].total_months = duration.days / 30
-        # context['clubs'] = PlayerCardClubsSerializer(
-        #     clubs.values(), many=True, context=context).data
-        context['coaches'] = coaches.values()
+                coaches[pk].total_days += duration.days
+        context['coaches'] = PlayerCardCoachesSerializer(
+            coaches.values(), many=True, context=context).data
         return context
 
 
