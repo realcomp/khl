@@ -45,7 +45,7 @@
                                         <a href="" class="option-link"
                                            ng-class="{ 'option-link_active':PlayerCardIndicatorsCtrl.coach === {{ coach.pk }} }"
                                            ng-click="PlayerCardIndicatorsCtrl.setCoach({{ coach.pk }})">
-                                            {{ coach.ru_fio }} (4 года 7 мес.)
+                                            {{ coach.ru_fio }} (0 лет {{ coach.total_months }} мес.)
                                         </a>
                                     </li>
                                 {% endfor %}

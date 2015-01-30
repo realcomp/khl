@@ -127,6 +127,10 @@ class PlayerCardCoaches(PlayerCard):
                 pk = clubcoach.coach_id
                 if pk not in coaches:
                     coaches[pk] = clubcoach.coach
+                if not hasattr(coaches[pk], 'total_months'):
+                    coaches[pk].total_months = 0
+                duration = clubcoach.end_date - clubcoach.start_date
+                coaches[pk].total_months = duration.days / 30
         # context['clubs'] = PlayerCardClubsSerializer(
         #     clubs.values(), many=True, context=context).data
         context['coaches'] = coaches.values()
