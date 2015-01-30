@@ -41,8 +41,7 @@
                         <div class="four wide column">
                             <ul class="options-list player-clubs-list">
                                 {% for club in clubs %}
-                                    <li class="option-item"
-                                        ng-init="PlayerCardIndicatorsCtrl.club = {{ clubs.0.pk }}">
+                                    <li class="option-item">
                                         <a href="" class="option-link"
                                            ng-class="{ 'option-link_active':PlayerCardIndicatorsCtrl.club === {{ club.pk }} }"
                                            ng-click="PlayerCardIndicatorsCtrl.setClub({{ club.pk }})">
@@ -174,10 +173,10 @@
                             </ul>
                             <a id="IndicatorsLink" class="hidden"
                                href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
-                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.length">
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <img src="{{ STATIC_URL }}images/player-card-graph.png" alt="" class="indicator-graph">
                             </div>
-                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table' && PlayerCardIndicatorsCtrl.data.length">
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <table class="ui celled table segment player-select-table">
                                     <thead>
                                         <tr>
@@ -251,7 +250,7 @@
                                     </thead>
                                     <tbody>
                                         {% verbatim %}
-                                            <tr ng-repeat="row in PlayerCardIndicatorsCtrl.data">
+                                            <tr ng-repeat="row in PlayerCardIndicatorsCtrl.data.results">
                                                 <td ng-show="PlayerCardIndicatorsCtrl.group_by === 'month'">
                                                     {{ row.date|date:'MM.yyyy' }}
                                                 </td>

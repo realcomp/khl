@@ -261,6 +261,7 @@
 
         this.indicators_type = 'graph';
         this.field = 'goals';
+        this.club = null;
         this.group_by = 'month';
         this.data = {};
 
@@ -274,12 +275,17 @@
 
         this.setClub = function(club) {
             this.club = club;
+            this.list();
         }
 
         this.list = function(order_by) {
+            var params = 'group_by=' + self.group_by;
+            if (self.club !== null) {
+                params += '&club=' + self.club;
+            }
             self.data = {};
             self.loader = true;
-            $http.get(url + '?group_by=' + self.group_by)
+            $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
                 self.loader = false;

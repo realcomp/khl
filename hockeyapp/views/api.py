@@ -104,6 +104,7 @@ class PlayersSearch(
 
 
 class PlayerCardIndicators(generics.ListAPIView):
+    paginate_by = 99999
     serializer_class = ClubPlayerMatchSerilizer
 
     def _get_aggregate(self, qs):
@@ -128,9 +129,11 @@ class PlayerCardIndicators(generics.ListAPIView):
             .filter(player_id=self.kwargs.get('player_id', 0)))
 
         if 'season' in self.request.GET:
-            season = get_object_or_404(
-                Season, pk=self.request.GET['season'])
-            clubplayers = clubplayers.filter(season=season)
+            clubplayers = clubplayers.filter(
+                season_id=self.request.GET['season'])
+
+        if 'club' in self.request.GET:
+            clubplayers = clubplayers.filter(club_id=self.request.GET['club'])
 
         qs = qs.filter(clubplayer__in=clubplayers)
 

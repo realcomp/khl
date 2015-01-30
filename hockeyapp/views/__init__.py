@@ -103,7 +103,8 @@ class PlayerCardClubs(PlayerCard):
                 clubs[pk] = clubplayer.club
             if not hasattr(clubs[pk], 'selected_seasons'):
                 clubs[pk].selected_seasons = []
-            clubs[pk].selected_seasons.append(clubplayer.season)
+            if clubplayer.season not in clubs[pk].selected_seasons:
+                clubs[pk].selected_seasons.append(clubplayer.season)
         context['clubs'] = PlayerCardClubsSerializer(
             clubs.values(), many=True, context=context).data
         return context
