@@ -262,6 +262,7 @@
         this.indicators_type = 'graph';
         this.field = 'goals';
         this.club = null;
+        this.coach = null;
         this.group_by = 'month';
         this.data = {};
 
@@ -278,10 +279,18 @@
             this.list();
         }
 
+        this.setCoach = function(coach) {
+            this.coach = coach;
+            this.list();
+        }
+
         this.list = function(order_by) {
             var params = 'group_by=' + self.group_by;
             if (self.club !== null) {
                 params += '&club=' + self.club;
+            }
+            if (self.coach !== null) {
+                params += '&coach=' + self.coach;
             }
             self.data = {};
             self.loader = true;

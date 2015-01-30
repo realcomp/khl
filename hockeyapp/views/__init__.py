@@ -6,7 +6,7 @@ from django.views.generic import DetailView, TemplateView
 from addresses.models import Country
 from base.models import Season
 
-from ..models import Club, Player, ClubPlayer
+from ..models import Club, Player, ClubPlayer, CoachClub
 from ..serializers import (
     CountrySerializer, SeasonSerializer,
     PlayerCardSerializer, PlayerCardDetailSerializer,
@@ -112,6 +112,25 @@ class PlayerCardClubs(PlayerCard):
 
 class PlayerCardCoaches(PlayerCard):
     template_name = 'hockeyapp/players/player-card-coaches.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayerCardCoaches, self).get_context_data(**kwargs)
+        clubplayers = (
+            ClubPlayer.objects
+            .filter(player=self.get_object())
+            .order_by('season__start_date'))
+        coaches = {}
+        for clubplayer in clubplayers:
+            clubcoaches = CoachClub.objects.filter(
+                club=clubplayer.club, season=clubplayer.season)
+            for clubcoach in clubcoaches:
+                pk = clubcoach.coach_id
+                if pk not in coaches:
+                    coaches[pk] = clubcoach.coach
+        # context['clubs'] = PlayerCardClubsSerializer(
+        #     clubs.values(), many=True, context=context).data
+        context['coaches'] = coaches.values()
+        return context
 
 
 class PlayerCardPartners(PlayerCard):
