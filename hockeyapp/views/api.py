@@ -135,6 +135,11 @@ class PlayerCardIndicators(generics.ListAPIView):
         if 'club' in self.request.GET:
             clubplayers = clubplayers.filter(club_id=self.request.GET['club'])
 
+        if 'coach' in self.request.GET:
+            clubplayers = clubplayers.filter(
+                club__coachclub__coach_id=self.request.GET['coach'],
+                season__coachclub__coach_id=self.request.GET['coach'])
+
         qs = qs.filter(clubplayer__in=clubplayers)
 
         if self.request.GET.get('group_by') == 'season':
