@@ -38,6 +38,7 @@
                         </div>
                     </div>
                     <div class="row">
+                        {% comment %}
                         <div class="three wide column">
                             <div class="players-compare-title">Сравнить<br>с ...</div>
                             <ul class="players-compare-list">
@@ -65,7 +66,9 @@
                             </ul>
                             <a href="#" class="players-compare-player-add">+ добавить игрока</a>
                         </div>
-                        <div class="ten wide column">
+                        {% endcomment %}
+                        <!-- <div class="ten wide column"> -->
+                        <div class="sixteen wide column">
                             <div class="graph-controls-block">
                                 <ul class="graph-controls-list">
                                     <li class="graph-control-item">
@@ -281,6 +284,7 @@
                                 <img src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
                         </div>
+                        {% comment %}
                         <div class="three wide column">
                             <div class="players-compare-title">Похожие<br>игроки</div>
                             <ul class="players-compare-list">
@@ -307,6 +311,7 @@
                                 </li>
                             </ul>
                         </div>
+                        {% endcomment %}
                     </div>
                 </div>
                 <ul class="team-controls player-controls-block">
