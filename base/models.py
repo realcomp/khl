@@ -44,3 +44,8 @@ class Season(TitleBaseModel):
     objects = SeasonManager()
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+
+    @property
+    def short_title(self):
+        return '%s/%s' % (
+            str(self.start_date.year)[2:], str(self.end_date.year)[2:])

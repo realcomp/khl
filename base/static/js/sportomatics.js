@@ -272,6 +272,10 @@
             this.field = field;
         }
 
+        this.setClub = function(club) {
+            this.club = club;
+        }
+
         this.list = function(order_by) {
             self.data = {};
             self.loader = true;

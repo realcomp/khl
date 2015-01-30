@@ -6,12 +6,13 @@ from django.views.generic import DetailView, TemplateView
 from addresses.models import Country
 from base.models import Season
 
-from ..models import Club, Player
+from ..models import Club, Player, ClubPlayer
 from ..serializers import (
     CountrySerializer, SeasonSerializer,
     PlayerCardSerializer, PlayerCardDetailSerializer,
     ClubListSerializer,
 )
+from ..serializers.players import PlayerCardClubsSerializer
 from ..utils import get_season_end_date
 
 
@@ -88,6 +89,24 @@ class PlayerCardIndicators(PlayerCard):
 
 class PlayerCardClubs(PlayerCard):
     template_name = 'hockeyapp/players/player-card-clubs.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayerCardClubs, self).get_context_data(**kwargs)
+        clubplayers = (
+            ClubPlayer.objects
+            .filter(player=self.get_object())
+            .order_by('season__start_date'))
+        clubs = {}
+        for clubplayer in clubplayers:
+            pk = clubplayer.club_id
+            if pk not in clubs:
+                clubs[pk] = clubplayer.club
+            if not hasattr(clubs[pk], 'selected_seasons'):
+                clubs[pk].selected_seasons = []
+            clubs[pk].selected_seasons.append(clubplayer.season)
+        context['clubs'] = PlayerCardClubsSerializer(
+            clubs.values(), many=True, context=context).data
+        return context
 
 
 class PlayerCardCoaches(PlayerCard):

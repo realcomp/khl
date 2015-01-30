@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+from operator import attrgetter
+
 from rest_framework import serializers
 
-from . import SeasonSerializer
-from ..models import AdvancedPlayerStats, ClubPlayerMatch
+from . import SeasonSerializer, BaseClubSerializer
+from ..models import AdvancedPlayerStats, ClubPlayerMatch, Club, LeagueClub
 
 
 class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):
@@ -72,3 +74,28 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
             'faceoff', 'winfaceoff', 'winfaceoff_p__avg',
             'shots__avg', 'gamingtime__avg', 'change_count__avg')
         model = ClubPlayerMatch
+
+
+class PlayerCardClubsSerializer(BaseClubSerializer):
+    seasons_title = serializers.SerializerMethodField()
+
+    def get_seasons_title(self, obj):
+        # clubleague = LeagueClub.objects.get(
+        #     club=obj, season=obj.selected_seasons[0])
+        league_title = ''
+        if obj.league:
+            league_title = '%s: ' % obj.league.get_locale_attr(
+                'title', request=self.context.get('request'))
+        return '%(league)s%(club)s (%(seasons)s)' % {
+            # 'league': clubleague.league.short_title,
+            'league': league_title,
+            'club': obj.get_locale_attr(
+                'title', request=self.context.get('request')),
+            'seasons': ' '.join(
+                map(attrgetter('short_title'), obj.selected_seasons)),
+        }
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'logo', 'url', 'seasons_title')
+        model = Club
