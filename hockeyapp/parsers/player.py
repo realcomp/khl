@@ -335,7 +335,8 @@ class MHLPlayerInfo(KHLPlayerInfo):
         _res = self._get_value('photo')
         if _res:
             if ('/img/teamplayers_db//.jpg' not in _res[0] or 
-                '/i/no_photo.gif' not in _res[0]:
+                '/i/no_photo.gif' not in _res[0]
+            ):
                 return _res[0]
 
     def get_birth_date(self):
