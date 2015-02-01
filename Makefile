@@ -24,6 +24,11 @@ clean_venv:
 test:
 	$(PYTHON) $(PROJECT_DIR)/manage.py test --traceback
 
+get_code:
+	git pull origin master
+	pip install -r requirments.txt
+	python manage.py migrate
+
 deploy:
 	git pull origin master
 	pip install -r requirments.txt
@@ -33,3 +38,5 @@ deploy:
 	sudo service nginx reload
 	sudo supervisorctl restart sportomatics
 	celery multi restart sportomatics_worker -A sportomatics --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log"
+
+deploy_with_test: get_code test deploy

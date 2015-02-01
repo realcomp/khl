@@ -5,7 +5,7 @@ from .. import parsers
 from ..models import Match, Player, Club
 
 
-class HockeyAppTest(base.tests.BaseTest):
+class HockeyAppParserTest(base.tests.BaseTest):
     blank = ''
     khl_player_id = 3582
     mhl_player_id = 22698
@@ -24,10 +24,10 @@ class HockeyAppTest(base.tests.BaseTest):
         self._create_players()
         #schedule = parsers.schedule.KHLScheduleParser()
         #schedule.put_data_in_db_from_page(266)
-        self._create_mhl_match()
-        self._create_mhl2_match()
-        self._create_khl_match()
-        self._create_vhl_match()
+        #self._create_mhl_match()
+        #self._create_mhl2_match()
+        #self._create_khl_match()
+        #self._create_vhl_match()
         #updates
         #self._update_mhl_match()
         #self._update_khl_match()
