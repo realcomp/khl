@@ -7,7 +7,10 @@ from ..models import Match, Player, Club
 
 class HockeyAppTest(base.tests.BaseTest):
     blank = ''
-    player_id = 3582
+    khl_player_id = 3582
+    mhl_player_id = 22698
+    mhl2_player_id = 18395
+    vhl_player_id = 13228
     mhl_match_id = 44367
     mhl2_match_id = 45340
     khl_match_id = 42100
@@ -18,7 +21,7 @@ class HockeyAppTest(base.tests.BaseTest):
         self._check_parsers()
         #creates
         self._create_club()
-        self._create_player()
+        self._create_players()
         #schedule = parsers.schedule.KHLScheduleParser()
         #schedule.put_data_in_db_from_page(266)
         self._create_mhl_match()
@@ -32,10 +35,22 @@ class HockeyAppTest(base.tests.BaseTest):
 
     def _check_parsers(self):
         ''' test parsers fucntionality'''
-        # test player parser
-        self.player_data = parsers.player.GetPlayerInfo(
-                                            ).get_page(self.player_id)
-        self.assertIsNotNone(self.player_data)
+        # test khl player parser
+        self.khl_player_data = parsers.player.KHLPlayerInfo(
+                                            ).get_page(self.khl_player_id)
+        self.assertIsNotNone(self.khl_player_data)
+        # test mhl player parser
+        self.mhl_player_data = parsers.player.MHLPlayerInfo(
+                                            ).get_page(self.mhl_player_id)
+        self.assertIsNotNone(self.mhl_player_data)
+        # test mhl2 player parser
+        self.mhl2_player_data = parsers.player.MHL2PlayerInfo(
+                                            ).get_page(self.mhl2_player_id)
+        self.assertIsNotNone(self.mhl2_player_data)
+        # test vhl player parser
+        self.vhl_player_data = parsers.player.VHLPlayerInfo(
+                                            ).get_page(self.vhl_player_id)
+        self.assertIsNotNone(self.vhl_player_data)
         # test mhl match parser
         self.mhl_match_data = parsers.match.HockeyMHLMatchParser(html=True
                                                 ).get_page(self.mhl_match_id)
@@ -77,29 +92,40 @@ class HockeyAppTest(base.tests.BaseTest):
             self.assertNotEqual(getattr(club.arena, field), self.blank)
         self.assertIsNotNone(getattr(club.arena, 'photo_id'))
 
-    def _create_player(self):
-        ''' test create player '''
+    def _create_players(self):
+        ''' test create players '''
+        # create khl player
         self.assertEqual(Player.objects.count(), 0)
-        #get player from khl site
-        khlid = self.player_id
+        id = self.khl_player_id
         player = Player.objects.get_or_create_player(
-            khl_id=khlid,
-            data=self.player_data
+            khl_id=id,
+            data=self.khl_player_data
         )
-        self.assertEqual(Player.objects.filter(khl_id=khlid).count(), 1)
+        self.assertEqual(Player.objects.filter(khl_id=id).count(), 1)
         #check fields
         for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
             'height', 'weight', 'contract_type', 'contract_to', 'number',
-            'grip', 'birth_date', 'citizenship', 'wiki_page',
+            'grip', 'citizenship', 'wiki_page',
         ):
             self.assertNotEqual(getattr(player, field), self.blank)
         for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
             self.assertIsNotNone(getattr(player, field))
-        self.assertEqual(player.khl_id, khlid)
-        #update
-        player = Player.objects.get_or_create_player(khl_id=khlid)
-        self.assertEqual(Player.objects.filter(khl_id=khlid).count(), 1)
-        self.assertNotEqual(player.ru_fio, self.blank)
+        self.assertEqual(player.khl_id, id)
+
+        for id, data in (
+            (self.mhl_player_id, self.mhl_player_data),
+            (self.mhl2_player_id, self.mhl2_player_data),
+            (self.vhl_player_id, self.vhl_player_data),
+        ):
+            player = Player.objects.get_or_create_player(khl_id=id,data=data)
+            #check fields
+            for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
+                'height', 'weight', 'citizenship',
+            ):
+                self.assertNotEqual(getattr(player, field), self.blank)
+            for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
+                self.assertIsNotNone(getattr(player, field))
+            self.assertEqual(player.khl_id, id)
 
     def _create_mhl_match(self):
         '''

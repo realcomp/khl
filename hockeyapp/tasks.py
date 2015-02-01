@@ -1,11 +1,12 @@
 #coding: utf-8
 from __future__ import unicode_literals, print_function
-import logging
 import datetime
 import sys
 
 #from celery.task import periodic_task
 #from celery.schedules import crontab
+from celery.utils.log import get_task_logger
+logger = get_task_logger(__name__)
 
 from sportomatics.celery import app
 
@@ -14,7 +15,6 @@ from base.utils import str2int_safe, str2sec_safe, str2float_safe
 from . import parsers
 from . import models
 
-logger = logging.getLogger('root')
 
 @app.task(ignore_result=True, track_started=True)
 def async_hockey_match_parser(parser_id, matchid, update=False):
@@ -22,14 +22,16 @@ def async_hockey_match_parser(parser_id, matchid, update=False):
         Парсер матча.
     '''
     try:
-        parser = {  b'1': parsers.match.HockeyMHLMatchParser,
-                    b'2': parsers.match.HockeyKHLMatchParser,
-                    b'3': parsers.match.HockeyVHLMatchParser,
-                    b'4': parsers.match.HockeyMHL2MatchParser,
+        parser_id = int(parser_id)
+        parser = {  1: parsers.match.HockeyMHLMatchParser,
+                    2: parsers.match.HockeyKHLMatchParser,
+                    3: parsers.match.HockeyVHLMatchParser,
+                    4: parsers.match.HockeyMHL2MatchParser,
         }.get(parser_id, parsers.match.HockeyMHLMatchParser)
         if update:
-            m = models.Match.objects.get(khl_id=matchid)
-            parser().update_model_object(m)
+            m = models.Match.objects.filter(khl_id=matchid).last()
+            if m:
+                parser().update_model_object(m)
         else:
             parser().put_data_in_db_from_page(matchid)
         #parsers.match.HockeyMHLMatchParser(html=False).get_page(matchid)
@@ -57,12 +59,23 @@ def async_hockey_matches_parser(parser_id, match_id, matches, update=False):
 
 
 @app.task(ignore_result=True, track_started=True)
-def async_hockey_player_update(id):
+def async_hockey_player_update(id, parser_id):
     b'''
         Обновление инфо о игроке
     '''
     try:
-        models.Player.objects.get_or_create_player(khl_id=id, update=True)
+        parser_id = int(parser_id)
+        parser = {  1: parsers.player.MHLPlayerInfo,
+                    2: parsers.player.KHLPlayerInfo,
+                    3: parsers.player.VHLPlayerInfo,
+                    4: parsers.player.MHL2PlayerInfo,
+        }.get(parser_id)
+        if parser:
+            data = parser().get_page(id)
+            models.Player.objects.get_or_create_player( khl_id=id,
+                                                        update=True,
+                                                        data=data
+            )
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 

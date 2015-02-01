@@ -17,21 +17,14 @@ import filer
 from addresses.models import Country
 
 from ..utils import get_season_start_date, get_season_end_date
-from .. import parsers
 
 
 class PlayerQuerySet(models.QuerySet):
     b''' Менеджер игрока '''
-    def _get_data(self, khl_id):
-        b''' Берем данные со стороннего сайта парсером '''
-        return parsers.player.GetPlayerInfo().get_page(khl_id)
-
     def get_or_create_player(self, khl_id, ru_fio='', update=False, data=None):
         b''' получаем игрока по id со стороннего ресурса '''
         _player = self.filter(khl_id=khl_id).last()
         if not _player or update:
-            if not data:
-                data = self._get_data(khl_id)
             if data:
                 data.pop('club', None)
                 for k,v in data.items():

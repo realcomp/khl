@@ -69,6 +69,22 @@ MHL_MATCH_REPORT_DICT = {
     'goals_history': '//table[@class="matches_goals"]',
     'penalties_history': '//table[@class="matches_penalty"]',
 }
+
+# MHL PLAYER INFO ##############################################################
+MHL_PLAYER_URL = MHL_SITE_URL+'players/'
+MHL_PLAYER_XPATH = '//div[@class="second_content"]'
+MHL_PLAYER_DATA_DICT = {
+    'ru_fio': '/div[@class="big_letter"]/text()',
+    'photo': '/div[@class="profile clearfix"]/div[@class="photo"]/img/@src',
+    'stats': '//div[@class="profile clearfix"]/div[@class="detail"]/ul/li',
+    'number': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[1]/b/text()',
+    'line': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[2]/b/text()',
+    'height': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[3]/b/text()',
+    'weight': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[4]/b/text()',
+    'birth_date': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[5]/b/text()',
+    'citizenship': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[7]/b/text()',
+    'all': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/b/text()',
+}
 ################################################################################
 
 
@@ -101,6 +117,24 @@ MHL2_MATCH_REPORT_DICT = {
     'guest_offenders': _MPS_GUEST_XPATH+'[3]',
     'goals_history': '//table[@class="matches_goals"]',
     'penalties_history': '//table[@class="matches_penalty"]',
+}
+################################################################################
+
+# MHL-2 PLAYER INFO ##############################################################
+MHL2_PLAYER_URL = MHL2_SITE_URL+'players/'
+MHL2_PLAYER_XPATH = '//div[@class="second_content"]'
+MHL2_PLAYER_DATA_DICT = {
+    'ru_fio': '/div[@class="big_letter"]/h2/text()',
+    'photo': '/table[@class="playerinfo"]/tbody/tr/td[@class="playerimg"]/img/@src',
+    'stats': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li',
+    'club': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[1]/b/text()',
+    'number': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[2]/b/text()',
+    'line': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[3]/b/text()',
+    'height': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[4]/b/text()',
+    'weight': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[5]/b/text()',
+    'birth_date': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[6]/b/text()',
+    'citizenship': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/li[8]/b/text()',
+    'all': '/table[@class="playerinfo"]/tbody/tr/td[@valign="top"]/ul/b/text()',
 }
 ################################################################################
 
@@ -139,6 +173,25 @@ VHL_MATCH_REPORT_DICT = {
     'penalties_history': '/table[@class="tablesorter matches_penalty"]',
 }
 ################################################################################
+
+# VHL PLAYER INFO ##############################################################
+VHL_PLAYER_URL = VHL_SITE_URL+'/players/'
+VHL_PLAYER_XPATH = '//div[@id="content"]/div[@class="lcol"]'
+VHL_PLAYER_DATA_DICT = {
+    'ru_fio': '/h1/span/text()',
+    'photo': '/div[@class="profile clearfix"]/div[@class="photo"]/img/@src',
+    'stats': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li',
+    'club': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[1]/b/text()',
+    'number': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[2]/b/text()',
+    'line': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[3]/b/text()',
+    'height': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[4]/b/text()',
+    'weight': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[5]/b/text()',
+    'birth_date': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[6]/b/text()',
+    'citizenship': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/li[8]/b/text()',
+    'all': '/div[@class="profile clearfix"]/div[@class="detail"]/ul/b/text()',
+}
+################################################################################
+
 
 #KHL Match Advanced DATA INFO
 MATCH_ADV_STATS_URL = 'http://text.khl.ru/text/'
@@ -198,9 +251,9 @@ MATCH_PLAYER_EXTRAS = {
 
 
 #KHL PLAYER INFO
-PLAYER_URL = KHL_SITE_URL+'/players/'
-PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
-PLAYER_DATA_DICT = {
+KHL_PLAYER_URL = KHL_SITE_URL+'/players/'
+KHL_PLAYER_XPATH = '//div[@class="borderdiv"]/table/tbody'
+KHL_PLAYER_DATA_DICT = {
     'ru_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()',
     'en_fio': '/tr[@valign="top"]/td[@valign="top"]/div[@class="big_letter"]/h2/text()[preceding-sibling::br]',
     'photo': '/tr[@valign="top"]/td[@rowspan="3"]/div',
