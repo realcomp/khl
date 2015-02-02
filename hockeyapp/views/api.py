@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import datetime
 import itertools
 import json
-import operator
 
-from django.db.models import Avg, Q, Max, Min, Sum
+from django.db.models import Avg, Sum
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, viewsets
 
 from addresses.models import Country
+
 from base.models import Season
 
 from .mixins import PaginationMixin, OrderMixin
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
+from ..filters import PlayersSearchFilter
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, LeagueClub
 from ..serializers import (
     CountryLeaguesSerializer,
     PlayerCardSerializer,
@@ -24,83 +24,16 @@ from ..serializers import (
 )
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import ClubPlayerMatchSerilizer
-from ..utils import month_range
 
 
 class PlayersSearch(
         PaginationMixin, OrderMixin, viewsets.ReadOnlyModelViewSet):
     # permission_classes = permissions.IsAuthenticated,
+    filter_backends = PlayersSearchFilter,
     serializer_class = PlayerCardSerializer
 
     def get_queryset(self):
         return Player.objects.all()
-
-    def filter_queryset(self, qs):
-        qs = super(PlayersSearch, self).filter_queryset(qs)
-
-        if 'line' in self.request.GET:
-            # union of sets
-            values = reduce(operator.or_, map(set, map(
-                json.loads, self.request.GET.getlist('line'))))
-            qs = qs.filter(line__in=values)
-
-        q_citizenship = None
-        if 'citizenship' in self.request.GET:
-            citizenship = filter(None, self.request.GET.getlist('citizenship'))
-            if citizenship:
-                q = Q(citizenship__in=citizenship)
-                q_citizenship = (q_citizenship | q) if q_citizenship else q
-        if ('citizenship_other' in self.request.GET and
-                'citizenship_other_active' in self.request.GET):
-            citizenship_other = filter(
-                None, self.request.GET.getlist('citizenship_other'))
-            if citizenship_other:
-                q = Q(citizenship__in=citizenship_other)
-            else:
-                q = ~Q(citizenship__ru_title=b'Россия')
-            q_citizenship = (q_citizenship | q) if q_citizenship else q
-        if q_citizenship:
-            qs = qs.filter(q_citizenship)
-
-        club = None
-        if 'club' in self.request.GET:
-            club = get_object_or_404(Club, pk=self.request.GET['club'])
-
-        if 'season' in self.request.GET and club:
-            season = json.loads(self.request.GET['season'])
-            qs = qs.by_season(club, season)
-
-        if 'league' in self.request.GET:
-            leagues = self.request.GET.getlist('league')
-            # qs = (
-            #     qs.filter(
-            #         Q(club__leagueclub__league_id__in=leagues) |
-            #         Q(clubplayer__club__leagueclub__league_id__in=leagues))
-            #     .distinct())
-            qs = qs.filter(club__leagueclub__league_id__in=leagues)
-
-        # get clubs
-        club_players = qs.values_list('id', 'club')
-        club_players2 = (
-            ClubPlayer.objects
-            .filter(player__in=qs)
-            .order_by('-end_date')
-            .values_list('player_id', 'club_id'))
-        clubs_q = Q()
-        if club_players:
-            clubs_q |= Q(pk__in=zip(*club_players)[1])
-        if club_players2:
-            clubs_q |= Q(pk__in=zip(*club_players2)[1])
-        clubs = {
-            club.pk: club for club in Club.objects.filter(clubs_q)}
-        self.players_clubs = {}
-        for player_id, club_id in filter(
-                lambda x: x[1], itertools.chain(club_players, club_players2)):
-            if player_id not in self.players_clubs:
-                self.players_clubs[player_id] = []
-            if clubs[club_id] not in self.players_clubs[player_id]:
-                self.players_clubs[player_id].append(clubs[club_id])
-        return qs
 
 
 class PlayerCardIndicators(generics.ListAPIView):
