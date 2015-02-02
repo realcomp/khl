@@ -274,7 +274,12 @@
                                                 <td ng-show="PlayerCardIndicatorsCtrl.group_by === 'season'">
                                                     {{ row.season.label }}
                                                 </td>
-                                                <td>{{ row[PlayerCardIndicatorsCtrl.field] }}</td>
+                                                <td>
+                                                    {{ row[PlayerCardIndicatorsCtrl.field] }}
+                                                    <span ng-show="PlayerCardIndicatorsCtrl.field === 'winfaceoff_p__avg' || PlayerCardIndicatorsCtrl.field === 'pis__avg'">
+                                                        %
+                                                    </span>
+                                                </td>
                                             </tr>
                                         {% endverbatim %}
                                     </tbody>
