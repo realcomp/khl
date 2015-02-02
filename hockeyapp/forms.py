@@ -8,22 +8,32 @@ from django.utils.translation import ugettext_lazy as _
 from suit.widgets import SuitDateWidget
 
 from base.admin import LinkedSelect2, select2_options
+from base.models import Season
 
 from .models import Club, LeagueClub
 
 
 class ClubleaguesAddForm(forms.ModelForm):
+    seasons = forms.ModelMultipleChoiceField(
+                queryset=Season.objects.all().order_by('ru_title'),
+                initial=Season.objects.all().order_by('ru_title'),
+                widget=FilteredSelectMultiple(
+                                verbose_name=Season._meta.verbose_name_plural,
+                                is_stacked=False,
+                                attrs={'style': 'height:400px;'}
+                ),
+    )
     clubs = forms.ModelMultipleChoiceField(
                 queryset=Club.objects.all().order_by('ru_title'),
                 widget=FilteredSelectMultiple(
-                                    verbose_name=Club._meta.verbose_name_plural,
-                                    is_stacked=False,
-                                    attrs={'style': 'height:400px;'}
+                                verbose_name=Club._meta.verbose_name_plural,
+                                is_stacked=False,
+                                attrs={'style': 'height:400px;'}
                 ),
     )
     class Meta:
         model = LeagueClub
-        fields = 'league', 'season'
+        fields = 'league',
         widgets = {
             'league': LinkedSelect2(select2_options=select2_options),
             'start_date': SuitDateWidget,
