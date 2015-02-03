@@ -17,11 +17,7 @@ class ClubleaguesAddForm(forms.ModelForm):
     seasons = forms.ModelMultipleChoiceField(
                 queryset=Season.objects.all().order_by('ru_title'),
                 initial=Season.objects.all().order_by('ru_title'),
-                widget=FilteredSelectMultiple(
-                                verbose_name=Season._meta.verbose_name_plural,
-                                is_stacked=False,
-                                attrs={'style': 'height:400px;'}
-                ),
+                widget=forms.CheckboxSelectMultiple,
     )
     clubs = forms.ModelMultipleChoiceField(
                 queryset=Club.objects.all().order_by('ru_title'),

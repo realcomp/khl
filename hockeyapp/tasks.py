@@ -3,8 +3,6 @@ from __future__ import unicode_literals, print_function
 import datetime
 import sys
 
-#from celery.task import periodic_task
-#from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
@@ -14,6 +12,13 @@ from base.utils import str2int_safe, str2sec_safe, str2float_safe
 
 from . import parsers
 from . import models
+
+
+@app.task(ignore_result=True, track_started=True)
+def periodic_update_clubs():
+        links = parsers.club.KHLClubURLs().get_page()
+        for link in links:
+            parsers.club.KHLClubInfo().put_data_in_db_from_page(link[:-1]) #remove last slash
 
 
 @app.task(ignore_result=True, track_started=True)

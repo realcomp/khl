@@ -3,6 +3,9 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
+from celery import local_celery_crontab
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'wwgwj3gc7al-mwofc6u0xjvi4&@7d&^59mvb=nien887rqjwpb'
 
@@ -95,6 +98,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CELERY_ACCEPT_CONTENT = ('pickle', 'json', 'msgpack', 'yaml')
 BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERYBEAT_SCHEDULE = {
+    'hockeyapp-periodic-update-clubs-every-monday-midnight': {
+        'task': 'hockeyapp.tasks.periodic_update_clubs',
+        'schedule': local_celery_crontab(hour=0, minute=0, day_of_week=1),
+    },
+}
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

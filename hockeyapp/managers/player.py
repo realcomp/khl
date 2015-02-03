@@ -26,10 +26,12 @@ class PlayerQuerySet(models.QuerySet):
         _player = self.filter(khl_id=khl_id).last()
         if not _player or update:
             if data:
-                data.pop('club', None)
-                for k,v in data.items():
-                    if not v:
+                #clear data ####################################################
+                for k,v in data.items(): 
+                    if not v: 
                         data.pop(k, None)
+                ################################################################
+                data.pop('club', None)
                 _ava = data.pop('ava_url', None)
                 if _ava:
                     # создаем фото игрока, если нет в бд
@@ -40,10 +42,14 @@ class PlayerQuerySet(models.QuerySet):
                     data['citizenship'], _crt = _func(ru_title = _citizenship)
                 if not data.get('ru_fio') and ru_fio:
                     data['ru_fio'] = ru_fio
-                if update and _player:
-                    self.filter(khl_id=_player.khl_id).update(**data)
-                else:
-                    _player = self.create(**data)
+            else:
+                data = dict(khl_id=khl_id,)
+                if ru_fio:
+                    data['ru_fio']=ru_fio
+            if update and _player:
+                self.filter(khl_id=_player.khl_id).update(**data)
+            else:
+                _player = self.create(**data)
         return _player
 
     def _create_photo(self, khl_id, ava_url):

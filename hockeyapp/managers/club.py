@@ -43,6 +43,10 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                         func = model.objects.create_or_update_arena
                         data['arena'] = func(data=_arena,update=True)
                     _coach_fio = data.pop('coach', None)
+                    _plrs = data.pop('players', None)
+                    if _plrs:
+                        model = get_model(CURRENT_APP, 'Player')
+                        _plrs = model.objects.filter(khl_id__in=_plrs)
                     if _coach_fio and (not update or _club and not _club.coach):
                         model = get_model(CURRENT_APP, 'Coach')
                         func = model.objects.get_or_create
@@ -51,6 +55,7 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                         self.filter(ru_title=ru_title).update(**data)
                     else:
                         _club = self.create(**data)
+                    _club.players = _plrs
             return _club
 
     def by_season(self, season):

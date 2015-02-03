@@ -7,9 +7,9 @@ import datetime
 import re
 import requests
 
-from .. import defaults
 
 from . import GrabParser
+from . import xpathes
 
 
 KHL_PLAYER_RU_TO_EN = {
@@ -29,7 +29,7 @@ KHL_PLAYER_RU_TO_EN = {
 
 class GetAllKHLPlayerIDs(GrabParser):
     b''' Парсер списка игроков КХЛ '''
-    url = defaults.KHL_PLAYER_URL
+    url = xpathes.KHL_PLAYER_URL
     absolute_url = url
     as_get_param = True
     pk_kwarg = 'letter'
@@ -63,11 +63,11 @@ class GetAllKHLPlayerIDs(GrabParser):
 
 class KHLPlayerInfo(GrabParser):
     b''' парсер данных о игроке КХЛ '''
-    url = defaults.KHL_PLAYER_URL
+    url = xpathes.KHL_PLAYER_URL
     absolute_url = url
     as_get_param = False
-    body_xpath = defaults.KHL_PLAYER_XPATH
-    xpath_dict = defaults.KHL_PLAYER_DATA_DICT
+    body_xpath = xpathes.KHL_PLAYER_XPATH
+    xpath_dict = xpathes.KHL_PLAYER_DATA_DICT
     model_name = 'Player'
     stats_indexes =  {
                         b'Клуб': -1,
@@ -153,7 +153,7 @@ class KHLPlayerInfo(GrabParser):
             _res = _res[0].attrib.get('style')
             _res = re.search('url\((.*?)\)', _res).group(1)
             if _res != '/img/teamplayers_db//.jpg':
-                return defaults.KHL_SITE_URL+_res
+                return xpathes.KHL_SITE_URL+_res
 
     def get_ru_fio(self):
         b''' возьмем ФИО игрока '''
@@ -226,7 +226,7 @@ class KHLPlayerInfo(GrabParser):
         if _res:
             _res = _res[0].strip().lower().encode('utf-8')
             _m = _res.split()[1]
-            _res = _res.replace(_m, defaults.MDP.get(_m).encode('utf-8'))
+            _res = _res.replace(_m, xpathes.MDP.get(_m).encode('utf-8'))
             return datetime.datetime.strptime(_res, '%d %m %Y')
         return ''
 
@@ -236,7 +236,7 @@ class KHLPlayerInfo(GrabParser):
         if _res:
             _res = _res[0].strip().lower().encode('utf-8')
             _m = _res.split()[1]
-            _res = _res.replace(_m, defaults.MDP.get(_m).encode('utf-8'))
+            _res = _res.replace(_m, xpathes.MDP.get(_m).encode('utf-8'))
             return datetime.datetime.strptime(_res, '%d %m %Y')
         return ''
 
@@ -280,17 +280,17 @@ MHL_PLAYER_RU_TO_EN = {
 
 class GetAllMHLPlayerIDs(GetAllKHLPlayerIDs):
     b''' Парсер списка игроков МХЛ '''
-    url = defaults.MHL_PLAYER_URL
+    url = xpathes.MHL_PLAYER_URL
     absolute_url = url
     player_xpath = '//td[@class="player_surname"]/a/@href'
 
 
 class MHLPlayerInfo(KHLPlayerInfo):
     b''' парсер данных о игроке МХЛ '''
-    url = defaults.MHL_PLAYER_URL
+    url = xpathes.MHL_PLAYER_URL
     absolute_url = url
-    body_xpath = defaults.MHL_PLAYER_XPATH
-    xpath_dict = defaults.MHL_PLAYER_DATA_DICT
+    body_xpath = xpathes.MHL_PLAYER_XPATH
+    xpath_dict = xpathes.MHL_PLAYER_DATA_DICT
     stats_indexes =  {
                         b'Номер': -1,
                         b'Амплуа': -1,
@@ -353,7 +353,7 @@ class MHLPlayerInfo(KHLPlayerInfo):
 
 class GetAllMHL2PlayerIDs(GetAllMHLPlayerIDs):
     b''' Парсер списка игроков МХЛ-2 '''
-    url = defaults.MHL2_PLAYER_URL
+    url = xpathes.MHL2_PLAYER_URL
     absolute_url = url
 
     def _get_absolute_url(self, id=None, slash=True):
@@ -388,10 +388,10 @@ MHL2_PLAYER_RU_TO_EN = {
 
 class MHL2PlayerInfo(MHLPlayerInfo):
     b''' парсер данных о игроке МХЛ-2 '''
-    url = defaults.MHL2_PLAYER_URL
+    url = xpathes.MHL2_PLAYER_URL
     absolute_url = url
-    body_xpath = defaults.MHL2_PLAYER_XPATH
-    xpath_dict = defaults.MHL2_PLAYER_DATA_DICT
+    body_xpath = xpathes.MHL2_PLAYER_XPATH
+    xpath_dict = xpathes.MHL2_PLAYER_DATA_DICT
     stats_indexes =  {
                         b'Клуб': -1,
                         b'Номер': -1,
@@ -439,17 +439,17 @@ class MHL2PlayerInfo(MHLPlayerInfo):
 
 class GetAllVHLPlayerIDs(GetAllMHLPlayerIDs):
     b''' Парсер списка игроков ВХЛ '''
-    url = defaults.VHL_PLAYER_URL
+    url = xpathes.VHL_PLAYER_URL
     absolute_url = url
     player_xpath = '//td[@width="200"]/a/@href'
 
 
 class VHLPlayerInfo(MHL2PlayerInfo):
     b''' парсер данных о игроке ВХЛ '''
-    url = defaults.VHL_PLAYER_URL
+    url = xpathes.VHL_PLAYER_URL
     absolute_url = url
-    body_xpath = defaults.VHL_PLAYER_XPATH
-    xpath_dict = defaults.VHL_PLAYER_DATA_DICT
+    body_xpath = xpathes.VHL_PLAYER_XPATH
+    xpath_dict = xpathes.VHL_PLAYER_DATA_DICT
 
     def get_player_all_data(self, khl_id=None, html_body=None):
         b'''

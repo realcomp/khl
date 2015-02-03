@@ -6,6 +6,8 @@ __author__='smirnov.ev'
 import grab
 import time
 
+from lxml.html import fromstring
+
 from django.db.models.loading import get_model
 
 
@@ -19,8 +21,32 @@ class GrabParser(object):
     html = True
 
     def __init__(self, html=None, absolute_url=None):
+        super(GrabParser, self).__init__()
         self.html = html or self.html
         self.absolute_url = absolute_url or self.absolute_url
+        if not self.url:
+            self.url = self.absolute_url
+
+    def put_data_in_db_from_page(self, id=None):
+        b'''Основной метод, берующий данные со стороннего сайта и кладущий
+            в БД, если все хорошо
+        ''' 
+        data = self.get_page(id)
+        if data and self.model_name:
+            model = get_model('hockeyapp', self.model_name)
+            return model.objects.get_or_create(**data)
+
+    def get_page_from_db(self, obj):
+        b''' Парсинг html из ДБ '''
+        if obj.html_body:
+            html_body = obj.html_body
+            self.page_tree = fromstring(html_body)
+            return self.get_match_all_data(obj.khl_id, html_body, obj.url)
+
+    def update_model_object(self, obj):
+        b''' Обновляем данные '''
+        data = self.get_page_from_db(obj)
+        return self.put_data_in_db_from_page(obj.khl_id, data)
 
     def get_html_body(self, html_body=None):
         return html_body if self.html and html_body else ''
@@ -59,7 +85,7 @@ class GrabParser(object):
                 _url = b'?{0}={1}'.format(self.pk_kwarg,id)
             else:
                 _url = b'{0}{1}'.format(id,'/' if slash else '')
-            self.absolute_url = b'{0}{1}'.format(self.absolute_url,_url)
+            self.absolute_url = b'{0}{1}'.format(self.url,_url)
         return self.absolute_url
 
     def get_page(self, id=None, slash=True, count=None):
@@ -82,14 +108,5 @@ class GrabParser(object):
                 # страница доступна
                 self.page_tree = self.g.tree
                 return self.page_tree
-
-    def put_data_in_db_from_page(self, id=None):
-        b'''Основной метод, берующий данные со стороннего сайта и кладущий
-            в БД, если все хорошо
-        ''' 
-        data = self.get_page(id)
-        if data and self.model_name:
-            model = get_model('hockeyapp', self.model_name)
-            return model.objects.get_or_create(**data)
 
 from . import player, match, club, schedule

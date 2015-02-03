@@ -8,18 +8,18 @@ import datetime
 from django.db.models.loading import get_model
 from base.utils import str2int_safe
 
-from .. import defaults
 
 from . import GrabParser
+from . import xpathes
 
 
 class KHLScheduleParser(GrabParser):
     b''' Парсер расписания матчей КХЛ '''
     model_name = 'Schedule'
-    url = defaults.KHL_SITE_URL
+    url = xpathes.KHL_SITE_URL
     absolute_url = url+'/calendar/??/00'
     as_get_param = False
-    body_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
+    body_xpath = xpathes.KHL_MATCH_PROTOCOL_XPATH
     match_protocol_xpath = body_xpath
     xpath_dict = {
                     'matches': "/div"
@@ -101,7 +101,7 @@ class KHLScheduleParser(GrabParser):
         }
         return match
 
-    def python_date(self, date, month_dict = defaults.MDP):
+    def python_date(self, date, month_dict = xpathes.MDP):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
@@ -134,10 +134,10 @@ class KHLScheduleParser(GrabParser):
 class VHLScheduleParser(KHLScheduleParser):
     b''' Парсер расписания матчей ВХЛ '''
     model_name = 'Schedule'
-    url = defaults.VHL_SITE_URL
+    url = xpathes.VHL_SITE_URL
     absolute_url = url+'/calendar/??/season/0/'
     as_get_param = False
-    body_xpath = defaults.VHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
+    body_xpath = xpathes.VHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
     match_protocol_xpath = body_xpath
     xpath_dict = {
                     'matches': "/div[@class='matches_list']/table[@class='uni_table matches']/tr"
@@ -213,10 +213,10 @@ class VHLScheduleParser(KHLScheduleParser):
 class MHLScheduleParser(VHLScheduleParser):
     b''' Парсер расписания матчей MХЛ '''
     model_name = 'Schedule'
-    url = defaults.MHL_SITE_URL
+    url = xpathes.MHL_SITE_URL
     absolute_url = url+'calendar/??/0/'
     as_get_param = False
-    body_xpath = defaults.MHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
+    body_xpath = xpathes.MHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
     match_protocol_xpath = body_xpath
     xpath_dict = {
                     'matches': "/div[@class='matches_list']/table[@class='matches_table']/tr"

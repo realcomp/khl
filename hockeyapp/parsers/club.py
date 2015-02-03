@@ -8,35 +8,37 @@ from django.db.models.loading import get_model
 
 from base.utils import str2int_safe
 
-from .. import defaults
-
 from . import GrabParser
+from . import xpathes
+
 
 CURRENT_APP = __package__.split('.')[0]
 
 
-class GetAllClubURLs(GrabParser):
-    url = defaults.KHL_CLUB_URL
+class KHLClubURLs(GrabParser):
+    b''' URL клубов с сайта КХЛ '''
+    url = xpathes.KHL_CLUB_URL
     absolute_url = url
     as_get_param = False
 
     def get_page(self, id=None):
         b''' список URL клубов '''
-        self.page_tree = super(GetAllClubURLs, self).get_page()
+        self.page_tree = super(KHLClubURLs, self).get_page()
         if self.page_tree is not None:
-            return self.page_tree.xpath(defaults.CLUB_LIST_XPATH)
+            return self.page_tree.xpath(xpathes.KHL_CLUB_LIST_XPATH)
 
 
-class ArenaInfo(GrabParser):
-    url = defaults.KHL_SITE_URL
+class KHLArenaInfo(GrabParser):
+    b''' инфо о арене с сайта КХЛ '''
+    url = xpathes.KHL_SITE_URL
     absolute_url = url
     as_get_param = False
-    body_xpath = defaults.CLUB_INFO_XPATH
-    xpath_dict = defaults.ARENA_DATA_XPATH_DICT
+    body_xpath = xpathes.KHL_CLUB_INFO_XPATH
+    xpath_dict = xpathes.KHL_ARENA_XPATH_DICT
 
     def get_page(self, id=None):
         b''' Страница информации о клубе '''
-        self.page_tree = super(ArenaInfo, self).get_page(id)
+        self.page_tree = super(KHLArenaInfo, self).get_page(id)
         if self.page_tree is not None:
             return self.get_arena_data()
 
@@ -85,12 +87,13 @@ class ArenaInfo(GrabParser):
         return str2int_safe(_value.split(b'зрител')[0].replace(' ', ''))
 
 
-class ClubInfo(GrabParser):
-    url = defaults.KHL_SITE_URL
+class KHLClubInfo(GrabParser):
+    b''' инфо о клубе с сайта КХЛ '''
+    url = xpathes.KHL_SITE_URL
     absolute_url = url
     as_get_param = False
-    body_xpath = defaults.CLUB_INFO_XPATH
-    xpath_dict = defaults.CLUB_DATA_XPATH_DICT
+    body_xpath = xpathes.KHL_CLUB_INFO_XPATH
+    xpath_dict = xpathes.KHL_CLUB_XPATH_DICT
     model_name = 'Club'
 
     def put_data_in_db_from_page(self, id=None):
@@ -106,17 +109,17 @@ class ClubInfo(GrabParser):
 
     def get_page(self, id=None):
         b''' Страница информации о клубе '''
-        self.page_tree = super(ClubInfo, self).get_page(id)
+        self.page_tree = super(KHLClubInfo, self).get_page(id)
         if self.page_tree is not None:
             _html_body = self.g.response.unicode_body()
-            return self.get_club_data(html_body=_html_body)
+            return self.get_club_data(html_body=_html_body, id=id)
 
-    def get_club_data(self, html_body=None):
+    def get_club_data(self, html_body=None, id=None):
         b'''
             Данные o клубе через DOM-дерево
         '''
         if self.page_tree is not None:
-            return {
+            _res = {
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
                     'ru_title': self.get_ru_title(),
@@ -125,13 +128,15 @@ class ClubInfo(GrabParser):
                     'opening_dt': self.get_opening_dt(),
                     'coach': self.get_coach(),
                     'contacts': self.get_contacts(),
-                    'arena': self.get_arena_info()
+                    'arena': self.get_arena_info(),
+                    'players': self.get_players(id)
             }
+            return _res
 
     def get_arena_info(self):
         b''' Информация о арене '''
         url = self.absolute_url+'arena/'
-        return ArenaInfo(absolute_url=url).get_page()
+        return KHLArenaInfo(absolute_url=url).get_page()
 
     def get_ru_title(self):
         b''' Название клуба '''
@@ -157,3 +162,10 @@ class ClubInfo(GrabParser):
     def get_logo_url(self):
         b''' URL логотипа клуба '''
         return self.url+self._get_strip_value('logo_url')
+
+    def get_players(self, id=''):
+        url = self.absolute_url+'team'
+        plrs_page_tree = GrabParser(absolute_url=url).get_page()
+        plrs_links = plrs_page_tree.xpath(xpathes.KHL_PLAYERS_XPATH)
+        if plrs_links:
+            return {link.split('/')[-2] for link in plrs_links}#khl_id set

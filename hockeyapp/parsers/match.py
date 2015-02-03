@@ -16,10 +16,10 @@ current_tz = timezone.get_current_timezone()
 
 from base.utils import str2int_safe, str2float_safe, str2sec_safe
 
-from .. import defaults
 from ..utils import khl_string_data2python_obj_safe
 
 from . import GrabParser
+from . import xpathes
 
 
 _PARITTYDICT = {
@@ -33,12 +33,12 @@ _PARITTYDICT = {
 
 class AdvancedHockeyMatchParser(GrabParser):
     b''' Парсер дополнительной статистики матча из текстовой трансляции '''
-    url = defaults.MATCH_ADV_STATS_URL
+    url = xpathes.MATCH_ADV_STATS_URL
     absolute_url = url
     as_get_param = False
-    match_protocol_xpath = defaults.MATCH_ADV_STATS_XPATH
-    body_xpath = defaults.MATCH_ADV_STATS_XPATH
-    xpath_dict = defaults.MATCH_ADV_STATC_DICT
+    match_protocol_xpath = xpathes.MATCH_ADV_STATS_XPATH
+    body_xpath = xpathes.MATCH_ADV_STATS_XPATH
+    xpath_dict = xpathes.MATCH_ADV_STATC_DICT
     teams = None
 
     def get_page(self, id=None):
@@ -64,19 +64,19 @@ class AdvancedHockeyMatchParser(GrabParser):
     def _get_team_players(self, xpath_dict):
         b''' Словарь статистики команды '''
         res = self._get_extra_stats(xpath_dict['shots'], 
-                                    defaults.MATCH_PLAYER_SHOTS,
+                                    xpathes.MATCH_PLAYER_SHOTS,
                                     text_content=True,
                                     table_name = 'shots',
         )
-        for key,xpathes in (
-                            ('faceoff',defaults.MATCH_PLAYER_FACEOFFS,),
-                            ('gamingtime', defaults.MATCH_PLAYER_GAMINGTIMES),
-                            ('extra', defaults.MATCH_PLAYER_EXTRAS),
+        for key,_xpathes in (
+                            ('faceoff',xpathes.MATCH_PLAYER_FACEOFFS,),
+                            ('gamingtime', xpathes.MATCH_PLAYER_GAMINGTIMES),
+                            ('extra', xpathes.MATCH_PLAYER_EXTRAS),
 
         ):
             self._get_extra_stats(  
                                 xpath_dict[key],
-                                xpathes,
+                                _xpathes,
                                 res,
                                 table_name=key
             )
@@ -141,19 +141,19 @@ class AdvancedHockeyMatchParser(GrabParser):
 
 class HockeyMHLMatchParser(GrabParser):
     b'''Парсер хоккейной статистики матча с сайта МХЛ'''
-    url = defaults.MHL_URL
+    url = xpathes.MHL_URL
     absolute_url = url
     pk_kwarg = 'idgame'
     as_get_param = True
-    match_protocol_xpath = defaults.MHL_MATCH_PROTOCOL_XPATH
+    match_protocol_xpath = xpathes.MHL_MATCH_PROTOCOL_XPATH
     page_tree = None
-    body_xpath = defaults.MHL_BODY_XPATH
-    xpath_dict = defaults.MHL_MATCH_REPORT_DICT
+    body_xpath = xpathes.MHL_BODY_XPATH
+    xpath_dict = xpathes.MHL_MATCH_REPORT_DICT
     model_name = 'Match'
     adv_stats = None
-    empty_page_text = defaults.MHL_EMPTY_PAGE_TEXT
-    body_notexists = defaults.MHL_BODY_NOTEXISTS
-    body_notexists_alt = defaults.MHL_BODY_NOTEXISTS_ALT
+    empty_page_text = xpathes.MHL_EMPTY_PAGE_TEXT
+    body_notexists = xpathes.MHL_BODY_NOTEXISTS
+    body_notexists_alt = xpathes.MHL_BODY_NOTEXISTS_ALT
 
     def put_data_in_db_from_page(self, id=None, data=None):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
@@ -185,21 +185,6 @@ class HockeyMHLMatchParser(GrabParser):
             else:
                 time.sleep(60)
                 self.get_page(id)
-
-    def get_page_from_db(self, obj):
-        b''' Парсинг html из ДБ '''
-        if obj.html_body:
-            html_body = obj.html_body
-            self.page_tree = fromstring(html_body)
-            return self.get_match_all_data(obj.khl_id, html_body, obj.url)
-        #else:
-            #return self.get_page(obj.khl_id)
-
-    def update_model_object(self, obj):
-        b''' Обновляем данные о матче '''
-        data = self.get_page_from_db(obj)
-        if data:
-            return self.put_data_in_db_from_page(obj.khl_id, data)
 
     def _get_adv_stats(self, matchid):
         b''' Дополнительная статитстика по игрокам '''
@@ -253,7 +238,7 @@ class HockeyMHLMatchParser(GrabParser):
             }
             return res
 
-    def python_date(self, date, month_dict = defaults.MD):
+    def python_date(self, date, month_dict = xpathes.MD):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
@@ -520,13 +505,13 @@ class HockeyMHLMatchParser(GrabParser):
 
 class HockeyMHL2MatchParser(HockeyMHLMatchParser):
     b'''Парсер хоккейной статистики матча с сайта МХЛ-2'''
-    url = defaults.MHL2_URL
+    url = xpathes.MHL2_URL
     absolute_url = url
-    match_protocol_xpath = defaults.MHL2_MATCH_PROTOCOL_XPATH
-    body_xpath = defaults.MHL2_BODY_XPATH
-    xpath_dict = defaults.MHL2_MATCH_REPORT_DICT
+    match_protocol_xpath = xpathes.MHL2_MATCH_PROTOCOL_XPATH
+    body_xpath = xpathes.MHL2_BODY_XPATH
+    xpath_dict = xpathes.MHL2_MATCH_REPORT_DICT
 
-    def python_date(self, date, month_dict = defaults.MD):
+    def python_date(self, date, month_dict = xpathes.MD):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
@@ -550,13 +535,13 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
 
 class HockeyKHLMatchParser(HockeyMHLMatchParser):
     b'''Парсер хоккейной статистики матча с сайта КХЛ'''
-    url = defaults.KHL_MATCH_URL
+    url = xpathes.KHL_MATCH_URL
     absolute_url = url
     pk_kwarg = 'id'
     as_get_param = False
-    match_protocol_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
-    body_xpath = defaults.KHL_MATCH_PROTOCOL_XPATH
-    xpath_dict = defaults.KHL_MATCH_REPORT_DICT
+    match_protocol_xpath = xpathes.KHL_MATCH_PROTOCOL_XPATH
+    body_xpath = xpathes.KHL_MATCH_PROTOCOL_XPATH
+    xpath_dict = xpathes.KHL_MATCH_REPORT_DICT
 
     def get_page(self, id=None):
         b'''  смотрим протокол матча '''
@@ -580,7 +565,7 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
         _res = self._get_value('match_spectators')
         return str2int_safe(_res[0].strip().split()[0])
 
-    def python_date(self, date, month_dict = defaults.MDP):
+    def python_date(self, date, month_dict = xpathes.MDP):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
@@ -773,13 +758,13 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
 
 class HockeyVHLMatchParser(HockeyMHLMatchParser):
     b'''Парсер хоккейной статистики матча с сайта ВХЛ'''
-    url = defaults.VHL_MATCH_URL
+    url = xpathes.VHL_MATCH_URL
     absolute_url = url
-    match_protocol_xpath = defaults.VHL_MATCH_PROTOCOL_XPATH
-    body_xpath = defaults.VHL_MATCH_PROTOCOL_XPATH
-    xpath_dict = defaults.VHL_MATCH_REPORT_DICT
+    match_protocol_xpath = xpathes.VHL_MATCH_PROTOCOL_XPATH
+    body_xpath = xpathes.VHL_MATCH_PROTOCOL_XPATH
+    xpath_dict = xpathes.VHL_MATCH_REPORT_DICT
 
-    def python_date(self, date, month_dict = defaults.MD_EN):
+    def python_date(self, date, month_dict = xpathes.MD_EN):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')

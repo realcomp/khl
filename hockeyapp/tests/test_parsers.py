@@ -16,22 +16,22 @@ class HockeyAppParserTest(base.tests.BaseTest):
     khl_match_id = 42100
     vhl_match_id = 43031
 
-    def base_test(self):
-        ''' base hockeapp test '''
+    def test_parsers(self):
+        ''' test hockeyapp parsers '''
         self._check_parsers()
-        #creates
         self._create_club()
         self._create_players()
         #schedule = parsers.schedule.KHLScheduleParser()
         #schedule.put_data_in_db_from_page(266)
-        #self._create_mhl_match()
-        #self._create_mhl2_match()
-        #self._create_khl_match()
-        #self._create_vhl_match()
+        self._create_mhl_match()
+        self._create_mhl2_match()
+        self._create_khl_match()
+        self._create_vhl_match()
         #updates
-        #self._update_mhl_match()
-        #self._update_khl_match()
-        #self._update_vhl_match()
+        self._update_mhl_match()
+        self._update_mhl2_match()
+        self._update_khl_match()
+        self._update_vhl_match()
 
     def _check_parsers(self):
         ''' test parsers fucntionality'''
@@ -68,9 +68,9 @@ class HockeyAppParserTest(base.tests.BaseTest):
                                                 ).get_page(self.vhl_match_id)
         self.assertIsNotNone(self.khl_match_data)
         # test clubs parser
-        self.clublink = parsers.club.GetAllClubURLs().get_page()[0][:-1]
+        self.clublink = parsers.club.KHLClubURLs().get_page()[0][:-1]
         self.assertIsNotNone(self.clublink)
-        self.clubinfo = parsers.club.ClubInfo().get_page(self.clublink)
+        self.clubinfo = parsers.club.KHLClubInfo().get_page(self.clublink)
         self.assertIsNotNone(self.clubinfo)
 
     def _create_club(self):
@@ -184,6 +184,23 @@ class HockeyAppParserTest(base.tests.BaseTest):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id', 'spectators'):
+            self.assertIsNotNone(getattr(match, field))
+        self._check_mhl2_relations(match)
+
+    def _update_mhl2_match(self):
+        '''
+            test update mhl2 match
+        '''
+        #get and update match
+        match = Match.objects.get(khl_id=self.mhl2_match_id)
+        parser = parsers.match.HockeyMHL2MatchParser
+        match = parser().update_model_object(match)
+        #check fields
+        for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
+        'detail_count'):
+            self.assertNotEqual(getattr(match, field), self.blank)
+        for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
+        'guest_team_id', 'guest_coach_id'):
             self.assertIsNotNone(getattr(match, field))
         self._check_mhl2_relations(match)
 
