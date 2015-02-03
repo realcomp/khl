@@ -439,6 +439,7 @@ class ClubPlayerMatch(models.Model):
         связка игрок в клубе в сезоне с матчем в сезоне
         По сути статистика игрока в каждом матче
     '''
+    objects = managers.match.ClubPlayerMatchQuerySet.as_manager()
     clubplayer = models.ForeignKey(ClubPlayer)
     match = models.ForeignKey('hockeyapp.Match')
     adv_stats = models.OneToOneField(AdvancedPlayerStats, null=True, blank=True)

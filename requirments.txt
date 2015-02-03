@@ -1,6 +1,6 @@
-requests
-psycopg2
-python-dateutil
+requests==2.5.0
+psycopg2==2.5.4
+python-dateutil==2.3
 
 #grab
 lxml==3.4.1
@@ -9,34 +9,34 @@ cssselect==0.9.1
 grab==0.4.13
 
 #celery
-billiard
-pytz
-kombu
-amqp
-anyjson
-celery
+billiard==3.3.0.19
+pytz==2014.10
+kombu==3.0.24
+amqp==1.4.6
+anyjson==0.3.3
+celery==3.1.17
 
 
 Django==1.7.1
 #django-atomic-celery==1.1.2
 #django-atomic-signals==1.1.0
-django-autocomplete-light
-django-daterange-filter
-djangorestframework
-django-filer
-django-suit
-django-select2
-django-redis-sessions
-django-registration-redux
-django-relatives
-django-rosetta
+django-autocomplete-light==2.0.5
+django-daterange-filter==1.0.0
+djangorestframework==3.0.2
+django-filer==0.9.8
+django-suit==0.2.12
+django-select2==4.2.2
+django-redis-sessions==0.4.0
+django-registration-redux==1.1
+django-relatives==0.3.1
+django-rosetta==0.7.4
 
 #development
-ipython
+ipython==2.3.1
 #ipdb==0.8
 
 #dev_tools
-nose
-nose-notify
-django-nose
-rednose
+nose==1.3.4
+nose-notify==0.4.2
+django-nose==1.3
+rednose==0.4.1

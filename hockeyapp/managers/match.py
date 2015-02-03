@@ -4,7 +4,12 @@ from __future__ import unicode_literals, print_function
 __author__='smirnov.ev'
 
 from django.db import models
+from django.db.models import Max, Min
 from django.db.models.loading import get_model
+
+from base.models import Season
+
+from ..utils import month_range
 
 
 CURRENT_APP = __package__.split('.')[0]
@@ -203,3 +208,40 @@ class MatchManager(ManagerMixin, models.Manager):
         judges = judges or []
         model = get_model(CURRENT_APP, 'Judge')
         return (model.objects.get_or_create(ru_fio=j) for j in judges)
+
+
+class ClubPlayerMatchQuerySet(models.QuerySet):
+    def group_by_month(self):
+        """
+        returns list of QuerySet's
+        """
+        result = []
+        min_max = self.aggregate(Min('match__date'), Max('match__date'))
+        start_date = min_max.get('match__date__min')
+        end_date = min_max.get('match__date__max')
+        if start_date and end_date:
+            dates = list(month_range(start_date, end_date))
+            for i in range(len(dates) - 1):
+                month_qs = self.filter(
+                    match__date__gt=dates[i],
+                    match__date__lte=dates[i + 1])
+                month_qs.date = dates[i]
+                month_qs.season = None
+                result.append(month_qs)
+        return result
+
+    def group_by_season(self):
+        """
+        returns list of QuerySet's
+        """
+        result = []
+        seasons = (
+            Season.objects
+            .filter(pk__in=self.values_list('clubplayer__season_id'))
+            .order_by('start_date'))
+        for season in seasons:
+            season_qs = self.filter(clubplayer__season=season)
+            season_qs.date = None
+            season_qs.season = season
+            result.append(season_qs)
+        return result

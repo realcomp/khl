@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import itertools
 from operator import attrgetter
+
+from django.db.models import Avg, Sum
 
 from rest_framework import serializers
 
@@ -25,21 +28,28 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
     '''
     Serializer for QuerySet instances with aggregated values
     '''
-    class AggregateSumField(serializers.ReadOnlyField):
+    class AggregateField(serializers.ReadOnlyField):
         def get_attribute(self, instance):
-            # defined in view
+            if getattr(instance, '_aggregate', None) is None:
+                instance._aggregate = instance.aggregate(*itertools.chain(
+                    map(Sum, (
+                        'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
+                        'es_goals', 'overtime_goals', 'win_goals', 'bullet_goals',
+                        'shots', 'faceoff', 'winfaceoff', 'winfaceoff_p',
+                        'goals', 'assists', 'points')),
+                    map(Avg, (
+                        'shots', 'pis', 'winfaceoff_p')),
+                ))
             return instance._aggregate
 
+    class AggregateSumField(AggregateField):
         def to_representation(self, value):
             return value.get('%s__sum' % self.field_name) or 0
 
-    class AggregateAvgField(serializers.ReadOnlyField):
-        def get_attribute(self, instance):
-            # defined in view
-            return instance._aggregate
-
+    class AggregateAvgField(AggregateField):
         def to_representation(self, value):
-            return value.get(self.field_name) or 0
+            result = value.get(self.field_name)
+            return ('%0.2f' % result) if result else '0'
 
     count = serializers.SerializerMethodField()
     date = serializers.DateTimeField()
@@ -61,11 +71,32 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
     winfaceoff = AggregateSumField()
     winfaceoff_p__avg = AggregateAvgField()
     shots__avg = AggregateAvgField()
-    gamingtime__avg = AggregateAvgField()
-    change_count__avg = AggregateAvgField()
+    gamingtime__avg = serializers.SerializerMethodField()
+    change_count__avg = serializers.SerializerMethodField()
 
     def get_count(self, obj):
         return obj.count()
+
+    def get_gamingtime__avg(self, obj):
+        gamingtime_all = (
+            obj.aggregate(Avg('adv_stats__gamingtime_all'))
+            .get('adv_stats__gamingtime_all__avg') or 0)
+        gamingtime = (
+            obj.aggregate(Avg('gamingtime'))
+            .get('gamingtime__avg') or 0)
+        # seconds to minutes
+        result = (gamingtime_all or gamingtime) / 60
+        return ('%0.2f' % result) if result else '0'
+
+    def get_change_count__avg(self, obj):
+        change_count_all = (
+            obj.aggregate(Avg('adv_stats__change_count_all'))
+            .get('adv_stats__change_count_all__avg') or 0)
+        change_count = (
+            obj.aggregate(Avg('change_count'))
+            .get('change_count__avg') or 0)
+        result = change_count_all or change_count
+        return ('%0.2f' % result) if result else '0'
 
     class Meta(object):
         fields = (
