@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import itertools
 import json
 
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Q, Sum
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, viewsets
@@ -34,6 +34,26 @@ class PlayersSearch(
 
     def get_queryset(self):
         return Player.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        # get clubs
+        self.players_clubs = {}
+        qs = self.filter_queryset(self.get_queryset())
+        player_club = (
+            ClubPlayer.objects
+            .filter(player__in=qs)
+            .order_by('-end_date')
+            .values_list('player_id', 'club_id'))
+        if player_club:
+            clubs_q = Q(pk__in=zip(*player_club)[1])
+            clubs = {club.pk: club for club in Club.objects.filter(clubs_q)}
+            for player_id, club_id in filter(lambda x: x[1], player_club):
+                club = clubs[club_id]
+                if player_id not in self.players_clubs:
+                    self.players_clubs[player_id] = []
+                if club not in self.players_clubs[player_id]:
+                    self.players_clubs[player_id].append(club)
+        return super(PlayersSearch, self).list(self, request, *args, **kwargs)
 
 
 class PlayerCardIndicators(generics.ListAPIView):
