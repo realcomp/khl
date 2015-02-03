@@ -39,16 +39,14 @@ class PlayersSearch(
         # get clubs
         self.players_clubs = {}
         qs = self.filter_queryset(self.get_queryset())
-        player_club = (
+        clubplayers = (
             ClubPlayer.objects
             .filter(player__in=qs)
-            .order_by('-end_date')
-            .values_list('player_id', 'club_id'))
-        if player_club:
-            clubs_q = Q(pk__in=zip(*player_club)[1])
-            clubs = {club.pk: club for club in Club.objects.filter(clubs_q)}
-            for player_id, club_id in filter(lambda x: x[1], player_club):
-                club = clubs[club_id]
+            .order_by('-end_date'))
+        if clubplayers.exists():
+            for clubplayer in clubplayers:
+                player_id = clubplayer.player_id
+                club = clubplayer.club
                 if player_id not in self.players_clubs:
                     self.players_clubs[player_id] = []
                 if club not in self.players_clubs[player_id]:

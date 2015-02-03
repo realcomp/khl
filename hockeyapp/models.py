@@ -313,6 +313,7 @@ class LeagueClub(AdminLinkMixin, models.Model):
 
 class ClubPlayer(models.Model):
     b''' связка игрок - клуб в сезоне '''
+    objects = managers.player.ClubPlayerQuerySet.as_manager()
     player = models.ForeignKey(Player)
     club = models.ForeignKey(Club)
     number = models.PositiveIntegerField(_('Number'), default=0)
