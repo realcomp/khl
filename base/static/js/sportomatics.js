@@ -265,6 +265,7 @@
         this.coach = null;
         this.group_by = 'month';
         this.data = {};
+        this.graphData = {};
 
         this.setIndicatorsType = function(type) {
             this.indicators_type = type;
