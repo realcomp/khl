@@ -266,6 +266,79 @@
         this.group_by = 'month';
         this.data = {};
         this.graphData = {};
+        function ObjectToGenerate() {
+            return {
+                bindto: '#chart',
+                axis: {
+                    x: {
+                        type: 'timeseries',
+                        tick: {
+                            format: function (value) {
+                                var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                if (self.group_by === 'month') return monthNames[value.getMonth()] + ' ' + value.getDate() + ', ' + value.getFullYear();
+                                if (self.group_by === 'weeks') return value.getWeekNumber() + ' week, ' + value.getFullYear();
+                                if (self.group_by === 'season') return 'Сезон ' + (value.getFullYear()-1) + '-' + value.getFullYear();
+                                return value;
+                            }
+                        }
+                    },
+                    y: {
+                        min: -2,
+                        label: self.field
+                    }
+                },
+                data: {
+                    xs: {},
+                    columns: [],
+                    colors: {
+
+                    },
+                    type: 'spline'
+                },
+                point: {
+                    show: true
+                },
+                size: {
+                    width: 900
+                }
+            }
+        }
+        this.createC3ArrayAndData = function(array, number, field, name){
+            var resultArray = _.map(array, function(e){
+                if(e['date'] == null){
+                    console.log(e['season']['label'].substr(12,4));
+                    console.log(new Date(e['season']['label'].substr(12, 4)).yyyymmdd('-'))
+                    return new Date(e['season']['label'].substr(12,4)).yyyymmdd('-');
+                }
+                return new Date(e['date']).yyyymmdd('-');}
+            ).sort(function(a,b){
+                return new Date(a.substr(0, 4), a.substr(5, 2)-1, a.substr(8, 2)) - new Date(b.substr(0, 4),b.substr(5, 2)-1, b.substr(8, 2));
+            });
+            resultArray.unshift('x'+number);
+            var resultArrayData = array.map(function(e){
+                /*if( Object.prototype.toString.call( $scope.fieldMapping[field] ) === '[object Array]' ) {
+                 var sum = 0;
+                 _.each($scope.fieldMapping[field], function(fieldEntry){
+                 sum += e[fieldEntry];
+                 })
+                 return sum;
+                 } else*/ return e[field]; // wait for multiple players comparison
+            });
+            resultArrayData.unshift(name);
+            return {
+                array: resultArray,
+                data: resultArrayData
+            }
+        }
+        this.createFieldData = function(field, array){
+            var result = [];
+            var i = 0;
+            //TODO: make this method accept multiple players
+            var object = self.createC3ArrayAndData(array, i, field, 'Player ' + '1');
+            result.push(object);
+            return result;
+        };
 
         this.setIndicatorsType = function(type) {
             this.indicators_type = type;
@@ -273,6 +346,7 @@
 
         this.setField = function(field) {
             this.field = field;
+            this.list();
         }
 
         this.setClub = function(club) {
@@ -283,6 +357,9 @@
         this.setCoach = function(coach) {
             this.coach = coach;
             this.list();
+        }
+        this.setGraphResults = function(results){
+
         }
 
         this.list = function(order_by) {
@@ -299,6 +376,15 @@
             .success(function(data) {
                 self.data = data;
                 self.loader = false;
+                var fieldData = self.createFieldData(self.field, self.data.results);
+                    var objectToGenerate = new ObjectToGenerate();
+                    _.each(fieldData, function(c3ADObject){
+                        objectToGenerate.data.xs[c3ADObject.data[0]] = c3ADObject.array[0];
+                        objectToGenerate.data.colors[c3ADObject.data[0]] = '#58cb73';
+                        objectToGenerate.data.columns.push(c3ADObject.array);
+                        objectToGenerate.data.columns.push(c3ADObject.data);
+                    })
+                    var chart = c3.generate(objectToGenerate);
             });
         };
 
@@ -331,3 +417,22 @@
     }]);
 
 })();
+
+Date.prototype.yyyymmdd = function(delimiter){
+    if(delimiter == null) delimiter = '';
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return yyyy + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + (dd[1]?dd:"0"+dd[0]);
+}
+Date.prototype.getWeekNumber = function(){
+    var d = new Date(+this);
+    d.setHours(0,0,0);
+    d.setDate(d.getDate()+4-(d.getDay()||7));
+    return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
+};
+function getDateOfWeek(w, y) {
+    var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
+
+    return new Date(y, 0, d);
+}
