@@ -36,12 +36,12 @@ KHL_MATCH_REPORT_DICT = {
 
 
 # MHL MATCH ####################################################################
-MHL_SITE_URL = 'http://mhl.khl.ru/'
+MHL_SITE_URL = 'http://mhl.khl.ru'
 MHL_BODY_NOTEXISTS = b'Протокол не найден'
 MHL_BODY_NOTEXISTS_ALT = b'Не найден протокол игры'
 MHL_EMPTY_PAGE_TEXT = 'Fatal error'
 MHL_MATCH_PROTOCOL_XPATH = '//div[@class="content"]//div[@class="b-left"]//div[@class="second_content"]'
-MHL_URL = 'http://mhl.khl.ru/report/272/'
+MHL_URL = MHL_SITE_URL+ '/report/272/'
 MHL_BODY_XPATH = MHL_MATCH_PROTOCOL_XPATH+'//div[@class="inner_content"]'
 _MMP_XPATH = '//table[@class="matches_protocol_main"]' #xpath match main protocol
 _MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]//table'
@@ -71,7 +71,7 @@ MHL_MATCH_REPORT_DICT = {
 }
 
 # MHL PLAYER INFO ##############################################################
-MHL_PLAYER_URL = MHL_SITE_URL+'players/'
+MHL_PLAYER_URL = MHL_SITE_URL+'/players/'
 MHL_PLAYER_XPATH = '//div[@class="second_content"]'
 MHL_PLAYER_DATA_DICT = {
     'ru_fio': '/div[@class="big_letter"]/text()',
@@ -89,9 +89,9 @@ MHL_PLAYER_DATA_DICT = {
 
 
 # MHL-2 MATCH ####################################################################
-MHL2_SITE_URL = 'http://mhl2.khl.ru/'
+MHL2_SITE_URL = 'http://mhl2.khl.ru'
 MHL2_MATCH_PROTOCOL_XPATH = '//div[@id="wrapper"]/div[@class="content"]/div[@class="leftBlockInside"]/div[@class="second_content"]'
-MHL2_URL = MHL2_SITE_URL+'report/274/'
+MHL2_URL = MHL2_SITE_URL+'/report/274/'
 MHL2_BODY_XPATH = MHL2_MATCH_PROTOCOL_XPATH+'/div[@style="background:url(/img/pl_bg.png)"]'
 _MPS_HOME_XPATH = '//div[@class="matches_player_statistic"]/table[@class="universal_table"]'
 _MPS_GUEST_XPATH = '//div[@class="matches_player_statistic"]/dl/table[@class="universal_table"]'
@@ -121,7 +121,7 @@ MHL2_MATCH_REPORT_DICT = {
 ################################################################################
 
 # MHL-2 PLAYER INFO ##############################################################
-MHL2_PLAYER_URL = MHL2_SITE_URL+'players/'
+MHL2_PLAYER_URL = MHL2_SITE_URL+'/players/'
 MHL2_PLAYER_XPATH = '//div[@class="second_content"]'
 MHL2_PLAYER_DATA_DICT = {
     'ru_fio': '/div[@class="big_letter"]/h2/text()',
@@ -341,4 +341,44 @@ KHL_ARENA_XPATH_DICT = {
     'contacts_alt': '//p[3]', 
 }
 KHL_PLAYERS_XPATH = '//table[@class="typical"]/tbody/tr/td/div/a/@href'
+################################################################################
+
+
+# VHL CLUB INFO ################################################################
+VHL_CLUB_URL = VHL_SITE_URL+'/teams/'
+VHL_CLUB_LIST_XPATH = '//table[@class="one_club"]/tr/td/a/@href'
+VHL_CLUB_INFO_XPATH = VHL_MATCH_PROTOCOL_XPATH + '/div[@class="wrap_teamslist"]'
+VHL_CLUB_XPATH_DICT = {
+    'logo_url': '/div[@class="team-element"]/img[@class="team_logo"]/@src',
+    'ru_title': '/h1/span/text()',
+    'site': '/div[@class="team-element"]/div/p/a/@href',
+    'contacts': '/div[@class="team-element"]/div/p',
+    'players': '//div[@class="team-element"]/div[@class="composition"]/table[@class="team_table"]/tbody/tr/td/a/@href',
+}
+################################################################################
+
+
+# MHL CLUB INFO ################################################################
+MHL_CLUB_URL = MHL_SITE_URL+'/teams/'
+MHL_CLUB_LIST_XPATH = '//div[@class="clubs_list"]/div/table[@class="one_club"]/tr/td/a/@href'
+MHL_CLUB_INFO_XPATH = MHL_MATCH_PROTOCOL_XPATH + '/div[@class="wrap_teamslist"]'
+MHL_CLUB_XPATH_DICT = {
+    'logo_url': '/div[@class="team-element"]/img[@class="team_logo"]/@src',
+    'ru_title': '/h1/text()',
+    'site': '/div[@class="team-element"]/div/font/a/@href',
+    'players': '//div[@class="team-element"]/div[@class="composition"]/table[@class="tablesorter"]/tbody/tr/td/a/@href',
+}
+################################################################################
+
+
+# MHL2 CLUB INFO ################################################################
+MHL2_CLUB_URL = MHL2_SITE_URL+'/teams/'
+MHL2_CLUB_LIST_XPATH = '//div[@class="clubs_list"]/table[@class="one_club"]/tr/th/a/@href'
+MHL2_CLUB_INFO_XPATH = MHL2_MATCH_PROTOCOL_XPATH
+MHL2_CLUB_XPATH_DICT = {
+    'logo_url': '/div[@class="white_bg"]/div[@class="catalog-element"]/table/tr/td/img/@src',
+    'ru_title': '/h1/text()',
+    #'site': '/div[@class="white_bg"]/div[@class="catalog-element"]/table/tr/td/div/p/font/font/a/@href',
+    'players': '//div[@class="white_bg"]/div[@class="catalog-element"]/table[@class="tablesorter"]/tbody/tr/td/a/@href',
+}
 ################################################################################

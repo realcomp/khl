@@ -15,10 +15,23 @@ from . import models
 
 
 @app.task(ignore_result=True, track_started=True)
+def club_async_update(links, parser):
+    for link in links:
+        try:
+            parser().put_data_in_db_from_page(link[:-1]) #remove last slash
+        except Exception, exc:
+            logger.error(exc, exc_info=sys.exc_info())
+
+@app.task(ignore_result=True, track_started=True)
 def periodic_update_clubs():
-        links = parsers.club.KHLClubURLs().get_page()
-        for link in links:
-            parsers.club.KHLClubInfo().put_data_in_db_from_page(link[:-1]) #remove last slash
+        for links, club_parser in ( 
+            (parsers.club.KHLClubURLs().get_page(), parsers.club.KHLClubInfo), 
+            (parsers.club.VHLClubURLs().get_page(), parsers.club.VHLClubInfo),
+            (parsers.club.MHLClubURLs().get_page(), parsers.club.MHLClubInfo),
+            (parsers.club.MHL2ClubURLs().get_page(), parsers.club.MHL2ClubInfo),
+        ):
+            if club_parser:
+                club_async_update.delay(links, club_parser)
 
 
 @app.task(ignore_result=True, track_started=True)

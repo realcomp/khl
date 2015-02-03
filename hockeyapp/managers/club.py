@@ -55,7 +55,8 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                         self.filter(ru_title=ru_title).update(**data)
                     else:
                         _club = self.create(**data)
-                    _club.players = _plrs
+                    if _plrs:
+                        _club.players = _plrs
             return _club
 
     def by_season(self, season):

@@ -129,7 +129,7 @@ class KHLClubInfo(GrabParser):
                     'coach': self.get_coach(),
                     'contacts': self.get_contacts(),
                     'arena': self.get_arena_info(),
-                    'players': self.get_players(id)
+                    'players': self.get_players(id) or []
             }
             return _res
 
@@ -168,4 +168,140 @@ class KHLClubInfo(GrabParser):
         plrs_page_tree = GrabParser(absolute_url=url).get_page()
         plrs_links = plrs_page_tree.xpath(xpathes.KHL_PLAYERS_XPATH)
         if plrs_links:
-            return {link.split('/')[-2] for link in plrs_links}#khl_id set
+            return set(link.split('/')[-2] for link in plrs_links)#khl_id set
+################################################################################
+################################################################################
+################################################################################
+
+
+class VHLClubURLs(GrabParser):
+    b''' URL клубов с сайта ВХЛ '''
+    url = xpathes.VHL_CLUB_URL
+    absolute_url = url
+    as_get_param = False
+
+    def get_page(self, id=None):
+        b''' список URL клубов '''
+        self.page_tree = super(VHLClubURLs, self).get_page()
+        if self.page_tree is not None:
+            return set(self.page_tree.xpath(xpathes.VHL_CLUB_LIST_XPATH))
+
+
+class VHLClubInfo(KHLClubInfo):
+    b''' инфо о клубе с сайта ВХЛ '''
+    url = xpathes.VHL_SITE_URL
+    absolute_url = url
+    body_xpath = xpathes.VHL_CLUB_INFO_XPATH
+    xpath_dict = xpathes.VHL_CLUB_XPATH_DICT
+
+    def get_club_data(self, html_body=None, id=None):
+        b'''
+            Данные o клубе через DOM-дерево
+        '''
+        if self.page_tree is not None:
+            _res = {
+                    'url': self.absolute_url,
+                    'html_body': self.get_html_body(html_body),
+                    'ru_title': self.get_ru_title(),
+                    'site': self.get_site_url(),
+                    'logo_url': self.get_logo_url(),
+                    'contacts': self.get_contacts(),
+                    'players': self.get_players() or []
+            }
+            return _res
+
+    def get_ru_title(self):
+        b''' Название клуба '''
+        return self._get_strip_value('ru_title').split(':')[1].strip()
+
+    def get_players(self, id=''):
+        plrs_links = self._get_value('players')
+        if plrs_links:
+            return set(link.split('/')[-2] for link in plrs_links)#khl_id set
+################################################################################
+################################################################################
+################################################################################
+
+
+class MHLClubURLs(GrabParser):
+    b''' URL клубов с сайта MХЛ '''
+    url = xpathes.MHL_CLUB_URL
+    absolute_url = url
+    as_get_param = False
+
+    def get_page(self, id=None):
+        b''' список URL клубов '''
+        self.page_tree = super(MHLClubURLs, self).get_page()
+        if self.page_tree is not None:
+            return set(self.page_tree.xpath(xpathes.MHL_CLUB_LIST_XPATH))
+
+
+class MHLClubInfo(VHLClubInfo):
+    b''' инфо о клубе с сайта MХЛ '''
+    url = xpathes.MHL_SITE_URL
+    absolute_url = url
+    body_xpath = xpathes.MHL_CLUB_INFO_XPATH
+    xpath_dict = xpathes.MHL_CLUB_XPATH_DICT
+
+    def get_club_data(self, html_body=None, id=None):
+        b'''
+            Данные o клубе через DOM-дерево
+        '''
+        if self.page_tree is not None:
+            _res = {
+                    'url': self.absolute_url,
+                    'html_body': self.get_html_body(html_body),
+                    'ru_title': self.get_ru_title(),
+                    'site': self.get_site_url(),
+                    'logo_url': self.get_logo_url(),
+                    'players': self.get_players() or []
+            }
+            return _res
+################################################################################
+################################################################################
+################################################################################
+
+
+class MHL2ClubURLs(GrabParser):
+    b''' URL клубов с сайта MХЛ-2 '''
+    url = xpathes.MHL2_CLUB_URL
+    absolute_url = url
+    as_get_param = False
+
+    def get_page(self, id=None):
+        b''' список URL клубов '''
+        self.page_tree = super(MHL2ClubURLs, self).get_page()
+        if self.page_tree is not None:
+            return set(self.page_tree.xpath(xpathes.MHL2_CLUB_LIST_XPATH))
+
+
+class MHL2ClubInfo(VHLClubInfo):
+    b''' инфо о клубе с сайта MХЛ '''
+    url = xpathes.MHL2_SITE_URL
+    absolute_url = url
+    body_xpath = xpathes.MHL2_CLUB_INFO_XPATH
+    xpath_dict = xpathes.MHL2_CLUB_XPATH_DICT
+
+    def _get_absolute_url(self, id=None, slash=True):
+        b'''определяем url страницы
+            По-умолчанию: self.absolute_url = self.url
+        '''
+        if id:
+            _url = b'{0}{1}'.format(id,'/' if slash else '')
+            self.absolute_url = b'{0}{1}'.format(xpathes.MHL2_CLUB_URL,_url)
+        return self.absolute_url
+
+    def get_club_data(self, html_body=None, id=None):
+        b'''
+            Данные o клубе через DOM-дерево
+        '''
+        if self.page_tree is not None:
+            _res = {
+                    'url': self.absolute_url,
+                    'html_body': self.get_html_body(html_body),
+                    'ru_title': self.get_ru_title(),
+                    #'site': self.get_site_url(),
+                    'logo_url': self.get_logo_url(),
+                    'players': self.get_players() or []
+            }
+            return _res
