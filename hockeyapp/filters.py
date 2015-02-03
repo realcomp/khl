@@ -56,22 +56,4 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         if q_citizenship:
             qs = qs.filter(q_citizenship)
 
-        # get clubs
-        club_players2 = (
-            ClubPlayer.objects
-            .filter(player__in=qs)
-            .order_by('-end_date')
-            .values_list('player_id', 'club_id'))
-        clubs_q = Q()
-        if club_players2:
-            clubs_q |= Q(pk__in=zip(*club_players2)[1])
-        clubs = {
-            club.pk: club for club in Club.objects.filter(clubs_q)}
-        view.players_clubs = {}
-        for player_id, club_id in filter(
-                lambda x: x[1], club_players2):
-            if player_id not in view.players_clubs:
-                view.players_clubs[player_id] = []
-            if clubs[club_id] not in view.players_clubs[player_id]:
-                view.players_clubs[player_id].append(clubs[club_id])
         return qs

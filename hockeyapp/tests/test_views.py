@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
+from base.models import Season
+
 from ..models import Player
 
 
@@ -24,6 +26,10 @@ class ViewsTestCase(TestCase):
     }
 
     def setUp(self):
+        Season.objects.create(
+            start_date=datetime.date(year=2000, month=12, day=31),
+            end_date=datetime.date(year=2001, month=12, day=31))
+
         self.player = Player.objects.create(**self.PLAYER_DATA)
         self.client = Client()
 
