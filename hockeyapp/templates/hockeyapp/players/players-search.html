@@ -1,4 +1,5 @@
 {% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -184,42 +185,93 @@
                         <div class="four wide column">
                             <a href="#" class="option-btn option-btn_active">Сейчас играют</a>
                             <a href="#" class="option-btn">Все</a>
+                            {% verbatim %}
+                            {{ PlayersSearchController.rated_by }}
+                            {% endverbatim %}
                             <ul class="options-list">
                                 <li class="option-item">
-                                    <a href="#" class="option-link option-link_active">сезоны</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'seasons' }"
+                                       ng-click="PlayersSearchController.rated_by = 'seasons'">
+                                        {% trans 'Seasons' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">матчи</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'matches' }"
+                                       ng-click="PlayersSearchController.rated_by = 'matches'">
+                                        {% trans 'Matches' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">голы</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'goals' }"
+                                       ng-click="PlayersSearchController.rated_by = 'goals'">
+                                        {% trans 'Goals' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">передачи</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'assists' }"
+                                       ng-click="PlayersSearchController.rated_by = 'assists'">
+                                        {% trans 'Assists' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">очки</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'points' }"
+                                       ng-click="PlayersSearchController.rated_by = 'points'">
+                                        {% trans 'Points' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">плюс / минус</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'plus_minus' }"
+                                       ng-click="PlayersSearchController.rated_by = 'plus_minus'">
+                                        {% trans '+/-' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">среднее количество голов за игру</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'goals' }"
+                                       ng-click="PlayersSearchController.rated_by = 'goals'">
+                                        {% trans 'Average goals count per game' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">среднее количество передач за игру</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'assists__avg' }"
+                                       ng-click="PlayersSearchController.rated_by = 'assists__avg'">
+                                        {% trans 'Average assist count per game' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">среднее количество очков за игру</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'points__avg' }"
+                                       ng-click="PlayersSearchController.rated_by = 'points__avg'">
+                                        {% trans 'Average points per game' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">средний показатель "плюс/минус" за игру</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'plus_minus__avg' }"
+                                       ng-click="PlayersSearchController.rated_by = 'plus_minus__avg'">
+                                        {% trans 'Average "plus/minus" per game' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">SM-индекс</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'sm_index__avg' }"
+                                       ng-click="PlayersSearchController.rated_by = 'sm_index__avg'">
+                                        {% trans 'SM-index' %}
+                                    </a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="#" class="option-link">CORSI-индекс</a>
+                                    <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchController.rated_by === 'corsi_index__avg' }"
+                                       ng-click="PlayersSearchController.rated_by = 'corsi_index__avg'">
+                                        {% trans 'CORSI-index' %}
+                                    </a>
                                 </li>
                             </ul>
                         </div>
