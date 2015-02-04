@@ -54,7 +54,8 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         }),      
         (None, {
             'classes': ('suit-tab suit-tab-servinfo',),
-            'fields': ('khl_id', 'url', 'html_body',)
+            'fields': ( 'khl_id', 'url', 'html_body', 'is_championship',
+                        'is_playoff')
         }),
     )
 
@@ -234,28 +235,24 @@ class ClubPlayerMatchAdmin(NoFilterAdmin):
         return ('id',)+self.get_fields(request)
 admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 
+
 admin.site.register(AdvancedPlayerStats)
+
 
 def import_names(modeladmin, request, queryset):
     def update_or_create_name(**kwargs):
-        try:
-            name = Name.objects.get(
+        name, _crt = Name.objects.get_or_create(
                 ru_name=kwargs['ru_name'], en_name=kwargs['en_name'])
-        except Name.DoesNotExist as e:
-            name = Name.objects.create(
-                ru_name=kwargs['ru_name'], en_name=kwargs['en_name'],
-                type=kwargs['type'])
-        finally:
-            return name
+        return name
 
     players = (
         Player.objects
         .exclude(ru_name__isnull=True)
         .exclude(en_name__isnull=True))
     for ru_name, en_name in players.values_list('ru_name', 'en_name'):
-        name = update_or_create_name(ru_name=ru_name, en_name=en_name, type=0)
+        update_or_create_name(ru_name=ru_name, en_name=en_name, type=0)
     for ru_name, en_name in players.values_list('ru_lastname', 'en_lastname'):
-        name = update_or_create_name(ru_name=ru_name, en_name=en_name, type=1)
+        update_or_create_name(ru_name=ru_name, en_name=en_name, type=1)
 
 import_names.short_description = _('Import Names')
 
@@ -278,7 +275,6 @@ def export_names(modeladmin, request, queryset):
             ru_name__in=names.values_list('ru_name')):
         swap_names(player)
         player.save()
-
 export_names.short_description = _('Export Names')
 
 
