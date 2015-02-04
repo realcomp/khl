@@ -73,6 +73,38 @@ class ScheduleManager(models.Manager):
             else:
                 self.create(**m)
 
+    def update_schedule(self, **kwargs):
+        b''' метод обновить записи о матчах '''
+        _season = kwargs.pop('season', {})
+        _league = kwargs.pop('league', 'KHL')
+        sm = get_model('base', 'Season')
+        _season, _crt = sm.objects.get_or_create_season(**_season)
+        league_model = get_model(CURRENT_APP, 'League')
+        _league, _crt = league_model.objects.get_or_create(en_title=_league)
+        self.filter(league=_league, season=_season, khl_id__isnull=True
+            ).update(is_championship=False)
+        self.filter(league=_league, season=_season, khl_id__isnull=False
+            ).update(is_championship=True)
+        for m in kwargs.get('matches',):
+            home_team= self._get_team(m.pop('home_team', None))
+            guest_team= self._get_team(m.pop('guest_team', None))
+            _match = self.filter(ru_title = m.get('ru_title'),
+                                league = _league,
+                                season = _season,
+                                home_team = home_team,
+                                guest_team = guest_team,
+                                khl_id__isnull=True,
+                        ).last()
+            if _match:
+                m['is_championship'] = True
+                if not _match.match and m.get('khl_id'):
+                    _model = get_model(CURRENT_APP, 'Match')
+                    _m = _model.objects.filter(khl_id=m.get('khl_id')).last()
+                    if _m:
+                        m['match'] = _m
+                        m['processed'] = True
+                self.filter(pk=_match.pk).update(**m)
+
     def _get_team(self, ru_title):
         club_model = get_model(CURRENT_APP, 'club')
         _club, _crt = club_model.objects.get_or_create(ru_title=ru_title)

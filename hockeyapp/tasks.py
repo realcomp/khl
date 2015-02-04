@@ -35,6 +35,33 @@ def periodic_update_clubs():
 
 
 @app.task(ignore_result=True, track_started=True)
+def periodic_update_schedules():
+    _parsers = ((parsers.schedule.KHLScheduleParser, 266),
+                (parsers.schedule.VHLScheduleParser, 269),
+                (parsers.schedule.MHLScheduleParser, 272),
+                (parsers.schedule.MHL2ScheduleParser, 274),
+    )
+    for _parser, id in _parsers:
+        _parser().put_data_in_db_from_page(id,update=True)
+
+
+@app.task(ignore_result=True, track_started=True)
+def periodic_get_matches():
+    matches = models.Schedule.objects.filter(khl_id__isnull=False,
+                                            processed=False,
+                                            match__isnull=True)
+    for m in matches:
+        parser_id = {
+                        'MHL': 1,
+                        'KHL': 2,
+                        'VHL': 3,
+                        'MHL-2': 4,
+        }.get(m.league.en_title)
+        if parser_id:
+            async_hockey_match_parser.delay(parser_id, m.khl_id)
+
+
+@app.task(ignore_result=True, track_started=True)
 def async_hockey_match_parser(parser_id, matchid, update=False):
     b'''
         Парсер матча.

@@ -561,7 +561,9 @@ class Match(AdminLinkMixin, TitleBaseModel):
     objects = managers.match.MatchManager()
     #service info
     khl_id = models.PositiveIntegerField(_('Other site ID'), null=True)
-    proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
+    is_championship = models.BooleanField(_('Is championship'), default=True)
+    is_playoff = models.BooleanField(_('Is playoff'), default=False)
+    proccesed_time = models.DateTimeField(_('Processed time'),auto_now=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
 
@@ -636,12 +638,13 @@ class Schedule(TitleBaseModel):
                                 related_name='schedule_guestmatches',
                                 verbose_name=_('Guest team'))
     processed = models.BooleanField(default=False)
-    proccesed_time = models.DateTimeField(_('Processed time'),
+    proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,
                                             null=True, blank=True)
     class Meta:
         verbose_name=_('League Schedule')
         verbose_name_plural=_('League Schedules')
         ordering = 'date',
+
 
 class Name(models.Model):
     b'''Словарь имен/фамилий'''

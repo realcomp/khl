@@ -6,8 +6,10 @@ __author__='smirnov.ev'
 import datetime
 
 from django.db.models.loading import get_model
-from base.utils import str2int_safe
+from django.utils import timezone
+current_tz = timezone.get_current_timezone()
 
+from base.utils import str2int_safe
 
 from . import GrabParser
 from . import xpathes
@@ -41,14 +43,17 @@ class KHLScheduleParser(GrabParser):
             self.absolute_url = self.absolute_url.replace('??', str(id))
         return self.absolute_url
 
-    def put_data_in_db_from_page(self, id=None):
+    def put_data_in_db_from_page(self, id=None, update=False):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
         ''' 
         data = self.get_page(id)
         if data and self.model_name:
             model = get_model('hockeyapp', self.model_name)
-            model.objects.create_schedule(**data)
+            if update:
+                model.objects.update_schedule(**data)
+            else:
+                model.objects.create_schedule(**data)
 
     def get_page(self, id=None):
         b'''  смотрим страницу календаря '''
@@ -113,7 +118,8 @@ class KHLScheduleParser(GrabParser):
             else:
                 mask = '%d %m %Y'
             _dt = ''.join(_date_dict).encode('utf-8')
-            return datetime.datetime.strptime(_dt, mask)
+            _dt = datetime.datetime.strptime(_dt, mask)
+            return timezone.make_aware(_dt, current_tz)
 
     def start_date(self, date):
         b''' возвращает дату начала сезона '''

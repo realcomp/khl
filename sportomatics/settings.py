@@ -103,6 +103,14 @@ CELERYBEAT_SCHEDULE = {
         'task': 'hockeyapp.tasks.periodic_update_clubs',
         'schedule': local_celery_crontab(hour=0, minute=0, day_of_week=1),
     },
+    'hockeyapp-periodic-update-schedules-every-day-midnight': {
+        'task': 'hockeyapp.tasks.periodic_update_schedules',
+        'schedule': local_celery_crontab(hour=0, minute=0),
+    },
+    'hockeyapp-periodic-get-matches-every-day-midnight': {
+        'task': 'hockeyapp.tasks.periodic_get_matches',
+        'schedule': local_celery_crontab(hour=1, minute=0),
+    },
 }
 
 
