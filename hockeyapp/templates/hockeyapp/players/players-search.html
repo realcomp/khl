@@ -277,21 +277,22 @@
                                         </td>
                                         {% verbatim %}
                                         <td>
-                                            <a href="{{ player.last_clubs[0].url }}" class="club-link"
-                                               ng-show="player.last_clubs.length > 0">
-                                                {{ player.last_clubs[0].title_verbose }}
+                                            <a href="{{ player.clubplayers[0].club_url }}" class="club-link"
+                                               ng-show="player.clubplayers.length > 0">
+                                                {{ player.clubplayers[0].club.title_verbose }}
                                             </a>
-                                            <div ng-show="player.last_clubs.length > 1">
+                                            <div ng-show="player.clubplayers.length > 1">
                                                 <ul class="club-link-list hidden">
-                                                    <li ng-repeat="club in player.last_clubs">
-                                                        <a href="{{ club.url }}" class="club-link"
+                                                    <li ng-repeat="clubplayer in player.clubplayers">
+                                                        <a href="{{ clubplayer.club_url }}" class="club-link"
                                                            ng-hide="$first">
-                                                            {{ club.title_verbose }}
+                                                            {{ clubplayer.season.short_title }}:
+                                                            {{ clubplayer.club.title_verbose }}
                                                         </a>
                                                     </li>
                                                 </ul>
                                                 <a class="more-clubs-btn more-clubs-btn_open"
-                                                   onclick="angular.element(this).scope().moreClubs(this)"><span>показать еще {{ player.last_clubs.length - 1 }} команд</span><i class="triangle down icon"></i></a>
+                                                   onclick="angular.element(this).scope().moreClubs(this)"><span>показать еще {{ player.clubplayers.length - 1 }} команд</span><i class="triangle down icon"></i></a>
                                                 <a class="more-clubs-btn more-clubs-btn_close"
                                                    onclick="angular.element(this).scope().moreClubs(this)"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
                                             </div>

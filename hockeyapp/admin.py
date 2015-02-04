@@ -77,7 +77,7 @@ admin.site.register(Match, MatchAdmin)
 class ClubPlayerInline(TabularInlineReadOnly):
     model = ClubPlayer
     readonly_fields = ( object_link, 'club', 'number', 'line', 'start_date',
-                        'end_date', 'season')
+                        'end_date', 'season', 'league')
 
 class PlayerCitizenshipInline(TabularInlineReadOnly):
     model = PlayerCitizenship
@@ -205,7 +205,7 @@ class ClubPlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (ClubPlayerMatchInline, )
     linked_readonly_fields = ('player',)
     readonly_fields = linked_readonly_fields
-    list_filter = ('club', 'line', 'number', 'season')
+    list_filter = ('club', 'line', 'number', 'season', 'league')
     list_display = ('id', 'player')+list_filter
 admin.site.register(ClubPlayer, ClubPlayerAdmin)
 

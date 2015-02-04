@@ -2,14 +2,26 @@ from __future__ import absolute_import
 
 import os
 
-from celery import Celery
+import celery
 from celery.schedules import crontab
 
 from django.conf import settings
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'sportomatics.settings')
 
-app = Celery('sportomatics', backend='amqp')
+
+class Celery(celery.Celery):
+    def on_configure(self):
+        import raven
+        from raven.contrib.celery import register_signal, register_logger_signal
+        client = raven.Client()
+        # register a custom filter to filter out duplicate logs
+        register_logger_signal(client)
+        # hook into the Celery error handler
+        register_signal(client)
+
+
+app = Celery(__name__, backend='amqp')        
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
