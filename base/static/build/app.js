@@ -370,6 +370,7 @@ angular.module('Sportomatics')
     this.data = {};
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
+
     this.loader = false;
     this.countries_selected = [];
     this.leagues_selected = [];
@@ -437,6 +438,72 @@ angular.module('Sportomatics')
 
     this.getCountries(this.search);
 }])
+
+var next = function($http) {
+    return function(isAll) {
+        var self = this,
+            url = self.data.next;
+        if (isAll) {
+            url = url.replace(/&page=\d+$/, '&paginate_by=' + self.data.count);
+        }
+        self.loader = true;
+        $http.get(url)
+            .success(function(data) {
+                if (isAll) {
+                    self.data = data;
+                } else {
+                    self.data.next = data.next;
+                    self.data.results = self.data.results.concat(data.results);
+                }
+                self.loader = false;
+            });
+    };
+}
+
+var getCountries = function($http) {
+    return function(callback) {
+        var self = this,
+            url = $('#LeagueListLink').attr('href');
+        if (url) {
+            $http.get(url)
+                .success(function(data) {
+                    self.countries = data;
+                    if (self.countries.length) { // has countries
+                        if (Array.isArray(self.countries_selected) &&
+                            self.countries_selected.length === 0) { // array is expected
+                            self.countries_selected = [String(self.countries[0].pk)];
+                        } else {
+                            self.countries_selected = self.countries[0].pk;
+                        }
+                        if (self.countries[0].league_set.length) { // has leagues
+                            if (Array.isArray(self.leagues_selected) &&
+                                self.leagues_selected.length === 0) { // array is expected
+                                self.leagues_selected = [String(self.countries[0].league_set[0].pk)];
+                            } else {
+                                self.leagues_selected = self.countries[0].league_set[0].pk;
+                            }
+                        }
+                    }
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                });
+        }
+    };
+}
+
+var getLeagues = function(countries, countries_selected) {
+    var result = [];
+    $.each(countries_selected, function() {
+        var pk = this;
+        $.each(countries, function() {
+            if (this.pk == pk) {
+                result = result.concat(this.league_set);
+            }
+        });
+    });
+    return result;
+}
 })();
 ;(function() {
 angular.module('Sportomatics')
