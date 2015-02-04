@@ -93,14 +93,14 @@
                                                         <td ng-repeat="cell_id in row"
                                                             class="cell-{{ cell_id[0] }}">
                                                             <a class="team-player-photo-link"
-                                                               href="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).url }}"
+                                                               href=""
+                                                               onclick="angular.element(this).scope().showPopup(this, event);"
                                                                ng-show="ClubTeamCtrl.isPersonVisible(ClubTeamCtrl.players, cell_id)">
                                                                 <span class="team-player-number"
                                                                       ng-show="ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number">
                                                                     {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number }}
                                                                 </span>
                                                                 <img alt="" class="team-player-photo"
-                                                                     onmouseover="angular.element(this).scope().showPopup(this, event);"
                                                                      ng-src="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).photo || '/static/images/nophoto.gif' }}">
                                                                 <span class="team-player-name">
                                                                     {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).fio }}</span>
@@ -222,7 +222,8 @@
                         </div>
                     </div>
 
-                    <div class="player-partners-popup popup">
+                    <div class="player-partners-popup popup"
+                         onclick="$(this).hide(300)">
                         <a href="{% url 'hockeyapp:player-card-api' 0 %}" class="hidden" id="PlayerCardLink">×</a>
                         <a href="#" class="close-popup-btn">×</a>
                         <div class="player-bio" ng-show="ClubTeamCtrl.popup">
