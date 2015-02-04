@@ -320,10 +320,19 @@ class ClubPlayer(models.Model):
                                             choices=PLAYER_ROLE)
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
+    league = models.ForeignKey(League, null=True, blank=True,
+                                on_delete=models.SET_NULL,)
     season = models.ForeignKey( Season, null=True, blank=True,
                                 on_delete=models.SET_NULL,)
 
     __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
+
+    def save(self, **kwargs):
+        if not self.pk and not self.league:
+            #добавляем лигу клуба
+            if self.club and self.club.league:
+                self.league = self.club.league
+        super(ClubPlayer, self).save(**kwargs)
 
     class Meta:
         verbose_name=_('Club player')
