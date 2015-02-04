@@ -14,7 +14,7 @@ angular.module('Sportomatics')
     this.data = {};
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
-    this.rated_by = 'seasons';
+    this.ratedBy = 'seasons';
     this.loader = false;
     this.countries_selected = [];
     this.leagues_selected = [];
@@ -76,6 +76,13 @@ angular.module('Sportomatics')
                 self.data = data;
                 self.loader = false;
             });
+    };
+
+    this.setRatedBy = function(ratedBy) {
+        if (!this.loader) {
+            this.ratedBy = ratedBy;
+            this.search();
+        }
     };
 
     this.next = next($http);
