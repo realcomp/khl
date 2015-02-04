@@ -186,7 +186,7 @@ class ClubView(DetailView):
             default_season = get_object_or_404(
                 Season, pk=self.request.GET['season'])
         else:
-            default_season = seasons[0]
+            default_season = seasons[0] if seasons else None
         context['default_season'] = SeasonSerializer(
             default_season, context=context).data
         context.update(ClubListSerializer(

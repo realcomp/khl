@@ -184,9 +184,13 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
         return 'http://www.khl.ru/players/%s/' % obj.khl_id
 
     def get_clubplayers(self, obj):
-        clubplayers = getattr(self.context['view'], 'clubplayers', {})
+        clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
+        if clubplayers_data is None:
+            clubplayers = obj.clubplayer_set.all()
+        else:
+            clubplayers = clubplayers_data.get(obj.pk)
         return ClubPlayerSerializer(
-            clubplayers.get(obj.pk), many=True, context=self.context).data
+            clubplayers, many=True, context=self.context).data
 
     class Meta(object):
         fields = (
@@ -264,7 +268,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
-            'photo', 'khl_url', 'birth_date_short', 'club', 'last_clubs',
+            'photo', 'khl_url', 'birth_date_short', 'club', 'clubplayers',
             'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
             'contract_to', 'number', 'line_display', 'name', 'lastname',
             'seasons_count', 'matches_count',
