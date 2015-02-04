@@ -41,10 +41,10 @@
                                 <div class="ui tabular menu content-tabs">
                                     <span class="heading">Состав команды на</span>
                                     <div class="ui selection dropdown">
-                                        <input type="hidden" name="season" value="{{ seasons.0.pk }}"
+                                        <input type="hidden" name="season" value="{{ default_season.pk }}"
                                                ng-model="ClubTeamCtrl.season"
                                                onchange="angular.element(this).scope().setSeason(this)">
-                                        <div class="default text">{{ seasons.0.label }}</div>
+                                        <div class="default text">{{ default_season.label }}</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
                                             {% for season in seasons %}

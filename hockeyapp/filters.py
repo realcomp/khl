@@ -23,12 +23,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
 
         if 'league' in request.GET:
             leagues = request.GET.getlist('league')
-            clubs = (
-                LeagueClub.objects
-                .filter(season=season)
-                .filter(league__in=leagues)
-                .values_list('club_id', flat=True))
-            clubplayers = clubplayers.filter(club__in=clubs)
+            clubplayers = clubplayers.filter(league__in=leagues)
             players = clubplayers.values_list('player_id', flat=True)
             qs = qs.filter(pk__in=players)
 

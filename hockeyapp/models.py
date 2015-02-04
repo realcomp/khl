@@ -1,6 +1,8 @@
 #coding: utf-8
 from __future__ import unicode_literals
 
+import urllib
+
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -73,18 +75,18 @@ class Player(AbstractMan):
     def club(self):
         return self.club_set.all().last()
 
-    @property
-    def last_clubs(self):
-        last_club_ids = set(
-            self.clubplayer_set
-            .exclude(club=self.club)  # exclude current club
-            .order_by('-end_date')
-            .values_list('club_id', flat=True))
-        clubs = list(Club.objects.filter(pk__in=last_club_ids))
-        clubs.sort(key=lambda x: last_club_ids.index(x.pk))
-        if self.club_set.exists():
-            clubs.insert(0, self.club)
-        return clubs
+    # @property
+    # def last_clubs(self):
+    #     last_club_ids = set(
+    #         self.clubplayer_set
+    #         .exclude(club=self.club)  # exclude current club
+    #         .order_by('-end_date')
+    #         .values_list('club_id', flat=True))
+    #     clubs = list(Club.objects.filter(pk__in=last_club_ids))
+    #     clubs.sort(key=lambda x: last_club_ids.index(x.pk))
+    #     if self.club_set.exists():
+    #         clubs.insert(0, self.club)
+    #     return clubs
 
     @property
     def is_legionnaire(self):
@@ -334,6 +336,22 @@ class ClubPlayer(models.Model):
             if self.club and self.club.league:
                 self.league = self.club.league
         super(ClubPlayer, self).save(**kwargs)
+
+    @property
+    def player_url(self):
+        if self.pk and self.player:
+            url = reverse(
+                'hockeyapp:player-card', kwargs={'pk': self.player.pk})
+            return '%s' % url
+
+    @property
+    def club_url(self):
+        if self.pk and self.club:
+            url = reverse('hockeyapp:club', kwargs={'pk': self.club.pk})
+            params = urllib.urlencode({
+                'season': self.season.pk,
+            })
+            return '%s?%s' % (url, params)
 
     class Meta:
         verbose_name=_('Club player')

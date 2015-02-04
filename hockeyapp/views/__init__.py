@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, TemplateView
 
 from addresses.models import Country
@@ -181,6 +182,13 @@ class ClubView(DetailView):
             .order_by('-start_date'))
         context['seasons'] = SeasonSerializer(
             seasons, context=context, many=True).data
+        if 'season' in self.request.GET:
+            default_season = get_object_or_404(
+                Season, pk=self.request.GET['season'])
+        else:
+            default_season = seasons[0]
+        context['default_season'] = SeasonSerializer(
+            default_season, context=context).data
         context.update(ClubListSerializer(
             self.get_object(), context=context).data)
         return context
