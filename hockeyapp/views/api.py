@@ -30,27 +30,23 @@ class PlayersSearch(
         PaginationMixin, OrderMixin, viewsets.ReadOnlyModelViewSet):
     # permission_classes = permissions.IsAuthenticated,
     filter_backends = PlayersSearchFilter,
+    queryset = Player.objects.all()
     serializer_class = PlayerCardSerializer
 
-    def get_queryset(self):
-        return Player.objects.all()
-
     def list(self, request, *args, **kwargs):
-        # get clubs
-        self.players_clubs = {}
+        # get clubplayers
         qs = self.filter_queryset(self.get_queryset())
+        self.clubplayers = {}
         clubplayers = (
             ClubPlayer.objects
             .filter(player__in=qs)
             .order_by('-end_date'))
-        if clubplayers.exists():
-            for clubplayer in clubplayers:
-                player_id = clubplayer.player_id
-                club = clubplayer.club
-                if player_id not in self.players_clubs:
-                    self.players_clubs[player_id] = []
-                if club not in self.players_clubs[player_id]:
-                    self.players_clubs[player_id].append(club)
+        for clubplayer in clubplayers:
+            player_id = clubplayer.player_id
+            if player_id not in self.clubplayers:
+                self.clubplayers[player_id] = []
+            if clubplayer not in self.clubplayers[player_id]:
+                self.clubplayers[player_id].append(clubplayer)
         return super(PlayersSearch, self).list(self, request, *args, **kwargs)
 
 

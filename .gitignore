@@ -15,6 +15,7 @@ reports/
 sportparser/local_settings.py
 local_settings.py
 node_modules
+node_modules/
 
 /static/
 /docs/_build

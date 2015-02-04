@@ -41,10 +41,10 @@
                                 <div class="ui tabular menu content-tabs">
                                     <span class="heading">Состав команды на</span>
                                     <div class="ui selection dropdown">
-                                        <input type="hidden" name="season" value="{{ seasons.0.pk }}"
+                                        <input type="hidden" name="season" value="{{ default_season.pk }}"
                                                ng-model="ClubTeamCtrl.season"
                                                onchange="angular.element(this).scope().setSeason(this)">
-                                        <div class="default text">{{ seasons.0.label }}</div>
+                                        <div class="default text">{{ default_season.label }}</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
                                             {% for season in seasons %}
@@ -242,14 +242,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="player-clubs" ng-show="ClubTeamCtrl.popup.last_clubs.length">
+                        <div class="player-clubs" ng-show="ClubTeamCtrl.popup.clubplayers.length">
                             <div class="player-club"
-                                 ng-repeat="club in ClubTeamCtrl.popup.last_clubs">
+                                 ng-repeat="clubplayer in ClubTeamCtrl.popup.clubplayers">
                                 {% verbatim %}
                                     <span class="player-club-now"
                                           ng-show="$index === 0">Сейчас</span>
-                                    <a href="{{ club.url }}" class="player-club-link">
-                                        {{ club.title_verbose }}
+                                    <a href="{{ clubplayer.club_url }}" class="player-club-link">
+                                        {{ clubplayer.club.title_verbose }}
                                     </a>
                                 {% endverbatim %}
                             </div>
