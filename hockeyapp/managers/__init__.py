@@ -103,6 +103,9 @@ class ScheduleManager(models.Manager):
                     if _m:
                         m['match'] = _m
                         m['processed'] = True
+                        _m.is_championship = _match.is_championship
+                        _m.is_playoff = _match.is_playoff
+                        _m.save(update_fields=['is_playoff', 'is_championship'])
                 self.filter(pk=_match.pk).update(**m)
 
     def _get_team(self, ru_title):
