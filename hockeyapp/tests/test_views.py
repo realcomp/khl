@@ -9,7 +9,7 @@ from django.test.client import Client
 
 from base.models import Season
 
-from ..models import Player
+from ..models import Arena, Club, Player
 
 
 class ViewsTestCase(TestCase):
@@ -24,6 +24,10 @@ class ViewsTestCase(TestCase):
         'grip': 'left',
         'number': '666',
     }
+    CLUB_DATA = {
+        'site': 'https://google.com/',
+        'contacts': '+7 999-999-99-99',
+    }
 
     def setUp(self):
         Season.objects.create(
@@ -31,6 +35,10 @@ class ViewsTestCase(TestCase):
             end_date=datetime.date(year=2001, month=12, day=31))
 
         self.player = Player.objects.create(**self.PLAYER_DATA)
+        self.club = Club.objects.create(**self.CLUB_DATA)
+        self.club.arena = Arena.objects.create(
+            contacts='+7 999-999-99-99')
+        self.club.save()
         self.client = Client()
 
     def assertEqualPlayer(self, context, obj):
@@ -49,6 +57,9 @@ class ViewsTestCase(TestCase):
             context['khl_url'],
             'http://www.khl.ru/players/%s/' % obj.khl_id)
         self.assertEqual(context['birth_date_short'], '31.12.2000')
+
+    def assertEqualClub(self, context, obj):
+        self.assertEqual(context['pk'], obj.pk)
 
     def test_players_search(self):
         response = self.client.get(
@@ -108,3 +119,44 @@ class ViewsTestCase(TestCase):
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
+
+    def test_club_list(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-list'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_club(self):
+        response = self.client.get(
+            reverse('hockeyapp:club', kwargs={'pk': self.club.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualClub(response.context_data, self.club)
+
+    def test_club_calendar(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-calendar', kwargs={'pk': self.club.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualClub(response.context_data, self.club)
+
+    def test_club_stats(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-stats', kwargs={'pk': self.club.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualClub(response.context_data, self.club)
+
+    def test_club_home(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-home', kwargs={'pk': self.club.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualClub(response.context_data, self.club)
+
+    def test_club_photos(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-photos', kwargs={'pk': self.club.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualClub(response.context_data, self.club)
+
+    def test_club_fanzone(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-fanzone', kwargs={'pk': self.club.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqualClub(response.context_data, self.club)

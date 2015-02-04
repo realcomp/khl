@@ -29,11 +29,31 @@
              ['goalkeeper', null]],
             // row 5
             [['defender', 8], ['defender', null], ['defender', 9],
-             ['trainer', null], ['trainer', 0], ['trainer', null], ['trainer', 1],
-             ['trainer', null], ['trainer', 2], ['trainer', null],
+             ['forward', null], ['forward', 12], ['forward', null], ['forward', 13],
+             ['forward', null], ['forward', 14], ['forward', null],
              ['goalkeeper', 2]],
             // row 6
             [['defender', null], ['defender', 10], ['defender', null],
+             ['forward', 15], ['forward', null], ['forward', 16], ['forward', null],
+             ['forward', 17], ['forward', null], ['forward', 18],
+             ['goalkeeper', null]],
+            // row 7
+            [['defender', 11], ['defender', null], ['defender', 12],
+             ['forward', null], ['forward', 19], ['forward', null], ['forward', 20],
+             ['forward', null], ['forward', 21], ['forward', null],
+             ['goalkeeper', 3]],
+            // row 8
+            [['defender', null], ['defender', 13], ['defender', null],
+             ['forward', 22], ['forward', null], ['forward', 23], ['forward', null],
+             ['forward', 24], ['forward', null], ['forward', 25],
+             ['goalkeeper', null]],
+            // row 9
+            [['defender', 13], ['defender', null], ['defender', 14],
+             ['trainer', null], ['trainer', 0], ['trainer', null], ['trainer', 1],
+             ['trainer', null], ['trainer', 2], ['trainer', null],
+             ['goalkeeper', 4]],
+            // row 10
+            [['defender', null], ['defender', 15], ['defender', null],
              ['trainer', 3], ['trainer', null], ['trainer', 4], ['trainer', null],
              ['trainer', 5], ['trainer', null], ['trainer', 6],
              ['goalkeeper', null]],

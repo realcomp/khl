@@ -81,17 +81,22 @@ class PlayerQuerySet(models.QuerySet):
             _file.save()
             return _file
 
-    def by_season(self, club, season=None):
-        '''
-        :param season: season years ('2014', '2015')
-        :type season: tuple
-        '''
-        club_players = club.clubplayer_set
-        if season:
-            season_start = get_season_start_date(year=season[0])
-            season_end = get_season_end_date(year=season[1])
-            q_start = Q(start_date__lte=season_start)
-            q_end = Q(end_date__gte=season_end) | Q(end_date__isnull=True)
-            club_players = club_players.filter(q_start & q_end)
-        player_ids = club_players.values_list('player_id', flat=True)
-        return self.filter(pk__in=player_ids)
+    # def by_season(self, club, season=None):
+    #     '''
+    #     :param season: season years ('2014', '2015')
+    #     :type season: tuple
+    #     '''
+    #     club_players = club.clubplayer_set
+    #     if season:
+    #         season_start = get_season_start_date(year=season[0])
+    #         season_end = get_season_end_date(year=season[1])
+    #         q_start = Q(start_date__lte=season_start)
+    #         q_end = Q(end_date__gte=season_end) | Q(end_date__isnull=True)
+    #         club_players = club_players.filter(q_start & q_end)
+    #     player_ids = club_players.values_list('player_id', flat=True)
+    #     return self.filter(pk__in=player_ids)
+
+
+class ClubPlayerQuerySet(models.QuerySet):
+    def by_season(self, season):
+        return self.filter(season=season)

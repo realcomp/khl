@@ -20,3 +20,5 @@ node_modules
 /docs/_build
 /local_email_box
 /logs
+.idea/
+.idea

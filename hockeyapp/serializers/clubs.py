@@ -79,11 +79,11 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
     def _get_players(self, obj):
         if self._players is not None:
             return self._players
-        clubplayers = map(
-            lambda x: obj.clubplayer_set.filter(season=x),
-            self._get_seasons(obj))
+        clubplayers = map(obj.clubplayer_set.by_season, self._get_seasons(obj))
         players = map(
-            lambda x: set(Player.objects.filter(clubplayer__in=x)),
+            lambda x: set(
+                Player.objects
+                .filter(pk__in=x.values_list('player_id', flat=True))),
             clubplayers)
         joined = players[1] - players[0]  # joined club in current season
         left = players[1] - players[2]  # left club in next season
@@ -154,10 +154,10 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
 
 class LeagueClubsListSerializer(LeagueSerializer):
     clubs = ClubLightListSerializer(many=True)
-    clubs_count = serializers.IntegerField()
+    players_count = serializers.IntegerField()
 
     class Meta(object):
-        fields = 'pk', 'title', 'clubs', 'clubs_count'
+        fields = 'pk', 'title', 'clubs', 'players_count'
         model = League
 
 
@@ -205,33 +205,41 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
         source_players = self._get_players(obj)
         season = self._get_season(obj)
         if season:
+            same_club = (
+                ClubPlayer.objects
+                .filter(
+                    player__in=source_players, season=season, club_id=obj.pk)
+                .values_list('player_id', flat=True))
             clubplayers = (
                 ClubPlayer.objects
                 .filter(player__in=source_players, season=season)
+                .exclude(player__in=same_club)
+                .exclude(club_id=obj.pk)
                 .order_by('club'))
-            clubs = Club.objects.filter(
-                pk__in=clubplayers.values_list('club_id'))
             clubleagues = {
                 x.club_id: x.league for x in LeagueClub.objects
                 .filter(
-                    Q(club__in=clubs) &
+                    Q(club__in=clubplayers.values_list('club_id', flat=True)) &
                     (Q(season=season) | Q(season__isnull=True)))
             }
             leagues = {}
             default_league = League(
                 en_title=_('Other leagues'),
                 ru_title=_('Other leagues'))
-            # we need duplicates
-            for club in map(operator.attrgetter('club'), clubplayers):
-                league = clubleagues.get(club.pk, default_league)
+            for clubplayer in clubplayers:
+                league = clubleagues.get(clubplayer.club_id, default_league)
                 leagues[league.pk] = league
                 if not hasattr(league, 'clubs'):
                     league.clubs = []
-                if not hasattr(league, 'clubs_count'):
-                    league.clubs_count = 0
-                if club not in league.clubs:
-                    league.clubs.append(club)
-                league.clubs_count += 1
+                if not hasattr(league, 'players'):
+                    league.players = []
+                if not hasattr(league, 'players_count'):
+                    league.players_count = 0
+                if clubplayer.club not in league.clubs:
+                    league.clubs.append(clubplayer.club)
+                if clubplayer.player not in league.players:
+                    league.players.append(clubplayer.player)
+                    league.players_count += 1
             return leagues.values()
 
     def get_leagues(self, obj):
@@ -241,8 +249,7 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
     def get_season(self, obj):
         season = self._get_season(obj)
         if season:
-            return SeasonSerializer(
-                self._get_season(obj), context=self.context).data
+            return SeasonSerializer(season, context=self.context).data
 
     def get_prev_season(self, obj):
         seasons = list(obj.seasons)
@@ -251,14 +258,12 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
         if i < len(seasons) - 1:
             season = seasons[i + 1]
         if season:
-            return SeasonSerializer(
-                season, context=self.context).data
+            return SeasonSerializer(season, context=self.context).data
 
     def get_source_season(self, obj):
         season = self._get_source_season(obj)
         if season:
-            return SeasonSerializer(
-                season, context=self.context).data
+            return SeasonSerializer(season, context=self.context).data
 
     class Meta(object):
         fields = (
