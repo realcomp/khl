@@ -84,6 +84,8 @@ function getDateOfWeek(w, y) {
 
     return new Date(y, 0, d);
 }
+})();
+;(function() {
 angular.module('Sportomatics')
 .controller('ClubListController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -137,6 +139,8 @@ angular.module('Sportomatics')
     this.getCountries();
     this.list();
 }])
+})();
+;(function() {
 angular.module('Sportomatics')
 .controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
     this.graph_type = 'linear';
@@ -145,6 +149,8 @@ angular.module('Sportomatics')
         this.graph_type = type;
     };
 }])
+})();
+;(function() {
 angular.module('Sportomatics')
 .controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -161,6 +167,8 @@ angular.module('Sportomatics')
     };
     this.search();
 }])
+})();
+;(function() {
 angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -170,7 +178,7 @@ angular.module('Sportomatics')
     this.field = 'goals';
     this.club = null;
     this.coach = null;
-    this.group_by = 'month';
+    this.groupBy = 'month';
     this.data = {};
     this.graphData = {};
     function ObjectToGenerate() {
@@ -183,9 +191,9 @@ angular.module('Sportomatics')
                         format: function (value) {
                             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                            if (self.group_by === 'month') return monthNames[value.getMonth()] + ' ' + value.getDate() + ', ' + value.getFullYear();
-                            if (self.group_by === 'weeks') return value.getWeekNumber() + ' week, ' + value.getFullYear();
-                            if (self.group_by === 'season') return 'Сезон ' + (value.getFullYear()-1) + '-' + value.getFullYear();
+                            if (self.groupBy === 'month') return monthNames[value.getMonth()] + ' ' + value.getDate() + ', ' + value.getFullYear();
+                            if (self.groupBy === 'weeks') return value.getWeekNumber() + ' week, ' + value.getFullYear();
+                            if (self.groupBy === 'season') return 'Сезон ' + (value.getFullYear()-1) + '-' + value.getFullYear();
                             return value;
                         }
                     }
@@ -201,19 +209,28 @@ angular.module('Sportomatics')
                 colors: {
 
                 },
-                type: 'spline'
+                type: 'line'
             },
             point: {
-                show: true
+                show: false
             },
             size: {
                 width: 900
             },
             transition: {
-                duration: 1000
             }, zoom: {
+                //enabled: true,
                 rescale: true
+            },
+            grid: {
+                x: {
+                    show: true
+                },
+                y: {
+                    show: true
+                }
             }
+
         }
     }
     this.createC3ArrayAndData = function(array, number, field, name){
@@ -270,12 +287,44 @@ angular.module('Sportomatics')
         this.coach = coach;
         this.list();
     }
-    this.setGraphResults = function(results){
+    this.setGraphResults = function(results) {
 
     }
+    $scope.setGroupBy = function(groupby){
+        console.log(groupby)
+        self.groupBy = groupby;
+        self.list();
+    };
+    var chart = null;
+    $scope.addChart = function () {
+        var params = 'group_by=season';
+        if (self.club !== null) {
+            params += '&club=' + self.club;
+        }
+        if (self.coach !== null) {
+            params += '&coach=' + self.coach;
+        }
+        $http.get(url + '?' + params)
+            .success(function(data) {
+                self.data = data;
+                var fieldData = self.createFieldData(self.field, self.data.results);
+                var objectToGenerate = new ObjectToGenerate();
+                _.each(fieldData, function (c3ADObject) {
+                    objectToGenerate.data.xs[c3ADObject.data[0]] = c3ADObject.array[0];
+                    objectToGenerate.data.colors[c3ADObject.data[0]] = '#58cb73';
+                    objectToGenerate.data.columns.push(c3ADObject.array);
+                    objectToGenerate.data.columns.push(c3ADObject.data);
+                    chart.flow({
+                        columns: objectToGenerate.data.columns,
+                        'xs.x1' : c3ADObject.array[0]
+                    })
+                });
+
+            })
+    };
 
     this.list = function(order_by) {
-        var params = 'group_by=' + self.group_by;
+        var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
             params += '&club=' + self.club;
         }
@@ -296,12 +345,14 @@ angular.module('Sportomatics')
                     objectToGenerate.data.columns.push(c3ADObject.array);
                     objectToGenerate.data.columns.push(c3ADObject.data);
                 });
-                var chart = c3.generate(objectToGenerate);
+                chart = c3.generate(objectToGenerate);
             });
     };
 
     this.list();
 }])
+})();
+;(function() {
 angular.module('Sportomatics')
 .controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -319,6 +370,7 @@ angular.module('Sportomatics')
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
     this.ratedBy = 'seasons';
+
     this.loader = false;
     this.countries_selected = [];
     this.leagues_selected = [];
@@ -394,6 +446,73 @@ angular.module('Sportomatics')
     this.getCountries(this.search);
 }])
 
+var next = function($http) {
+    return function(isAll) {
+        var self = this,
+            url = self.data.next;
+        if (isAll) {
+            url = url.replace(/&page=\d+$/, '&paginate_by=' + self.data.count);
+        }
+        self.loader = true;
+        $http.get(url)
+            .success(function(data) {
+                if (isAll) {
+                    self.data = data;
+                } else {
+                    self.data.next = data.next;
+                    self.data.results = self.data.results.concat(data.results);
+                }
+                self.loader = false;
+            });
+    };
+}
+
+var getCountries = function($http) {
+    return function(callback) {
+        var self = this,
+            url = $('#LeagueListLink').attr('href');
+        if (url) {
+            $http.get(url)
+                .success(function(data) {
+                    self.countries = data;
+                    if (self.countries.length) { // has countries
+                        if (Array.isArray(self.countries_selected) &&
+                            self.countries_selected.length === 0) { // array is expected
+                            self.countries_selected = [String(self.countries[0].pk)];
+                        } else {
+                            self.countries_selected = self.countries[0].pk;
+                        }
+                        if (self.countries[0].league_set.length) { // has leagues
+                            if (Array.isArray(self.leagues_selected) &&
+                                self.leagues_selected.length === 0) { // array is expected
+                                self.leagues_selected = [String(self.countries[0].league_set[0].pk)];
+                            } else {
+                                self.leagues_selected = self.countries[0].league_set[0].pk;
+                            }
+                        }
+                    }
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                });
+        }
+    };
+}
+
+var getLeagues = function(countries, countries_selected) {
+    var result = [];
+    $.each(countries_selected, function() {
+        var pk = this;
+        $.each(countries, function() {
+            if (this.pk == pk) {
+                result = result.concat(this.league_set);
+            }
+        });
+    });
+    return result;
+}
+})();
+;(function() {
 angular.module('Sportomatics')
 .controller('ProfileController', ['$http', '$scope', function($http, $scope) {
     var self = this;
