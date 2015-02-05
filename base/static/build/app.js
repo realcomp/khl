@@ -359,7 +359,8 @@ angular.module('Sportomatics')
     this.data = {};
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
-    this.ratedBy = 'seasons';
+    this.ratedBy = 'clubplayer__season_id__count';
+    this.isPlaying = true;
 
     this.loader = false;
     this.countries_selected = [];
@@ -411,7 +412,11 @@ angular.module('Sportomatics')
             }
             self.order_by = order_by;
         }
-        params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
+        params += '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by +
+            '&rated_by=' + self.ratedBy;
+        if (self.isPlaying) {
+            params += '&is_playing=true';
+        }
         $.each(self.leagues_selected, function() {
             params += '&league=' + this;
         });

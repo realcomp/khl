@@ -100,3 +100,6 @@ class PlayerQuerySet(models.QuerySet):
 class ClubPlayerQuerySet(models.QuerySet):
     def by_season(self, season):
         return self.filter(season=season)
+
+    def by_leagues(self, leagues):
+        return self.filter(league__in=leagues)

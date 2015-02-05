@@ -3,11 +3,12 @@ from __future__ import unicode_literals
 
 import itertools
 import json
+import operator
 
-from django.db.models import Avg, Q, Sum
+from django.db.models import Avg, Q, Sum, Count
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics, viewsets
+from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
 
@@ -23,19 +24,21 @@ from ..serializers import (
     MetricsPlayerSerializer,
 )
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
-from ..serializers.players import ClubPlayerMatchSerilizer
+from ..serializers.players import (
+    PlayersSearchSerializer, ClubPlayerMatchSerilizer)
 
 
 class PlayersSearch(
-        PaginationMixin, OrderMixin, viewsets.ReadOnlyModelViewSet):
-    # permission_classes = permissions.IsAuthenticated,
+        PaginationMixin, viewsets.ReadOnlyModelViewSet):
+        # PaginationMixin, OrderMixin, viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter,
     queryset = Player.objects.all()
-    serializer_class = PlayerCardSerializer
+    serializer_class = PlayersSearchSerializer
 
     def list(self, request, *args, **kwargs):
-        # get clubplayers
         qs = self.filter_queryset(self.get_queryset())
+
+        # get clubplayers
         self.clubplayers = {}
         clubplayers = (
             ClubPlayer.objects
@@ -47,7 +50,49 @@ class PlayersSearch(
                 self.clubplayers[player_id] = []
             if clubplayer not in self.clubplayers[player_id]:
                 self.clubplayers[player_id].append(clubplayer)
-        return super(PlayersSearch, self).list(self, request, *args, **kwargs)
+        self.rating_values = {}
+
+        # get rating values
+        for player_id, clubplayers in self.clubplayers.items():
+            if self.request.GET.get('rated_by') == 'clubplayer__season_id__count':
+                seasons = set(
+                    ClubPlayer.objects
+                    .filter(pk__in=map(operator.attrgetter('pk'), clubplayers))
+                    .values_list('season_id'))
+                result = len(seasons)
+            else:
+                matches = (
+                    ClubPlayerMatch.objects
+                    .filter(clubplayer_id__in=map(operator.attrgetter('pk'), clubplayers)))
+                field, _, op = self.request.GET.get(
+                    'rated_by', 'goals__sum').rpartition('__')
+                OP = {
+                    'sum': Sum,
+                    'avg': Avg,
+                    'count': Count,
+                }.get(op, Sum)
+                result = matches.aggregate(
+                    OP(field)).get('%s__%s' % (field, op)) or 0
+            self.rating_values[player_id] = result
+
+        self.rating = {}
+        if self.rating_values:
+            # sorted by value
+            player_ids = zip(*sorted(
+                self.rating_values.items(), key=lambda x: x[1]))[0]
+            self.rating = dict(zip(
+                player_ids,
+                map(player_ids.index, player_ids)))
+
+        # sort list by rating
+        instance = sorted(list(qs), key=lambda x: self.rating.get(x.pk))
+
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_pagination_serializer(page)
+        else:
+            serializer = self.get_serializer(instance, many=True)
+        return response.Response(serializer.data)
 
 
 class PlayerCardIndicators(generics.ListAPIView):

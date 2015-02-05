@@ -16,10 +16,10 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         clubplayers = ClubPlayer.objects.all()
 
         if 'season' in request.GET:
-            season = request.GET['season']
-        else:
-            season = Season.objects.latest('start_date')
-        clubplayers = clubplayers.filter(season=season)
+            clubplayers = clubplayers.by_season(self.request.GET['season'])
+        elif 'is_playing' in request.GET:
+            clubplayers = clubplayers.by_season(
+                Season.objects.latest('start_date'))
 
         if 'league' in request.GET:
             leagues = request.GET.getlist('league')
