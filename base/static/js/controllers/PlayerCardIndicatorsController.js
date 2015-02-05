@@ -2,7 +2,16 @@ angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ['$http', '$scope', function($http, $scope) {
     var self = this,
         url = $('#IndicatorsLink').attr('href');
-
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var monthNamesRu = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
+        "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+    var localeRu = {
+        'season' : 'Сезон'
+    };
+    var localeEn = {
+        'season' : 'Season'
+    };
     this.indicators_type = 'graph';
     this.field = 'goals';
     this.club = null;
@@ -18,10 +27,7 @@ angular.module('Sportomatics')
                     type: 'timeseries',
                     tick: {
                         format: function (value) {
-                            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                             if (self.groupBy === 'month') return monthNames[value.getMonth()] + ' ' + value.getDate() + ', ' + value.getFullYear();
-                            if (self.groupBy === 'weeks') return value.getWeekNumber() + ' week, ' + value.getFullYear();
                             if (self.groupBy === 'season') return 'Сезон ' + (value.getFullYear()-1) + '-' + value.getFullYear();
                             return value;
                         }
@@ -65,9 +71,8 @@ angular.module('Sportomatics')
     this.createC3ArrayAndData = function(array, number, field, name){
         var resultArray = _.map(array, function(e){
                 if(e['date'] == null){
-                    console.log(e['season']['label'].substr(12,4));
-                    console.log(new Date(e['season']['label'].substr(12, 4)).yyyymmdd('-'))
-                    return new Date(e['season']['label'].substr(12,4)).yyyymmdd('-');
+                    console.log(new Date(e['season']['start_date'].substr(0, 4)).yyyymmdd('-'))
+                    return new Date(e['season']['start_date'].substr(0,4)).yyyymmdd('-');
                 }
                 return new Date(e['date']).yyyymmdd('-');}
         ).sort(function(a,b){
@@ -163,7 +168,8 @@ angular.module('Sportomatics')
         self.data = {};
         self.loader = true;
         $http.get(url + '?' + params)
-            .success(function(data) {
+            .success(function(data, status, headers) {
+                self.locale = headers()['content-language'];
                 self.data = data;
                 self.loader = false;
                 var fieldData = self.createFieldData(self.field, self.data.results);
