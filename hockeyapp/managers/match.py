@@ -109,7 +109,8 @@ class MatchManager(ManagerMixin, models.Manager):
         b''' метод взять или создать запись о матче '''
         self._season = kwargs.pop('season', {})
         sm = get_model('base', 'Season')
-        self._season['season'], _crt = sm.objects.get_or_create_season(**self._season)
+        sm = sm.objects.get_or_create_season
+        self._season['season'], _crt = sm(**self._season)
         _match = {
                 'home_team': self._get_team(**kwargs.pop('home_team', {})),
                 'home_coach': self._get_coach(kwargs.pop('home_coach', {})),
@@ -179,11 +180,15 @@ class MatchManager(ManagerMixin, models.Manager):
         _coach = kwargs.pop('coach', None)
         _players = kwargs.pop('players', None)
         club_model = get_model(CURRENT_APP, 'club')
-        _club, _crt = club_model.objects.get_or_create(**kwargs)
-        if _players and _crt:
-            _club.players = set([self._get_player(p.get('khl_id'),
-                                                  p.get('ru_fio'),
-            ) for p in _players])
+        _title = kwargs.pop('ru_title', None)
+        _club = club_model.objects.by_title_alias(_title).first()
+        if not _club:
+            kwargs['ru_title'] = _title
+            _club, _crt = club_model.objects.get_or_create(**kwargs)
+            if _players and _crt:
+                _club.players = set([self._get_player(p.get('khl_id'),
+                                                      p.get('ru_fio'),
+                ) for p in _players])
         if _region:
             model = get_model('addresses', 'Address')
             _region, _crt = model.objects.get_or_create(ru_title=_region)
@@ -211,6 +216,9 @@ class MatchManager(ManagerMixin, models.Manager):
 
 
 class ClubPlayerMatchQuerySet(models.QuerySet):
+    # Вообще кверисет должен возвращать кверисет. А там, где нужно убрать дубли,
+    # лучше заюзать set(queryset) и циклы, как ниже описаны. Но Queryset должен
+    # быть queryset
     def group_by_month(self):
         """
         returns list of QuerySet's

@@ -28,7 +28,7 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
             data = self._get_data(url)
         ru_title = data.get('ru_title', None)
         if ru_title:
-            _club = self.filter(ru_title=ru_title).last()
+            _club = self.by_title_alias(ru_title).last()
             if not _club or update:
                 if data:
                     data = self.clean_data(data)
@@ -73,3 +73,12 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
             Q(leagueclub__end_date__gte=season_end) |
             Q(leagueclub__end_date__isnull=True))
         return self.filter(q_start & q_end)
+
+    def by_title_alias(self, title):
+        q_title = ( Q(ru_title=title) |
+                    Q(en_title=title)
+        )
+        q_title|= ( Q(clubtitlealias__alias__ru_title=title) |
+                    Q(clubtitlealias__alias__en_title=title)
+        )
+        return self.filter(q_title)

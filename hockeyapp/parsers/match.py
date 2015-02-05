@@ -486,6 +486,7 @@ class HockeyMHLMatchParser(GrabParser):
             _res = _res[0].text_content().strip().split('          ')
         if _res:
             if len(_res) < 3:
+                print(_res, self.absolute_url)
                 return [_res[1].strip()]
             else:
                 return [_res[1].strip(), _res[3].strip()]

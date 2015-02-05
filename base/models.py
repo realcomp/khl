@@ -49,3 +49,10 @@ class Season(TitleBaseModel):
     def short_title(self):
         return '%s/%s' % (
             str(self.start_date.year)[2:], str(self.end_date.year)[2:])
+
+
+class TitleAlias(TitleBaseModel):
+    b''' Общая модель алиасов названий '''
+    class Meta:
+        verbose_name = _('Title alias')
+        verbose_name_plural = _('Title aliases')

@@ -10,13 +10,10 @@ from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
-from django.db.models import Q
 
 import filer
 
 from addresses.models import Country
-
-from ..utils import get_season_start_date, get_season_end_date
 
 
 class PlayerQuerySet(models.QuerySet):
