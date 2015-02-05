@@ -191,6 +191,10 @@
                             <a id="IndicatorsLink" class="hidden"
                                href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
 
+
+                            <div style="position:relative;text-align: center; top: 50px; right: 34px" ng-show="PlayerCardIndicatorsCtrl.loader">
+                                <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                            </div>
                             <div id="chartdiv" style="width: 100%; height:400px; "></div>
                             <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <div id="chart"></div>
@@ -291,9 +295,6 @@
                                         {% endverbatim %}
                                     </tbody>
                                 </table>
-                            </div>
-                            <div style="text-align: center" ng-show="PlayerCardIndicatorsCtrl.loader">
-                                <img src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
                         </div>
                         {% comment %}
