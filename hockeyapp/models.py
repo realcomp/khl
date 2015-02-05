@@ -11,6 +11,7 @@ from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
 from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
+from base.models import TitleAlias
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from . import managers
@@ -258,6 +259,16 @@ class Club(TitleBaseModel):
     class Meta:
         verbose_name = _('Club')
         verbose_name_plural = _('Clubs')
+
+
+class ClubTitleAlias(models.Model):
+    b''' Имя(алиас) клуба '''
+    club = models.ForeignKey(Club)
+    alias = models.OneToOneField(TitleAlias)
+
+    class Meta:
+        verbose_name = _('Club title alias')
+        verbose_name_plural = _('Club title aliases ')
 
 
 class AddressClub(models.Model):

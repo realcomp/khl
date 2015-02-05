@@ -12,7 +12,7 @@ from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
-from .models import AddressClubPhotos, Name, Schedule
+from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -116,8 +116,14 @@ class LeagueClubInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'club', 'start_date', 'end_date', 'season')
     fields = readonly_fields
 
+class ClubTitleAliasInline(TabularInlineReadOnly):
+    model = ClubTitleAlias
+    readonly_fields = ( object_link, 'club', 'alias')
+    fields = readonly_fields
+
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
-    inlines = (CoachClubInline, AddressClubInline, LeagueClubInline)
+    inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
+                ClubTitleAliasInline)
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields
@@ -140,7 +146,7 @@ class ScheduleAdmin(BaseAdmin):
                     'season', 'date',)
 admin.site.register(Schedule, ScheduleAdmin)
 
-for model in (League, LeagueClub, CoachClub,):
+for model in (League, LeagueClub, CoachClub, ClubTitleAlias):
     admin.site.register(model, BaseListAdmin)
 
 

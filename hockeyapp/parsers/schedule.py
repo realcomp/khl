@@ -125,13 +125,15 @@ class KHLScheduleParser(GrabParser):
         b''' возвращает дату начала сезона '''
         _pdt = date
         _year = _pdt.year - 1 if _pdt.month < 7 else _pdt.year
-        return datetime.datetime(day=1, month=7, year=_year)
+        _dt = datetime.datetime(day=1, month=7, year=_year)
+        return timezone.make_aware(_dt, current_tz)
 
     def end_date(self, date):
         b''' возвращает дату окончания сезона '''
         _pdt = date
         _year = _pdt.year + 1 if _pdt.month > 6 else _pdt.year
-        return datetime.datetime(day=30, month=6, year=_year)
+        _dt =  datetime.datetime(day=30, month=6, year=_year)
+        return timezone.make_aware(_dt, current_tz)
 ################################################################################
 ################################################################################
 ################################################################################
@@ -139,10 +141,8 @@ class KHLScheduleParser(GrabParser):
 
 class VHLScheduleParser(KHLScheduleParser):
     b''' Парсер расписания матчей ВХЛ '''
-    model_name = 'Schedule'
     url = xpathes.VHL_SITE_URL
     absolute_url = url+'/calendar/??/season/0/'
-    as_get_param = False
     body_xpath = xpathes.VHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
     match_protocol_xpath = body_xpath
     xpath_dict = {
@@ -218,10 +218,8 @@ class VHLScheduleParser(KHLScheduleParser):
 
 class MHLScheduleParser(VHLScheduleParser):
     b''' Парсер расписания матчей MХЛ '''
-    model_name = 'Schedule'
     url = xpathes.MHL_SITE_URL
-    absolute_url = url+'calendar/??/0/'
-    as_get_param = False
+    absolute_url = url+'/calendar/??/0/'
     body_xpath = xpathes.MHL_MATCH_PROTOCOL_XPATH+'/div[@id="laConteiner"]/div[@class="inner_content"]'
     match_protocol_xpath = body_xpath
     xpath_dict = {
@@ -250,10 +248,8 @@ class MHLScheduleParser(VHLScheduleParser):
 
 class MHL2ScheduleParser(MHLScheduleParser):
     b''' Парсер расписания матчей MХЛ-2 '''
-    model_name = 'Schedule'
-    url = 'http://mhl2.khl.ru'
+    url = xpathes.MHL2_SITE_URL
     absolute_url = url+'/calendar/??/0/'
-    as_get_param = False
     body_xpath = '//div[@id="wrapper"]/div[@class="content"]/div[@class="leftBlockInside"]/div[@class="second_content"]'
     match_protocol_xpath = body_xpath
     mxd = {

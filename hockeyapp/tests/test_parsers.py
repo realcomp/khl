@@ -19,10 +19,11 @@ class HockeyAppParserTest(base.tests.BaseTest):
     def test_parsers(self):
         ''' test hockeyapp parsers '''
         self._check_parsers()
+        # creates
         self._create_club()
         self._create_players()
-        #schedule = parsers.schedule.KHLScheduleParser()
-        #schedule.put_data_in_db_from_page(266)
+        #self._create_schedulers()
+        #creates matches
         self._create_mhl_match()
         self._create_mhl2_match()
         self._create_khl_match()
@@ -126,6 +127,16 @@ class HockeyAppParserTest(base.tests.BaseTest):
             for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
                 self.assertIsNotNone(getattr(player, field))
             self.assertEqual(player.khl_id, id)
+
+    def _create_schedulers(self):
+        ''' test schedulers cretes '''
+        _parsers = (#(parsers.schedule.KHLScheduleParser, 266),
+                    #(parsers.schedule.VHLScheduleParser, 269),
+                    #(parsers.schedule.MHLScheduleParser, 272),
+                    #(parsers.schedule.MHL2ScheduleParser, 274),
+        )
+        for _parser, id in _parsers:
+            _parser().put_data_in_db_from_page(id)
 
     def _create_mhl_match(self):
         '''

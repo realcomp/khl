@@ -2774,18 +2774,19 @@
             .remove();
     };
     c3_chart_internal_fn.redrawLine = function (drawLine, withTransition) {
+        console.log('a')
         var totalLength = this.mainLine.node().getTotalLength();
         return [
             (withTransition ? this.mainLine.transition() : this.mainLine)
                 .attr("d", drawLine)
                 .style("stroke", this.color)
                 .style("opacity", 1)
-                .attr("stroke-dasharray", totalLength + " " + totalLength)
+                /*.attr("stroke-dasharray", totalLength + " " + totalLength)
                 .attr("stroke-dashoffset", totalLength)
                 .transition()
                 .duration(2000)
                 .ease("linear")
-                .attr("stroke-dashoffset", 0)
+                .attr("stroke-dashoffset", 0)*/
         ];
     };
     c3_chart_internal_fn.generateDrawLine = function (lineIndices, isSub) {

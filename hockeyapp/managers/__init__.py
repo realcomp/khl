@@ -110,7 +110,9 @@ class ScheduleManager(models.Manager):
 
     def _get_team(self, ru_title):
         club_model = get_model(CURRENT_APP, 'club')
-        _club, _crt = club_model.objects.get_or_create(ru_title=ru_title)
+        _club = club_model.objects.by_title_alias(ru_title).first()
+        if not _club:
+            _club = club_model.objects.get_or_create(ru_title=ru_title)
         return _club
 
 

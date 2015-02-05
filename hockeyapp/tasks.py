@@ -99,8 +99,6 @@ def async_hockey_matches_parser(parser_id, match_id, matches, update=False):
             async_hockey_match_parser.delay(parser_id, matchid, update)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
-        #if i%100 == 0:
-        #time.sleep(10)
 
 
 @app.task(ignore_result=True, track_started=True)

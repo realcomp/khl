@@ -4762,5 +4762,8 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     padding-left: 3%;
 }
 .chart-button{
-    max-height: 40px;
+    max-height: 30px;
+    line-height: 6px !important;
+    background: #8ebd5d !important;
+
 }

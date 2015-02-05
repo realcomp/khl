@@ -193,8 +193,8 @@
                             <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <div id="chart"></div>
                                 <div class="chart-button-panel">
-                                    <a class="ui green button chart-button" ng-click="setGroupBy('month')">По месяцам</a>
-                                    <a class="ui green button chart-button" ng-click="setGroupBy('season')">По сезонам</a>
+                                    <a class="ui green button chart-button" ng-click="setGroupBy('month')">{% trans 'By month' %}</a>
+                                    <a class="ui green button chart-button" ng-click="setGroupBy('season')">{% trans 'By season' %}</a>
                                 </div>
                             </div>
                             <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
