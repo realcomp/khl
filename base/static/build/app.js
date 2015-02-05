@@ -1,3 +1,4 @@
+;(function() {
 'use strict';
 angular.module('Sportomatics', [])
 
@@ -511,6 +512,7 @@ var getLeagues = function(countries, countries_selected) {
     });
     return result;
 }
+
 })();
 ;(function() {
 angular.module('Sportomatics')
@@ -565,3 +567,4 @@ angular.module('Sportomatics')
             });
     };
 }])
+})();
