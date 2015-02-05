@@ -20,7 +20,7 @@ gulp.task('scripts', function () {
 
 gulp.task('libs', function () {
     gulp.src(paths.libs)
-        .pipe(ngAnnotate())
+        //.pipe(ngAnnotate())
         .pipe(uglify())
         .pipe(concat('libs.min.js'))
         .pipe(gulp.dest('./base/static/build/'))
