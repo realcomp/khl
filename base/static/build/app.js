@@ -1,4 +1,3 @@
-;(function() {
 'use strict';
 angular.module('Sportomatics', [])
 
@@ -85,8 +84,6 @@ function getDateOfWeek(w, y) {
 
     return new Date(y, 0, d);
 }
-})();
-;(function() {
 angular.module('Sportomatics')
 .controller('ClubListController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -140,8 +137,6 @@ angular.module('Sportomatics')
     this.getCountries();
     this.list();
 }])
-})();
-;(function() {
 angular.module('Sportomatics')
 .controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
     this.graph_type = 'linear';
@@ -150,8 +145,6 @@ angular.module('Sportomatics')
         this.graph_type = type;
     };
 }])
-})();
-;(function() {
 angular.module('Sportomatics')
 .controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -168,8 +161,6 @@ angular.module('Sportomatics')
     };
     this.search();
 }])
-})();
-;(function() {
 angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -352,8 +343,6 @@ angular.module('Sportomatics')
 
     this.list();
 }])
-})();
-;(function() {
 angular.module('Sportomatics')
 .controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -513,8 +502,6 @@ var getLeagues = function(countries, countries_selected) {
     return result;
 }
 
-})();
-;(function() {
 angular.module('Sportomatics')
 .controller('ProfileController', ['$http', '$scope', function($http, $scope) {
     var self = this;
@@ -567,4 +554,3 @@ angular.module('Sportomatics')
             });
     };
 }])
-})();
