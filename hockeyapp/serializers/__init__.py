@@ -86,7 +86,8 @@ class SeasonSerializer(TitleBaseSerializer):
             _('SEASON'), obj.start_date.year, obj.end_date.year)
 
     class Meta(object):
-        fields = 'pk', 'title', 'label', 'short_title'
+        fields = (
+            'pk', 'title', 'label', 'short_title', 'start_date', 'end_date')
         model = Season
 
 
