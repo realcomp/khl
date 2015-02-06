@@ -8,7 +8,36 @@ from rest_framework import filters
 
 from base.models import Season
 
-from .models import Club, ClubPlayer, LeagueClub
+from .models import ClubPlayer
+
+
+class OrderFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, qs, view):
+        if 'order_by' in request.GET:
+            field = request.GET['order_by']
+            reverse = field.startswith('-')
+            lc = request.LANGUAGE_CODE
+            is_array = (
+                field.lstrip('-').startswith('[') and
+                field.endswith(']'))
+            if is_array:
+                fields = json.loads(field.lstrip('-'))
+            else:
+                fields = [field.lstrip('-')]
+            fields = map(
+                lambda f: ('-' if reverse else '') + (f % lc if '%s' in f else f),
+                fields)
+            return qs.order_by(*fields)
+        return qs
+
+
+class PlayersSearchOrderFilter(OrderFilter):
+    def filter_queryset(self, request, qs, view):
+        if request.GET.get('order_by', '') in ('rating', '-rating'):
+            return qs
+        else:
+            return super(PlayersSearchOrderFilter, self).filter_queryset(
+                request, qs, view)
 
 
 class PlayersSearchFilter(filters.BaseFilterBackend):

@@ -3,7 +3,7 @@
     <div class="row">
         <div class="twelve wide column">
             <div class="player-card-block">
-                <img src="{{ photo }}" width="105" alt="" class="player-card-avatar">
+                <img src="{{ photo|default:'/static/images/nophoto.gif' }}" width="105" alt="" class="player-card-avatar">
                 <div class="player-card-desc">
                     <div class="player-card-name">{{ fio }}</div>
                     <div class="player-card-amplua">{% trans 'Line' %}: {{ line_display }}</div>

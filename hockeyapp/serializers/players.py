@@ -10,7 +10,7 @@ from . import (
     BasePlayerCardSerializer, SeasonSerializer, BaseClubSerializer,
     CoachSerializer, CountrySerializer, ClubPlayerSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, LeagueClub, Coach, Player)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -45,7 +45,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'clubplayers', 'age', 'birth_date_short',
-            'rating', 'rating_value')
+            'rating', 'rating_value', 'fio')
         model = Player
 
 

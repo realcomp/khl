@@ -6,7 +6,7 @@ PYTHON?=$(VENV_DIR)/bin/python
 all: virtualenv pip migrate test
 
 virtualenv:
-	virtualenv $(VENV_DIR)
+	virtualenv $(VENV_DIR) --system-site-packages
 
 pip: requirements
 

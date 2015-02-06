@@ -484,9 +484,8 @@ class HockeyMHLMatchParser(GrabParser):
         _res = self._get_value('match_judges')
         if _res:
             _res = _res[0].text_content().strip().split('          ')
-        if _res:
+        if _res and len(_res)>1:
             if len(_res) < 3:
-                print(_res, self.absolute_url)
                 return [_res[1].strip()]
             else:
                 return [_res[1].strip(), _res[3].strip()]
@@ -516,6 +515,7 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
+            print(_date_dict)
             _dt = _date_dict[:1]
             _dt.append(_date_dict[2])
             _date_dict = _dt
