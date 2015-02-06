@@ -1,5 +1,9 @@
 angular.module('Sportomatics')
-.factory('ChartFactory', function($q, $rootScope, AmChartsFactory){
+.value('zoomData', {
+    startDate: 'a',
+    endDate: 'a'
+})
+.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData){
 
     return {
         generateSerialChart: function(data, field, graphsCount){
@@ -19,7 +23,10 @@ angular.module('Sportomatics')
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
-
+                chart.addListener("zoomed", function (chart) {
+                    zoomData.startDate = chart.startDate;
+                    zoomData.endDate = chart.endDate;
+                });
                 // AXES
                 // category
                 var categoryAxis = chart.categoryAxis;
@@ -154,7 +161,7 @@ angular.module('Sportomatics')
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
-});
+})
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 function generateChartData(data, field) {
     var chartData = [];
@@ -191,4 +198,7 @@ function generateGraph(i, title, axis){
         graph.lineColor = colors[i]; //TODO: add more colors
         graph.lineThickness = 4;
         return graph;
+}
+function saveZoomParams(endDate, endIndex, endValue, startDate){
+
 }

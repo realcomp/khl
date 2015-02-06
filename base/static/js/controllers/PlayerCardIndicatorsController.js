@@ -1,5 +1,5 @@
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory) {
+.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData) {
     //http://www.amcharts.com/lib/images/
     var self = this,
         url = $('#IndicatorsLink').attr('href');
@@ -22,7 +22,7 @@ angular.module('Sportomatics')
     this.groupBy = 'season';
     this.data = [];
     this.graphData = {};
-        this.chartsCount = 0;
+    this.chartsCount = 0;
     function ObjectToGenerate() {
         return {
             bindto: '#chart',
@@ -104,7 +104,7 @@ angular.module('Sportomatics')
 
     this.setField = function(field) {
         this.field = field;
-        this.list();
+        this.list(true);
     };
 
     this.setClub = function(club) {
@@ -145,7 +145,7 @@ angular.module('Sportomatics')
     $scope.unload = function(){
 
     };
-    this.list = function(order_by) {
+    this.list = function(switched) {
         var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
             params += '&club=' + self.club;
@@ -160,9 +160,16 @@ angular.module('Sportomatics')
                 self.locale = headers()['content-language'];
                 self.data = data;
                 self.loader = false;
+                if(switched){
+                    var zoomStart = zoomData.startDate;
+                    var zoomEnd = zoomData.endDate;
+                }
                 ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
                     chart.write("chartdiv");
                     chart.addClassNames = false;
+                    if(switched){
+                        chart.zoomToDates(zoomStart, zoomEnd);
+                    }
                 });
                 // generate some random data, quite different range
 

@@ -85,7 +85,11 @@ function getDateOfWeek(w, y) {
     return new Date(y, 0, d);
 }
 angular.module('Sportomatics')
-.factory('ChartFactory', ["$q", "$rootScope", "AmChartsFactory", function($q, $rootScope, AmChartsFactory){
+.value('zoomData', {
+    startDate: 'a',
+    endDate: 'a'
+})
+.factory('ChartFactory', ["$q", "$rootScope", "AmChartsFactory", "zoomData", function($q, $rootScope, AmChartsFactory, zoomData){
 
     return {
         generateSerialChart: function(data, field, graphsCount){
@@ -105,7 +109,10 @@ angular.module('Sportomatics')
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
-
+                chart.addListener("zoomed", function (chart) {
+                    zoomData.startDate = chart.startDate;
+                    zoomData.endDate = chart.endDate;
+                });
                 // AXES
                 // category
                 var categoryAxis = chart.categoryAxis;
@@ -240,7 +247,7 @@ angular.module('Sportomatics')
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
-}]);
+}])
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 function generateChartData(data, field) {
     var chartData = [];
@@ -277,6 +284,9 @@ function generateGraph(i, title, axis){
         graph.lineColor = colors[i]; //TODO: add more colors
         graph.lineThickness = 4;
         return graph;
+}
+function saveZoomParams(endDate, endIndex, endValue, startDate){
+
 }
 angular.module('Sportomatics')
 .controller('ClubListController', ['$http', '$scope', function($http, $scope) {
@@ -356,7 +366,7 @@ angular.module('Sportomatics')
     this.search();
 }])
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory) {
+.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData) {
     //http://www.amcharts.com/lib/images/
     var self = this,
         url = $('#IndicatorsLink').attr('href');
@@ -379,7 +389,7 @@ angular.module('Sportomatics')
     this.groupBy = 'season';
     this.data = [];
     this.graphData = {};
-        this.chartsCount = 0;
+    this.chartsCount = 0;
     function ObjectToGenerate() {
         return {
             bindto: '#chart',
@@ -461,7 +471,7 @@ angular.module('Sportomatics')
 
     this.setField = function(field) {
         this.field = field;
-        this.list();
+        this.list(true);
     };
 
     this.setClub = function(club) {
@@ -502,7 +512,7 @@ angular.module('Sportomatics')
     $scope.unload = function(){
 
     };
-    this.list = function(order_by) {
+    this.list = function(switched) {
         var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
             params += '&club=' + self.club;
@@ -517,9 +527,16 @@ angular.module('Sportomatics')
                 self.locale = headers()['content-language'];
                 self.data = data;
                 self.loader = false;
+                if(switched){
+                    var zoomStart = zoomData.startDate;
+                    var zoomEnd = zoomData.endDate;
+                }
                 ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
                     chart.write("chartdiv");
                     chart.addClassNames = false;
+                    if(switched){
+                        chart.zoomToDates(zoomStart, zoomEnd);
+                    }
                 });
                 // generate some random data, quite different range
 
