@@ -15,23 +15,26 @@ from . import (
     BasePlayerCardSerializer,
     BaseClubSerializer, ClubLightListSerializer,
     CoachSerializer,
-    LeagueSerializer)
+    LeagueSerializer,
+    CountrySerializer)
 from ..models import Club, ClubPlayer, Coach, Player, League, LeagueClub
 
 
-class ClubPlayerSerializer(BasePlayerCardSerializer):
+class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
     line_display = serializers.ReadOnlyField(source='get_line_display')
-    club = ClubLightListSerializer()
+    birth_date_short = serializers.SerializerMethodField()
+    citizenship = CountrySerializer()
+    contract_to = serializers.SerializerMethodField()
     photo = serializers.ReadOnlyField(source='photo.url')
     is_joined = serializers.ReadOnlyField()
     is_left = serializers.ReadOnlyField()
+    is_legionnaire = serializers.ReadOnlyField()
 
     class Meta(object):
         fields = (
-            'pk', 'fio', 'line', 'line_display', 'club', 'photo', 'number',
-            'birth_date', 'birth_date_short', 'contract_type', 'age', 'url',
-            'name', 'lastname', 'is_joined', 'is_left', 'is_legionnaire',
-            'contract_to', 'citizenship')
+            'pk', 'url', 'number', 'line_display', 'name', 'lastname',
+            'birth_date_short', 'citizenship', 'contract_to', 'photo',
+            'is_joined', 'is_left', 'is_legionnaire')
         model = Player
 
 
@@ -112,22 +115,25 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
 
     def get_all_players(self, obj):
         players = sorted(list(self._get_players(obj)), key=lambda x: x.line)
-        return ClubPlayerSerializer(
+        print('★' * 80)
+        print(ClubTeamPlayerSerializer(
+            players, context=self.context, many=True).data)
+        return ClubTeamPlayerSerializer(
             players, context=self.context, many=True).data
 
     def get_offender_players(self, obj):
         players = filter(lambda x: x.line == 3, self._get_players(obj))
-        return ClubPlayerSerializer(
+        return ClubTeamPlayerSerializer(
             players, context=self.context, many=True).data
 
     def get_defender_players(self, obj):
         players = filter(lambda x: x.line == 2, self._get_players(obj))
-        return ClubPlayerSerializer(
+        return ClubTeamPlayerSerializer(
             players, context=self.context, many=True).data
 
     def get_goalkeeper_players(self, obj):
         players = filter(lambda x: x.line == 1, self._get_players(obj))
-        return ClubPlayerSerializer(
+        return ClubTeamPlayerSerializer(
             players, context=self.context, many=True).data
 
     def get_coaches(self, obj):

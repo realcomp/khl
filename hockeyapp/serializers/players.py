@@ -6,9 +6,47 @@ from django.db.models import Avg, Sum
 
 from rest_framework import serializers
 
-from . import SeasonSerializer, BaseClubSerializer, CoachSerializer
+from . import (
+    BasePlayerCardSerializer, SeasonSerializer, BaseClubSerializer,
+    CoachSerializer, CountrySerializer, ClubPlayerSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, LeagueClub, Coach)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, LeagueClub, Coach, Player)
+
+
+class PlayersSearchSerializer(BasePlayerCardSerializer):
+    url = serializers.ReadOnlyField(source='get_absolute_url')
+    photo = serializers.ReadOnlyField(source='photo.url')
+    line_display = serializers.ReadOnlyField(source='get_line_display')
+    citizenship = CountrySerializer()
+    clubplayers = serializers.SerializerMethodField()
+    age = serializers.SerializerMethodField()
+    birth_date_short = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
+    rating_value = serializers.SerializerMethodField()
+
+    def get_clubplayers(self, obj):
+        clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
+        if clubplayers_data is None:
+            clubplayers = obj.clubplayer_set.all()
+        else:
+            clubplayers = clubplayers_data.get(obj.pk)
+        return ClubPlayerSerializer(
+            clubplayers, many=True, context=self.context).data
+
+    def get_rating(self, obj):
+        rating = getattr(self.context['view'], 'rating', {})
+        return rating.get(obj.pk, 0)
+
+    def get_rating_value(self, obj):
+        rating_values = getattr(self.context['view'], 'rating_values', {})
+        return rating_values.get(obj.pk, 0)
+
+    class Meta(object):
+        fields = (
+            'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
+            'citizenship', 'clubplayers', 'age', 'birth_date_short',
+            'rating', 'rating_value')
+        model = Player
 
 
 class AdvancedPlayerStatsSerializer(serializers.ModelSerializer):

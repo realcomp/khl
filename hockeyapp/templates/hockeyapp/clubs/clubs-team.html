@@ -199,7 +199,11 @@
                                                     {% verbatim %}
                                                         <td align="center">{{ player.number }}</td>
                                                         <td>{{ player.line_display }}</td>
-                                                        <td><a href="{{ player.url }}" class="player-popup-btn">{{ player.fio }}</a></td>
+                                                        <td>
+                                                            <a href="{{ player.url }}" class="player-popup-btn">
+                                                                {{ player.name }} {{ player.lastname }}
+                                                            </a>
+                                                        </td>
                                                         <td align="center">{{ player.birth_date_short }}</td>
                                                         <td>{{ player.citizenship && player.citizenship.title }}</td>
                                                         <td align="center">{{ player.contract_to }}</td>

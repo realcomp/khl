@@ -188,43 +188,43 @@
                             <ul class="options-list">
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'seasons' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('seasons')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'clubplayer__season_id__count' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('clubplayer__season_id__count')">
                                         {% trans 'Seasons' %}
                                     </a>
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'matches' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('matches')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'pk__count' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('pk__count')">
                                         {% trans 'Matches' %}
                                     </a>
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'goals' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('goals')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'goals__sum' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('goals__sum')">
                                         {% trans 'Goals' %}
                                     </a>
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'assists' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('assists')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'assists__sum' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('assists__sum')">
                                         {% trans 'Assists' %}
                                     </a>
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'points' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('points')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'points__sum' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('points__sum')">
                                         {% trans 'Points' %}
                                     </a>
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'plus_minus' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('plus_minus')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'plus_minus__sum' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('plus_minus__sum')">
                                         {% trans '+/-' %}
                                     </a>
                                 </li>
@@ -258,15 +258,15 @@
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'sm_index' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('sm_index')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'sm_index__sum' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('sm_index__sum')">
                                         {% trans 'SM-index' %}
                                     </a>
                                 </li>
                                 <li class="option-item">
                                     <a href="" class="option-link"
-                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'corsi_index' }"
-                                       ng-click="PlayersSearchCtrl.setRatedBy('corsi_index')">
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'corsi_index__sum' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('corsi_index__sum')">
                                         {% trans 'CORSI-index' %}
                                     </a>
                                 </li>
@@ -293,22 +293,22 @@
                                                 {% trans 'Age' %}
                                             </a>
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'seasons'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'clubplayer__season_id__count'">
                                             {% trans 'Seasons' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'matches'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'pk__count'">
                                             {% trans 'Matches' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'goals'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'goals__sum'">
                                             {% trans 'Goals' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'assists'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'assists__sum'">
                                             {% trans 'Assists' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'points'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'points__sum'">
                                             {% trans 'Points' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'plus_minus'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'plus_minus__sum'">
                                             {% trans '+/-' %}
                                         </th>
                                         <th ng-show="PlayersSearchCtrl.ratedBy === 'goals__avg'">
@@ -323,10 +323,10 @@
                                         <th ng-show="PlayersSearchCtrl.ratedBy === 'plus_minus__avg'">
                                             {% trans 'Average "plus/minus" per game' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'sm_index'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'sm_index__sum'">
                                             {% trans 'SM-index' %}
                                         </th>
-                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'corsi_index'">
+                                        <th ng-show="PlayersSearchCtrl.ratedBy === 'corsi_index__sum'">
                                             {% trans 'CORSI-index' %}
                                         </th>
                                         <th align="center">
@@ -341,7 +341,7 @@
                                     <tr ng-repeat="player in PlayersSearchCtrl.data.results">
                                         <td>
                                             {% verbatim %}
-                                                {{ $index + 1 }}
+                                                {{ player.rating + 1 }}
                                             {% endverbatim %}
                                         </td>
                                         <td>
@@ -390,8 +390,7 @@
                                             <div class="player-desc">{{ player.birth_date_short }}</div>
                                         </td>
                                         <td align="center">
-                                            {{ player.contract_to }}
-                                            <span class="player-desc">{{ player.contract_type }}</span>
+                                            {{ player.rating_value }}
                                         </td>
                                         <td align="center">2837</td>
                                         <td align="center">3274</td>

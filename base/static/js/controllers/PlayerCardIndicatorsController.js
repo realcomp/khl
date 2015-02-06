@@ -1,5 +1,6 @@
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ['$http', '$scope', function($http, $scope) {
+.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory) {
+    //http://www.amcharts.com/lib/images/
     var self = this,
         url = $('#IndicatorsLink').attr('href');
     var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -12,6 +13,8 @@ angular.module('Sportomatics')
     var localeEn = {
         'season' : 'Season'
     };
+    this.url = $('#IndicatorsLink').attr('href');
+        console.log(this.url)
     this.indicators_type = 'graph';
     this.field = 'goals';
     this.club = null;
@@ -19,6 +22,7 @@ angular.module('Sportomatics')
     this.groupBy = 'month';
     this.data = {};
     this.graphData = {};
+        this.chartsCount = 0;
     function ObjectToGenerate() {
         return {
             bindto: '#chart',
@@ -42,7 +46,6 @@ angular.module('Sportomatics')
                 xs: {},
                 columns: [],
                 colors: {
-
                 },
                 type: 'line'
             },
@@ -56,14 +59,6 @@ angular.module('Sportomatics')
             }, zoom: {
                 //enabled: true,
                 rescale: true
-            },
-            grid: {
-                x: {
-                    show: true
-                },
-                y: {
-                    show: true
-                }
             }
 
         }
@@ -94,11 +89,11 @@ angular.module('Sportomatics')
             data: resultArrayData
         }
     }
-    this.createFieldData = function(field, array){
+    this.createFieldData = function(field, array, chartsCount){
         var result = [];
         var i = 0;
         //TODO: make this method accept multiple players
-        var object = self.createC3ArrayAndData(array, i, field, 'Player ' + '1');
+        var object = self.createC3ArrayAndData(array, chartsCount, field, 'Player ' + chartsCount);
         result.push(object);
         return result;
     };
@@ -110,28 +105,27 @@ angular.module('Sportomatics')
     this.setField = function(field) {
         this.field = field;
         this.list();
-    }
+    };
 
     this.setClub = function(club) {
         this.club = club;
         this.list();
-    }
+    };
 
     this.setCoach = function(coach) {
         this.coach = coach;
         this.list();
-    }
+    };
     this.setGraphResults = function(results) {
 
-    }
-    $scope.setGroupBy = function(groupby){
-        console.log(groupby)
-        self.groupBy = groupby;
-        self.list();
     };
-    var chart = null;
-    $scope.addChart = function () {
-        var params = 'group_by=season';
+    //var chart = null;
+    $scope.loadChart = function (url, unload) {
+        if(unload != null) {
+            var toUnload = unload
+            console.log(unload);
+        }
+        var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
             params += '&club=' + self.club;
         }
@@ -141,22 +135,16 @@ angular.module('Sportomatics')
         $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
-                var fieldData = self.createFieldData(self.field, self.data.results);
-                var objectToGenerate = new ObjectToGenerate();
-                _.each(fieldData, function (c3ADObject) {
-                    objectToGenerate.data.xs[c3ADObject.data[0]] = c3ADObject.array[0];
-                    objectToGenerate.data.colors[c3ADObject.data[0]] = '#58cb73';
-                    objectToGenerate.data.columns.push(c3ADObject.array);
-                    objectToGenerate.data.columns.push(c3ADObject.data);
-                    chart.flow({
-                        columns: objectToGenerate.data.columns,
-                        'xs.x1' : c3ADObject.array[0]
-                    })
-                });
 
             })
     };
+    $scope.setGroupBy = function(groupby){
+        self.groupBy = groupby;
+        self.list();
+    };
+    $scope.unload = function(){
 
+    };
     this.list = function(order_by) {
         var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
@@ -165,24 +153,44 @@ angular.module('Sportomatics')
         if (self.coach !== null) {
             params += '&coach=' + self.coach;
         }
-        self.data = {};
+        //self.data = {};
         self.loader = true;
         $http.get(url + '?' + params)
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
                 self.data = data;
                 self.loader = false;
-                var fieldData = self.createFieldData(self.field, self.data.results);
-                var objectToGenerate = new ObjectToGenerate();
-                _.each(fieldData, function(c3ADObject){
-                    objectToGenerate.data.xs[c3ADObject.data[0]] = c3ADObject.array[0];
-                    objectToGenerate.data.colors[c3ADObject.data[0]] = '#58cb73';
-                    objectToGenerate.data.columns.push(c3ADObject.array);
-                    objectToGenerate.data.columns.push(c3ADObject.data);
+                ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
+                    chart.write("chartdiv");
                 });
-                chart = c3.generate(objectToGenerate);
+                // generate some random data, quite different range
+
             });
     };
 
     this.list();
+
 }])
+.factory('AmChartsFactory', function ($q, $rootScope, $document) {
+    var deferred = $q.defer();
+
+    AmCharts.ready(function(){
+        $rootScope.$apply(deferred.resolve);
+    });
+
+    return {
+        ready: function () {
+            return deferred.promise;
+        }
+    };
+})
+    .run(function (AmChartsFactory) {})
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
