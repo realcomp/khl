@@ -5,7 +5,7 @@ var minifyCSS = require('gulp-minify-css');
 var ngAnnotate = require('gulp-ng-annotate');
 var closure = require('gulp-jsclosure');
 var paths = {
-    scripts: ['base/static/js/sportomatics.js', 'base/static/js/controllers/*.js'],
+    scripts: ['base/static/js/sportomatics.js','base/static/js/services/*.js', 'base/static/js/controllers/*.js'],
     libs: ['base/static/js/libs/*.js']
 };
 
