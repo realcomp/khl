@@ -14,6 +14,7 @@ class BaseTest(FastFixtureTestCase):
     fixtures = ('',)
     def setUp(self):
         self.test_client = Client()
+        transaction.set_autocommit(True)
 
     @classmethod
     def _fixture_teardown(cls):
@@ -52,7 +53,6 @@ class BaseTest(FastFixtureTestCase):
         return response
 
     def logining(self):
-        transaction.set_autocommit(True)
         _pswd = '12345'
         _email = 'test@test.com'
         usr = User.objects.filter(email=_email, uin=_pswd).last()

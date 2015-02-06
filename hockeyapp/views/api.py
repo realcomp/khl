@@ -5,21 +5,18 @@ import itertools
 import json
 import operator
 
-from django.db.models import Avg, Q, Sum, Count
+from django.db.models import Avg, Sum, Count
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
 
-from base.models import Season
-
 from .mixins import PaginationMixin, OrderMixin
 from ..filters import PlayersSearchFilter
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, LeagueClub
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
 from ..serializers import (
     CountryLeaguesSerializer,
-    PlayerCardSerializer,
     ClubListSerializer,
     MetricsPlayerSerializer,
 )
