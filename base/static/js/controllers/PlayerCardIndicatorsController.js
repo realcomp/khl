@@ -15,12 +15,12 @@ angular.module('Sportomatics')
     };
     this.url = $('#IndicatorsLink').attr('href');
         console.log(this.url)
-    this.indicators_type = 'graph';
-    this.field = 'goals';
+    this.indicatorsType = 'graph';
+    this.field = 'count';
     this.club = null;
     this.coach = null;
-    this.groupBy = 'month';
-    this.data = {};
+    this.groupBy = 'season';
+    this.data = [];
     this.graphData = {};
         this.chartsCount = 0;
     function ObjectToGenerate() {
@@ -99,7 +99,7 @@ angular.module('Sportomatics')
     };
 
     this.setIndicatorsType = function(type) {
-        this.indicators_type = type;
+        this.indicatorsType = type;
     };
 
     this.setField = function(field) {
@@ -120,11 +120,7 @@ angular.module('Sportomatics')
 
     };
     //var chart = null;
-    $scope.loadChart = function (url, unload) {
-        if(unload != null) {
-            var toUnload = unload
-            console.log(unload);
-        }
+    $scope.addGraph = function (url) {
         var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
             params += '&club=' + self.club;
@@ -135,7 +131,11 @@ angular.module('Sportomatics')
         $http.get(url + '?' + params)
             .success(function(data) {
                 self.data = data;
-
+                angular.copy();
+                ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
+                    chart.write("chartdiv");
+                    chart.validateData();
+                });
             })
     };
     $scope.setGroupBy = function(groupby){
@@ -162,6 +162,7 @@ angular.module('Sportomatics')
                 self.loader = false;
                 ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
                     chart.write("chartdiv");
+                    chart.addClassNames = false;
                 });
                 // generate some random data, quite different range
 

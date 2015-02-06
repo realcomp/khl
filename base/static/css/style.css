@@ -2980,6 +2980,12 @@ i.icon {
 .player-card-short-page .indicator-link:hover {
   text-decoration: none;
 }
+.player-card-short-page .indicator-chosen {
+    color: black;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+}
 /* line 1867, ../sass/_base.sass */
 .player-card-short-page .indicator-graph {
   width: 100%;
@@ -4766,4 +4772,30 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     line-height: 6px !important;
     background: #8ebd5d !important;
 
+}
+
+.amcharts-graph-g2 {
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-dasharray: 500%;
+    stroke-dasharray: 0 \0/;    /* fixes IE prob */
+    stroke-dashoffset: 0 \0/;   /* fixes IE prob */
+    -webkit-animation: am-draw 5s;
+    animation: am-draw 5s;
+}
+@-webkit-keyframes am-draw {
+    0% {
+        stroke-dashoffset: 500%;
+    }
+    100% {
+        stroke-dashoffset: 0px;
+    }
+}
+@keyframes am-draw {
+    0% {
+        stroke-dashoffset: 500%;
+    }
+    100% {
+        stroke-dashoffset: 0px;
+    }
 }
