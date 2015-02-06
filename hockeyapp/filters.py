@@ -11,6 +11,33 @@ from base.models import Season
 from .models import Club, ClubPlayer, LeagueClub
 
 
+class OrderFilter(object):
+    def filter_queryset(self, request, qs, view):
+        qs = super(OrderFilter, self).filter_queryset(qs)
+        if 'order_by' in request.GET:
+            field = request.GET['order_by']
+            is_array = (
+                field.lstrip('-').startswith('[') and
+                field.endswith(']'))
+            if is_array:
+                fields = json.loads(field.lstrip('-'))
+            else:
+                fields = [field.lstrip('-')]
+            fields = map(
+                lambda f: ('-' if field.startswith('-') else '') + (f % request.LANGUAGE_CODE if '%s' in f else f),
+                fields)
+            qs = qs.order_by(*fields)
+        return qs
+
+
+class PlayersSearchOrderFilter(OrderFilter):
+    def filter_queryset(self, request, qs, view):
+        if self.request.GET.get('order_by', '') in ('rating', '-rating'):
+            return qs
+        else:
+            qs = super(PlayersSearchOrderFilter, self).filter_queryset(qs)
+
+
 class PlayersSearchFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
         clubplayers = ClubPlayer.objects.all()
