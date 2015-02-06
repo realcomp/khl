@@ -69,9 +69,8 @@ angular.module('Sportomatics')
                 gamesAxis.position = "right"; // this line makes the axis to appear on the right
                 gamesAxis.axisColor = "#408e3a";
                 gamesAxis.gridAlpha = 0;
-                gamesAxis.axisThickness = 2;
+                gamesAxis.axisThickness = 0;
                 gamesAxis.stackType = "regular";
-                gamesAxis.offset = 50;
                 gamesAxis.maximum = 100;
                 chart.addValueAxis(gamesAxis);
 
@@ -107,15 +106,15 @@ angular.module('Sportomatics')
                 distanceGraph.valueField = "count";
                 distanceGraph.title = "games";
                 distanceGraph.type = "step";
-                distanceGraph.fillAlphas = 0.1;
-                distanceGraph.valueAxis = gamesAxis; // indicate which axis should be used
+                distanceGraph.fillAlphas = 0;
                 distanceGraph.lineColor = "#408e3a";
                 distanceGraph.alphaField = "alpha";
-                distanceGraph.lineThickness = 2;
+                distanceGraph.lineThickness = 0;
                 distanceGraph.lineAlpha = 0.3;
                 distanceGraph.newStack = true;
                 distanceGraph.stackable = true;
-                distanceGraph.balloonText = 'Игр: [[value]]' ;
+                distanceGraph.balloonText = '';
+                distanceGraph.visibleInLegend = false;
                 if(field !== 'count')
                 chart.addGraph(distanceGraph);
 
@@ -138,6 +137,10 @@ angular.module('Sportomatics')
 
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();
+                if(field !== 'count')
+                chartScrollbar.graph = distanceGraph;
+                chartScrollbar.autoGridCount = true;
+                chartScrollbar.color = "#000000";
                 chart.addChartScrollbar(chartScrollbar);
 
                 // LEGEND
