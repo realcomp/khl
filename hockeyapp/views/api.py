@@ -12,18 +12,12 @@ from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
 
-<<<<<<< Updated upstream
-from .mixins import PaginationMixin, OrderMixin
-from ..filters import PlayersSearchFilter
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
-=======
 from base.models import Season
 
 from .mixins import PaginationMixin
 from ..filters import (
     PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter)
 from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, LeagueClub
->>>>>>> Stashed changes
 from ..serializers import (
     CountryLeaguesSerializer,
     ClubListSerializer,

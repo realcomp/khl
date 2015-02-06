@@ -8,14 +8,15 @@ from rest_framework import filters
 
 from base.models import Season
 
-from .models import Club, ClubPlayer, LeagueClub
+from .models import ClubPlayer
 
 
-class OrderFilter(object):
+class OrderFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
-        qs = super(OrderFilter, self).filter_queryset(qs)
         if 'order_by' in request.GET:
             field = request.GET['order_by']
+            reverse = field.startswith('-')
+            lc = request.LANGUAGE_CODE
             is_array = (
                 field.lstrip('-').startswith('[') and
                 field.endswith(']'))
@@ -24,18 +25,19 @@ class OrderFilter(object):
             else:
                 fields = [field.lstrip('-')]
             fields = map(
-                lambda f: ('-' if field.startswith('-') else '') + (f % request.LANGUAGE_CODE if '%s' in f else f),
+                lambda f: ('-' if reverse else '') + (f % lc if '%s' in f else f),
                 fields)
-            qs = qs.order_by(*fields)
+            return qs.order_by(*fields)
         return qs
 
 
 class PlayersSearchOrderFilter(OrderFilter):
     def filter_queryset(self, request, qs, view):
-        if self.request.GET.get('order_by', '') in ('rating', '-rating'):
+        if request.GET.get('order_by', '') in ('rating', '-rating'):
             return qs
         else:
-            qs = super(PlayersSearchOrderFilter, self).filter_queryset(qs)
+            return super(PlayersSearchOrderFilter, self).filter_queryset(
+                request, qs, view)
 
 
 class PlayersSearchFilter(filters.BaseFilterBackend):
