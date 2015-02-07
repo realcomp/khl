@@ -12,9 +12,12 @@ from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
 
-from .mixins import PaginationMixin, OrderMixin
-from ..filters import PlayersSearchFilter
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
+from base.models import Season
+
+from .mixins import PaginationMixin
+from ..filters import (
+    PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter)
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, LeagueClub
 from ..serializers import (
     CountryLeaguesSerializer,
     ClubListSerializer,
@@ -27,8 +30,7 @@ from ..serializers.players import (
 
 class PlayersSearch(
         PaginationMixin, viewsets.ReadOnlyModelViewSet):
-        # PaginationMixin, OrderMixin, viewsets.ReadOnlyModelViewSet):
-    filter_backends = PlayersSearchFilter,
+    filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
     queryset = Player.objects.all()
     serializer_class = PlayersSearchSerializer
 
@@ -47,9 +49,9 @@ class PlayersSearch(
                 self.clubplayers[player_id] = []
             if clubplayer not in self.clubplayers[player_id]:
                 self.clubplayers[player_id].append(clubplayer)
-        self.rating_values = {}
 
         # get rating values
+        self.rating_values = {}
         for player_id, clubplayers in self.clubplayers.items():
             if self.request.GET.get('rated_by') == 'clubplayer__season_id__count':
                 seasons = set(
@@ -81,8 +83,14 @@ class PlayersSearch(
                 player_ids,
                 map(player_ids.index, player_ids)))
 
-        # sort list by rating
-        instance = sorted(list(qs), key=lambda x: self.rating.get(x.pk))
+        if request.GET.get('order_by', '') in ('rating', '-rating'):
+            # sort list by rating
+            instance = list(qs)
+            instance.sort(key=lambda x: self.rating.get(x.pk))
+            if request.GET.get('order_by', '').startswith('-'):
+                instance.reverse()
+        else:
+            instance = qs
 
         page = self.paginate_queryset(instance)
         if page is not None:
@@ -144,8 +152,8 @@ class LeagueList(generics.ListAPIView):
         return Country.objects.exclude(league__isnull=True)
 
 
-class ClubList(PaginationMixin, OrderMixin, generics.ListAPIView):
-    # permission_classes = permissions.IsAuthenticated,
+class ClubList(PaginationMixin, generics.ListAPIView):
+    filter_backends = OrderFilter,
     serializer_class = ClubListSerializer
 
     def get_queryset(self):

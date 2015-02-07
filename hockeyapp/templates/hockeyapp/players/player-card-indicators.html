@@ -180,11 +180,11 @@
                             </div>
                             <ul class="indicators-list">
                                 <li class="indicator-item">
-                                    <a href="" class="indicator-link"
+                                    <a href="" ng-class="{ 'indicator-link': PlayerCardIndicatorsCtrl.indicatorsType !== 'graph' , 'indicator-chosen': PlayerCardIndicatorsCtrl.indicatorsType === 'graph'  }"
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('graph')">График</a>
                                 </li>
                                 <li class="indicator-item">
-                                    <a href="" class="indicator-link"
+                                    <a href="" ng-class="{ 'indicator-link': PlayerCardIndicatorsCtrl.indicatorsType !== 'table' , 'indicator-chosen': PlayerCardIndicatorsCtrl.indicatorsType === 'table'  }"
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('table')">Таблица</a>
                                 </li>
                             </ul>
@@ -196,15 +196,16 @@
                                 <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
                             <div id="chartdiv" style="width: 100%; height:400px; "></div>
-                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.results.length">
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicatorsType === 'graph' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <div id="chart"></div>
                                 <div class="chart-button-panel">
                                     <a class="ui green button chart-button" ng-click="setGroupBy('month')">{% trans 'By month' %}</a>
                                     <a class="ui green button chart-button" ng-click="setGroupBy('season')">{% trans 'By season' %}</a>
+                                    <a class="ui green button chart-button" ng-click="addGraph('/ru/hockey/api/players/926/indicators/')">Сравнить с игроком 926</a>
                                 </div>
                             </div>
 
-                            <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
+                            <div ng-show="PlayerCardIndicatorsCtrl.indicatorsType === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <table class="ui celled table segment player-select-table">
                                     <thead>
                                         <tr>

@@ -84,6 +84,13 @@ angular.module('Sportomatics')
             });
     };
 
+    this.setPlaying = function(isPlaying) {
+        if (!this.loader) {
+            this.isPlaying = isPlaying;
+            this.search();
+        }
+    }
+
     this.setRatedBy = function(ratedBy) {
         if (!this.loader) {
             this.ratedBy = ratedBy;

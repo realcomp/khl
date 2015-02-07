@@ -1,13 +1,15 @@
 angular.module('Sportomatics')
-.factory('ChartFactory', function($q, $rootScope, AmChartsFactory){
-
+.value('zoomData', {
+    startDate: 'a',
+    endDate: 'a'
+})
+.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData){
 
     return {
-        generateSerialChart: function(data, field){
+        generateSerialChart: function(data, field, graphsCount){
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
-                console.log('abc')
                 // generate some random data first
                 var chartData = generateChartData(data, field);
 
@@ -17,16 +19,22 @@ angular.module('Sportomatics')
                 chart.dataProvider = chartData;
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
+                chart.addClassNames = true;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
-
+                chart.addListener("zoomed", function (chart) {
+                    zoomData.startDate = chart.startDate;
+                    zoomData.endDate = chart.endDate;
+                });
                 // AXES
                 // category
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
                 categoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
-                categoryAxis.minorGridEnabled = true;
+                //categoryAxis.minorGridEnabled = true;
+                categoryAxis.autoGridCount =  false;
+                categoryAxis.gridAlpha = 0.1;
                 categoryAxis.axisColor = "#DADADA";
                 categoryAxis.twoLineMode = true;
                 categoryAxis.dateFormats = [{
@@ -64,12 +72,14 @@ angular.module('Sportomatics')
                 chart.addValueAxis(valueAxis1);
 
                 // second value axis (on the right)
-                var valueAxis2 = new AmCharts.ValueAxis();
-                valueAxis2.position = "right"; // this line makes the axis to appear on the right
-                valueAxis2.axisColor = "#FCD202";
-                valueAxis2.gridAlpha = 0;
-                valueAxis2.axisThickness = 2;
-                chart.addValueAxis(valueAxis2);
+                var gamesAxis = new AmCharts.ValueAxis();
+                gamesAxis.position = "right"; // this line makes the axis to appear on the right
+                gamesAxis.axisColor = "#408e3a";
+                gamesAxis.gridAlpha = 0;
+                gamesAxis.axisThickness = 0;
+                gamesAxis.stackType = "regular";
+                gamesAxis.maximum = 100;
+                chart.addValueAxis(gamesAxis);
 
                 // third value axis (on the left, detached)
                 var valueAxis3 = new AmCharts.ValueAxis();
@@ -81,25 +91,39 @@ angular.module('Sportomatics')
 
                 // GRAPHS
                 // first graph
+                for(var i = 0; i < graphsCount; i ++){
+                    var graph = generateGraph(i, data[i]['title'], valueAxis1);
+                    chart.addGraph(graph);
+                }
                 var graph1 = new AmCharts.AmGraph();
+
+                graph1.id = "g2";
                 graph1.valueAxis = valueAxis1; // we have to indicate which value axis should be used
-                graph1.title = self.field;
+                graph1.title = field;
                 graph1.valueField = "values";
                 graph1.bullet = "round";
                 graph1.hideBulletsCount = 30;
                 graph1.bulletBorderThickness = 1;
                 graph1.lineColor = "#408e3a";
                 graph1.lineThickness = 4;
+                graph1.animationPlayed = true;
                 chart.addGraph(graph1);
                 // second graph
-                var graph2 = new AmCharts.AmGraph();
-                graph2.valueAxis = valueAxis2; // we have to indicate which value axis should be used
-                graph2.title = self.field;
-                graph2.valueField = "hits";
-                graph2.bullet = "square";
-                graph2.hideBulletsCount = 30;
-                graph2.bulletBorderThickness = 1;
-                //chart.addGraph(graph2);
+                var distanceGraph = new AmCharts.AmGraph();
+                distanceGraph.valueField = "count";
+                distanceGraph.title = "games";
+                distanceGraph.type = "step";
+                distanceGraph.fillAlphas = 0;
+                distanceGraph.lineColor = "#408e3a";
+                distanceGraph.alphaField = "alpha";
+                distanceGraph.lineThickness = 0;
+                distanceGraph.lineAlpha = 0.3;
+                distanceGraph.newStack = true;
+                distanceGraph.stackable = true;
+                distanceGraph.balloonText = '';
+                distanceGraph.visibleInLegend = false;
+                if(field !== 'count')
+                chart.addGraph(distanceGraph);
 
                 // third graph
                 var graph3 = new AmCharts.AmGraph();
@@ -120,6 +144,10 @@ angular.module('Sportomatics')
 
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();
+                if(field !== 'count')
+                chartScrollbar.graph = distanceGraph;
+                chartScrollbar.autoGridCount = true;
+                chartScrollbar.color = "#000000";
                 chart.addChartScrollbar(chartScrollbar);
 
                 // LEGEND
@@ -127,12 +155,14 @@ angular.module('Sportomatics')
                 legend.marginLeft = 110;
                 legend.useGraphSettings = true;
                 chart.addLegend(legend);
+
                 deferred.resolve(chart);
             });
-            return deferred.promise;
+            return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
 })
+var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 function generateChartData(data, field) {
     var chartData = [];
     var dates = data.map(function(e){
@@ -142,12 +172,12 @@ function generateChartData(data, field) {
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
+    var count = data.map(function(e){ return e['count']});
     for(var i = 0; i< dates.length; i++){
-        console.log(dates[i])
-        console.log(values[i])
         chartData.push({
             date: dates[i],
-            values: values[i]
+            values: values[i],
+            count: count[i]
         });
     }
     return chartData;
@@ -156,4 +186,19 @@ function generateChartData(data, field) {
 function zoomChart() {
     // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
     //chart.zoomToIndexes(10, 20);
+}
+function generateGraph(i, title, axis){
+        var graph = new AmCharts.AmGraph();
+        graph.valueAxis = axis; // we have to indicate which value axis should be used
+        graph.title = title;
+        graph.valueField = 'value'+i;
+        graph.bullet = "round";
+        graph.hideBulletsCount = 30;
+        graph.bulletBorderThickness = 1;
+        graph.lineColor = colors[i]; //TODO: add more colors
+        graph.lineThickness = 4;
+        return graph;
+}
+function saveZoomParams(endDate, endIndex, endValue, startDate){
+
 }
