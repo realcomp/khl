@@ -515,7 +515,7 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')
-            print(_date_dict)
+            print(_date_dict, self.absolute_url)
             _dt = _date_dict[:1]
             _dt.append(_date_dict[2])
             _date_dict = _dt
