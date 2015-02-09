@@ -195,21 +195,21 @@ angular.module('Sportomatics')
                 graph1.animationPlayed = true;
                 chart.addGraph(graph1);
                 // second graph
-                var distanceGraph = new AmCharts.AmGraph();
-                distanceGraph.valueField = "count";
-                distanceGraph.title = "games";
-                distanceGraph.type = "step";
-                distanceGraph.fillAlphas = 0;
-                distanceGraph.lineColor = "#408e3a";
-                distanceGraph.alphaField = "alpha";
-                distanceGraph.lineThickness = 0;
-                distanceGraph.lineAlpha = 0.3;
-                distanceGraph.newStack = true;
-                distanceGraph.stackable = true;
-                distanceGraph.balloonText = '';
-                distanceGraph.visibleInLegend = false;
-                if(field !== 'count')
-                chart.addGraph(distanceGraph);
+                var gamesGraph = new AmCharts.AmGraph();
+                gamesGraph.valueField = "count";
+                gamesGraph.title = "games";
+                gamesGraph.type = "step";
+                gamesGraph.fillAlphas = 0;
+                gamesGraph.lineColor = "#408e3a";
+                gamesGraph.alphaField = "alpha";
+                gamesGraph.lineThickness = 0;
+                gamesGraph.lineAlpha = 0.3;
+                gamesGraph.newStack = true;
+                gamesGraph.stackable = true;
+                gamesGraph.balloonText = '';
+                gamesGraph.visibleInLegend = false;
+                //if(field !== 'count')
+                //chart.addGraph(gamesGraph);
 
                 // third graph
                 var graph3 = new AmCharts.AmGraph();
@@ -231,7 +231,7 @@ angular.module('Sportomatics')
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();
                 if(field !== 'count')
-                chartScrollbar.graph = distanceGraph;
+                chartScrollbar.graph = gamesGraph;
                 chartScrollbar.autoGridCount = true;
                 chartScrollbar.color = "#000000";
                 chart.addChartScrollbar(chartScrollbar);
@@ -253,7 +253,7 @@ function generateChartData(data, field) {
     var chartData = [];
     var dates = data.map(function(e){
         if(e['date'] == null){
-            return new Date(e['season']['start_date'].substr(0,4));
+            return new Date(e['season']['end_date']);
         }
         return new Date(e['date']);
     });
@@ -262,8 +262,8 @@ function generateChartData(data, field) {
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
-            values: values[i],
-            count: count[i]
+            values: values[i]//,
+           // count: count[i]
         });
     }
     return chartData;
