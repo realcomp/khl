@@ -14,7 +14,7 @@ angular.module('Sportomatics')
     this.data = {};
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
-    this.ratedBy = 'clubplayer__season_id__count';
+    this.ratedBy = 'seasons_total';
     this.isPlaying = true;
 
     this.loader = false;

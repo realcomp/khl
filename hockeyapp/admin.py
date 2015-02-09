@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Avg, Q, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from daterange_filter.filter import DateRangeFilter
@@ -85,7 +86,15 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'start_date', 'end_date',)
 
 
+def recalc_counters(modeladmin, request, queryset):
+    for player in queryset:
+        player.recalc_counters()
+        player.save()
+recalc_counters.short_description = _('Recalculate counters')
+
+
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
+    actions = recalc_counters,
     inlines = (ClubPlayerInline, PlayerCitizenshipInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',

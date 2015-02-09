@@ -34,7 +34,7 @@ class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'url', 'number', 'line_display', 'name', 'lastname',
             'birth_date_short', 'citizenship', 'contract_to', 'photo',
-            'is_joined', 'is_left', 'is_legionnaire')
+            'is_joined', 'is_left', 'is_legionnaire', 'fio')
         model = Player
 
 
@@ -115,8 +115,6 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
 
     def get_all_players(self, obj):
         players = sorted(list(self._get_players(obj)), key=lambda x: x.line)
-        print(ClubTeamPlayerSerializer(
-            players, context=self.context, many=True).data)
         return ClubTeamPlayerSerializer(
             players, context=self.context, many=True).data
 

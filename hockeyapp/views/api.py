@@ -41,7 +41,7 @@ class PlayersSearch(
         self.clubplayers = {}
         clubplayers = (
             ClubPlayer.objects
-            .filter(player__in=qs)
+            .filter(pk__in=qs.values_list('clubplayer', flat=True))
             .order_by('-end_date'))
         for clubplayer in clubplayers:
             player_id = clubplayer.player_id
@@ -50,54 +50,19 @@ class PlayersSearch(
             if clubplayer not in self.clubplayers[player_id]:
                 self.clubplayers[player_id].append(clubplayer)
 
-        # get rating values
-        self.rating_values = {}
-        for player_id, clubplayers in self.clubplayers.items():
-            if self.request.GET.get('rated_by') == 'clubplayer__season_id__count':
-                seasons = set(
-                    ClubPlayer.objects
-                    .filter(pk__in=map(operator.attrgetter('pk'), clubplayers))
-                    .values_list('season_id'))
-                result = len(seasons)
-            else:
-                matches = (
-                    ClubPlayerMatch.objects
-                    .filter(clubplayer_id__in=map(operator.attrgetter('pk'), clubplayers)))
-                field, _, op = self.request.GET.get(
-                    'rated_by', 'goals__sum').rpartition('__')
-                OP = {
-                    'sum': Sum,
-                    'avg': Avg,
-                    'count': Count,
-                }.get(op, Sum)
-                result = matches.aggregate(
-                    OP(field)).get('%s__%s' % (field, op)) or 0
-            self.rating_values[player_id] = result
-
+        # get rating
+        rated_by = self.request.GET.get('rated_by', 'seasons_total')
         self.rating = {}
-        if self.rating_values:
-            # sorted by value
-            player_ids = zip(*sorted(
-                self.rating_values.items(), key=lambda x: x[1]))[0]
-            self.rating = dict(zip(
-                player_ids,
-                map(player_ids.index, player_ids)))
+        rating_index = 0
+        rating_value = None
+        for player in qs.order_by('-' + rated_by):
+            if (getattr(player, rated_by) < rating_value or
+                    rating_value is None):
+                rating_index += 1
+                rating_value = getattr(player, rated_by)
+            self.rating[player.pk] = rating_index
 
-        if request.GET.get('order_by', '') in ('rating', '-rating'):
-            # sort list by rating
-            instance = list(qs)
-            instance.sort(key=lambda x: self.rating.get(x.pk))
-            if request.GET.get('order_by', '').startswith('-'):
-                instance.reverse()
-        else:
-            instance = qs
-
-        page = self.paginate_queryset(instance)
-        if page is not None:
-            serializer = self.get_pagination_serializer(page)
-        else:
-            serializer = self.get_serializer(instance, many=True)
-        return response.Response(serializer.data)
+        return super(PlayersSearch, self).list(request, *args, **kwargs)
 
 
 class PlayerCardIndicators(generics.ListAPIView):

@@ -33,8 +33,10 @@ class OrderFilter(filters.BaseFilterBackend):
 
 class PlayersSearchOrderFilter(OrderFilter):
     def filter_queryset(self, request, qs, view):
-        if request.GET.get('order_by', '') in ('rating', '-rating'):
-            return qs
+        if request.GET.get('order_by', '').lstrip('-') == 'rating':
+            field = request.GET['rated_by']
+            reverse = request.GET.get('order_by', '').startswith('-')
+            return qs.order_by('%s%s' % ('-' if reverse else '', field))
         else:
             return super(PlayersSearchOrderFilter, self).filter_queryset(
                 request, qs, view)

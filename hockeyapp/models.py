@@ -5,6 +5,7 @@ import urllib
 
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import  Q, Avg, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -57,24 +58,60 @@ class Player(AbstractMan):
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+    last_club = models.ForeignKey(
+        'hockeyapp.Club', verbose_name=_('Club'),
+        related_name='last_players', null=True)
 
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
 
+    # clubplayermatch data (do recalc_counters to update)
+    seasons_total = models.IntegerField(_('Seasons Total'), null=True)
+    matches_total = models.IntegerField(_('Matches Total'), null=True)
+    goals_total = models.IntegerField(_('Goals Total'), null=True)
+    assists_total = models.IntegerField(_('Assists Total'), null=True)
+    points_total = models.IntegerField(_('Points Total'), null=True)
+    plus_minus_total = models.IntegerField(_('Points Total'), null=True)
+    goals_average = models.IntegerField(_('Goals Average'), null=True)
+    assists_average = models.IntegerField(_('Assists Average'), null=True)
+    points_average = models.IntegerField(_('Points Average'), null=True)
+    plus_minus_average = models.IntegerField(_('Points Average'), null=True)
+
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
+
+    def recalc_counters(self):
+        q_rated_matches = (
+            Q(clubplayermatch__match__is_championship=True) |
+            Q(clubplayermatch__match__is_playoff=True))
+        clubplayers = self.clubplayer_set.filter(q_rated_matches)
+        fields = 'goals', 'assists', 'points', 'plus_minus'
+        kwargs = {}
+        kwargs.update({
+            '%s_total' % field: Sum('clubplayermatch__%s' % field)
+            for field in fields
+        })
+        kwargs.update({
+            '%s_average' % field: Avg('clubplayermatch__%s' % field)
+            for field in fields
+        })
+        for k, v in clubplayers.aggregate(**kwargs).items():
+            setattr(self, k, v)
+        self.seasons_total = len(set(clubplayers.values_list('season')))
+        self.matches_total = clubplayers.count()
 
     def save(self, **kwargs):
         if self.pk and not self.line:
             #смотрим амплуа игрока из истории 
             if self.clubplayer_set.exists():
                 self.line = self.clubplayer_set.all().last().line
+                self.last_club = self.clubplayer_set.all().last().club
         super(Player, self).save(**kwargs)
 
     @property
     def club(self):
-        return self.club_set.all().last()
+        return self.last_club
 
     # @property
     # def last_clubs(self):
