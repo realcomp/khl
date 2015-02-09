@@ -132,16 +132,29 @@ angular.module('Sportomatics')
         }
         $http.get(url + '?' + params)
             .success(function(data) {
-                self.data = data;
-                angular.copy();
-                ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
-                    chart.write("chartdiv");
-                    chart.validateData();
-                });
+                $scope.dataByMonth = data;
+                group = 'season';
+                params = 'group_by=' + group;
+                if (self.club !== null) {
+                    params += '&club=' + self.club;
+                }
+                if (self.coach !== null) {
+                    params += '&coach=' + self.coach;
+                }
+                $http.get(url + '?' + params)
+                    .success(function(data, status, headers) {
+                        $scope.dataBySeason = data;
+                        self.loader = false;
+                    }).then(function(){
+                        self.list();
+                        console.log($scope.dataByMonth);
+                        console.log($scope.dataBySeason);
+                    })
             })
     };
     $scope.setGroupBy = function(groupby){
         self.groupBy = groupby;
+        $scope.onSeason = false;
         self.list();
     };
     $scope.unload = function(){
@@ -150,11 +163,12 @@ angular.module('Sportomatics')
     $scope.moveToSeason = function(season){
         zoomData.startDate = season.start_date;
         zoomData.endDate = season.end_date;
+        $scope.onSeason = true;
         self.groupBy = 'month';
         self.list(true);
     };
     this.list = function(switched) {
-        var params = 'group_by=' + self.groupBy;
+        /*var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
             params += '&club=' + self.club;
         }
@@ -168,28 +182,61 @@ angular.module('Sportomatics')
                 self.locale = headers()['content-language'];
                 self.data = data;
                 self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
-                self.loader = false;
+                self.loader = false;*/
+        var data;
+        data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
                 if(switched){
                     var datesArray = data.results.map(function(e){ return new Date(e['date']) });
                     var min = Math.min.apply(null, datesArray);
                     var max = Math.max.apply(null, datesArray);
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
-
                 }
-                ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
+                ChartFactory.generateSerialChart(data.results, self.field).then(function(chart){
                     chart.write("chartdiv");
                     chart.addClassNames = false;
                     if(switched){
                         chart.zoomToDates(zoomStart, zoomEnd);
                     }
                 });
-                // generate some random data, quite different range
-
-            });
+            //});
+    };
+    $scope.getPlayerData = function(){
+        var group = 'month';
+        var params = 'group_by=' + group;
+        if (self.club !== null) {
+            params += '&club=' + self.club;
+        }
+        if (self.coach !== null) {
+            params += '&coach=' + self.coach;
+        }
+        self.loader = true;
+        $http.get(url + '?' + params)
+            .success(function(data, status, headers) {
+                self.locale = headers()['content-language'];
+                self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
+                $scope.dataByMonth = data;
+                group = 'season';
+                params = 'group_by=' + group;
+                if (self.club !== null) {
+                    params += '&club=' + self.club;
+                }
+                if (self.coach !== null) {
+                    params += '&coach=' + self.coach;
+                }
+                $http.get(url + '?' + params)
+                    .success(function(data, status, headers) {
+                        $scope.dataBySeason = data;
+                        self.loader = false;
+                    }).then(function(){
+                        self.list();
+                        console.log($scope.dataByMonth);
+                        console.log($scope.dataBySeason);
+                    })
+            })
     };
 
-    this.list();
+    $scope.getPlayerData();
 
 }])
 .factory('AmChartsFactory', function ($q, $rootScope, $document) {
