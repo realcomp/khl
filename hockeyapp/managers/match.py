@@ -3,8 +3,9 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
+from django.core.cache import cache
 from django.db import models
-from django.db.models import Max, Min
+from django.db.models import Avg, Sum, Count, Max, Min
 from django.db.models.loading import get_model
 
 from base.models import Season
@@ -253,3 +254,18 @@ class ClubPlayerMatchQuerySet(models.QuerySet):
             season_qs.season = season
             result.append(season_qs)
         return result
+
+    # def aggregate_by_player(self, key, player_id):
+    #     cache_key = 'ClubPlayerMatchQuerySet/player/%s/%s' % (player_id, key)
+    #     result = cache.get(cache_key)
+    #     if result is None:
+    #         field, _, op = key.rpartition('__')
+    #         OP = {
+    #             'sum': Sum,
+    #             'avg': Avg,
+    #             'count': Count,
+    #         }[op]
+    #         result = self.aggregate(OP(field)).get(key) or 0
+    #         # cache for a day
+    #         cache.set(cache_key, result, 60*60*24)
+    #     return result

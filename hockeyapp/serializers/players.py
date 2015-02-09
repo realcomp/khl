@@ -22,7 +22,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     age = serializers.SerializerMethodField()
     birth_date_short = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
-    rating_value = serializers.SerializerMethodField()
+    rating_index = serializers.SerializerMethodField()
 
     def get_clubplayers(self, obj):
         clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
@@ -31,21 +31,21 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
         else:
             clubplayers = clubplayers_data.get(obj.pk)
         return ClubPlayerSerializer(
-            clubplayers, many=True, context=self.context).data
+            clubplayers, context=self.context, many=True).data
 
     def get_rating(self, obj):
+        rated_by = self.context['request'].GET.get('rated_by')
+        return getattr(obj, rated_by, None)
+
+    def get_rating_index(self, obj):
         rating = getattr(self.context['view'], 'rating', {})
         return rating.get(obj.pk, 0)
-
-    def get_rating_value(self, obj):
-        rating_values = getattr(self.context['view'], 'rating_values', {})
-        return rating_values.get(obj.pk, 0)
 
     class Meta(object):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'clubplayers', 'age', 'birth_date_short',
-            'rating', 'rating_value', 'fio')
+            'rating', 'rating_index', 'fio')
         model = Player
 
 

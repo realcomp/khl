@@ -34,7 +34,7 @@ class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'url', 'number', 'line_display', 'name', 'lastname',
             'birth_date_short', 'citizenship', 'contract_to', 'photo',
-            'is_joined', 'is_left', 'is_legionnaire')
+            'is_joined', 'is_left', 'is_legionnaire', 'fio')
         model = Player
 
 
