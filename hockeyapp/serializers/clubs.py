@@ -115,8 +115,6 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
 
     def get_all_players(self, obj):
         players = sorted(list(self._get_players(obj)), key=lambda x: x.line)
-        print(ClubTeamPlayerSerializer(
-            players, context=self.context, many=True).data)
         return ClubTeamPlayerSerializer(
             players, context=self.context, many=True).data
 
