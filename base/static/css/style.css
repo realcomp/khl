@@ -4799,3 +4799,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
         stroke-dashoffset: 0px;
     }
 }
+.indicator-item{
+    font-family: "Open Sans", sans-serif;
+}

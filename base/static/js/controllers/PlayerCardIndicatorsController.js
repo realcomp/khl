@@ -1,5 +1,5 @@
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData) {
+.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData','LocaleFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory) {
     //http://www.amcharts.com/lib/images/
     var self = this,
         url = $('#IndicatorsLink').attr('href');
@@ -17,6 +17,7 @@ angular.module('Sportomatics')
         console.log(this.url)
     this.indicatorsType = 'graph';
     this.field = 'count';
+    this.fieldName = LocaleFactory.getFieldName(this.field);
     this.club = null;
     this.coach = null;
     this.groupBy = 'season';
@@ -104,6 +105,7 @@ angular.module('Sportomatics')
 
     this.setField = function(field) {
         this.field = field;
+        this.fieldName = LocaleFactory.getFieldName(field, self.locale);
         this.list(true);
     };
 
