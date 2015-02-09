@@ -161,6 +161,7 @@ angular.module('Sportomatics')
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
                 self.data = data;
+                self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
                 self.loader = false;
                 if(switched){
                     var zoomStart = zoomData.startDate;

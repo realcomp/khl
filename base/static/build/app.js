@@ -376,84 +376,84 @@ angular.module('Sportomatics')
                 };
                 var fieldNamesEn = {
                     count: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'GP',
+                        fullName: 'Games played'
                     },
                     goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'G',
+                        fullName: 'Goals'
                     },
                     assists: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'A',
+                        fullName: 'Assists'
                     },
                     points: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'PTS',
+                        fullName: 'Points'
                     },
                     plus_minus: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: '+/-',
+                        fullName: 'Plus/Minus'
                     },
                     penalty_time: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'PIM',
+                        fullName: 'Penalty in minutes'
                     },
                     es_goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'ESG',
+                        fullName: 'Even Strength Goals'
                     },
                     pp_goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'PPG',
+                        fullName: 'Power play goals'
                     },
                     ev_goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'SHG',
+                        fullName: 'Shorthanded goals'
                     },
                     overtime_goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'OTG',
+                        fullName: 'Overtime goals'
                     },
                     win_goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'GWG',
+                        fullName: 'Game winning goals'
                     },
                     bullet_goals: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'SDS',
+                        fullName: 'Shootouts deciding shots'
                     },
                     shots: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'SOG',
+                        fullName: 'Shots on goal'
                     },
                     pis__avg: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: '%SOG',
+                        fullName: 'Shots on goal percentage'
                     },
                     shots__avg: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'S/G',
+                        fullName: 'Average Shots/Game'
                     },
                     faceoff: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'FO',
+                        fullName: 'Faceoffs'
                     },
                     winfaceoff: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'FOW',
+                        fullName: 'Faceoffs won'
                     },
                     winfaceoff_p__avg: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: '%FO',
+                        fullName: 'Faceoffs won percentage'
                     },
                     gamingtime__avg: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'TOI/G',
+                        fullName: 'Average time on ice/Game'
                     },
                     change_time__avg: {
-                        shortName: 'И',
-                        fullName: 'Количество проведенных игр'
+                        shortName: 'SFT/G',
+                        fullName: 'Average Shifts/Game'
                     }
                 };
                 return (locale === 'en') ? fieldNamesEn[field]['fullName'] : fieldNames[field]['fullName'];
@@ -701,6 +701,7 @@ angular.module('Sportomatics')
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
                 self.data = data;
+                self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
                 self.loader = false;
                 if(switched){
                     var zoomStart = zoomData.startDate;
