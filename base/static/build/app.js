@@ -208,8 +208,8 @@ angular.module('Sportomatics')
                 gamesGraph.stackable = true;
                 gamesGraph.balloonText = '';
                 gamesGraph.visibleInLegend = false;
-                //if(field !== 'count')
-                //chart.addGraph(gamesGraph);
+                if(field !== 'count')
+                chart.addGraph(gamesGraph);
 
                 // third graph
                 var graph3 = new AmCharts.AmGraph();
@@ -262,8 +262,8 @@ function generateChartData(data, field) {
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
-            values: values[i]//,
-           // count: count[i]
+            values: values[i],
+            count: count[i]
         });
     }
     return chartData;
