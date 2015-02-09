@@ -4773,6 +4773,12 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     background: #8ebd5d !important;
 
 }
+.chart-button-selected {
+    color: #8ebd5d !important;
+    background: #ffffff !important;
+    border: 1px solid #8ebd5d !important;
+    line-height: 4px !important;
+}
 
 .amcharts-graph-g2 {
     stroke-linejoin: round;
@@ -4801,4 +4807,17 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .indicator-item{
     font-family: "Open Sans", sans-serif;
+}
+.season-button{
+    background: #c0c0c0;
+    font-size: 12px;
+    color: #000000;
+    font-weight: normal;
+    border-radius: 2px;
+    padding: 3px;
+    cursor: pointer;
+}
+.season-buttons-label{
+    padding-left: 3%;
+    line-height: 30px;
 }

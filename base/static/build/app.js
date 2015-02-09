@@ -687,6 +687,12 @@ angular.module('Sportomatics')
     $scope.unload = function(){
 
     };
+    $scope.moveToSeason = function(season){
+        zoomData.startDate = season.start_date;
+        zoomData.endDate = season.end_date;
+        self.groupBy = 'month';
+        self.list(true);
+    };
     this.list = function(switched) {
         var params = 'group_by=' + self.groupBy;
         if (self.club !== null) {
@@ -704,8 +710,12 @@ angular.module('Sportomatics')
                 self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
                 self.loader = false;
                 if(switched){
-                    var zoomStart = zoomData.startDate;
-                    var zoomEnd = zoomData.endDate;
+                    var datesArray = data.results.map(function(e){ return new Date(e['date']) });
+                    var min = Math.min.apply(null, datesArray);
+                    var max = Math.max.apply(null, datesArray);
+                    var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
+                    var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
+
                 }
                 ChartFactory.generateSerialChart(self.data.results, self.field).then(function(chart){
                     chart.write("chartdiv");
