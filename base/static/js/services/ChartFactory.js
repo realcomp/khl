@@ -6,12 +6,11 @@ angular.module('Sportomatics')
 .factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData){
 
     return {
-        generateSerialChart: function(data, field, graphsCount){
+        generateSerialChart: function(data, field, chartData, graphsCount){
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
                 // generate some random data first
-                var chartData = generateChartData(data, field);
 
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
@@ -163,25 +162,7 @@ angular.module('Sportomatics')
     }
 })
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
-function generateChartData(data, field) {
-    var chartData = [];
-    var dates = data.map(function(e){
-        if(e['date'] == null){
-            return new Date(e['season']['end_date']);
-        }
-        return new Date(e['date']);
-    });
-    var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
-    for(var i = 0; i< dates.length; i++){
-        chartData.push({
-            date: dates[i],
-            values: values[i],
-            count: count[i]
-        });
-    }
-    return chartData;
-}
+
 // this method is called when chart is first inited as we listen for "dataUpdated" event
 function zoomChart() {
     // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues

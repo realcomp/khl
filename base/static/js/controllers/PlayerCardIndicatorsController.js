@@ -14,7 +14,6 @@ angular.module('Sportomatics')
         'season' : 'Season'
     };
     this.url = $('#IndicatorsLink').attr('href');
-        console.log(this.url)
     this.indicatorsType = 'graph';
     this.field = 'count';
     this.fieldName = LocaleFactory.getFieldName(this.field);
@@ -24,80 +23,6 @@ angular.module('Sportomatics')
     this.data = [];
     this.graphData = {};
     this.chartsCount = 0;
-    function ObjectToGenerate() {
-        return {
-            bindto: '#chart',
-            axis: {
-                x: {
-                    type: 'timeseries',
-                    tick: {
-                        format: function (value) {
-                            if (self.groupBy === 'month') return monthNames[value.getMonth()] + ' ' + value.getDate() + ', ' + value.getFullYear();
-                            if (self.groupBy === 'season') return 'Сезон ' + (value.getFullYear()-1) + '-' + value.getFullYear();
-                            return value;
-                        }
-                    }
-                },
-                y: {
-                    min: -2,
-                    label: self.field
-                }
-            },
-            data: {
-                xs: {},
-                columns: [],
-                colors: {
-                },
-                type: 'line'
-            },
-            point: {
-                show: false
-            },
-            size: {
-                width: 900
-            },
-            transition: {
-            }, zoom: {
-                //enabled: true,
-                rescale: true
-            }
-
-        }
-    }
-    this.createC3ArrayAndData = function(array, number, field, name){
-        var resultArray = _.map(array, function(e){
-                if(e['date'] == null){
-                    console.log(new Date(e['season']['start_date'].substr(0, 4)).yyyymmdd('-'))
-                    return new Date(e['season']['start_date'].substr(0,4)).yyyymmdd('-');
-                }
-                return new Date(e['date']).yyyymmdd('-');}
-        ).sort(function(a,b){
-                return new Date(a.substr(0, 4), a.substr(5, 2)-1, a.substr(8, 2)) - new Date(b.substr(0, 4),b.substr(5, 2)-1, b.substr(8, 2));
-            });
-        resultArray.unshift('x'+number);
-        var resultArrayData = array.map(function(e){
-            /*if( Object.prototype.toString.call( $scope.fieldMapping[field] ) === '[object Array]' ) {
-             var sum = 0;
-             _.each($scope.fieldMapping[field], function(fieldEntry){
-             sum += e[fieldEntry];
-             })
-             return sum;
-             } else*/ return e[field]; // wait for multiple players comparison
-        });
-        resultArrayData.unshift(name);
-        return {
-            array: resultArray,
-            data: resultArrayData
-        }
-    }
-    this.createFieldData = function(field, array, chartsCount){
-        var result = [];
-        var i = 0;
-        //TODO: make this method accept multiple players
-        var object = self.createC3ArrayAndData(array, chartsCount, field, 'Player ' + chartsCount);
-        result.push(object);
-        return result;
-    };
 
     this.setIndicatorsType = function(type) {
         this.indicatorsType = type;
@@ -123,7 +48,7 @@ angular.module('Sportomatics')
     };
     //var chart = null;
     $scope.addGraph = function (url) {
-        var params = 'group_by=' + self.groupBy;
+        var params = 'group_by=month';
         if (self.club !== null) {
             params += '&club=' + self.club;
         }
@@ -133,8 +58,7 @@ angular.module('Sportomatics')
         $http.get(url + '?' + params)
             .success(function(data) {
                 $scope.dataByMonth = data;
-                group = 'season';
-                params = 'group_by=' + group;
+                params = 'group_by=season';
                 if (self.club !== null) {
                     params += '&club=' + self.club;
                 }
@@ -146,9 +70,12 @@ angular.module('Sportomatics')
                         $scope.dataBySeason = data;
                         self.loader = false;
                     }).then(function(){
-                        self.list();
-                        console.log($scope.dataByMonth);
-                        console.log($scope.dataBySeason);
+                        var data;
+                        data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
+                        var newChartData = updatedChartData($scope.chart, $scope.chartData, data.results, self.field);
+                        $scope.chart.dataProvider = newChartData.chartData;
+                        $scope.chart.addGraph(newChartData.newGraph);
+                        $scope.chart.validateData();
                     })
             })
     };
@@ -192,11 +119,13 @@ angular.module('Sportomatics')
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
-                ChartFactory.generateSerialChart(data.results, self.field).then(function(chart){
-                    chart.write("chartdiv");
-                    chart.addClassNames = false;
+                $scope.chartData = generateChartData(data.results, self.field);
+                ChartFactory.generateSerialChart(data.results, self.field, $scope.chartData).then(function(chart){
+                    $scope.chart = chart;
+                    $scope.chart.write("chartdiv");
+                    $scope.chart.addClassNames = false;
                     if(switched){
-                        chart.zoomToDates(zoomStart, zoomEnd);
+                        $scope.chart.zoomToDates(zoomStart, zoomEnd);
                     }
                 });
             //});
@@ -261,4 +190,67 @@ Array.prototype.contains = function(obj) {
         }
     }
     return false;
+}
+function generateChartData(data, field) {
+    var chartData = [];
+    var dates = data.map(function(e){
+        if(e['date'] == null){
+            return new Date(e['season']['end_date']);
+        }
+        return new Date(e['date']);
+    });
+    var values = data.map(function(e){ return e[field]});
+    var count = data.map(function(e){ return e['count']});
+    for(var i = 0; i< dates.length; i++){
+        chartData.push({
+            date: dates[i],
+            values: values[i],
+            count: count[i]
+        });
+    }
+    return chartData;
+}
+function updatedChartData(chart, initialData, data, field){
+
+    var chartData = initialData;
+    console.log(chartData);
+    var dates = data.map(function(e){
+        if(e['date'] == null){
+            return new Date(e['season']['end_date']);
+        }
+        return new Date(e['date']);
+    });
+    var values = data.map(function(e){ return e[field]});
+    var count = data.map(function(e){ return e['count']});
+    _.each(dates, function(date, index){
+        var pushed = false;
+        _.each(chartData, function(e){
+            if(e['date'] === date){
+                e['values1'] = values[index];
+                e['count1'] = count[index];
+                pushed = true;
+            }
+        });
+        if (!pushed) {
+            chartData.push({
+                date: date,
+                values1: values[index],
+                count1: count[index]
+            });
+        }
+    });
+    console.log(chartData);
+    var graph = new AmCharts.AmGraph();
+    graph.valueAxis = chart.valueAxes[0]; // we have to indicate which value axis should be used
+    graph.title = '926';
+    graph.valueField = 'values'+1;
+    graph.bullet = "round";
+    graph.hideBulletsCount = 30;
+    graph.bulletBorderThickness = 1;
+    graph.lineColor = '#000000'; //TODO: add more colors
+    graph.lineThickness = 4;
+    return {
+        chartData: chartData,
+        newGraph: graph
+    };
 }
