@@ -106,7 +106,7 @@ class Player(AbstractMan):
             #смотрим амплуа игрока из истории 
             if self.clubplayer_set.exists():
                 self.line = self.clubplayer_set.all().last().line
-                self.club = self.clubplayer_set.all().last().club
+                self.last_club = self.clubplayer_set.all().last().club
         super(Player, self).save(**kwargs)
 
     @property
