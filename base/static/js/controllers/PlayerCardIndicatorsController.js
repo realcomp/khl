@@ -95,21 +95,6 @@ angular.module('Sportomatics')
         self.list(true);
     };
     this.list = function(switched) {
-        /*var params = 'group_by=' + self.groupBy;
-        if (self.club !== null) {
-            params += '&club=' + self.club;
-        }
-        if (self.coach !== null) {
-            params += '&coach=' + self.coach;
-        }
-        //self.data = {};
-        self.loader = true;
-        $http.get(url + '?' + params)
-            .success(function(data, status, headers) {
-                self.locale = headers()['content-language'];
-                self.data = data;
-                self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
-                self.loader = false;*/
         var data;
         data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
                 if(switched){
