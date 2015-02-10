@@ -3,7 +3,7 @@ angular.module('Sportomatics')
     startDate: 'a',
     endDate: 'a'
 })
-.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData){
+.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
         generateSerialChart: function(data, field, chartData, graphsCount){
@@ -133,13 +133,6 @@ angular.module('Sportomatics')
                 graph3.hideBulletsCount = 30;
                 graph3.bulletBorderThickness = 1;
                 //chart.addGraph(graph3);
-
-                // CURSOR
-                var chartCursor = new AmCharts.ChartCursor();
-                chartCursor.cursorAlpha = 1;
-                //chartCursor.fullWidth = true;
-                chartCursor.cursorColor = "#8ebd5d";
-                chart.addChartCursor(chartCursor);
 
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();

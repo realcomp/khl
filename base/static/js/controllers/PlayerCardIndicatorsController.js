@@ -2,17 +2,7 @@ angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData','LocaleFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory) {
     //http://www.amcharts.com/lib/images/
     var self = this,
-        url = $('#IndicatorsLink').attr('href');
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var monthNamesRu = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
-        "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-    var localeRu = {
-        'season' : 'Сезон'
-    };
-    var localeEn = {
-        'season' : 'Season'
-    };
+    url = $('#IndicatorsLink').attr('href');
     this.url = $('#IndicatorsLink').attr('href');
     this.indicatorsType = 'graph';
     this.field = 'count';
@@ -107,6 +97,25 @@ angular.module('Sportomatics')
                 $scope.chartData = generateChartData(data.results, self.field);
                 ChartFactory.generateSerialChart(data.results, self.field, $scope.chartData).then(function(chart){
                     $scope.chart = chart;
+                    // CURSOR
+                    var chartCursor = new AmCharts.ChartCursor();
+                    chartCursor.cursorAlpha = 1;
+                    chartCursor.cursorColor = "#8ebd5d";
+                    chartCursor.categoryBalloonFunction = function(value){
+                        if(self.groupBy === 'month'){
+                            return $scope.localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                        } else {
+                            return $scope.localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                        }
+                    };
+                    $scope.chart.addChartCursor(chartCursor);
+                    $scope.chart.allLabels = [{
+                        align: 'center',
+                        y: 60,
+                        alpha: 0.7,
+                        bold: true,
+                        text: self.fieldName.toUpperCase()
+                    }];
                     $scope.chart.write("chartdiv");
                     $scope.chart.addClassNames = false;
                     if(switched){
@@ -128,6 +137,7 @@ angular.module('Sportomatics')
         $http.get(url + '?' + params)
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
+                $scope.localeObject = LocaleFactory['locale_'+self.locale];
                 self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
                 $scope.dataByMonth = data;
                 group = 'season';
