@@ -194,7 +194,7 @@ angular.module('Sportomatics')
                 graph1.lineColor = "#408e3a";
                 graph1.lineThickness = 4;
                 graph1.animationPlayed = true;
-                if(field !== 'count')
+                if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
                 graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
                 // second graph
@@ -902,13 +902,13 @@ function generateChartData(data, field) {
     });
     var values = data.map(function(e){ return e[field]});
     var count = data.map(function(e){ return Math.ceil(e['count']/10)});
-
+    var realCount = data.map(function(e){ return e['count']});
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
             values: values[i],
             count: count[i],
-            percentage: (field === 'count') ? undefined : Math.round(parseFloat(values[i]/count[i])*1000)/1000
+            percentage: (field === 'count') ? undefined : (count[i] === 0) ? undefined : Math.round(parseFloat(values[i]/realCount[i])*1000)/1000
         });
     }
     return chartData;
