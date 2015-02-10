@@ -43,13 +43,15 @@ class KHLScheduleParser(GrabParser):
             self.absolute_url = self.absolute_url.replace('??', str(id))
         return self.absolute_url
 
-    def put_data_in_db_from_page(self, id=None, update=False):
+    def put_data_in_db_from_page(self, id=None, update=False,
+                                challenge_type=False):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
         ''' 
         data = self.get_page(id)
         if data and self.model_name:
             model = get_model('hockeyapp', self.model_name)
+            if challenge_type: data['challenge_type'] = challenge_type
             if update:
                 model.objects.update_schedule(**data)
             else:

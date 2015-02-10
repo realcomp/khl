@@ -15,6 +15,7 @@ from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
 from base.models import TitleAlias, SocialNetValue
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
+from .choices import CHALLENGE_TYPE
 from . import managers
 
 
@@ -635,6 +636,8 @@ class Match(AdminLinkMixin, TitleBaseModel):
     khl_id = models.PositiveIntegerField(_('Other site ID'), null=True)
     is_championship = models.BooleanField(_('Is championship'), default=True)
     is_playoff = models.BooleanField(_('Is playoff'), default=False)
+    challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
+                                null=True, choices=CHALLENGE_TYPE)
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
@@ -696,6 +699,8 @@ class Schedule(TitleBaseModel):
     date = models.DateTimeField(_('Match date'), null=True, blank=True)
     is_championship = models.BooleanField(_('Is championship'), default=True)
     is_playoff = models.BooleanField(_('Is playoff'), default=False)
+    challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
+                                null=True, choices=CHALLENGE_TYPE)
     #relations
     season = models.ForeignKey(Season, null=True, blank=True)
     league = models.ForeignKey(League, null=True, blank=True)

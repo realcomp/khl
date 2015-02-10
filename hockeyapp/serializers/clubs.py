@@ -54,7 +54,7 @@ class BaseClubTeamSerializer(BaseClubSerializer):
 
 class ClubTeamSerializer(BaseClubTeamSerializer):
     seasons = SeasonSerializer(many=True)
-    all_players = serializers.SerializerMethodField()
+    # all_players = serializers.SerializerMethodField()
     offender_players = serializers.SerializerMethodField()
     defender_players = serializers.SerializerMethodField()
     goalkeeper_players = serializers.SerializerMethodField()
@@ -113,10 +113,10 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
             coach.is_left = coach in left
         return self._coaches
 
-    def get_all_players(self, obj):
-        players = sorted(list(self._get_players(obj)), key=lambda x: x.line)
-        return ClubTeamPlayerSerializer(
-            players, context=self.context, many=True).data
+    # def get_all_players(self, obj):
+    #     players = sorted(list(self._get_players(obj)), key=lambda x: x.line)
+    #     return ClubTeamPlayerSerializer(
+    #         players, context=self.context, many=True).data
 
     def get_offender_players(self, obj):
         players = filter(lambda x: x.line == 3, self._get_players(obj))
@@ -149,7 +149,7 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
-            'address', 'all_players', 'offender_players',
+            'address', 'offender_players',  # 'all_players',
             'defender_players', 'goalkeeper_players', 'coaches',
             'url', 'seasons', 'season', 'prev_season')
         model = Club

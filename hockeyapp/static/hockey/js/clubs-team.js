@@ -185,13 +185,15 @@
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
-                self.clubs.clubs.push({
-                    'data': data,
-                    'table': {
-                        'club': data.leagues[0].clubs,
-                    },
-                    'league': data.leagues[0]
-                });
+                if (data.leagues.length) {
+                    self.clubs.clubs.push({
+                        'data': data,
+                        'table': {
+                            'club': data.leagues[0].clubs,
+                        },
+                        'league': data.leagues[0]
+                    });
+                }
                 self.clubs.loader = false;
             });
         };

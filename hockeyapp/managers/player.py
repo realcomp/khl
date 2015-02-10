@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
+import datetime
 import requests
 
 from PIL import Image
@@ -96,7 +97,11 @@ class PlayerQuerySet(models.QuerySet):
 
 class ClubPlayerQuerySet(models.QuerySet):
     def by_season(self, season):
-        return self.filter(season=season)
+        qs = self.filter(season=season)
+        if season.is_last:
+            end_date = min(datetime.datetime.now().date(), season.end_date)
+            qs = qs.filter(end_date__gte=end_date)
+        return qs
 
     def by_leagues(self, leagues):
         return self.filter(league__in=leagues)
