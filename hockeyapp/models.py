@@ -12,7 +12,7 @@ from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
 from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
-from base.models import TitleAlias
+from base.models import TitleAlias, SocialNetValue
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from . import managers
@@ -61,6 +61,8 @@ class Player(AbstractMan):
     last_club = models.ForeignKey(
         'hockeyapp.Club', verbose_name=_('Club'),
         related_name='last_players', null=True)
+    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
+                                    verbose_name = _('Social accounts'))
 
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
@@ -158,6 +160,8 @@ class Coach(AbstractMan):
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
+                                    verbose_name = _('Social accounts'))
     class Meta:
         verbose_name=_('Coach')
         verbose_name_plural=_('Coaches')
@@ -168,6 +172,8 @@ class Judge(AbstractMan):
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
+    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
+                                    verbose_name = _('Social accounts'))
     class Meta:
         verbose_name=_('Judge')
         verbose_name_plural=_('Judges')

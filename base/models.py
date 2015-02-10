@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from .choices import SOCIAL_NETWORKS
 from .managers import SeasonManager
 
 
@@ -56,3 +57,13 @@ class TitleAlias(TitleBaseModel):
     class Meta:
         verbose_name = _('Title alias')
         verbose_name_plural = _('Title aliases')
+
+
+class SocialNetValue(TitleBaseModel):
+    url = models.URLField('URL', blank=True)
+    stype = models.PositiveIntegerField(_('Social Network'), null=True,
+                                        choices = SOCIAL_NETWORKS)
+    __unicode__ = lambda self: '{}: {}'.format(self.stype, self.url)
+    class Meta:
+        verbose_name = _('Social Network Value')
+        verbose_name_plural = _('Social Network Values')

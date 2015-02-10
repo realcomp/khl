@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.db.models import Avg, Q, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from daterange_filter.filter import DateRangeFilter
