@@ -86,10 +86,6 @@ class ScheduleManager(models.Manager):
         _season, _crt = sm.objects.get_or_create_season(**_season)
         league_model = get_model(CURRENT_APP, 'League')
         _league, _crt = league_model.objects.get_or_create(en_title=_league)
-        self.filter(league=_league, season=_season, khl_id__isnull=True
-            ).update(is_championship=False)
-        self.filter(league=_league, season=_season, khl_id__isnull=False
-            ).update(is_championship=True)
         challenge_type = kwargs.pop('challenge_type', None)
         for m in kwargs.get('matches',):
             home_team= self._get_team(m.pop('home_team', None))
