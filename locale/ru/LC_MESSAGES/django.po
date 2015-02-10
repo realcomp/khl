@@ -1561,7 +1561,7 @@ msgstr "Средний показатель \"плюс/минус\" за игр�
 
 #: hockeyapp/templates/hockeyapp/players/players-search.html:201
 msgid "By alphabet"
-msgstr ""
+msgstr "По алфавиту"
 
 #: hockeyapp/templates/hockeyapp/players/players-search.html:257
 #: hockeyapp/templates/hockeyapp/players/players-search.html:374

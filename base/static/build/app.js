@@ -1037,6 +1037,9 @@ angular.module('Sportomatics')
         if (self.isPlaying) {
             params += '&is_playing=true';
         }
+        if (self.alphabetFilter) {
+            params += '&%s_lastname__startswith=' + self.alphabetFilter;
+        }
         $.each(self.leagues_selected, function() {
             params += '&league=' + this;
         });
@@ -1059,7 +1062,11 @@ angular.module('Sportomatics')
     this.setRatedBy = function(ratedBy) {
         if (!this.loader) {
             this.ratedBy = ratedBy;
-            this.search();
+            if (ratedBy) {
+                this.search();
+            } else {
+                this.search('[%22%s_lastname%22,%22%s_name%22]');
+            }
         }
     };
 

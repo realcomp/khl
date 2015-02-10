@@ -73,10 +73,11 @@ class KHLScheduleParser(GrabParser):
                 'url': self.absolute_url,
                 #'html_body': self.get_html_body(html_body),
         }
-        res['season'] = { 
-                            'start_date':self.start_date(self.date),
-                            'end_date': self.end_date(self.date),
-                }
+        if self.date:
+            res['season'] = { 
+                                'start_date':self.start_date(self.date),
+                                'end_date': self.end_date(self.date),
+                    }
         return res
 
     def get_matches(self):
@@ -113,8 +114,11 @@ class KHLScheduleParser(GrabParser):
         if date:
             _date_dict = date.strip().lower().split(',')
             _m = _date_dict[0].split()[1].encode('utf-8')
-            _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
-                                                    month_dict.get(_m))
+            month = month_dict.get(_m)
+            if month: 
+                _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), month)
+            else:
+                _date_dict[0] = _date_dict[0][:3]+'01'+_date_dict[0][3:]
             if _date_dict[-1] != '':
                 mask = '%d %m %Y %H:%M'
             else:
@@ -125,17 +129,19 @@ class KHLScheduleParser(GrabParser):
 
     def start_date(self, date):
         b''' возвращает дату начала сезона '''
-        _pdt = date
-        _year = _pdt.year - 1 if _pdt.month < 7 else _pdt.year
-        _dt = datetime.datetime(day=1, month=7, year=_year)
-        return timezone.make_aware(_dt, current_tz)
+        if date:
+            _pdt = date
+            _year = _pdt.year - 1 if _pdt.month < 7 else _pdt.year
+            _dt = datetime.datetime(day=1, month=7, year=_year)
+            return timezone.make_aware(_dt, current_tz)
 
     def end_date(self, date):
         b''' возвращает дату окончания сезона '''
-        _pdt = date
-        _year = _pdt.year + 1 if _pdt.month > 6 else _pdt.year
-        _dt =  datetime.datetime(day=30, month=6, year=_year)
-        return timezone.make_aware(_dt, current_tz)
+        if date:
+            _pdt = date
+            _year = _pdt.year + 1 if _pdt.month > 6 else _pdt.year
+            _dt =  datetime.datetime(day=30, month=6, year=_year)
+            return timezone.make_aware(_dt, current_tz)
 ################################################################################
 ################################################################################
 ################################################################################
