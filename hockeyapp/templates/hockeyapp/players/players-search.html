@@ -196,6 +196,13 @@
                             <ul class="options-list">
                                 <li class="option-item">
                                     <a href="" class="option-link"
+                                       ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === '' }"
+                                       ng-click="PlayersSearchCtrl.setRatedBy('')">
+                                        {% trans 'By alphabet' %}
+                                    </a>
+                                </li>
+                                <li class="option-item">
+                                    <a href="" class="option-link"
                                        ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'seasons_total' }"
                                        ng-click="PlayersSearchCtrl.setRatedBy('seasons_total')">
                                         {% trans 'Seasons' %}
@@ -281,6 +288,18 @@
                             </ul>
                         </div>
                         <div class="twelve wide column">
+                            <a href="" class="option-btn alphabet-btn"
+                               ng-class="{ 'option-btn_active':!PlayersSearchCtrl.alphabetFilter }"
+                               ng-click="PlayersSearchCtrl.setAlphabetFilter(null)">
+                                {% trans 'ALL' %}
+                            </a>
+                            {% for letter in alphabet %}
+                                <a href="" class="option-btn alphabet-btn"
+                                   ng-class="{ 'option-btn_active':PlayersSearchCtrl.alphabetFilter === '{{ letter }}' }"
+                                   ng-click="PlayersSearchCtrl.setAlphabetFilter('{{ letter }}')">
+                                    {{ letter }}
+                                </a>
+                            {% endfor %}
                             <table class="ui celled table segment player-select-table"
                                    ng-show="PlayersSearchCtrl.data.results">
                                 <thead>
@@ -299,6 +318,12 @@
                                         <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'birth_date' }">
                                             <a href="" ng-click="PlayersSearchCtrl.search('birth_date')">
                                                 {% trans 'Age' %}
+                                            </a>
+                                        </th>
+                                        <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'contract_to' }"
+                                            ng-show="PlayersSearchCtrl.ratedBy === ''">
+                                            <a href="" ng-click="PlayersSearchCtrl.search('contract_to')">
+                                                {% trans 'Contract to' %}
                                             </a>
                                         </th>
                                         <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
@@ -433,8 +458,12 @@
                                             {{ player.age[0] }}
                                             <div class="player-desc">{{ player.birth_date_short }}</div>
                                         </td>
-                                        <td align="center">
+                                        <td align="center" ng-show="PlayersSearchCtrl.ratedBy">
                                             {{ player.rating }}
+                                        </td>
+                                        <td align="center" ng-hide="PlayersSearchCtrl.ratedBy">
+                                            {{ player.contract_to }}
+                                            <span class="player-desc">{{ player.contract_type }}</span>
                                         </td>
                                         <td align="center">2837</td>
                                         <td align="center">3274</td>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-04 19:49+0300\n"
+"POT-Creation-Date: 2015-02-10 12:59+0300\n"
 "PO-Revision-Date: 2014-12-10 10:42+0000\n"
 "Last-Translator: Anonymous User <anonymous@user.tld>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -419,16 +419,24 @@ msgstr ""
 msgid "Title (en)"
 msgstr ""
 
-#: base/models.py:45 hockeyapp/models.py:108 hockeyapp/models.py:267
-#: hockeyapp/models.py:304 hockeyapp/models.py:324 hockeyapp/models.py:366
-#: hockeyapp/models.py:382
+#: base/models.py:45 hockeyapp/models.py:146 hockeyapp/models.py:315
+#: hockeyapp/models.py:352 hockeyapp/models.py:372 hockeyapp/models.py:414
+#: hockeyapp/models.py:430
 msgid "Start date"
 msgstr ""
 
-#: base/models.py:46 hockeyapp/models.py:109 hockeyapp/models.py:268
-#: hockeyapp/models.py:305 hockeyapp/models.py:325 hockeyapp/models.py:367
-#: hockeyapp/models.py:383
+#: base/models.py:46 hockeyapp/models.py:147 hockeyapp/models.py:316
+#: hockeyapp/models.py:353 hockeyapp/models.py:373 hockeyapp/models.py:415
+#: hockeyapp/models.py:431
 msgid "End date"
+msgstr ""
+
+#: base/models.py:57
+msgid "Title alias"
+msgstr ""
+
+#: base/models.py:58
+msgid "Title aliases"
 msgstr ""
 
 #: base/templates/partial/footer.html:11
@@ -451,8 +459,8 @@ msgstr ""
 msgid "Free services"
 msgstr ""
 
-#: base/templates/partial/footer.html:17 hockeyapp/models.py:145
-#: hockeyapp/models.py:182
+#: base/templates/partial/footer.html:17 hockeyapp/models.py:183
+#: hockeyapp/models.py:220
 msgid "Contacts"
 msgstr ""
 
@@ -541,31 +549,35 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: hockeyapp/admin.py:33
+#: hockeyapp/admin.py:34
 msgid "General"
 msgstr ""
 
-#: hockeyapp/admin.py:34 hockeyapp/models.py:606 hockeyapp/models.py:653
+#: hockeyapp/admin.py:35 hockeyapp/models.py:654 hockeyapp/models.py:701
 msgid "Home team"
 msgstr ""
 
-#: hockeyapp/admin.py:35 hockeyapp/models.py:615 hockeyapp/models.py:657
+#: hockeyapp/admin.py:36 hockeyapp/models.py:663 hockeyapp/models.py:705
 msgid "Guest team"
 msgstr ""
 
-#: hockeyapp/admin.py:36
+#: hockeyapp/admin.py:37
 msgid "Service Info"
 msgstr ""
 
-#: hockeyapp/admin.py:180 hockeyapp/models.py:602
+#: hockeyapp/admin.py:94
+msgid "Recalculate counters"
+msgstr ""
+
+#: hockeyapp/admin.py:196 hockeyapp/models.py:650
 msgid "Line judges"
 msgstr ""
 
-#: hockeyapp/admin.py:257
+#: hockeyapp/admin.py:273
 msgid "Import Names"
 msgstr ""
 
-#: hockeyapp/admin.py:278
+#: hockeyapp/admin.py:294
 msgid "Export Names"
 msgstr ""
 
@@ -589,13 +601,13 @@ msgstr ""
 msgid "Offender"
 msgstr ""
 
-#: hockeyapp/choices.py:18 hockeyapp/models.py:474
+#: hockeyapp/choices.py:18 hockeyapp/models.py:522
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:196
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:197
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:215
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:236
 #: hockeyapp/templates/hockeyapp/players/player-card-short.html:59
-#: hockeyapp/templates/hockeyapp/players/players-search.html:207
-#: hockeyapp/templates/hockeyapp/players/players-search.html:303
+#: hockeyapp/templates/hockeyapp/players/players-search.html:222
+#: hockeyapp/templates/hockeyapp/players/players-search.html:344
 msgid "Goals"
 msgstr ""
 
@@ -667,610 +679,651 @@ msgstr ""
 msgid "Update from db cache"
 msgstr ""
 
-#: hockeyapp/models.py:20
+#: hockeyapp/models.py:22
 msgid "Full name (rus)"
 msgstr ""
 
-#: hockeyapp/models.py:21 hockeyapp/models.py:674
+#: hockeyapp/models.py:23 hockeyapp/models.py:722
 msgid "Name (rus)"
 msgstr ""
 
-#: hockeyapp/models.py:22
+#: hockeyapp/models.py:24
 msgid "Last name (rus)"
 msgstr ""
 
-#: hockeyapp/models.py:23
+#: hockeyapp/models.py:25
 msgid "Full name (en)"
 msgstr ""
 
-#: hockeyapp/models.py:24 hockeyapp/models.py:676
+#: hockeyapp/models.py:26 hockeyapp/models.py:724
 msgid "Name (en)"
 msgstr ""
 
-#: hockeyapp/models.py:25
+#: hockeyapp/models.py:27
 msgid "Last name (en)"
 msgstr ""
 
-#: hockeyapp/models.py:26
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:276
+#: hockeyapp/models.py:28
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:280
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:43
 #: hockeyapp/templates/hockeyapp/players/card.html:16
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:33
 msgid "Birth date"
 msgstr ""
 
-#: hockeyapp/models.py:27
+#: hockeyapp/models.py:29
 msgid "Death date"
 msgstr ""
 
-#: hockeyapp/models.py:45
+#: hockeyapp/models.py:47
 msgid "Contract type"
 msgstr ""
 
-#: hockeyapp/models.py:48
+#: hockeyapp/models.py:50
+#: hockeyapp/templates/hockeyapp/players/players-search.html:326
 msgid "Contract to"
 msgstr ""
 
-#: hockeyapp/models.py:49 hockeyapp/models.py:321
+#: hockeyapp/models.py:51 hockeyapp/models.py:369
 msgid "Number"
 msgstr ""
 
-#: hockeyapp/models.py:50 hockeyapp/models.py:322
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:238
+#: hockeyapp/models.py:52 hockeyapp/models.py:370
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:242
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:39
 #: hockeyapp/templates/hockeyapp/players/card.html:9
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:10
 msgid "Line"
 msgstr ""
 
-#: hockeyapp/models.py:52
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:264
+#: hockeyapp/models.py:54
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:268
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:41
 #: hockeyapp/templates/hockeyapp/players/card.html:12
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:21
 msgid "Weight"
 msgstr ""
 
-#: hockeyapp/models.py:53
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:259
+#: hockeyapp/models.py:55
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:263
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:40
 #: hockeyapp/templates/hockeyapp/players/card.html:11
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:16
 msgid "Height"
 msgstr ""
 
-#: hockeyapp/models.py:54
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:269
+#: hockeyapp/models.py:56
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:273
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:42
 #: hockeyapp/templates/hockeyapp/players/card.html:13
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:26
 msgid "Grip"
 msgstr ""
 
-#: hockeyapp/models.py:55 hockeyapp/models.py:119 hockeyapp/models.py:129
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:291
+#: hockeyapp/models.py:57 hockeyapp/models.py:157 hockeyapp/models.py:167
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:295
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:45
 #: hockeyapp/templates/hockeyapp/players/card.html:18
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:46
 msgid "Citizenship"
 msgstr ""
 
-#: hockeyapp/models.py:58 hockeyapp/models.py:122 hockeyapp/models.py:132
-#: hockeyapp/models.py:163 hockeyapp/models.py:295
+#: hockeyapp/models.py:60 hockeyapp/models.py:160 hockeyapp/models.py:170
+#: hockeyapp/models.py:201 hockeyapp/models.py:343
 msgid "Photo"
 msgstr ""
 
-#: hockeyapp/models.py:61 hockeyapp/models.py:206 hockeyapp/models.py:584
-#: hockeyapp/models.py:659
-msgid "Processed time"
-msgstr ""
-
-#: hockeyapp/models.py:100
-msgid "Player"
-msgstr ""
-
-#: hockeyapp/models.py:101
-msgid "Players"
-msgstr ""
-
-#: hockeyapp/models.py:114
-msgid "Player citizenship"
-msgstr ""
-
-#: hockeyapp/models.py:115
-msgid "Players citizenships"
-msgstr ""
-
-#: hockeyapp/models.py:124
-msgid "Coach"
-msgstr ""
-
-#: hockeyapp/models.py:125
-msgid "Coaches"
-msgstr ""
-
-#: hockeyapp/models.py:134
-msgid "Judge"
-msgstr ""
-
-#: hockeyapp/models.py:135
-msgid "Judges"
-msgstr ""
-
-#: hockeyapp/models.py:140 hockeyapp/models.py:141
-msgid "Capacity"
-msgstr ""
-
-#: hockeyapp/models.py:142 hockeyapp/models.py:283
-msgid "Latitude and Longitude"
-msgstr ""
-
-#: hockeyapp/models.py:144 hockeyapp/models.py:181
-msgid "Site"
-msgstr ""
-
-#: hockeyapp/models.py:146
-msgid "Tickets"
-msgstr ""
-
-#: hockeyapp/models.py:147 hockeyapp/models.py:285
-msgid "Main photo"
-msgstr ""
-
-#: hockeyapp/models.py:158
-msgid "Arena"
-msgstr ""
-
-#: hockeyapp/models.py:159
-msgid "Arenas"
-msgstr ""
-
-#: hockeyapp/models.py:171
-msgid "League"
-msgstr ""
-
-#: hockeyapp/models.py:172
-msgid "Leagues"
-msgstr ""
-
-#: hockeyapp/models.py:177
-msgid "Founding date"
-msgstr ""
-
-#: hockeyapp/models.py:178
-msgid "Closing date"
-msgstr ""
-
-#: hockeyapp/models.py:179 hockeyapp/models.py:381
-msgid "Logo"
-msgstr ""
-
-#: hockeyapp/models.py:183
-msgid "Styles (CSS)"
-msgstr ""
-
-#: hockeyapp/models.py:189
-msgid "Head Coach"
-msgstr ""
-
-#: hockeyapp/models.py:192
-msgid "Help coaches"
-msgstr ""
-
-#: hockeyapp/models.py:259
+#: hockeyapp/models.py:62 hockeyapp/models.py:297
 msgid "Club"
 msgstr ""
 
-#: hockeyapp/models.py:260
+#: hockeyapp/models.py:66 hockeyapp/models.py:244 hockeyapp/models.py:632
+#: hockeyapp/models.py:707
+msgid "Processed time"
+msgstr ""
+
+#: hockeyapp/models.py:71
+msgid "Seasons Total"
+msgstr ""
+
+#: hockeyapp/models.py:72
+msgid "Matches Total"
+msgstr ""
+
+#: hockeyapp/models.py:73
+msgid "Goals Total"
+msgstr ""
+
+#: hockeyapp/models.py:74
+msgid "Assists Total"
+msgstr ""
+
+#: hockeyapp/models.py:75 hockeyapp/models.py:76
+msgid "Points Total"
+msgstr ""
+
+#: hockeyapp/models.py:77
+msgid "Goals Average"
+msgstr ""
+
+#: hockeyapp/models.py:78
+msgid "Assists Average"
+msgstr ""
+
+#: hockeyapp/models.py:79 hockeyapp/models.py:80
+msgid "Points Average"
+msgstr ""
+
+#: hockeyapp/models.py:138
+msgid "Player"
+msgstr ""
+
+#: hockeyapp/models.py:139
+msgid "Players"
+msgstr ""
+
+#: hockeyapp/models.py:152
+msgid "Player citizenship"
+msgstr ""
+
+#: hockeyapp/models.py:153
+msgid "Players citizenships"
+msgstr ""
+
+#: hockeyapp/models.py:162
+msgid "Coach"
+msgstr ""
+
+#: hockeyapp/models.py:163
+msgid "Coaches"
+msgstr ""
+
+#: hockeyapp/models.py:172
+msgid "Judge"
+msgstr ""
+
+#: hockeyapp/models.py:173
+msgid "Judges"
+msgstr ""
+
+#: hockeyapp/models.py:178 hockeyapp/models.py:179
+msgid "Capacity"
+msgstr ""
+
+#: hockeyapp/models.py:180 hockeyapp/models.py:331
+msgid "Latitude and Longitude"
+msgstr ""
+
+#: hockeyapp/models.py:182 hockeyapp/models.py:219
+msgid "Site"
+msgstr ""
+
+#: hockeyapp/models.py:184
+msgid "Tickets"
+msgstr ""
+
+#: hockeyapp/models.py:185 hockeyapp/models.py:333
+msgid "Main photo"
+msgstr ""
+
+#: hockeyapp/models.py:196
+msgid "Arena"
+msgstr ""
+
+#: hockeyapp/models.py:197
+msgid "Arenas"
+msgstr ""
+
+#: hockeyapp/models.py:209
+msgid "League"
+msgstr ""
+
+#: hockeyapp/models.py:210
+msgid "Leagues"
+msgstr ""
+
+#: hockeyapp/models.py:215
+msgid "Founding date"
+msgstr ""
+
+#: hockeyapp/models.py:216
+msgid "Closing date"
+msgstr ""
+
+#: hockeyapp/models.py:217 hockeyapp/models.py:429
+msgid "Logo"
+msgstr ""
+
+#: hockeyapp/models.py:221
+msgid "Styles (CSS)"
+msgstr ""
+
+#: hockeyapp/models.py:227
+msgid "Head Coach"
+msgstr ""
+
+#: hockeyapp/models.py:230
+msgid "Help coaches"
+msgstr ""
+
+#: hockeyapp/models.py:298
 msgid "Clubs"
 msgstr ""
 
-#: hockeyapp/models.py:272
+#: hockeyapp/models.py:307
+msgid "Club title alias"
+msgstr ""
+
+#: hockeyapp/models.py:308
+msgid "Club title aliases "
+msgstr ""
+
+#: hockeyapp/models.py:320
 msgid "Post address"
 msgstr ""
 
-#: hockeyapp/models.py:273
+#: hockeyapp/models.py:321
 msgid "Office phone"
 msgstr ""
 
-#: hockeyapp/models.py:275
+#: hockeyapp/models.py:323
 msgid "Contact name"
 msgstr ""
 
-#: hockeyapp/models.py:277
+#: hockeyapp/models.py:325
 msgid "Contact phone"
 msgstr ""
 
-#: hockeyapp/models.py:279
+#: hockeyapp/models.py:327
 msgid "Contact post"
 msgstr ""
 
-#: hockeyapp/models.py:282
+#: hockeyapp/models.py:330
 msgid "Phone"
 msgstr ""
 
-#: hockeyapp/models.py:290
+#: hockeyapp/models.py:338
 msgid "Club address"
 msgstr ""
 
-#: hockeyapp/models.py:291
+#: hockeyapp/models.py:339
 msgid "Club addresses"
 msgstr ""
 
-#: hockeyapp/models.py:312
+#: hockeyapp/models.py:360
 msgid "Club league"
 msgstr ""
 
-#: hockeyapp/models.py:313
+#: hockeyapp/models.py:361
 msgid "Club leagues"
 msgstr ""
 
-#: hockeyapp/models.py:357
+#: hockeyapp/models.py:405
 msgid "Club player"
 msgstr ""
 
-#: hockeyapp/models.py:358
+#: hockeyapp/models.py:406
 msgid "Club players"
 msgstr ""
 
-#: hockeyapp/models.py:365
+#: hockeyapp/models.py:413
 msgid "Head coach"
 msgstr ""
 
-#: hockeyapp/models.py:374
+#: hockeyapp/models.py:422
 msgid "Club coach"
 msgstr ""
 
-#: hockeyapp/models.py:375
+#: hockeyapp/models.py:423
 msgid "Club coaches"
 msgstr ""
 
-#: hockeyapp/models.py:387
+#: hockeyapp/models.py:435
 msgid "Logo Club History"
 msgstr ""
 
-#: hockeyapp/models.py:388
+#: hockeyapp/models.py:436
 msgid "Logo Club Histories"
 msgstr ""
 
-#: hockeyapp/models.py:393
+#: hockeyapp/models.py:441
 msgid "Fiver"
 msgstr ""
 
-#: hockeyapp/models.py:395
+#: hockeyapp/models.py:443
 msgid "1th period Shots"
 msgstr ""
 
-#: hockeyapp/models.py:397
+#: hockeyapp/models.py:445
 msgid "2nd period Shots"
 msgstr ""
 
-#: hockeyapp/models.py:399
+#: hockeyapp/models.py:447
 msgid "3th period Shots"
 msgstr ""
 
-#: hockeyapp/models.py:401
+#: hockeyapp/models.py:449
 msgid "All periods Shots"
 msgstr ""
 
-#: hockeyapp/models.py:403
+#: hockeyapp/models.py:451
 msgid "1th period Faceoffs"
 msgstr ""
 
-#: hockeyapp/models.py:405
+#: hockeyapp/models.py:453
 msgid "2nd period Faceoffs"
 msgstr ""
 
-#: hockeyapp/models.py:407
+#: hockeyapp/models.py:455
 msgid "3th period Faceoffs"
 msgstr ""
 
-#: hockeyapp/models.py:409
+#: hockeyapp/models.py:457
 msgid "All periods Faceoffs"
 msgstr ""
 
-#: hockeyapp/models.py:412
+#: hockeyapp/models.py:460
 msgid "1th period change count"
 msgstr ""
 
-#: hockeyapp/models.py:414
+#: hockeyapp/models.py:462
 msgid "1th period time in game, sec"
 msgstr ""
 
-#: hockeyapp/models.py:416
+#: hockeyapp/models.py:464
 msgid "2nd period change count"
 msgstr ""
 
-#: hockeyapp/models.py:418
+#: hockeyapp/models.py:466
 msgid "2nd period time in game, sec"
 msgstr ""
 
-#: hockeyapp/models.py:420
+#: hockeyapp/models.py:468
 msgid "3th period change count"
 msgstr ""
 
-#: hockeyapp/models.py:422
+#: hockeyapp/models.py:470
 msgid "3th period time in game, sec"
 msgstr ""
 
-#: hockeyapp/models.py:424
+#: hockeyapp/models.py:472
 msgid "All periods change count"
 msgstr ""
 
-#: hockeyapp/models.py:426
+#: hockeyapp/models.py:474
 msgid "All periods time in game, sec"
 msgstr ""
 
-#: hockeyapp/models.py:428
+#: hockeyapp/models.py:476
 msgid "1th period blocks"
 msgstr ""
 
-#: hockeyapp/models.py:430
+#: hockeyapp/models.py:478
 msgid "1th period hits"
 msgstr ""
 
-#: hockeyapp/models.py:432
+#: hockeyapp/models.py:480
 msgid "1th period fouls"
 msgstr ""
 
-#: hockeyapp/models.py:434
+#: hockeyapp/models.py:482
 msgid "2nd period blocks"
 msgstr ""
 
-#: hockeyapp/models.py:436
+#: hockeyapp/models.py:484
 msgid "2nd period hits"
 msgstr ""
 
-#: hockeyapp/models.py:438
+#: hockeyapp/models.py:486
 msgid "2nd period fouls"
 msgstr ""
 
-#: hockeyapp/models.py:440
+#: hockeyapp/models.py:488
 msgid "3th period blocks"
 msgstr ""
 
-#: hockeyapp/models.py:442
+#: hockeyapp/models.py:490
 msgid "3th period hits"
 msgstr ""
 
-#: hockeyapp/models.py:444
+#: hockeyapp/models.py:492
 msgid "3th period fouls"
 msgstr ""
 
-#: hockeyapp/models.py:446
+#: hockeyapp/models.py:494
 msgid "All periods blocks"
 msgstr ""
 
-#: hockeyapp/models.py:448
+#: hockeyapp/models.py:496
 msgid "All periods hits"
 msgstr ""
 
-#: hockeyapp/models.py:450
+#: hockeyapp/models.py:498
 msgid "All periods fouls"
 msgstr ""
 
-#: hockeyapp/models.py:461
+#: hockeyapp/models.py:509
 msgid "Player Stats"
 msgstr ""
 
-#: hockeyapp/models.py:462
+#: hockeyapp/models.py:510
 msgid "Players Stats"
 msgstr ""
 
-#: hockeyapp/models.py:475
+#: hockeyapp/models.py:523
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:193
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:194
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:212
-#: hockeyapp/templates/hockeyapp/players/players-search.html:214
-#: hockeyapp/templates/hockeyapp/players/players-search.html:306
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:233
+#: hockeyapp/templates/hockeyapp/players/players-search.html:229
+#: hockeyapp/templates/hockeyapp/players/players-search.html:350
 msgid "Assists"
 msgstr ""
 
-#: hockeyapp/models.py:476
-#: hockeyapp/templates/hockeyapp/players/players-search.html:221
-#: hockeyapp/templates/hockeyapp/players/players-search.html:309
+#: hockeyapp/models.py:524
+#: hockeyapp/templates/hockeyapp/players/players-search.html:236
+#: hockeyapp/templates/hockeyapp/players/players-search.html:356
 msgid "Points"
 msgstr ""
 
-#: hockeyapp/models.py:479 hockeyapp/models.py:480
+#: hockeyapp/models.py:527 hockeyapp/models.py:528
 msgid "Penalty Time"
 msgstr ""
 
-#: hockeyapp/models.py:481 hockeyapp/models.py:482
+#: hockeyapp/models.py:529 hockeyapp/models.py:530
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:208
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:209
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:227
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:248
 msgid "EV Goals"
 msgstr ""
 
-#: hockeyapp/models.py:483 hockeyapp/models.py:484
+#: hockeyapp/models.py:531 hockeyapp/models.py:532
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:211
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:212
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:230
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:251
 msgid "Power Play Goals"
 msgstr ""
 
-#: hockeyapp/models.py:485 hockeyapp/models.py:486
+#: hockeyapp/models.py:533 hockeyapp/models.py:534
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:214
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:215
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:233
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:254
 msgid "Even Strength Goals"
 msgstr ""
 
-#: hockeyapp/models.py:488 hockeyapp/models.py:489
+#: hockeyapp/models.py:536 hockeyapp/models.py:537
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:217
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:218
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:236
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:257
 msgid "Overtime Goals"
 msgstr ""
 
-#: hockeyapp/models.py:491 hockeyapp/models.py:492
+#: hockeyapp/models.py:539 hockeyapp/models.py:540
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:220
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:221
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:239
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:260
 msgid "Win Goals"
 msgstr ""
 
-#: hockeyapp/models.py:493 hockeyapp/models.py:494
+#: hockeyapp/models.py:541 hockeyapp/models.py:542
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:223
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:224
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:242
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:263
 msgid "Win Bullet Goals"
 msgstr ""
 
-#: hockeyapp/models.py:496 hockeyapp/models.py:497
+#: hockeyapp/models.py:544 hockeyapp/models.py:545
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:226
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:227
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:245
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:266
 msgid "Shots count"
 msgstr ""
 
-#: hockeyapp/models.py:498 hockeyapp/models.py:499
+#: hockeyapp/models.py:546 hockeyapp/models.py:547
 msgid "Implemented Shots, %"
 msgstr ""
 
-#: hockeyapp/models.py:501 hockeyapp/models.py:502
+#: hockeyapp/models.py:549 hockeyapp/models.py:550
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:232
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:233
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:251
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:272
 msgid "Face-off"
 msgstr ""
 
-#: hockeyapp/models.py:503 hockeyapp/models.py:504
+#: hockeyapp/models.py:551 hockeyapp/models.py:552
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:235
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:236
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:254
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:275
 msgid "Face-off Wins"
 msgstr ""
 
-#: hockeyapp/models.py:505 hockeyapp/models.py:506
+#: hockeyapp/models.py:553 hockeyapp/models.py:554
 msgid "Face-off Wins, %"
 msgstr ""
 
-#: hockeyapp/models.py:509
+#: hockeyapp/models.py:557
 msgid "Change count"
 msgstr ""
 
-#: hockeyapp/models.py:510
+#: hockeyapp/models.py:558
 msgid "Hits"
 msgstr ""
 
-#: hockeyapp/models.py:511
+#: hockeyapp/models.py:559
 msgid "Blocks"
 msgstr ""
 
-#: hockeyapp/models.py:512
+#: hockeyapp/models.py:560
 msgid "Fouls"
 msgstr ""
 
-#: hockeyapp/models.py:514 hockeyapp/models.py:515
+#: hockeyapp/models.py:562 hockeyapp/models.py:563
 msgid "Loose Goals"
 msgstr ""
 
-#: hockeyapp/models.py:516 hockeyapp/models.py:517
+#: hockeyapp/models.py:564 hockeyapp/models.py:565
 msgid "Saves Goals"
 msgstr ""
 
-#: hockeyapp/models.py:518 hockeyapp/models.py:519
+#: hockeyapp/models.py:566 hockeyapp/models.py:567
 msgid "Saves Goals , %"
 msgstr ""
 
-#: hockeyapp/models.py:521 hockeyapp/models.py:522
+#: hockeyapp/models.py:569 hockeyapp/models.py:570
 msgid "Safety Factor"
 msgstr ""
 
-#: hockeyapp/models.py:523 hockeyapp/models.py:524
+#: hockeyapp/models.py:571 hockeyapp/models.py:572
 msgid "Gaming time"
 msgstr ""
 
-#: hockeyapp/models.py:533
+#: hockeyapp/models.py:581
 msgid "Club Player History Match"
 msgstr ""
 
-#: hockeyapp/models.py:534
+#: hockeyapp/models.py:582
 msgid "Club Player Histories in Matches"
 msgstr ""
 
-#: hockeyapp/models.py:558
+#: hockeyapp/models.py:606
 msgid "Match goal entry"
 msgstr ""
 
-#: hockeyapp/models.py:559
+#: hockeyapp/models.py:607
 msgid "Match goal entries"
 msgstr ""
 
-#: hockeyapp/models.py:574
+#: hockeyapp/models.py:622
 msgid "Match penalty entry"
 msgstr ""
 
-#: hockeyapp/models.py:575
+#: hockeyapp/models.py:623
 msgid "Match penalty entries"
 msgstr ""
 
-#: hockeyapp/models.py:581 hockeyapp/models.py:641
+#: hockeyapp/models.py:629 hockeyapp/models.py:689
 msgid "Other site ID"
 msgstr ""
 
-#: hockeyapp/models.py:582 hockeyapp/models.py:643
+#: hockeyapp/models.py:630 hockeyapp/models.py:691
 msgid "Is championship"
 msgstr ""
 
-#: hockeyapp/models.py:583 hockeyapp/models.py:644
+#: hockeyapp/models.py:631 hockeyapp/models.py:692
 msgid "Is playoff"
 msgstr ""
 
-#: hockeyapp/models.py:589 hockeyapp/models.py:590
+#: hockeyapp/models.py:637 hockeyapp/models.py:638
 msgid "Spectators count"
 msgstr ""
 
-#: hockeyapp/models.py:592 hockeyapp/models.py:593 hockeyapp/models.py:642
+#: hockeyapp/models.py:640 hockeyapp/models.py:641 hockeyapp/models.py:690
 msgid "Match date"
 msgstr ""
 
-#: hockeyapp/models.py:594
+#: hockeyapp/models.py:642
 msgid "Match count"
 msgstr ""
 
-#: hockeyapp/models.py:595
+#: hockeyapp/models.py:643
 msgid "Match detail count"
 msgstr ""
 
-#: hockeyapp/models.py:626
+#: hockeyapp/models.py:674
 msgid "Match"
 msgstr ""
 
-#: hockeyapp/models.py:627
+#: hockeyapp/models.py:675
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:190
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:191
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:209
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:230
 #: hockeyapp/templates/hockeyapp/players/player-card-short.html:52
-#: hockeyapp/templates/hockeyapp/players/players-search.html:200
-#: hockeyapp/templates/hockeyapp/players/players-search.html:300
+#: hockeyapp/templates/hockeyapp/players/players-search.html:215
+#: hockeyapp/templates/hockeyapp/players/players-search.html:338
 msgid "Matches"
 msgstr ""
 
-#: hockeyapp/models.py:662
+#: hockeyapp/models.py:710
 msgid "League Schedule"
 msgstr ""
 
-#: hockeyapp/models.py:663
+#: hockeyapp/models.py:711
 msgid "League Schedules"
 msgstr ""
 
-#: hockeyapp/models.py:670
+#: hockeyapp/models.py:718
 msgid "First Name"
 msgstr ""
 
-#: hockeyapp/models.py:671
+#: hockeyapp/models.py:719
 msgid "Last Name"
 msgstr ""
 
-#: hockeyapp/models.py:682
-#: hockeyapp/templates/hockeyapp/players/players-search.html:283
+#: hockeyapp/models.py:730
+#: hockeyapp/templates/hockeyapp/players/players-search.html:310
 msgid "Name"
 msgstr ""
 
-#: hockeyapp/models.py:683
+#: hockeyapp/models.py:731
 msgid "Names"
 msgstr ""
 
@@ -1280,7 +1333,7 @@ msgstr ""
 msgid "SEASON"
 msgstr ""
 
-#: hockeyapp/serializers/clubs.py:227 hockeyapp/serializers/clubs.py:228
+#: hockeyapp/serializers/clubs.py:230 hockeyapp/serializers/clubs.py:231
 msgid "Other leagues"
 msgstr ""
 
@@ -1310,15 +1363,16 @@ msgstr ""
 msgid "players"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:281
+#: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:285
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:44
 #: hockeyapp/templates/hockeyapp/players/card.html:17
 #: hockeyapp/templates/hockeyapp/players/players-search-popup.html:36
-#: hockeyapp/templates/hockeyapp/players/players-search.html:293
+#: hockeyapp/templates/hockeyapp/players/players-search.html:320
 msgid "Age"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/clubs/clubs.html:52
+#: hockeyapp/templates/hockeyapp/players/players-search.html:294
 msgid "ALL"
 msgstr ""
 
@@ -1349,65 +1403,65 @@ msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:184
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:185
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:203
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:224
 msgid "Date"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:187
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:188
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:206
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:227
 msgid "Season"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:199
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:200
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:218
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:239
 msgid "Score"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:202
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:203
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:221
-#: hockeyapp/templates/hockeyapp/players/players-search.html:228
-#: hockeyapp/templates/hockeyapp/players/players-search.html:312
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:242
+#: hockeyapp/templates/hockeyapp/players/players-search.html:243
+#: hockeyapp/templates/hockeyapp/players/players-search.html:362
 msgid "+/-"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:205
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:206
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:224
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:245
 msgid "Penalty Time, sec"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:229
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:230
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:248
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:269
 #, python-format
 msgid "Implemented Shots, %%"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:238
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:239
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:257
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:278
 #, python-format
 msgid "Face-off Wins, %%"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:241
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:242
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:260
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:281
 msgid "Shots/match"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:244
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:245
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:263
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:284
 msgid "Time in game / match, sec"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:247
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:248
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:266
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:287
 msgid "Change count / match"
 msgstr ""
 
@@ -1415,9 +1469,17 @@ msgstr ""
 msgid "mon."
 msgstr ""
 
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:203
+msgid "By month"
+msgstr ""
+
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:204
+msgid "By season"
+msgstr ""
+
 #: hockeyapp/templates/hockeyapp/players/player-card-short.html:45
-#: hockeyapp/templates/hockeyapp/players/players-search.html:193
-#: hockeyapp/templates/hockeyapp/players/players-search.html:297
+#: hockeyapp/templates/hockeyapp/players/players-search.html:208
+#: hockeyapp/templates/hockeyapp/players/players-search.html:332
 msgid "Seasons"
 msgstr ""
 
@@ -1430,8 +1492,8 @@ msgid "Scored"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-short.html:90
-#: hockeyapp/templates/hockeyapp/players/players-search.html:235
-#: hockeyapp/templates/hockeyapp/players/players-search.html:315
+#: hockeyapp/templates/hockeyapp/players/players-search.html:250
+#: hockeyapp/templates/hockeyapp/players/players-search.html:368
 msgid "Average goals count per game"
 msgstr ""
 
@@ -1444,37 +1506,45 @@ msgid "Average score count per game"
 msgstr ""
 
 #: hockeyapp/templates/hockeyapp/players/player-card-short.html:111
-#: hockeyapp/templates/hockeyapp/players/players-search.html:256
-#: hockeyapp/templates/hockeyapp/players/players-search.html:324
+#: hockeyapp/templates/hockeyapp/players/players-search.html:271
+#: hockeyapp/templates/hockeyapp/players/players-search.html:386
 msgid "Average \"plus/minus\" per game"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/players/players-search.html:242
-#: hockeyapp/templates/hockeyapp/players/players-search.html:318
+#: hockeyapp/templates/hockeyapp/players/players-search.html:201
+msgid "By alphabet"
+msgstr ""
+
+#: hockeyapp/templates/hockeyapp/players/players-search.html:257
+#: hockeyapp/templates/hockeyapp/players/players-search.html:374
 msgid "Average assist count per game"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/players/players-search.html:249
-#: hockeyapp/templates/hockeyapp/players/players-search.html:321
+#: hockeyapp/templates/hockeyapp/players/players-search.html:264
+#: hockeyapp/templates/hockeyapp/players/players-search.html:380
 msgid "Average points per game"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/players/players-search.html:263
-#: hockeyapp/templates/hockeyapp/players/players-search.html:327
+#: hockeyapp/templates/hockeyapp/players/players-search.html:278
+#: hockeyapp/templates/hockeyapp/players/players-search.html:392
 msgid "SM-index"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/players/players-search.html:270
-#: hockeyapp/templates/hockeyapp/players/players-search.html:330
+#: hockeyapp/templates/hockeyapp/players/players-search.html:285
+#: hockeyapp/templates/hockeyapp/players/players-search.html:398
 msgid "CORSI-index"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/players/players-search.html:280
+#: hockeyapp/templates/hockeyapp/players/players-search.html:307
 msgid "Place"
 msgstr ""
 
-#: hockeyapp/templates/hockeyapp/players/players-search.html:288
+#: hockeyapp/templates/hockeyapp/players/players-search.html:315
 msgid "Team"
+msgstr ""
+
+#: hockeyapp/views/__init__.py:74
+msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 msgstr ""
 
 #: sportomatics/settings.py:77

@@ -23,6 +23,8 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     birth_date_short = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
     rating_index = serializers.SerializerMethodField()
+    contract_to = serializers.SerializerMethodField()
+    contract_type = serializers.ReadOnlyField(source='get_contract_type_display')
 
     def get_clubplayers(self, obj):
         clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
@@ -35,7 +37,8 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
 
     def get_rating(self, obj):
         rated_by = self.context['request'].GET.get('rated_by', 'goals_total')
-        return getattr(obj, rated_by, None)
+        if rated_by:
+            return getattr(obj, rated_by, None)
 
     def get_rating_index(self, obj):
         rating = getattr(self.context['view'], 'rating', {})
@@ -45,7 +48,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'clubplayers', 'age', 'birth_date_short',
-            'rating', 'rating_index', 'fio')
+            'rating', 'rating_index', 'fio', 'contract_to', 'contract_type')
         model = Player
 
 
