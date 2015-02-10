@@ -3,10 +3,10 @@ angular.module('Sportomatics')
     startDate: 'a',
     endDate: 'a'
 })
-.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData){
+.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(data, field, chartData, graphsCount){
+        generateSerialChart: function(data, field, chartData, locale, graphsCount){
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
@@ -61,13 +61,15 @@ angular.module('Sportomatics')
                     period: 'YYYY',
                     format: 'YYYY'
                 }];
-
+                var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
                 valueAxis1.axisThickness = 1;
                 valueAxis1.gridAlpha = 0.1;
-                valueAxis1.minimum = -2;
+                valueAxis1.maximum = (currMax === 0) ? +2 : (currMax/10 > 0) ? currMax+(currMax/10)*5: currMax + currMax%10;
+                valueAxis1.minimum = (currMin === 0) ? -2 : (currMin/10 > 0) ? currMin-(currMin/10)*5 : currMin - Math.abs(currMin%10);
                 chart.addValueAxis(valueAxis1);
 
                 // second value axis (on the right)
@@ -77,7 +79,7 @@ angular.module('Sportomatics')
                 gamesAxis.gridAlpha = 0;
                 gamesAxis.axisThickness = 0;
                 gamesAxis.stackType = "regular";
-                gamesAxis.maximum = 100;
+                gamesAxis.maximum = 5;
                 chart.addValueAxis(gamesAxis);
 
                 // third value axis (on the left, detached)
@@ -106,6 +108,8 @@ angular.module('Sportomatics')
                 graph1.lineColor = "#408e3a";
                 graph1.lineThickness = 4;
                 graph1.animationPlayed = true;
+                if(field !== 'count')
+                graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
                 // second graph
                 var gamesGraph = new AmCharts.AmGraph();
@@ -117,10 +121,9 @@ angular.module('Sportomatics')
                 gamesGraph.alphaField = "alpha";
                 gamesGraph.lineThickness = 0;
                 gamesGraph.lineAlpha = 0.3;
-                gamesGraph.newStack = true;
-                gamesGraph.stackable = true;
                 gamesGraph.balloonText = '';
                 gamesGraph.visibleInLegend = false;
+                gamesGraph.velueAxis = gamesAxis;
                 if(field !== 'count')
                 chart.addGraph(gamesGraph);
 
@@ -133,13 +136,6 @@ angular.module('Sportomatics')
                 graph3.hideBulletsCount = 30;
                 graph3.bulletBorderThickness = 1;
                 //chart.addGraph(graph3);
-
-                // CURSOR
-                var chartCursor = new AmCharts.ChartCursor();
-                chartCursor.cursorAlpha = 1;
-                //chartCursor.fullWidth = true;
-                chartCursor.cursorColor = "#8ebd5d";
-                chart.addChartCursor(chartCursor);
 
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();

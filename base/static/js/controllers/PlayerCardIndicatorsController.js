@@ -2,17 +2,7 @@ angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData','LocaleFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory) {
     //http://www.amcharts.com/lib/images/
     var self = this,
-        url = $('#IndicatorsLink').attr('href');
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var monthNamesRu = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
-        "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-    var localeRu = {
-        'season' : 'Сезон'
-    };
-    var localeEn = {
-        'season' : 'Season'
-    };
+    url = $('#IndicatorsLink').attr('href');
     this.url = $('#IndicatorsLink').attr('href');
     this.indicatorsType = 'graph';
     this.field = 'count';
@@ -105,8 +95,27 @@ angular.module('Sportomatics')
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field);
-                ChartFactory.generateSerialChart(data.results, self.field, $scope.chartData).then(function(chart){
+                ChartFactory.generateSerialChart(data.results, self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
+                    // CURSOR
+                    var chartCursor = new AmCharts.ChartCursor();
+                    chartCursor.cursorAlpha = 1;
+                    chartCursor.cursorColor = "#8ebd5d";
+                    chartCursor.categoryBalloonFunction = function(value){
+                        if(self.groupBy === 'month'){
+                            return $scope.localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                        } else {
+                            return $scope.localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                        }
+                    };
+                    $scope.chart.addChartCursor(chartCursor);
+                    $scope.chart.allLabels = [{
+                        align: 'center',
+                        y: 60,
+                        alpha: 0.7,
+                        bold: true,
+                        text: self.fieldName.toUpperCase()
+                    }];
                     $scope.chart.write("chartdiv");
                     $scope.chart.addClassNames = false;
                     if(switched){
@@ -128,6 +137,7 @@ angular.module('Sportomatics')
         $http.get(url + '?' + params)
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
+                $scope.localeObject = LocaleFactory['locale_'+self.locale];
                 self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
                 $scope.dataByMonth = data;
                 group = 'season';
@@ -185,12 +195,14 @@ function generateChartData(data, field) {
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
+
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
             values: values[i],
-            count: count[i]
+            count: count[i],
+            percentage: (field === 'count') ? undefined : Math.round(parseFloat(values[i]/count[i])*1000)/1000
         });
     }
     return chartData;
@@ -206,7 +218,7 @@ function updatedChartData(chart, initialData, data, field){
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     _.each(dates, function(date, index){
         var pushed = false;
         _.each(chartData, function(e){

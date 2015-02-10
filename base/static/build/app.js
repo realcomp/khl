@@ -89,10 +89,10 @@ angular.module('Sportomatics')
     startDate: 'a',
     endDate: 'a'
 })
-.factory('ChartFactory', ["$q", "$rootScope", "AmChartsFactory", "zoomData", function($q, $rootScope, AmChartsFactory, zoomData){
+.factory('ChartFactory', ["$q", "$rootScope", "AmChartsFactory", "zoomData", "LocaleFactory", function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(data, field, chartData, graphsCount){
+        generateSerialChart: function(data, field, chartData, locale, graphsCount){
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
@@ -147,13 +147,15 @@ angular.module('Sportomatics')
                     period: 'YYYY',
                     format: 'YYYY'
                 }];
-
+                var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
                 valueAxis1.axisThickness = 1;
                 valueAxis1.gridAlpha = 0.1;
-                valueAxis1.minimum = -2;
+                valueAxis1.maximum = (currMax === 0) ? +2 : (currMax/10 > 0) ? currMax+(currMax/10)*5: currMax + currMax%10;
+                valueAxis1.minimum = (currMin === 0) ? -2 : (currMin/10 > 0) ? currMin-(currMin/10)*5 : currMin - Math.abs(currMin%10);
                 chart.addValueAxis(valueAxis1);
 
                 // second value axis (on the right)
@@ -163,7 +165,7 @@ angular.module('Sportomatics')
                 gamesAxis.gridAlpha = 0;
                 gamesAxis.axisThickness = 0;
                 gamesAxis.stackType = "regular";
-                gamesAxis.maximum = 100;
+                gamesAxis.maximum = 5;
                 chart.addValueAxis(gamesAxis);
 
                 // third value axis (on the left, detached)
@@ -192,6 +194,8 @@ angular.module('Sportomatics')
                 graph1.lineColor = "#408e3a";
                 graph1.lineThickness = 4;
                 graph1.animationPlayed = true;
+                if(field !== 'count')
+                graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
                 // second graph
                 var gamesGraph = new AmCharts.AmGraph();
@@ -203,10 +207,9 @@ angular.module('Sportomatics')
                 gamesGraph.alphaField = "alpha";
                 gamesGraph.lineThickness = 0;
                 gamesGraph.lineAlpha = 0.3;
-                gamesGraph.newStack = true;
-                gamesGraph.stackable = true;
                 gamesGraph.balloonText = '';
                 gamesGraph.visibleInLegend = false;
+                gamesGraph.velueAxis = gamesAxis;
                 if(field !== 'count')
                 chart.addGraph(gamesGraph);
 
@@ -219,13 +222,6 @@ angular.module('Sportomatics')
                 graph3.hideBulletsCount = 30;
                 graph3.bulletBorderThickness = 1;
                 //chart.addGraph(graph3);
-
-                // CURSOR
-                var chartCursor = new AmCharts.ChartCursor();
-                chartCursor.cursorAlpha = 1;
-                //chartCursor.fullWidth = true;
-                chartCursor.cursorColor = "#8ebd5d";
-                chart.addChartCursor(chartCursor);
 
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();
@@ -271,6 +267,7 @@ function saveZoomParams(endDate, endIndex, endValue, startDate){
 }
 angular.module('Sportomatics')
     .factory('LocaleFactory', ["$rootScope", function($rootScope){
+        var chosen = 'ru';
         return {
             getFieldName: function(field, locale){
                 var fieldNames = {
@@ -350,7 +347,7 @@ angular.module('Sportomatics')
                         shortName: 'ВП/И',
                         fullName: 'Среднее время на площадке за игру'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
                     }
@@ -432,12 +429,200 @@ angular.module('Sportomatics')
                         shortName: 'TOI/G',
                         fullName: 'Average time on ice/Game'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'SFT/G',
                         fullName: 'Average Shifts/Game'
                     }
                 };
                 return (locale === 'en') ? fieldNamesEn[field]['fullName'] : fieldNames[field]['fullName'];
+            },
+            locale_ru: {
+                fieldNames: {
+                    count: {
+                        shortName: 'И',
+                        fullName: 'Количество проведенных игр'
+                    },
+                    goals: {
+                        shortName: 'Ш',
+                        fullName: 'Заброшенные шайбы'
+                    },
+                    assists: {
+                        shortName: 'А',
+                        fullName: 'Передачи'
+                    },
+                    points: {
+                        shortName: 'О',
+                        fullName: 'Очки'
+                    },
+                    plus_minus: {
+                        shortName: '+/-',
+                        fullName: 'Коэффициент полезности'
+                    },
+                    penalty_time: {
+                        shortName: 'Штр',
+                        fullName: 'Штрафное время'
+                    },
+                    es_goals: {
+                        shortName: 'ШР',
+                        fullName: 'Шайбы в равенстве'
+                    },
+                    pp_goals: {
+                        shortName: 'ШБ',
+                        fullName: 'Шайбы в большинстве'
+                    },
+                    ev_goals: {
+                        shortName: 'ШМ',
+                        fullName: 'Шайбы в меньшинстве'
+                    },
+                    overtime_goals: {
+                        shortName: 'ШО',
+                        fullName: 'Шайбы в овертайме'
+                    },
+                    win_goals: {
+                        shortName: 'ШП',
+                        fullName: 'Победные шайбы'
+                    },
+                    bullet_goals: {
+                        shortName: 'РБ',
+                        fullName: 'Решающие буллиты'
+                    },
+                    shots: {
+                        shortName: 'БВ',
+                        fullName: 'Броски по воротам'
+                    },
+                    pis__avg: {
+                        shortName: '%БВ',
+                        fullName: 'Процент реализованных бросков'
+                    },
+                    shots__avg: {
+                        shortName: 'БВ/И',
+                        fullName: 'Среднее количество бросков по воротам за игру'
+                    },
+                    faceoff: {
+                        shortName: 'Вбр',
+                        fullName: 'Вбрасывания'
+                    },
+                    winfaceoff: {
+                        shortName: 'ВВбр',
+                        fullName: 'Выигранные вбрасывания'
+                    },
+                    winfaceoff_p__avg: {
+                        shortName: '%Вбр',
+                        fullName: 'Процент выигранных вбрасываний'
+                    },
+                    gamingtime__avg: {
+                        shortName: 'ВП/И',
+                        fullName: 'Среднее время на площадке за игру'
+                    },
+                    change_count__avg: {
+                        shortName: 'См/И',
+                        fullName: 'Среднее количество смен за игру'
+                    }
+                },
+                buttonNames: {
+                    month: 'По месяцам',
+                    season: 'По сезонам'
+                },
+                monthNames: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
+                    "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+                words: {
+                    season: 'Сезон',
+                    moths: 'Месяц'
+                }
+            },
+            locale_en: {
+                fieldNames: {
+                    count: {
+                        shortName: 'GP',
+                        fullName: 'Games played'
+                    },
+                    goals: {
+                        shortName: 'G',
+                        fullName: 'Goals'
+                    },
+                    assists: {
+                        shortName: 'A',
+                        fullName: 'Assists'
+                    },
+                    points: {
+                        shortName: 'PTS',
+                        fullName: 'Points'
+                    },
+                    plus_minus: {
+                        shortName: '+/-',
+                        fullName: 'Plus/Minus'
+                    },
+                    penalty_time: {
+                        shortName: 'PIM',
+                        fullName: 'Penalty in minutes'
+                    },
+                    es_goals: {
+                        shortName: 'ESG',
+                        fullName: 'Even Strength Goals'
+                    },
+                    pp_goals: {
+                        shortName: 'PPG',
+                        fullName: 'Power play goals'
+                    },
+                    ev_goals: {
+                        shortName: 'SHG',
+                        fullName: 'Shorthanded goals'
+                    },
+                    overtime_goals: {
+                        shortName: 'OTG',
+                        fullName: 'Overtime goals'
+                    },
+                    win_goals: {
+                        shortName: 'GWG',
+                        fullName: 'Game winning goals'
+                    },
+                    bullet_goals: {
+                        shortName: 'SDS',
+                        fullName: 'Shootouts deciding shots'
+                    },
+                    shots: {
+                        shortName: 'SOG',
+                        fullName: 'Shots on goal'
+                    },
+                    pis__avg: {
+                        shortName: '%SOG',
+                        fullName: 'Shots on goal percentage'
+                    },
+                    shots__avg: {
+                        shortName: 'S/G',
+                        fullName: 'Average Shots/Game'
+                    },
+                    faceoff: {
+                        shortName: 'FO',
+                        fullName: 'Faceoffs'
+                    },
+                    winfaceoff: {
+                        shortName: 'FOW',
+                        fullName: 'Faceoffs won'
+                    },
+                    winfaceoff_p__avg: {
+                        shortName: '%FO',
+                        fullName: 'Faceoffs won percentage'
+                    },
+                    gamingtime__avg: {
+                        shortName: 'TOI/G',
+                        fullName: 'Average time on ice/Game'
+                    },
+                    change_count__avg: {
+                        shortName: 'SFT/G',
+                        fullName: 'Average Shifts/Game'
+                    }
+                },
+                buttonNames: {
+                    month: 'By month',
+                    season: 'By season'
+                },
+                monthNames : ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                words: {
+                    season: 'Season',
+                    moths: 'Month'
+                }
             }
         }
 
@@ -523,17 +708,7 @@ angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData','LocaleFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory) {
     //http://www.amcharts.com/lib/images/
     var self = this,
-        url = $('#IndicatorsLink').attr('href');
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var monthNamesRu = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
-        "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-    var localeRu = {
-        'season' : 'Сезон'
-    };
-    var localeEn = {
-        'season' : 'Season'
-    };
+    url = $('#IndicatorsLink').attr('href');
     this.url = $('#IndicatorsLink').attr('href');
     this.indicatorsType = 'graph';
     this.field = 'count';
@@ -626,8 +801,27 @@ angular.module('Sportomatics')
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field);
-                ChartFactory.generateSerialChart(data.results, self.field, $scope.chartData).then(function(chart){
+                ChartFactory.generateSerialChart(data.results, self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
+                    // CURSOR
+                    var chartCursor = new AmCharts.ChartCursor();
+                    chartCursor.cursorAlpha = 1;
+                    chartCursor.cursorColor = "#8ebd5d";
+                    chartCursor.categoryBalloonFunction = function(value){
+                        if(self.groupBy === 'month'){
+                            return $scope.localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                        } else {
+                            return $scope.localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                        }
+                    };
+                    $scope.chart.addChartCursor(chartCursor);
+                    $scope.chart.allLabels = [{
+                        align: 'center',
+                        y: 60,
+                        alpha: 0.7,
+                        bold: true,
+                        text: self.fieldName.toUpperCase()
+                    }];
                     $scope.chart.write("chartdiv");
                     $scope.chart.addClassNames = false;
                     if(switched){
@@ -649,6 +843,7 @@ angular.module('Sportomatics')
         $http.get(url + '?' + params)
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
+                $scope.localeObject = LocaleFactory['locale_'+self.locale];
                 self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
                 $scope.dataByMonth = data;
                 group = 'season';
@@ -706,12 +901,14 @@ function generateChartData(data, field) {
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
+
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
             values: values[i],
-            count: count[i]
+            count: count[i],
+            percentage: (field === 'count') ? undefined : Math.round(parseFloat(values[i]/count[i])*1000)/1000
         });
     }
     return chartData;
@@ -727,7 +924,7 @@ function updatedChartData(chart, initialData, data, field){
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     _.each(dates, function(date, index){
         var pushed = false;
         _.each(chartData, function(e){
@@ -776,7 +973,8 @@ angular.module('Sportomatics')
     this.data = {};
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
-    this.ratedBy = 'seasons_total';
+    this.ratedBy = '';
+    this.alphabetFilter = null;
     this.isPlaying = true;
 
     this.loader = false;
@@ -856,6 +1054,13 @@ angular.module('Sportomatics')
     this.setRatedBy = function(ratedBy) {
         if (!this.loader) {
             this.ratedBy = ratedBy;
+            this.search();
+        }
+    };
+
+    this.setAlphabetFilter = function(alphabetFilter) {
+        if (!this.loader) {
+            this.alphabetFilter = alphabetFilter;
             this.search();
         }
     };
