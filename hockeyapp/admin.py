@@ -42,7 +42,7 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
-                        'spectators', 'judges', 'line_judges')
+                        'spectators', 'judges', 'line_judges', 'challenge_type')
         }),
         (None, {
             'classes': ('suit-tab suit-tab-hometeam',),

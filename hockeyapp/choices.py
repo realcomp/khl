@@ -41,3 +41,15 @@ FIVER_VALUES = (
     (3, 3),
     (4, 4),
 )
+
+CHALLENGE_TYPE = (
+    DEFAULT_STATUS,
+    (1, _('Championship')),
+    (2, _('Playoff')),
+    (3, _('Hopeful cup')),
+    (4, _('Junior World Cup')),
+    (5, _('Challenge Cup')),
+    (6, _('MHL playout')),
+    (7, _('MHL qualifying tournament')),
+    (8, _('MHL-2 Generation Cup'))
+)
