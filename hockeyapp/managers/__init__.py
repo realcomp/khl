@@ -95,8 +95,9 @@ class ScheduleManager(models.Manager):
                         season = _season,
                         home_team = home_team,
                         guest_team = guest_team,
-                        khl_id__isnull=kwargs.get('without_khl_id', True),
             )
+            if kwargs.get('without_khl_id', True):
+                qs['khl_id__isnull'] = True
             _match = self.filter(**qs).last()
             if _match:
                 m['challenge_type'] = challenge_type
