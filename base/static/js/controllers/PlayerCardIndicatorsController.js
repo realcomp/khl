@@ -195,7 +195,7 @@ function generateChartData(data, field) {
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
@@ -216,7 +216,7 @@ function updatedChartData(chart, initialData, data, field){
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     _.each(dates, function(date, index){
         var pushed = false;
         _.each(chartData, function(e){

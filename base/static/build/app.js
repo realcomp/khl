@@ -147,13 +147,16 @@ angular.module('Sportomatics')
                     period: 'YYYY',
                     format: 'YYYY'
                 }];
-
+                var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
+                console.log(currMin)
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
                 valueAxis1.axisThickness = 1;
                 valueAxis1.gridAlpha = 0.1;
-                valueAxis1.minimum = -2;
+                valueAxis1.maximum = (currMax === 0) ? +2 : (currMax/10 > 0) ? currMax+(currMax/10)*5: currMax + currMax%10;
+                valueAxis1.minimum = (currMin === 0) ? -2 : (currMin/10 > 0) ? currMin-(currMin/10)*5 : currMin - Math.abs(currMin%10);
                 chart.addValueAxis(valueAxis1);
 
                 // second value axis (on the right)
@@ -163,7 +166,7 @@ angular.module('Sportomatics')
                 gamesAxis.gridAlpha = 0;
                 gamesAxis.axisThickness = 0;
                 gamesAxis.stackType = "regular";
-                gamesAxis.maximum = 100;
+                gamesAxis.maximum = 5;
                 chart.addValueAxis(gamesAxis);
 
                 // third value axis (on the left, detached)
@@ -203,10 +206,9 @@ angular.module('Sportomatics')
                 gamesGraph.alphaField = "alpha";
                 gamesGraph.lineThickness = 0;
                 gamesGraph.lineAlpha = 0.3;
-                gamesGraph.newStack = true;
-                gamesGraph.stackable = true;
                 gamesGraph.balloonText = '';
                 gamesGraph.visibleInLegend = false;
+                gamesGraph.velueAxis = gamesAxis;
                 if(field !== 'count')
                 chart.addGraph(gamesGraph);
 
@@ -344,7 +346,7 @@ angular.module('Sportomatics')
                         shortName: 'ВП/И',
                         fullName: 'Среднее время на площадке за игру'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
                     }
@@ -426,7 +428,7 @@ angular.module('Sportomatics')
                         shortName: 'TOI/G',
                         fullName: 'Average time on ice/Game'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'SFT/G',
                         fullName: 'Average Shifts/Game'
                     }
@@ -511,7 +513,7 @@ angular.module('Sportomatics')
                         shortName: 'ВП/И',
                         fullName: 'Среднее время на площадке за игру'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
                     }
@@ -605,7 +607,7 @@ angular.module('Sportomatics')
                         shortName: 'TOI/G',
                         fullName: 'Average time on ice/Game'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'SFT/G',
                         fullName: 'Average Shifts/Game'
                     }
@@ -898,7 +900,7 @@ function generateChartData(data, field) {
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
@@ -919,7 +921,7 @@ function updatedChartData(chart, initialData, data, field){
         return new Date(e['date']);
     });
     var values = data.map(function(e){ return e[field]});
-    var count = data.map(function(e){ return e['count']});
+    var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     _.each(dates, function(date, index){
         var pushed = false;
         _.each(chartData, function(e){

@@ -80,7 +80,7 @@ angular.module('Sportomatics')
                         shortName: 'ВП/И',
                         fullName: 'Среднее время на площадке за игру'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
                     }
@@ -162,7 +162,7 @@ angular.module('Sportomatics')
                         shortName: 'TOI/G',
                         fullName: 'Average time on ice/Game'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'SFT/G',
                         fullName: 'Average Shifts/Game'
                     }
@@ -247,7 +247,7 @@ angular.module('Sportomatics')
                         shortName: 'ВП/И',
                         fullName: 'Среднее время на площадке за игру'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
                     }
@@ -341,7 +341,7 @@ angular.module('Sportomatics')
                         shortName: 'TOI/G',
                         fullName: 'Average time on ice/Game'
                     },
-                    change_time__avg: {
+                    change_count__avg: {
                         shortName: 'SFT/G',
                         fullName: 'Average Shifts/Game'
                     }
