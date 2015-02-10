@@ -288,18 +288,51 @@
                             </ul>
                         </div>
                         <div class="twelve wide column">
-                            <a href="" class="option-btn alphabet-btn"
-                               ng-class="{ 'option-btn_active':!PlayersSearchCtrl.alphabetFilter }"
-                               ng-click="PlayersSearchCtrl.setAlphabetFilter(null)">
-                                {% trans 'ALL' %}
-                            </a>
-                            {% for letter in alphabet %}
+                            <div class="row">
                                 <a href="" class="option-btn alphabet-btn"
-                                   ng-class="{ 'option-btn_active':PlayersSearchCtrl.alphabetFilter === '{{ letter }}' }"
-                                   ng-click="PlayersSearchCtrl.setAlphabetFilter('{{ letter }}')">
-                                    {{ letter }}
+                                   ng-class="{ 'option-btn_active':!PlayersSearchCtrl.alphabetFilter }"
+                                   ng-click="PlayersSearchCtrl.setAlphabetFilter(null)">
+                                    {% trans 'ALL' %}
                                 </a>
-                            {% endfor %}
+                                {% for letter in alphabet %}
+                                    <a href="" class="option-btn alphabet-btn"
+                                       ng-class="{ 'option-btn_active':PlayersSearchCtrl.alphabetFilter === '{{ letter }}' }"
+                                       ng-click="PlayersSearchCtrl.setAlphabetFilter('{{ letter }}')">
+                                        {{ letter }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            <div class="row">
+                                Найти в списке
+                                <div class="ui selection dropdown dropdown-small-inline">
+                                    <input type="text" name="club" placeholder="Команду..."
+                                           ng-model="PlayersSearchCtrl.playerFilter">
+                                    <input type="hidden">
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        {% verbatim %}
+                                            <div class="item" data-value="{{ name }}"
+                                                 ng-repeat="name in PlayersSearchCtrl.getNames(PlayersSearchCtrl.playerFilter)">
+                                                {{ name }}
+                                            </div>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                                <div class="ui selection dropdown dropdown-small-inline">
+                                    <input type="text" name="player" placeholder="Игрока..."
+                                           ng-model="PlayersSearchCtrl.clubFilter">
+                                    <input type="hidden">
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        {% verbatim %}
+                                            <div class="item" data-value="{{ club }}"
+                                                 ng-repeat="club in PlayersSearchCtrl.getClubs(PlayersSearchCtrl.clubFilter)">
+                                                {{ club }}
+                                            </div>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                            </div>
                             <table class="ui celled table segment player-select-table"
                                    ng-show="PlayersSearchCtrl.data.results">
                                 <thead>

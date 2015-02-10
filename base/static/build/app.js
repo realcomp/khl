@@ -1077,6 +1077,22 @@ angular.module('Sportomatics')
         }
     };
 
+    this.getNames = function(s) {
+        if (s === 'test') {
+            return ['test'];
+        } else {
+            return [];
+        }
+    }
+
+    this.getClubs = function(s) {
+        if (s === 'test') {
+            return ['test'];
+        } else {
+            return [];
+        }
+    }
+
     this.next = next($http);
 
     this.getCountries(this.search);
