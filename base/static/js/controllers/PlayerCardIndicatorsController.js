@@ -16,6 +16,7 @@ angular.module('Sportomatics')
 
     this.setIndicatorsType = function(type) {
         this.indicatorsType = type;
+        $timeout(function(){}, 500); //angular forced $digest
     };
 
     this.setField = function(field) {
@@ -71,6 +72,7 @@ angular.module('Sportomatics')
     };
     $scope.setGroupBy = function(groupby){
         self.groupBy = groupby;
+        self.data = (groupby === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
         $scope.onSeason = false;
         self.list();
     };
@@ -151,6 +153,7 @@ angular.module('Sportomatics')
                 $http.get(url + '?' + params)
                     .success(function(data, status, headers) {
                         $scope.dataBySeason = data;
+                        self.data = data;
                         self.loader = false;
                     }).then(function(){
                         self.list();
@@ -198,6 +201,8 @@ function generateChartData(data, field) {
     var count = data.map(function(e){ return Math.ceil(e['count']/10)});
     var realCount = data.map(function(e){ return e['count']});
     for(var i = 0; i< dates.length; i++){
+        if(!((field === 'shots' || field === 'pis__avg' || field === 'shots__avg' || field === 'faceoff' || field === 'winfaceoff' || field === 'winfaceoff_p__avg' || field === 'gamingtime__avg' || field === 'change_count__avg')
+            && (dates[i].getFullYear() <= 2008)))
         chartData.push({
             date: dates[i],
             values: values[i],
