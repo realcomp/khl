@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, TemplateView
+from django.utils.translation import ugettext_lazy as _
 
 from addresses.models import Country
 from base.models import Season
@@ -70,6 +71,7 @@ class PlayersSearch(TemplateView):
         context['russia'] = CountrySerializer(
             Country.objects.filter(ru_title=b'Россия').last(),
             context=context).data
+        context['alphabet'] = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         return context
 
 

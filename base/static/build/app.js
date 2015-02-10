@@ -776,7 +776,8 @@ angular.module('Sportomatics')
     this.data = {};
     this.order_by = '[%22%s_lastname%22,%22%s_name%22]';
     this.order_by_reversed = false;
-    this.ratedBy = 'seasons_total';
+    this.ratedBy = '';
+    this.alphabetFilter = null;
     this.isPlaying = true;
 
     this.loader = false;
@@ -856,6 +857,13 @@ angular.module('Sportomatics')
     this.setRatedBy = function(ratedBy) {
         if (!this.loader) {
             this.ratedBy = ratedBy;
+            this.search();
+        }
+    };
+
+    this.setAlphabetFilter = function(alphabetFilter) {
+        if (!this.loader) {
+            this.alphabetFilter = alphabetFilter;
             this.search();
         }
     };

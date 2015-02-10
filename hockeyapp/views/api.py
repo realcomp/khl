@@ -51,15 +51,21 @@ class PlayersSearch(
                 self.clubplayers[player_id].append(clubplayer)
 
         # get rating
+        rated_qs = qs
         rated_by = self.request.GET.get('rated_by', 'seasons_total')
+        if rated_by:
+            rated_qs = qs.order_by('-' + rated_by)
         self.rating = {}
         rating_index = 0
         rating_value = None
-        for player in qs.order_by('-' + rated_by):
-            if (getattr(player, rated_by) < rating_value or
-                    rating_value is None):
+        for player in rated_qs:
+            if rated_by:
+                if (getattr(player, rated_by) < rating_value or
+                        rating_value is None):
+                    rating_index += 1
+                    rating_value = getattr(player, rated_by)
+            else:
                 rating_index += 1
-                rating_value = getattr(player, rated_by)
             self.rating[player.pk] = rating_index
 
         return super(PlayersSearch, self).list(request, *args, **kwargs)
