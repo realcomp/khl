@@ -196,13 +196,13 @@ function generateChartData(data, field) {
     });
     var values = data.map(function(e){ return e[field]});
     var count = data.map(function(e){ return Math.ceil(e['count']/10)});
-
+    var realCount = data.map(function(e){ return e['count']});
     for(var i = 0; i< dates.length; i++){
         chartData.push({
             date: dates[i],
             values: values[i],
             count: count[i],
-            percentage: (field === 'count') ? undefined : Math.round(parseFloat(values[i]/count[i])*1000)/1000
+            percentage: (field === 'count') ? undefined : (count[i] === 0) ? undefined : Math.round(parseFloat(values[i]/realCount[i])*1000)/1000
         });
     }
     return chartData;
