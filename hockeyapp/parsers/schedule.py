@@ -118,7 +118,7 @@ class KHLScheduleParser(GrabParser):
             if month: 
                 _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), month)
             else:
-                _date_dict[0] = _date_dict[:3]+'01'+_date_dict[3:]
+                _date_dict[0] = _date_dict[0][:3]+'01'+_date_dict[0][3:]
             if _date_dict[-1] != '':
                 mask = '%d %m %Y %H:%M'
             else:
