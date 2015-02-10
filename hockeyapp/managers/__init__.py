@@ -90,15 +90,15 @@ class ScheduleManager(models.Manager):
         for m in kwargs.get('matches',):
             home_team= self._get_team(m.pop('home_team', None))
             guest_team= self._get_team(m.pop('guest_team', None))
-            _match = self.filter(ru_title = m.get('ru_title'),
-                                league = _league,
-                                season = _season,
-                                home_team = home_team,
-                                guest_team = guest_team,
-                                khl_id__isnull=True,
-                        ).last()
+            qs = dict(  ru_title = m.get('ru_title'),
+                        league = _league,
+                        season = _season,
+                        home_team = home_team,
+                        guest_team = guest_team,
+                        khl_id__isnull=kwargs.get('without_khl_id', True),
+            )
+            _match = self.filter(**qs).last()
             if _match:
-                m['is_championship'] = True
                 m['challenge_type'] = challenge_type
                 if not _match.match and m.get('khl_id'):
                     _m = self._get_match(m)
