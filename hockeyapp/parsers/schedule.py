@@ -111,8 +111,10 @@ class KHLScheduleParser(GrabParser):
     def python_date(self, date, month_dict = xpathes.MDP):
         b''' парсит дату в datetime object '''
         if date:
+            print(date)
             _date_dict = date.strip().lower().split(',')
             _m = _date_dict[0].split()[1].encode('utf-8')
+            print(_m)
             _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
                                                     month_dict.get(_m))
             if _date_dict[-1] != '':
