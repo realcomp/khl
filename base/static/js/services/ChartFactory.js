@@ -6,7 +6,7 @@ angular.module('Sportomatics')
 .factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(data, field, chartData, graphsCount){
+        generateSerialChart: function(data, field, chartData, locale, graphsCount){
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
@@ -63,7 +63,6 @@ angular.module('Sportomatics')
                 }];
                 var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
                 var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
-                console.log(currMin)
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
@@ -109,6 +108,8 @@ angular.module('Sportomatics')
                 graph1.lineColor = "#408e3a";
                 graph1.lineThickness = 4;
                 graph1.animationPlayed = true;
+                if(field !== 'count')
+                graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
                 // second graph
                 var gamesGraph = new AmCharts.AmGraph();
