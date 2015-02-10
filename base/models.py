@@ -1,6 +1,8 @@
 #coding: utf-8
 from __future__ import unicode_literals
 
+import datetime
+
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -50,6 +52,17 @@ class Season(TitleBaseModel):
     def short_title(self):
         return '%s/%s' % (
             str(self.start_date.year)[2:], str(self.end_date.year)[2:])
+
+    @property
+    def is_last(self):
+        try:
+            season = (
+                Season.objects
+                .filter(start_date__lte=datetime.datetime.now().date())
+                .latest('end_date'))
+            return self.pk == season.pk
+        except Season.DoesNotExist:
+            return False
 
 
 class TitleAlias(TitleBaseModel):
