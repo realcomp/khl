@@ -304,7 +304,6 @@ def temp_update_schedules():
                 (parsers.schedule.VHLScheduleParser, 189, 1),
     )
     for _parser, id, chlng_type in _parsers:
-        print(id)
         _parser().put_data_in_db_from_page( id, update=True,
                                             challenge_type=chlng_type
         )
