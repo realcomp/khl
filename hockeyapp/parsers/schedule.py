@@ -114,18 +114,18 @@ class KHLScheduleParser(GrabParser):
         if date:
             _date_dict = date.strip().lower().split(',')
             _m = _date_dict[0].split()[1].encode('utf-8')
-            try:
-                _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
-                                                        month_dict.get(_m))
-                if _date_dict[-1] != '':
-                    mask = '%d %m %Y %H:%M'
-                else:
-                    mask = '%d %m %Y'
-                _dt = ''.join(_date_dict).encode('utf-8')
-                _dt = datetime.datetime.strptime(_dt, mask)
-                return timezone.make_aware(_dt, current_tz)
-            except:
-                return None
+            month = month_dict.get(_m)
+            if not month:
+                month=b'января'
+            _date_dict[0] = _date_dict[0].replace(  _m.decode('utf-8'), 
+                                                    month_dict.get(_m))
+            if _date_dict[-1] != '':
+                mask = '%d %m %Y %H:%M'
+            else:
+                mask = '%d %m %Y'
+            _dt = ''.join(_date_dict).encode('utf-8')
+            _dt = datetime.datetime.strptime(_dt, mask)
+            return timezone.make_aware(_dt, current_tz)
 
     def start_date(self, date):
         b''' возвращает дату начала сезона '''
