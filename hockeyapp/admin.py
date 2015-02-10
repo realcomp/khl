@@ -150,7 +150,8 @@ class ScheduleAdmin(BaseAdmin):
     linked_readonly_fields = ('match', 'home_team', 'guest_team')
     readonly_fields = linked_readonly_fields
     list_filter = ( 'league', 'home_team', 'guest_team', 'season',
-                    ('date', DateRangeFilter))
+                    'challenge_type', ('date', DateRangeFilter)
+    )
     list_display = ('khl_id', 'league', 'home_team', 'guest_team',
                     'season', 'date',)
 admin.site.register(Schedule, ScheduleAdmin)
