@@ -9,4 +9,5 @@ SOCIAL_NETWORKS = (
                     (4, 'Goggle+'),
                     (5, 'Twitter'),
                     (6, 'Instagram'),
+                    (7, 'Personal page'),
 )
