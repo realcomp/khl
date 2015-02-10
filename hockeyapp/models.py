@@ -97,7 +97,7 @@ class Player(AbstractMan):
             for field in fields
         })
         for k, v in clubplayers.aggregate(**kwargs).items():
-            setattr(self, k, v)
+            setattr(self, k, v or 0)
         self.seasons_total = len(set(clubplayers.values_list('season')))
         self.matches_total = clubplayers.count()
 

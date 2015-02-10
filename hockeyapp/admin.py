@@ -87,9 +87,10 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
 
 
 def recalc_counters(modeladmin, request, queryset):
-    for player in queryset:
-        player.recalc_counters()
-        player.save()
+    from .tasks import player_recalc_counters
+    pks = queryset.values_list('pk', flat=True)
+    for i in range(0, len(pks), 1000):  # 1000 players per task
+        player_recalc_counters.delay(pks[i:i + 1000])
 recalc_counters.short_description = _('Recalculate counters')
 
 
