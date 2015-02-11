@@ -64,12 +64,6 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
                 json.loads, request.GET.getlist('line'))))
             qs = qs.filter(line__in=lines)
 
-        if '%s_lastname__startswith' in request.GET:
-            s = request.GET['%s_lastname__startswith']
-            qs = qs.filter(**{
-                '%s_lastname__startswith' % request.LANGUAGE_CODE: s,
-            })
-
         q_citizenship = None
         if 'citizenship' in request.GET:
             citizenship = filter(None, request.GET.getlist('citizenship'))

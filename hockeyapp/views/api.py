@@ -68,7 +68,19 @@ class PlayersSearch(
                 rating_index += 1
             self.rating[player.pk] = rating_index
 
-        return super(PlayersSearch, self).list(request, *args, **kwargs)
+        if '%s_lastname__startswith' in self.request.GET:
+            s = self.request.GET['%s_lastname__startswith']
+            qs = qs.filter(**{
+                '%s_lastname__startswith' % self.request.LANGUAGE_CODE: s,
+            })
+
+        instance = qs
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_pagination_serializer(page)
+        else:
+            serializer = self.get_serializer(instance, many=True)
+        return response.Response(serializer.data)
 
 
 class PlayerCardIndicators(generics.ListAPIView):
