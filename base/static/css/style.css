@@ -4893,3 +4893,39 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     color: #ffffff;
 }
 
+.fixed{
+    position: fixed;
+    margin-top: 0px;
+    top: 0;
+    background: #ffffff;
+    width: 1000px !important ;
+    z-index:99999;
+}
+.team-name-inner{
+    margin: 0 auto;
+    max-width: 500px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px;
+    font-size: 16px;
+}
+.team-name-inner span{
+    font-size: 12px;
+}
+.team-logo-inner{
+    width: 25px !important;
+    height: 25px !important;
+    vertical-align: middle;
+    float: left;
+}
+.team-logo-inner img{
+    width: 25px;
+    height: 25px;
+}
+.breadcrumb-inner{
+    vertical-align: middle;
+    float: left;
+}
+.inline-block{
+    display: inline-block;
+}

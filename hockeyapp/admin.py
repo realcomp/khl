@@ -13,6 +13,7 @@ from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
+from .models import PlayerCoachJudge
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -130,9 +131,12 @@ class ClubTitleAliasInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'club', 'alias')
     fields = readonly_fields
 
+class ClubSocialsInline(admin.TabularInline):
+    model = Club.socials.through
+
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
-                ClubTitleAliasInline)
+                ClubTitleAliasInline, ClubSocialsInline)
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields
@@ -204,6 +208,7 @@ admin.site.register(Judge, JudgeAdmin)
 
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
+admin.site.register(PlayerCoachJudge, NoFilterAdmin)
 
 class CoachAdmin(BaseListAdmin):
     inlines = (CoachClubInline,)
