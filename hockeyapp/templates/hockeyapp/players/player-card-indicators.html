@@ -178,7 +178,7 @@
                                     <option value="season">{% trans 'by season' %}</option>
                                 </select>-->
                             </div>
-                            <ul class="indicators-list">
+                            <!--<ul class="indicators-list">
                                 <li class="indicator-item">
                                     <a href="" ng-class="{ 'indicator-link': PlayerCardIndicatorsCtrl.indicatorsType !== 'graph' , 'indicator-chosen': PlayerCardIndicatorsCtrl.indicatorsType === 'graph'  }"
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('graph')">График</a>
@@ -187,7 +187,7 @@
                                     <a href="" ng-class="{ 'indicator-link': PlayerCardIndicatorsCtrl.indicatorsType !== 'table' , 'indicator-chosen': PlayerCardIndicatorsCtrl.indicatorsType === 'table'  }"
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('table')">Таблица</a>
                                 </li>
-                            </ul>
+                            </ul>-->
                             <a id="IndicatorsLink" class="hidden"
                                href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
                             <div style="position:relative;text-align: center; top: 50px; right: 34px" ng-show="PlayerCardIndicatorsCtrl.loader">

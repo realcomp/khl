@@ -155,13 +155,8 @@
                                            ng-click="PlayerCardIndicatorsCtrl.setField('change_count__avg')">См/И</a>
                                     </li>
                                 </ul>
-                                <select ng-model="PlayerCardIndicatorsCtrl.group_by"
-                                        ng-change="PlayerCardIndicatorsCtrl.list()">
-                                    <option value="month">{% trans 'by month' %}</option>
-                                    <option value="season">{% trans 'by season' %}</option>
-                                </select>
                             </div>
-                            <ul class="indicators-list">
+                            <!--<ul class="indicators-list">
                                 <li class="indicator-item">
                                     <a href="" class="indicator-link"
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('graph')">График</a>
@@ -170,7 +165,7 @@
                                     <a href="" class="indicator-link"
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('table')">Таблица</a>
                                 </li>
-                            </ul>
+                            </ul>-->
                             <a id="IndicatorsLink" class="hidden"
                                href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
                             <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'graph' && PlayerCardIndicatorsCtrl.data.results.length">

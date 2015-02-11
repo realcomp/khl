@@ -722,7 +722,14 @@ angular.module('Sportomatics')
 
     this.setIndicatorsType = function(type) {
         this.indicatorsType = type;
-        $timeout(function(){}, 500); //angular forced $digest
+        if(type === 'graph') {
+            $timeout(function(){
+                //self.list();
+            }, 100);
+        }
+        else {
+            this.data = (this.groupBy === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
+        }
     };
 
     this.setField = function(field) {
@@ -738,7 +745,8 @@ angular.module('Sportomatics')
 
     this.setCoach = function(coach) {
         this.coach = coach;
-        this.list();
+        console.log(coach);
+        $scope.getCoachData();
     };
     this.setGraphResults = function(results) {
 
@@ -781,6 +789,7 @@ angular.module('Sportomatics')
         self.data = (groupby === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
         $scope.onSeason = false;
         self.list();
+        $timeout(function(){}, 500);
     };
     $scope.unload = function(){
 
@@ -790,15 +799,16 @@ angular.module('Sportomatics')
         zoomData.endDate = season.end_date;
         $scope.onSeason = true;
         self.groupBy = 'month';
+        self.data = $scope.dataByMonth;
         self.list(true);
     };
     this.list = function(switched) {
         var data;
         data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
+        var datesArray = (self.groupBy === 'month') ? data.results.map(function(e){ return new Date(e['date']) }) : data.results.map(function(e){ return new Date(e['season']['end_date']) });
+        var min = Math.min.apply(null, datesArray);
+        var max = Math.max.apply(null, datesArray);
                 if(switched){
-                    var datesArray = data.results.map(function(e){ return new Date(e['date']) });
-                    var min = Math.min.apply(null, datesArray);
-                    var max = Math.max.apply(null, datesArray);
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
@@ -817,6 +827,7 @@ angular.module('Sportomatics')
                         }
                     };
                     $scope.chart.addChartCursor(chartCursor);
+                    // LABELS
                     $scope.chart.allLabels = [{
                         align: 'center',
                         y: 60,
@@ -824,6 +835,22 @@ angular.module('Sportomatics')
                         bold: true,
                         text: self.fieldName.toUpperCase()
                     }];
+                    // WRITE
+                    if(self.coach){
+                        $scope.chart.guides = [];
+                        _.each($scope.coachData.results, function(result){
+                            var seasonEnd = new Date(result.season.end_date);
+                            var prevSeasonEndString = (parseInt(result.season.end_date.substr(0,4))-1).toString() + result.season.end_date.substr(4);
+                            var prevSeasonEnd = new Date(prevSeasonEndString);
+                            $scope.chart.guides.push({
+                                "fillAlpha" : 0.3,
+                                "date" : (prevSeasonEnd.getTime() >= min) ? prevSeasonEnd : new Date(min),
+                                "toDate": seasonEnd,
+                                "fillColor" : "#3498db"
+                            });
+                        })
+
+                    }
                     $scope.chart.write("chartdiv");
                     $scope.chart.addClassNames = false;
                     if(switched){
@@ -859,7 +886,7 @@ angular.module('Sportomatics')
                 $http.get(url + '?' + params)
                     .success(function(data, status, headers) {
                         $scope.dataBySeason = data;
-                        self.data = data;
+                        self.data = data; //for table view
                         self.loader = false;
                     }).then(function(){
                         self.list();
@@ -868,6 +895,22 @@ angular.module('Sportomatics')
                     })
             })
     };
+        $scope.getCoachData = function(){
+            var group = 'season';
+            var params = 'group_by=' + group;
+            if (self.club !== null) {
+                params += '&club=' + self.club;
+            }
+            if (self.coach !== null) {
+                params += '&coach=' + self.coach;
+            }
+            $http.get(url + '?' + params)
+                .success(function(data, status, headers) {
+                    $scope.coachData = data;
+                }).then(function(){
+                    self.list();
+                })
+        };
 
     $scope.getPlayerData();
 
