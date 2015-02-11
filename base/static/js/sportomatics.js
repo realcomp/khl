@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', [])
+angular.module('Sportomatics', ['angucomplete'])
 
 var next = function($http) {
     return function(isAll) {

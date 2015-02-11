@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', [])
+angular.module('Sportomatics', ['angucomplete'])
 
 var next = function($http) {
     return function(isAll) {
@@ -84,6 +84,7 @@ function getDateOfWeek(w, y) {
 
     return new Date(y, 0, d);
 }
+
 angular.module('Sportomatics')
 .value('zoomData', {
     startDate: 'a',

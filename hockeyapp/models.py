@@ -86,8 +86,8 @@ class Player(AbstractMan):
 
     def recalc_counters(self):
         q_rated_matches = (
-            Q(clubplayermatch__match__is_championship=True) |
-            Q(clubplayermatch__match__is_playoff=True))
+            Q(clubplayermatch__match__challenge_type__isnull=False) &
+            Q(clubplayermatch__match__challenge_type__gt=0))
         clubplayers = self.clubplayer_set.filter(q_rated_matches)
         fields = 'goals', 'assists', 'points', 'plus_minus'
         kwargs = {}
