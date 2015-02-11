@@ -7,7 +7,7 @@ from django.db.models import Avg, Sum
 from rest_framework import serializers
 
 from . import (
-    AbstractManSerializer, BasePlayerCardSerializer,
+    AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
     SeasonSerializer, BaseClubSerializer,
     CoachSerializer, CountrySerializer, ClubPlayerSerializer)
 from ..models import (
@@ -191,3 +191,9 @@ class PlayerNamesSerializer(AbstractManSerializer):
     class Meta(object):
         fields = 'fio', 'name', 'lastname'
         model = Player
+
+
+class ClubTitlesSerializer(TitleBaseSerializer):
+    class Meta(object):
+        fields = 'title',
+        model = Club

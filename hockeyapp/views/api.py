@@ -25,7 +25,8 @@ from ..serializers import (
 )
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import (
-    PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer)
+    PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
+    ClubTitlesSerializer)
 
 
 class PlayersSearch(
@@ -194,11 +195,23 @@ class PlayerNamesSearch(generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(PlayerNamesSearch, self).filter_queryset(qs)
-
         s = self.request.GET.get('s')
         if s:
             qs = qs.filter(**{
                 '%s_lastname__istartswith' % self.request.LANGUAGE_CODE: s,
             })
+        return qs
 
+
+class ClubTitlesSearch(generics.ListAPIView):
+    queryset = Club.objects.all()
+    serializer_class = ClubTitlesSerializer
+
+    def filter_queryset(self, qs):
+        qs = super(ClubTitlesSearch, self).filter_queryset(qs)
+        s = self.request.GET.get('s')
+        if s:
+            qs = qs.filter(**{
+                '%s_title__istartswith' % self.request.LANGUAGE_CODE: s,
+            })
         return qs
