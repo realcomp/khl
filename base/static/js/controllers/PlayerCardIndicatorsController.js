@@ -34,7 +34,7 @@ angular.module('Sportomatics')
 
     this.setClub = function(club) {
         this.club = club;
-        this.list();
+        $scope.getClubData();
     };
 
     this.setCoach = function(coach) {
@@ -140,6 +140,22 @@ angular.module('Sportomatics')
                                 "fillAlpha" : 0.3,
                                 "date" : (prevSeasonEnd.getTime() >= min) ? prevSeasonEnd : new Date(min),
                                 "toDate": seasonEnd,
+                                "fillColor" : "#3498db",
+                                "lineThickness": 0
+                            });
+                        })
+
+                    }
+                    if(self.club){
+                        $scope.chart.guides = [];
+                        _.each($scope.clubData.results, function(result){
+                            var seasonEnd = new Date(result.season.end_date);
+                            var prevSeasonEndString = (parseInt(result.season.end_date.substr(0,4))-1).toString() + result.season.end_date.substr(4);
+                            var prevSeasonEnd = new Date(prevSeasonEndString);
+                            $scope.chart.guides.push({
+                                "fillAlpha" : 0.3,
+                                "date" : (prevSeasonEnd.getTime() >= min) ? prevSeasonEnd : new Date(min),
+                                "toDate": seasonEnd,
                                 "fillColor" : "#3498db"
                             });
                         })
@@ -192,15 +208,25 @@ angular.module('Sportomatics')
         $scope.getCoachData = function(){
             var group = 'season';
             var params = 'group_by=' + group;
-            if (self.club !== null) {
-                params += '&club=' + self.club;
-            }
             if (self.coach !== null) {
                 params += '&coach=' + self.coach;
             }
             $http.get(url + '?' + params)
                 .success(function(data, status, headers) {
                     $scope.coachData = data;
+                }).then(function(){
+                    self.list();
+                })
+        };
+        $scope.getClubData = function(){
+            var group = 'season';
+            var params = 'group_by=' + group;
+            if (self.club !== null) {
+                params += '&club=' + self.club;
+            }
+            $http.get(url + '?' + params)
+                .success(function(data, status, headers) {
+                    $scope.clubData = data;
                 }).then(function(){
                     self.list();
                 })
