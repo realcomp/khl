@@ -150,6 +150,16 @@ angular.module('Sportomatics')
                 legend.marginLeft = 110;
                 legend.useGraphSettings = true;
                 chart.addLegend(legend);
+                console.log(locale.fieldNames[field].fullName);
+
+                // LABEL
+                chart.allLabels = [{
+                    align: 'center',
+                    y: 60,
+                    alpha: 0.7,
+                    bold: true,
+                    text: locale.fieldNames[field].fullName.toUpperCase()
+                }];
 
                 deferred.resolve(chart);
             });

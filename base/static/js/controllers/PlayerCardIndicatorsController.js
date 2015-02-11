@@ -121,14 +121,7 @@ angular.module('Sportomatics')
                         }
                     };
                     $scope.chart.addChartCursor(chartCursor);
-                    // LABELS
-                    $scope.chart.allLabels = [{
-                        align: 'center',
-                        y: 60,
-                        alpha: 0.7,
-                        bold: true,
-                        text: self.fieldName.toUpperCase()
-                    }];
+
                     // WRITE
                     if(self.coach){
                         $scope.chart.guides = [];
@@ -183,7 +176,7 @@ angular.module('Sportomatics')
             .success(function(data, status, headers) {
                 self.locale = headers()['content-language'];
                 $scope.localeObject = LocaleFactory['locale_'+self.locale];
-                self.fieldName = LocaleFactory.getFieldName(self.field, self.locale);
+                self.fieldName = $scope.localeObject.fieldNames[self.field].fullName;
                 $scope.dataByMonth = data;
                 group = 'season';
                 params = 'group_by=' + group;

@@ -26,7 +26,7 @@ angular.module('Sportomatics')
                     },
                     penalty_time: {
                         shortName: 'Штр',
-                        fullName: 'Штрафное время'
+                        fullName: 'Штрафное время, мин'
                     },
                     es_goals: {
                         shortName: 'ШР',
