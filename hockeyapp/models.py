@@ -403,10 +403,11 @@ class ClubPlayer(models.Model):
     def club_url(self):
         if self.pk and self.club:
             url = reverse('hockeyapp:club', kwargs={'pk': self.club.pk})
-            params = urllib.urlencode({
-                'season': self.season.pk,
-            })
-            return '%s?%s' % (url, params)
+            if self.season:
+                url += '?%s' % urllib.urlencode({
+                    'season': self.season.pk,
+                })
+            return url
 
     class Meta:
         verbose_name=_('Club player')
