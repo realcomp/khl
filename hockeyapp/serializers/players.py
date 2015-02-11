@@ -189,11 +189,11 @@ class PlayerCardCoachesSerializer(CoachSerializer):
 
 class PlayerNamesSerializer(AbstractManSerializer):
     class Meta(object):
-        fields = 'fio', 'name', 'lastname'
+        fields = 'pk', 'fio', 'name', 'lastname'
         model = Player
 
 
 class ClubTitlesSerializer(TitleBaseSerializer):
     class Meta(object):
-        fields = 'title',
+        fields = 'pk', 'title'
         model = Club

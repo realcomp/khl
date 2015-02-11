@@ -200,7 +200,7 @@ class PlayerNamesSearch(generics.ListAPIView):
             qs = qs.filter(**{
                 '%s_lastname__istartswith' % self.request.LANGUAGE_CODE: s,
             })
-        return qs
+        return qs.order_by('%s_lastname' % self.request.LANGUAGE_CODE)
 
 
 class ClubTitlesSearch(generics.ListAPIView):
@@ -214,4 +214,4 @@ class ClubTitlesSearch(generics.ListAPIView):
             qs = qs.filter(**{
                 '%s_title__istartswith' % self.request.LANGUAGE_CODE: s,
             })
-        return qs
+        return qs.order_by('%s_title' % self.request.LANGUAGE_CODE)

@@ -1054,6 +1054,8 @@ angular.module('Sportomatics')
     this.ratedBy = '';
     this.alphabetFilter = null;
     this.isPlaying = true;
+    this.playersFilter = null;
+    this.clubsFilter = null;
 
     this.loader = false;
     this.countries_selected = [];
@@ -1113,6 +1115,9 @@ angular.module('Sportomatics')
         if (self.alphabetFilter) {
             params += '&%s_lastname__startswith=' + self.alphabetFilter;
         }
+        if (self.clubsFilter) {
+            params += '&club=' + self.clubsFilter.pk;
+        }
         $.each(self.leagues_selected, function() {
             params += '&league=' + this;
         });
@@ -1136,6 +1141,8 @@ angular.module('Sportomatics')
         if (!this.loader) {
             this.ratedBy = ratedBy;
             if (ratedBy) {
+                this.order_by = 'rating';
+                this.order_by_reversed = true;
                 this.search();
             } else {
                 this.search('[%22%s_lastname%22,%22%s_name%22]');
@@ -1148,6 +1155,16 @@ angular.module('Sportomatics')
             this.alphabetFilter = alphabetFilter;
             this.search();
         }
+    };
+
+    this.setPlayersFilter = function(obj) {
+        self.playersFilter = obj.originalObject;
+        self.search();
+    };
+
+    this.setClubsFilter = function(obj) {
+        self.clubsFilter = obj.originalObject;
+        self.search();
     };
 
     this.getNames = function(s) {

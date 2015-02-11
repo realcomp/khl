@@ -295,14 +295,16 @@
                                                   pause="300" minlength="2"
                                                   selectedobject="PlayersSearchCtrl.playersFilter"
                                                   url="{% url 'hockeyapp:player-names-search-api' %}?s="
-                                                  titlefield="lastname" />
+                                                  titlefield="lastname,name"
+                                                  onchangecallback="PlayersSearchCtrl.setPlayersFilter" />
                                 </div>
                                 <div class="ui selection dropdown dropdown-small-inline">
                                     <angucomplete id="clubs_filter" placeholder="Команду..."
                                                   pause="300" minlength="2"
                                                   selectedobject="PlayersSearchCtrl.clubsFilter"
                                                   url="{% url 'hockeyapp:club-titles-search-api' %}?s="
-                                                  titlefield="title" />
+                                                  titlefield="title"
+                                                  onchangecallback="PlayersSearchCtrl.setClubsFilter" />
                                 </div>
                             </div>
                             <div class="row">

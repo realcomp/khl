@@ -17,7 +17,11 @@ from ..models import Arena, Club, Player
 class ViewsTestCase(TestCase):
     PLAYER_DATA = {
         'ru_fio': 'Иванов Иван',
+        'ru_name': 'Иван',
+        'ru_lastname': 'Иванов',
         'en_fio': 'Ivanov Ivan',
+        'en_name': 'Ivan',
+        'en_lastname': 'Ivanov',
         'khl_id': 666,
         'line': 1,
         'birth_date': datetime.date(year=2000, month=12, day=31),
@@ -27,6 +31,8 @@ class ViewsTestCase(TestCase):
         'number': '666',
     }
     CLUB_DATA = {
+        'ru_title': 'СКА',
+        'en_title': 'SKA',
         'site': 'https://google.com/',
         'contacts': '+7 999-999-99-99',
     }
@@ -77,6 +83,22 @@ class ViewsTestCase(TestCase):
             reverse('hockeyapp:players-search-api'))
         self.assertEqual(response.status_code, 200)
         # self.assertEqualPlayer(response.data['results'][0], self.player)
+
+    def test_player_names_search_api(self):
+        response = self.client.get(
+            reverse('hockeyapp:player-names-search-api') +
+            b'?s=%s' % self.PLAYER_DATA['ru_lastname'][:2].lower())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data[0]['lastname'], self.PLAYER_DATA['ru_lastname'])
+
+    def test_club_titles_search_cpi(self):
+        response = self.client.get(
+            reverse('hockeyapp:club-titles-search-api') +
+            b'?s=%s' % self.CLUB_DATA['ru_title'][:2].lower())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.data[0]['title'], self.CLUB_DATA['ru_title'])
 
     def test_player_card(self):
         response = self.client.get(
