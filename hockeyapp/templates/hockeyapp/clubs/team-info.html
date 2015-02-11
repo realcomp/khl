@@ -1,8 +1,8 @@
 <div class="team-info">
-    <div class="team-heading">
+    <div id="team-heading" class="team-heading">
         <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
-        <div class="team-logo"><img src="{{ logo|default:"" }}" alt="Sportomatics" class="team-logo-image"></div>
-        <div class="team-name">{{ title }}
+        <div id="team-logo" class="team-logo"><img src="{{ logo|default:"" }}" alt="Sportomatics" class="team-logo-image"></div>
+        <div id="team-name" class="team-name">{{ title }}
             {% if address.title %}
                 <span>({{ address.title }})</span>
             {% endif %}

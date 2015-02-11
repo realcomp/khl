@@ -111,6 +111,7 @@ angular.module('Sportomatics')
                 if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
                 graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
+
                 // second graph
                 var gamesGraph = new AmCharts.AmGraph();
                 gamesGraph.valueField = "count";
@@ -126,16 +127,6 @@ angular.module('Sportomatics')
                 gamesGraph.velueAxis = gamesAxis;
                 if(field !== 'count')
                 chart.addGraph(gamesGraph);
-
-                // third graph
-                var graph3 = new AmCharts.AmGraph();
-                graph3.valueAxis = valueAxis3; // we have to indicate which value axis should be used
-                graph3.valueField = "views";
-                graph3.title = "green line";
-                graph3.bullet = "triangleUp";
-                graph3.hideBulletsCount = 30;
-                graph3.bulletBorderThickness = 1;
-                //chart.addGraph(graph3);
 
                 // SCROLLBAR
                 var chartScrollbar = new AmCharts.ChartScrollbar();

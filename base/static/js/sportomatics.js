@@ -84,3 +84,78 @@ function getDateOfWeek(w, y) {
 
     return new Date(y, 0, d);
 }
+//TODO: make expressions to check if already scrolled (for performance)
+$(function() {
+    var top = $('.breadcrumbs').offset().top;
+    var topSecondary = $('.team-info').offset().top;
+    var topThird = $('.page-menu').offset().top - 40;
+    var breadcrumbWidth = $('.breadcrumb').first().css('width').substr(0, $('.breadcrumb').first().css('width').length -2);
+    var teamNameWidth = parseInt($('#team-name').css('width').substr(0, $('#team-name').css('width').length-2));
+    $(window).scroll(function(event) {
+        var y = $(window).scrollTop();
+        if (y >= top) {
+            $('.team-info').css('margin-top', '52px');
+            $('.breadcrumbs').addClass('fixed').css('border-bottom', '1px solid #f2f2f2');
+        } else if(y < top) {
+            $('.breadcrumbs').removeClass('fixed').css('border-bottom', 'none');
+            $('.team-info').css('margin-top', '0px');
+        }
+        if (y >= topSecondary){
+            $('.team-info').css('margin-top', '106px');
+            $('.my-team-btn').css('margin-top', '4px');
+            $('.breadcrumb').after($('#team-logo'));
+            $("#team-logo").after($('#team-name'));
+            $('#team-name').addClass('team-name-inner inline-block');
+            $('.breadcrumb').addClass('inline-block breadcrumb-inner');
+            $('#team-logo').addClass('team-logo-inner inline-block');
+            $('#team-logo').css('margin-left', (1000 - breadcrumbWidth*2 - (25+teamNameWidth))/2 + 'px', 'important');
+        } else if (y < topSecondary){
+            $('.my-team-btn').after($('#team-logo'));
+            $('.my-team-btn').css('margin-top', '10px');
+            $('#team-logo').after($('#team-name'));
+            $('#team-logo').css('margin-left', '0px');
+            $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
+            $('#team-logo').removeClass('team-logo-inner inline-block');
+            $('#team-name').removeClass('team-name-inner inline-block');
+        }
+        if (y >= topThird){
+            $('.team-info').css('margin-top', '150px', 'important')
+            $('.search-block').after($('.page-menu'));
+
+            $('.page-menu').css('margin-left', '5px', 'important');
+            $('.page-menu').css('margin-right', '5px', 'important');
+        } else if (y < topThird){
+            $('.page-menu').removeClass('fixed');
+            $('.page-inner-container').before($('.page-menu'));
+            $('.page-menu').css('margin-left', '0px', 'important');
+            $('.page-menu').css('margin-right', '0px', 'important');
+        }
+    });
+    var y = $(window).scrollTop();
+    if (y >= topSecondary){
+        $('.team-info').css('margin-top', '106px');
+        $('.my-team-btn').css('margin-top', '4px');
+        $('.breadcrumb').after($('#team-logo'));
+        $("#team-logo").after($('#team-name'));
+        $('#team-name').addClass('team-name-inner inline-block');
+        $('.breadcrumb').addClass('inline-block breadcrumb-inner');
+        $('#team-logo').addClass('team-logo-inner inline-block');
+        $('#team-logo').css('margin-left', (1000 - breadcrumbWidth*2 - (25+teamNameWidth))/2 + 'px', 'important');
+    } else if (y < topSecondary){
+        $('.my-team-btn').after($('#team-logo'));
+        $('.my-team-btn').css('margin-top', '10px');
+        $('#team-logo').after($('#team-name'));
+        $('#team-logo').css('margin-left', '0px');
+        $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
+        $('#team-logo').removeClass('team-logo-inner inline-block');
+        $('#team-name').removeClass('team-name-inner inline-block');
+    }
+    if (y >= top) {
+        $('.team-info').css('margin-top', '52px');
+        $('.breadcrumbs').addClass('fixed');
+    } else if(y < top) {
+        $('.breadcrumbs').removeClass('fixed');
+        $('.team-info').css('margin-top', '0px');
+    }
+
+});
