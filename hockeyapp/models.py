@@ -180,6 +180,23 @@ class Judge(AbstractMan):
         verbose_name_plural=_('Judges')
 
 
+class PlayerCoachJudge(models.Model):
+    player = models.OneToOneField(Player,verbose_name=Player._meta.verbose_name,
+                                            on_delete=models.SET_NULL,
+                                            null=True, blank=True)
+    coach = models.OneToOneField(Coach,verbose_name=Coach._meta.verbose_name,
+                                            on_delete=models.SET_NULL,
+                                            null=True, blank=True)
+    judge = models.OneToOneField(Judge,verbose_name=Judge._meta.verbose_name,
+                                            on_delete=models.SET_NULL,
+                                            null=True, blank=True)
+    __unicode__ = lambda self: '{} {} {} {}'.format(self.id, self.player,
+                                                    self.coach, self.judge)
+    class Meta:
+        verbose_name=_('Player - Coach - Judge')
+        verbose_name_plural=verbose_name
+
+
 class Arena(TitleBaseModel):
     objects = managers.arena.ArenaManager()
     capacity = models.PositiveIntegerField(_('Capacity'), null=True)
@@ -239,6 +256,8 @@ class Club(TitleBaseModel):
     arena = models.ForeignKey(Arena, null=True, blank=True,
                                     on_delete=models.SET_NULL)
     players = models.ManyToManyField(Player, null=True, blank=True)
+    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
+                                    verbose_name = _('Social accounts'))
     league = models.ForeignKey(League, null=True, blank=True)
     farm_club = models.OneToOneField('self', null=True, blank=True,
                                     on_delete=models.SET_NULL,
