@@ -4921,6 +4921,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .team-logo-inner img{
     width: 25px;
     height: 25px;
+    margin-top: 6px;
 }
 .breadcrumb-inner{
     vertical-align: middle;
