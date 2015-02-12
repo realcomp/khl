@@ -133,7 +133,6 @@ $(function() {
         if (topThird && y >= topThird){
             $('.team-info').css('margin-top', '150px', 'important')
             $('.search-block').after($('.page-menu'));
-
             $('.page-menu').css('margin-left', '5px', 'important');
             $('.page-menu').css('margin-right', '5px', 'important');
         } else if (topThird && y < topThird){
@@ -177,10 +176,11 @@ $(function() {
         $('.team-info').css('margin-top', '52px');
         $('.breadcrumbs').addClass('fixed');
     } else if(top && y < top) {
+        $('.team-info').css('margin-top', '52px');
+        $('.breadcrumbs').addClass('fixed');
         $('.breadcrumbs').removeClass('fixed');
         $('.team-info').css('margin-top', '0px');
     }
-
 });
 /*$(function(){
     if($('.breadcrumb').length){
