@@ -3,21 +3,18 @@ from __future__ import unicode_literals
 
 import itertools
 import json
-import operator
 
-from django.db.models import Avg, Sum, Count
+from django.db.models import Avg, Sum
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
 
-from base.models import Season
-
 from .mixins import PaginationMixin
 from ..filters import (
     PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter)
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, LeagueClub
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
 from ..serializers import (
     CountryLeaguesSerializer,
     ClubListSerializer,
@@ -37,7 +34,6 @@ class PlayersSearch(
 
     def list(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
-
         # get clubplayers
         self.clubplayers = {}
         clubplayers = (
@@ -50,7 +46,6 @@ class PlayersSearch(
                 self.clubplayers[player_id] = []
             if clubplayer not in self.clubplayers[player_id]:
                 self.clubplayers[player_id].append(clubplayer)
-
         # get rating
         rated_qs = qs
         rated_by = self.request.GET.get('rated_by', 'seasons_total')

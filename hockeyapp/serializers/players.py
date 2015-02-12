@@ -94,6 +94,8 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
             return ('%0.2f' % result) if result else '0'
 
     count = serializers.SerializerMethodField()
+    start_date = serializers.SerializerMethodField()
+    end_date = serializers.SerializerMethodField()
     date = serializers.DateTimeField()
     season = SeasonSerializer()
     goals = AggregateSumField()
@@ -118,6 +120,14 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
 
     def get_count(self, obj):
         return obj.count()
+
+    def get_start_date(self, obj):
+        if hasattr(obj, 'start_date'):
+            return obj.start_date
+
+    def get_end_date(self, obj):
+        if hasattr(obj, 'end_date'):
+            return obj.end_date
 
     def get_gamingtime__avg(self, obj):
         gamingtime_all = (
@@ -146,7 +156,9 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
             'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals', 'es_goals',
             'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis__avg',
             'faceoff', 'winfaceoff', 'winfaceoff_p__avg',
-            'shots__avg', 'gamingtime__avg', 'change_count__avg')
+            'shots__avg', 'gamingtime__avg', 'change_count__avg',
+            'start_date', 'end_date',
+        )
         model = ClubPlayerMatch
 
 
