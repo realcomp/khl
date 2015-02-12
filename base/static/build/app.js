@@ -176,8 +176,6 @@ $(function() {
         $('.team-info').css('margin-top', '52px');
         $('.breadcrumbs').addClass('fixed');
     } else if(top && y < top) {
-        $('.team-info').css('margin-top', '52px');
-        $('.breadcrumbs').addClass('fixed');
         $('.breadcrumbs').removeClass('fixed');
         $('.team-info').css('margin-top', '0px');
     }
