@@ -3932,7 +3932,7 @@ i.icon {
 
 /* line 2485, ../sass/_base.sass */
 .clubs-page .breadcrumbs {
-  border-bottom: none;
+  /*border-bottom: none;*/
 }
 /* line 2487, ../sass/_base.sass */
 .clubs-page .page-inner-container {
@@ -4921,6 +4921,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .team-logo-inner img{
     width: 25px;
     height: 25px;
+    margin-top: 6px;
 }
 .breadcrumb-inner{
     vertical-align: middle;
@@ -4928,4 +4929,12 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .inline-block{
     display: inline-block;
+}
+.ui.breadcrumb a:last-of-type{
+    text-decoration: none !important;
+}
+.clipped-img{
+    width: 35px !important;
+    height: 35px;
+    clip: rect(50px, 50px, 50px, 50px);
 }

@@ -58,6 +58,11 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             players = clubplayers.values_list('player_id', flat=True)
             qs = qs.filter(pk__in=players)
 
+        if 'club' in request.GET:
+            clubplayers = clubplayers.filter(club=request.GET['club'])
+            players = clubplayers.values_list('player_id', flat=True)
+            qs = qs.filter(pk__in=players)
+
         if 'line' in request.GET:
             # union of sets
             lines = reduce(operator.or_, map(set, map(

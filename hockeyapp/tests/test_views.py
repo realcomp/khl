@@ -92,7 +92,7 @@ class ViewsTestCase(TestCase):
         self.assertEqual(
             response.data[0]['lastname'], self.PLAYER_DATA['ru_lastname'])
 
-    def test_club_titles_search_cpi(self):
+    def test_club_titles_search_api(self):
         response = self.client.get(
             reverse('hockeyapp:club-titles-search-api') +
             b'?s=%s' % self.CLUB_DATA['ru_title'][:2].lower())

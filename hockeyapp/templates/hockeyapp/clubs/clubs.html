@@ -48,7 +48,7 @@
                                             <label class="item">
                                                 <input id="clubs-all" class="hidden" type="radio" value=""
                                                        ng-model="ClubListCtrl.leagues_selected"
-                                                       ng-change="ClubListCtrl.list()" />
+                                                       ng-change="ClubListCtrl.list(undefined, true)" />
                                                 {% trans 'ALL' %}
                                             </label>
                                         </li>

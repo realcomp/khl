@@ -241,6 +241,9 @@ angular.module('angucomplete', [] )
                 } else if (event.which == 8) {
                     $scope.selectedObject = null;
                     $scope.$apply();
+                    if ($scope.onChangeCallback && typeof $scope.onChangeCallback === 'function') {
+                        $scope.onChangeCallback(null);
+                    }
                 }
             });
 
