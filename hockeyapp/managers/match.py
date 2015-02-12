@@ -3,9 +3,8 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
-from django.core.cache import cache
 from django.db import models
-from django.db.models import Avg, Sum, Count, Max, Min
+from django.db.models import Max, Min
 from django.db.models.loading import get_model
 
 from base.models import Season
@@ -250,6 +249,9 @@ class ClubPlayerMatchQuerySet(models.QuerySet):
             .order_by('start_date'))
         for season in seasons:
             season_qs = self.filter(clubplayer__season=season)
+            min_max = season_qs.aggregate(Min('match__date'),Max('match__date'))
+            season_qs.start_date = min_max.get('match__date__min')
+            season_qs.end_date = min_max.get('match__date__max')
             season_qs.date = None
             season_qs.season = season
             result.append(season_qs)
