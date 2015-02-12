@@ -28,8 +28,17 @@ class AbstractMan(LocaleAttrMixin, models.Model):
     en_lastname = models.CharField(_('Last name (en)'), max_length=4096, blank=True, null=True)
     birth_date = models.DateField(_('Birth date'), null=True, blank=True)
     death_date = models.DateField(_('Death date'), null=True, blank=True)
-    wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
     khl_id = models.PositiveIntegerField(default=0, null=True)
+    #socials
+    vk = models.URLField('VK account URL', blank=True, max_length=1024)
+    ok = models.URLField('OK account URL', blank=True, max_length=1024)
+    fb = models.URLField('Facebook account URL', blank=True, max_length=1024)
+    gl = models.URLField('Google+ account URL', blank=True, max_length=1024)
+    tw = models.URLField('Twitter account URL', blank=True, max_length=1024)
+    im = models.URLField('Instagram account URL', blank=True, max_length=1024)
+    pp = models.URLField('Personal page URL', blank=True, max_length=1024)
+    ut = models.URLField('Youtube account URL', blank=True, max_length=1024)
+    wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
     __unicode__ = lambda self: self.ru_fio
 
     def save(self, **kwargs):
@@ -158,6 +167,7 @@ class PlayerSocial(SocialAbstract):
         verbose_name=_('Player social account')
         verbose_name_plural=_('Players social accounts')
 
+
 class Coach(AbstractMan):
     citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
                                             on_delete=models.SET_NULL,
@@ -255,7 +265,15 @@ class Club(TitleBaseModel):
     site = models.URLField(_('Site'), blank=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
-
+    #socials
+    vk = models.URLField('VK account URL', blank=True, max_length=1024)
+    ok = models.URLField('OK account URL', blank=True, max_length=1024)
+    fb = models.URLField('Facebook account URL', blank=True, max_length=1024)
+    gl = models.URLField('Google+ account URL', blank=True, max_length=1024)
+    tw = models.URLField('Twitter account URL', blank=True, max_length=1024)
+    im = models.URLField('Instagram account URL', blank=True, max_length=1024)
+    pp = models.URLField('Personal page URL', blank=True, max_length=1024)
+    ut = models.URLField('Youtube account URL', blank=True, max_length=1024)
     #relation
     address = models.ForeignKey(Address, null=True, blank=True,
                                     on_delete=models.SET_NULL)
@@ -275,7 +293,6 @@ class Club(TitleBaseModel):
     junior_club = models.OneToOneField('self', null=True, blank=True,
                                     on_delete=models.SET_NULL,
                                     related_name='juniorclubparent')
-
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)

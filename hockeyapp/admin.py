@@ -101,7 +101,7 @@ recalc_counters.short_description = _('Recalculate counters')
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     actions = recalc_counters,
-    inlines = (ClubPlayerInline, PlayerCitizenshipInline, PlayerSocialsInline)
+    inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
     )
@@ -142,17 +142,18 @@ class ClubSocialsInline(admin.TabularInline):
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
-                ClubTitleAliasInline, ClubSocialsInline)
+                ClubTitleAliasInline,)# ClubSocialsInline)
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields
     list_editable = 'league',
     select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
-                        'junior_club', 'socials',
+                        'junior_club',
     )
     fields = (  'ru_title', 'en_title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
-                'farm_club', 'junior_club', 'site', 'players', 'style',)
+                'farm_club', 'junior_club', 'site', 'players', 'style',
+                'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
 admin.site.register(Club, ClubAdmin)
 
 
@@ -213,7 +214,7 @@ class JudgeSocialsInline(admin.TabularInline):
     fields = ('url', 'stype')
 
 class JudgeAdmin(BaseListAdmin):
-    inlines = (JudgeMatchesInline,LineJudgeMatchesInline, JudgeSocialsInline)
+    inlines = (JudgeMatchesInline,LineJudgeMatchesInline,)# JudgeSocialsInline)
 admin.site.register(Judge, JudgeAdmin)
 
 
