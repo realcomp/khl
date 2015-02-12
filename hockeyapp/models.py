@@ -116,7 +116,8 @@ class Player(AbstractMan):
                 self.line = self.clubplayer_set.all().last().line
         # update last club
         if self.pk and self.clubplayer_set.exists():
-            self.last_club = self.clubplayer_set.all().last().club
+            self.last_club = self.clubplayer_set.order_by(
+                '-end_date', '-pk')[0].club
         super(Player, self).save(**kwargs)
 
     @property

@@ -39,7 +39,7 @@ class PlayersSearch(
         clubplayers = (
             ClubPlayer.objects
             .filter(pk__in=qs.values_list('clubplayer', flat=True))
-            .order_by('-end_date'))
+            .order_by('-end_date', '-pk'))
         for clubplayer in clubplayers:
             player_id = clubplayer.player_id
             if player_id not in self.clubplayers:
