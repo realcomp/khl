@@ -69,21 +69,12 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
                 json.loads, request.GET.getlist('line'))))
             qs = qs.filter(line__in=lines)
 
-        q_citizenship = None
+        q_citizenship = Q()
         if 'citizenship' in request.GET:
-            citizenship = filter(None, request.GET.getlist('citizenship'))
-            if citizenship:
-                q = Q(citizenship__in=citizenship)
-                q_citizenship = (q_citizenship | q) if q_citizenship else q
-        if ('citizenship_other' in request.GET and
-                'citizenship_other_active' in request.GET):
-            citizenship_other = filter(
-                None, request.GET.getlist('citizenship_other'))
-            if citizenship_other:
-                q = Q(citizenship__in=citizenship_other)
-            else:
-                q = ~Q(citizenship__ru_title=b'Россия')
-            q_citizenship = (q_citizenship | q) if q_citizenship else q
+            citizenship = request.GET.getlist('citizenship')
+            q_citizenship |= Q(citizenship__in=citizenship)
+        if 'citizenship_other' in request.GET:
+            q_citizenship |= ~Q(citizenship__ru_title=b'Россия')
         if q_citizenship:
             qs = qs.filter(q_citizenship)
 

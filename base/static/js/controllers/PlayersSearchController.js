@@ -1,5 +1,15 @@
-angular.module('Sportomatics')
-.controller('PlayersSearchController', ['$http', '$scope', function($http, $scope) {
+var app = angular.module('Sportomatics');
+
+app.config(function($routeProvider) {
+    $routeProvider
+    .when('/rated_by/:ratedBy/', {
+        controller: 'PlayersSearchController'
+    });
+});
+
+app.controller('PlayersSearchController', [
+    '$route', '$http', '$scope',
+    function($route, $http, $scope) {
     var self = this,
         url = $('#PlayersSearchForm').attr('action'),
         getUnchecker = function(isDefault, defaultValue) {
@@ -37,13 +47,20 @@ angular.module('Sportomatics')
         }
     };
 
-    $scope.citizenshipCheck = function(e) {
-        var isDefault = $(e).attr('name') === 'citizenship' && $(e).attr('value') === '';
-        if ($(e).is(':checked')) {
-            $('input[name="citizenship"]').each(getUnchecker(isDefault, ''));
-            $('input[name="citizenship_other_active"]').each(getUnchecker(isDefault, ''));
+    $scope.setCitizenship = function(event) {
+        if (event.target.id === 'isCitizenshipAll' && event.target.checked) {
+            $('#isCitizenshipRussia').attr('checked', false);
+            $('#isCitizenshipOther').attr('checked', false);
         }
-    };
+        if (event.target.id === 'isCitizenshipRussia' && event.target.checked) {
+            $('#isCitizenshipAll').attr('checked', false);
+        }
+        if (event.target.id === 'isCitizenshipOther' && event.target.checked) {
+            self.isCitizenshipOther = event.target.checked;
+            self.isCitizenshipAll = false;
+            $('#isCitizenshipAll').attr('checked', false);
+        }
+    }
 
     $scope.contractCheck = function(e) {
         var isDefault = $(e).attr('value') === '';
@@ -70,8 +87,20 @@ angular.module('Sportomatics')
             }
             self.order_by = order_by;
         }
-        params += '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by +
-            '&rated_by=' + self.ratedBy;
+        params += '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
+        if (self.ratedBy) {
+            params += '&rated_by=' + self.ratedBy;
+        }
+        if ($('#isCitizenshipRussia').is(':checked')) {
+            params += '&citizenship=' + $('#citizenshipRussia').val();
+        }
+        if ($('#isCitizenshipOther').is(':checked')) {
+            if ($('#citizenshipOther').val()) {
+                params += '&citizenship=' + $('#citizenshipOther').val();
+            } else {
+                params += '&citizenship_other=true';
+            }
+        }
         if (self.isPlaying) {
             params += '&is_playing=true';
         }
@@ -80,6 +109,9 @@ angular.module('Sportomatics')
         }
         if (self.clubsFilter) {
             params += '&club=' + self.clubsFilter.pk;
+        }
+        if (self.playersFilter) {
+            params += '&player=' + self.playersFilter.pk;
         }
         $.each(self.leagues_selected, function() {
             params += '&league=' + this;
@@ -137,22 +169,6 @@ angular.module('Sportomatics')
         }
         self.search();
     };
-
-    this.getNames = function(s) {
-        if (s === 'test') {
-            return ['test'];
-        } else {
-            return [];
-        }
-    }
-
-    this.getClubs = function(s) {
-        if (s === 'test') {
-            return ['test'];
-        } else {
-            return [];
-        }
-    }
 
     this.next = next($http);
 

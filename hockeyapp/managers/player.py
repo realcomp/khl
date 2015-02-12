@@ -79,6 +79,27 @@ class PlayerQuerySet(models.QuerySet):
             _file.save()
             return _file
 
+    def ranged_filter(self, filter_, range_):
+        i = 0
+        start = 0
+        end = 0
+        count = self.count()
+        for obj in self:
+            if filter_(obj):
+                break
+            i += 1
+        start = i - range_
+        end = i + range_
+        if i - range_ < 0:
+            start = 0
+            end = i + range_
+            end -= i - range_
+        elif i + range_ > count - 1:
+            end = count - 1
+            start = i - range_
+            start += (count - 1) - (i + range_)
+        return self[start:end + 1]
+
     # def by_season(self, club, season=None):
     #     '''
     #     :param season: season years ('2014', '2015')

@@ -75,6 +75,10 @@ class PlayersSearch(
                 '%s_lastname__startswith' % self.request.LANGUAGE_CODE: s,
             })
 
+        if 'player' in self.request.GET:
+            pk = int(self.request.GET['player'])
+            qs = qs.ranged_filter(lambda player: player.pk == pk, 5)
+
         instance = qs
         page = self.paginate_queryset(instance)
         if page is not None:

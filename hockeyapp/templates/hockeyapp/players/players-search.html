@@ -98,26 +98,27 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="citizenship" value="" checked="checked"
-                                               onchange="angular.element(this).scope().citizenshipCheck(this)">
+                                        <input type="checkbox" id="isCitizenshipAll" checked="checked"
+                                               onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="citizenship" value="{{ russia.pk }}"
-                                               onchange="angular.element(this).scope().citizenshipCheck(this)">
+                                        <input type="hidden" id="citizenshipRussia" value="{{ russia.pk }}">
+                                        <input type="checkbox" id="isCitizenshipRussia"
+                                               onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>{{ russia.title }}</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="citizenship_other_active"
-                                               onchange="angular.element(this).scope().citizenshipCheck(this)">
+                                        <input type="checkbox" id="isCitizenshipOther"
+                                               onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>иное</label>
                                     </div>
                                     <div class="ui selection dropdown dropdown-small-inline">
-                                        <input type="hidden" name="citizenship_other">
+                                        <input type="hidden" id="citizenshipOther" value="">
                                         <div class="default text">любое</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
@@ -429,7 +430,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="player in PlayersSearchCtrl.data.results">
+                                        <tr ng-class="{ selected:player.pk === PlayersSearchCtrl.playersFilter.pk }"
+                                            ng-repeat="player in PlayersSearchCtrl.data.results">
                                             <td>
                                                 {% verbatim %}
                                                     {{ player.rating_index }}

@@ -4933,3 +4933,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .ui.breadcrumb a:last-of-type{
     text-decoration: none !important;
 }
+.ui.table.player-select-table .selected {
+    background: #e3edb9;
+}
