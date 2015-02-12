@@ -161,13 +161,14 @@ $(function() {
             scrolledAfterPlayer = false;
         }
         //team card
-        if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo){
+        if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
             console.log('team info call ');
             $('.page-container').css('margin-top', '114px');
             $('.my-team-btn').css('margin-top', '4px');
             $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
             $("#team-logo").after($('#team-name')).addClass('team-logo-inner inline-block').css('margin-left', teamLogoMargin + 'px', 'important');
             $('#team-name').addClass('team-name-inner inline-block');
+            $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
             scrolledAfterTeamInfo = true;
         } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
             console.log('team info reverse call ');
@@ -175,22 +176,9 @@ $(function() {
             $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
             $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
             $('#team-name').removeClass('team-name-inner inline-block');
+            $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
             $('.page-container').css('margin-top', '0px');
             scrolledAfterTeamInfo = false;
-        }
-        //green menu
-        if (topThird && y >= topThird && !scrolledAfterGreenMenu && !$('#player-card-block').length){
-            console.log('green menu call ');
-            //if($('.team-info').length)
-            $('.page-container').css('margin-top', '114px', 'important');
-            if(!$('#player-card-block').length)
-            $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
-            scrolledAfterGreenMenu = true;
-        } else if (topThird && y < topThird && scrolledAfterGreenMenu && !$('#player-card-block').length){
-            console.log('green menu reverse call ');
-            if(!$('#player-card-block').length)
-            $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
-            scrolledAfterGreenMenu = false;
         }
     });
     var y = $(window).scrollTop();
