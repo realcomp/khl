@@ -108,13 +108,25 @@ $(function() {
         if (top && y >= top) {
             if($('.team-info').length) {
                 $('.team-info').css('margin-top', '52px');
-            } else {($('.page-container').css('margin-top', '42px'))}
+            } else {
+                if($('.player-card-block').length){
+                    if($('.breadcrumbs').length){
+                        $('.breadcrumbs').next().css('margin-top', '30px')
+                    }
+                } else ($('.page-container').css('margin-top', '42px'))
+            }
             $('.breadcrumbs').addClass('fixed');//.css('border-bottom', '1px solid #f2f2f2');
         } else if(top && y < top) {
             $('.breadcrumbs').removeClass('fixed');//.css('border-bottom', 'none');
             if($('.team-info').length) {
                 $('.team-info').css('margin-top', '0px');
-            } else {($('.page-container').css('margin-top', '0px'))}
+            } else {
+                if($('.player-card-block').length){
+                    if($('.breadcrumbs').length){
+                        $('.breadcrumbs').next().css('margin-top', '0px')
+                    }
+                } else ($('.page-container').css('margin-top', '0px'))
+            }
         }
         if (topSecondary && y >= topSecondary){
             $('.team-info').css('margin-top', '106px');
@@ -179,13 +191,25 @@ $(function() {
     if (top && y >= top) {
         if($('.team-info').length) {
             $('.team-info').css('margin-top', '52px');
-        } else {($('.page-container').css('margin-top', '42px'))}
+        } else {
+            if($('.player-card-block').length){
+                if($('.breadcrumbs').length){
+                    $('.breadcrumbs').next().css('margin-top', '30px')
+                }
+            } else ($('.page-container').css('margin-top', '42px'))
+        }
         $('.breadcrumbs').addClass('fixed');
     } else if(top && y < top) {
         $('.breadcrumbs').removeClass('fixed');
         if($('.team-info').length) {
             $('.team-info').css('margin-top', '0px');
-        } else {($('.page-container').css('margin-top', '0px'))}
+        } else {
+            if($('.player-card-block').length){
+                if($('.breadcrumbs').length){
+                    $('.breadcrumbs').next().css('margin-top', '0px')
+                }
+            } else ($('.page-container').css('margin-top', '0px'))
+        }
     }
 });
 /*$(function(){
