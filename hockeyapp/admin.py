@@ -88,6 +88,7 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
 
 class PlayerSocialsInline(admin.TabularInline):
     model = PlayerSocial
+    fields = ('url', 'stype')
 
 
 def recalc_counters(modeladmin, request, queryset):
@@ -137,6 +138,7 @@ class ClubTitleAliasInline(TabularInlineReadOnly):
 
 class ClubSocialsInline(admin.TabularInline):
     model = ClubSocial
+    fields = ('url', 'stype')
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
@@ -208,6 +210,7 @@ class LineJudgeMatchesInline(TabularInlineReadOnly):
 
 class JudgeSocialsInline(admin.TabularInline):
     model = JudgeSocial
+    fields = ('url', 'stype')
 
 class JudgeAdmin(BaseListAdmin):
     inlines = (JudgeMatchesInline,LineJudgeMatchesInline, JudgeSocialsInline)
@@ -219,6 +222,7 @@ admin.site.register(PlayerCoachJudge, NoFilterAdmin)
 
 class CoachSocialsInline(admin.TabularInline):
     model = CoachSocial
+    fields = ('url', 'stype')
 
 class CoachAdmin(BaseListAdmin):
     inlines = (CoachClubInline,CoachSocialsInline)
