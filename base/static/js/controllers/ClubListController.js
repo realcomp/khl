@@ -24,7 +24,7 @@ angular.module('Sportomatics')
         this.list();
     };
 
-    this.list = function(order_by) {
+    this.list = function(order_by, all) {
         var self = this,
             params = $('#ClubListForm').serialize();
         if (order_by) {
@@ -35,6 +35,7 @@ angular.module('Sportomatics')
             }
             self.order_by = order_by;
         }
+        if(self.leagues_selected === '' && !all) self.leagues_selected = 1; // to avoid waiting for getCountries league set
         params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by +
         '&league=' + self.leagues_selected;
         self.data = {};
@@ -47,7 +48,7 @@ angular.module('Sportomatics')
     };
 
     this.next = next($http);
-
     this.getCountries();
     this.list();
-}])
+
+}]);

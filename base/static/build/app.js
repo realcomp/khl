@@ -176,6 +176,8 @@ $(function() {
         $('.team-info').css('margin-top', '52px');
         $('.breadcrumbs').addClass('fixed');
     } else if(top && y < top) {
+        $('.team-info').css('margin-top', '52px');
+        $('.breadcrumbs').addClass('fixed');
         $('.breadcrumbs').removeClass('fixed');
         $('.team-info').css('margin-top', '0px');
     }
@@ -756,7 +758,7 @@ angular.module('Sportomatics')
         this.list();
     };
 
-    this.list = function(order_by) {
+    this.list = function(order_by, all) {
         var self = this,
             params = $('#ClubListForm').serialize();
         if (order_by) {
@@ -767,6 +769,7 @@ angular.module('Sportomatics')
             }
             self.order_by = order_by;
         }
+        if(self.leagues_selected === '' && !all) self.leagues_selected = 1; // to avoid waiting for getCountries league set
         params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by +
         '&league=' + self.leagues_selected;
         self.data = {};
@@ -779,10 +782,10 @@ angular.module('Sportomatics')
     };
 
     this.next = next($http);
-
     this.getCountries();
     this.list();
-}])
+
+}]);
 angular.module('Sportomatics')
 .controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
     this.graph_type = 'linear';
