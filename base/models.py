@@ -72,11 +72,15 @@ class TitleAlias(TitleBaseModel):
         verbose_name_plural = _('Title aliases')
 
 
-class SocialNetValue(TitleBaseModel):
+class SocialAbstract(TitleBaseModel):
     url = models.URLField('URL', blank=True)
     stype = models.PositiveIntegerField(_('Social Network'), null=True,
                                         choices = SOCIAL_NETWORKS)
     __unicode__ = lambda self: '{}: {}'.format(self.stype, self.url)
+    class Meta:
+        abstract=True
+
+class SocialNetValue(SocialAbstract):
     class Meta:
         verbose_name = _('Social Network Value')
         verbose_name_plural = _('Social Network Values')

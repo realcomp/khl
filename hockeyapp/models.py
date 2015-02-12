@@ -12,7 +12,7 @@ from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
 from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
-from base.models import TitleAlias, SocialNetValue
+from base.models import TitleAlias, SocialAbstract
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from .choices import CHALLENGE_TYPE
@@ -62,14 +62,10 @@ class Player(AbstractMan):
     last_club = models.ForeignKey(
         'hockeyapp.Club', verbose_name=_('Club'),
         related_name='last_players', null=True)
-    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
-                                    verbose_name = _('Social accounts'))
-
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
-
     # clubplayermatch data (do recalc_counters to update)
     seasons_total = models.IntegerField(_('Seasons Total'), null=True)
     matches_total = models.IntegerField(_('Matches Total'), null=True)
@@ -156,16 +152,27 @@ class PlayerCitizenship(models.Model):
         verbose_name_plural=_('Players citizenships')
 
 
+class PlayerSocial(SocialAbstract):
+    player = models.ForeignKey(Player)
+    class Meta:
+        verbose_name=_('Player social account')
+        verbose_name_plural=_('Players social accounts')
+
 class Coach(AbstractMan):
     citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
-    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
-                                    verbose_name = _('Social accounts'))
     class Meta:
         verbose_name=_('Coach')
         verbose_name_plural=_('Coaches')
+
+
+class CoachSocial(SocialAbstract):
+    coach = models.ForeignKey(Coach)
+    class Meta:
+        verbose_name=_('Coach social account')
+        verbose_name_plural=_('Coaches social accounts')
 
 
 class Judge(AbstractMan):
@@ -173,11 +180,16 @@ class Judge(AbstractMan):
                                             on_delete=models.SET_NULL,
                                             null=True, blank=True)
     photo = FilerImageField(verbose_name=_('Photo'), null=True, blank=True)
-    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
-                                    verbose_name = _('Social accounts'))
     class Meta:
         verbose_name=_('Judge')
         verbose_name_plural=_('Judges')
+
+
+class JudgeSocial(SocialAbstract):
+    judge = models.ForeignKey(Judge)
+    class Meta:
+        verbose_name=_('Judge social account')
+        verbose_name_plural=_('Judges social accounts')
 
 
 class PlayerCoachJudge(models.Model):
@@ -256,8 +268,6 @@ class Club(TitleBaseModel):
     arena = models.ForeignKey(Arena, null=True, blank=True,
                                     on_delete=models.SET_NULL)
     players = models.ManyToManyField(Player, null=True, blank=True)
-    socials = models.ManyToManyField(SocialNetValue, null=True, blank=True,
-                                    verbose_name = _('Social accounts'))
     league = models.ForeignKey(League, null=True, blank=True)
     farm_club = models.OneToOneField('self', null=True, blank=True,
                                     on_delete=models.SET_NULL,
@@ -461,6 +471,13 @@ class LogoClubHistory(models.Model):
     class Meta:
         verbose_name=_('Logo Club History')
         verbose_name_plural=_('Logo Club Histories')
+
+
+class ClubSocial(SocialAbstract):
+    club = models.ForeignKey(Club)
+    class Meta:
+        verbose_name=_('Club social account')
+        verbose_name_plural=_('Clubs social accounts')
 
 
 class AdvancedPlayerStats(models.Model):

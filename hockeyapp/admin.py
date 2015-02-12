@@ -13,7 +13,8 @@ from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
 from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
-from .models import PlayerCoachJudge
+from .models import PlayerCoachJudge, ClubSocial, PlayerSocial, CoachSocial
+from .models import JudgeSocial
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -85,6 +86,9 @@ class PlayerCitizenshipInline(TabularInlineReadOnly):
     model = PlayerCitizenship
     readonly_fields = ( object_link, 'start_date', 'end_date',)
 
+class PlayerSocialsInline(admin.TabularInline):
+    model = PlayerSocial
+
 
 def recalc_counters(modeladmin, request, queryset):
     from .tasks import player_recalc_counters
@@ -96,7 +100,7 @@ recalc_counters.short_description = _('Recalculate counters')
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     actions = recalc_counters,
-    inlines = (ClubPlayerInline, PlayerCitizenshipInline)
+    inlines = (ClubPlayerInline, PlayerCitizenshipInline, PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
     )
@@ -132,7 +136,7 @@ class ClubTitleAliasInline(TabularInlineReadOnly):
     fields = readonly_fields
 
 class ClubSocialsInline(admin.TabularInline):
-    model = Club.socials.through
+    model = ClubSocial
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
@@ -142,11 +146,11 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     readonly_fields = linked_m2m_readonly_fields
     list_editable = 'league',
     select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
-                        'junior_club',
+                        'junior_club', 'socials',
     )
     fields = (  'ru_title', 'en_title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
-                'farm_club', 'junior_club', 'site', 'players', 'style')
+                'farm_club', 'junior_club', 'site', 'players', 'style',)
 admin.site.register(Club, ClubAdmin)
 
 
@@ -202,16 +206,22 @@ class LineJudgeMatchesInline(TabularInlineReadOnly):
     linked_readonly_fields = ('match',)
     fields = linked_readonly_fields
 
+class JudgeSocialsInline(admin.TabularInline):
+    model = JudgeSocial
+
 class JudgeAdmin(BaseListAdmin):
-    inlines = (JudgeMatchesInline,LineJudgeMatchesInline)
+    inlines = (JudgeMatchesInline,LineJudgeMatchesInline, JudgeSocialsInline)
 admin.site.register(Judge, JudgeAdmin)
 
 
 admin.site.register(LogoClubHistory, NoFilterAdmin)
 admin.site.register(PlayerCoachJudge, NoFilterAdmin)
 
+class CoachSocialsInline(admin.TabularInline):
+    model = CoachSocial
+
 class CoachAdmin(BaseListAdmin):
-    inlines = (CoachClubInline,)
+    inlines = (CoachClubInline,CoachSocialsInline)
 admin.site.register(Coach, CoachAdmin)
 
 class ClubPlayerMatchInline(TabularInlineReadOnly):
