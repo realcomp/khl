@@ -1224,12 +1224,20 @@ angular.module('Sportomatics')
     };
 
     this.setPlayersFilter = function(obj) {
-        self.playersFilter = obj.originalObject;
+        if (obj) {
+            self.playersFilter = obj.originalObject;
+        } else {
+            self.playersFilter = null;
+        }
         self.search();
     };
 
     this.setClubsFilter = function(obj) {
-        self.clubsFilter = obj.originalObject;
+        if (obj) {
+            self.clubsFilter = obj.originalObject;
+        } else {
+            self.clubsFilter = null;
+        }
         self.search();
     };
 

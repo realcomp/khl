@@ -8,7 +8,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from .choices import SOCIAL_NETWORKS
-from .managers import SeasonManager
+from .managers import SeasonQuerySet
 
 
 class LocaleAttrMixin(object):
@@ -44,7 +44,7 @@ class TitleBaseModel(LocaleAttrMixin, models.Model):
 
 
 class Season(TitleBaseModel):
-    objects = SeasonManager()
+    objects = SeasonQuerySet.as_manager()
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
 
@@ -56,10 +56,7 @@ class Season(TitleBaseModel):
     @property
     def is_last(self):
         try:
-            season = (
-                Season.objects
-                .filter(start_date__lte=datetime.datetime.now().date())
-                .latest('end_date'))
+            season = Season.objects.active().latest('end_date')
             return self.pk == season.pk
         except Season.DoesNotExist:
             return False
