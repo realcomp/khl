@@ -49,7 +49,8 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'clubplayers', 'age', 'birth_date_short',
-            'rating', 'rating_index', 'fio', 'contract_to', 'contract_type')
+            'rating', 'rating_index', 'fio', 'contract_to', 'contract_type',
+            'weight', 'height', 'grip')
         model = Player
 
 
