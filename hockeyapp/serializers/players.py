@@ -173,12 +173,12 @@ class PlayerCardClubsSerializer(BaseClubSerializer):
             league_title = '%s: ' % obj.league.get_locale_attr(
                 'title', request=self.context.get('request'))
         return '%(league)s%(club)s (%(seasons)s)' % {
-            # 'league': clubleague.league.short_title,
             'league': league_title,
             'club': obj.get_locale_attr(
                 'title', request=self.context.get('request')),
-            'seasons': ' '.join(
-                map(attrgetter('short_title'), obj.selected_seasons)),
+            'seasons': ' '.join(map(
+                attrgetter('short_title'),
+                filter(None, obj.selected_seasons))),
         }
 
     class Meta(object):
