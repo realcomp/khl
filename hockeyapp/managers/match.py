@@ -235,6 +235,8 @@ class ClubPlayerMatchQuerySet(models.QuerySet):
                     match__date__lte=dates[i + 1])
                 month_qs.date = dates[i]
                 month_qs.season = None
+                if month_qs.exists():
+                    month_qs.season = month_qs[0].clubplayer.season
                 result.append(month_qs)
         return result
 
