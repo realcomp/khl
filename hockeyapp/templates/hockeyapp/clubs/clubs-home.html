@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -30,7 +31,7 @@
                     <img src="{{ arena.photo }}" alt="" class="stadium-photo" width="450">
                     <div class="stadium-desc">
                         <div class="stadium-title">{{ arena.title }}</div>
-                        <div class="stadium-info">{{ arena.title }}</div>
+                        <div class="stadium-info"></div>
                         <ul class="stadium-info-list">
                             <li class="stadium-info-item">
                                 <span>Официальное название:</span> "{{ arena.title }}"
@@ -40,10 +41,10 @@
                                 {{ arena.contacts }}
                             </li>
                             <li class="stadium-info-item">
-                                <span>Вместимость:</span> {{ arena.capacity }}
+                                <span>Вместимость:</span> {{ arena.capacity }} {% trans 'зрителей' %}
                             </li>
                             <li class="stadium-info-item">
-                                <span>Сайт:</span> {{ arena.site }}
+                                <span>Сайт:</span> <a href="{{ arena.site }}">{{ arena.site }}</a>
                             </li>
                         </ul>
                     </div>
@@ -875,7 +876,11 @@
                     <div class="heading">Как добраться</div>
                     <div class="team-track-map">
                         <iframe src="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
-                                width="932" height="486" frameborder="0" style="border:0"></iframe>
+                                name="GoogleMap" width="932" height="486" frameborder="0" style="border:0"></iframe>
+                        <a href="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
+                           target="GoogleMap">
+                            Сбросить масштабирование
+                        </a>
                     </div>
                 </div>
 
