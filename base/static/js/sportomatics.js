@@ -130,9 +130,11 @@ $(function() {
                     }
                 } else ($('.page-container').css('margin-top', '42px')) // clubs page
             }
+            if(!$('.sm-logo').length) $('.breadcrumb').before($("<img class='sm-logo' style='vertical-align: middle; margin-right: 5px' src='/static/images/sm_micro.png'>"));
             $('.breadcrumbs').addClass('fixed');
         } else if(top && y < top) {
             $('.breadcrumbs').removeClass('fixed');
+            if($('.sm-logo').length) $('.sm-logo').remove();
             if($('.team-info').length) {
                 $('.team-info').css('margin-top', '0px');
             } else {
@@ -241,9 +243,11 @@ $(function() {
                 }
             } else ($('.page-container').css('margin-top', '42px')) // clubs page
         }
+        if(!$('.sm-logo').length) $('.breadcrumb').before($("<img class='sm-logo' style='vertical-align: middle; margin-right: 5px' src='/static/images/sm_micro.png'>"));
         $('.breadcrumbs').addClass('fixed');
     } else if(top && y < top) {
         $('.breadcrumbs').removeClass('fixed');
+        if($('.sm-logo').length) $('.sm-logo').remove();
         if($('.team-info').length) {
             $('.team-info').css('margin-top', '0px');
         } else {
