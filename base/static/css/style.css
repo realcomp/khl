@@ -4640,6 +4640,11 @@ i.icon {
   height: 90px;
   border-radius: 5px;
 }
+.clubs-team-page .clubs-team-logo {
+    width: 68px;
+    height: 68px;
+    border-radius: 5px;
+}
 /* line 2958, ../sass/_base.sass */
 .clubs-team-page .team-player-team-link {
   position: relative;
