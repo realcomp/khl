@@ -1,3 +1,5 @@
+import itertools
+
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
@@ -277,40 +279,41 @@ admin.site.register(AdvancedPlayerStats)
 
 def import_names(modeladmin, request, queryset):
     def update_or_create_name(**kwargs):
-        name, _crt = Name.objects.get_or_create(
-                ru_name=kwargs['ru_name'], en_name=kwargs['en_name'])
+        name, created = Name.objects.get_or_create(
+            ru_name=kwargs['ru_name'], en_name=kwargs['en_name'])
+        if not name.type:
+            name.type = kwargs['type']
+            name.save()
         return name
 
-    players = (
-        Player.objects
-        .exclude(ru_name__isnull=True)
-        .exclude(en_name__isnull=True))
-    for ru_name, en_name in players.values_list('ru_name', 'en_name'):
-        update_or_create_name(ru_name=ru_name, en_name=en_name, type=0)
-    for ru_name, en_name in players.values_list('ru_lastname', 'en_lastname'):
-        update_or_create_name(ru_name=ru_name, en_name=en_name, type=1)
-
+    q_named = Q(ru_name__isnull=False) & Q(en_name__isnull=False)
+    players = Player.objects.filter(q_named)
+    coaches = Coach.objects.filter(q_named)
+    for type, field in (
+            (0, 'name'),
+            (1, 'lastname')):
+        for ru_name, en_name in itertools.chain(
+                players.values_list('ru_%s' % field, 'en_%s' % field),
+                coaches.values_list('ru_%s' % field, 'en_%s' % field)):
+            update_or_create_name(ru_name=ru_name, en_name=en_name, type=type)
 import_names.short_description = _('Import Names')
 
 
 def export_names(modeladmin, request, queryset):
-    def swap_names(player):
+    def swap_names(obj):
         ''' swaps first and last names '''
-        ru_name, ru_lastname = player.ru_name, player.ru_lastname
-        player.ru_name, player.ru_lastname = ru_lastname, ru_name
-        en_name, en_lastname = player.en_name, player.en_lastname
-        player.en_name, player.en_lastname = en_lastname, en_name
+        obj.ru_lastname, obj.ru_name = obj.ru_name, obj.ru_lastname
+        obj.en_lastname, obj.en_name = obj.en_name, obj.en_lastname
 
-    names = queryset.filter(type=0)  # first names
-    for player in Player.objects.filter(
-            ru_lastname__in=names.values_list('ru_name')):
-        swap_names(player)
-        player.save()
-    names = queryset.filter(type=1)  # last names
-    for player in Player.objects.filter(
-            ru_name__in=names.values_list('ru_name')):
-        swap_names(player)
-        player.save()
+    for model in (Player, Coach):
+        for type, field in (
+                (0, 'ru_lastname'),  # first names
+                (1, 'ru_name')):  # last names
+            names = queryset.filter(type=type)
+            for obj in model.objects.filter(**{
+                    '%s__in' % field: names.values_list('ru_name')}):
+                swap_names(obj)
+                obj.save()
 export_names.short_description = _('Export Names')
 
 
