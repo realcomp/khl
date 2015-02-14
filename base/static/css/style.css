@@ -4942,7 +4942,19 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     background: #e3edb9;
 }
 .clipped-img{
-    width: 35px !important;
+    /*margin-top: -35px !important;
+    margin-left: -25px !important;*/
+    width: 32px !important;
+    height: 32px !important;
+    border: 1px solid #f2f2f2;
+    border-radius: 50%;
+    z-index: 99998;
+}
+.min-photo-container{
+    vertical-align: middle;
+    width: 35px;
     height: 35px;
-    clip: rect(50px, 50px, 50px, 50px);
+    overflow: hidden;
+    border: 1px solid #ffffff;
+    border-radius: 6px;
 }
