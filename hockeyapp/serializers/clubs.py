@@ -219,18 +219,12 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
                 .exclude(player__in=same_club)
                 .exclude(club_id=obj.pk)
                 .order_by('club'))
-            clubleagues = {
-                x.club_id: x.league for x in LeagueClub.objects
-                .filter(
-                    Q(club__in=clubplayers.values_list('club_id', flat=True)) &
-                    (Q(season=season) | Q(season__isnull=True)))
-            }
             leagues = {}
             default_league = League(
                 en_title=_('Other leagues'),
                 ru_title=_('Other leagues'))
             for clubplayer in clubplayers:
-                league = clubleagues.get(clubplayer.club_id, default_league)
+                league = clubplayer.league or default_league
                 leagues[league.pk] = league
                 if not hasattr(league, 'clubs'):
                     league.clubs = []
