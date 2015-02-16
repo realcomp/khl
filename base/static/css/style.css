@@ -4934,8 +4934,8 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     margin-top: 6px;
 }
 #player-card-name, #team-name{
-    text-decoration: none;
-    color: #000000;
+    text-decoration: none !important;
+    color: #000000 !important;
 }
 .player-card-name-inner{
     text-transform: uppercase !important;
