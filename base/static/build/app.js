@@ -1407,6 +1407,13 @@ app.controller('PlayersSearchController', [
         self.search();
     };
 
+    this.isMatchesTotalVisible = function() {
+        return (self.ratedBy === 'goals_average' ||
+            self.ratedBy === 'assists_average' ||
+            self.ratedBy === 'points_average' ||
+            self.ratedBy === 'plus_minus_average')
+    }
+
     this.next = next($http);
 
     this.getCountries(this.search);

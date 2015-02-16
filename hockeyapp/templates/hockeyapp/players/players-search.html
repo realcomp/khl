@@ -390,25 +390,31 @@
                                             <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
                                                 ng-show="PlayersSearchCtrl.ratedBy === 'goals_average'">
                                                 <a href="" ng-click="PlayersSearchCtrl.search('rating')">
-                                                    {% trans 'Average goals count per game' %}
+                                                    {% trans 'Avg goals per game' %}
                                                 </a>
                                             </th>
                                             <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
                                                 ng-show="PlayersSearchCtrl.ratedBy === 'assists_average'">
                                                 <a href="" ng-click="PlayersSearchCtrl.search('rating')">
-                                                    {% trans 'Average assist count per game' %}
+                                                    {% trans 'Avg assists per game' %}
                                                 </a>
                                             </th>
                                             <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
                                                 ng-show="PlayersSearchCtrl.ratedBy === 'points_average'">
                                                 <a href="" ng-click="PlayersSearchCtrl.search('rating')">
-                                                    {% trans 'Average points per game' %}
+                                                    {% trans 'Avg points per game' %}
                                                 </a>
                                             </th>
                                             <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
                                                 ng-show="PlayersSearchCtrl.ratedBy === 'plus_minus_average'">
                                                 <a href="" ng-click="PlayersSearchCtrl.search('rating')">
-                                                    {% trans 'Average "plus/minus" per game' %}
+                                                    {% trans 'Avg "+/-" per game' %}
+                                                </a>
+                                            </th>
+                                            <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'matches_total' }"
+                                                ng-show="PlayersSearchCtrl.isMatchesTotalVisible()">
+                                                <a href="" ng-click="PlayersSearchCtrl.search('matches_total')">
+                                                    {% trans 'Matches count' %}
                                                 </a>
                                             </th>
                                             <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
@@ -439,7 +445,7 @@
                                                     {{ player.rating_index }}
                                                 {% endverbatim %}
                                             </td>
-                                            <td>
+                                            <td ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == '[%22%s_lastname%22,%22%s_name%22]' }">
                                                 <div class="player-avatar-block">
                                                     {% verbatim %}
                                                     <a href=""
@@ -458,7 +464,7 @@
                                                 </div>
                                             </td>
                                             {% verbatim %}
-                                            <td>
+                                            <td ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'last_club__%s_title' }">
                                                 <a href="{{ player.clubplayers[0].club_url }}" class="club-link"
                                                    ng-show="player.clubplayers.length > 0">
                                                     {{ player.clubplayers[0].club.title_verbose }}
@@ -479,16 +485,26 @@
                                                        onclick="angular.element(this).scope().moreClubs(this)"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
                                                 </div>
                                             </td>
-                                           <td align="center">
+                                           <td align="center"
+                                               ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'birth_date' }">
                                                 {{ player.age[0] }}
                                                 <div class="player-desc">{{ player.birth_date_short }}</div>
                                             </td>
-                                            <td align="center" ng-show="PlayersSearchCtrl.ratedBy">
+                                            <td align="center"
+                                                ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                                ng-show="PlayersSearchCtrl.ratedBy">
                                                 {{ player.rating }}
                                             </td>
-                                            <td align="center" ng-hide="PlayersSearchCtrl.ratedBy">
+                                            <td align="center"
+                                                ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'contract_to' }"
+                                                ng-hide="PlayersSearchCtrl.ratedBy">
                                                 {{ player.contract_to }}
                                                 <span class="player-desc">{{ player.contract_type }}</span>
+                                            </td>
+                                            <td align="center"
+                                                ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'matches_total' }"
+                                                ng-show="PlayersSearchCtrl.isMatchesTotalVisible()">
+                                                {{ player.matches_total }}
                                             </td>
                                             <td align="center">2837</td>
                                             <td align="center">3274</td>
