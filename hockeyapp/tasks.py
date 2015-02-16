@@ -249,11 +249,13 @@ insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
 @app.task(ignore_result=True, track_started=True)
-def _get_instagram_pictures(insta_loc_id, club, min_timestamp, max_id=None):
-    _ts_min = min_timestamp
+def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
+                            max_timestamp=None, max_id=None
+):
     _fn = club.image_folder_name
     data, next = insta_api.location_recent_media(location_id=insta_loc_id,
-                                                min_timestamp=_ts_min,
+                                                min_timestamp=min_timestamp,
+                                                max_timestamp=max_timestamp,
                                                 max_id=max_id)
     if data:
         for item in data:
@@ -262,22 +264,26 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp, max_id=None):
                 models.ClubPhotos.objects.get_or_create(club=club, photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
-        _get_instagram_pictures(insta_loc_id, club, _ts_min, max_id)
+        _get_instagram_pictures(insta_loc_id, club,
+                                min_timestamp= min_timestamp,
+                                max_timestamp=max_timestamp,
+                                max_id=max_id)
 
 
 @app.task(ignore_result=True, track_started=True)
-def _get_clubs_instagram_pictures(min_timestamp=None):
+def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
-        _ts_min = min_timestamp
+        min_timestamp = min_timestamp
     else:
         _ts_min = datetime.datetime.now()-datetime.timedelta(day=1)
-        _ts_min = time.mktime(_ts_min.timetuple())
+        min_timestamp = time.mktime(_ts_min.timetuple())
     clubs = models.Club.objects.filter(arena__isnull=False)
     for club in clubs:
         if club.arena.arenainstagram_set.exists():
             caims = club.arena.arenainstagram_set.all()
             for obj in caims:
-                _get_instagram_pictures.delay(obj.im_id, club, _ts_min)
+                _get_instagram_pictures.delay(  obj.im_id, club,
+                                                min_timestamp, max_timestamp)
 
 
 @app.task(ignore_result=True, track_started=True)
