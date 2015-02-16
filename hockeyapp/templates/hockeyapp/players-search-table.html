@@ -1,0 +1,355 @@
+{% load i18n %}
+<div class="page-inner-container">
+    <div class="ui grid">
+        <div class="row">
+            <div class="four wide column">
+                <a href="" class="option-btn"
+                   ng-class="{ 'option-btn_active':PlayersSearchCtrl.isPlaying }"
+                   ng-click="PlayersSearchCtrl.setPlaying(true)">
+                    Сейчас играют
+                </a>
+                <a href="" class="option-btn"
+                   ng-class="{ 'option-btn_active':!PlayersSearchCtrl.isPlaying }"
+                   ng-click="PlayersSearchCtrl.setPlaying(false)">
+                    Все
+                </a>
+                <ul class="options-list">
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === '' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('')">
+                            {% trans 'By alphabet' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'seasons_total' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('seasons_total')">
+                            {% trans 'Seasons' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'matches_total' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('matches_total')">
+                            {% trans 'Matches' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'goals_total' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('goals_total')">
+                            {% trans 'Goals' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'assists_total' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('assists_total')">
+                            {% trans 'Assists' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'points_total' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('points_total')">
+                            {% trans 'Points' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'plus_minus_total' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('plus_minus_total')">
+                            {% trans '+/-' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'goals_average' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('goals_average')">
+                            {% trans 'Average goals count per game' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'assists_average' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('assists_average')">
+                            {% trans 'Average assist count per game' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'points_average' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('points_average')">
+                            {% trans 'Average points per game' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'plus_minus_average' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('plus_minus_average')">
+                            {% trans 'Average "plus/minus" per game' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'sm_index__sum' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('sm_index__sum')">
+                            {% trans 'SM-index' %}
+                        </a>
+                    </li>
+                    <li class="option-item">
+                        <a href="" class="option-link"
+                           ng-class="{ 'option-link_active': PlayersSearchCtrl.ratedBy === 'corsi_index__sum' }"
+                           ng-click="PlayersSearchCtrl.setRatedBy('corsi_index__sum')">
+                            {% trans 'CORSI-index' %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="twelve wide column">
+                <div class="row">
+                    Найти в списке
+                    <div class="ui selection dropdown dropdown-small-inline">
+                        <angucomplete id="players_filter" placeholder="Игрока..."
+                                      pause="300" minlength="2"
+                                      selectedobject="PlayersSearchCtrl.playersFilter"
+                                      url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                      titlefield="lastname,name"
+                                      onchangecallback="PlayersSearchCtrl.setPlayersFilter" />
+                    </div>
+                    <div class="ui selection dropdown dropdown-small-inline">
+                        <angucomplete id="clubs_filter" placeholder="Команду..."
+                                      pause="300" minlength="2"
+                                      selectedobject="PlayersSearchCtrl.clubsFilter"
+                                      url="{% url 'hockeyapp:club-titles-search-api' %}?s="
+                                      titlefield="title"
+                                      onchangecallback="PlayersSearchCtrl.setClubsFilter" />
+                    </div>
+                </div>
+                <div class="row">
+                    <a href="" class="option-btn alphabet-btn"
+                       ng-class="{ 'option-btn_active':!PlayersSearchCtrl.alphabetFilter }"
+                       ng-click="PlayersSearchCtrl.setAlphabetFilter(null)">
+                        {% trans 'ALL' %}
+                    </a>
+                    {% for letter in alphabet %}
+                        <a href="" class="option-btn alphabet-btn"
+                           ng-class="{ 'option-btn_active':PlayersSearchCtrl.alphabetFilter === '{{ letter }}' }"
+                           ng-click="PlayersSearchCtrl.setAlphabetFilter('{{ letter }}')">
+                            {{ letter }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <table class="ui celled table segment player-select-table"
+                           ng-show="PlayersSearchCtrl.data.results">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Place' %}</th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == '[%22%s_lastname%22,%22%s_name%22]' }">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('[%22%s_lastname%22,%22%s_name%22]')">
+                                        {% trans 'Name' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'last_club__%s_title' }">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('last_club__%s_title')">
+                                        {% trans 'Team' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'birth_date' }">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('birth_date')">
+                                        {% trans 'Age' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'contract_to' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === ''">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('contract_to')">
+                                        {% trans 'Contract to' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'seasons_total'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Seasons' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'matches_total'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Matches' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'goals_total'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Goals' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'assists_total'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Assists' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'points_total'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Points' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'plus_minus_total'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans '+/-' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'goals_average'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Avg goals per game' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'assists_average'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Avg assists per game' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'points_average'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Avg points per game' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'plus_minus_average'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'Avg "+/-" per game' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'matches_total' }"
+                                    ng-show="PlayersSearchCtrl.isMatchesTotalVisible()">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('matches_total')">
+                                        {% trans 'Matches count' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'sm_index__sum'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'SM-index' %}
+                                    </a>
+                                </th>
+                                <th ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy === 'corsi_index__sum'">
+                                    <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                                        {% trans 'CORSI-index' %}
+                                    </a>
+                                </th>
+                                <th align="center">
+                                    SMI
+                                </th>
+                                <th align="center">
+                                    CORSI
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-class="{ selected:player.pk === PlayersSearchCtrl.playersFilter.pk }"
+                                ng-repeat="player in PlayersSearchCtrl.data.results">
+                                <td>
+                                    {% verbatim %}
+                                        {{ player.rating_index }}
+                                    {% endverbatim %}
+                                </td>
+                                <td ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == '[%22%s_lastname%22,%22%s_name%22]' }">
+                                    <div class="player-avatar-block">
+                                        {% verbatim %}
+                                        <a href=""
+                                           onclick="angular.element(this).scope().PlayerPartnersPopupShow(this, event);"><img
+                                           ng-src="{{ player.photo || '/static/images/nophoto.gif' }}"
+                                           width="30" alt="" class="player-avatar"></a>
+                                        <div class="player-info">
+                                            <span class="player-name">
+                                                <a href=""
+                                                   onclick="angular.element(this).scope().PlayerPartnersPopupShow(this, event);">{{ player.lastname }} {{ player.name }}</a>
+                                            </span>
+                                            <span class="player-name">{{ player.line_display|lowercase }}</span>
+                                            <span class="player-country">{{ player.citizenship.title }}</span>
+                                        </div>
+                                        {% endverbatim %}
+                                    </div>
+                                </td>
+                                {% verbatim %}
+                                <td ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'last_club__%s_title' }">
+                                    <a href="{{ player.clubplayers[0].club_url }}" class="club-link"
+                                       ng-show="player.clubplayers.length > 0">
+                                        {{ player.clubplayers[0].club.title_verbose }}
+                                    </a>
+                                    <div ng-show="player.clubplayers.length > 1">
+                                        <ul class="club-link-list hidden">
+                                            <li ng-repeat="clubplayer in player.clubplayers">
+                                                <a href="{{ clubplayer.club_url }}" class="club-link"
+                                                   ng-hide="$first">
+                                                    {{ clubplayer.season.short_title }}:
+                                                    {{ clubplayer.club.title_verbose }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <a class="more-clubs-btn more-clubs-btn_open"
+                                           onclick="angular.element(this).scope().moreClubs(this)"><span>показать еще {{ player.clubplayers.length - 1 }} команд</span><i class="triangle down icon"></i></a>
+                                        <a class="more-clubs-btn more-clubs-btn_close"
+                                           onclick="angular.element(this).scope().moreClubs(this)"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
+                                    </div>
+                                </td>
+                               <td align="center"
+                                   ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'birth_date' }">
+                                    {{ player.age[0] }}
+                                    <div class="player-desc">{{ player.birth_date_short }}</div>
+                                </td>
+                                <td align="center"
+                                    ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'rating' }"
+                                    ng-show="PlayersSearchCtrl.ratedBy">
+                                    {{ player.rating }}
+                                </td>
+                                <td align="center"
+                                    ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'contract_to' }"
+                                    ng-hide="PlayersSearchCtrl.ratedBy">
+                                    {{ player.contract_to }}
+                                    <span class="player-desc">{{ player.contract_type }}</span>
+                                </td>
+                                <td align="center"
+                                    ng-class="{ 'column-sort':PlayersSearchCtrl.order_by == 'matches_total' }"
+                                    ng-show="PlayersSearchCtrl.isMatchesTotalVisible()">
+                                    {{ player.matches_total }}
+                                </td>
+                                <td align="center">2837</td>
+                                <td align="center">3274</td>
+                                {% endverbatim %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" style="text-align: center">
+                    <img src="{{ STATIC_URL }}images/loader-large.gif"
+                         ng-show="PlayersSearchCtrl.loader">
+                    <a class="option-btn" href=""
+                       ng-click="PlayersSearchCtrl.next()"
+                       ng-show="!PlayersSearchCtrl.loader && PlayersSearchCtrl.data.next">
+                        показать еще 50</a>
+                    {% verbatim %}
+                    <a class="option-btn" href=""
+                       ng-click="PlayersSearchCtrl.next(true)"
+                       ng-show="!PlayersSearchCtrl.loader && PlayersSearchCtrl.data.next">
+                        показать все {{ PlayersSearchCtrl.data.count }}</a>
+                    {% endverbatim %}
+                </div>
+            </div>
+        </div>
+        <ul class="team-controls player-controls-block">
+            <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+            <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+            <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+        </ul>
+    </div>
+</div>
