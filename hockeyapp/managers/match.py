@@ -40,9 +40,10 @@ class ManagerMixin(object):
         data.update(self._season)
         stats = data.pop('stats', None)
         adv_stats = data.pop('adv_stats', None)
-        _clubplayer, _crt = model.objects.get_or_create(club=club,
-                                                        player=_player,
-                                                        **data)
+        _clubplayers = model.objects.filter(club=club, player=_player, **data)
+        _clubplayer = _clubplayers.order_by('pk').first()
+        if not _clubplayer:
+            _clubplayer = model.objects.create(club=club, player=_player,**data)
         if match and _clubplayer and stats:
             cpm = self._create_clubplayer_stats(match=match, data=stats,
                                                 clubplayer=_clubplayer)
@@ -234,9 +235,10 @@ class ClubPlayerMatchQuerySet(models.QuerySet):
                     match__date__gt=dates[i],
                     match__date__lte=dates[i + 1])
                 month_qs.date = dates[i]
-                month_qs.season = None
                 if month_qs.exists():
                     month_qs.season = month_qs[0].clubplayer.season
+                else:
+                    month_qs.season = None
                 result.append(month_qs)
         return result
 

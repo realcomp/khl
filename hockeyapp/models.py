@@ -12,7 +12,7 @@ from filer.fields.image import FilerImageField
 
 from addresses.models import Address, Country
 from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
-from base.models import TitleAlias, SocialAbstract
+from base.models import TitleAlias, SocialAbstract, InstagramImageFile
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from .choices import CHALLENGE_TYPE
@@ -225,7 +225,6 @@ class PlayerCoachJudge(models.Model):
 class Arena(TitleBaseModel):
     objects = managers.arena.ArenaManager()
     capacity = models.PositiveIntegerField(_('Capacity'), null=True)
-    capacity_str = models.CharField(_('Capacity'), max_length=1024, blank=True)
     coords = models.CharField(_('Latitude and Longitude'),
                                 max_length=1024, blank=True)
     site = models.URLField(_('Site'), blank=True)
@@ -249,6 +248,17 @@ class Arena(TitleBaseModel):
 class ArenaPhotos(models.Model):
     photo = FilerImageField(verbose_name=_('Photo'))
     arena = models.ForeignKey(Arena, verbose_name=Arena._meta.verbose_name)
+
+
+class ArenaInstagram(models.Model):
+    arena = models.ForeignKey(Arena)
+    name = models.CharField(_('Name'), max_length=1024)
+    im_id = models.CharField(_('Instagram ID'), max_length=1024)
+    lat = models.CharField(_('Latitude'), max_length=1024)
+    lng = models.CharField(_('Longtitude'), max_length=1024)
+    class Meta:
+        verbose_name=_('Arena instagram')
+        verbose_name_plural=_('Arena instagrams')
 
 
 class League(TitleBaseModel):
@@ -349,6 +359,11 @@ class Club(TitleBaseModel):
         if i < len(seasons) - 1:
             return seasons[i + 1]
 
+    image_folder_name = property(lambda self: 'Hockey club: {}(id {})'.format(
+                                                                self.ru_title,
+                                                                self.pk,)
+    )
+
     class Meta:
         verbose_name = _('Club')
         verbose_name_plural = _('Clubs')
@@ -396,9 +411,17 @@ class AddressClub(models.Model):
 
 
 class AddressClubPhotos(models.Model):
-    photo = FilerImageField(verbose_name=_('Photo'))
     addressclub = models.ForeignKey(AddressClub, 
                                     verbose_name=AddressClub._meta.verbose_name)
+    photo = FilerImageField(verbose_name=_('Photo'))
+
+
+class ClubPhotos(models.Model):
+    club = models.ForeignKey(Club, verbose_name=Club._meta.verbose_name)
+    photo = models.ForeignKey(InstagramImageFile)
+    class Meta:
+        verbose_name=_('Club instagram photo')
+        verbose_name_plural=_('Club instagram photos')
 
 
 class LeagueClub(AdminLinkMixin, models.Model):

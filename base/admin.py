@@ -14,7 +14,7 @@ from django_select2.widgets import Select2MultipleWidget, Select2Widget
 from suit.admin import SortableModelAdmin
 from suit.widgets import LinkedSelect, SuitDateWidget, SuitSplitDateTimeWidget
 
-from .models import Season, TitleAlias, SocialNetValue
+from .models import Season, TitleAlias, SocialNetValue, InstagramImageFile
 
 
 DEFAULT_FORMTABS = (('general', 'General'),)+settings.LANGUAGES
@@ -164,5 +164,5 @@ class SimpleRangeFilter(admin.filters.FieldListFilter):
 #admin.filters.FieldListFilter.register( lambda f: True, SimpleRangeFilter)
 
 
-for m in (TitleAlias, Season, SocialNetValue):
+for m in (TitleAlias, Season, SocialNetValue, InstagramImageFile):
     admin.site.register(m, BaseAdmin)

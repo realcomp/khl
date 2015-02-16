@@ -111,6 +111,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'hockeyapp.tasks.periodic_get_matches',
         'schedule': local_celery_crontab(hour=1, minute=0),
     },
+    'hockeyapp-periodic_get-clubs-instagram_pictures-every-day-midnight': {
+        'task': 'hockeyapp.tasks._get_clubs_instagram_pictures',
+        'schedule': local_celery_crontab(hour=0, minute=0),
+    },
 }
 
 
@@ -146,6 +150,7 @@ SUIT_CONFIG = {
         {'app': 'accounts',},
         {'app': 'addresses',},
         {'app': 'base',},
+        {'app': 'filer',},
         {'app': 'hockeyapp',},
         {
             'label': _('Club leagues add form'), 
@@ -190,6 +195,10 @@ ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 #social
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
+#instagram api
+INSTAGRAM_ID = '0e374970926c4d459048dba13494ae2f'
+INSTAGRAM_SECRET = 'effcd0e38f154c28931c7f3655260472'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.BasicAuthentication',
@@ -205,6 +214,10 @@ CACHES = {
             "CLIENT_CLASS": "redis_cache.client.DefaultClient",
         }
     }
+}
+
+MIGRATION_MODULES = {
+    'filer': 'filer.migrations_django',
 }
 
 try:

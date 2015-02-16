@@ -1,14 +1,15 @@
 #coding: utf-8
 from __future__ import unicode_literals
 
-import datetime
-
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from picklefield.fields import PickledObjectField
+from filer.fields.image import FilerImageField
+
 from .choices import SOCIAL_NETWORKS
-from .managers import SeasonQuerySet
+from .managers import SeasonQuerySet, IIFQuerySet
 
 
 class LocaleAttrMixin(object):
@@ -81,3 +82,14 @@ class SocialNetValue(SocialAbstract):
     class Meta:
         verbose_name = _('Social Network Value')
         verbose_name_plural = _('Social Network Values')
+
+
+class InstagramImageFile(models.Model):
+    objects = IIFQuerySet.as_manager()
+    instagram_id = models.CharField(_('Instagram ID'), max_length=1024)
+    link = models.URLField('Link')
+    data = PickledObjectField()
+    img = FilerImageField(verbose_name=_('Photo'))
+    class Meta:
+        verbose_name = _('Instagram image file')
+        verbose_name_plural = _('Instagram image files')
