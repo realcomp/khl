@@ -151,13 +151,13 @@ $(function() {
             $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
             $('#player-card-avatar').addClass('clipped-img');
             $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
-            $('.min-photo-container').after($('#player-card-name').addClass('inline-block').css('font-weight', '700', 'important'));
+            $('.min-photo-container').after($('#player-card-name').addClass('inline-block player-card-name-inner'));
             $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
             $('.page-container').css('margin-top', '68px');
             scrolledAfterPlayer = true;
         } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
             console.log('player reverse call ');
-            $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important'));
+            $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block player-card-inner'));
             $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
             $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
             $('.page-container').css('margin-top', '0px');

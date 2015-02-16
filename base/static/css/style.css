@@ -2779,7 +2779,10 @@ i.icon {
 }
 /* line 1741, ../sass/_base.sass */
 .player-card-short-page .player-card-block .player-card-name {
-  font-size: 16px;
+  font-size: 18px;
+    display: block;
+    text-decoration: none;
+    color: #000000;
 }
 /* line 1743, ../sass/_base.sass */
 .player-card-short-page .player-card-block .player-card-avatar {
@@ -4913,6 +4916,8 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     vertical-align: middle;
     line-height: 40px;
     font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 .team-name-inner span{
     font-size: 12px;
@@ -4927,6 +4932,13 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     width: 25px;
     height: 25px;
     margin-top: 6px;
+}
+#player-card-name, #team-name{
+    text-decoration: none;
+    color: #000000;
+}
+.player-card-name-inner{
+    text-transform: uppercase !important;
 }
 .breadcrumb-inner{
     vertical-align: middle;
