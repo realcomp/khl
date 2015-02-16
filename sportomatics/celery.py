@@ -15,7 +15,7 @@ class Celery(celery.Celery):
         import raven
         from raven.contrib.celery import register_signal, register_logger_signal
         if hasattr(settings, 'RAVEN_CONFIG'):
-            client = raven.Clientt(dsn=settings.RAVEN_CONFIG.get('dsn'))
+            client = raven.Client(dsn=settings.RAVEN_CONFIG.get('dsn'))
         else:
             client = raven.Client()
         # register a custom filter to filter out duplicate logs
