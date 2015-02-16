@@ -4,8 +4,8 @@
         <div class="twelve wide column">
             <div id="player-card-block" class="player-card-block">
                 <img id="player-card-avatar" src="{{ photo|default:'/static/images/nophoto.gif' }}" width="105" alt="" class="player-card-avatar">
-                <div class="player-card-desc">
-                    <div id="player-card-name" class="player-card-name">{{ fio }}</div>
+                <div id="player-card-desc" class="player-card-desc">
+                    <a id="player-card-name" href="{% url 'hockeyapp:player-card' pk %}" class="player-card-name">{{ fio }}</a>
                     <div id="player-card-amplua" class="player-card-amplua">{% trans 'Line' %}: {{ line_display }}</div>
                     <ul class="player-card-list">
                         <li class="player-card-item">{% trans 'Height' %}: {{ height }} см.</li>

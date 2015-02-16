@@ -7,14 +7,14 @@
             <a class="active item" href="{% url 'hockeyapp:index' %}">{% trans 'Hockey' %}</a>
             {#% include 'partial/header/items.html' %#}
 
-            <div class="ui dropdown item">
+            <!--<div class="ui dropdown item">
                 {% trans 'All' %}
                 <i class="dropdown icon"></i>
 
                 <div class="menu">
                     {% include 'partial/header/items.html' %}
                 </div>
-            </div>
+            </div>-->
 
             <div class="ui text right menu">
                 {% if user.is_authenticated %}

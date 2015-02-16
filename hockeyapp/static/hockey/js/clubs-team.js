@@ -6,6 +6,28 @@
         url = $('#ClubTeamForm').attr('action'),
         popup = null;
 
+        $scope.PlayerPartnersPopup = {
+            data: null,
+            isClubsVisible: true
+        };
+        $scope.PlayerPartnersPopupShow = function(e, event) {
+            var popup = $('.player-partners-popup:hidden'),
+            url = $('#PlayerCardLink').attr('href'),
+            pk;
+            if (popup.length && this.cell_id[0] !== 'trainer') {
+                pk = self.getCell(self.players, this.cell_id).pk;
+                $scope.PlayerPartnersPopup.data = null;
+                $http.get(url.replace(0, pk))
+                .success(function(data) {
+                    $scope.PlayerPartnersPopup.data = data;
+                });
+                $('.player-partners-popup:hidden').show(500).offset({
+                    left: event.pageX,
+                    top: event.pageY
+                });
+            }
+        };
+
         self.PLAYERS_TABLE = [ // table indexes, null is an empty filler
             // row 1
             [['defender', 0], ['defender', null], ['defender', 1], ['defender', null],
@@ -100,27 +122,6 @@
             self.list(self.compare);
         }
 
-        $scope.showPopup = function(e, event) {
-            var popup = $('.player-partners-popup:hidden');
-            if (popup.length && this.cell_id[0] !== 'trainer') {
-                self.popup = null;
-                self.loadPopup(this.cell_id);
-                $('.player-partners-popup:hidden').show(500).offset({
-                    left: event.pageX,
-                    top: event.pageY
-                });
-            }
-        }
-
-        self.loadPopup = function(cell_id) {
-            var pk = self.getCell(self.players, cell_id).pk,
-            url = $('#PlayerCardLink').attr('href');
-            $http.get(url.replace(0, pk))
-            .success(function(data) {
-                self.popup = data;
-            });
-        }
-
         self.getCell = function(table, cell_id) {
             var group;
             if (table.table && cell_id && Array.isArray(cell_id) && cell_id[1] !== null) {
@@ -174,13 +175,14 @@
 
         this.compare = function() {
             var url = $('#ClubTeamCompareLink').attr('href'),
-            params = 'source_season=' + self.players.data.season.pk,
             club = self.clubs.getLastClub(),
-            leagues;
+            params, leagues;
             if (club) {
-                params += '&season=' + club.data.prev_season.pk;
+                params = 'source_season=' + club.data.season.pk +
+                    '&season=' + club.data.prev_season.pk;
             } else {
-                params += '&season=' + self.players.data.prev_season.pk;
+                params = 'source_season=' + self.players.data.season.pk +
+                    '&season=' + self.players.data.prev_season.pk;
             }
             self.clubs.loader = true;
             $http.get(url + '?' + params)

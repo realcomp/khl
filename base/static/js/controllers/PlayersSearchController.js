@@ -34,6 +34,26 @@ app.controller('PlayersSearchController', [
     this.countries_selected = [];
     this.leagues_selected = [];
 
+    $scope.PlayerPartnersPopup = {
+        data: null,
+        isClubsVisible: false
+    };
+    $scope.PlayerPartnersPopupShow = function(e, event) {
+        var popup = $('.player-partners-popup:hidden'),
+        url = $('#PlayerCardLink').attr('href');
+        if (popup.length) {
+            $scope.PlayerPartnersPopup.data = null;
+            $http.get(url.replace(0, this.player.pk))
+            .success(function(data) {
+                $scope.PlayerPartnersPopup.data = data;
+            });
+            $('.player-partners-popup:hidden').show(500).offset({
+                left: event.pageX,
+                top: event.pageY
+            });
+        }
+    };
+
     $scope.moreClubs = function(e) {
         $(e).closest('td').toggleClass('show-more-clubs')
     };
@@ -67,11 +87,6 @@ app.controller('PlayersSearchController', [
         if ($(e).is(':checked')) {
             $('input[name="contract"]').each(getUnchecker(isDefault, ''));
         }
-    };
-
-    $scope.showPopup = function(e) {
-        var block = $(e).closest('.player-avatar-block');
-        block.children('.player-avatar-block-popup').show();
     };
 
     this.getCountries = getCountries($http);

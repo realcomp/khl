@@ -8,7 +8,7 @@ angular.module('Sportomatics')
     this.loader = false;
     this.countries = {};
     this.countries_selected = [];
-    this.leagues_selected = '';
+    this.leagues_selected = 1;
 
     $scope.setSeason = function(e) {
         // turn missing braces back
@@ -18,11 +18,6 @@ angular.module('Sportomatics')
 
     this.getCountries = getCountries($http);
     this.getLeagues = getLeagues;
-
-    this.setCountry = function() {
-        this.leagues_selected = '';
-        this.list();
-    };
 
     this.list = function(order_by, all) {
         var self = this,
@@ -35,9 +30,11 @@ angular.module('Sportomatics')
             }
             self.order_by = order_by;
         }
-        if(self.leagues_selected === '' && !all) self.leagues_selected = 1; // to avoid waiting for getCountries league set
-        params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by +
-        '&league=' + self.leagues_selected;
+        // if(self.leagues_selected === null && !all) self.leagues_selected = 1; // to avoid waiting for getCountries league set
+        params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
+        if (self.leagues_selected) {
+            params += '&league=' + self.leagues_selected;
+        }
         self.data = {};
         self.loader = true;
         $http.get(url + '?' + params)
@@ -45,6 +42,21 @@ angular.module('Sportomatics')
                 self.data = data;
                 self.loader = false;
             });
+    };
+
+    this.setCountry = function(country) {
+        if (this.countries_selected[0] != country) {
+            this.countries_selected = [country];
+            this.leagues_selected = null;
+            this.list();
+        }
+    };
+
+    this.setLeague = function(league) {
+        if (self.leagues_selected != league) {
+            self.leagues_selected = league;
+            self.list();
+        }
     };
 
     this.next = next($http);

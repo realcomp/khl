@@ -20,7 +20,7 @@ $(document).ready(function(){
     $('.payment-block_new').tabs();
     $('.payment-block_old').tabs();
     $('.team-calendar').tabs();
-    $('.clubs-tabs').tabs();
+    // $('.clubs-tabs').tabs();
     $('.clubs-photos-tabs').tabs();
     $('.clubs-team-tabs').tabs();
     $('.team-view-type-tabs').tabs();
