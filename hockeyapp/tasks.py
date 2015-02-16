@@ -1,13 +1,20 @@
 #coding: utf-8
 from __future__ import unicode_literals, print_function
 import datetime
+import re
 import sys
+import time
 
 from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
+from django.conf import settings
+
 from sportomatics.celery import app
 
+from instagram.client import InstagramAPI
+
+from base.models import InstagramImageFile
 from base.utils import str2int_safe, str2sec_safe, str2float_safe
 
 from . import parsers
@@ -236,6 +243,47 @@ def player_recalc_counters(ids):
             player.save()
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
+
+
+insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
+                         client_secret=settings.INSTAGRAM_SECRET)
+
+@app.task(ignore_result=True, track_started=True)
+def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
+                            max_timestamp=None, max_id=None
+):
+    _fn = club.image_folder_name
+    data, next = insta_api.location_recent_media(location_id=insta_loc_id,
+                                                min_timestamp=min_timestamp,
+                                                max_timestamp=max_timestamp,
+                                                max_id=max_id)
+    if data:
+        for item in data:
+            if item.type == 'image':
+                iif = InstagramImageFile.objects.get_or_create_iif(item, _fn)
+                models.ClubPhotos.objects.get_or_create(club=club, photo=iif)
+    if next:
+        max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
+        _get_instagram_pictures(insta_loc_id, club,
+                                min_timestamp= min_timestamp,
+                                max_timestamp=max_timestamp,
+                                max_id=max_id)
+
+
+@app.task(ignore_result=True, track_started=True)
+def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
+    if min_timestamp:
+        min_timestamp = min_timestamp
+    else:
+        _ts_min = datetime.datetime.now()-datetime.timedelta(day=1)
+        min_timestamp = time.mktime(_ts_min.timetuple())
+    clubs = models.Club.objects.filter(arena__isnull=False)
+    for club in clubs:
+        if club.arena.arenainstagram_set.exists():
+            caims = club.arena.arenainstagram_set.all()
+            for obj in caims:
+                _get_instagram_pictures.delay(  obj.im_id, club,
+                                                min_timestamp, max_timestamp)
 
 
 @app.task(ignore_result=True, track_started=True)

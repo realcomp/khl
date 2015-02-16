@@ -35,10 +35,10 @@ def fcfl(admin_field):
     fieldname = admin_field.field['field']
     displayed = admin_field.contents()
     obj = admin_field.form.instance
-    cond = (hasattr(admin_field.model_admin, 'linked_readonly_fields') or
-            hasattr(admin_field.model_admin, 'linked_m2m_readonly_fields') or
-            fieldname in admin_field.model_admin.linked_readonly_fields or
-            fieldname in admin_field.model_admin.linked_m2m_readonly_fields
+    cond =((hasattr(admin_field.model_admin, 'linked_readonly_fields') and
+            fieldname in admin_field.model_admin.linked_readonly_fields) or
+           (hasattr(admin_field.model_admin, 'linked_m2m_readonly_fields') and
+            fieldname in admin_field.model_admin.linked_m2m_readonly_fields)
     )
     if not cond:
         return displayed
