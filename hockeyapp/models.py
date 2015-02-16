@@ -82,10 +82,10 @@ class Player(AbstractMan):
     assists_total = models.IntegerField(_('Assists Total'), null=True)
     points_total = models.IntegerField(_('Points Total'), null=True)
     plus_minus_total = models.IntegerField(_('Points Total'), null=True)
-    goals_average = models.IntegerField(_('Goals Average'), null=True)
-    assists_average = models.IntegerField(_('Assists Average'), null=True)
-    points_average = models.IntegerField(_('Points Average'), null=True)
-    plus_minus_average = models.IntegerField(_('Points Average'), null=True)
+    goals_average = models.FloatField(_('Goals Average'), null=True)
+    assists_average = models.FloatField(_('Assists Average'), null=True)
+    points_average = models.FloatField(_('Points Average'), null=True)
+    plus_minus_average = models.FloatField(_('Points Average'), null=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 

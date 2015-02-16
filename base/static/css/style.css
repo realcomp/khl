@@ -4953,6 +4953,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .ui.table.player-select-table .selected {
     background: #e3edb9;
 }
+.player-select-table.ui.table td.column-sort {
+    background: #e3edb9;
+}
 .clipped-img{
     /*margin-top: -35px !important;
     margin-left: -25px !important;*/
