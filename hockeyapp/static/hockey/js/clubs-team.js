@@ -175,13 +175,14 @@
 
         this.compare = function() {
             var url = $('#ClubTeamCompareLink').attr('href'),
-            params = 'source_season=' + self.players.data.season.pk,
             club = self.clubs.getLastClub(),
-            leagues;
+            params, leagues;
             if (club) {
-                params += '&season=' + club.data.prev_season.pk;
+                params = 'source_season=' + club.data.season.pk +
+                    '&season=' + club.data.prev_season.pk;
             } else {
-                params += '&season=' + self.players.data.prev_season.pk;
+                params = 'source_season=' + self.players.data.season.pk +
+                    '&season=' + self.players.data.prev_season.pk;
             }
             self.clubs.loader = true;
             $http.get(url + '?' + params)
