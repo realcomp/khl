@@ -264,10 +264,10 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                 models.ClubPhotos.objects.get_or_create(club=club, photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
-        _get_instagram_pictures(insta_loc_id, club,
-                                min_timestamp= min_timestamp,
-                                max_timestamp=max_timestamp,
-                                max_id=max_id)
+        _get_instagram_pictures.delay(  insta_loc_id, club,
+                                        min_timestamp= min_timestamp,
+                                        max_timestamp=max_timestamp,
+                                        max_id=max_id)
 
 
 @app.task(ignore_result=True, track_started=True)
