@@ -116,11 +116,11 @@
                 }
             },
             'clubs': []
-        }
+        };
 
         $scope.setSeason = function(e) {
             self.list(self.compare);
-        }
+        };
 
         self.getCell = function(table, cell_id) {
             var group;
@@ -130,7 +130,7 @@
                     return group[cell_id[1]];
                 }
             }
-        }
+        };
 
         self.isPersonVisible = function(table, cell_id) {
             var cell;
@@ -146,6 +146,15 @@
                     case 'legionnaire':
                         return cell.is_legionnaire;
                 }
+            } else {
+                return false;
+            }
+        };
+        self.isPersonInCell = function(table, cell_id) {
+            var cell;
+            cell = this.getCell(table, cell_id);
+            if (cell) {
+                return true;
             } else {
                 return false;
             }

@@ -4970,3 +4970,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border: 1px solid #ffffff;
     border-radius: 6px;
 }
+.opacity-30{
+    opacity: 0.3 !important;
+}
+.opacity-50{
+    opacity: 0.5 !important;
+}

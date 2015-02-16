@@ -16,7 +16,7 @@
                 <div class="divider"> / </div>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
                 <div class="divider"> / </div>
-                <a class="active section">Состав команды</a>
+                <a class="active section">Календарь</a>
             </div>
             <div class="search-block">
                 <div class="item">
@@ -95,7 +95,8 @@
                                                             <a class="team-player-photo-link"
                                                                href=""
                                                                onclick="angular.element(this).scope().PlayerPartnersPopupShow(this, event);"
-                                                               ng-show="ClubTeamCtrl.isPersonVisible(ClubTeamCtrl.players, cell_id)">
+                                                               ng-class="{'opacity-30' : !ClubTeamCtrl.isPersonVisible(ClubTeamCtrl.players, cell_id)}"
+                                                                    ng-show="ClubTeamCtrl.isPersonInCell(ClubTeamCtrl.players, cell_id)">
                                                                 <span class="team-player-number"
                                                                       ng-show="ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number">
                                                                     {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number }}
