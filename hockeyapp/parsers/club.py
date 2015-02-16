@@ -128,7 +128,7 @@ class KHLClubInfo(GrabParser):
                     'opening_dt': self.get_opening_dt(),
                     'coach': self.get_coach(),
                     'contacts': self.get_contacts(),
-                    'arena': self.get_arena_info(),
+                    #'arena': self.get_arena_info(),
                     'players': self.get_players(id) or []
             }
             return _res
