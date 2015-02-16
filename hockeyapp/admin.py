@@ -194,7 +194,7 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     list_filter = ('ru_title', 'country', 'league',
                     ('capacity', SimpleRangeFilter),
     )
-    list_display = ('ru_title', 'country', 'league', 'capacity')
+    list_display = ('ru_title', 'country', 'league', 'capacity', 'coords')
 admin.site.register(Arena, ArenaAdmin)
 
 
