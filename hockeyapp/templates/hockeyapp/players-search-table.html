@@ -212,7 +212,7 @@
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'assists_average'">
-                            <a href="" ng-click="PlayersSearchCtrl.search('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Avg assists per game' %}
                             </a>
                         </th>
