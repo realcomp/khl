@@ -320,6 +320,14 @@ class Club(TitleBaseModel):
                 'title', request=request)
         return title
 
+    def get_players(self, season):
+        if season.is_last:
+            return self.players.all()
+        else:
+            clubplayers = self.clubplayer_set.by_season(season)
+            pks = clubplayers.values_list('player_id', flat=True)
+            return Player.objects.filter(pk__in=pks)
+
     @property
     def all_players(self):
         return self.players.order_by('line', 'number')
