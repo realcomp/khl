@@ -153,7 +153,7 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields
-    #list_editable = 'league',
+    list_editable = 'league',
     select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
                         'junior_club',
     )

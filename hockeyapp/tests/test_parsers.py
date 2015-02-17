@@ -86,7 +86,7 @@ class HockeyAppParserTest(base.tests.BaseTest):
         #check fields
         for field in ('ru_title', 'html_body', 'url', 'site', 'contacts'):
             self.assertNotEqual(getattr(club, field), self.blank)
-        for field in ('proccesed_time', 'coach_id', 'arena_id', 'logo_id'):
+        for field in ('proccesed_time', 'coach_id', 'logo_id',):# 'arena_id',):
             self.assertIsNotNone(getattr(club, field))
         #check arena fields
         for field in ('ru_title', 'site', 'contacts', 'tickets_url'):

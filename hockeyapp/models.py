@@ -458,7 +458,7 @@ class ClubPlayer(models.Model):
     __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
 
     def save(self, **kwargs):
-        if not self.pk and not self.league:
+        if not self.league:
             #добавляем лигу клуба
             if self.club and self.club.league:
                 self.league = self.club.league

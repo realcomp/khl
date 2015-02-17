@@ -275,7 +275,7 @@ def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
         min_timestamp = min_timestamp
     else:
-        _ts_min = datetime.datetime.now()-datetime.timedelta(day=1)
+        _ts_min = datetime.datetime.now()-datetime.timedelta(days=1)
         min_timestamp = time.mktime(_ts_min.timetuple())
     clubs = models.Club.objects.filter(arena__isnull=False)
     for club in clubs:
