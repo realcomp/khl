@@ -1,6 +1,6 @@
 #coding: utf-8
 from __future__ import unicode_literals
-
+import datetime
 import urllib
 
 from django.core.urlresolvers import reverse
@@ -460,9 +460,18 @@ class ClubPlayer(models.Model):
     def save(self, **kwargs):
         if not self.league:
             #добавляем лигу клуба
-            if self.club and self.club.league:
-                self.league = self.club.league
+            self.league = self._get_club_league()
         super(ClubPlayer, self).save(**kwargs)
+
+    def _get_club_league(self):
+        if self.club:
+            if self.club.league:
+                return self.club.league
+            sdt = datetime.datetime(day=1, month=7, year=2015)
+            edt = datetime.datetime(day=30, month=6, year=2014)
+            qs = self.club.leagueclub_set.filter(start_date=sdt, end_date=edt)
+            if qs.last():
+                return qs.last().league
 
     @property
     def player_url(self):
