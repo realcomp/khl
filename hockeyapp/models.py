@@ -467,9 +467,7 @@ class ClubPlayer(models.Model):
         if self.club:
             if self.club.league:
                 return self.club.league
-            sdt = datetime.datetime(day=1, month=7, year=2015)
-            edt = datetime.datetime(day=30, month=6, year=2014)
-            qs = self.club.leagueclub_set.filter(start_date=sdt, end_date=edt)
+            qs = self.club.leagueclub_set.all()
             if qs.last():
                 return qs.last().league
 
