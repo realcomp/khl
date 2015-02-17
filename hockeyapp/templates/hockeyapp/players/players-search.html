@@ -23,6 +23,8 @@
         <div class="page-content page-container"
              ng-controller="PlayersSearchController as PlayersSearchCtrl">
             <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
+            <a class="hidden" id="PlayersSearchLink"
+               href="{% url 'hockeyapp:players-search-api' %}"></a>
             <div class="container-top-block">
                 <div class="ui grid">
                     <div class="row">
@@ -41,9 +43,9 @@
                             <div class="column-title">Страна:</div>
                             <select id="players-search-country"
                                     class="select players-search-select" multiple="multiple" size="8"
-                                    ng-model="PlayersSearchCtrl.countries_selected">
+                                    ng-model="params.countriesSelected">
                                 <option value="{{ country.pk }}"
-                                        ng-repeat="country in PlayersSearchCtrl.countries"
+                                        ng-repeat="country in countries"
                                         ng-selected="$index === 0">
                                     {{ country.title }}
                                 </option>
@@ -53,9 +55,9 @@
                             <div class="column-title">Лига:</div>
                             <select id="players-search-league"
                                     class="select players-search-select" multiple="multiple" size="8"
-                                    ng-model="PlayersSearchCtrl.leagues_selected">
+                                    ng-model="params.leaguesSelected">
                                 <option value="{{ league.pk }}"
-                                        ng-repeat="league in PlayersSearchCtrl.getLeagues(PlayersSearchCtrl.countries, PlayersSearchCtrl.countries_selected)"
+                                        ng-repeat="league in PlayersSearchService.getLeagues(countries, params.countriesSelected)"
                                         ng-selected="$index === 0">
                                     {{ league.title }}
                                 </option>
@@ -176,14 +178,18 @@
                         <div class="column">
                             <div class="align-center">
                                 <a class="ui tiny green button"
-                                   ng-click="PlayersSearchCtrl.search()">показать</a>
+                                   ng-click="PlayersSearchService.search(this)">показать</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% include 'hockeyapp/players-search-table.html' %}
-            {% include 'hockeyapp/player-partners-popup.html' %}
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    {% include "hockeyapp/players-search-table.html" %}
+                </div>
+            </div>
+            {% include "hockeyapp/player-partners-popup.html" %}
             </form>
         </div>
     </div>

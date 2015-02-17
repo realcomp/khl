@@ -48,13 +48,13 @@ class PlayersSearch(
                 self.clubplayers[player_id].append(clubplayer)
         # get rating
         rated_qs = qs
-        rated_by = self.request.GET.get('rated_by', 'seasons_total')
+        rated_by = self.request.GET.get('rated_by', '')
         if rated_by:
             rated_qs = qs.order_by('-' + rated_by)
         self.rating = {}
         rating_index = 0
         rating_value = None
-        for player in rated_qs:
+        for i, player in enumerate(rated_qs):
             if rated_by:
                 if (getattr(player, rated_by) < rating_value or
                         rating_value is None):
@@ -63,6 +63,8 @@ class PlayersSearch(
             else:
                 rating_index += 1
             self.rating[player.pk] = rating_index
+            # if not rated_by and i > self.get_paginate_by():
+            #     break
 
         if '%s_lastname__startswith' in self.request.GET:
             s = self.request.GET['%s_lastname__startswith']
