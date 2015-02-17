@@ -116,14 +116,16 @@
                               titlefield="lastname,name"
                               onchangecallback="PlayersSearchCtrl.setPlayersFilter" />
             </div>
-            <div class="ui selection dropdown dropdown-small-inline">
-                <angucomplete id="clubs_filter" placeholder="Команду..."
-                              pause="300" minlength="2"
-                              selectedobject="params.clubsFilter"
-                              url="{% url 'hockeyapp:club-titles-search-api' %}?s="
-                              titlefield="title"
-                              onchangecallback="PlayersSearchCtrl.setClubsFilter" />
-            </div>
+            {% block clubsfilter %}
+                <div class="ui selection dropdown dropdown-small-inline">
+                    <angucomplete id="clubs_filter" placeholder="Команду..."
+                                  pause="300" minlength="2"
+                                  selectedobject="params.clubsFilter"
+                                  url="{% url 'hockeyapp:club-titles-search-api' %}?s="
+                                  titlefield="title"
+                                  onchangecallback="PlayersSearchCtrl.setClubsFilter" />
+                </div>
+            {% endblock %}
         </div>
         <div class="row">
             <a href="" class="option-btn alphabet-btn"
@@ -146,65 +148,65 @@
                     <tr>
                         <th>{% trans 'Place' %}</th>
                         <th ng-class="{ 'column-sort':params.orderBy === '[%22%s_lastname%22,%22%s_name%22]' }">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('[%22%s_lastname%22,%22%s_name%22]')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, '[%22%s_lastname%22,%22%s_name%22]')">
                                 {% trans 'Name' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'last_club__%s_title' }">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('last_club__%s_title')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'last_club__%s_title')">
                                 {% trans 'Team' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'birth_date' }">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('birth_date')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'birth_date')">
                                 {% trans 'Age' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'contract_to' }"
                             ng-show="params.ratedBy === ''">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('contract_to')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'contract_to')">
                                 {% trans 'Contract to' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'seasons_total'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Seasons' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'matches_total'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Matches' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'goals_total'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Goals' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'assists_total'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Assists' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'points_total'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Points' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'plus_minus_total'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans '+/-' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'goals_average'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Avg goals per game' %}
                             </a>
                         </th>
@@ -216,31 +218,31 @@
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'points_average'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Avg points per game' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'plus_minus_average'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'Avg "+/-" per game' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'matches_total' }"
                             ng-show="PlayersSearchCtrl.isMatchesTotalVisible()">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('matches_total')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'matches_total')">
                                 {% trans 'Matches count' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'sm_index__sum'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'SM-index' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'corsi_index__sum'">
-                            <a href="" ng-click="PlayersSearchCtrl.setOrderBy('rating')">
+                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
                                 {% trans 'CORSI-index' %}
                             </a>
                         </th>
