@@ -23,9 +23,10 @@
         {% include "hockeyapp/clubs/team-info.html" %}
 
         <div class="page-content page-container"
-             ng-controller="PlayersSearchController as PlayersSearchCtrl">
+             ng-controller="ClubStatsController as ClubStatsCtrl">
             <a class="hidden" id="PlayersSearchLink"
                href="{% url 'hockeyapp:players-search-api' %}"></a>
+            <input name="club" type="hidden" value="{{ pk }}">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-stats" %}
             <div class="page-inner-container">
                 <div class="ui grid">
