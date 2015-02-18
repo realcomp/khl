@@ -268,22 +268,23 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
 
 
 class MetricsPlayerSerializer(BasePlayerCardSerializer):
+    club = ClubLightListSerializer()
+    photo = serializers.ReadOnlyField(source='photo.url')
+    age = serializers.SerializerMethodField()
+    contract_type = serializers.ReadOnlyField(
+        source='get_contract_type_display')
+    birth_date = serializers.SerializerMethodField()
+    birth_date_short = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
-    line = serializers.SerializerMethodField()
-    grip = serializers.SerializerMethodField()
+    citizenship = CountrySerializer()
 
     def get_url(self, obj):
         return reverse('hockeyapp:metrics-player-card', kwargs={'pk': obj.pk})
 
-    def get_line(self, obj):
-        return obj.get_line_display().lower()[:3]
-
-    def get_grip(self, obj):
-        return obj.grip.lower()[:3]
-
     class Meta(object):
         fields = (
-            'pk', 'url', 'fio', 'club', 'line', 'photo', 'grip',
-            'contract_type', 'height', 'weight', 'age', 'name', 'lastname',
+            'pk', 'fio', 'name', 'lastname', 'club', 'photo',
+            'url', 'line', 'grip',
+            'contract_type', 'height', 'weight', 'age',
             'birth_date', 'birth_date_short', 'citizenship')
         model = Player

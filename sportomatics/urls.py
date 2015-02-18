@@ -59,7 +59,8 @@ urlpatterns += i18n_patterns('',
 )
 
 urlpatterns += patterns('',
-    url(r'^$', 'base.views.index',),
+    # url(r'^$', 'base.views.index',),
+    url(r'^$', 'hockeyapp.views.index', name='index'),
 )
 
 #TODO: remove this later
