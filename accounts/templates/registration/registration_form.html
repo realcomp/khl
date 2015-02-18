@@ -2,64 +2,6 @@
 {% load i18n %}
 
 {% block content %}
-    <script type="text/ng-template" id="step2">
-        <div class="row registration-content-row">
-            <p>Давайте познакомимся получше?</p>
-        </div>
-        <div class="row registration-content-row">
-            <p><span class="registration-step-label">ШАГ 2</span></p>
-        </div>
-        <div class="row registration-content-row">
-            <div class="row registration-content-row">
-                <div class="inline-block">
-                    <input type="radio" ng-model="personalInfo" ng-value="true">
-                    Расскажите немного о себе
-                </div>
-            </div>
-            <div class="row registration-content-row">
-                <div class="registration-label inline-block">
-                    Имя:
-                </div>
-                <div class="registration-input inline-block">
-                    <input type="text" ng-model="personal.name">
-                </div>
-                <div class="inline-block m-l-20">
-                    <input class="vertical-middle" type="checkbox" ng-model="personal.hideName">
-                    скрывать имя в "любительской версии"
-                </div>
-            </div>
-            <div class="row registration-content-row">
-                <div class="registration-label inline-block vertical-top">
-                    Фото:
-                </div>
-                <div class="registration-input inline-block">
-                    <div class="registration-personal-photo"></div>
-                    <input type="file" ng-model="personal.photo">
-                </div>
-            </div>
-            <div class="row registration-content-row">
-                <div class="registration-label inline-block">
-                    Мой сайт:
-                </div>
-                <div class="registration-input inline-block">
-                    <input type="text" ng-model="personal.website">
-                </div>
-            </div>
-            <div class="row registration-content-row">
-                <div class="inline-block">
-                    <input type="radio" ng-model="personalInfo" ng-value="false">
-                    Я не хочу ничего рассказывать
-                </div>
-            </div>
-            <div class="row">
-                <button type="button" class="small ui green button registration-next"
-                        ng-disabled="personalInfo"
-                        ng-click=""
-                        ng-class="{'opacity-30': personalInfo}">
-                    {% trans 'Next' %}</button>
-            </div>
-        </div>
-    </script>
     <script type="text/ng-template" id="step1">
             <div class="row registration-content-row">
                 <p>Отлично! Всего три шага, и вы с нами!</p>
@@ -119,6 +61,75 @@
                     <button type="button" class="small ui green button registration-next-form" ng-click="nextStep()" >{% trans 'Next' %}</button>
                 </div>
             </div>
+    </script>
+    <script type="text/ng-template" id="step2">
+        <div class="row registration-content-row">
+            <p>Давайте познакомимся получше?</p>
+        </div>
+        <div class="row registration-content-row">
+            <p><span class="registration-step-label">ШАГ 2</span></p>
+        </div>
+        <div class="row registration-content-row">
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="personalInfo" ng-value="true">
+                    Расскажите немного о себе
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    Имя:
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="personal.name">
+                </div>
+                <div class="inline-block m-l-20">
+                    <input class="vertical-middle" type="checkbox" ng-model="personal.hideName">
+                    скрывать имя в "любительской версии"
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block vertical-top">
+                    Фото:
+                </div>
+                <div class="registration-input inline-block">
+                    <div class="registration-personal-photo"></div>
+                    <input type="file" ng-model="personal.photo">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    Мой сайт:
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="personal.website">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="personalInfo" ng-value="false">
+                    Я не хочу ничего рассказывать
+                </div>
+            </div>
+            <div class="row">
+                <!--<button type="button" class="small ui green button registration-next"
+                        ng-disabled="personalInfo"
+                        ng-click=""
+                        ng-class="{'opacity-30': personalInfo}">
+                    {% trans 'Next' %}</button>-->
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="step3">
+        <div class="row registration-content-row">
+            <p>Настройте сайт под себя!</p>
+        </div>
+        <div class="row registration-content-row">
+            <p><span class="registration-step-label">ШАГ 3</span></p>
+        </div>
+        <div class="row registration-content-row">
+
+        </div>
     </script>
     <!-- page code -->
     <div class="page-inner-container" ng-controller="RegistrationController">
@@ -187,8 +198,6 @@
                             {% trans 'Next' %}</button>
                         </div>
                     </div>
-
-
                     <!--<div class="row">
                         {% for field in form %}
                         <div class="inline field">
