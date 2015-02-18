@@ -5050,6 +5050,22 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
     margin-bottom: 10px;
 }
+.registration-preferences{
+    margin-left: 20px;
+}
+.registration-preferences-sports{
+    max-width: 220px;
+
+}
+.registration-preferences-countires{
+    margin-left: 30px;
+}
+.registration-preferences-sport{
+    height: 30px;
+}
+.registration-preferences-country{
+    height: 30px;
+}
 .positive{
  color: #30792a;
 }
@@ -5064,4 +5080,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .m-l-20{
     margin-left: 20px !important;
+}
+.bold{
+    font-weight: bold;
 }

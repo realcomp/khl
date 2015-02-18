@@ -2,12 +2,29 @@ angular.module('Sportomatics')
     .controller('RegistrationController', ['$http', '$scope','$templateCache', function($http, $scope, $templateCache) {
         $scope.selectedType = 'regular';
         $scope.user = {};
-        $scope.currentStep = 1;
-        $scope.currentStepTemplate = 'step1';
+        $scope.personal = {};
+        $scope.currentStep = 3;
+        $scope.currentStepTemplate = 'step3';
         $scope.subscribe = true;
         $scope.personalInfo = true;
         $scope.selectedRegistrationType = 'social';
-
+        $scope.preferencesSports = {
+            'hockey': true,
+            'football': false,
+            'backetball': false
+        };
+        $scope.countries = [
+            ['Россия', true],
+            ['США', false],
+            ['Канада', false],
+            ['Германия', false]
+        ];
+        $scope.$watch('countries', function(newval, oldval){
+            console.log(newval);
+        }, true);
+        $scope.log = function(){
+            console.log($scope.preferencesSports);
+        };
         $scope.selectType = function(type){
             $scope.selectedType = type;
         };

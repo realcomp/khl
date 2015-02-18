@@ -128,7 +128,43 @@
             <p><span class="registration-step-label">ШАГ 3</span></p>
         </div>
         <div class="row registration-content-row">
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="preferencesInfo" ng-value="true">
+                    Настройте ваши предпочтения
+                </div>
+            </div>
+            <div class="row registration-content-row registration-preferences">
+                <div class="inline-block registration-preferences-sports vertical-top">
+                    <div class="registration-preferences-sport bold">
+                        Меня интересует:
+                    </div>
+                    <div class="registration-preferences-sport">
+                        <input class="vertical-middle" type="checkbox" ng-change="log()" ng-model="preferencesSports['hockey']">
+                        <div class="vertical-middle inline-block">Хоккей</div>
+                    </div>
+                    <div class="registration-preferences-sport">
+                        <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['football']">
+                        <div class="vertical-middle inline-block">Футбол</div>
+                    </div>
+                    <div class="registration-preferences-sport">
+                        <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['backetball']">
+                        <div class="vertical-middle inline-block">Баскетбол</div>
+                    </div>
+                </div>
+                <div class="inline-block registration-preferences-countires vertical-top">
+                    <div class="registration-preferences-sport bold">
+                        В странах:
+                    </div>
+                    <div class="registration-preferences-country" ng-repeat="country in countries track by $index">
+                        <input class="vertical-middle" type="checkbox" ng-model="countries[$index][1]">
+                        <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
+                    </div>
+                </div>
+                <div class="inline-block">
 
+                </div>
+            </div>
         </div>
     </script>
     <!-- page code -->
