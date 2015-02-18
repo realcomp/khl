@@ -15,8 +15,7 @@ class CPAPIBase(object):
     serializer_class = serializers.ClubPhotoSerializer
     permission_classes = (SportoAdminPermission,)
     pagination_serializer_class = AltPaginationSerializer
-    #paginate_by = 500
-    paginate_by = 8
+    paginate_by = 40
 
 
 class ClubPhotosList(CPAPIBase, drf.generics.ListAPIView):
