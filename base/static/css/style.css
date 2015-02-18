@@ -5035,3 +5035,32 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     margin-top: 10px !important;
     margin-left: 150px !important;
 }
+.registration-step-label{
+    font-size: 14px;
+    font-weight: 600;
+}
+.registration-passwords-comparison-label{
+    margin-left: 20px;
+}
+.registration-personal-photo{
+    width: 150px;
+    height: 200px;
+    -webkit-box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
+    -moz-box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
+    box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
+}
+.positive{
+ color: #30792a;
+}
+.negative{
+    color: #F22613;
+}
+.vertical-middle{
+    vertical-align: middle !important;
+}
+.vertical-top{
+    vertical-align: top !important;
+}
+.m-l-20{
+    margin-left: 20px !important;
+}

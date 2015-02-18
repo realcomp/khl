@@ -2,13 +2,132 @@
 {% load i18n %}
 
 {% block content %}
+    <script type="text/ng-template" id="step2">
+        <div class="row registration-content-row">
+            <p>Давайте познакомимся получше?</p>
+        </div>
+        <div class="row registration-content-row">
+            <p><span class="registration-step-label">ШАГ 2</span></p>
+        </div>
+        <div class="row registration-content-row">
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="personalInfo" ng-value="true">
+                    Расскажите немного о себе
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    Имя:
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="personal.name">
+                </div>
+                <div class="inline-block m-l-20">
+                    <input class="vertical-middle" type="checkbox" ng-model="personal.hideName">
+                    скрывать имя в "любительской версии"
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block vertical-top">
+                    Фото:
+                </div>
+                <div class="registration-input inline-block">
+                    <div class="registration-personal-photo"></div>
+                    <input type="file" ng-model="personal.photo">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    Мой сайт:
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="personal.website">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="personalInfo" ng-value="false">
+                    Я не хочу ничего рассказывать
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" class="small ui green button registration-next"
+                        ng-disabled="personalInfo"
+                        ng-click=""
+                        ng-class="{'opacity-30': personalInfo}">
+                    {% trans 'Next' %}</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="step1">
+            <div class="row registration-content-row">
+                <p>Отлично! Всего три шага, и вы с нами!</p>
+            </div>
+            <div class="row registration-content-row">
+                <p><span class="registration-step-label">ШАГ 1</span> <br>
+                    Все поля обязательны к заполнению</p>
+            </div>
+            <div class="row registration-content-row">
+                <div class="row">
+                    <div class="registration-label inline-block">
+                        Выберите логин:
+                    </div>
+                    <div class="registration-input inline-block">
+                        <input type="text" ng-model="user.login">
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        Пароль:
+                    </div>
+                    <div class="registration-input inline-block">
+                        <input type="password" ng-change="comparePasswords()" ng-model="user.password">
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        Пароль повторно:
+                    </div>
+                    <div class="registration-input inline-block">
+                        <input type="password" ng-change="comparePasswords()" ng-model="user.password2">
+                    </div>
+                    <div class="registration-passwords-comparison-label inline-block">
+                        <div ng-if="user.password && user.password2 && passwordsMatch" ng-class="{'positive': passwordsMatch}">
+                            <i class="fa fa-thumbs-o-up"></i> Пароли совпадают
+                        </div>
+                        <div ng-if="user.password && user.password2 && !passwordsMatch" ng-class="{'negative': !passwordsMatch}">
+                            <i class="fa fa-thumbs-o-down"></i> Пароли не совпадают
+                        </div>
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        E-mail:
+                    </div>
+                    <div class="registration-input-email inline-block">
+                        <input type="email" ng-model="user.email">
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-checkbox">
+                        <input type="checkbox" ng-model="subscribe">
+                        получать рассылку новостей сайта
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="small ui green button registration-next-form" ng-click="nextStep()" >{% trans 'Next' %}</button>
+                </div>
+            </div>
+    </script>
+    <!-- page code -->
     <div class="page-inner-container" ng-controller="RegistrationController">
         <div class="user-page">
             <div class="ui tabular menu content-tabs">
                 <span class="heading">{% trans "New User's Registration" %}</span>
             </div>
             <div class="greeting-registration">
-                <p>Спасибо, что вы захотели зарегистрироваться на нашем сайте.<br>
+                <p>Спасибо, что захотели зарегистрироваться на нашем сайте.<br>
                 Нет ничего проще — выберите подходящий способ.<br>
                 Мы постарались сделать все так, чтобы это не отняло у вас более 1 минуты.<br><br></p>
             </div>
@@ -42,6 +161,9 @@
                             </div>
                         </div>
                     </div>
+                    <div ng-if="selectedType === 'regular'">
+                        <div id="tpl-step-content" ng-include src="currentStepTemplate"></div>
+                    </div>
                     <div ng-if="selectedType === 'social'">
                         <div class="row registration-content-row">
                             <div class="inline-block">
@@ -58,62 +180,14 @@
                             </div>
                         </div>
                         <div class="row">
-                            <button type="button" class="small ui green button registration-next" ng-disabled="selectedRegistrationType !== 'regular'" ng-click="selectType('regular') ">{% trans 'Next' %}</button>
+                            <button type="button" class="small ui green button registration-next"
+                                    ng-disabled="selectedRegistrationType !== 'regular'"
+                                    ng-click="selectType('regular') "
+                                    ng-class="{'opacity-30': selectedRegistrationType !== 'regular'}">
+                            {% trans 'Next' %}</button>
                         </div>
                     </div>
-                    <div  ng-if="selectedType === 'regular'">
-                        <div class="row registration-content-row">
-                            <p>Отлично! Всего три шага, и вы с нами!</p>
-                        </div>
-                        <div class="row registration-content-row">
-                            <p>ШАГ 1 <br>
-                            Все поля обязательны к заполнению</p>
-                        </div>
-                        <div class="row registration-content-row">
-                            <div class="row">
-                                <div class="registration-label inline-block">
-                                    Выберите логин:
-                                </div>
-                                <div class="registration-input inline-block">
-                                    <input type="text" ng-model="user.login">
-                                </div>
-                            </div>
-                            <div class="row registration-content-row">
-                                <div class="registration-label inline-block">
-                                    Пароль:
-                                </div>
-                                <div class="registration-input inline-block">
-                                    <input type="password" ng-model="user.password">
-                                </div>
-                            </div>
-                            <div class="row registration-content-row">
-                                <div class="registration-label inline-block">
-                                    Пароль повторно:
-                                </div>
-                                <div class="registration-input inline-block">
-                                    <input type="password" ng-model="user.password2">
-                                </div>
-                            </div>
-                            <div class="row registration-content-row">
-                                <div class="registration-label inline-block">
-                                    E-mail:
-                                </div>
-                                <div class="registration-input-email inline-block">
-                                    <input type="email" ng-model="user.email">
-                                </div>
-                            </div>
-                            <div class="row registration-content-row">
-                                <div class="registration-checkbox">
-                                    <input type="checkbox" ng-model="subscribe">
-                                    получать рассылку новостей сайта
-                                </div>
-                            </div>
-                            <div class="row">
-                                <button  class="small ui green button registration-next-form" >{% trans 'Next' %}</button>
-                            </div>
-                        </div>
 
-                    </div>
 
                     <!--<div class="row">
                         {% for field in form %}
