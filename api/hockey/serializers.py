@@ -10,7 +10,7 @@ from hockeyapp.models import ClubPhotos, Club
 class ClubMinimalSerialiser(drf.serializers.ModelSerializer):
     class Meta:
         model = Club
-        fields = 'id', 'ru_title'
+        fields = 'id', 'ru_title', 'get_absolute_url'
         read_only_fields = fields
 
 

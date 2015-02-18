@@ -1,6 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
 
+from django.http import Http404
 from django.views.generic import FormView, TemplateView
 
 from ..forms import ClubleaguesAddForm, MatchParserForm
@@ -53,4 +54,8 @@ matchparser_form = MatchParserFormView.as_view()
 
 class ClubPhotoAngularTemplate(TemplateView):
     template_name = 'hockeyapp/admin/clubs-insta-photo.html'
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise Http404()
+        return super(ClubPhotoAngularTemplate, self).dispatch(request, *args, **kwargs)
 cpat = ClubPhotoAngularTemplate.as_view()

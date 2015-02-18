@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import rest_framework as drf
 
+from api.base.permissions import SportoAdminPermission
 from hockeyapp.models import ClubPhotos
 
 from . import serializers
@@ -11,6 +12,7 @@ from . import serializers
 class CPAPIBase(object):
     queryset = ClubPhotos.objects.filter(processed=False)
     serializer_class = serializers.ClubPhotoSerializer
+    permission_classes = (SportoAdminPermission,)
 
 
 class ClubPhotosList(CPAPIBase, drf.generics.ListAPIView):
