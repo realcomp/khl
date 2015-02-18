@@ -13,6 +13,7 @@ class CPAPIBase(object):
     queryset = ClubPhotos.objects.filter(processed=False)
     serializer_class = serializers.ClubPhotoSerializer
     permission_classes = (SportoAdminPermission,)
+    paginate_by = 100
 
 
 class ClubPhotosList(CPAPIBase, drf.generics.ListAPIView):
