@@ -241,6 +241,10 @@ class ClubStatsView(ClubView):
         return context
 
 
+class ClubNewsView(ClubView):
+    template_name = 'hockeyapp/clubs/clubs-news.html'
+
+
 class MetricsPlayers(TemplateView):
     template_name = 'hockeyapp/metrics/player-select.html'
 

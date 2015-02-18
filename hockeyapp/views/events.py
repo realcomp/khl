@@ -6,6 +6,8 @@ from __future__ import unicode_literals
 
 import datetime
 
+from django.core.urlresolvers import reverse
+
 
 class Event(object):
     '''
@@ -49,7 +51,8 @@ class MatchEvent(Event):
 
     @property
     def url(self):
-        return self.obj.home_team.get_absolute_url()
+        return reverse(
+            'hockeyapp:club-news', kwargs={'pk': self.obj.home_team_id})
 
     @property
     def image(self):
@@ -73,12 +76,14 @@ class EventFactory(object):
 
     def get_birthday_events(self, date):
         events = []
-        birth_dates = map(
-            lambda x: datetime.date(year=x, month=date.month, day=date.day),
-            range(date.year-200, date.year))
+        x_birthdate = {
+            'where': [
+                'extract(day from birth_date)=%d and '
+                'extract(month from birth_date)=%d' % (date.day, date.month)],
+        }
         players = self.sources.get('player')
         if players:
-            for player in players.filter(birth_date__in=birth_dates):
+            for player in players.extra(**x_birthdate):
                 events.append(BirthdayEvent(date, player))
         return events
 
@@ -88,6 +93,6 @@ class EventFactory(object):
         if schedules:
             for schedule in schedules.filter(
                     date__gte=date,
-                    date__lte=date + datetime.timedelta(days=1)):
+                    date__lte=date + datetime.timedelta(days=7)):
                 events.append(MatchEvent(date, schedule))
         return events

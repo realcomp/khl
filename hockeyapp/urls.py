@@ -84,6 +84,8 @@ urlpatterns = patterns('hockeyapp.views',
         name='club-photos'),
     url(r'^clubs/(?P<pk>\d+)/fanzone/$', views.ClubFanZoneView.as_view(),
         name='club-fanzone'),
+    url(r'^clubs/(?P<pk>\d+)/news/$', views.ClubNewsView.as_view(),
+        name='club-news'),
 
     #admin
     url(r'^sporto-admin/club-insta-photo/$',
