@@ -47,6 +47,7 @@ INSTALLED_APPS = (
 
     'accounts',
     'addresses',
+    'api',
     'base',
     'hockeyapp',
 )

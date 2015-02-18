@@ -1,7 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
 
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from ..forms import ClubleaguesAddForm, MatchParserForm
 from ..models import LeagueClub, Match
@@ -49,3 +49,8 @@ class MatchParserFormView(FormView):
         async_hockey_matches_parser.delay(parser_id, from_id, count or 1,update)
         return super(MatchParserFormView, self).form_valid(form)
 matchparser_form = MatchParserFormView.as_view()
+
+
+class ClubPhotoAngularTemplate(TemplateView):
+    template_name = 'hockeyapp/admin/clubs-insta-photo.html'
+cpat = ClubPhotoAngularTemplate.as_view()

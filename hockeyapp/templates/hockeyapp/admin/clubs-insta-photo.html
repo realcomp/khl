@@ -1,0 +1,33 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+    <script src="{{ STATIC_URL }}hockey/js/clubs-insta-photo.js"></script>
+{% endblock %}
+
+{% block ngapp %}SportomaticsAdminClubPhotos{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container admin-page">
+        <div class="page-content page-container">
+            <div class="page-inner-container">
+                <div id="photos-new" data-tab="photos-new" ng-controller="AdminClubPhotoController" apiurl="{% url 'api:hockey:clubphotos' %}">
+                    {% verbatim %}
+                    <div ng-repeat="item in photos" class="item" style="display:inline-block;padding-bottom:30px;padding-left:5px;">
+                        <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="220" height="220" cpid="{{item.id}}">
+                        <div class="item-data">{{item.club.ru_title}}</div>
+                    </div>
+                    {% endverbatim %}
+                </div>
+                <hr class="hr">
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">УДАЛИТЬ</a></li>
+                    {#<li class="team-control-btn"><a class="ui blue button">OK</a></li>#}
+                    {#<li class="team-control-btn"><a class="ui green button">СОХРАНИТЬ</a></li>#}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

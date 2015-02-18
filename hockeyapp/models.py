@@ -419,6 +419,8 @@ class AddressClubPhotos(models.Model):
 class ClubPhotos(models.Model):
     club = models.ForeignKey(Club, verbose_name=Club._meta.verbose_name)
     photo = models.ForeignKey(InstagramImageFile)
+    processed = models.BooleanField(default=False)
+    proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,)    
     class Meta:
         verbose_name=_('Club instagram photo')
         verbose_name_plural=_('Club instagram photos')
