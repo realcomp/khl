@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import rest_framework as drf
 
 from api.base.permissions import SportoAdminPermission
+from api.base.paginators import AltPaginationSerializer
 from hockeyapp.models import ClubPhotos
 
 from . import serializers
@@ -13,7 +14,9 @@ class CPAPIBase(object):
     queryset = ClubPhotos.objects.filter(processed=False)
     serializer_class = serializers.ClubPhotoSerializer
     permission_classes = (SportoAdminPermission,)
-    paginate_by = 500
+    pagination_serializer_class = AltPaginationSerializer
+    #paginate_by = 500
+    paginate_by = 8
 
 
 class ClubPhotosList(CPAPIBase, drf.generics.ListAPIView):

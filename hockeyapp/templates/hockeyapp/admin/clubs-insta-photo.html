@@ -17,28 +17,41 @@
                 <a class="active item" href="{% url 'hockeyapp:club-insta-photo' %}">ОБРАБОТКА ФОТО ИЗ INSTAGRAM</a>
             </div>
             <div class="page-inner-container">
-                <div id="photos-new" data-tab="photos-new" ng-controller="AdminClubPhotoController" apiurl="{% url 'api:hockey:clubphotos' %}">
-                    {% verbatim %}
-                    <div ng-repeat="item in photos" class="item" style="display:inline-block;padding-left:5px;padding-top:20px;">
-                        <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="220" height="220" cpid="{{item.id}}">
-                        <div class="item-data"><a href="{{item.club.get_absolute_url}}">{{item.club.ru_title}}</a></div>
-                        <ul class="team-controls">
-                            <li class="team-control-btn">
-                                <a class="ui orange button" ng-click="delCP(item.id, $index)">УДАЛИТЬ</a>
-                            </li>
-                            <li class="team-control-btn" ng-click="procCP(item.id, $index)"><a class="ui green button">СОХРАНИТЬ</a></li>
-                        </ul>
+                <form method="post" action="" ng-controller="AdminClubPhotoController">
+                    {% csrf_token %}
+                    <div id="photos-new" data-tab="photos-new">
+{% verbatim %}
+                        <div ng-repeat="item in photos" class="item" style="display:inline-block;padding-left:5px;padding-top:20px;">
+                            <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="220" height="220" ng-click="checkedInputImg(item.id)">
+                            <div class="item-data"><a href="{{item.club.get_absolute_url}}">{{item.club.ru_title}}</a></div>
+                            <ul class="team-controls">
+                                <li class="team-control-btn" ng-click="procCP(item.id, $index)">
+                                    <a class="ui green button">ДОБАВИТЬ</a>
+                                </li>
+                                <li class="team-control-btn">
+                                    <a class="ui orange button" ng-click="delCP(item.id, $index)">УДАЛИТЬ</a>
+                                </li>
+                                <li style="display:none;"><input id="id_cp_{{item.id}}" name="cp" type="checkbox" value="{{item.id}}"></li>
+                            </ul>
+                        </div>
+                        <hr class="hr">
+                        <div class="team-controls team-control-btn ui blue button" ng-click="nextPage()" id="nextpagebutton">ЗАГРУЗИТЬ ЕЩЕ</div>
+{% endverbatim %}
                     </div>
-                    {% endverbatim %}
-                </div>
-                {% comment %}
-                <hr class="hr">
-                <ul class="team-controls player-controls-block">
-                    <li class="team-control-btn"><a class="ui orange button">УДАЛИТЬ ВСЕ</a></li>
-                    {#<li class="team-control-btn"><a class="ui blue button">OK</a></li>#}
-                    <li class="team-control-btn"><a class="ui green button">СОХРАНИТЬ ВСЕ</a></li>
-                </ul>
-                {% endcomment %}
+                    <hr class="hr">
+                    <ul class="team-controls player-controls-block">
+                        <li class="team-control-btn">
+                            <a class="ui blue button" ng-click="checkedAllInputs()">ВЫДЕЛИТЬ ВСЕ</a>
+                        </li>
+                        <li class="team-control-btn">
+                            <a class="ui orange button" ng-click="deleteAll()">УДАЛИТЬ ВЫБРАННОЕ</a>
+                            <input id="id_delete_all" name="delete_all" type="checkbox">я понимаю, что удалю фото насовсем
+                        </li>
+                        <li class="team-control-btn">
+                            <a class="ui green button" ng-click="addAll()">ДОБАВИТЬ ВЫБРАННОЕ</a>
+                        </li>
+                    </ul>
+                </form>
             </div>
         </div>
     </div>
@@ -69,10 +82,18 @@
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }]);
     app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', function($scope, ClubPhoto) {
-        ClubPhoto.query().$promise.then(function(data) {
-            $scope.photos = data.results;
-        });
-        
+        $scope.next_page = 1;
+
+        $scope.getPage = function() {
+            ClubPhoto.query({page:$scope.next_page}).$promise.then(function(data) {
+                $scope.photos = data.results;
+                $scope.next_page = data.next_page;
+                if(!$scope.next_page) {
+                    $('#nextpagebutton').remove();
+                };
+            });
+        };
+
         $scope.delCP = function(id, index) {
             ClubPhoto.delete({id:id});
             $scope.photos.splice(index, 1);
@@ -81,6 +102,44 @@
         $scope.procCP = function(id, index) {
             ClubPhoto.update({id:id}, {processed:true});
             $scope.photos.splice(index, 1);
+        };
+
+        $scope.deleteAll = function() {
+            if($('input[name="delete_all"]').attr('checked')){
+                var inputs = $('input[name="cp"]:checked');
+                $.each(inputs, function(index, value) {
+                    ClubPhoto.delete({id:$(value).val()});
+                });
+                window.location.reload();
+            };
+        };
+
+        $scope.addAll = function() {
+            var inputs = $('input[name="cp"]:checked');
+            $.each(inputs, function(value) {
+                ClubPhoto.update({id:$(value).val()}, {processed:true});
+            });
+            window.location.reload();
+        };
+
+        $scope.nextPage = function() {
+            if($scope.next_page) {
+                $scope.getPage($scope.next_page);
+            }
+        };
+        $scope.getPage($scope.next_page);
+
+        $scope.checkedInputImg = function(id) {
+            if($('#id_cp_'+id).attr('checked')) {
+                $('#id_cp_'+id).removeAttr('checked');
+            }
+            else {
+                $('#id_cp_'+id).attr('checked', 'checked');
+            };
+        };
+
+        $scope.checkedAllInputs = function() {
+            $('input[name="cp"]').attr('checked', 'checked');
         };
     }]);
 })();
