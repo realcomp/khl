@@ -37,7 +37,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
             clubplayers, context=self.context, many=True).data
 
     def get_rating(self, obj):
-        rated_by = self.context['request'].GET.get('rated_by', 'goals_total')
+        rated_by = self.context['request'].GET.get('rated_by', '')
         if rated_by:
             return getattr(obj, rated_by, None)
 

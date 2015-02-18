@@ -119,9 +119,9 @@ class PlayerQuerySet(models.QuerySet):
 class ClubPlayerQuerySet(models.QuerySet):
     def by_season(self, season):
         qs = self.filter(season=season)
-        if season.is_last:
-            end_date = min(datetime.datetime.now().date(), season.end_date)
-            qs = qs.filter(end_date__gte=end_date)
+        # if season.is_last:
+        #     end_date = min(datetime.datetime.now().date(), season.end_date)
+        #     qs = qs.filter(end_date__gte=end_date)
         return qs
 
     def by_leagues(self, leagues):

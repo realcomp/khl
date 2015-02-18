@@ -261,7 +261,8 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
         for item in data:
             if item.type == 'image':
                 iif = InstagramImageFile.objects.get_or_create_iif(item, _fn)
-                models.ClubPhotos.objects.get_or_create(club=club, photo=iif)
+                if iif:
+                    models.ClubPhotos.objects.get_or_create(club=club,photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
         _get_instagram_pictures.delay(  insta_loc_id, club,

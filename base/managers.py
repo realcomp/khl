@@ -72,9 +72,10 @@ class IIFQuerySet(GetFilerImage, models.QuerySet):
                                         iif_obj.get_standard_resolution_url(),
                                         folder_name,
         )
-        data = dict(instagram_id=iif_obj.id,
-                    link=iif_obj.link,
-                    data=iif_obj,
-                    img=filer_image)
-        iif, _crt = self.get_or_create(**data)
-        return iif
+        if filer_image:
+            data = dict(instagram_id=iif_obj.id,
+                        link=iif_obj.link,
+                        data=iif_obj,
+                        img=filer_image)
+            iif, _crt = self.get_or_create(**data)
+            return iif

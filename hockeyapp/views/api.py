@@ -48,7 +48,7 @@ class PlayersSearch(
                 self.clubplayers[player_id].append(clubplayer)
         # get rating
         rated_qs = qs
-        rated_by = self.request.GET.get('rated_by', 'seasons_total')
+        rated_by = self.request.GET.get('rated_by', '')
         if rated_by:
             rated_qs = qs.order_by('-' + rated_by)
         self.rating = {}
