@@ -2,22 +2,250 @@
 {% load i18n %}
 
 {% block content %}
-    <div class="page-inner-container">
+    <script type="text/ng-template" id="step1">
+            <div class="row registration-content-row">
+                <p>Отлично! Всего три шага, и вы с нами!</p>
+            </div>
+            <div class="row registration-content-row">
+                <p><span class="registration-step-label">ШАГ 1</span> <br>
+                    Все поля обязательны к заполнению</p>
+            </div>
+            <div class="row registration-content-row">
+                <div class="row">
+                    <div class="registration-label inline-block">
+                        Выберите логин:
+                    </div>
+                    <div class="registration-input inline-block">
+                        <input type="text" ng-model="user.login">
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        Пароль:
+                    </div>
+                    <div class="registration-input inline-block">
+                        <input type="password" ng-change="comparePasswords()" ng-model="user.password">
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        Пароль повторно:
+                    </div>
+                    <div class="registration-input inline-block">
+                        <input type="password" ng-change="comparePasswords()" ng-model="user.password2">
+                    </div>
+                    <div class="registration-passwords-comparison-label inline-block">
+                        <div ng-if="user.password && user.password2 && passwordsMatch" ng-class="{'positive': passwordsMatch}">
+                            <i class="fa fa-thumbs-o-up"></i> Пароли совпадают
+                        </div>
+                        <div ng-if="user.password && user.password2 && !passwordsMatch" ng-class="{'negative': !passwordsMatch}">
+                            <i class="fa fa-thumbs-o-down"></i> Пароли не совпадают
+                        </div>
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        E-mail:
+                    </div>
+                    <div class="registration-input-email inline-block">
+                        <input type="email" ng-model="user.email">
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-checkbox">
+                        <input type="checkbox" ng-model="subscribe">
+                        получать рассылку новостей сайта
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="small ui green button registration-next-form" ng-click="nextStep()" >{% trans 'Next' %}</button>
+                </div>
+            </div>
+    </script>
+    <script type="text/ng-template" id="step2">
+        <div class="row registration-content-row">
+            <p>Давайте познакомимся получше?</p>
+        </div>
+        <div class="row registration-content-row">
+            <p><span class="registration-step-label">ШАГ 2</span></p>
+        </div>
+        <div class="row registration-content-row">
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="personalInfo" ng-value="true">
+                    Расскажите немного о себе
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    Имя:
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="personal.name">
+                </div>
+                <div class="inline-block m-l-20">
+                    <input class="vertical-middle" type="checkbox" ng-model="personal.hideName">
+                    скрывать имя в "любительской версии"
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block vertical-top">
+                    Фото:
+                </div>
+                <div class="registration-input inline-block">
+                    <div class="registration-personal-photo"></div>
+                    <input type="file" ng-model="personal.photo">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    Мой сайт:
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="personal.website">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="personalInfo" ng-value="false">
+                    Я не хочу ничего рассказывать
+                </div>
+            </div>
+            <div class="row">
+                <!--<button type="button" class="small ui green button registration-next"
+                        ng-disabled="personalInfo"
+                        ng-click=""
+                        ng-class="{'opacity-30': personalInfo}">
+                    {% trans 'Next' %}</button>-->
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="step3">
+        <div class="row registration-content-row">
+            <p>Настройте сайт под себя!</p>
+        </div>
+        <div class="row registration-content-row">
+            <p><span class="registration-step-label">ШАГ 3</span></p>
+        </div>
+        <div class="row registration-content-row">
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="preferencesInfo" ng-value="true">
+                    Настройте ваши предпочтения
+                </div>
+            </div>
+            <div class="row registration-content-row registration-preferences">
+                <div class="inline-block registration-preferences-sports vertical-top">
+                    <div class="registration-preferences-sport bold">
+                        Меня интересует:
+                    </div>
+                    <div class="registration-preferences-sport">
+                        <input class="vertical-middle" type="checkbox" ng-change="log()" ng-model="preferencesSports['hockey']">
+                        <div class="vertical-middle inline-block">Хоккей</div>
+                    </div>
+                    <div class="registration-preferences-sport">
+                        <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['football']">
+                        <div class="vertical-middle inline-block">Футбол</div>
+                    </div>
+                    <div class="registration-preferences-sport">
+                        <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['backetball']">
+                        <div class="vertical-middle inline-block">Баскетбол</div>
+                    </div>
+                </div>
+                <div class="inline-block registration-preferences-countires vertical-top">
+                    <div class="registration-preferences-sport bold">
+                        В странах:
+                    </div>
+                    <div class="registration-preferences-country" ng-repeat="country in countries track by $index">
+                        <input class="vertical-middle" type="checkbox" ng-model="countries[$index][1]">
+                        <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
+                    </div>
+                </div>
+                <div class="inline-block">
+
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- page code -->
+    <div class="page-inner-container" ng-controller="RegistrationController">
         <div class="user-page">
             <div class="ui tabular menu content-tabs">
-                <span class="heading">{% trans 'Signup' %}</span>
+                <span class="heading">{% trans "New User's Registration" %}</span>
+            </div>
+            <div class="greeting-registration">
+                <p>Спасибо, что захотели зарегистрироваться на нашем сайте.<br>
+                Нет ничего проще — выберите подходящий способ.<br>
+                Мы постарались сделать все так, чтобы это не отняло у вас более 1 минуты.<br><br></p>
             </div>
             <form action="" name="profile-edit-form" method="POST" class="ui form contact-form">
                 {% csrf_token %}
-                {% for field in form %}
-                    <div class="inline field">
-                        {{ field.errors }}
-                        {{ field.label_tag }}
-                        {{ field }}
+                <div class="ui-grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu content-tabs">
+                                <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                    <li class="ui-state-default ui-corner-top"
+                                        ng-class="{ 'ui-tabs-active ui-state-active': selectedType === 'social' }">
+
+                                        <a class="item tab-btn ui-tabs-anchor" href="" ng-click="selectedType = 'social'">
+                                            При помощи аккаунта в социальной сети
+                                        </a>
+                                    </li>
+                                    <li class="ui-state-default ui-corner-top"
+                                        ng-class="{ 'ui-tabs-active ui-state-active': selectedType === 'regular' }">
+                                        <a class="item tab-btn ui-tabs-anchor" href="" ng-click="selectedType = 'regular'">
+                                            Полная форма регистрации
+                                        </a>
+                                    </li>
+                                    <li class="ui-state-default ui-corner-top"
+                                        ng-class="{ 'ui-tabs-active ui-state-active': selectedType === 'rememberPassword' }">
+                                        <a class="item tab-btn ui-tabs-anchor" href="" ng-click="selectedType = 'rememberPassword'">
+                                            Вспомнить пароль
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                {% endfor %}
-                <hr class="hr">
-                <button type="submit" class="small ui green button">{% trans 'Signup' %}</button>
+                    <div ng-if="selectedType === 'regular'">
+                        <div id="tpl-step-content" ng-include src="currentStepTemplate"></div>
+                    </div>
+                    <div ng-if="selectedType === 'social'">
+                        <div class="row registration-content-row">
+                            <div class="inline-block">
+                                <input type="radio" ng-model="selectedRegistrationType" ng-value="'social'">
+                                Выберите аккаунт в социальной сети, при помощи которого вы хотите авторизоваться:
+                            </div>
+                            <script src="//ulogin.ru/js/ulogin.js"></script>
+                            <div class="uLogin-registration" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,odnoklassniki,twitter,google,yandex,mailru;hidden=other;redirect_uri=http%3A%2F%2Fdev.sportomatics.ru"></div>
+                        </div>
+                        <div class="row registration-content-row">
+                            <div class="inline-block">
+                                <input type="radio" ng-model="selectedRegistrationType" ng-value="'regular'">
+                                У меня нет такого аккаунта или я не хочу этого делать
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button type="button" class="small ui green button registration-next"
+                                    ng-disabled="selectedRegistrationType !== 'regular'"
+                                    ng-click="selectType('regular') "
+                                    ng-class="{'opacity-30': selectedRegistrationType !== 'regular'}">
+                            {% trans 'Next' %}</button>
+                        </div>
+                    </div>
+                    <!--<div class="row">
+                        {% for field in form %}
+                        <div class="inline field">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                        <hr class="hr">
+                    </div>-->
+                </div>
+
             </form>
         </div>
     </div>

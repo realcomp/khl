@@ -3961,12 +3961,22 @@ i.icon {
   color: #30792a;
   font-size: 13px;
 }
+.user-page .ui.tabular.menu .item {
+    color: #30792a;
+    font-size: 13px;
+}
 /* line 2504, ../sass/_base.sass */
 .clubs-page .ui.tabular.menu .ui-tabs-active .item {
   border: 1px solid #dcddde;
   border-radius: 5px 5px 0 0;
   border-bottom-color: #fff;
   color: #dd8517;
+}
+.user-page .ui.tabular.menu .ui-tabs-active .item {
+    border: 1px solid #dcddde;
+    border-radius: 5px 5px 0 0;
+    border-bottom-color: #fff;
+    color: #dd8517;
 }
 /* line 2509, ../sass/_base.sass */
 .clubs-page .player-controls-block {
@@ -4979,4 +4989,98 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .opacity-50{
     opacity: 0.5 !important;
+}
+.user-page .ui.tabular.menu .ui-tabs-active .item {
+    border-bottom: 1px solid transparent;
+    background: #fff;
+}
+/* line 423, ../sass/_base.sass */
+.user-page .ui.tabular.menu .ui-tabs-active .item-orange {
+    background: #fff;
+    color: #f0ad56;
+}
+/* line 426, ../sass/_base.sass */
+.user-page .ui.tabular.menu .ui-tabs-active .item-blue {
+    background: #fff;
+    color: #a4c4c1;
+}
+.uLogin-registration , .registration-next{
+    margin-top: 20px !important;
+    margin-left: 20px !important;
+}
+.registration-content-row{
+    margin-top: 20px !important;
+}
+.registration-label{
+    margin-left: -20px;
+    width: 150px;
+    text-align: right;
+}
+.registration-input-email{
+    min-width: 180px;
+    max-width: 200px !important;
+    margin-left: 15px !important;
+}
+.registration-label span{
+}
+.registration-input{
+    max-width: 150px !important;
+    margin-left: 15px;
+}
+.registration-checkbox{
+    margin-left: 150px;
+    max-width: 400px;
+}
+.registration-next-form{
+    margin-top: 10px !important;
+    margin-left: 150px !important;
+}
+.registration-step-label{
+    font-size: 14px;
+    font-weight: 600;
+}
+.registration-passwords-comparison-label{
+    margin-left: 20px;
+}
+.registration-personal-photo{
+    width: 150px;
+    height: 200px;
+    -webkit-box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
+    -moz-box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
+    box-shadow: 0px 0px 3px 2px rgba(148,136,148,1);
+    margin-bottom: 10px;
+}
+.registration-preferences{
+    margin-left: 20px;
+}
+.registration-preferences-sports{
+    max-width: 220px;
+
+}
+.registration-preferences-countires{
+    margin-left: 30px;
+}
+.registration-preferences-sport{
+    height: 30px;
+}
+.registration-preferences-country{
+    height: 30px;
+}
+.positive{
+ color: #30792a;
+}
+.negative{
+    color: #F22613;
+}
+.vertical-middle{
+    vertical-align: middle !important;
+}
+.vertical-top{
+    vertical-align: top !important;
+}
+.m-l-20{
+    margin-left: 20px !important;
+}
+.bold{
+    font-weight: bold;
 }

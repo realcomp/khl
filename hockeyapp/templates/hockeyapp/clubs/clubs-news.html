@@ -1,0 +1,181 @@
+{% extends "hockeyapp/clubs/base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-photos-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section" href="/">Хоккей</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
+                <div class="divider"> / </div>
+                <a class="active section">Новости и результаты матчей</a>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include "hockeyapp/clubs/team-info.html" %}
+
+        <div class="page-content page-container">
+            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
+            <div class="page-inner-container">
+                <div class="clubs-photos-tabs">
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui tabular menu content-tabs">
+                                    <div class="heading">Новости и результаты матчей</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="photos-new" data-tab="photos-new">
+                            <div class="sixteen wide column">
+                                <div class="masonry-clubs-photos masonry">
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/240/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/220/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/260/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/230/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/186/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/160/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item w2">
+                                        <img src="http://lorempixel.com/372/240/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/210/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/222/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/100/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <img src="http://lorempixel.com/186/80/sports/" alt="" class="item-photo">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,8 +1,8 @@
 <div class="ui green inverted menu page-menu">
     <a class="{% if clubs_menu_active == 'club' %}active {% endif %}item"
        href="{% url 'hockeyapp:club' pk %}">Состав команды</a>
-    <!-- <a class="{% if clubs_menu_active == 'club-matches' %}active {% endif %}item" -->
-    <!--    href="#">Новости и результаты матчей</a> -->
+    <a class="{% if clubs_menu_active == 'club-news' %}active {% endif %}item"
+       href="{% url 'hockeyapp:club-news' pk %}">Новости и результаты матчей</a>
     <a class="{% if clubs_menu_active == 'club-calendar' %}active {% endif %}item"
        href="{% url 'hockeyapp:club-calendar' pk %}">Календарь игр</a>
     <a class="{% if clubs_menu_active == 'club-stats' %}active {% endif %}item"

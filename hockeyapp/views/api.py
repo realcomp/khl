@@ -181,7 +181,6 @@ class ClubTeamCompare(generics.RetrieveAPIView):
 
 class MetricsPlayers(generics.ListAPIView):
     paginate_by = 100
-    # permission_classes = permissions.IsAuthenticated,
     serializer_class = MetricsPlayerSerializer
 
     def get_queryset(self):

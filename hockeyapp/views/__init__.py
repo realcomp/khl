@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
+
 from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, TemplateView
 from django.utils.translation import ugettext_lazy as _
@@ -8,18 +10,36 @@ from django.utils.translation import ugettext_lazy as _
 from addresses.models import Country
 from base.models import Season
 
-from ..models import Club, Player, ClubPlayer, CoachClub
+from .events import EventFactory
+from ..models import Club, Player, ClubPlayer, CoachClub, Schedule
 from ..serializers import (
     CountrySerializer, SeasonSerializer,
     PlayerCardSerializer, PlayerCardDetailSerializer,
     ClubListSerializer,
 )
+from ..serializers.events import EventSerializer
 from ..serializers.players import (
     PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
 from ..utils import get_season_end_date
 
 
-class Index(TemplateView):
+class EventsMixin(object):
+    def get_events(self):
+        efactory = EventFactory(sources={
+            'player': Player.objects.all(),
+            'schedule': Schedule.objects.all(),
+        })
+        return efactory.get_events(datetime.datetime.now().date())
+
+    def get_context_data(self, **kwargs):
+        context = super(EventsMixin, self).get_context_data(**kwargs)
+        context['request'] = self.request
+        context['events'] = EventSerializer(
+            self.get_events(), context=context, many=True).data
+        return context
+
+
+class Index(EventsMixin, TemplateView):
     def get_template_names(self):
         version = 'CLASSIC'
         if self.request.user.is_authenticated():
@@ -33,7 +53,7 @@ class Index(TemplateView):
 index = Index.as_view()
 
 
-class IndexClassic(TemplateView):
+class IndexClassic(EventsMixin, TemplateView):
     version = 'CLASSIC'
 
     def get_template_names(self):
@@ -219,6 +239,10 @@ class ClubStatsView(ClubView):
         context = super(ClubStatsView, self).get_context_data(**kwargs)
         context['alphabet'] = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         return context
+
+
+class ClubNewsView(ClubView):
+    template_name = 'hockeyapp/clubs/clubs-news.html'
 
 
 class MetricsPlayers(TemplateView):

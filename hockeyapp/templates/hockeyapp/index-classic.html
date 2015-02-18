@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body %}
 <section class="content">
@@ -149,190 +150,39 @@
                 <div class="column">
                     <div class="relative">
                         <ul class="events-list">
-                            <li class="event-item"><a href="#" class="event-link event-link_active">Мои</a></li>
-                            <li class="event-item"><a href="#" class="event-link">Все события</a></li>
+                            <li class="event-item"><a href="#" class="event-link">Мои</a></li>
+                            <li class="event-item"><a href="#" class="event-link event-link_active">Все события ({{ events|length }})</a></li>
                         </ul>
                         <div class="page-title">События</div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="four wide column">
-                    <div class="event-block event-block_green">
-                        <img src="http://lorempixel.com/233/244/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
+                {% for event in events %}
+                    <div class="four wide column">
+                        <div class="event-block event-block_green">
+                            <a href="{{ event.url }}">
+                                <img src="{{ event.image }}" alt="" class="event-picture">
+                            </a>
+                            <div class="event-info">
+                                <span class="event-more"><i class="align justify icon"></i></span>
+                                <!-- <span class="event-label">{% trans 'Hockey' %}</span> -->
+                                <span class="event-label">{{ event.type }}</span>
+                                <span class="event-date">{{ event.date }}</span>
+                            </div>
+                            <div class="event-title">{{ event.title }}</div>
+                            <span class="event-views"><i class="unhide icon"></i>1206</span>
+                            <span class="event-comments"><i class="comment icon"></i>10</span>
                         </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
                     </div>
-                    <div class="event-block event-block_orange">
-                        <img src="http://lorempixel.com/233/254/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
+                    {% if forloop.counter == 8 %}
+                        <div class="four wide column">
+                            <div class="event-block">
+                                <img src="{{ STATIC_URL }}images/welcome-banner.png" alt="" class="event-picture">
+                            </div>
                         </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_purple">
-                        <img src="http://lorempixel.com/233/233/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_green">
-                        <img src="http://lorempixel.com/233/240/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="event-block event-block_mint">
-                        <img src="http://lorempixel.com/233/296/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block">
-                        <img src="{{ STATIC_URL }}images/welcome-banner.png" alt="" class="event-picture">
-                    </div>
-                    <div class="event-block event-block_mint">
-                        <img src="http://lorempixel.com/233/249/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_green">
-                        <img src="http://lorempixel.com/233/306/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="event-block event-block_purple">
-                        <img src="http://lorempixel.com/233/243/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_green">
-                        <img src="http://lorempixel.com/233/255/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_orange">
-                        <img src="http://lorempixel.com/233/233/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_green">
-                        <img src="http://lorempixel.com/233/242/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                </div>
-                <div class="four wide column">
-                    <div class="event-block event-block_mint">
-                        <img src="http://lorempixel.com/233/252/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_orange">
-                        <img src="http://lorempixel.com/233/252/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_mint">
-                        <img src="http://lorempixel.com/233/237/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                    <div class="event-block event-block_green">
-                        <img src="http://lorempixel.com/233/241/sports/" alt="" class="event-picture">
-                        <div class="event-info">
-                            <span class="event-more"><i class="align justify icon"></i></span>
-                            <span class="event-label">Воллейбол</span>
-                            <span class="event-date">12 августа 2014</span>
-                        </div>
-                        <div class="event-title">Баллончик с пеной на авторитет арбитра не повлияет</div>
-                        <span class="event-views"><i class="unhide icon"></i>1206</span>
-                        <span class="event-comments"><i class="comment icon"></i>10</span>
-                    </div>
-                </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
