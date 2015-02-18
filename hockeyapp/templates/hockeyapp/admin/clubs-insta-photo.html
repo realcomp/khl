@@ -56,7 +56,7 @@
     }]);
     services.factory('ClubPhoto', function($resource){
         return $resource("{% url 'api:hockey:clubphotos' %}"+":id", {}, {
-            query: {method:'GET', params:{id:null}, isArray:true},
+            query: {method:'GET', params:{id:null}},
             get: { method: 'GET'},
             update: { method: 'PATCH'},
             delete: { method: 'DELETE'}
@@ -69,7 +69,9 @@
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     }]);
     app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', function($scope, ClubPhoto) {
-        $scope.photos = ClubPhoto.query();
+        ClubPhoto.query().$promise.then(function(data) {
+            $scope.photos = data.results;
+        });
         
         $scope.delCP = function(id, index) {
             ClubPhoto.delete({id:id});
