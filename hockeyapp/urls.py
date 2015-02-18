@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls import url
+from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
 
 
-urlpatterns = (
+urlpatterns = patterns('hockeyapp.views',
     # TODO: move to separate namespace
     # REST API
     url(r'^api/leagues/$', api.LeagueList.as_view(),
@@ -84,4 +84,9 @@ urlpatterns = (
         name='club-photos'),
     url(r'^clubs/(?P<pk>\d+)/fanzone/$', views.ClubFanZoneView.as_view(),
         name='club-fanzone'),
+
+    #admin
+    url(r'^sporto-admin/club-insta-photo/$',
+        'admin.cpat',
+        name='club-insta-photo'),
 )

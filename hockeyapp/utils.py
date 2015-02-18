@@ -123,5 +123,6 @@ def get_instagram_pictures():
     for club in clubs:
         if club.arena.arenainstagram_set.exists():
             caims = club.arena.arenainstagram_set.all()
-            for obj in caims:
-                _get_pictures(obj.im_id, club)
+            _get_pictures(caims.last().im_id, club)
+            #for obj in caims:
+                #_get_pictures(obj.im_id, club)

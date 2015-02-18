@@ -49,11 +49,11 @@ if settings.DEBUG:
         url(r'', include('django.contrib.staticfiles.urls')),
     ) + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += i18n_patterns(
-    '',
+urlpatterns += i18n_patterns('',
     url(r'^$', 'hockeyapp.views.index', name='index'),
     url(r'^accounts/', include('registration.urls')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+    url(r'^api/', include('api.urls', namespace='api')),
     url(r'^base/', include('base.urls', namespace='base')),
     url(r'^hockey/', include('hockeyapp.urls', namespace='hockeyapp')),
 )
