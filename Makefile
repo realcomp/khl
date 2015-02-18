@@ -37,7 +37,6 @@ deploy:
 	python manage.py collectstatic --no-post-process --noinput
 	sudo service nginx reload
 	sudo supervisorctl restart sportomatics
-	ps auxww | grep 'celery worker' | awk '{print $2}' | xargs kill -9
-	celery multi start sportomatics_worker -B -A sportomatics --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log"
+	celery multi restart sportomatics_worker -B -A sportomatics --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log"
 
 deploy_with_test: get_code test deploy
