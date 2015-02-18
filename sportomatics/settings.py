@@ -99,24 +99,24 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CELERY_ACCEPT_CONTENT = ('pickle', 'json', 'msgpack', 'yaml')
 BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-CELERYBEAT_SCHEDULE = {
-    'hockeyapp-periodic-update-clubs-every-monday-midnight': {
-        'task': 'hockeyapp.tasks.periodic_update_clubs',
-        'schedule': local_celery_crontab(hour=0, minute=0, day_of_week=1),
-    },
-    'hockeyapp-periodic-update-schedules-every-day-midnight': {
-        'task': 'hockeyapp.tasks.periodic_update_schedules',
-        'schedule': local_celery_crontab(hour=0, minute=0),
-    },
-    'hockeyapp-periodic-get-matches-every-day-midnight': {
-        'task': 'hockeyapp.tasks.periodic_get_matches',
-        'schedule': local_celery_crontab(hour=1, minute=0),
-    },
-    'hockeyapp-periodic_get-clubs-instagram_pictures-every-day-midnight': {
-        'task': 'hockeyapp.tasks._get_clubs_instagram_pictures',
-        'schedule': local_celery_crontab(hour=0, minute=0),
-    },
-}
+#CELERYBEAT_SCHEDULE = {
+    #'hockeyapp-periodic-update-clubs-every-monday-midnight': {
+        #'task': 'hockeyapp.tasks.periodic_update_clubs',
+        #'schedule': local_celery_crontab(hour=0, minute=0, day_of_week=1),
+    #},
+    #'hockeyapp-periodic-update-schedules-every-day-midnight': {
+        #'task': 'hockeyapp.tasks.periodic_update_schedules',
+        #'schedule': local_celery_crontab(hour=0, minute=0),
+    #},
+    #'hockeyapp-periodic-get-matches-every-day-midnight': {
+        #'task': 'hockeyapp.tasks.periodic_get_matches',
+        #'schedule': local_celery_crontab(hour=1, minute=0),
+    #},
+    #'hockeyapp-periodic_get-clubs-instagram_pictures-every-day-midnight': {
+        #'task': 'hockeyapp.tasks._get_clubs_instagram_pictures',
+        #'schedule': local_celery_crontab(hour=0, minute=0),
+    #},
+#}
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
