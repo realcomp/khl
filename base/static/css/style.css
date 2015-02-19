@@ -5055,7 +5055,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .registration-preferences-sports{
     max-width: 220px;
-
 }
 .registration-preferences-countires{
     margin-left: 30px;
@@ -5080,6 +5079,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .m-l-20{
     margin-left: 20px !important;
+}
+.m-l-50{
+    margin-left: 50px !important;
 }
 .bold{
     font-weight: bold;

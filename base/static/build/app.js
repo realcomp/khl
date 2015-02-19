@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngRoute'])
+angular.module('Sportomatics', ['angucomplete', 'ngRoute', 'ngTagsInput'])
 
 var next = function($http) {
     return function(isAll) {
@@ -992,6 +992,37 @@ angular.module('Sportomatics')
     };
 }]);
 
+angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $filter) {
+    var clubs = [
+        { "text": "Динамо Мск" },
+        { "text": "СКА СПБ" },
+        { "text": "Трактор (Челябинск)" },
+        { "text": "Рубин (Краснодар)" },
+        { "text": "Спартак Мск" },
+        { "text": "Терек" },
+        { "text": "Цверна Звезда" }
+    ];
+    var countries = [
+        { "text" : "Россия" },
+        { "text" : "США" },
+        { "text" : "Канада" },
+        { "text" : "Германия" }
+    ];
+    this.getClubs = function (sport) {
+        //TODO: get clubs by selected sport in selected countries
+    };
+
+    this.loadCountries = function(query) {
+        var deferred = $q.defer();
+        deferred.resolve($filter('filter')(countries, { text: query}));
+        return deferred.promise;
+    };
+    this.loadClubs = function(query) {
+        var deferred = $q.defer();
+            deferred.resolve($filter('filter')(clubs, { text: query}));
+            return deferred.promise;
+    };
+}]);
 angular.module('Sportomatics')
 .controller('ClubListController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -1618,7 +1649,7 @@ angular.module('Sportomatics')
     };
 }])
 angular.module('Sportomatics')
-    .controller('RegistrationController', ['$http', '$scope','$templateCache', function($http, $scope, $templateCache) {
+    .controller('RegistrationController', ['$http', '$scope','$templateCache','$q','tags', function($http, $scope, $templateCache, $q, tags) {
         $scope.selectedType = 'regular';
         $scope.user = {};
         $scope.personal = {};
@@ -1632,12 +1663,14 @@ angular.module('Sportomatics')
             'football': false,
             'backetball': false
         };
-        $scope.countries = [
-            ['Россия', true],
-            ['США', false],
-            ['Канада', false],
-            ['Германия', false]
-        ];
+        $scope.tags = [];
+        $scope.countries = [];
+        $scope.loadTagsCountries = function (query) {
+            return tags.loadCountries(query);
+        };
+        $scope.loadTags = function(query) {
+            return tags.loadClubs(query);
+        };
         $scope.$watch('countries', function(newval, oldval){
             console.log(newval);
         }, true);

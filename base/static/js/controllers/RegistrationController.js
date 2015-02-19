@@ -1,5 +1,5 @@
 angular.module('Sportomatics')
-    .controller('RegistrationController', ['$http', '$scope','$templateCache', function($http, $scope, $templateCache) {
+    .controller('RegistrationController', ['$http', '$scope','$templateCache','$q','tags', function($http, $scope, $templateCache, $q, tags) {
         $scope.selectedType = 'regular';
         $scope.user = {};
         $scope.personal = {};
@@ -13,12 +13,14 @@ angular.module('Sportomatics')
             'football': false,
             'backetball': false
         };
-        $scope.countries = [
-            ['Россия', true],
-            ['США', false],
-            ['Канада', false],
-            ['Германия', false]
-        ];
+        $scope.tags = [];
+        $scope.countries = [];
+        $scope.loadTagsCountries = function (query) {
+            return tags.loadCountries(query);
+        };
+        $scope.loadTags = function(query) {
+            return tags.loadClubs(query);
+        };
         $scope.$watch('countries', function(newval, oldval){
             console.log(newval);
         }, true);

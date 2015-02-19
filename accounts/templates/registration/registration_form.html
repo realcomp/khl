@@ -156,13 +156,30 @@
                     <div class="registration-preferences-sport bold">
                         В странах:
                     </div>
-                    <div class="registration-preferences-country" ng-repeat="country in countries track by $index">
+                    <!--<div class="registration-preferences-country" ng-repeat="country in countries track by $index">
                         <input class="vertical-middle" type="checkbox" ng-model="countries[$index][1]">
                         <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
+                    </div>-->
+                    <div class="inline-block">
+                        <tags-input ng-model="countries" placeholder="начните писать название" add-on-comma="{false}" style="max-width:200px !important;">
+                            <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTagsCountries($query)"></auto-complete>
+                        </tags-input>
                     </div>
                 </div>
-                <div class="inline-block">
-
+                <div class="inline-block m-l-50">
+                    <div class="registration-preferences-sport bold">
+                        Мои команды:
+                    </div>
+                    <div class="">
+                        <div class="inline-block bold vertical-top">
+                            Хоккей
+                        </div>
+                        <div class="inline-block m-l-20">
+                            <tags-input ng-model="tags" placeholder="начните писать название" add-on-comma="{false}" style="max-width:450px !important;">
+                                <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTags($query)"></auto-complete>
+                            </tags-input>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
