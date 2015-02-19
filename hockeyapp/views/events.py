@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 import datetime
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 
 class Event(object):
@@ -22,11 +23,19 @@ class Event(object):
 
     @property
     def url(self):
-        raise NotImplementedError()
+        pass
 
     @property
     def image(self):
-        raise NotImplementedError()
+        pass
+
+    @property
+    def logo(self):
+        pass
+
+    @property
+    def type(self):
+        pass
 
 
 class BirthdayEvent(Event):
@@ -41,6 +50,10 @@ class BirthdayEvent(Event):
     def image(self):
         return self.obj.photo.url
 
+    @property
+    def type(self):
+        return _('Birth day')
+
 
 class MatchEvent(Event):
     """
@@ -50,13 +63,36 @@ class MatchEvent(Event):
         super(MatchEvent, self).__init__(obj.date.date(), obj)
 
     @property
+    def type(self):
+        return _('Match')
+
+
+class HomeMatchEvent(MatchEvent):
+    """
+    Clubs's home matches
+    """
+    @property
     def url(self):
         return reverse(
             'hockeyapp:club-news', kwargs={'pk': self.obj.home_team_id})
 
     @property
-    def image(self):
+    def logo(self):
         return self.obj.home_team.logo and self.obj.home_team.logo.url
+
+
+class GuestMatchEvent(MatchEvent):
+    """
+    Clubs's guest matches
+    """
+    @property
+    def url(self):
+        return reverse(
+            'hockeyapp:club-news', kwargs={'pk': self.obj.guest_team_id})
+
+    @property
+    def logo(self):
+        return self.obj.guest_team.logo and self.obj.guest_team.logo.url
 
 
 class EventFactory(object):
@@ -71,7 +107,8 @@ class EventFactory(object):
     def get_events(self, date):
         events = []
         events += self.get_birthday_events(date)
-        events += self.get_match_events(date)
+        events += self.get_home_match_events(date)
+        events += self.get_guest_match_events(date)
         return events
 
     def get_birthday_events(self, date):
@@ -87,12 +124,22 @@ class EventFactory(object):
                 events.append(BirthdayEvent(date, player))
         return events
 
-    def get_match_events(self, date):
+    def get_home_match_events(self, date):
         events = []
         schedules = self.sources.get('schedule')
         if schedules:
             for schedule in schedules.filter(
                     date__gte=date,
                     date__lte=date + datetime.timedelta(days=7)):
-                events.append(MatchEvent(date, schedule))
+                events.append(HomeMatchEvent(date, schedule))
+        return events
+
+    def get_guest_match_events(self, date):
+        events = []
+        schedules = self.sources.get('schedule')
+        if schedules:
+            for schedule in schedules.filter(
+                    date__gte=date,
+                    date__lte=date + datetime.timedelta(days=7)):
+                events.append(GuestMatchEvent(date, schedule))
         return events
