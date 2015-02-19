@@ -1,6 +1,15 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router']);
-
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router'])
+.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
+    $stateProvider
+        .state('playersCoaches', {
+            url: '/ru/hockey/players',
+            templateUrl: ' ',
+            controller: ["$state", function($state){
+                alert($state)
+            }]
+        })
+}]);
 var next = function($http) {
     return function(isAll) {
         var self = this,
@@ -264,6 +273,8 @@ $.fn.textWidth = function(){
     $(this).html(html_org);
     return width;
 };
+
+angular.module('Sportomatics')
 
 angular.module('Sportomatics')
 .value('zoomData', {
@@ -1170,13 +1181,14 @@ angular.module('Sportomatics')
     this.search();
 }])
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData','LocaleFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory) {
+.controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location) {
     //http://www.amcharts.com/lib/images/
+
     var self = this,
     url = $('#IndicatorsLink').attr('href');
     this.url = $('#IndicatorsLink').attr('href');
     this.indicatorsType = 'graph';
-    this.field = 'count';
+    this.field = $location.search()['field'] || 'count';
     this.fieldName = LocaleFactory.getFieldName(this.field);
     this.club = null;
     this.coach = null;
@@ -1200,6 +1212,7 @@ angular.module('Sportomatics')
     this.setField = function(field) {
         this.field = field;
         this.fieldName = LocaleFactory.getFieldName(field, self.locale);
+        $location.search('field='+field);
         this.list(true);
     };
 
