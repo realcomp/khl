@@ -24,7 +24,7 @@ class Celery(celery.Celery):
         register_signal(client)
 
 
-app = Celery(__name__, backend='amqp')        
+app = Celery(__name__, backend='redis')        
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 

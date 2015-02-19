@@ -98,7 +98,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 CELERY_ACCEPT_CONTENT = ('pickle', 'json', 'msgpack', 'yaml')
-BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+BROKER_URL = 'redis://localhost:6379/0'
 CELERYBEAT_SCHEDULE = {
     'hockeyapp-periodic-update-clubs-every-monday-midnight': {
         'task': 'hockeyapp.tasks.periodic_update_clubs',
