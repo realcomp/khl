@@ -3,10 +3,11 @@ angular.module('Sportomatics')
         $scope.selectedType = 'regular';
         $scope.user = {};
         $scope.personal = {};
-        $scope.currentStep = 3;
-        $scope.currentStepTemplate = 'step3';
+        $scope.currentStep = 2;
+        $scope.currentStepTemplate = 'step2';
         $scope.subscribe = true;
         $scope.personalInfo = true;
+        $scope.preferencesInfo = true;
         $scope.selectedRegistrationType = 'social';
         $scope.preferencesSports = {
             'hockey': true,
@@ -33,9 +34,10 @@ angular.module('Sportomatics')
         $scope.checkStep = function(){
             switch($scope.currentStep){
                 case 1:
-                return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+                    return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+
                 case 2:
-                return true;
+                    return true;
             }
             return false;
         };

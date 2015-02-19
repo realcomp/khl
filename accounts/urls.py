@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^api/profile/$', api.ProfileView.as_view(),
         name='profile-api'),
     # Django CBV's'
-    url(r'^signup/$', views.Signup.as_view(), name='signup'),
+    url(r'^signup/', views.Signup.as_view(), name='signup'),
     url(r'^profile/$', views.ProfilePrivateView.as_view(),
         name='profile-private'),
     url(r'^profile/offers/$', views.ProfileOffersView.as_view(),

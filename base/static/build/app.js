@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngRoute', 'ngTagsInput'])
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router']);
 
 var next = function($http) {
     return function(isAll) {
@@ -1489,18 +1489,9 @@ function updatedChartData(chart, initialData, data, field){
         newGraph: graph
     };
 }
-var app = angular.module('Sportomatics');
-
-app.config(["$routeProvider", function($routeProvider) {
-    $routeProvider
-    .when('/rated_by/:ratedBy/', {
-        controller: 'PlayersSearchController'
-    });
-}]);
-
-app.controller('PlayersSearchController', [
-    '$route', '$http', '$scope', 'PlayersSearchService',
-    function($route, $http, $scope, PlayersSearchService) {
+angular.module('Sportomatics')
+.controller('PlayersSearchController', ['$http', '$scope', 'PlayersSearchService',
+    function($http, $scope, PlayersSearchService) {
     var self = this,
         getUnchecker = function(isDefault, defaultValue) {
             return function() {
@@ -1653,10 +1644,11 @@ angular.module('Sportomatics')
         $scope.selectedType = 'regular';
         $scope.user = {};
         $scope.personal = {};
-        $scope.currentStep = 3;
-        $scope.currentStepTemplate = 'step3';
+        $scope.currentStep = 2;
+        $scope.currentStepTemplate = 'step2';
         $scope.subscribe = true;
         $scope.personalInfo = true;
+        $scope.preferencesInfo = true;
         $scope.selectedRegistrationType = 'social';
         $scope.preferencesSports = {
             'hockey': true,
@@ -1683,9 +1675,10 @@ angular.module('Sportomatics')
         $scope.checkStep = function(){
             switch($scope.currentStep){
                 case 1:
-                return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+                    return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+
                 case 2:
-                return true;
+                    return true;
             }
             return false;
         };

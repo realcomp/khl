@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngRoute', 'ngTagsInput'])
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router']);
 
 var next = function($http) {
     return function(isAll) {

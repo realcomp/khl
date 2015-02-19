@@ -112,11 +112,7 @@
                 </div>
             </div>
             <div class="row">
-                <!--<button type="button" class="small ui green button registration-next"
-                        ng-disabled="personalInfo"
-                        ng-click=""
-                        ng-class="{'opacity-30': personalInfo}">
-                    {% trans 'Next' %}</button>-->
+                <button type="button" class="small ui green button registration-next" ng-click="nextStep()">{% trans 'Next' %}</button>
             </div>
         </div>
     </script>
@@ -161,7 +157,7 @@
                         <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
                     </div>-->
                     <div class="inline-block">
-                        <tags-input ng-model="countries" placeholder="начните писать название" add-on-comma="{false}" style="max-width:200px !important;">
+                        <tags-input ng-model="countries" placeholder="начните писать название" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
                             <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTagsCountries($query)"></auto-complete>
                         </tags-input>
                     </div>
@@ -175,12 +171,21 @@
                             Хоккей
                         </div>
                         <div class="inline-block m-l-20">
-                            <tags-input ng-model="tags" placeholder="начните писать название" add-on-comma="{false}" style="max-width:450px !important;">
+                            <tags-input ng-model="tags" placeholder="начните писать название" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:450px !important;">
                                 <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTags($query)"></auto-complete>
                             </tags-input>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input type="radio" ng-model="preferencesInfo" ng-value="false">
+                    У меня нет предпочтений
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" class="small ui green button registration-next" ng-click="endRegistration()">{% trans 'END' %}</button>
             </div>
         </div>
     </script>
