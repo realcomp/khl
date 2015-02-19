@@ -106,7 +106,7 @@ class EventFactory(object):
 
     def get_events(self, date):
         events = []
-        # events += self.get_birthday_events(date)
+        events += self.get_birthday_events(date)
         events += self.get_home_match_events(date)
         events += self.get_guest_match_events(date)
         return events
