@@ -1,13 +1,15 @@
 angular.module('Sportomatics')
     .controller('RegistrationController', ['$http', '$scope','$templateCache','$q','tags', function($http, $scope, $templateCache, $q, tags) {
-        $scope.selectedType = 'regular';
+        $scope.selectedType = 'social';
         $scope.user = {};
         $scope.personal = {};
-        $scope.currentStep = 2;
-        $scope.currentStepTemplate = 'step2';
+        $scope.rememberPasswordData = {};
+        $scope.currentStep = 1;
+        $scope.currentStepTemplate = 'step1';
         $scope.subscribe = true;
         $scope.personalInfo = true;
         $scope.preferencesInfo = true;
+        $scope.rememberWithLogin = true;
         $scope.selectedRegistrationType = 'social';
         $scope.preferencesSports = {
             'hockey': true,

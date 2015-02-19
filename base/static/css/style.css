@@ -5077,6 +5077,21 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .vertical-top{
     vertical-align: top !important;
 }
+.m-r-5{
+    margin-right: 5px !important;
+}
+.m-r-8{
+    margin-right: 8px !important;
+}
+.m-r-10{
+    margin-right: 10px !important;
+}
+.m-r-20{
+    margin-right: 20px !important;
+}
+.m-l-8{
+    margin-left: 8px !important;
+}
 .m-l-20{
     margin-left: 20px !important;
 }

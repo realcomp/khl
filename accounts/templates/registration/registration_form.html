@@ -189,6 +189,36 @@
             </div>
         </div>
     </script>
+    <script type="text/ng-template" id="rememberPasswordTemplate">
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input class="m-r-10" type="radio" ng-model="rememberWithLogin" ng-value="true">
+                    Ваш логин:
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-input inline-block">
+                    <input class="m-l-8" type="text" ng-model="rememberPasswordData.login">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                или
+            </div>
+            <div class="row registration-content-row">
+                <div class="inline-block">
+                    <input class="m-r-10" type="radio" ng-model="rememberWithLogin" ng-value="false">
+                    Адрес электронной почты:
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-input inline-block">
+                    <input class="m-l-8" type="text" ng-model="rememberPasswordData.password">
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" class="small ui green button registration-next" ng-click="endRegistration()">{% trans 'CHANGE PASSWORD' %}</button>
+            </div>
+    </script>
     <!-- page code -->
     <div class="page-inner-container" ng-controller="RegistrationController">
         <div class="user-page">
@@ -221,8 +251,8 @@
                                         </a>
                                     </li>
                                     <li class="ui-state-default ui-corner-top"
-                                        ng-class="{ 'ui-tabs-active ui-state-active': selectedType === 'rememberPassword' }">
-                                        <a class="item tab-btn ui-tabs-anchor" href="" ng-click="selectedType = 'rememberPassword'">
+                                        ng-class="{ 'ui-tabs-active ui-state-active': selectedType === 'remember' }">
+                                        <a class="item tab-btn ui-tabs-anchor" href="" ng-click="selectedType = 'remember'">
                                             Вспомнить пароль
                                         </a>
                                     </li>
@@ -236,7 +266,7 @@
                     <div ng-if="selectedType === 'social'">
                         <div class="row registration-content-row">
                             <div class="inline-block">
-                                <input type="radio" ng-model="selectedRegistrationType" ng-value="'social'">
+                                <input  class="m-r-8" type="radio" ng-model="selectedRegistrationType" ng-value="'social'">
                                 Выберите аккаунт в социальной сети, при помощи которого вы хотите авторизоваться:
                             </div>
                             <script src="//ulogin.ru/js/ulogin.js"></script>
@@ -244,7 +274,7 @@
                         </div>
                         <div class="row registration-content-row">
                             <div class="inline-block">
-                                <input type="radio" ng-model="selectedRegistrationType" ng-value="'regular'">
+                                <input  class="m-r-8" type="radio" ng-model="selectedRegistrationType" ng-value="'regular'">
                                 У меня нет такого аккаунта или я не хочу этого делать
                             </div>
                         </div>
@@ -255,6 +285,9 @@
                                     ng-class="{'opacity-30': selectedRegistrationType !== 'regular'}">
                             {% trans 'Next' %}</button>
                         </div>
+                    </div>
+                    <div ng-if="selectedType === 'remember'">
+                        <div id="tpl-dw-content" ng-include src="'rememberPasswordTemplate'"></div>
                     </div>
                     <!--<div class="row">
                         {% for field in form %}
