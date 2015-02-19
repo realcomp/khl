@@ -835,5 +835,34 @@ class Name(models.Model):
         return '%s: %s / %s' % (self.type, self.ru_name, self.en_name)
 
     class Meta(object):
-        verbose_name=_('Name')
-        verbose_name_plural=_('Names')
+        verbose_name = _('Name')
+        verbose_name_plural = _('Names')
+
+
+class Timeline(LocaleAttrMixin, models.Model):
+    start_date = models.DateTimeField(_('Start date'), blank=True, null=True)
+    end_date = models.DateTimeField(_('End date'), blank=True, null=True)
+    ru_headline = models.CharField(
+        _('Headline (RU)'), max_length=255, blank=True, null=True)
+    en_headline = models.CharField(
+        _('Headline (EN)'), max_length=255, blank=True, null=True)
+    ru_text = models.TextField(_('Text (RU)'), blank=True, null=True)
+    en_text = models.TextField(_('Text (EN)'), blank=True, null=True)
+    media = FilerImageField(verbose_name=_('Media'), null=True, blank=True)
+    # media_credit = models.CharField(
+    #     _('Media credit'), max_length=255, blank=True, null=True)
+    # media_caption = models.TextField(_('Media caption'), blank=True, null=True)
+    type = models.CharField(
+        _('Type'), max_length=255, blank=True, null=True)
+    tag = models.CharField(
+        _('Tag'), max_length=255, blank=True, null=True)
+
+    # related objects
+    player = models.ForeignKey(
+        Player, verbose_name=_('Player'), on_delete=models.SET_NULL,
+        blank=True, null=True)
+
+    class Meta(object):
+        ordering = 'start_date',
+        verbose_name = _('Timeline event')
+        verbose_name_plural = _('Timeline events')

@@ -1,15 +1,6 @@
-var app = angular.module('Sportomatics');
-
-app.config(function($routeProvider) {
-    $routeProvider
-    .when('/rated_by/:ratedBy/', {
-        controller: 'PlayersSearchController'
-    });
-});
-
-app.controller('PlayersSearchController', [
-    '$route', '$http', '$scope', 'PlayersSearchService',
-    function($route, $http, $scope, PlayersSearchService) {
+angular.module('Sportomatics')
+.controller('PlayersSearchController', ['$http', '$scope', 'PlayersSearchService',
+    function($http, $scope, PlayersSearchService) {
     var self = this,
         getUnchecker = function(isDefault, defaultValue) {
             return function() {

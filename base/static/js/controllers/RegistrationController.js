@@ -1,24 +1,27 @@
 angular.module('Sportomatics')
-    .controller('RegistrationController', ['$http', '$scope','$templateCache', function($http, $scope, $templateCache) {
+    .controller('RegistrationController', ['$http', '$scope','$templateCache','$q','tags', function($http, $scope, $templateCache, $q, tags) {
         $scope.selectedType = 'regular';
         $scope.user = {};
         $scope.personal = {};
-        $scope.currentStep = 3;
-        $scope.currentStepTemplate = 'step3';
+        $scope.currentStep = 2;
+        $scope.currentStepTemplate = 'step2';
         $scope.subscribe = true;
         $scope.personalInfo = true;
+        $scope.preferencesInfo = true;
         $scope.selectedRegistrationType = 'social';
         $scope.preferencesSports = {
             'hockey': true,
             'football': false,
             'backetball': false
         };
-        $scope.countries = [
-            ['Россия', true],
-            ['США', false],
-            ['Канада', false],
-            ['Германия', false]
-        ];
+        $scope.tags = [];
+        $scope.countries = [];
+        $scope.loadTagsCountries = function (query) {
+            return tags.loadCountries(query);
+        };
+        $scope.loadTags = function(query) {
+            return tags.loadClubs(query);
+        };
         $scope.$watch('countries', function(newval, oldval){
             console.log(newval);
         }, true);
@@ -31,9 +34,10 @@ angular.module('Sportomatics')
         $scope.checkStep = function(){
             switch($scope.currentStep){
                 case 1:
-                return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+                    return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+
                 case 2:
-                return true;
+                    return true;
             }
             return false;
         };

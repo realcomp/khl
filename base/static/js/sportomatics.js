@@ -1,6 +1,15 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngRoute'])
-
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router'])
+.config(function($stateProvider, $urlRouterProvider){
+    $stateProvider
+        .state('playersCoaches', {
+            url: '/ru/hockey/players',
+            templateUrl: ' ',
+            controller: function($state){
+                alert($state)
+            }
+        })
+});
 var next = function($http) {
     return function(isAll) {
         var self = this,

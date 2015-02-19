@@ -1,6 +1,15 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngRoute'])
-
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router'])
+.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
+    $stateProvider
+        .state('playersCoaches', {
+            url: '/ru/hockey/players',
+            templateUrl: ' ',
+            controller: ["$state", function($state){
+                alert($state)
+            }]
+        })
+}]);
 var next = function($http) {
     return function(isAll) {
         var self = this,
@@ -264,6 +273,8 @@ $.fn.textWidth = function(){
     $(this).html(html_org);
     return width;
 };
+
+angular.module('Sportomatics')
 
 angular.module('Sportomatics')
 .value('zoomData', {
@@ -992,6 +1003,37 @@ angular.module('Sportomatics')
     };
 }]);
 
+angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $filter) {
+    var clubs = [
+        { "text": "Динамо Мск" },
+        { "text": "СКА СПБ" },
+        { "text": "Трактор (Челябинск)" },
+        { "text": "Рубин (Краснодар)" },
+        { "text": "Спартак Мск" },
+        { "text": "Терек" },
+        { "text": "Цверна Звезда" }
+    ];
+    var countries = [
+        { "text" : "Россия" },
+        { "text" : "США" },
+        { "text" : "Канада" },
+        { "text" : "Германия" }
+    ];
+    this.getClubs = function (sport) {
+        //TODO: get clubs by selected sport in selected countries
+    };
+
+    this.loadCountries = function(query) {
+        var deferred = $q.defer();
+        deferred.resolve($filter('filter')(countries, { text: query}));
+        return deferred.promise;
+    };
+    this.loadClubs = function(query) {
+        var deferred = $q.defer();
+            deferred.resolve($filter('filter')(clubs, { text: query}));
+            return deferred.promise;
+    };
+}]);
 angular.module('Sportomatics')
 .controller('ClubListController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -1139,13 +1181,14 @@ angular.module('Sportomatics')
     this.search();
 }])
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ['$http', '$scope','$timeout','AmChartsFactory','ChartFactory','zoomData','LocaleFactory', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory) {
+.controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location) {
     //http://www.amcharts.com/lib/images/
+
     var self = this,
     url = $('#IndicatorsLink').attr('href');
     this.url = $('#IndicatorsLink').attr('href');
     this.indicatorsType = 'graph';
-    this.field = 'count';
+    this.field = $location.search()['field'] || 'count';
     this.fieldName = LocaleFactory.getFieldName(this.field);
     this.club = null;
     this.coach = null;
@@ -1169,6 +1212,7 @@ angular.module('Sportomatics')
     this.setField = function(field) {
         this.field = field;
         this.fieldName = LocaleFactory.getFieldName(field, self.locale);
+        $location.search('field='+field);
         this.list(true);
     };
 
@@ -1458,18 +1502,9 @@ function updatedChartData(chart, initialData, data, field){
         newGraph: graph
     };
 }
-var app = angular.module('Sportomatics');
-
-app.config(["$routeProvider", function($routeProvider) {
-    $routeProvider
-    .when('/rated_by/:ratedBy/', {
-        controller: 'PlayersSearchController'
-    });
-}]);
-
-app.controller('PlayersSearchController', [
-    '$route', '$http', '$scope', 'PlayersSearchService',
-    function($route, $http, $scope, PlayersSearchService) {
+angular.module('Sportomatics')
+.controller('PlayersSearchController', ['$http', '$scope', 'PlayersSearchService',
+    function($http, $scope, PlayersSearchService) {
     var self = this,
         getUnchecker = function(isDefault, defaultValue) {
             return function() {
@@ -1618,26 +1653,29 @@ angular.module('Sportomatics')
     };
 }])
 angular.module('Sportomatics')
-    .controller('RegistrationController', ['$http', '$scope','$templateCache', function($http, $scope, $templateCache) {
+    .controller('RegistrationController', ['$http', '$scope','$templateCache','$q','tags', function($http, $scope, $templateCache, $q, tags) {
         $scope.selectedType = 'regular';
         $scope.user = {};
         $scope.personal = {};
-        $scope.currentStep = 3;
-        $scope.currentStepTemplate = 'step3';
+        $scope.currentStep = 2;
+        $scope.currentStepTemplate = 'step2';
         $scope.subscribe = true;
         $scope.personalInfo = true;
+        $scope.preferencesInfo = true;
         $scope.selectedRegistrationType = 'social';
         $scope.preferencesSports = {
             'hockey': true,
             'football': false,
             'backetball': false
         };
-        $scope.countries = [
-            ['Россия', true],
-            ['США', false],
-            ['Канада', false],
-            ['Германия', false]
-        ];
+        $scope.tags = [];
+        $scope.countries = [];
+        $scope.loadTagsCountries = function (query) {
+            return tags.loadCountries(query);
+        };
+        $scope.loadTags = function(query) {
+            return tags.loadClubs(query);
+        };
         $scope.$watch('countries', function(newval, oldval){
             console.log(newval);
         }, true);
@@ -1650,9 +1688,10 @@ angular.module('Sportomatics')
         $scope.checkStep = function(){
             switch($scope.currentStep){
                 case 1:
-                return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+                    return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+
                 case 2:
-                return true;
+                    return true;
             }
             return false;
         };
