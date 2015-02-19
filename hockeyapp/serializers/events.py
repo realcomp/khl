@@ -28,7 +28,7 @@ class EventSerializer(serializers.Serializer):
             teams = [home_team, guest_team]
             if isinstance(event, GuestMatchEvent):
                 teams.reverse()
-            return '%s - %s' % teams
+            return '%s - %s' % tuple(teams)
 
     class Meta(object):
         fields = 'date', 'title', 'type', 'url', 'image', 'logo'
