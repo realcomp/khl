@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.utils.translation import ugettext_lazy as _
-
 from rest_framework import serializers
 
-from ..views.events import BirthdayEvent, MatchEvent
+from ..views.events import BirthdayEvent, MatchEvent, GuestMatchEvent
 
 
 class EventSerializer(serializers.Serializer):
     date = serializers.DateField()
     title = serializers.SerializerMethodField()
-    type = serializers.SerializerMethodField()
+    type = serializers.CharField()
     url = serializers.URLField()
     image = serializers.URLField()
+    logo = serializers.URLField()
 
     def get_title(self, event):
         request = self.context.get('request')
@@ -26,13 +25,10 @@ class EventSerializer(serializers.Serializer):
                 'title', request=request)
             guest_team = event.obj.guest_team.get_locale_attr(
                 'title', request=request)
-            return '%s - %s' % (home_team, guest_team)
-
-    def get_type(self, event):
-        if isinstance(event, BirthdayEvent):
-            return _('Birth day')
-        elif isinstance(event, MatchEvent):
-            return _('Match')
+            teams = [home_team, guest_team]
+            if isinstance(event, GuestMatchEvent):
+                teams.reverse()
+            return '{} - {}'.format(*teams)
 
     class Meta(object):
-        fields = 'date', 'title', 'type', 'url', 'image'
+        fields = 'date', 'title', 'type', 'url', 'image', 'logo'

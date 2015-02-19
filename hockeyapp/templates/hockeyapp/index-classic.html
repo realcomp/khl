@@ -160,9 +160,16 @@
             <div class="row">
                 {% for event in events %}
                     <div class="four wide column">
-                        <div class="event-block event-block_green">
+                        <div class="event-block event-block_green" style="text-align: center">
                             <a href="{{ event.url }}">
-                                <img src="{{ event.image }}" alt="" class="event-picture">
+                                {% if event.image %}
+                                    <img src="{{ event.image }}" alt="" class="event-picture">
+                                {% endif %}
+                                {% if event.logo %}
+                                    <div class="event-picture" style="text-align: center">
+                                        <img src="{{ event.logo }}" alt="">
+                                    </div>
+                                {% endif %}
                             </a>
                             <div class="event-info">
                                 <span class="event-more"><i class="align justify icon"></i></span>

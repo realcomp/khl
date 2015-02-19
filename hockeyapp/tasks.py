@@ -130,7 +130,7 @@ def async_hockey_player_update(id, parser_id):
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def async_temp_match_update(match_id):
     b'''
         Обновление инфо о матче в дб
@@ -161,7 +161,7 @@ def mhl_matches_update():
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def async_temp_stats_plr_update(id):
     b'''
         Обновление инфо о статистике игрока
@@ -195,7 +195,7 @@ def async_all_cmps_update():
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def add_season_for_all():
     try:
         def update_obj(obj):
@@ -248,7 +248,7 @@ def player_recalc_counters(ids):
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                             max_timestamp=None, max_id=None
 ):
@@ -271,7 +271,7 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                                         max_id=max_id)
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
         min_timestamp = min_timestamp
@@ -287,7 +287,7 @@ def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
                                                 min_timestamp, max_timestamp)
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def temp_update_schedules():
     '''
         1 - championship,
