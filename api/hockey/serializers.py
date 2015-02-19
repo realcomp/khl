@@ -16,6 +16,8 @@ class ClubMinimalSerialiser(drf.serializers.ModelSerializer):
 
 class ClubPhotoSerializer(drf.serializers.ModelSerializer):
     club = ClubMinimalSerialiser()
+    club_id = drf.serializers.PrimaryKeyRelatedField(read_only=False,
+                                    queryset=Club.objects.all())
     photo = IIFMinimalSerializer()
     class Meta:
         model = ClubPhotos
