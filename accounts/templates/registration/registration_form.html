@@ -4,7 +4,7 @@
 {% block content %}
     <script type="text/ng-template" id="step1">
             <div class="row registration-content-row">
-                <p>{% trans 'Fine! Just three easy steps, and you;re with us!' %}</p>
+                <p>{% trans "Fine! Just three easy steps, and you're with us!" %}</p>
             </div>
             <div class="row registration-content-row">
                 <p><span class="registration-step-label">ШАГ 1</span> <br>
@@ -65,7 +65,7 @@
     <script type="text/ng-template" id="step2">
         <div class="row registration-content-row">
             <p>
-                {% trans 'Let's get to know each other! ' %}
+                {% trans "Let's get to know each other! " %}
             </p>
         </div>
         <div class="row registration-content-row">
@@ -110,7 +110,7 @@
             <div class="row registration-content-row">
                 <div class="inline-block">
                     <input type="radio" ng-model="personalInfo" ng-value="false">
-                    {% trans 'I don't want to give any information about me' %}
+                    {% trans "I don't want to give any information about me" %}
                 </div>
             </div>
             <div class="row">
@@ -135,7 +135,7 @@
             <div class="row registration-content-row registration-preferences">
                 <div class="inline-block registration-preferences-sports vertical-top">
                     <div class="registration-preferences-sport bold">
-                        {% trans 'I'm interested in:' %}
+                        {% trans "I'm interested in:" %}
                     </div>
                     <div class="registration-preferences-sport">
                         <input class="vertical-middle" type="checkbox" ng-change="log()" ng-model="preferencesSports['hockey']">
@@ -183,7 +183,7 @@
             <div class="row registration-content-row">
                 <div class="inline-block">
                     <input type="radio" ng-model="preferencesInfo" ng-value="false">
-                    {% trans 'I don't have any preferences' %}
+                    {% trans "I don't have any preferences" %}
                 </div>
             </div>
             <div class="row">
