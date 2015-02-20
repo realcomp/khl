@@ -241,3 +241,28 @@ class TimelineSerializer(LangDepSerializer):
         fields = (
             'start_date', 'end_date', 'headline', 'text', 'tag', 'asset')
         model = Timeline
+
+
+class PlayerTimelineSerializer(AbstractManSerializer):
+    headline = serializers.SerializerMethodField()
+    text = serializers.SerializerMethodField()
+    asset = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    date = TimelineSerializer(many=True, source='timeline_set')
+
+    def get_headline(self, obj):
+        return 'HEADLINE'
+
+    def get_text(self, obj):
+        return 'TEXT'
+
+    def get_asset(self, obj):
+        return {
+            'media': '',
+            # 'thumbnail': '',
+        }
+
+    class Meta(object):
+        fields = (
+            'headline', 'text', 'asset', 'type', 'date')
+        model = Player

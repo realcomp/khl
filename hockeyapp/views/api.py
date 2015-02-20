@@ -23,7 +23,7 @@ from ..serializers import (
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, TimelineSerializer)
+    ClubTitlesSerializer, PlayerTimelineSerializer)
 
 
 class PlayersSearch(
@@ -142,32 +142,9 @@ class PlayerNamesSearch(generics.ListAPIView):
         return qs.order_by('%s_lastname' % self.request.LANGUAGE_CODE)
 
 
-class PlayerTimeline(generics.ListAPIView):
-    queryset = Timeline.objects.all()
-    serializer_class = TimelineSerializer
-
-    def filter_queryset(self, qs):
-        qs = super(PlayerTimeline, self).filter_queryset(qs)
-        return qs.filter(player_id=self.kwargs.get('pk', 0))
-
-    def list(self, request, *args, **kwargs):
-        instance = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(instance)
-        if page is not None:
-            serializer = self.get_pagination_serializer(page)
-        else:
-            serializer = self.get_serializer(instance, many=True)
-        return Response({
-            'timeline': {
-                'headline': 'HEADLINE',
-                'type': 'default',
-                'text': 'text',
-                'asset': {
-                    'media': '',
-                },
-                'date': serializer.data,
-            },
-        })
+class PlayerTimeline(generics.RetrieveAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerTimelineSerializer
 
 
 class LeagueList(generics.ListAPIView):
