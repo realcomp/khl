@@ -41,6 +41,17 @@
                                 <div class="ui icon input">
                                     Сейчас: <a href="{{PhotoPopup.club.get_absolute_url}}" id="photo_club" >{{PhotoPopup.club.ru_title}}</a><br/>
                                 </div>
+{% endverbatim %}
+                                <br/>
+                                <div class="ui icon input">
+                                    <label>Название команды:
+                                    <angucomplete id="clubs_filter"
+                                                      pause="300" minlength="2"
+                                                      selectedobject="selectedClub" 
+                                                      url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                                    </label>
+                                </div>
+{% verbatim %}
                                 <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
                                 <div class="ui icon input">
                                     <label>Номера игроков:</label>
