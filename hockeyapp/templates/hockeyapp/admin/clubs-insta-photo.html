@@ -50,11 +50,13 @@
                                 </div>
 {% verbatim %}
                                 <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}">
-                                <div class="ui icon input" ng-if="PhotoPopup.data.photo.user_str"><br/>
+                                <br/>
+                                <div class="ui icon input" ng-if="PhotoPopup.data.photo.user_str">
                                     <label>{{PhotoPopup.data.photo.user_str}}:</label>
                                     <input id="id_cp_comment" name="cp_comment" type="text" value="{{PhotoPopup.data.comment}}">
                                 </div>
-                                <div ng-if="PhotoPopup.matches.length"><br/>
+                                <br/>
+                                <div ng-if="PhotoPopup.matches.length">
                                     <label>Матчи:</label>
                                     <div ng-repeat="match in PhotoPopup.matches">
                                         <input id="id_cp_match_{{match.id}}" name="cp_match" type="radio" value="{{match.id}}">{{match.title}}
