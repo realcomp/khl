@@ -31,23 +31,15 @@
                         <hr class="hr">
                         <div class="team-controls team-control-btn ui blue button" ng-click="nextPage()" id="nextpagebutton">ЗАГРУЗИТЬ ЕЩЕ</div>
 
-                    <div class="player-partners-popup popup" style="min-width:1024px;">
+                    <div class="player-partners-popup popup" style="min-width:1100px;">
                         <a href="#" class="close-popup-btn">×</a>
                         <div ng-show="PhotoPopup">
                             <div style="width:640px;display: inline-block;">
                                 <img alt="" class="item-photo" ng-src="{{ PhotoPopup.data.photo.img.file }}">
                             </div>
                             <div style="display:inline-block;float:right;">
-                                <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}">
-                                <div>
-                                    <a class="ui green button"  ng-click="procCPPopup(PhotoPopup.data.id, PhotoPopup.index)">ДОБАВИТЬ</a>
-                                </div>
-                                <div>
-                                    <a class="ui orange button" ng-click="delCPPopup(PhotoPopup.data.id, PhotoPopup.index)">УДАЛИТЬ</a><br/>
-                                    <input id="id_delete_photopopup_{{PhotoPopup.data.id}}" name="delete_photopopup" type="checkbox" ng-model="deletePhotopopup">я понимаю, что удалю фото насовсем
-                                </div>
                                 <div class="ui icon input">
-                                    Сейчас: <a href="{{PhotoPopup.data.club.get_absolute_url}}" >{{PhotoPopup.data.club.ru_title}}</a><br/>
+                                    Сейчас: <a href="{{PhotoPopup.club.get_absolute_url}}" >{{PhotoPopup.club.ru_title}}</a><br/>
 {% endverbatim %}
                                     <label>Название команды:
                                     <angucomplete id="clubs_filter"
@@ -56,6 +48,24 @@
                                                       url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
                                     </label>
                                 </div>
+{% verbatim %}
+                                <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}">
+                                <div>
+                                    <label>Комментарий:</label>
+                                    <input id="id_cp_comment" name="cp_comment" type="text" value="{{PhotoPopup.data.comment}}">
+                                </div>
+                                <div ng-repeat="match in PhotoPopup.matches">
+                                    <label>Матчи:</label>
+                                    <input id="id_cp_match_{{match.id}}" name="cp_match" type="radio" value="{{match.id}}">{{match.title}}
+                                </div>
+                                <div>
+                                    <a class="ui green button"  ng-click="procCPPopup(PhotoPopup.data.id, PhotoPopup.index)">ДОБАВИТЬ</a>
+                                </div>
+                                <div>
+                                    <a class="ui orange button" ng-click="delCPPopup(PhotoPopup.data.id, PhotoPopup.index)">УДАЛИТЬ</a><br/>
+                                    <input id="id_delete_photopopup_{{PhotoPopup.data.id}}" name="delete_photopopup" type="checkbox" ng-model="deletePhotopopup">я понимаю, что удалю фото насовсем
+                                </div>
+{% endverbatim %}
                             </div>
                         </div>
                     </div>
@@ -90,7 +100,7 @@
       $resourceProvider.defaults.stripTrailingSlashes = false;
     }]);
     services.factory('ClubPhoto', function($resource){
-        return $resource("{% url 'api:hockey:clubphotos' %}"+":id", {}, {
+        return $resource("{% url 'api:hockey:clubphotos' %}"+":id/", {}, {
             query: {method:'GET', params:{id:null}},
             get: { method: 'GET'},
             update: { method: 'PATCH'},
@@ -98,12 +108,25 @@
         });
     });
 
+    services.factory('Club', function($resource){
+        return $resource("{% url 'api:hockey:club_list' %}"+":id/", {}, {
+            get: { method: 'GET'},
+        });
+    });
+
+    services.factory('Match', function($resource){
+        return $resource("{% url 'api:hockey:match_list' %}"+":id/", {}, {
+            query: {method:'GET', params:{id:null}, isArray:true},
+        });
+    });
+
     var app = angular.module('SportomaticsAdminClubPhotos', ['CLubPhotoServices', 'angucomplete']);
-    app.config(['$httpProvider', function($httpProvider) {
+    app.config(['$httpProvider', '$resourceProvider', function($httpProvider, $resourceProvider) {
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $resourceProvider.defaults.stripTrailingSlashes = false;
     }]);
-    app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', function($scope, ClubPhoto) {
+    app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', 'Club', 'Match', function($scope, ClubPhoto, Club, Match) {
         $scope.next_page = 1;
         $scope.clubphoto = null;
         $scope.deletePhotopopup = false;
@@ -172,7 +195,11 @@
         };
 
         $scope.PhotoPopupShow = function(id, index, event) {
-            $scope.PhotoPopup.data = ClubPhoto.get({id:id});
+            $scope.PhotoPopup.data = ClubPhoto.get({id:id}, function(photo) {
+                $scope.PhotoPopup.club = Club.get({id:photo.club});
+                var params = {date:photo.photo.created, club:photo.club}
+                $scope.PhotoPopup.matches = Match.query(params);
+            });
             $scope.PhotoPopup.index = index;
             $('.player-partners-popup:hidden').show(500);
         };
@@ -189,8 +216,13 @@
             var data = {processed:true};
             var new_club = $('input[name="cp_club"]').val();
             if(new_club) {
-                data['club_id'] = parseInt(new_club);
+                data['club'] = parseInt(new_club);
             };
+            var match = $('input[name="cp_match"]:checked').val();
+            if(match) {
+                data['match'] = parseInt(match);
+            };
+            data['comment'] = $('input[name="cp_comment"]').val();
             ClubPhoto.update({id:id}, data);
             $scope.photos.splice(index, 1);
             $scope.deletePhotopopup = false;

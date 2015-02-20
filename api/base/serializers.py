@@ -19,4 +19,4 @@ class IIFMinimalSerializer(drf.serializers.ModelSerializer):
     img = FIFSerialiser()
     class Meta:
         model = InstagramImageFile
-        fields = 'id', 'img'
+        fields = 'id', 'img', 'created'

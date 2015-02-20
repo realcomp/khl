@@ -427,11 +427,20 @@ class AddressClubPhotos(models.Model):
 class ClubPhotos(models.Model):
     club = models.ForeignKey(Club, verbose_name=Club._meta.verbose_name)
     photo = models.ForeignKey(InstagramImageFile)
+    match = models.ForeignKey('hockeyapp.Match', null=True, blank=True,
+                                on_delete=models.SET_NULL,)
+    player_numbers = models.CharField(max_length=1024, blank=True)
+    comment = models.CharField(_('Comment'), max_length=1024, blank=True)
     processed = models.BooleanField(default=False)
     proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,)    
     class Meta:
         verbose_name=_('Club instagram photo')
         verbose_name_plural=_('Club instagram photos')
+
+    def save(self, **kwargs):
+        if self.photo.comment and not self.comment:
+            self.comment = self.photo.comment
+        super(ClubPhotos, self).save(**kwargs)
 
 
 class LeagueClub(AdminLinkMixin, models.Model):
