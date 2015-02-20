@@ -92,6 +92,7 @@ class InstagramImageFile(models.Model):
     img = FilerImageField(verbose_name=_('Photo'))
     created = models.DateTimeField(_('Created date'), null=True, blank=True,)
     comment = models.CharField(_('Comment'), max_length=1024, blank=True)
+    user_str = models.CharField(_('Instagram user'), max_length=1024, blank=True)
     class Meta:
         verbose_name = _('Instagram image file')
         verbose_name_plural = _('Instagram image files')

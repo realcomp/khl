@@ -76,11 +76,13 @@ class IIFQuerySet(GetFilerImage, models.QuerySet):
         if filer_image:
             _dt = timezone.make_aware(iif_obj.created_time, current_tz)
             _cmnt = iif_obj.comments[0].text if iif_obj.comments else ''
+            _usr = iif_obj.comments[0].user.full_name if iif_obj.comments else ''
             data = dict(instagram_id=iif_obj.id,
                         link=iif_obj.link,
                         data=iif_obj,
                         created=_dt,
                         comment=_cmnt,
+                        user_str=_usr,
                         img=filer_image)
             iif, _crt = self.get_or_create(**data)
             return iif
