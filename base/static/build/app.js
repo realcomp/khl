@@ -1181,7 +1181,7 @@ angular.module('Sportomatics')
     this.search();
 }])
 angular.module('Sportomatics')
-.controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location) {
+.controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", "$q", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {
     //http://www.amcharts.com/lib/images/
 
     var self = this,
@@ -1190,8 +1190,8 @@ angular.module('Sportomatics')
     this.indicatorsType = 'graph';
     this.field = $location.search()['field'] || 'count';
     this.fieldName = LocaleFactory.getFieldName(this.field);
-    this.club = null;
-    this.coach = null;
+    this.club = parseInt($location.search()['club']) || null;
+    this.coach = parseInt($location.search()['coach']) || null;
     this.groupBy = 'season';
     this.data = [];
     this.graphData = {};
@@ -1212,19 +1212,20 @@ angular.module('Sportomatics')
     this.setField = function(field) {
         this.field = field;
         this.fieldName = LocaleFactory.getFieldName(field, self.locale);
-        $location.search('field='+field);
+        $location.search('field', field);
         this.list(true);
     };
 
     this.setClub = function(club) {
         this.club = club;
-        $scope.getClubData();
+        $location.search('club', club);
+        $scope.getClubData(true);
     };
 
     this.setCoach = function(coach) {
         this.coach = coach;
-        console.log(coach);
-        $scope.getCoachData();
+        $location.search('coach', coach);
+        $scope.getCoachData(true);
     };
     this.setGraphResults = function(results) {
 
@@ -1349,12 +1350,6 @@ angular.module('Sportomatics')
     $scope.getPlayerData = function(){
         var group = 'month';
         var params = 'group_by=' + group;
-        if (self.club !== null) {
-            params += '&club=' + self.club;
-        }
-        if (self.coach !== null) {
-            params += '&coach=' + self.coach;
-        }
         self.loader = true;
         $http.get(url + '?' + params)
             .success(function(data, status, headers) {
@@ -1364,12 +1359,6 @@ angular.module('Sportomatics')
                 $scope.dataByMonth = data;
                 group = 'season';
                 params = 'group_by=' + group;
-                if (self.club !== null) {
-                    params += '&club=' + self.club;
-                }
-                if (self.coach !== null) {
-                    params += '&coach=' + self.coach;
-                }
                 $http.get(url + '?' + params)
                     .success(function(data, status, headers) {
                         $scope.dataBySeason = data;
@@ -1382,34 +1371,36 @@ angular.module('Sportomatics')
                     })
             })
     };
-        $scope.getCoachData = function(){
-            var group = 'season';
-            var params = 'group_by=' + group;
-            if (self.coach !== null) {
-                params += '&coach=' + self.coach;
-            }
+    $scope.getCoachData = function(){
+        var group = 'season';
+        var params = 'group_by=' + group;
+        if (self.coach !== null) {
+            params += '&coach=' + self.coach;
             $http.get(url + '?' + params)
                 .success(function(data, status, headers) {
                     $scope.coachData = data;
                 }).then(function(){
                     self.list();
                 })
-        };
-        $scope.getClubData = function(){
-            var group = 'season';
-            var params = 'group_by=' + group;
-            if (self.club !== null) {
-                params += '&club=' + self.club;
-            }
+        }
+    };
+    $scope.getClubData = function(toList){
+        var group = 'season';
+        var params = 'group_by=' + group;
+        if (self.club !== null) {
+            params += '&club=' + self.club;
             $http.get(url + '?' + params)
                 .success(function(data, status, headers) {
                     $scope.clubData = data;
                 }).then(function(){
-                    self.list();
+                    if(toList) self.list();
                 })
-        };
+        }
+    };
 
     $scope.getPlayerData();
+    $scope.getCoachData(true);
+    $scope.getClubData(true);
 
 }])
 .factory('AmChartsFactory', ["$q", "$rootScope", "$document", function ($q, $rootScope, $document) {
