@@ -9,8 +9,9 @@ import requests
 from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
-
 from django.db import models
+from django.utils import timezone
+current_tz = timezone.get_current_timezone()
 
 import filer
 
@@ -73,9 +74,13 @@ class IIFQuerySet(GetFilerImage, models.QuerySet):
                                         folder_name,
         )
         if filer_image:
+            _dt = timezone.make_aware(iif_obj.created_time, current_tz)
+            _cmnt = iif_obj.comments[0].text if iif_obj.comments else ''
             data = dict(instagram_id=iif_obj.id,
                         link=iif_obj.link,
                         data=iif_obj,
+                        created=_dt,
+                        comment=_cmnt,
                         img=filer_image)
             iif, _crt = self.get_or_create(**data)
             return iif

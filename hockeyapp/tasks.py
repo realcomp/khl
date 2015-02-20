@@ -248,7 +248,7 @@ def player_recalc_counters(ids):
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
-#@app.task(ignore_result=True, track_started=True)
+@app.task(ignore_result=True, track_started=True)
 def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                             max_timestamp=None, max_id=None
 ):
@@ -271,7 +271,7 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                                         max_id=max_id)
 
 
-#@app.task(ignore_result=True, track_started=True)
+@app.task(ignore_result=True, track_started=True)
 def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
         min_timestamp = min_timestamp
