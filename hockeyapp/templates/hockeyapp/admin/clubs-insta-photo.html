@@ -49,14 +49,16 @@
                                     </label>
                                 </div>
 {% verbatim %}
-                                <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
-                                <div class="ui icon input">
+                                <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}">
+                                <div class="ui icon input" ng-if="PhotoPopup.data.photo.user_str"><br/>
                                     <label>{{PhotoPopup.data.photo.user_str}}:</label>
                                     <input id="id_cp_comment" name="cp_comment" type="text" value="{{PhotoPopup.data.comment}}">
-                                </div><br/>
-                                <label>Матчи:</label>
-                                <div ng-repeat="match in PhotoPopup.matches">
-                                    <input id="id_cp_match_{{match.id}}" name="cp_match" type="radio" value="{{match.id}}">{{match.title}}
+                                </div>
+                                <div ng-if="PhotoPopup.matches.length"><br/>
+                                    <label>Матчи:</label>
+                                    <div ng-repeat="match in PhotoPopup.matches">
+                                        <input id="id_cp_match_{{match.id}}" name="cp_match" type="radio" value="{{match.id}}">{{match.title}}
+                                    </div>
                                 </div>
                                 <div>
                                     <a class="ui green button"  ng-click="procCPPopup(PhotoPopup.data.id, PhotoPopup.index)">ДОБАВИТЬ</a>
