@@ -1649,6 +1649,7 @@ angular.module('Sportomatics')
         $scope.user = {};
         $scope.personal = {};
         $scope.rememberPasswordData = {};
+        $scope.preferences = {};
         $scope.currentStep = 1;
         $scope.currentStepTemplate = 'step1';
         $scope.subscribe = true;
@@ -1659,7 +1660,7 @@ angular.module('Sportomatics')
         $scope.preferencesSports = {
             'hockey': true,
             'football': false,
-            'backetball': false
+            'basketball': false
         };
         $scope.tags = [];
         $scope.countries = [];
@@ -1698,14 +1699,42 @@ angular.module('Sportomatics')
             $scope.passwordsMatch = false;
             return false;
         };
+        $scope.saveStep = function(){
+            switch($scope.currentStep){
+                case 1:
+                    if($scope.personalInfo){
+                        var userToLocalStorage;
+                        angular.copy($scope.user, userToLocalStorage);
+                        userToLocalStorage.password = undefined;
+                        userToLocalStorage.password2 = undefined;
+                        localStorage.setItem('sportomatics_registrationUserInfo', JSON.stringify(userToLocalStorage));
+                    }
+                    break;
+                case 2:
+                    if($scope.personalInfo){
+                        localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
+                    }
+                    break;
+                case 3:
+                    if($scope.e()){
+
+                    }
+                    break;
+            }
+        };
         $scope.nextStep = function(){
             if($scope.checkStep()) {
                 $scope.currentStep += 1;
                 $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                $scope.saveStep();
             }
             else alert('Введите все данные');
+        };
+        $scope.prevStep = function(){
+            $scope.currentStep -= 1;
+            $scope.currentStepTemplate = 'step'+ $scope.currentStep;
         }
-    }])
+    }]);
         function validateEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);

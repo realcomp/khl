@@ -7,7 +7,7 @@
                 <p>{% trans "Fine! Just three easy steps, and you're with us!" %}</p>
             </div>
             <div class="row registration-content-row">
-                <p><span class="registration-step-label">ШАГ 1</span> <br>
+                <p><span class="registration-step-label">{% trans 'STEP 1' %}</span> <br>
                     {% trans 'All fields are required' %}</p>
             </div>
             <div class="row registration-content-row">
@@ -69,7 +69,7 @@
             </p>
         </div>
         <div class="row registration-content-row">
-            <p><span class="registration-step-label">ШАГ 2</span></p>
+            <p><span class="registration-step-label">{% trans 'STEP 2' %}</span></p>
         </div>
         <div class="row registration-content-row">
             <div class="row registration-content-row">
@@ -94,10 +94,27 @@
                 <div class="registration-label inline-block vertical-top">
                     {% trans 'Profile photo:' %}
                 </div>
-                <div class="registration-input inline-block">
-                    <div class="registration-personal-photo"></div>
-                    <input type="file" ng-model="personal.photo">
+                <div class="registration-input-photo inline-block">
+                    <div class="registration-personal-photo">
+                        <img src="{{STATIC_URL}}images/avatar-sample.png">
+                    </div>
+                    <input type="file" class="file-input" name="avatar" id="avatar">
+                    <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
+                    <div class="avatar-upload-desc">Формат фото: jpg, jpeg, png</div>
                 </div>
+                <!--<div class="avatar-upload-block">
+                            <img alt="sample avatar" class="avatar-image" id="id_avatar"
+                                 src="/static/images/avatar-sample.png"
+                                 {% verbatim %}
+                                 ng-src="{{ ProfileCtrl.user.avatar }}">
+                                 {% endverbatim%}
+                            <div class="avatar-upload-controls">
+                                <input type="file" class="file-input" name="avatar" id="avatar"
+                                       onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
+                                <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
+                                <div class="avatar-upload-desc">Формат фото: jpg, jpeg, png</div>
+                            </div>
+                        </div>-->
             </div>
             <div class="row registration-content-row">
                 <div class="registration-label inline-block">
@@ -114,6 +131,7 @@
                 </div>
             </div>
             <div class="row">
+                <button type="button" class="small ui green button registration-next" ng-click="prevStep()">{% trans 'PREV' %}</button>
                 <button type="button" class="small ui green button registration-next" ng-click="nextStep()">{% trans 'Next' %}</button>
             </div>
         </div>
@@ -123,7 +141,7 @@
             <p>{% trans 'Customize the website!' %}</p>
         </div>
         <div class="row registration-content-row">
-            <p><span class="registration-step-label">ШАГ 3</span></p>
+            <p><span class="registration-step-label">{% trans 'STEP 3' %}</span></p>
         </div>
         <div class="row registration-content-row">
             <div class="row registration-content-row">
@@ -146,7 +164,7 @@
                         <div class="vertical-middle inline-block">{% trans 'Football' %}</div>
                     </div>
                     <div class="registration-preferences-sport">
-                        <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['backetball']">
+                        <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['basketball']">
                         <div class="vertical-middle inline-block">{% trans 'Basketball' %}</div>
                     </div>
                 </div>
@@ -159,7 +177,7 @@
                         <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
                     </div>-->
                     <div class="inline-block">
-                        <tags-input ng-model="countries" placeholder="начните писать название" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
+                        <tags-input ng-model="countries" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
                             <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTagsCountries($query)"></auto-complete>
                         </tags-input>
                     </div>
@@ -173,7 +191,7 @@
                             {% trans 'Hockey' %}
                         </div>
                         <div class="inline-block m-l-20">
-                            <tags-input ng-model="tags" placeholder="начните писать название" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:450px !important;">
+                            <tags-input ng-model="tags" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:450px !important;">
                                 <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTags($query)"></auto-complete>
                             </tags-input>
                         </div>
@@ -187,6 +205,7 @@
                 </div>
             </div>
             <div class="row">
+                <button type="button" class="small ui green button registration-next" ng-click="prevStep()">{% trans 'PREV' %}</button>
                 <button type="button" class="small ui green button registration-next" ng-click="endRegistration()">{% trans 'END' %}</button>
             </div>
         </div>
@@ -241,7 +260,7 @@
                         <div class="column">
                             <div class="ui tabular menu content-tabs">
                                 <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-                                    <li class="ui-state-default ui-corner-top"
+                                    <li class="ui-state-default ui-corner-top m-l-20"
                                         ng-class="{ 'ui-tabs-active ui-state-active': selectedType === 'social' }">
 
                                         <a class="item tab-btn ui-tabs-anchor" href="" ng-click="selectedType = 'social'">
