@@ -9,7 +9,7 @@ import rest_framework as drf
 
 from api.base.permissions import SportoAdminPermission
 from api.base.paginators import AltPaginationSerializer
-from hockeyapp.models import ClubPhotos, Club, Match
+from hockeyapp.models import ClubPhotos, Club, Match, ArenaPhotos
 
 from . import serializers
 
@@ -64,3 +64,10 @@ class MatchList(drf.generics.ListAPIView):
                 Q(date__lte=date+datetime.timedelta(days=1))
         return qs.filter(q)
 match_list = MatchList.as_view()
+
+
+class ArenaPhotoList(drf.generics.ListCreateAPIView):
+    queryset = ArenaPhotos.objects.all()
+    serializer_class = serializers.ArenaPhotoSerializer
+    permission_classes = (SportoAdminPermission,)
+arenaphoto_list = ArenaPhotoList.as_view()

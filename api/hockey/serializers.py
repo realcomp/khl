@@ -4,13 +4,13 @@ from __future__ import unicode_literals
 import rest_framework as drf
 
 from api.base.serializers import IIFMinimalSerializer
-from hockeyapp.models import ClubPhotos, Club, Match
+from hockeyapp.models import ClubPhotos, Club, Match, ArenaPhotos
 
 
 class ClubMinimalSerialiser(drf.serializers.ModelSerializer):
     class Meta:
         model = Club
-        fields = 'id', 'ru_title', 'get_absolute_url'
+        fields = 'id', 'ru_title', 'get_absolute_url', 'arena'
         read_only_fields = fields
 
 
@@ -22,8 +22,14 @@ class ClubPhotoSerializer(drf.serializers.ModelSerializer):
 
 
 class MatchMinimalSerialiser(drf.serializers.ModelSerializer):
-    title = drf.serializers.ReadOnlyField(source='__unicode__')
+    home_team = ClubMinimalSerialiser()
+    guest_team = ClubMinimalSerialiser()
     class Meta:
         model = Match
-        fields = 'id', 'title'
+        fields = 'id', 'home_team', 'guest_team', 'count', 'date'
         read_only_fields = fields
+
+
+class ArenaPhotoSerializer(drf.serializers.ModelSerializer):
+    class Meta:
+        model = ArenaPhotos

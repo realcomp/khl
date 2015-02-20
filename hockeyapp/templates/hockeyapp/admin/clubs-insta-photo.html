@@ -39,16 +39,8 @@
                             </div>
                             <div style="display:inline-block;float:right;">
                                 <div class="ui icon input">
-                                    Сейчас: <a href="{{PhotoPopup.club.get_absolute_url}}" >{{PhotoPopup.club.ru_title}}</a><br/>
-{% endverbatim %}
-                                    <label>Название команды:
-                                    <angucomplete id="clubs_filter"
-                                                      pause="300" minlength="2"
-                                                      selectedobject="selectedClub" 
-                                                      url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
-                                    </label>
+                                    Сейчас: <a href="{{PhotoPopup.club.get_absolute_url}}" id="photo_club" >{{PhotoPopup.club.ru_title}}</a><br/>
                                 </div>
-{% verbatim %}
                                 <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
                                 <div class="ui icon input">
                                     <label>Номера игроков:</label>
@@ -61,10 +53,14 @@
                                 </div>
                                 <br/>
                                 <div ng-if="PhotoPopup.matches.length">
-                                    <label>Матчи:</label>
-                                    <div ng-repeat="match in PhotoPopup.matches">
-                                        <input id="id_cp_match_{{match.id}}" name="cp_match" type="radio" value="{{match.id}}">{{match.title}}
-                                    </div>
+                                    <p>Матчи:</p>
+                                    <ul ng-repeat="match in PhotoPopup.matches">
+                                        <li><a href="#" ng-click="setTeam(match.home_team)">{{match.home_team.ru_title}}</a>&nbsp;{{match.count}} <a href="#" ng-click="setTeam(match.guest_team)">{{match.guest_team.ru_title}}</a>&nbsp;({{match.date}})</li>
+                                    </ul>
+                                </div>
+
+                                <div id="arena_{{PhotoPopup.data.id}}">
+                                    <a class="ui blue button" ng-click="createArenaPhoto(PhotoPopup.data.photo.id, PhotoPopup.club.arena)">ФОТО АРЕНЫ</a>
                                 </div>
 
                                 <div>
@@ -129,13 +125,19 @@
         });
     });
 
+    services.factory('ArenaPhoto', function($resource){
+        return $resource("{% url 'api:hockey:arenaphoto_list' %}"+":id/", {}, {
+            create: {method:'POST', params:{id:null}},
+        });
+    });
+
     var app = angular.module('SportomaticsAdminClubPhotos', ['CLubPhotoServices', 'angucomplete']);
     app.config(['$httpProvider', '$resourceProvider', function($httpProvider, $resourceProvider) {
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
         $resourceProvider.defaults.stripTrailingSlashes = false;
     }]);
-    app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', 'Club', 'Match', function($scope, ClubPhoto, Club, Match) {
+    app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', 'Club', 'Match', 'ArenaPhoto', function($scope, ClubPhoto, Club, Match, ArenaPhoto) {
         $scope.next_page = 1;
         $scope.clubphoto = null;
         $scope.deletePhotopopup = false;
@@ -227,10 +229,6 @@
             if(new_club) {
                 data['club'] = parseInt(new_club);
             };
-            var match = $('input[name="cp_match"]:checked').val();
-            if(match) {
-                data['match'] = parseInt(match);
-            };
             data['comment'] = $('input[name="cp_comment"]').val();
             data['player_numbers'] = $('input[name="cp_player_numbers"]').val();
             ClubPhoto.update({id:id}, data);
@@ -238,6 +236,19 @@
             $scope.deletePhotopopup = false;
             $('.player-partners-popup').hide(300);  
         };
+
+        $scope.createArenaPhoto = function(photo_id, arena_id) {
+            ArenaPhoto.create({arena:arena_id, photo:photo_id}, function(photo) {
+                $('#arena_'+$scope.PhotoPopup.data.id).hide();
+            });
+        };
+
+        $scope.setTeam = function(team) {
+            $('#photo_club').attr('href', team.get_absolute_url);
+            $('#photo_club').text(team.ru_title);
+            $('#id_cp_club').val(team.id);
+        };
+
     }]);
 })();
 </script>

@@ -35,6 +35,7 @@ INSTALLED_APPS = (
 
     #'django_atomic_signals',
     #'django_atomic_celery',
+    #'debug_toolbar',
 
     'daterange_filter',
     'django_select2',
