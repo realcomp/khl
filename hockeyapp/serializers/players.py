@@ -11,7 +11,7 @@ from . import (
     SeasonSerializer, BaseClubSerializer,
     CoachSerializer, CountrySerializer, ClubPlayerSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, Timeline)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -210,3 +210,34 @@ class ClubTitlesSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
         model = Club
+
+
+class TimelineSerializer(LangDepSerializer):
+    startDate = serializers.SerializerMethodField()
+    endDate = serializers.SerializerMethodField()
+    headline = serializers.SerializerMethodField()
+    text = serializers.SerializerMethodField()
+    asset = serializers.SerializerMethodField()
+
+    get_headline = lambda self, obj: self._get_field(obj, 'headline')
+    get_text = lambda self, obj: self._get_field(obj, 'text')
+
+    def _get_date(self, date):
+        return '%d,%d,%d' % (date.year, obj.month, obj.day)
+
+    def get_startDate(self, obj):
+        return self._get_date(obj.start_date)
+
+    def get_endDate(self, obj):
+        return self._get_date(obj.end_date)
+
+    def get_asset(self, obj):
+        return {
+            'media': obj.media,
+            # 'thumbnail': obj.media.thumbnail,
+        }
+
+    class Meta(object):
+        fields = (
+            'start_date', 'end_date', 'headline', 'text', 'tag', 'asset')
+        model = Timeline
