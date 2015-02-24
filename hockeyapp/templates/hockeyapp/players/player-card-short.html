@@ -1,6 +1,25 @@
 {% extends "hockeyapp/players/base.html" %}
 {% load i18n %}
 
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="http://cdn.knightlab.com/libs/timeline/latest/css/timeline.css">
+    <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/timeline.js"></script>
+    <!-- <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/timeline-min.js"></script> -->
+    <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/storyjs-embed.js"></script>
+    <script>
+        $(document).ready(function() {
+            createStoryJS({
+                type: 'timeline',
+                width: '900',
+                height: '600',
+                source: '{% url 'hockeyapp:player-timeline-api' pk %}',
+                embed_id: 'player-timeline'
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 <section class="content">
     <div class="container player-card-short-page">
@@ -272,45 +291,47 @@
                     <div class="row">
                         <div class="column">
                             <div class="news-title heading">События из жизни</div>
-                            <div class="player-news-slider">
-                                <div class="slides_container">
-                                    <div>
-                                        <div class="slide">
-                                            <div class="news-image">
-                                                <img src="{{ STATIC_URL }}images/player-news-slider-pic.png" alt="" class="news-image-pic">
-                                            </div>
-                                            <div class="news-desc">
-                                                <div class="news-date">1 августа 2003</div>
-                                                <div class="news-title">Приглашение в сборную России</div>
-                                                <div class="news-description">Вместе с рядом других игроков Илья был приглашен принять участие в тренировочном сборе в белорусском Пинске.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="slide">
-                                            <div class="news-image">
-                                                <img src="{{ STATIC_URL }}images/player-news-slider-pic.png" alt="" class="news-image-pic">
-                                            </div>
-                                            <div class="news-desc">
-                                                <div class="news-date">12 августа 2003</div>
-                                                <div class="news-title">Новость 2</div>
-                                                <div class="news-description">Вместе с рядом других игроков Илья был приглашен принять участие в тренировочном сборе в белорусском Пинске.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href="#" class="prev"><i class="arrow left icon"></i></a>
-                                <a href="#" class="next"><i class="arrow right icon"></i></a>
-                            </div>
+                            <div id="player-timeline"></div>
+
+                            <!-- <div class="player-news-slider"> -->
+                            <!--     <div class="slides_container"> -->
+                            <!--         <div> -->
+                            <!--             <div class="slide"> -->
+                            <!--                 <div class="news-image"> -->
+                            <!--                     <img src="{{ STATIC_URL }}images/player-news-slider-pic.png" alt="" class="news-image-pic"> -->
+                            <!--                 </div> -->
+                            <!--                 <div class="news-desc"> -->
+                            <!--                     <div class="news-date">1 августа 2003</div> -->
+                            <!--                     <div class="news-title">Приглашение в сборную России</div> -->
+                            <!--                     <div class="news-description">Вместе с рядом других игроков Илья был приглашен принять участие в тренировочном сборе в белорусском Пинске.</div> -->
+                            <!--                 </div> -->
+                            <!--             </div> -->
+                            <!--         </div> -->
+                            <!--         <div> -->
+                            <!--             <div class="slide"> -->
+                            <!--                 <div class="news-image"> -->
+                            <!--                     <img src="{{ STATIC_URL }}images/player-news-slider-pic.png" alt="" class="news-image-pic"> -->
+                            <!--                 </div> -->
+                            <!--                 <div class="news-desc"> -->
+                            <!--                     <div class="news-date">12 августа 2003</div> -->
+                            <!--                     <div class="news-title">Новость 2</div> -->
+                            <!--                     <div class="news-description">Вместе с рядом других игроков Илья был приглашен принять участие в тренировочном сборе в белорусском Пинске.</div> -->
+                            <!--                 </div> -->
+                            <!--             </div> -->
+                            <!--         </div> -->
+                            <!--     </div> -->
+                            <!--     <a href="#" class="prev"><i class="arrow left icon"></i></a> -->
+                            <!--     <a href="#" class="next"><i class="arrow right icon"></i></a> -->
+                            <!-- </div> -->
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="column">
-                            <div class="align-center">
-                                <img src="{{ STATIC_URL }}images/player-card-short-graph.png" alt="">
-                            </div>
-                        </div>
-                    </div>
+                    <!-- <div class="row"> -->
+                    <!--     <div class="column"> -->
+                    <!--         <div class="align-center"> -->
+                    <!--             <img src="{{ STATIC_URL }}images/player-card-short-graph.png" alt=""> -->
+                    <!--         </div> -->
+                    <!--     </div> -->
+                    <!-- </div> -->
                 </div>
                 <ul class="team-controls player-controls-block">
                     <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>

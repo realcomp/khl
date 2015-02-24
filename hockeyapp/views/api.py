@@ -146,6 +146,11 @@ class PlayerTimeline(generics.RetrieveAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerTimelineSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return response.Response({'timeline': serializer.data})
+
 
 class LeagueList(generics.ListAPIView):
     serializer_class = CountryLeaguesSerializer

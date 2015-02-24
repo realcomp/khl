@@ -7,6 +7,7 @@ from django.db.models import Avg, Sum
 from rest_framework import serializers
 
 from . import (
+    LangDepSerializer,
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
     SeasonSerializer, BaseClubSerializer,
     CoachSerializer, CountrySerializer, ClubPlayerSerializer)
@@ -223,7 +224,8 @@ class TimelineSerializer(LangDepSerializer):
     get_text = lambda self, obj: self._get_field(obj, 'text')
 
     def _get_date(self, date):
-        return '%d,%d,%d' % (date.year, obj.month, obj.day)
+        if date:
+            return '%d,%d,%d' % (date.year, date.month, date.day)
 
     def get_startDate(self, obj):
         return self._get_date(obj.start_date)
@@ -233,13 +235,13 @@ class TimelineSerializer(LangDepSerializer):
 
     def get_asset(self, obj):
         return {
-            'media': obj.media,
-            # 'thumbnail': obj.media.thumbnail,
+            'media': obj.media.url,
+            'thumbnail': obj.media.url,
         }
 
     class Meta(object):
         fields = (
-            'start_date', 'end_date', 'headline', 'text', 'tag', 'asset')
+            'startDate', 'endDate', 'headline', 'text', 'tag', 'asset')
         model = Timeline
 
 
@@ -251,16 +253,20 @@ class PlayerTimelineSerializer(AbstractManSerializer):
     date = TimelineSerializer(many=True, source='timeline_set')
 
     def get_headline(self, obj):
-        return 'HEADLINE'
+        return ' '.join((
+            self._get_field(obj, 'lastname'), self._get_field(obj, 'name')))
 
     def get_text(self, obj):
         return 'TEXT'
 
     def get_asset(self, obj):
         return {
-            'media': '',
-            # 'thumbnail': '',
+            'media': obj.photo.url,
+            'thumbnail': obj.photo.url,
         }
+
+    def get_type(self, obj):
+        return 'default'
 
     class Meta(object):
         fields = (
