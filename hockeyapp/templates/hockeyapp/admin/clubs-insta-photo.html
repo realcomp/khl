@@ -174,7 +174,7 @@
         };
 
         $scope.deleteAll = function() {
-            if($('input[name="delete_all"]').attr('checked')){
+            if($('input[name="delete_all"]:checked').length){
                 var inputs = $('input[name="cp"]:checked');
                 $.each(inputs, function(index, value) {
                     ClubPhoto.delete({id:$(value).val()});
