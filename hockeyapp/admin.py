@@ -340,35 +340,26 @@ admin.site.register(Name, NameAdmin)
 
 
 def generate_timeline(modeladmin, request, queryset):
-    start_date = Timeline.objects.last() and Timeline.objects.last().start_date
-    # birthday events
-    players = Player.objects.all()
-    if start_date:
-        players = players.filter(birth_date__gt=start_date)
-    for player in players:
-        Timeline.objects.create(
-            start_date=player.birth_date,
-            ru_headline='День рождения',
-            en_headline='Birth day',
-            ru_text='День рождения',
-            en_text='Birth day',
-            media=player.photo,
-            player=player)
-
-    # TODO: other types of events
+    from . import tasks
+    tasks.player_generate_timeline.delay()
+    pks = Player.objects.values_list('pk', flat=True)
+    for i in range(0, len(pks), 100):  # 100 players per task
+        tasks.player_generate_timeline_matches.delay(pks[i:i + 100])
+    # tasks.player_generate_timeline_matches.delay([1830])  # dev mode
 generate_timeline.short_description = _('Generate new timeline events')
 
 
 def regenerate_timeline(modeladmin, request, queryset):
-    Timeline.objects.delete()
-    return generate_timeline(modeladmin, request, queryset)
+    Timeline.objects.all().delete()
+    generate_timeline(modeladmin, request, queryset)
 regenerate_timeline.short_description = _('Re-generate timeline events')
 
 
 class TimelineAdmin(admin.ModelAdmin):
     actions = generate_timeline, regenerate_timeline,
     form = TimelineForm
-    list_display = 'start_date', 'end_date', 'ru_headline', 'en_headline'
+    list_display = (
+        'start_date', 'end_date', 'ru_headline', 'en_headline', 'type')
     list_filter = 'type',
     search_fields = 'ru_headline', 'en_headline', 'ru_text', 'en_text', 'tag'
 admin.site.register(Timeline, TimelineAdmin)
