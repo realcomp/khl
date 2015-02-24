@@ -14,7 +14,7 @@ from addresses.models import Country
 from .mixins import PaginationMixin
 from ..filters import (
     PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter)
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, Timeline
 from ..serializers import (
     CountryLeaguesSerializer,
     ClubListSerializer,
@@ -23,7 +23,7 @@ from ..serializers import (
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer)
+    ClubTitlesSerializer, PlayerTimelineSerializer)
 
 
 class PlayersSearch(
@@ -128,6 +128,25 @@ class PlayerCardIndicators(generics.ListAPIView):
             return qs.group_by_month()
 
 
+class PlayerNamesSearch(generics.ListAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerNamesSerializer
+
+    def filter_queryset(self, qs):
+        qs = super(PlayerNamesSearch, self).filter_queryset(qs)
+        s = self.request.GET.get('s')
+        if s:
+            qs = qs.filter(**{
+                '%s_lastname__istartswith' % self.request.LANGUAGE_CODE: s,
+            })
+        return qs.order_by('%s_lastname' % self.request.LANGUAGE_CODE)
+
+
+class PlayerTimeline(generics.RetrieveAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerTimelineSerializer
+
+
 class LeagueList(generics.ListAPIView):
     serializer_class = CountryLeaguesSerializer
 
@@ -185,20 +204,6 @@ class MetricsPlayers(generics.ListAPIView):
 
     def get_queryset(self):
         return Player.objects.all()
-
-
-class PlayerNamesSearch(generics.ListAPIView):
-    queryset = Player.objects.all()
-    serializer_class = PlayerNamesSerializer
-
-    def filter_queryset(self, qs):
-        qs = super(PlayerNamesSearch, self).filter_queryset(qs)
-        s = self.request.GET.get('s')
-        if s:
-            qs = qs.filter(**{
-                '%s_lastname__istartswith' % self.request.LANGUAGE_CODE: s,
-            })
-        return qs.order_by('%s_lastname' % self.request.LANGUAGE_CODE)
 
 
 class ClubTitlesSearch(generics.ListAPIView):
