@@ -5105,6 +5105,61 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .m-l-50{
     margin-left: 50px !important;
 }
+.m-t-20{
+    margin-top: 20px !important;
+}
+.m-t-10{
+    margin-top: 10px !important;
+}
+.m-t-5{
+    margin-top: 5px !important;
+}
 .bold{
     font-weight: bold;
+}
+.popup-photo{
+    width: 500px;
+    height: 500px;
+}
+.photo-comment{
+    width: 285px;
+    max-width: 285px;
+    min-height: 80px;
+    max-height: 150px;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .3125em
+}
+.instagram-photos-container{
+    width: 1300px !important;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px dashed #ccc;
+    border-radius: 0 0 8px 8px;
+    border-top: none;
+    padding: 28px;
+}
+.instagram-photos-container .photos-block{
+    width: 76%;
+    display: inline-block;
+}
+.instagram-photos-container .instruments-block{
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 10px;
+    position: fixed;
+}
+.control-button{
+    width: 240px;
+    max-height: 60px;
+    margin-top: 10px !important;
+}
+.pointer{
+    cursor: pointer !important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
