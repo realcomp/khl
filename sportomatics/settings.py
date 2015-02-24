@@ -33,14 +33,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
-    #'django_atomic_signals',
-    #'django_atomic_celery',
-    #'debug_toolbar',
-
     'daterange_filter',
     'django_select2',
-    'easy_thumbnails',
     'filer',
+    'easy_thumbnails',
     'registration',
     'relatives',
     'rest_framework',
@@ -124,6 +120,16 @@ CELERY_IGNORE_RESULT = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+THUMBNAIL_HIGH_RESOLUTION = True
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    #'easy_thumbnails.processors.scale_and_crop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters',
+)
+FILER_PAGINATE_BY = 50
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
