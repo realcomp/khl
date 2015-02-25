@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <div id="photos-new" data-tab="photos-new">
                     {% verbatim %}
-                    <div ng-repeat="item in photos track by $index" class="item" style="display:inline-block;padding-left:5px;padding-top:20px; margin: 20px">
+                    <div ng-repeat="item in photos track by $index" id="item_id_cp_{{item.id}}" class="item" style="display:inline-block;padding-left:5px;padding-top:20px; margin: 20px">
                         <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="150" height="150" ng-click="checkedInputImg(item.id)">
                         <div class="item-data">
                             <a href="#" class="popup-show-button" ng-click="PhotoPopupShow(item.id, $index, $event)">Увеличить</a>
@@ -157,6 +157,7 @@
             $scope.clubphoto = null;
             $scope.deletePhotopopup = false;
             $scope.selectedClub = '';
+            $scope.photos = [];
             $scope.$watch('selectedClub', function(newval, oldval){
                 console.log(newval)
                 console.log(oldval)
@@ -190,11 +191,14 @@
             });
             $scope.getPage = function() {
                 ClubPhoto.query({page:$scope.next_page}).$promise.then(function(data) {
-                    $scope.photos = data.results;
+                    $.each(data.results, function(index, value){
+                        $scope.photos.push(value)
+                    });
+                    //$scope.photos = data.results;
                     $scope.next_page = data.next_page;
                     if(!$scope.next_page) {
                         $('#nextpagebutton').remove();
-                    };
+                    }
                 });
             };
 
@@ -213,8 +217,10 @@
                     var inputs = $('input[name="cp"]:checked');
                     $.each(inputs, function(index, value) {
                         ClubPhoto.delete({id:$(value).val()});
+                        $("#item_" + $(value).attr('id')).css('opacity', '0');
                     });
-                    window.location.reload();
+                    $('input[name="delete_all"]').prop("checked", false);
+                    //window.location.reload();
                 }
             };
             $scope.agree = function(){
@@ -227,10 +233,10 @@
             $scope.addAll = function() {
                 var inputs = $('input[name="cp"]:checked');
                 $.each(inputs, function(index, value) {
-                    console.log(value)
                     ClubPhoto.update({id:$(value).val()}, {processed:true});
+                    $("#item_" + $(value).attr('id')).css('opacity', '0');
                 });
-                window.location.reload();
+                //window.location.reload();
             };
 
             $scope.nextPage = function() {
