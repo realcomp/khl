@@ -12,19 +12,19 @@
                 <div id="photos-new" data-tab="photos-new">
                     {% verbatim %}
                     <div ng-repeat="item in photos track by $index" class="item" style="display:inline-block;padding-left:5px;padding-top:20px; margin: 20px">
-                        <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="150" height="150" ng-click="checkedInputImg(item.id)" ng-dblclick="PhotoPopupShow(item.id, $index, $event)">
+                        <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="150" height="150" ng-click="checkedInputImg(item.id)">
                         <div class="item-data">
-                            <a href="#" ng-click="PhotoPopupShow(item.id, $index, $event)">Увеличить</a>
+                            <a href="#" class="popup-show-button" ng-click="PhotoPopupShow(item.id, $index, $event)">Увеличить</a>
                             <input id="id_cp_{{item.id}}" name="cp" type="checkbox" value="{{item.id}}" style="float: right; margin-top: 3px">
                         </div>
                     </div>
                     <hr class="hr">
                     <div class="team-controls team-control-btn ui blue button" ng-click="nextPage()" id="nextpagebutton">ЗАГРУЗИТЬ ЕЩЕ</div>
 
-                    <div class="player-partners-popup popup" style="min-width:1000px; z-index: 99999; position: fixed">
+                    <div class="player-partners-popup popup" style="min-width:1030px; z-index: 99999; position: fixed">
                         <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
                         <div>
-                            <div style="width:520px;display: inline-block;">
+                            <div style="width:650px;display: inline-block;">
                                 <img alt="" class="item-photo popup-photo" ng-src="{{ PhotoPopup.data.photo.img.file }}">
                             </div>
                             <div style="display:inline-block;margin-left: 30px; vertical-align: top">
@@ -169,11 +169,14 @@
             var instrumentsBlock = $('#instruments-block');
             var instagramBlock = $('#instagram-photos-container');
             instagramBlock.on('click', function(event){
-                if(!$(event.target).is('.player-partners-popup') && !$(event.target).parents('.player-partners-popup').is('.player-partners-popup')){
+                if(!$(event.target).is('.player-partners-popup') &&
+                    !$(event.target).parents('.player-partners-popup').is('.player-partners-popup') &&
+                    !$(event.target).is('.popup-show-button')){
                     $('.player-partners-popup').hide(300);
                     $('input[name="cp_player_numbers"]').val('');
-                    $('input[name="#id_cp_club"]').val('');
-                    $('input[name="#photo_club"]').val('');
+                    $('input[name="id_cp_club"]').val('');
+                    $('input[name="photo_club"]').val('');
+                    $('input[name="delete_photopopup"]').prop("checked", false);
                 }
             });
             closePopupBtn.on('click', function(e) {
@@ -182,6 +185,7 @@
                 $('input[name="cp_player_numbers"]').val('');
                 $('input[name="#id_cp_club"]').val('');
                 $('input[name="#photo_club"]').val('');
+                $('input[name="delete_photopopup"]').prop("checked", false);
                 $scope.selectedClub = '';
             });
             $scope.getPage = function() {
@@ -222,9 +226,10 @@
 
             $scope.addAll = function() {
                 var inputs = $('input[name="cp"]:checked');
-                $.each(inputs, function(value) {
+                $.each(inputs, function(index, value) {
+                    console.log(value)
                     ClubPhoto.update({id:$(value).val()}, {processed:true});
-                })
+                });
                 window.location.reload();
             };
 
@@ -269,6 +274,7 @@
                     $('input[name="cp_player_numbers"]').val('');
                     $('input[name="#id_cp_club"]').val('');
                     $('input[name="#photo_club"]').val('');
+                    $('input[name="delete_photopopup"]').prop("checked", false);
                     $scope.selectedClub = '';
                 };
             };
@@ -288,6 +294,7 @@
                 $('input[name="cp_player_numbers"]').val('');
                 $('input[name="#id_cp_club"]').val('');
                 $('input[name="#photo_club"]').val('');
+                $('input[name="delete_photopopup"]').prop("checked", false);
                 $scope.selectedClub = '';
             };
 

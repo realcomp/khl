@@ -5118,8 +5118,8 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     font-weight: bold;
 }
 .popup-photo{
-    width: 500px;
-    height: 500px;
+    width: 640px;
+    height: 640px;
 }
 .photo-comment{
     width: 285px;
@@ -5130,16 +5130,16 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border-radius: .3125em
 }
 .instagram-photos-container{
-    width: 1300px !important;
+    width: 1250px !important;
     margin: 0 auto;
     background: #fff;
-    border: 1px dashed #ccc;
-    border-radius: 0 0 8px 8px;
-    border-top: none;
-    padding: 28px;
+}
+.instagram-photos-container .player-partners-popup{
+    border: 1px;
+    top: 5px;
 }
 .instagram-photos-container .photos-block{
-    width: 76%;
+    width: 78%;
     display: inline-block;
 }
 .instagram-photos-container .instruments-block{
