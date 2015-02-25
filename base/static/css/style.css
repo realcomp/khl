@@ -3301,18 +3301,18 @@ i.icon {
   line-height: 24px;
   font-weight: 700;
   text-decoration: none;
-  -moz-transition: 0.5s;
+  /*-moz-transition: 0.5s;
   -o-transition: 0.5s;
   -webkit-transition: 0.5s;
   -ms-transition: 0.5s;
-  transition: 0.5s;
+  transition: 0.5s;*/
 }
 /* line 2080, ../sass/_base.sass */
 .player-partners-popup .close-popup-btn:hover {
-  -moz-transform: scale(1.1, 1.1);
+  /*-moz-transform: scale(1.1, 1.1);
   -ms-transform: scale(1.1, 1.1);
   -webkit-transform: scale(1.1, 1.1);
-  transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);*/
 }
 /* line 2082, ../sass/_base.sass */
 .player-partners-popup .player-photo {
@@ -5134,6 +5134,27 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     margin: 0 auto;
     background: #fff;
 }
+.blur{
+    -webkit-filter: blur(20px);
+    -moz-filter: blur(20px);
+    -o-filter: blur(20px);
+    -ms-filter: blur(20px);
+    filter: blur(20px);
+    opacity: 0.2;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+.nofilter{
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    -o-filter: none !important;
+    -ms-filter: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+}
 .instagram-photos-container .player-partners-popup{
     border: 1px;
     top: 5px;
@@ -5162,4 +5183,29 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+.rightleft{
+    margin-top: 250px;
+    vertical-align: top;
+    width: 30px;
+    display: inline-block;
+    font-size: 72px;
+    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+    color: #ffffff;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.rightleft:hover{
+    color: #000000;
+}
+.no-transition{
+    -moz-transition: none !important;
+    -webkit-transition: none !important;
+    -o-transition: color 0 ease-in !important;
+    transition: none !important;
 }

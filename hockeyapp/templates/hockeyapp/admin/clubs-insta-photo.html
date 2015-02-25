@@ -22,78 +22,87 @@
                     </div>
                     <hr class="hr">
                     <div class="team-controls team-control-btn ui blue button" ng-click="nextPage()" id="nextpagebutton">ЗАГРУЗИТЬ ЕЩЕ</div>
-
-                    <div class="player-partners-popup popup" style="min-width:1030px; z-index: 99999; position: fixed">
-                        <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
-                        <div>
-                            <div style="width:650px;display: inline-block;">
-                                <img alt="" class="item-photo popup-photo" ng-src="{{ PhotoPopup.data.photo.img.file }}">
-                            </div>
-                            <div style="display:inline-block;margin-left: 30px; vertical-align: top">
-                                <div class="ui icon input">
-                                    Текущая команда
-                                    <input type="text" id="curr_team" disabled ng-model="PhotoPopup.club.ru_title">
-                                </div>
-                                {% endverbatim %}
-                                <br/>
-                                <div class="ui icon input m-t-5">
-                                    <label>Ввести название команды вручную:
-                                        <angucomplete id="clubs_filter"
-                                                      pause="300" minlength="2"
-                                                      selectedobject="selectedClub"
-                                                      url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
-                                    </label>
-                                </div>
-                                {% verbatim %}
-                                <div ng-if="PhotoPopup.matches.length">
-                                    <div> Или выбрать из прошедших матчей:</div>
-                                    <ul ng-repeat="match in PhotoPopup.matches">
-                                        <li><a href="#" ng-click="setTeam(match.home_team)">{{match.home_team.ru_title}}</a>&nbsp;{{match.count}} <a href="#" ng-click="setTeam(match.guest_team)">{{match.guest_team.ru_title}}</a>&nbsp;({{match.date}})</li>
-                                    </ul>
-                                </div>
-                                <br>
-                                <div class="ui icon input">
-                                    <div>Выбранная команда:</div>
-                                    <input type="text" id="photo_club" disabled ng-model="selectedClub.originalObject.title">
-                                </div>
-                                <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
-                                <div class="ui icon input m-t-5">
-                                    <label>Номера игроков:</label>
-                                    <div>
-                                        <input id="id_cp_player_numbers" name="cp_player_numbers" type="text" value="{{PhotoPopup.data.player_numbers}}" style="max-width: 80px">
-                                    </div>
-                                </div>
-                                <br/>
-                                <div ng-if="PhotoPopup.data.photo.user_str">
-                                    <div class="ui icon input" >
-                                        <label>{{PhotoPopup.data.photo.user_str}}:</label>
-                                    </div>
-                                    <div class="m-t-5">
-                                        <textarea class="photo-comment" id="id_cp_comment" name="cp_comment" type="text">{{PhotoPopup.data.comment}}</textarea>
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="m-t-10" id="arena_{{PhotoPopup.data.id}}">
-                                    <a class="ui blue button" ng-click="createArenaPhoto(PhotoPopup.data.photo.id, PhotoPopup.club.arena)">ФОТО АРЕНЫ</a>
-                                </div>
-
-                                <div class="m-t-10">
-                                    <a class="ui green button"  ng-click="procCPPopup(PhotoPopup.data.id, PhotoPopup.index)">ДОБАВИТЬ</a>
-                                </div>
-                                <div class="m-t-10">
-                                    <a class="ui orange button" ng-click="delCPPopup(PhotoPopup.data.id, PhotoPopup.index)">УДАЛИТЬ</a><br/>
-                                    <div class="m-t-10">
-                                        <input class="m-t-5" id="id_delete_photopopup_{{PhotoPopup.data.id}}" name="delete_photopopup" type="checkbox" ng-model="deletePhotopopup"><span ng-click="agreePopup()" class="pointer"> я понимаю, что удалю фото насовсем</span>
-                                    </div>
-                                </div>
-                                {% endverbatim %}
-                            </div>
-                        </div>
-                    </div>
+                    {% endverbatim %}
+                    <!-- here -->
                 </div>
                 <hr class="hr">
-
             </form>
+        </div>
+        {% verbatim %}
+        <div id="#switcher" class="player-partners-popup popup no-transition" style="min-width:1100px; z-index: 99999; position: fixed">
+            <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
+            <div>
+                <div class="rightleft" ng-click="prevPhoto()">
+                    <i class="fa fa-angle-left"></i>
+                </div>
+                <div style="width:650px;display: inline-block;">
+                    <img alt="" class="item-photo popup-photo" ng-src="{{ PhotoPopup.data.photo.img.file }}">
+                </div>
+                <div class="rightleft" ng-click="nextPhoto()">
+                    <i class="fa fa-angle-right"></i>
+                </div>
+                <div style="display:inline-block;margin-left: 30px; vertical-align: top">
+                    <div class="ui icon input">
+                        Текущая команда
+                        <input type="text" id="curr_team" disabled ng-model="PhotoPopup.club.ru_title">
+                    </div>
+                    {% endverbatim %}
+                    <br/>
+                    <div class="ui icon input m-t-5">
+                        <label>Ввести название команды вручную:
+                            <angucomplete id="clubs_filter"
+                                          pause="300" minlength="2"
+                                          selectedobject="selectedClub"
+                                          url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                        </label>
+                    </div>
+                    {% verbatim %}
+                    <br>
+                    <div ng-if="PhotoPopup.matches.length" class="m-t-5">
+                        <div> Или выбрать из прошедших матчей:</div>
+                        <ul ng-repeat="match in PhotoPopup.matches">
+                            <li><a href="#" ng-click="setTeam(match.home_team)">{{match.home_team.ru_title}}</a>&nbsp;{{match.count}} <a href="#" ng-click="setTeam(match.guest_team)">{{match.guest_team.ru_title}}</a>&nbsp;({{match.date}})</li>
+                        </ul>
+                    </div>
+                    <div ng-if="!PhotoPopup.matches.length" style="margin-top: 41px"></div>
+                    <br>
+                    <div class="ui icon input">
+                        <div>Выбранная команда:</div>
+                        <input type="text" id="photo_club" disabled ng-model="selectedClub.originalObject.title">
+                    </div>
+                    <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
+                    <div class="ui icon input m-t-5">
+                        <label>Номера игроков:</label>
+                        <div>
+                            <input id="id_cp_player_numbers" name="cp_player_numbers" type="text" value="{{PhotoPopup.data.player_numbers}}" style="max-width: 80px">
+                        </div>
+                    </div>
+                    <br/>
+                    <!--<div ng-if="PhotoPopup.data.photo.user_str">
+                        <div class="ui icon input" >
+                            <label>{{PhotoPopup.data.photo.user_str}}:</label>
+                        </div>
+                        <div class="m-t-5">
+                            <textarea class="photo-comment" id="id_cp_comment" name="cp_comment" type="text">{{PhotoPopup.data.comment}}</textarea>
+                        </div>
+                    </div>-->
+                    <br/>
+                    <div class="m-t-10" id="arena_{{PhotoPopup.data.id}}">
+                        <a class="ui blue button" ng-click="createArenaPhoto(PhotoPopup.data.photo.id, PhotoPopup.club.arena)">ФОТО АРЕНЫ</a>
+                    </div>
+
+                    <div class="m-t-10">
+                        <a class="ui green button"  ng-click="procCPPopup(PhotoPopup.data.id, PhotoPopup.index)">ДОБАВИТЬ</a>
+                    </div>
+                    <div class="m-t-10">
+                        <a class="ui orange button" ng-click="delCPPopup(PhotoPopup.data.id, PhotoPopup.index)">УДАЛИТЬ</a><br/>
+                        <div class="m-t-10">
+                            <input class="m-t-5" id="id_delete_photopopup_{{PhotoPopup.data.id}}" name="delete_photopopup" type="checkbox" ng-model="deletePhotopopup"><span ng-click="agreePopup()" class="pointer"> я понимаю, что удалю фото насовсем</span>
+                        </div>
+                    </div>
+                    {% endverbatim %}
+                </div>
+            </div>
         </div>
         <div id="#instruments-block" class="instruments-block">
             <ul class="team-controls player-controls-block">
@@ -179,6 +188,7 @@
                     $('input[name="id_cp_club"]').val('');
                     $('input[name="photo_club"]').val('');
                     $('input[name="delete_photopopup"]').prop("checked", false);
+                    $('.photos-block, .instruments-block, .header').removeClass("blur");
                 }
             });
             closePopupBtn.on('click', function(e) {
@@ -188,6 +198,7 @@
                 $('input[name="#id_cp_club"]').val('');
                 $('input[name="#photo_club"]').val('');
                 $('input[name="delete_photopopup"]').prop("checked", false);
+                $('.photos-block, .instruments-block, .header').removeClass("blur");
                 $scope.selectedClub = '';
             });
             $scope.getPage = function() {
@@ -286,7 +297,18 @@
                     $scope.PhotoPopup.matches = Match.query(params);
                 });
                 $scope.PhotoPopup.index = index;
+                $('.photos-block, .instruments-block, .header').addClass("blur");
                 $('.player-partners-popup:hidden').show(500);
+            };
+            $scope.nextPhoto = function(){
+                var index = $scope.PhotoPopup.index + 1;
+                if($scope.photos[index])
+                $scope.PhotoPopupShow($scope.photos[index].id, index);
+            };
+            $scope.prevPhoto = function(){
+                var index = $scope.PhotoPopup.index + -1;
+                if($scope.photos[index])
+                    $scope.PhotoPopupShow($scope.photos[index].id, index);
             };
 
             $scope.delCPPopup = function(id, index) {
