@@ -96,3 +96,4 @@ class InstagramImageFile(models.Model):
     class Meta:
         verbose_name = _('Instagram image file')
         verbose_name_plural = _('Instagram image files')
+        ordering = ('created', 'pk')

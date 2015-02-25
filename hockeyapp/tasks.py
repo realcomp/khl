@@ -250,7 +250,7 @@ insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
 @app.task(ignore_result=True, track_started=True)
-def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
+def get_instagram_pictures(insta_loc_id, club, min_timestamp,
                             max_timestamp=None, max_id=None
 ):
     _fn = club.image_folder_name
@@ -266,25 +266,29 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                     models.ClubPhotos.objects.get_or_create(club=club,photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
-        _get_instagram_pictures.delay(  insta_loc_id, club,
-                                        min_timestamp= min_timestamp,
+        get_instagram_pictures.delay(  insta_loc_id, club,
+                                        min_timestamp=min_timestamp,
                                         max_timestamp=max_timestamp,
                                         max_id=max_id)
 
 
 @app.task(ignore_result=True, track_started=True)
-def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
+def get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
         min_timestamp = min_timestamp
     else:
         _ts_min = datetime.datetime.today()-datetime.timedelta(days=1)
-        min_timestamp = time.mktime(_ts_min.timetuple())
+        min_timestamp = int(time.mktime(_ts_min.timetuple()))
+    if max_timestamp:
+        max_timestamp = max_timestamp
+    else:
+        max_timestamp = int(time.mktime(datetime.datetime.today().timetuple()))
     clubs = models.Club.objects.filter(arena__isnull=False)
     for club in clubs:
         if club.arena.arenainstagram_set.exists():
             caims = club.arena.arenainstagram_set.all()
             for obj in caims:
-                _get_instagram_pictures.delay(  obj.im_id, club,
+                get_instagram_pictures.delay(  obj.im_id, club,
                                                 min_timestamp, max_timestamp)
 
 
