@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import itertools
 
 from django.contrib import admin
-from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from daterange_filter.filter import DateRangeFilter
@@ -51,7 +51,7 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
-                        'spectators', 'judges', 'line_judges', 'challenge_type')
+                        'spectators', 'judges', 'line_judges', 'challenge_type',)
         }),
         (None, {
             'classes': ('suit-tab suit-tab-hometeam',),
