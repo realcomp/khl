@@ -40,7 +40,7 @@ class ScheduleManager(models.Manager):
             if m.get('khl_id') and (not _match or not _match.match):
                 m['match'] = self._get_match(m)
                 m['processed'] = True
-            if _match and _match.ru_title == m.get('ru_title'):
+            if _match and _match.title == m.get('title'):
                 self.filter(pk=_match.pk).update(**m)
             else:
                 self.create(**m)
@@ -57,7 +57,7 @@ class ScheduleManager(models.Manager):
         for m in kwargs.get('matches',):
             home_team= self._get_team(m.pop('home_team', None))
             guest_team= self._get_team(m.pop('guest_team', None))
-            qs = dict(  ru_title = m.get('ru_title'),
+            qs = dict(  title = m.get('title'),
                         league = _league,
                         season = _season,
                         home_team = home_team,
@@ -74,11 +74,11 @@ class ScheduleManager(models.Manager):
                     m['processed'] = True
                 self.filter(pk=_match.pk).update(**m)
 
-    def _get_team(self, ru_title):
+    def _get_team(self, title):
         club_model = get_model(CURRENT_APP, 'club')
-        _club = club_model.objects.by_title_alias(ru_title).first()
+        _club = club_model.objects.by_title_alias(title).first()
         if not _club:
-            _club = club_model.objects.get_or_create(ru_title=ru_title)
+            _club = club_model.objects.get_or_create(title=title)
         return _club
 
     def _get_match(self, m=None):

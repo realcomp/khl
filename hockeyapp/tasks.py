@@ -288,72 +288,72 @@ def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
 
 
 #@app.task(ignore_result=True, track_started=True)
-def temp_update_schedules():
-    '''
-        1 - championship,
-        2 - playoff,
-        3 - hopeful cup
-        4 - MHL World Cup
-        5 - MHL Challenge Cup
-        6 - MHL playout
-        7 - MHL qualifying tournament
-    '''
-    _parsers = (# KHL ######################################
-                (parsers.schedule.KHLScheduleParser, 245, 2),
-                (parsers.schedule.KHLScheduleParser, 265, 3),
-                (parsers.schedule.KHLScheduleParser, 244, 1),
-                (parsers.schedule.KHLScheduleParser, 223, 2),
-                (parsers.schedule.KHLScheduleParser, 237, 3),
-                (parsers.schedule.KHLScheduleParser, 222, 1),
-                (parsers.schedule.KHLScheduleParser, 203, 2),
-                (parsers.schedule.KHLScheduleParser, 202, 1),
-                (parsers.schedule.KHLScheduleParser, 186, 2),
-                (parsers.schedule.KHLScheduleParser, 185, 1),
-                (parsers.schedule.KHLScheduleParser, 168, 2),
-                (parsers.schedule.KHLScheduleParser, 167, 1),
-                (parsers.schedule.KHLScheduleParser, 165, 2),
-                (parsers.schedule.KHLScheduleParser, 160, 1),
-                # MHL #######################################
-                (parsers.schedule.MHLScheduleParser, 277, 4),
-                (parsers.schedule.MHLScheduleParser, 253, 2),
-                (parsers.schedule.MHLScheduleParser, 252, 1),
-                (parsers.schedule.MHLScheduleParser, 247, 4),
-                (parsers.schedule.MHLScheduleParser, 236, 5),
-                (parsers.schedule.MHLScheduleParser, 230, 2),
-                (parsers.schedule.MHLScheduleParser, 229, 1),
-                (parsers.schedule.MHLScheduleParser, 220, 4),
-                (parsers.schedule.MHLScheduleParser, 205, 2),
-                (parsers.schedule.MHLScheduleParser, 207, 6),
-                (parsers.schedule.MHLScheduleParser, 204, 1),
-                (parsers.schedule.MHLScheduleParser, 201, 4),
-                (parsers.schedule.MHLScheduleParser, 188, 2),
-                (parsers.schedule.MHLScheduleParser, 187, 1),
-                (parsers.schedule.MHLScheduleParser, 187, 1),
-                (parsers.schedule.MHLScheduleParser, 173, 2),
-                (parsers.schedule.MHLScheduleParser, 170, 1),
-                (parsers.schedule.MHLScheduleParser, 196, 7),
-                # MHL-2 #####################################
-                (parsers.schedule.MHL2ScheduleParser, 306, 8),
-                (parsers.schedule.MHL2ScheduleParser, 261, 8),
-                (parsers.schedule.MHL2ScheduleParser, 238, 8),
-                (parsers.schedule.MHL2ScheduleParser, 255, 2),
-                (parsers.schedule.MHL2ScheduleParser, 254, 1),
-                (parsers.schedule.MHL2ScheduleParser, 234, 2),
-                (parsers.schedule.MHL2ScheduleParser, 231, 1),
-                (parsers.schedule.MHL2ScheduleParser, 214, 2),
-                (parsers.schedule.MHL2ScheduleParser, 211, 1),
-                # VHL ########################################
-                (parsers.schedule.VHLScheduleParser, 251, 2),
-                (parsers.schedule.VHLScheduleParser, 250, 1),
-                (parsers.schedule.VHLScheduleParser, 228, 2),
-                (parsers.schedule.VHLScheduleParser, 227, 1),
-                (parsers.schedule.VHLScheduleParser, 209, 2),
-                (parsers.schedule.VHLScheduleParser, 208, 1),
-                (parsers.schedule.VHLScheduleParser, 190, 2),
-                (parsers.schedule.VHLScheduleParser, 189, 1),
-    )
-    for _parser, id, chlng_type in _parsers:
-        _parser().put_data_in_db_from_page( id, update=False,
-                                            challenge_type=chlng_type,
-                                            without_khl_id=False,
-        )
+#def temp_update_schedules():
+    #'''
+        #1 - championship,
+        #2 - playoff,
+        #3 - hopeful cup
+        #4 - MHL World Cup
+        #5 - MHL Challenge Cup
+        #6 - MHL playout
+        #7 - MHL qualifying tournament
+    #'''
+    #_parsers = (# KHL ######################################
+                #(parsers.schedule.KHLScheduleParser, 245, 2),
+                #(parsers.schedule.KHLScheduleParser, 265, 3),
+                #(parsers.schedule.KHLScheduleParser, 244, 1),
+                #(parsers.schedule.KHLScheduleParser, 223, 2),
+                #(parsers.schedule.KHLScheduleParser, 237, 3),
+                #(parsers.schedule.KHLScheduleParser, 222, 1),
+                #(parsers.schedule.KHLScheduleParser, 203, 2),
+                #(parsers.schedule.KHLScheduleParser, 202, 1),
+                #(parsers.schedule.KHLScheduleParser, 186, 2),
+                #(parsers.schedule.KHLScheduleParser, 185, 1),
+                #(parsers.schedule.KHLScheduleParser, 168, 2),
+                #(parsers.schedule.KHLScheduleParser, 167, 1),
+                #(parsers.schedule.KHLScheduleParser, 165, 2),
+                #(parsers.schedule.KHLScheduleParser, 160, 1),
+                ## MHL #######################################
+                #(parsers.schedule.MHLScheduleParser, 277, 4),
+                #(parsers.schedule.MHLScheduleParser, 253, 2),
+                #(parsers.schedule.MHLScheduleParser, 252, 1),
+                #(parsers.schedule.MHLScheduleParser, 247, 4),
+                #(parsers.schedule.MHLScheduleParser, 236, 5),
+                #(parsers.schedule.MHLScheduleParser, 230, 2),
+                #(parsers.schedule.MHLScheduleParser, 229, 1),
+                #(parsers.schedule.MHLScheduleParser, 220, 4),
+                #(parsers.schedule.MHLScheduleParser, 205, 2),
+                #(parsers.schedule.MHLScheduleParser, 207, 6),
+                #(parsers.schedule.MHLScheduleParser, 204, 1),
+                #(parsers.schedule.MHLScheduleParser, 201, 4),
+                #(parsers.schedule.MHLScheduleParser, 188, 2),
+                #(parsers.schedule.MHLScheduleParser, 187, 1),
+                #(parsers.schedule.MHLScheduleParser, 187, 1),
+                #(parsers.schedule.MHLScheduleParser, 173, 2),
+                #(parsers.schedule.MHLScheduleParser, 170, 1),
+                #(parsers.schedule.MHLScheduleParser, 196, 7),
+                ## MHL-2 #####################################
+                #(parsers.schedule.MHL2ScheduleParser, 306, 8),
+                #(parsers.schedule.MHL2ScheduleParser, 261, 8),
+                #(parsers.schedule.MHL2ScheduleParser, 238, 8),
+                #(parsers.schedule.MHL2ScheduleParser, 255, 2),
+                #(parsers.schedule.MHL2ScheduleParser, 254, 1),
+                #(parsers.schedule.MHL2ScheduleParser, 234, 2),
+                #(parsers.schedule.MHL2ScheduleParser, 231, 1),
+                #(parsers.schedule.MHL2ScheduleParser, 214, 2),
+                #(parsers.schedule.MHL2ScheduleParser, 211, 1),
+                ## VHL ########################################
+                #(parsers.schedule.VHLScheduleParser, 251, 2),
+                #(parsers.schedule.VHLScheduleParser, 250, 1),
+                #(parsers.schedule.VHLScheduleParser, 228, 2),
+                #(parsers.schedule.VHLScheduleParser, 227, 1),
+                #(parsers.schedule.VHLScheduleParser, 209, 2),
+                #(parsers.schedule.VHLScheduleParser, 208, 1),
+                #(parsers.schedule.VHLScheduleParser, 190, 2),
+                #(parsers.schedule.VHLScheduleParser, 189, 1),
+    #)
+    #for _parser, id, chlng_type in _parsers:
+        #_parser().put_data_in_db_from_page( id, update=False,
+                                            #challenge_type=chlng_type,
+                                            #without_khl_id=False,
+        #)

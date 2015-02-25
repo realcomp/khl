@@ -39,7 +39,15 @@ class AdminLinkMixin(object):
 class TitleBaseModel(LocaleAttrMixin, models.Model):
     ru_title = models.CharField(_('Title (rus)'), max_length=1024, blank=True)
     en_title = models.CharField(_('Title (en)'), max_length=1024, blank=True)
+    title = models.CharField(_('Title from parser'), max_length=1024,
+                                blank=True, editable=False)
     __unicode__ = lambda self: self.ru_title
+
+    def save(self, **kwargs):
+        if not self.ru_title and self.title:
+            self.ru_title = self.title
+        super(TitleBaseModel, self).save(**kwargs)
+
     class Meta:
         abstract=True
 

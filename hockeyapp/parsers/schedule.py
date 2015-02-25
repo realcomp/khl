@@ -102,7 +102,7 @@ class KHLScheduleParser(GrabParser):
             khl_id = mdiv.xpath(self.mxd['past_khl_id'])
         khl_id = khl_id[0].split('/')[3] if khl_id else ''
         match = {
-            'ru_title': mdiv.xpath(self.mxd['ru_title'])[0],
+            'title': mdiv.xpath(self.mxd['ru_title'])[0],
             'date': self.python_date(_time),
             'home_team': mdiv.xpath(self.mxd['home_team'])[0],
             'guest_team': mdiv.xpath(self.mxd['guest_team'])[0],
@@ -203,7 +203,7 @@ class VHLScheduleParser(KHLScheduleParser):
             else:
                 guest_team = mcapsula.xpath(self.mxd['guest_team_alt'])[0]
         match = {
-            'ru_title': self._get_title(mcapsula),
+            'title': self._get_title(mcapsula),
             'date': date,
             'home_team': home_team,
             'guest_team': guest_team,

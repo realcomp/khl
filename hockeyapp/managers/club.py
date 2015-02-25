@@ -26,9 +26,9 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
         if not data:
             # берем данные о клубе со стороннего ресурса
             data = self._get_data(url)
-        ru_title = data.get('ru_title', None)
-        if ru_title:
-            _club = self.by_title_alias(ru_title).last()
+        title = data.get('title', None)
+        if title:
+            _club = self.by_title_alias(title).last()
             if not _club or update:
                 if data:
                     data = self.clean_data(data)
@@ -50,9 +50,9 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                     if _coach_fio and (not update or _club and not _club.coach):
                         model = get_model(CURRENT_APP, 'Coach')
                         func = model.objects.get_or_create
-                        data['coach'] = func(ru_fio=_coach_fio)[0]
-                    if update and _club and _club.ru_title:
-                        self.filter(ru_title=ru_title).update(**data)
+                        data['coach'] = func(fio=_coach_fio)[0]
+                    if update and _club and _club.title:
+                        self.filter(title=title).update(**data)
                     else:
                         _club = self.create(**data)
                     if _plrs:

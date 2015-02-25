@@ -39,6 +39,10 @@ class AbstractMan(LocaleAttrMixin, models.Model):
     pp = models.URLField('Personal page URL', blank=True, max_length=1024)
     ut = models.URLField('Youtube account URL', blank=True, max_length=1024)
     wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
+    #parser service
+    _fio = models.CharField(_('FIO from parser'),max_length=4096, blank=True,
+                            editable=False)
+
     __unicode__ = lambda self: self.ru_fio
 
     def save(self, **kwargs):
@@ -46,6 +50,8 @@ class AbstractMan(LocaleAttrMixin, models.Model):
             self.ru_name, sep, self.ru_lastname = self.ru_fio.partition(' ')
         if self.en_fio and (not self.en_name or not self.en_lastname):
             self.en_name, sep, self.en_lastname = self.en_fio.partition(' ')
+        if not self.ru_fio and self.fio:
+            self.ru_fio = self.fio
         super(AbstractMan, self).save(**kwargs)
 
     class Meta:
