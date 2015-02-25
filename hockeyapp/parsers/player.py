@@ -320,7 +320,7 @@ class MHLPlayerInfo(KHLPlayerInfo):
                     'birth_date': self.get_birth_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
+            _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
 
@@ -423,7 +423,7 @@ class MHL2PlayerInfo(MHLPlayerInfo):
                     'birth_date': self.get_birth_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
+            _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
 
@@ -472,6 +472,6 @@ class VHLPlayerInfo(MHL2PlayerInfo):
                     'birth_date': self.get_birth_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
+            _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res

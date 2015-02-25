@@ -40,7 +40,7 @@ class AbstractMan(LocaleAttrMixin, models.Model):
     ut = models.URLField('Youtube account URL', blank=True, max_length=1024)
     wiki_page = models.URLField('Wiki page URL', blank=True, max_length=1024)
     #parser service
-    _fio = models.CharField(_('FIO from parser'),max_length=4096, blank=True,
+    fio = models.CharField(_('FIO from parser'),max_length=4096, blank=True,
                             editable=False)
 
     __unicode__ = lambda self: self.ru_fio
