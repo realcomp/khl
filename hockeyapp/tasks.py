@@ -419,6 +419,38 @@ def player_generate_timeline(ids):
             ru_text='Первая шайба в карьере',
             en_text='First goal in career')
 
+    def first_hat_trick_event(players):
+        def date_query(player):
+            return (
+                models.ClubPlayerMatch.objects
+                .filter(clubplayer__player=player, goals=3)
+                .earliest('match__date').match.date)
+        first_event(
+            players,
+            type='first_hat_trick',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый "хет-трик" в карьере',
+            en_headline='First hat trick in career',
+            ru_text='Первый "хет-трик" в карьере',
+            en_text='First hat trick in career')
+
+    def first_poker_event(players):
+        def date_query(player):
+            return (
+                models.ClubPlayerMatch.objects
+                .filter(clubplayer__player=player, goals=4)
+                .earliest('match__date').match.date)
+        first_event(
+            players,
+            type='first_poker',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый "покер" в карьере',
+            en_headline='First poker in career',
+            ru_text='Первый "покер" в карьере',
+            en_text='First poker in career')
+
     def first_0_loose_goals_event(players):
         def date_query(player):
             # line=1 goalkeeper
@@ -523,6 +555,8 @@ def player_generate_timeline(ids):
 
     birthday_events(players)
     first_goal_event(players)
+    first_hat_trick_event(players)
+    first_poker_event(players)
     first_0_loose_goals_event(players)
     first_loose_goal_event(players)
     first_match_event(players)
