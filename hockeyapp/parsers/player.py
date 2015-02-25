@@ -102,6 +102,7 @@ class KHLPlayerInfo(GrabParser):
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
                     'ru_fio': self.get_ru_fio(),
+                    'fio': self.get_ru_fio(),
                     'en_fio': self.get_en_fio(),
                     'ava_url': self.get_photo_url(),
                     'club': self.get_club(),
@@ -310,7 +311,7 @@ class MHLPlayerInfo(KHLPlayerInfo):
                     'khl_id': khl_id,
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_fio': self.get_ru_fio(),
+                    'fio': self.get_ru_fio(),
                     'ava_url': self.get_photo_url(),
                     'number': self.get_number(),
                     'line': self.get_line(),
@@ -319,7 +320,7 @@ class MHLPlayerInfo(KHLPlayerInfo):
                     'birth_date': self.get_birth_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
+            _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
 
@@ -412,7 +413,7 @@ class MHL2PlayerInfo(MHLPlayerInfo):
                     'khl_id': khl_id,
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_fio': self.get_ru_fio(),
+                    'fio': self.get_ru_fio(),
                     'ava_url': self.get_photo_url(),
                     'club': self.get_club(),
                     'number': self.get_number(),
@@ -422,7 +423,7 @@ class MHL2PlayerInfo(MHLPlayerInfo):
                     'birth_date': self.get_birth_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
+            _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
 
@@ -461,7 +462,7 @@ class VHLPlayerInfo(MHL2PlayerInfo):
                     'khl_id': khl_id,
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_fio': self.get_ru_fio(),
+                    'fio': self.get_ru_fio(),
                     'ava_url': self.get_photo_url(),
                     'club': self.get_club(),
                     'number': self.get_number(),
@@ -471,6 +472,6 @@ class VHLPlayerInfo(MHL2PlayerInfo):
                     'birth_date': self.get_birth_date(),
                     'citizenship': self.get_citizenship(),
             }
-            _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
+            _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res

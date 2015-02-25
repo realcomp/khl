@@ -206,7 +206,7 @@ class HockeyMHLMatchParser(GrabParser):
                     'khl_id': matchid,
                     'html_body': self.get_html_body(html_body),
                     'url': url if url else self.absolute_url,
-                    'ru_title': self.get_match_num(),
+                    'title': self.get_match_num(),
                     'spectators': self.get_spectators(),
                     'date': self.python_date(_date),
                     'count': self.get_match_count(),
@@ -214,7 +214,7 @@ class HockeyMHLMatchParser(GrabParser):
                     'judges': self.get_match_judges(),
                     'line_judges': self.get_match_line_judges(),
                     'home_team': {
-                                    'ru_title': self.get_home_team(),
+                                    'title': self.get_home_team(),
                                     'region':  self.get_home_team_region(),
                                     'coach': _home_coach,
                                     'players': _home_players,
@@ -222,7 +222,7 @@ class HockeyMHLMatchParser(GrabParser):
                     'home_coach': _home_coach,
                     'home_players': _home_players,
                     'guest_team': {
-                                    'ru_title': self.get_guest_team(),
+                                    'title': self.get_guest_team(),
                                     'region':  self.get_guest_team_region(),
                                     'coach': _guest_coach,
                                     'players': _guest_players,
@@ -385,7 +385,7 @@ class HockeyMHLMatchParser(GrabParser):
                     'number': _num,
                     'khl_id': _raw_link.attrib.get('href','').split('/')[-2],
                     'line': line_type,
-                    'ru_fio': _raw_link.text,
+                    'fio': _raw_link.text,
                     'stats': self._get_player_match_stats_by_line(tr,line_type),
             }
             if self.adv_stats and adv_stats_key:
@@ -708,7 +708,7 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
                 'khl_id': fromstring(_plr).attrib.get('href','///'
                                                     ).split('/')[-2],
                 'line': line_type,
-                'ru_fio': fromstring(_plr).text.strip(),
+                'fio': fromstring(_plr).text.strip(),
                 'stats': self._get_player_match_stats_by_line(item,line_type),
         }
         if self.adv_stats and adv_stats_key:

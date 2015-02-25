@@ -48,7 +48,7 @@ class KHLArenaInfo(GrabParser):
         '''
         if self.page_tree is not None:
             return {
-                    'ru_title': self.get_ru_title(),
+                    'title': self.get_title(),
                     'site': self.get_site_url(),
                     'photo_url': self.get_photo_url(),
                     'contacts': self.get_contacts(),
@@ -56,7 +56,7 @@ class KHLArenaInfo(GrabParser):
                     'tickets_url': self.get_tickets_url(),
             }
 
-    def get_ru_title(self):
+    def get_title(self):
         b''' Название арены клуба '''
         return self._get_strip_value('ru_title')
 
@@ -122,7 +122,7 @@ class KHLClubInfo(GrabParser):
             _res = {
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_title': self.get_ru_title(),
+                    'title': self.get_title(),
                     'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
                     'opening_dt': self.get_opening_dt(),
@@ -138,7 +138,7 @@ class KHLClubInfo(GrabParser):
         url = self.absolute_url+'arena/'
         return KHLArenaInfo(absolute_url=url).get_page()
 
-    def get_ru_title(self):
+    def get_title(self):
         b''' Название клуба '''
         return self._get_strip_value('ru_title')
 
@@ -202,7 +202,7 @@ class VHLClubInfo(KHLClubInfo):
             _res = {
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_title': self.get_ru_title(),
+                    'title': self.get_title(),
                     'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
                     'contacts': self.get_contacts(),
@@ -210,7 +210,7 @@ class VHLClubInfo(KHLClubInfo):
             }
             return _res
 
-    def get_ru_title(self):
+    def get_title(self):
         b''' Название клуба '''
         return self._get_strip_value('ru_title').split(':')[1].strip()
 
@@ -251,7 +251,7 @@ class MHLClubInfo(VHLClubInfo):
             _res = {
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_title': self.get_ru_title(),
+                    'title': self.get_title(),
                     'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
                     'players': self.get_players() or []
@@ -299,7 +299,7 @@ class MHL2ClubInfo(VHLClubInfo):
             _res = {
                     'url': self.absolute_url,
                     'html_body': self.get_html_body(html_body),
-                    'ru_title': self.get_ru_title(),
+                    'title': self.get_title(),
                     #'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
                     'players': self.get_players() or []

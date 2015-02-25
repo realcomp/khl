@@ -84,10 +84,12 @@ class HockeyAppParserTest(base.tests.BaseTest):
                                                 data=self.clubinfo)
         self.assertEqual(Club.objects.count(), 1)
         #check fields
-        for field in ('ru_title', 'html_body', 'url', 'site', 'contacts'):
+        for field in ('ru_title', 'html_body', 'url', 'site', 'contacts',
+        'title'):
             self.assertNotEqual(getattr(club, field), self.blank)
         for field in ('proccesed_time', 'coach_id', 'logo_id',):# 'arena_id',):
             self.assertIsNotNone(getattr(club, field))
+        self.assertEqual(club.ru_title, club.title)
         #check arena fields
         #for field in ('ru_title', 'site', 'contacts', 'tickets_url'):
             #self.assertNotEqual(getattr(club.arena, field), self.blank)
@@ -106,12 +108,13 @@ class HockeyAppParserTest(base.tests.BaseTest):
         #check fields
         for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
             'height', 'weight', 'contract_type', 'contract_to', 'number',
-            'grip', 'citizenship', 'wiki_page',
+            'grip', 'citizenship', 'wiki_page', 'fio',
         ):
             self.assertNotEqual(getattr(player, field), self.blank)
         for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
             self.assertIsNotNone(getattr(player, field))
         self.assertEqual(player.khl_id, id)
+        self.assertEqual(player.ru_fio, player.fio)
 
         for id, data in (
             (self.mhl_player_id, self.mhl_player_data),
@@ -121,12 +124,13 @@ class HockeyAppParserTest(base.tests.BaseTest):
             player = Player.objects.get_or_create_player(khl_id=id,data=data)
             #check fields
             for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
-                'height', 'weight', 'citizenship',
+                'height', 'weight', 'citizenship', 'fio',
             ):
                 self.assertNotEqual(getattr(player, field), self.blank)
             for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
                 self.assertIsNotNone(getattr(player, field))
             self.assertEqual(player.khl_id, id)
+            self.assertEqual(player.ru_fio, player.fio)
 
     def _create_schedulers(self):
         ''' test schedulers cretes '''
@@ -148,11 +152,13 @@ class HockeyAppParserTest(base.tests.BaseTest):
         self.assertEqual(Match.objects.count(), 1)
         #check fields
         self.assertEqual(match.khl_id, self.mhl_match_id)
-        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count'):
+        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count',
+        'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id', 'spectators'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_mhl_relations(match)
 
     def _update_mhl_match(self):
@@ -165,11 +171,12 @@ class HockeyAppParserTest(base.tests.BaseTest):
         match = parser().update_model_object(match)
         #check fields
         for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
-        'detail_count'):
+        'detail_count', 'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_mhl_relations(match)
 
     def _check_mhl_relations(self, match):
@@ -191,11 +198,13 @@ class HockeyAppParserTest(base.tests.BaseTest):
         self.assertEqual(Match.objects.count(), 2)
         #check fields
         self.assertEqual(match.khl_id, self.mhl2_match_id)
-        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count'):
+        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count',
+        'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id', 'spectators'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_mhl2_relations(match)
 
     def _update_mhl2_match(self):
@@ -208,11 +217,12 @@ class HockeyAppParserTest(base.tests.BaseTest):
         match = parser().update_model_object(match)
         #check fields
         for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
-        'detail_count'):
+        'detail_count', 'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_mhl2_relations(match)
 
     def _check_mhl2_relations(self, match):
@@ -234,11 +244,13 @@ class HockeyAppParserTest(base.tests.BaseTest):
         self.assertEqual(Match.objects.count(), 3)
         #check fields
         self.assertEqual(match.khl_id, self.khl_match_id)
-        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count'):
+        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count',
+        'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id', 'spectators'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_khl_relations(match)
 
     def _update_khl_match(self):
@@ -251,11 +263,12 @@ class HockeyAppParserTest(base.tests.BaseTest):
         match = parser().update_model_object(match)
         #check fields
         for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
-        'detail_count'):
+        'detail_count', 'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_khl_relations(match)
 
     def _check_khl_relations(self, match):
@@ -277,11 +290,13 @@ class HockeyAppParserTest(base.tests.BaseTest):
         self.assertEqual(Match.objects.count(), 4)
         #check fields
         self.assertEqual(match.khl_id, self.vhl_match_id)
-        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count'):
+        for field in ('ru_title', 'html_body', 'url', 'count', 'detail_count',
+        'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id', 'spectators'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_vhl_relations(match)
 
 
@@ -295,11 +310,12 @@ class HockeyAppParserTest(base.tests.BaseTest):
         match = parser().update_model_object(match)
         #check fields
         for field in ('ru_title', 'html_body', 'url', 'spectators', 'count',
-        'detail_count'):
+        'detail_count', 'title'):
             self.assertNotEqual(getattr(match, field), self.blank)
         for field in ('proccesed_time', 'home_coach_id', 'home_team_id',
         'guest_team_id', 'guest_coach_id'):
             self.assertIsNotNone(getattr(match, field))
+        self.assertEqual(match.ru_title, match.title)
         self._check_vhl_relations(match)
 
 

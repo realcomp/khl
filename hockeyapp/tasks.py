@@ -9,7 +9,6 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 from django.conf import settings
-from django.db.models import Q
 
 from sportomatics.celery import app
 
@@ -250,10 +249,10 @@ insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
 @app.task(ignore_result=True, track_started=True)
-def get_instagram_pictures(insta_loc_id, club, min_timestamp,
+def get_instagram_pictures(insta_loc_id, clubs, min_timestamp,
                             max_timestamp=None, max_id=None
 ):
-    _fn = club.image_folder_name
+    _fn = clubs.last() and clubs.last().image_folder_name or 'Instaphotos'
     data, next = insta_api.location_recent_media(location_id=insta_loc_id,
                                                 min_timestamp=min_timestamp,
                                                 max_timestamp=max_timestamp,
@@ -262,8 +261,10 @@ def get_instagram_pictures(insta_loc_id, club, min_timestamp,
         for item in data:
             if item.type == 'image':
                 iif = InstagramImageFile.objects.get_or_create_iif(item, _fn)
-                if iif:
-                    models.ClubPhotos.objects.get_or_create(club=club,photo=iif)
+                if iif and clubs:
+                    _crtr = models.ClubPhotos.objects.get_or_create
+                    for club in clubs:
+                        _crtr(club=club,photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
         get_instagram_pictures.delay(  insta_loc_id, club,
@@ -283,254 +284,247 @@ def get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
         max_timestamp = max_timestamp
     else:
         max_timestamp = int(time.mktime(datetime.datetime.today().timetuple()))
-    clubs = models.Club.objects.filter(arena__isnull=False)
-    for club in clubs:
-        if club.arena.arenainstagram_set.exists():
-            caims = club.arena.arenainstagram_set.all()
+    arenas = models.Arena.objects.filter(club__isnull=False)
+    for arena in arenas:
+        if arena.arenainstagram_set.exists():
+            caims = arena.arenainstagram_set.all()
+            clubs = arenas.club_set.all()
             for obj in caims:
-                get_instagram_pictures.delay(  obj.im_id, club,
+                get_instagram_pictures.delay(   obj.im_id, clubs,
                                                 min_timestamp, max_timestamp)
 
 
 #@app.task(ignore_result=True, track_started=True)
-def temp_update_schedules():
-    '''
-        1 - championship,
-        2 - playoff,
-        3 - hopeful cup
-        4 - MHL World Cup
-        5 - MHL Challenge Cup
-        6 - MHL playout
-        7 - MHL qualifying tournament
-    '''
-    _parsers = (# KHL ######################################
-                (parsers.schedule.KHLScheduleParser, 245, 2),
-                (parsers.schedule.KHLScheduleParser, 265, 3),
-                (parsers.schedule.KHLScheduleParser, 244, 1),
-                (parsers.schedule.KHLScheduleParser, 223, 2),
-                (parsers.schedule.KHLScheduleParser, 237, 3),
-                (parsers.schedule.KHLScheduleParser, 222, 1),
-                (parsers.schedule.KHLScheduleParser, 203, 2),
-                (parsers.schedule.KHLScheduleParser, 202, 1),
-                (parsers.schedule.KHLScheduleParser, 186, 2),
-                (parsers.schedule.KHLScheduleParser, 185, 1),
-                (parsers.schedule.KHLScheduleParser, 168, 2),
-                (parsers.schedule.KHLScheduleParser, 167, 1),
-                (parsers.schedule.KHLScheduleParser, 165, 2),
-                (parsers.schedule.KHLScheduleParser, 160, 1),
-                # MHL #######################################
-                (parsers.schedule.MHLScheduleParser, 277, 4),
-                (parsers.schedule.MHLScheduleParser, 253, 2),
-                (parsers.schedule.MHLScheduleParser, 252, 1),
-                (parsers.schedule.MHLScheduleParser, 247, 4),
-                (parsers.schedule.MHLScheduleParser, 236, 5),
-                (parsers.schedule.MHLScheduleParser, 230, 2),
-                (parsers.schedule.MHLScheduleParser, 229, 1),
-                (parsers.schedule.MHLScheduleParser, 220, 4),
-                (parsers.schedule.MHLScheduleParser, 205, 2),
-                (parsers.schedule.MHLScheduleParser, 207, 6),
-                (parsers.schedule.MHLScheduleParser, 204, 1),
-                (parsers.schedule.MHLScheduleParser, 201, 4),
-                (parsers.schedule.MHLScheduleParser, 188, 2),
-                (parsers.schedule.MHLScheduleParser, 187, 1),
-                (parsers.schedule.MHLScheduleParser, 187, 1),
-                (parsers.schedule.MHLScheduleParser, 173, 2),
-                (parsers.schedule.MHLScheduleParser, 170, 1),
-                (parsers.schedule.MHLScheduleParser, 196, 7),
-                # MHL-2 #####################################
-                (parsers.schedule.MHL2ScheduleParser, 306, 8),
-                (parsers.schedule.MHL2ScheduleParser, 261, 8),
-                (parsers.schedule.MHL2ScheduleParser, 238, 8),
-                (parsers.schedule.MHL2ScheduleParser, 255, 2),
-                (parsers.schedule.MHL2ScheduleParser, 254, 1),
-                (parsers.schedule.MHL2ScheduleParser, 234, 2),
-                (parsers.schedule.MHL2ScheduleParser, 231, 1),
-                (parsers.schedule.MHL2ScheduleParser, 214, 2),
-                (parsers.schedule.MHL2ScheduleParser, 211, 1),
-                # VHL ########################################
-                (parsers.schedule.VHLScheduleParser, 251, 2),
-                (parsers.schedule.VHLScheduleParser, 250, 1),
-                (parsers.schedule.VHLScheduleParser, 228, 2),
-                (parsers.schedule.VHLScheduleParser, 227, 1),
-                (parsers.schedule.VHLScheduleParser, 209, 2),
-                (parsers.schedule.VHLScheduleParser, 208, 1),
-                (parsers.schedule.VHLScheduleParser, 190, 2),
-                (parsers.schedule.VHLScheduleParser, 189, 1),
-    )
-    for _parser, id, chlng_type in _parsers:
-        _parser().put_data_in_db_from_page( id, update=False,
-                                            challenge_type=chlng_type,
-                                            without_khl_id=False,
-        )
+#def temp_update_schedules():
+    #'''
+        #1 - championship,
+        #2 - playoff,
+        #3 - hopeful cup
+        #4 - MHL World Cup
+        #5 - MHL Challenge Cup
+        #6 - MHL playout
+        #7 - MHL qualifying tournament
+    #'''
+    #_parsers = (# KHL ######################################
+                #(parsers.schedule.KHLScheduleParser, 245, 2),
+                #(parsers.schedule.KHLScheduleParser, 265, 3),
+                #(parsers.schedule.KHLScheduleParser, 244, 1),
+                #(parsers.schedule.KHLScheduleParser, 223, 2),
+                #(parsers.schedule.KHLScheduleParser, 237, 3),
+                #(parsers.schedule.KHLScheduleParser, 222, 1),
+                #(parsers.schedule.KHLScheduleParser, 203, 2),
+                #(parsers.schedule.KHLScheduleParser, 202, 1),
+                #(parsers.schedule.KHLScheduleParser, 186, 2),
+                #(parsers.schedule.KHLScheduleParser, 185, 1),
+                #(parsers.schedule.KHLScheduleParser, 168, 2),
+                #(parsers.schedule.KHLScheduleParser, 167, 1),
+                #(parsers.schedule.KHLScheduleParser, 165, 2),
+                #(parsers.schedule.KHLScheduleParser, 160, 1),
+                ## MHL #######################################
+                #(parsers.schedule.MHLScheduleParser, 277, 4),
+                #(parsers.schedule.MHLScheduleParser, 253, 2),
+                #(parsers.schedule.MHLScheduleParser, 252, 1),
+                #(parsers.schedule.MHLScheduleParser, 247, 4),
+                #(parsers.schedule.MHLScheduleParser, 236, 5),
+                #(parsers.schedule.MHLScheduleParser, 230, 2),
+                #(parsers.schedule.MHLScheduleParser, 229, 1),
+                #(parsers.schedule.MHLScheduleParser, 220, 4),
+                #(parsers.schedule.MHLScheduleParser, 205, 2),
+                #(parsers.schedule.MHLScheduleParser, 207, 6),
+                #(parsers.schedule.MHLScheduleParser, 204, 1),
+                #(parsers.schedule.MHLScheduleParser, 201, 4),
+                #(parsers.schedule.MHLScheduleParser, 188, 2),
+                #(parsers.schedule.MHLScheduleParser, 187, 1),
+                #(parsers.schedule.MHLScheduleParser, 187, 1),
+                #(parsers.schedule.MHLScheduleParser, 173, 2),
+                #(parsers.schedule.MHLScheduleParser, 170, 1),
+                #(parsers.schedule.MHLScheduleParser, 196, 7),
+                ## MHL-2 #####################################
+                #(parsers.schedule.MHL2ScheduleParser, 306, 8),
+                #(parsers.schedule.MHL2ScheduleParser, 261, 8),
+                #(parsers.schedule.MHL2ScheduleParser, 238, 8),
+                #(parsers.schedule.MHL2ScheduleParser, 255, 2),
+                #(parsers.schedule.MHL2ScheduleParser, 254, 1),
+                #(parsers.schedule.MHL2ScheduleParser, 234, 2),
+                #(parsers.schedule.MHL2ScheduleParser, 231, 1),
+                #(parsers.schedule.MHL2ScheduleParser, 214, 2),
+                #(parsers.schedule.MHL2ScheduleParser, 211, 1),
+                ## VHL ########################################
+                #(parsers.schedule.VHLScheduleParser, 251, 2),
+                #(parsers.schedule.VHLScheduleParser, 250, 1),
+                #(parsers.schedule.VHLScheduleParser, 228, 2),
+                #(parsers.schedule.VHLScheduleParser, 227, 1),
+                #(parsers.schedule.VHLScheduleParser, 209, 2),
+                #(parsers.schedule.VHLScheduleParser, 208, 1),
+                #(parsers.schedule.VHLScheduleParser, 190, 2),
+                #(parsers.schedule.VHLScheduleParser, 189, 1),
+    #)
+    #for _parser, id, chlng_type in _parsers:
+        #_parser().put_data_in_db_from_page( id, update=False,
+                                            #challenge_type=chlng_type,
+                                            #without_khl_id=False,
+        #)
 
 
 @app.task(ignore_result=True, track_started=True)
 def player_generate_timeline(ids):
-    # birthday events
-    timelines = models.Timeline.objects.filter(type='birthday')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        models.Timeline.objects.create(
-            start_date=player.birth_date,
-            ru_headline='День рождения',
-            en_headline='Birth day',
-            ru_text='День рождения',
-            en_text='Birth day',
-            media=player.photo,
-            type='birthday',
-            player=player)
+    def birthday_events(players):
+        # birthday events
+        timelines = models.Timeline.objects.filter(type='birthday')
+        for player in players.exclude(
+                pk__in=timelines.values_list('player_id', flat=True)):
+            models.Timeline.objects.create(
+                start_date=player.birth_date,
+                ru_headline='День рождения',
+                en_headline='Birth day',
+                ru_text='День рождения',
+                en_text='Birth day',
+                media=player.photo,
+                type='birthday',
+                player=player)
 
-    # first goal event
-    timelines = models.Timeline.objects.filter(type='first_goal')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
-            date = (
+    def first_event(players, **kwargs):
+        ''' abstract 1st event factory '''
+        timelines = models.Timeline.objects.filter(type=kwargs['type'])
+        for player in players.exclude(
+                pk__in=timelines.values_list('player_id', flat=True)):
+            try:
+                date = kwargs['date_query'](player)
+            except kwargs['date_model'].DoesNotExist:
+                pass
+            else:
+                models.Timeline.objects.create(
+                    start_date=date,
+                    ru_headline=kwargs['ru_headline'],
+                    en_headline=kwargs['en_headline'],
+                    ru_text=kwargs['ru_text'],
+                    en_text=kwargs['en_text'],
+                    media=player.photo,
+                    type=kwargs['type'],
+                    player=player)
+
+    def first_goal_event(players):
+        def date_query(player):
+            return (
                 models.MatchGoalHistory.objects
                 .filter(scorer=player)
                 .earliest('match__date').match.date)
-        except models.MatchGoalHistory.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первая шайба в карьере',
-                en_headline='First goal in career',
-                ru_text='Первая шайба в карьере',
-                en_text='First goal in career',
-                media=player.photo,
-                type='first_goal',
-                player=player)
+        first_event(
+            players,
+            type='first_goal',
+            date_query=date_query,
+            date_model=models.MatchGoalHistory,
+            ru_headline='Первая шайба в карьере',
+            en_headline='First goal in career',
+            ru_text='Первая шайба в карьере',
+            en_text='First goal in career')
 
-    # first 0 loose goals event
-    timelines = models.Timeline.objects.filter(type='first_0_loose_goals')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
+    def first_0_loose_goals_event(players):
+        def date_query(player):
             # line=1 goalkeeper
-            date = (
+            return (
                 models.ClubPlayerMatch.objects
                 .filter(
                     clubplayer__player=player, clubplayer__line=1,
                     loose_goals=0)
                 .earliest('match__date').match.date)
-        except models.ClubPlayerMatch.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первый "сухарь" в карьере',
-                en_headline='First 0 loose goals in career',
-                ru_text='Первый "сухарь" в карьере',
-                en_text='First 0 loose goals in career',
-                media=player.photo,
-                type='first_0_loose_goals',
-                player=player)
+        first_event(
+            players,
+            type='first_0_loose_goals',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый "сухарь" в карьере',
+            en_headline='First 0 loose goals in career',
+            ru_text='Первый "сухарь" в карьере',
+            en_text='First 0 loose goals in career')
 
-    # first loose goal event
-    timelines = models.Timeline.objects.filter(type='first_loose_goal')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
+    def first_loose_goal_event(players):
+        def date_query(player):
             # line=1 goalkeeper
-            date = (
+            return (
                 models.ClubPlayerMatch.objects
                 .filter(
                     clubplayer__player=player, clubplayer__line=1,
                     loose_goals__gte=1)
                 .earliest('match__date').match.date)
-        except models.ClubPlayerMatch.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первый гол в карьере',
-                en_headline='First loose goal in career',
-                ru_text='Первый гол в карьере',
-                en_text='First loose goal in career',
-                media=player.photo,
-                type='first_loose_goal',
-                player=player)
+        first_event(
+            players,
+            type='first_loose_goal',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый гол в карьере',
+            en_headline='First loose goal in career',
+            ru_text='Первый гол в карьере',
+            en_text='First loose goal in career')
 
-    # goals events
-    players = models.Player.objects.filter(pk__in=ids)
-    for player in players:
-        count = (
-            models.Timeline.objects
-            .filter(type='goals', player=player).count())
-        goals = (
-            models.MatchGoalHistory.objects
-            .filter(scorer=player)
-            .order_by('match__date'))
-        if goals.count() > 0 and goals.count() / 50 > count:
-            for i, goal in enumerate(goals):
-                if i + 1 > count * 50 and not (i + 1) % 50:
-                    models.Timeline.objects.create(
-                        start_date=goal.match.date,
-                        ru_headline='%d-я шайба в карьере' % (i + 1),
-                        en_headline='%dth goal in career' % (i + 1),
-                        ru_text='%d-я шайба в карьере' % (i + 1),
-                        en_text='%dth goal in career' % (i + 1),
-                        media=player.photo,
-                        type='goals',
-                        player=player)
-
-    # first match event
-    timelines = models.Timeline.objects.filter(type='first_match')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
-            date = (
+    def first_match_event(players):
+        def date_query(player):
+            return (
                 models.ClubPlayerMatch.objects
                 .filter(clubplayer__player=player)
                 .earliest('match__date').match.date)
-        except models.ClubPlayerMatch.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первый матч в карьере',
-                en_headline='First match in career',
-                ru_text='Первый матч в карьере',
-                en_text='First match in career',
-                media=player.photo,
-                type='first_match',
-                player=player)
+        first_event(
+            players,
+            type='first_match',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый матч в карьере',
+            en_headline='First match in career',
+            ru_text='Первый матч в карьере',
+            en_text='First match in career')
 
-    # matches events
+    def goals_events(players):
+        players = models.Player.objects.filter(pk__in=ids)
+        for player in players:
+            count = (
+                models.Timeline.objects
+                .filter(type='goals', player=player).count())
+            goals = (
+                models.MatchGoalHistory.objects
+                .filter(scorer=player)
+                .order_by('match__date'))
+            if goals.count() > 0 and goals.count() / 50 > count:
+                for i, goal in enumerate(goals):
+                    if i + 1 > count * 50 and not (i + 1) % 50:
+                        models.Timeline.objects.create(
+                            start_date=goal.match.date,
+                            ru_headline='%d-я шайба в карьере' % (i + 1),
+                            en_headline='%dth goal in career' % (i + 1),
+                            ru_text='%d-я шайба в карьере' % (i + 1),
+                            en_text='%dth goal in career' % (i + 1),
+                            media=player.photo,
+                            type='goals',
+                            player=player)
+
+    def matches_events(players):
+        players = models.Player.objects.filter(pk__in=ids)
+        for player in players:
+            count = (
+                models.Timeline.objects
+                .filter(type='matches', player=player).count())
+            matches = (
+                models.ClubPlayerMatch.objects
+                .filter(clubplayer__player=player)
+                .order_by('match__date'))
+            if matches.count() > 0 and matches.count() / 50 > count:
+                for i, match in enumerate(matches):
+                    if i + 1 > count * 50 and not (i + 1) % 50:
+                        models.Timeline.objects.create(
+                            start_date=match.match.date,
+                            ru_headline='%d-й матч в карьере' % (i + 1),
+                            en_headline='%dth match in career' % (i + 1),
+                            ru_text='%d-й матч в карьере' % (i + 1),
+                            en_text='%dth match in career' % (i + 1),
+                            media=player.photo,
+                            type='matches',
+                            player=player)
+
     players = models.Player.objects.filter(pk__in=ids)
-    for player in players:
-        count = (
-            models.Timeline.objects
-            .filter(type='matches', player=player).count())
-        matches = (
-            models.ClubPlayerMatch.objects
-            .filter(clubplayer__player=player)
-            .order_by('match__date'))
-        if matches.count() > 0 and matches.count() / 50 > count:
-            for i, match in enumerate(matches):
-                if i + 1 > count * 50 and not (i + 1) % 50:
-                    models.Timeline.objects.create(
-                        start_date=match.match.date,
-                        ru_headline='%d-й матч в карьере' % (i + 1),
-                        en_headline='%dth match in career' % (i + 1),
-                        ru_text='%d-й матч в карьере' % (i + 1),
-                        en_text='%dth match in career' % (i + 1),
-                        media=player.photo,
-                        type='matches',
-                        player=player)
+
+    birthday_events(players)
+    first_goal_event(players)
+    first_0_loose_goals_event(players)
+    first_loose_goal_event(players)
+    first_match_event(players)
+    goals_events(players)
+    matches_events(players)
