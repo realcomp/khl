@@ -173,7 +173,8 @@ class MatchManager(ManagerMixin, models.Manager):
     def _get_coach(self, fio=''):
         b''' получить тренера '''
         model = get_model(CURRENT_APP, 'Coach')
-        return model.objects.get_or_create(fio=fio)[0]
+        _qs = model.objects.filter(fio=fio)
+        return _qs.first() or model.objects.create(fio=fio)
 
     def _get_team(self, **kwargs):
         b''' получить команду '''
@@ -213,6 +214,7 @@ class MatchManager(ManagerMixin, models.Manager):
         b''' получить судей '''
         judges = judges or []
         model = get_model(CURRENT_APP, 'Judge')
+        print(judges)
         return (model.objects.get_or_create(fio=j) for j in judges)
 
 
