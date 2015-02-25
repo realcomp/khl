@@ -342,10 +342,10 @@ admin.site.register(Name, NameAdmin)
 def generate_timeline(modeladmin, request, queryset):
     from . import tasks
     pks = Player.objects.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        tasks.player_generate_timeline.delay(pks[i:i + 1000])
-    # tasks.player_generate_timeline.delay([1830])  # dev mode
-    # tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
+    # for i in range(0, len(pks), 1000):  # 1000 players per task
+    #     tasks.player_generate_timeline.delay(pks[i:i + 1000])
+    tasks.player_generate_timeline.delay([1830, 2210])  # dev mode
+    tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
 generate_timeline.short_description = _('Generate new timeline events')
 
 
