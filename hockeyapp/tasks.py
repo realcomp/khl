@@ -366,171 +366,163 @@ def temp_update_schedules():
 
 @app.task(ignore_result=True, track_started=True)
 def player_generate_timeline(ids):
-    # birthday events
-    timelines = models.Timeline.objects.filter(type='birthday')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        models.Timeline.objects.create(
-            start_date=player.birth_date,
-            ru_headline='День рождения',
-            en_headline='Birth day',
-            ru_text='День рождения',
-            en_text='Birth day',
-            media=player.photo,
-            type='birthday',
-            player=player)
+    def birthday_events(players):
+        # birthday events
+        timelines = models.Timeline.objects.filter(type='birthday')
+        for player in players.exclude(
+                pk__in=timelines.values_list('player_id', flat=True)):
+            models.Timeline.objects.create(
+                start_date=player.birth_date,
+                ru_headline='День рождения',
+                en_headline='Birth day',
+                ru_text='День рождения',
+                en_text='Birth day',
+                media=player.photo,
+                type='birthday',
+                player=player)
 
-    # first goal event
-    timelines = models.Timeline.objects.filter(type='first_goal')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
-            date = (
+    def first_event(players, **kwargs):
+        ''' abstract 1st event factory '''
+        timelines = models.Timeline.objects.filter(type=kwargs['type'])
+        for player in players.exclude(
+                pk__in=timelines.values_list('player_id', flat=True)):
+            try:
+                date = kwargs['date_query'](player)
+            except kwargs['date_model'].DoesNotExist:
+                pass
+            else:
+                models.Timeline.objects.create(
+                    start_date=date,
+                    ru_headline=kwargs['ru_headline'],
+                    en_headline=kwargs['en_headline'],
+                    ru_text=kwargs['ru_text'],
+                    en_text=kwargs['en_text'],
+                    media=player.photo,
+                    type=kwargs['type'],
+                    player=player)
+
+    def first_goal_event(players):
+        def date_query(player):
+            return (
                 models.MatchGoalHistory.objects
                 .filter(scorer=player)
                 .earliest('match__date').match.date)
-        except models.MatchGoalHistory.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первая шайба в карьере',
-                en_headline='First goal in career',
-                ru_text='Первая шайба в карьере',
-                en_text='First goal in career',
-                media=player.photo,
-                type='first_goal',
-                player=player)
+        first_event(
+            players,
+            type='first_goal',
+            date_query=date_query,
+            date_model=models.MatchGoalHistory,
+            ru_headline='Первая шайба в карьере',
+            en_headline='First goal in career',
+            ru_text='Первая шайба в карьере',
+            en_text='First goal in career')
 
-    # first 0 loose goals event
-    timelines = models.Timeline.objects.filter(type='first_0_loose_goals')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
+    def first_0_loose_goals_event(players):
+        def date_query(player):
             # line=1 goalkeeper
-            date = (
+            return (
                 models.ClubPlayerMatch.objects
                 .filter(
                     clubplayer__player=player, clubplayer__line=1,
                     loose_goals=0)
                 .earliest('match__date').match.date)
-        except models.ClubPlayerMatch.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первый "сухарь" в карьере',
-                en_headline='First 0 loose goals in career',
-                ru_text='Первый "сухарь" в карьере',
-                en_text='First 0 loose goals in career',
-                media=player.photo,
-                type='first_0_loose_goals',
-                player=player)
+        first_event(
+            players,
+            type='first_0_loose_goals',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый "сухарь" в карьере',
+            en_headline='First 0 loose goals in career',
+            ru_text='Первый "сухарь" в карьере',
+            en_text='First 0 loose goals in career')
 
-    # first loose goal event
-    timelines = models.Timeline.objects.filter(type='first_loose_goal')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
+    def first_loose_goal_event(players):
+        def date_query(player):
             # line=1 goalkeeper
-            date = (
+            return (
                 models.ClubPlayerMatch.objects
                 .filter(
                     clubplayer__player=player, clubplayer__line=1,
                     loose_goals__gte=1)
                 .earliest('match__date').match.date)
-        except models.ClubPlayerMatch.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первый гол в карьере',
-                en_headline='First loose goal in career',
-                ru_text='Первый гол в карьере',
-                en_text='First loose goal in career',
-                media=player.photo,
-                type='first_loose_goal',
-                player=player)
+        first_event(
+            players,
+            type='first_loose_goal',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый гол в карьере',
+            en_headline='First loose goal in career',
+            ru_text='Первый гол в карьере',
+            en_text='First loose goal in career')
 
-    # goals events
-    players = models.Player.objects.filter(pk__in=ids)
-    for player in players:
-        count = (
-            models.Timeline.objects
-            .filter(type='goals', player=player).count())
-        goals = (
-            models.MatchGoalHistory.objects
-            .filter(scorer=player)
-            .order_by('match__date'))
-        if goals.count() > 0 and goals.count() / 50 > count:
-            for i, goal in enumerate(goals):
-                if i + 1 > count * 50 and not (i + 1) % 50:
-                    models.Timeline.objects.create(
-                        start_date=goal.match.date,
-                        ru_headline='%d-я шайба в карьере' % (i + 1),
-                        en_headline='%dth goal in career' % (i + 1),
-                        ru_text='%d-я шайба в карьере' % (i + 1),
-                        en_text='%dth goal in career' % (i + 1),
-                        media=player.photo,
-                        type='goals',
-                        player=player)
-
-    # first match event
-    timelines = models.Timeline.objects.filter(type='first_match')
-    players = (
-        models.Player.objects
-        .filter(pk__in=ids)
-        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
-    for player in players:
-        try:
-            date = (
+    def first_match_event(players):
+        def date_query(player):
+            return (
                 models.ClubPlayerMatch.objects
                 .filter(clubplayer__player=player)
                 .earliest('match__date').match.date)
-        except models.ClubPlayerMatch.DoesNotExist:
-            pass
-        else:
-            models.Timeline.objects.create(
-                start_date=date,
-                ru_headline='Первый матч в карьере',
-                en_headline='First match in career',
-                ru_text='Первый матч в карьере',
-                en_text='First match in career',
-                media=player.photo,
-                type='first_match',
-                player=player)
+        first_event(
+            players,
+            type='first_match',
+            date_query=date_query,
+            date_model=models.ClubPlayerMatch,
+            ru_headline='Первый матч в карьере',
+            en_headline='First match in career',
+            ru_text='Первый матч в карьере',
+            en_text='First match in career')
 
-    # matches events
+    def goals_events(players):
+        players = models.Player.objects.filter(pk__in=ids)
+        for player in players:
+            count = (
+                models.Timeline.objects
+                .filter(type='goals', player=player).count())
+            goals = (
+                models.MatchGoalHistory.objects
+                .filter(scorer=player)
+                .order_by('match__date'))
+            if goals.count() > 0 and goals.count() / 50 > count:
+                for i, goal in enumerate(goals):
+                    if i + 1 > count * 50 and not (i + 1) % 50:
+                        models.Timeline.objects.create(
+                            start_date=goal.match.date,
+                            ru_headline='%d-я шайба в карьере' % (i + 1),
+                            en_headline='%dth goal in career' % (i + 1),
+                            ru_text='%d-я шайба в карьере' % (i + 1),
+                            en_text='%dth goal in career' % (i + 1),
+                            media=player.photo,
+                            type='goals',
+                            player=player)
+
+    def matches_events(players):
+        players = models.Player.objects.filter(pk__in=ids)
+        for player in players:
+            count = (
+                models.Timeline.objects
+                .filter(type='matches', player=player).count())
+            matches = (
+                models.ClubPlayerMatch.objects
+                .filter(clubplayer__player=player)
+                .order_by('match__date'))
+            if matches.count() > 0 and matches.count() / 50 > count:
+                for i, match in enumerate(matches):
+                    if i + 1 > count * 50 and not (i + 1) % 50:
+                        models.Timeline.objects.create(
+                            start_date=match.match.date,
+                            ru_headline='%d-й матч в карьере' % (i + 1),
+                            en_headline='%dth match in career' % (i + 1),
+                            ru_text='%d-й матч в карьере' % (i + 1),
+                            en_text='%dth match in career' % (i + 1),
+                            media=player.photo,
+                            type='matches',
+                            player=player)
+
     players = models.Player.objects.filter(pk__in=ids)
-    for player in players:
-        count = (
-            models.Timeline.objects
-            .filter(type='matches', player=player).count())
-        matches = (
-            models.ClubPlayerMatch.objects
-            .filter(clubplayer__player=player)
-            .order_by('match__date'))
-        if matches.count() > 0 and matches.count() / 50 > count:
-            for i, match in enumerate(matches):
-                if i + 1 > count * 50 and not (i + 1) % 50:
-                    models.Timeline.objects.create(
-                        start_date=match.match.date,
-                        ru_headline='%d-й матч в карьере' % (i + 1),
-                        en_headline='%dth match in career' % (i + 1),
-                        ru_text='%d-й матч в карьере' % (i + 1),
-                        en_text='%dth match in career' % (i + 1),
-                        media=player.photo,
-                        type='matches',
-                        player=player)
+
+    birthday_events(players)
+    first_goal_event(players)
+    first_0_loose_goals_event(players)
+    first_loose_goal_event(players)
+    first_match_event(players)
+    goals_events(players)
+    matches_events(players)
