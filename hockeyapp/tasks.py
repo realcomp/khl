@@ -9,6 +9,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 from django.conf import settings
+from django.db.models import Q
 
 from sportomatics.celery import app
 
@@ -249,7 +250,7 @@ insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
 @app.task(ignore_result=True, track_started=True)
-def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
+def get_instagram_pictures(insta_loc_id, club, min_timestamp,
                             max_timestamp=None, max_id=None
 ):
     _fn = club.image_folder_name
@@ -265,25 +266,29 @@ def _get_instagram_pictures(insta_loc_id, club, min_timestamp,
                     models.ClubPhotos.objects.get_or_create(club=club,photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
-        _get_instagram_pictures.delay(  insta_loc_id, club,
-                                        min_timestamp= min_timestamp,
+        get_instagram_pictures.delay(  insta_loc_id, club,
+                                        min_timestamp=min_timestamp,
                                         max_timestamp=max_timestamp,
                                         max_id=max_id)
 
 
 @app.task(ignore_result=True, track_started=True)
-def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
+def get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
         min_timestamp = min_timestamp
     else:
         _ts_min = datetime.datetime.today()-datetime.timedelta(days=1)
-        min_timestamp = time.mktime(_ts_min.timetuple())
+        min_timestamp = int(time.mktime(_ts_min.timetuple()))
+    if max_timestamp:
+        max_timestamp = max_timestamp
+    else:
+        max_timestamp = int(time.mktime(datetime.datetime.today().timetuple()))
     clubs = models.Club.objects.filter(arena__isnull=False)
     for club in clubs:
         if club.arena.arenainstagram_set.exists():
             caims = club.arena.arenainstagram_set.all()
             for obj in caims:
-                _get_instagram_pictures.delay(  obj.im_id, club,
+                get_instagram_pictures.delay(  obj.im_id, club,
                                                 min_timestamp, max_timestamp)
 
 
@@ -357,3 +362,122 @@ def _get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
                                             #challenge_type=chlng_type,
                                             #without_khl_id=False,
         #)
+
+
+@app.task(ignore_result=True, track_started=True)
+def player_generate_timeline_matches(ids):
+    # first match event
+    timelines = models.Timeline.objects.filter(type='first_match')
+    players = (
+        models.Player.objects
+        .filter(pk__in=ids)
+        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
+    for player in players:
+        try:
+            date = (
+                models.Match.objects
+                .filter(
+                    Q(home_players__player=player) |
+                    Q(guest_players__player=player))
+                .earliest('date').date)
+        except models.Match.DoesNotExist:
+            pass
+        else:
+            models.Timeline.objects.create(
+                start_date=date,
+                ru_headline='Первый матч в карьере',
+                en_headline='First match in career',
+                ru_text='Первый матч в карьере',
+                en_text='First match in career',
+                media=player.photo,
+                type='first_match',
+                player=player)
+
+    # matches events
+    # players = models.Player.objects.filter(pk__in=ids)
+    # for player in players:
+    #     print(player)
+    #     count = (
+    #         models.Timeline.objects
+    #         .filter(type='matches', player=player).count())
+    #     matches = (
+    #         models.Match.objects
+    #         .filter(
+    #             Q(home_players__player=player) |
+    #             Q(guest_players__player=player))
+    #         .order_by('date').distinct())
+    #     if matches.count() > 0 and matches.count() / 50 > count:
+    #         for i, match in enumerate(matches):
+    #             if i + 1 > count * 50 and not (i + 1) % 50:
+    #                 print(i)
+    #                 models.Timeline.objects.create(
+    #                     start_date=match.date,
+    #                     ru_headline='%d-й матч в карьере' % (i + 1),
+    #                     en_headline='%dth match in career' % (i + 1),
+    #                     ru_text='%d-я матч в карьере' % (i + 1),
+    #                     en_text='%dth match in career' % (i + 1),
+    #                     media=player.photo,
+    #                     type='matches',
+    #                     player=player)
+
+
+@app.task(ignore_result=True, track_started=True)
+def player_generate_timeline():
+    # birthday events
+    timelines = models.Timeline.objects.filter(type='birthday')
+    players = (
+        models.Player.objects
+        # .filter(pk=1830)  # dev mode
+        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
+    for player in players:
+        models.Timeline.objects.create(
+            start_date=player.birth_date,
+            ru_headline='День рождения',
+            en_headline='Birth day',
+            ru_text='День рождения',
+            en_text='Birth day',
+            media=player.photo,
+            type='birthday',
+            player=player)
+
+    # first goal event
+    timelines = models.Timeline.objects.filter(type='first_goal')
+    players = (
+        models.Player.objects
+        # .filter(pk=1830)  # dev mode
+        .exclude(pk__in=timelines.values_list('player_id', flat=True)))
+    for player in players:
+        goals = models.MatchGoalHistory.objects.filter(scorer=player)
+        if goals.exists():
+            models.Timeline.objects.create(
+                start_date=goals.earliest('match__date').match.date,
+                ru_headline='Первая шайба в карьере',
+                en_headline='First goal in career',
+                ru_text='Первая шайба в карьере',
+                en_text='First goal in career',
+                media=player.photo,
+                type='first_goal',
+                player=player)
+
+    # goals events
+    players = models.Player.objects.all()
+    # players = models.Player.objects.filter(pk=1830)  # dev mode
+    for player in players:
+        count = (
+            models.Timeline.objects
+            .filter(type='goals', player=player).count())
+        goals = (
+            models.MatchGoalHistory.objects
+            .filter(scorer=player)
+            .order_by('match__date'))
+        if goals.exists():
+            for i in range(max(count, 1) * 50 - 1, goals.count(), 50):
+                models.Timeline.objects.create(
+                    start_date=goals[i].match.date,
+                    ru_headline='%d-я шайба в карьере' % (i + 1),
+                    en_headline='%dth goal in career' % (i + 1),
+                    ru_text='%d-я шайба в карьере' % (i + 1),
+                    en_text='%dth goal in career' % (i + 1),
+                    media=player.photo,
+                    type='goals',
+                    player=player)

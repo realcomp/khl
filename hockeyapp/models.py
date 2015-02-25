@@ -442,6 +442,7 @@ class ClubPhotos(models.Model):
     class Meta:
         verbose_name=_('Club instagram photo')
         verbose_name_plural=_('Club instagram photos')
+        ordering = 'photo__created',
 
     def save(self, **kwargs):
         if self.photo.comment and not self.comment:
