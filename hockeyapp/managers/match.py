@@ -19,11 +19,11 @@ class ManagerMixin(object):
         b''' получить список игроков '''
         return [self._get_player(khl_id) for khl_id in khl_ids if khl_id]
 
-    def _get_player(self, khl_id, ru_fio='', update=False):
+    def _get_player(self, khl_id, fio='', update=False):
         b''' получить игрока '''
         model = get_model(CURRENT_APP, 'Player')
         return model.objects.get_or_create_player(  khl_id=khl_id, 
-                                                    ru_fio=ru_fio,
+                                                    fio=fio,
                                                     update=update)
 
     def _get_clubplayers(self, lst, club, match=None):
@@ -33,7 +33,7 @@ class ManagerMixin(object):
     def _get_clubplayer(self, data, club, match=None):
         b''' получить клубного игрока '''
         _player = self._get_player( data.pop('khl_id', None),
-                                    ru_fio=data.pop('ru_fio', ''),
+                                    fio=data.pop('fio', ''),
                                     #update=True,
         )
         model = get_model(CURRENT_APP, 'ClubPlayer')
@@ -170,10 +170,10 @@ class MatchManager(ManagerMixin, models.Manager):
         for penalty in penalties_history:
             model.objects.create_penalty(match=match,**penalty)
 
-    def _get_coach(self, coach_ru_fio=''):
+    def _get_coach(self, fio=''):
         b''' получить тренера '''
         model = get_model(CURRENT_APP, 'Coach')
-        return model.objects.get_or_create(ru_fio=coach_ru_fio)[0]
+        return model.objects.get_or_create(fio=fio)[0]
 
     def _get_team(self, **kwargs):
         b''' получить команду '''
@@ -181,18 +181,18 @@ class MatchManager(ManagerMixin, models.Manager):
         _coach = kwargs.pop('coach', None)
         _players = kwargs.pop('players', None)
         club_model = get_model(CURRENT_APP, 'club')
-        _title = kwargs.pop('ru_title', None)
+        _title = kwargs.pop('title', None)
         _club = club_model.objects.by_title_alias(_title).first()
         if not _club:
-            kwargs['ru_title'] = _title
+            kwargs['title'] = _title
             _club, _crt = club_model.objects.get_or_create(**kwargs)
             if _players and _crt:
-                _club.players = set([self._get_player(p.get('khl_id'),
-                                                      p.get('ru_fio'),
-                ) for p in _players])
+                _players = [self._get_player(p.get('khl_id'), p.get('fio'),)
+                            for p in _players]
+                _club.players = set(_players)
         if _region:
             model = get_model('addresses', 'Address')
-            _region, _crt = model.objects.get_or_create(ru_title=_region)
+            _region, _crt = model.objects.get_or_create(title=_region)
             kwargs['address'] =_region
             model = get_model(CURRENT_APP, 'AddressClub')
             model.objects.get_or_create(club=_club, 
@@ -213,7 +213,7 @@ class MatchManager(ManagerMixin, models.Manager):
         b''' получить судей '''
         judges = judges or []
         model = get_model(CURRENT_APP, 'Judge')
-        return (model.objects.get_or_create(ru_fio=j) for j in judges)
+        return (model.objects.get_or_create(fio=j) for j in judges)
 
 
 class ClubPlayerMatchQuerySet(models.QuerySet):

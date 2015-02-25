@@ -3,7 +3,6 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
-import datetime
 import requests
 
 from PIL import Image
@@ -19,7 +18,7 @@ from addresses.models import Country
 
 class PlayerQuerySet(models.QuerySet):
     b''' Менеджер игрока '''
-    def get_or_create_player(self, khl_id, ru_fio='', update=False, data=None):
+    def get_or_create_player(self, khl_id, fio='', update=False, data=None):
         b''' получаем игрока по id со стороннего ресурса '''
         _player = self.filter(khl_id=khl_id).last()
         if not _player or update:
@@ -38,12 +37,12 @@ class PlayerQuerySet(models.QuerySet):
                 if _citizenship:
                     _func = Country.objects.get_or_create
                     data['citizenship'], _crt = _func(ru_title = _citizenship)
-                if not data.get('ru_fio') and ru_fio:
-                    data['ru_fio'] = ru_fio
+                if not data.get('fio') and fio:
+                    data['fio'] = fio
             else:
                 data = dict(khl_id=khl_id,)
-                if ru_fio:
-                    data['ru_fio']=ru_fio
+                if fio:
+                    data['fio']=fio
             if update and _player:
                 self.filter(khl_id=_player.khl_id).update(**data)
             else:
