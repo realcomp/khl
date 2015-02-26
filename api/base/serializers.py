@@ -5,7 +5,7 @@ import rest_framework as drf
 
 from filer.models import Image
 
-from base.models import InstagramImageFile
+from base.models import InstagramImageFile, InstagramUser
 
 
 class FIFSerialiser(drf.serializers.ModelSerializer):
@@ -15,8 +15,14 @@ class FIFSerialiser(drf.serializers.ModelSerializer):
         read_only_fields = fields
 
 
+class InstagramUserSerializer(drf.serializers.ModelSerializer):
+    class Meta:
+        model = InstagramUser
+
+
 class IIFMinimalSerializer(drf.serializers.ModelSerializer):
     img = FIFSerialiser()
+    #instagram_user = InstagramUserSerializer()
     class Meta:
         model = InstagramImageFile
-        fields = 'id', 'img', 'created', 'user_str'
+        fields = 'id', 'img', 'created', 'user_str', 'instagram_user'

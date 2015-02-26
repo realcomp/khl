@@ -10,6 +10,7 @@ from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models.loading import get_model
 from django.utils import timezone
 current_tz = timezone.get_current_timezone()
 
@@ -83,6 +84,23 @@ class IIFQuerySet(GetFilerImage, models.QuerySet):
                         created=_dt,
                         comment=_cmnt,
                         user_str=_usr,
-                        img=filer_image)
+                        img=filer_image,
+                        instagram_user=self._get_instagram_user(iif_obj))
             iif, _crt = self.get_or_create(**data)
             return iif
+
+    def _get_instagram_user(self, iif_obj):
+        if iif_obj.user:
+            usr_model = get_model('base', 'InstagramUser')
+            user = usr_model.objects.filter(instagram_id=iif_obj.user.id).last()
+            if not user:
+                data = dict(
+                    instagram_id = iif_obj.user.id,
+                    bio = iif_obj.user.bio,
+                    full_name = iif_obj.user.full_name,
+                    profile_picture = iif_obj.user.profile_picture,
+                    username = iif_obj.user.username,
+                    website = iif_obj.user.website,
+                )
+                user = usr_model.objects.create(**data)
+            return user

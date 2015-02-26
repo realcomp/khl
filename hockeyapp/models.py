@@ -240,6 +240,10 @@ class Arena(TitleBaseModel):
     country = models.ForeignKey(Country, null=True, blank=True,
                                 verbose_name=Country._meta.verbose_name,)
     league = models.ForeignKey('League', null=True, blank=True)
+    image_folder_name = property(lambda self: 'ArenaInstaPhoto:{}(id{})'.format(
+                                                                self.title,
+                                                                self.pk,)
+    )
 
     def get_absolute_url(self):
         if self.pk:
@@ -256,15 +260,26 @@ class ArenaPhotos(models.Model):
     arena = models.ForeignKey(Arena, verbose_name=Arena._meta.verbose_name)
 
 
-class ArenaInstagram(models.Model):
-    arena = models.ForeignKey(Arena)
-    name = models.CharField(_('Name'), max_length=1024)
-    im_id = models.CharField(_('Instagram ID'), max_length=1024)
-    lat = models.CharField(_('Latitude'), max_length=1024)
-    lng = models.CharField(_('Longtitude'), max_length=1024)
+class ArenaInstaPhoto(models.Model):
+    arena = models.ForeignKey(Arena, verbose_name=Arena._meta.verbose_name)
+    photo = models.ForeignKey(InstagramImageFile)
+    match = models.ForeignKey('hockeyapp.Match', null=True, blank=True,
+                                on_delete=models.SET_NULL,)
+    club = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
+                                on_delete=models.SET_NULL,)
+    player_numbers = models.CharField(max_length=1024, blank=True)
+    comment = models.CharField(_('Comment'), max_length=1024, blank=True)
+    processed = models.BooleanField(default=False)
+    proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,)    
     class Meta:
-        verbose_name=_('Arena instagram')
-        verbose_name_plural=_('Arena instagrams')
+        verbose_name=_('Club instagram photo')
+        verbose_name_plural=_('Club instagram photos')
+        ordering = 'photo__created',
+
+    def save(self, **kwargs):
+        if self.photo.comment and not self.comment:
+            self.comment = self.photo.comment
+        super(ArenaInstaPhoto, self).save(**kwargs)
 
 
 class League(TitleBaseModel):
@@ -377,11 +392,6 @@ class Club(TitleBaseModel):
         if i < len(seasons) - 1:
             return seasons[i + 1]
 
-    image_folder_name = property(lambda self: 'Hockey club: {}(id {})'.format(
-                                                                self.ru_title,
-                                                                self.pk,)
-    )
-
     class Meta:
         verbose_name = _('Club')
         verbose_name_plural = _('Clubs')
@@ -432,26 +442,6 @@ class AddressClubPhotos(models.Model):
     addressclub = models.ForeignKey(AddressClub, 
                                     verbose_name=AddressClub._meta.verbose_name)
     photo = FilerImageField(verbose_name=_('Photo'))
-
-
-class ClubPhotos(models.Model):
-    club = models.ForeignKey(Club, verbose_name=Club._meta.verbose_name)
-    photo = models.ForeignKey(InstagramImageFile)
-    match = models.ForeignKey('hockeyapp.Match', null=True, blank=True,
-                                on_delete=models.SET_NULL,)
-    player_numbers = models.CharField(max_length=1024, blank=True)
-    comment = models.CharField(_('Comment'), max_length=1024, blank=True)
-    processed = models.BooleanField(default=False)
-    proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,)    
-    class Meta:
-        verbose_name=_('Club instagram photo')
-        verbose_name_plural=_('Club instagram photos')
-        ordering = 'photo__created',
-
-    def save(self, **kwargs):
-        if self.photo.comment and not self.comment:
-            self.comment = self.photo.comment
-        super(ClubPhotos, self).save(**kwargs)
 
 
 class LeagueClub(AdminLinkMixin, models.Model):
@@ -647,36 +637,18 @@ class ClubPlayerMatch(models.Model):
     assists = models.SmallIntegerField(_('Assists'), null=True)
     points = models.SmallIntegerField(_('Points'), null=True)
     plus_minus = models.SmallIntegerField('+/-', null=True)
-    plus_minus_str = models.CharField('+/-', max_length=8, blank=True)
     penalty_time = models.PositiveIntegerField(_('Penalty Time'), null=True)
-    penalty_time_str = models.CharField(_('Penalty Time'), max_length=8, blank=True)
     ev_goals = models.PositiveSmallIntegerField(_('EV Goals'), null=True)
-    ev_goals_str = models.CharField(_('EV Goals'), max_length=8, blank=True)
     pp_goals = models.PositiveSmallIntegerField(_('Power Play Goals'), null=True)
-    pp_goals_str = models.CharField(_('Power Play Goals'), max_length=8, blank=True)
     es_goals = models.PositiveSmallIntegerField(_('Even Strength Goals'), null=True)
-    es_goals_str = models.CharField(_('Even Strength Goals'),
-                                max_length=8, blank=True)
     overtime_goals = models.PositiveSmallIntegerField(_('Overtime Goals'), null=True)
-    overtime_goals_str = models.CharField(_('Overtime Goals'),
-                                max_length=8, blank=True)
     win_goals = models.PositiveSmallIntegerField(_('Win Goals'), null=True)
-    win_goals_str = models.CharField(_('Win Goals'), max_length=8,  blank=True)
     bullet_goals = models.PositiveSmallIntegerField(_('Win Bullet Goals'), null=True)
-    bullet_goals_str = models.CharField(_('Win Bullet Goals'), 
-                                max_length=8, blank=True)
     shots = models.PositiveSmallIntegerField(_('Shots count'), null=True)
-    shots_str = models.CharField(_('Shots count'), max_length=8, blank=True)
     pis = models.FloatField(_('Implemented Shots, %'), null=True)
-    pis_str = models.CharField(_('Implemented Shots, %'),
-                                max_length=8, blank=True)
     faceoff = models.PositiveSmallIntegerField(_('Face-off'), null=True)
-    faceoff_str = models.CharField(_('Face-off'), max_length=8, blank=True)
     winfaceoff = models.PositiveSmallIntegerField(_('Face-off Wins'), null=True)
-    winfaceoff_str = models.CharField(_('Face-off Wins'), max_length=8, blank=True)
     winfaceoff_p = models.FloatField(_('Face-off Wins, %'), null=True)
-    winfaceoff_p_str = models.CharField(_('Face-off Wins, %'),
-                                max_length=8, blank=True)
     #khl adv stats
     change_count = models.PositiveIntegerField(_('Change count'),null=True)
     hits = models.PositiveIntegerField(_('Hits'),null=True)
@@ -684,16 +656,10 @@ class ClubPlayerMatch(models.Model):
     fouls = models.PositiveIntegerField(_('Fouls'),null=True)
     #keeper stats
     loose_goals = models.PositiveSmallIntegerField(_('Loose Goals'), null=True)
-    loose_goals_str = models.CharField(_('Loose Goals'), max_length=8,  blank=True)
     saves = models.PositiveSmallIntegerField(_('Saves Goals'), null=True)
-    saves_str = models.CharField(_('Saves Goals'), max_length=8, blank=True)
     saves_p = models.FloatField(_('Saves Goals , %'), null=True)
-    saves_p_str = models.CharField(_('Saves Goals , %'),
-                                max_length=8, blank=True)
     sf = models.FloatField(_('Safety Factor'), null=True)
-    sf_str = models.CharField(_('Safety Factor'), max_length=8, blank=True)
     gamingtime = models.PositiveIntegerField(_('Gaming time'), null=True)
-    gamingtime_str = models.CharField(_('Gaming time'), max_length=8, blank=True)
 
     __unicode__ = lambda self: '{}'.format(self.match or self.pk,)
 
@@ -751,8 +717,6 @@ class Match(AdminLinkMixin, TitleBaseModel):
     objects = managers.match.MatchManager()
     #service info
     khl_id = models.PositiveIntegerField(_('Other site ID'), null=True)
-    is_championship = models.BooleanField(_('Is championship'), default=True)
-    is_playoff = models.BooleanField(_('Is playoff'), default=False)
     challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
                                 null=True, choices=CHALLENGE_TYPE)
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now=True)
@@ -814,8 +778,6 @@ class Schedule(TitleBaseModel):
     objects = managers.ScheduleManager()
     khl_id = models.PositiveIntegerField(_('Other site ID'), null=True,)
     date = models.DateTimeField(_('Match date'), null=True, blank=True)
-    is_championship = models.BooleanField(_('Is championship'), default=True)
-    is_playoff = models.BooleanField(_('Is playoff'), default=False)
     challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
                                 null=True, choices=CHALLENGE_TYPE)
     #relations

@@ -92,6 +92,19 @@ class SocialNetValue(SocialAbstract):
         verbose_name_plural = _('Social Network Values')
 
 
+class InstagramUser(models.Model):
+    instagram_id = models.CharField(_('Instagram ID'), max_length=1024)
+    full_name = models.CharField(_('Full name'), max_length=1024, blank=True)
+    profile_picture = models.URLField(_('Profile picture'), max_length=1024,
+                                        blank=True)
+    username = models.CharField(_('Username'), max_length=1024, blank=True)
+    website = models.URLField(_('Website'), max_length=1024, blank=True)
+    bio = models.TextField(_(b'BIO'), blank=True)
+    class Meta:
+        verbose_name = _('Instagram user')
+        verbose_name_plural = _('Instagram users')
+
+
 class InstagramImageFile(models.Model):
     objects = IIFQuerySet.as_manager()
     instagram_id = models.CharField(_('Instagram ID'), max_length=1024)
@@ -100,7 +113,8 @@ class InstagramImageFile(models.Model):
     img = FilerImageField(verbose_name=_('Photo'))
     created = models.DateTimeField(_('Created date'), null=True, blank=True,)
     comment = models.CharField(_('Comment'), max_length=1024, blank=True)
-    user_str = models.CharField(_('Instagram user'), max_length=1024, blank=True)
+    user_str = models.CharField(_('Instagram username'), max_length=1024, blank=True)
+    instagram_user = models.ForeignKey(InstagramUser, null=True)
     class Meta:
         verbose_name = _('Instagram image file')
         verbose_name_plural = _('Instagram image files')

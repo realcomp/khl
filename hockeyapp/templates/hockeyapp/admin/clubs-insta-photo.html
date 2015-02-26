@@ -1,23 +1,23 @@
 {% extends "accounts/profile/base.html" %}
 {% load i18n %}
 
-{% block ngapp %}SportomaticsAdminClubPhotos{% endblock %}
+{% block ngapp %}SportomaticsAdminArenaInstaPhoto{% endblock %}
 
 {% block body %}
 <section class="content">
-    <div id="instagram-photos-container" class="instagram-photos-container" ng-controller="AdminClubPhotoController" >
+    <div id="instagram-photos-container" class="instagram-photos-container" ng-controller="AdminArenaInstaPhotoController" >
         <div class="photos-block">
             <form method="post" action="" >
                 {% csrf_token %}
                 <div id="photos-new" data-tab="photos-new">
                     {% verbatim %}
-                    <div ng-repeat="item in photos track by $index" id="item_id_cp_{{item.id}}" class="item" style="display:inline-block;padding-left:5px;padding-top:20px; margin: 20px">
-                        <input type="hidden" id="club_id_cp_{{item.id}}" value="{{item.club}}">
-                        <input type="hidden" id="photo_id_cp_{{item.id}}" value="{{item.photo.id}}">
+                    <div ng-repeat="item in photos track by $index" id="item_id_aip_{{item.id}}" class="item" style="display:inline-block;padding-left:5px;padding-top:20px; margin: 20px">
+                        <input type="hidden" id="club_id_aip_{{item.id}}" value="{{item.club}}">
+                        <!--<input type="hidden" id="photo_id_aip_{{item.id}}" value="{{item.photo.id}}">-->
                         <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="150" height="150" ng-click="checkedInputImg(item.id)">
                         <div class="item-data">
                             <a href="#" class="popup-show-button" ng-click="PhotoPopupShow(item.id, $index, $event)">Увеличить</a>
-                            <input id="id_cp_{{item.id}}" name="cp" type="checkbox" value="{{item.id}}" style="float: right; margin-top: 3px">
+                            <input id="id_aip_{{item.id}}" name="cp" type="checkbox" value="{{item.id}}" style="float: right; margin-top: 3px">
                         </div>
                     </div>
                     <hr class="hr">
@@ -70,11 +70,11 @@
                         <div>Выбранная команда:</div>
                         <input type="text" id="photo_club" disabled ng-model="selectedClub.originalObject.title">
                     </div>
-                    <input ng-show="selectedClub" id="id_cp_club" name="cp_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
+                    <input ng-show="selectedClub" id="id_aip_club" name="aip_club" type="hidden" value="{{selectedClub.originalObject.pk}}"><br/>
                     <div class="ui icon input m-t-5">
                         <label>Номера игроков:</label>
                         <div>
-                            <input id="id_cp_player_numbers" name="cp_player_numbers" type="text" value="{{PhotoPopup.data.player_numbers}}" style="max-width: 80px">
+                            <input id="id_aip_player_numbers" name="aip_player_numbers" type="text" value="{{PhotoPopup.data.player_numbers}}" style="max-width: 80px">
                         </div>
                     </div>
                     <br/>
@@ -83,12 +83,12 @@
                             <label>{{PhotoPopup.data.photo.user_str}}:</label>
                         </div>
                         <div class="m-t-5">
-                            <textarea class="photo-comment" id="id_cp_comment" name="cp_comment" type="text">{{PhotoPopup.data.comment}}</textarea>
+                            <textarea class="photo-comment" id="id_aip_comment" name="aip_comment" type="text">{{PhotoPopup.data.comment}}</textarea>
                         </div>
                     </div>-->
                     <br/>
                     <div class="m-t-10" id="arena_{{PhotoPopup.data.id}}">
-                        <a class="ui blue button" ng-click="createArenaPhoto(PhotoPopup.data.photo.id, PhotoPopup.club.arena)">ФОТО АРЕНЫ</a>
+                        <a class="ui blue button" ng-click="createArenaPhoto(PhotoPopup.data.id, index)">ФОТО АРЕНЫ</a>
                     </div>
 
                     <div class="m-t-10">
@@ -126,13 +126,13 @@
 <script src="{{ STATIC_URL }}/js/angular-resource.js"></script>
 <script type="text/javascript">
     (function() {
-        var services = angular.module('CLubPhotoServices', ['ngResource']);
+        var services = angular.module('ArenaInstaPhotoServices', ['ngResource']);
         services.config(['$resourceProvider', function($resourceProvider) {
             // Don't strip trailing slashes from calculated URLs
             $resourceProvider.defaults.stripTrailingSlashes = false;
         }]);
-        services.factory('ClubPhoto', function($resource){
-            return $resource("{% url 'api:hockey:clubphotos' %}"+":id/", {}, {
+        services.factory('ArenaInstaPhoto', function($resource){
+            return $resource("{% url 'api:hockey:aip_list' %}"+":id/", {}, {
                 query: {method:'GET', params:{id:null}},
                 get: { method: 'GET'},
                 update: { method: 'PATCH'},
@@ -152,21 +152,22 @@
             });
         });
 
-        services.factory('ArenaPhoto', function($resource){
-            return $resource("{% url 'api:hockey:arenaphoto_list' %}"+":id/", {}, {
-                create: {method:'POST', params:{id:null}}
+        services.factory('InstagramUser', function($resource){
+            return $resource("{% url 'api:base:iu_list' %}"+":id/", {}, {
+                query: {method:'GET', params:{id:null}, isArray:true},
+                get: { method: 'GET'}
             });
         });
 
-        var app = angular.module('SportomaticsAdminClubPhotos', ['CLubPhotoServices', 'angucomplete']);
+        var app = angular.module('SportomaticsAdminArenaInstaPhoto', ['ArenaInstaPhotoServices', 'angucomplete']);
         app.config(['$httpProvider', '$resourceProvider', function($httpProvider, $resourceProvider) {
             $httpProvider.defaults.xsrfCookieName = 'csrftoken';
             $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             $resourceProvider.defaults.stripTrailingSlashes = false;
         }]);
-        app.controller('AdminClubPhotoController', ['$scope', 'ClubPhoto', 'Club', 'Match', 'ArenaPhoto', function($scope, ClubPhoto, Club, Match, ArenaPhoto) {
+        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match', function($scope, ArenaInstaPhoto, Club, Match) {
             $scope.next_page = 1;
-            $scope.clubphoto = null;
+            $scope.arenaInstaPhoto = null;
             $scope.deletePhotopopup = false;
             $scope.selectedClub = '';
             $scope.photos = [];
@@ -184,8 +185,8 @@
                     !$(event.target).parents('.player-partners-popup').is('.player-partners-popup') &&
                     !$(event.target).is('.popup-show-button')){
                     $('.player-partners-popup').hide(300);
-                    $('input[name="cp_player_numbers"]').val('');
-                    $('input[name="id_cp_club"]').val('');
+                    $('input[name="aip_player_numbers"]').val('');
+                    $('input[name="id_aip_club"]').val('');
                     $('input[name="photo_club"]').val('');
                     $('input[name="delete_photopopup"]').prop("checked", false);
                     $('.photos-block, .instruments-block, .header').removeClass("blur");
@@ -194,15 +195,15 @@
             closePopupBtn.on('click', function(e) {
                 e.preventDefault();
                 $(this).parent().hide(300);
-                $('input[name="cp_player_numbers"]').val('');
-                $('input[name="#id_cp_club"]').val('');
+                $('input[name="aip_player_numbers"]').val('');
+                $('input[name="#id_aip_club"]').val('');
                 $('input[name="#photo_club"]').val('');
                 $('input[name="delete_photopopup"]').prop("checked", false);
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
                 $scope.selectedClub = '';
             });
             $scope.getPage = function() {
-                ClubPhoto.query({page:$scope.next_page}).$promise.then(function(data) {
+                ArenaInstaPhoto.query({page:$scope.next_page}).$promise.then(function(data) {
                     $.each(data.results, function(index, value){
                         $scope.photos.push(value)
                     });
@@ -215,12 +216,12 @@
             };
 
             $scope.delCP = function(id, index) {
-                ClubPhoto.delete({id:id});
+                ArenaInstaPhoto.delete({id:id});
                 $scope.photos.splice(index, 1);
             };
 
             $scope.procCP = function(id, index) {
-                ClubPhoto.update({id:id}, {processed:true});
+                ArenaInstaPhoto.update({id:id}, {processed:true});
                 $scope.photos.splice(index, 1);
             };
 
@@ -228,7 +229,7 @@
                 if($('input[name="delete_all"]:checked').length){
                     var inputs = $('input[name="cp"]:checked');
                     $.each(inputs, function(index, value) {
-                        ClubPhoto.delete({id:$(value).val()});
+                        ArenaInstaPhoto.delete({id:$(value).val()});
                         $("#item_" + $(value).attr('id')).css('opacity', '0');
                     });
                     $('input[name="delete_all"]').prop("checked", false);
@@ -238,14 +239,11 @@
             $scope.allAsArenaPhoto = function(){
                     var inputs = $('input[name="cp"]:checked');
                     $.each(inputs, function(index, value) {
-                        var arena = '';
-                        var club = $("#club_" + $(value).attr('id')).val();
-                        var photo = parseInt($("#photo_" + $(value).attr('id')).val());
-                        Club.get({id: club}, function(club, abc){
-                            arena = club.arena;
-                            ArenaPhoto.create({arena:arena, photo:photo}, function(photo) {
-                                $("#item_" + $(value).attr('id')+" img").css('width', '142px').css('height', '142px').css('border', '4px solid #e74c3c', 'important');
-                            });
+                        console.log(value);
+                        var arena_id = $(value).attr('id');
+                        var club = $("#club_" + arena_id).val();
+                        ArenaInstaPhoto.update({id:$(value).val()}, {club:club.id, processed:true}, function(photo) {
+                            $("#item_" + arena_id + " img").css('width', '142px').css('height', '142px').css('border', '4px solid #e74c3c', 'important');
                         });
                     });
                 $scope.uncheckedAllInputs();
@@ -261,7 +259,7 @@
             $scope.addAll = function() {
                 var inputs = $('input[name="cp"]:checked');
                 $.each(inputs, function(index, value) {
-                    ClubPhoto.update({id:$(value).val()}, {processed:true});
+                    ArenaInstaPhoto.update({id:$(value).val()}, {processed:true});
                     $("#item_" + $(value).attr('id')).css('opacity', '0');
                 });
                 //window.location.reload();
@@ -275,7 +273,7 @@
             $scope.getPage($scope.next_page);
 
             $scope.checkedInputImg = function(id) {
-                $('#id_cp_'+id).prop("checked", !$('#id_cp_'+id).prop("checked"))
+                $('#id_aip_'+id).prop("checked", !$('#id_aip_'+id).prop("checked"))
             };
 
             $scope.checkedAllInputs = function() {
@@ -291,9 +289,14 @@
             };
 
             $scope.PhotoPopupShow = function(id, index, event) {
-                $scope.PhotoPopup.data = ClubPhoto.get({id:id}, function(photo) {
-                    $scope.PhotoPopup.club = Club.get({id:photo.club});
-                    var params = {date:photo.photo.created, club:photo.club};
+                $scope.PhotoPopup.data = ArenaInstaPhoto.get({id:id}, function(photo) {
+                    if (photo.club) {
+                        $scope.PhotoPopup.club = Club.get({id:photo.club});
+                    }
+                    else {
+                        $scope.PhotoPopup.club = null;   
+                    };
+                    var params = {date:photo.photo.created, arena:photo.arena};
                     $scope.PhotoPopup.matches = Match.query(params);
                 });
                 $scope.PhotoPopup.index = index;
@@ -316,8 +319,8 @@
                     $scope.delCP(id, index);
                     $scope.deletePhotopopup=false;
                     $('.player-partners-popup').hide(300);
-                    $('input[name="cp_player_numbers"]').val('');
-                    $('input[name="#id_cp_club"]').val('');
+                    $('input[name="aip_player_numbers"]').val('');
+                    $('input[name="#id_aip_club"]').val('');
                     $('input[name="#photo_club"]').val('');
                     $('input[name="delete_photopopup"]').prop("checked", false);
                     $('.photos-block, .instruments-block, .header').removeClass("blur");
@@ -327,34 +330,32 @@
 
             $scope.procCPPopup = function(id, index) {
                 var data = {processed:true};
-                var new_club = $('input[name="cp_club"]').val();
+                var new_club = $('input[name="aip_club"]').val();
                 if(new_club) {
                     data['club'] = parseInt(new_club);
                 };
-                data['comment'] = $('input[name="cp_comment"]').val();
-                data['player_numbers'] = $('input[name="cp_player_numbers"]').val();
-                ClubPhoto.update({id:id}, data);
+                data['comment'] = $('input[name="aip_comment"]').val();
+                data['player_numbers'] = $('input[name="aip_player_numbers"]').val();
+                ArenaInstaPhoto.update({id:id}, data);
                 $scope.photos.splice(index, 1);
                 $scope.deletePhotopopup = false;
                 $('.player-partners-popup').hide(300);
-                $('input[name="cp_player_numbers"]').val('');
-                $('input[name="#id_cp_club"]').val('');
+                $('input[name="aip_player_numbers"]').val('');
+                $('input[name="#id_aip_club"]').val('');
                 $('input[name="#photo_club"]').val('');
                 $('input[name="delete_photopopup"]').prop("checked", false);
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
                 $scope.selectedClub = '';
             }
 
-            $scope.createArenaPhoto = function(photo_id, arena_id) {
-                ArenaPhoto.create({arena:arena_id, photo:photo_id}, function(photo) {
-                    $('#arena_'+$scope.PhotoPopup.data.id).hide();
-                });
+            $scope.createArenaPhoto = function(id, index) {
+                $scope.procCPPopup(id, index);
             };
 
             $scope.setTeam = function(team) {
                 //$('#photo_club').attr('href', team.get_absolute_url);
                 $('#photo_club').val(team.ru_title);
-                $('#id_cp_club').val(team.id);
+                $('#id_aip_club').val(team.id);
                 $scope.PhotoPopup.club.ru_title = '';
             };
 
