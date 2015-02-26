@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="team-info">
     <div id="team-heading" class="team-heading">
         <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
@@ -9,8 +10,14 @@
         </a>
     </div>
     <ul class="info-list">
-        <li class="info-item"><i class="browser icon"></i> Сайт: <a href="{{ site }}">{{ site }}</a></li>
-        <li class="info-item"><i class="mail icon"></i> E-mail: pochta@ska.ru</li>
-        <li class="info-item"><i class="phone icon"></i> Тел.: +7 (812) 234 72 37</li>
+        {% if site %}
+            <li class="info-item"><i class="browser icon"></i> {% trans "Site" %}: <a href="{{ site }}">{{ site }}</a></li>
+        {% endif %}
+        {% if email %}
+            <li class="info-item"><i class="mail icon"></i> E-mail: {{ email }}</li>
+        {% endif %}
+        {% if phone %}
+            <li class="info-item"><i class="phone icon"></i> {% trans "Tel." %}: {{ phone }}</li>
+        {% endif %}
     </ul>
 </div>

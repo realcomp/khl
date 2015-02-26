@@ -1,6 +1,8 @@
 #coding: utf-8
 from __future__ import unicode_literals, print_function
 import datetime
+import itertools
+import operator
 import re
 import sys
 import time
@@ -9,6 +11,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 from django.conf import settings
+from django.db.models import Q
 
 from sportomatics.celery import app
 
@@ -551,6 +554,102 @@ def player_generate_timeline(ids):
                             type='matches',
                             player=player)
 
+    def club_change_events(players):
+        players = models.Player.objects.filter(pk__in=ids)
+        for player in players:
+            dates = (
+                models.Timeline.objects
+                .filter(type='club_change', player=player)
+                .values_list('start_date', flat=True))
+            clubplayers = (
+                models.ClubPlayer.objects
+                .filter(player=player)
+                .exclude(start_date__in=dates)
+                .order_by('start_date'))
+
+            # group by club
+            timelines = {}
+            for clubplayer in clubplayers:
+                ru_club = clubplayer.club.ru_title
+                en_club = clubplayer.club.en_title
+                url = clubplayer.club_url
+                timeline = models.Timeline(
+                    start_date=clubplayer.start_date,
+                    end_date=clubplayer.end_date,
+                    ru_headline='В составе клуба "%s"' % ru_club,
+                    en_headline='Membership in a club "%s"' % en_club,
+                    ru_text='В составе клуба "%s"' % ru_club,
+                    en_text='Membership in a club "%s"' % en_club,
+                    media=clubplayer.club.logo,
+                    media_caption='<a href="%s">-&gt;</a>' % url,
+                    type='club_change',
+                    player=player,
+                    club=clubplayer.club)
+
+                if clubplayer.club.pk not in timelines:
+                    timelines[clubplayer.club.pk] = [timeline]
+                else:
+                    date_a = timelines[clubplayer.club.pk][-1].end_date
+                    date_b = clubplayer.start_date
+                    # extra day between the same events is ignored
+                    if date_a + datetime.timedelta(days=1) >= date_b:
+                        # combine events by shifting end date
+                        timelines[clubplayer.club.pk][-1].end_date = clubplayer.end_date
+                    else:
+                        timelines[clubplayer.club.pk].append(timeline)
+            models.Timeline.objects.bulk_create(
+                itertools.chain(*timelines.values()))
+
+    def first_club_goal_event(players):
+        ''' depends on club_change_events '''
+        club_changes = (
+            models.Timeline.objects
+            .filter(type='club_change', player__in=players))
+
+        for player in players:
+            player_club_changes = club_changes.filter(player=player)
+
+            timelines = (
+                models.Timeline.objects
+                .filter(type='first_club_goal', player=player))
+            if timelines.exists():
+                # ~Q & ~Q & ~Q
+                q_existing = reduce(operator.and_, map(
+                    lambda x: ~Q(start_date=x.start_date, club=x.club), timelines))
+                player_club_changes = player_club_changes.filter(q_existing)
+
+            for club_change in player_club_changes:
+                try:
+                    history = (
+                        models.MatchGoalHistory.objects
+                        .filter(
+                            scorer=club_change.player,
+                            match__date__gte=club_change.start_date,
+                            match__date__lte=club_change.end_date)
+                        .filter(
+                            Q(
+                                match__home_players__club=club_change.club,
+                                match__home_players__player=club_change.player) |
+                            Q(
+                                match__guest_players__club=club_change.club,
+                                match__guest_players__player=club_change.player))
+                        .earliest('match__date'))
+                except models.MatchGoalHistory.DoesNotExist:
+                    pass
+                else:
+                    ru_club = club_change.club.ru_title
+                    en_club = club_change.club.en_title
+                    models.Timeline.objects.get_or_create(
+                        start_date=history.match.date,
+                        ru_headline='Первая шайба в клубе "%s"' % ru_club,
+                        en_headline='First goal in a club "%s"' % en_club,
+                        ru_text='Первая шайба в клубе "%s"' % ru_club,
+                        en_text='First goal in a club "%s"' % en_club,
+                        media=club_change.club.logo,
+                        type='first_club_goal',
+                        player=club_change.player,
+                        club=club_change.club)
+
     players = models.Player.objects.filter(pk__in=ids)
 
     birthday_events(players)
@@ -562,3 +661,5 @@ def player_generate_timeline(ids):
     first_match_event(players)
     goals_events(players)
     matches_events(players)
+    club_change_events(players)
+    first_club_goal_event(players)

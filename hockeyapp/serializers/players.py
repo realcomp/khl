@@ -235,8 +235,10 @@ class TimelineSerializer(LangDepSerializer):
 
     def get_asset(self, obj):
         return {
-            'media': obj.media.url,
-            'thumbnail': obj.media.url,
+            'media': obj.media and obj.media.url,
+            'thumbnail': obj.media and obj.media.url,
+            'credit': obj.media_credit,
+            'caption': obj.media_caption,
         }
 
     class Meta(object):
@@ -261,8 +263,8 @@ class PlayerTimelineSerializer(AbstractManSerializer):
 
     def get_asset(self, obj):
         return {
-            'media': obj.photo.url,
-            'thumbnail': obj.photo.url,
+            'media': obj.photo and obj.photo.url,
+            'thumbnail': obj.photo and obj.photo.url,
         }
 
     def get_type(self, obj):

@@ -167,7 +167,8 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     )
     fields = (  'ru_title', 'en_title', 'title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
-                'farm_club', 'junior_club', 'site', 'players', 'style',
+                'farm_club', 'junior_club', 'site', 'email', 'phone',
+                'players', 'style',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
     readonly_fields = ('title',)
 admin.site.register(Club, ClubAdmin)
@@ -351,7 +352,7 @@ def generate_timeline(modeladmin, request, queryset):
     pks = Player.objects.values_list('pk', flat=True)
     for i in range(0, len(pks), 1000):  # 1000 players per task
         tasks.player_generate_timeline.delay(pks[i:i + 1000])
-    # tasks.player_generate_timeline.delay([1830])  # dev mode
+    # tasks.player_generate_timeline.delay([1830, 2210])  # dev mode
     # tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
 generate_timeline.short_description = _('Generate new timeline events')
 

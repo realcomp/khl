@@ -5209,3 +5209,16 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     -o-transition: color 0 ease-in !important;
     transition: none !important;
 }
+#player-timeline *{
+    font-family: "Open Sans" !important;
+}
+#player-timeline{
+    margin-top: 20px !important;
+    height: 400px !important;
+}
+#player-timeline .media-image img{
+    max-height: 170px !important;
+    max-width: 140px !important;
+    height: 170px;
+    width: 140px;
+}

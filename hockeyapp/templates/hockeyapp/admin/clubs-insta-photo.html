@@ -29,7 +29,7 @@
             </form>
         </div>
         {% verbatim %}
-        <div id="#switcher" class="player-partners-popup popup no-transition" style="min-width:1100px; z-index: 99999; position: fixed">
+        <div id="#switcher" class="player-partners-popup no-transition" style="min-width:1100px; z-index: 99999; position: fixed">
             <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
             <div>
                 <div class="rightleft" ng-click="prevPhoto()">
@@ -312,7 +312,7 @@
             };
 
             $scope.delCPPopup = function(id, index) {
-                if($scope.deletePhotopopup){
+                if($('input[name="delete_photopopup"]').prop("checked")){
                     $scope.delCP(id, index);
                     $scope.deletePhotopopup=false;
                     $('.player-partners-popup').hide(300);
@@ -320,8 +320,9 @@
                     $('input[name="#id_cp_club"]').val('');
                     $('input[name="#photo_club"]').val('');
                     $('input[name="delete_photopopup"]').prop("checked", false);
+                    $('.photos-block, .instruments-block, .header').removeClass("blur");
                     $scope.selectedClub = '';
-                };
+                }
             };
 
             $scope.procCPPopup = function(id, index) {
@@ -340,8 +341,9 @@
                 $('input[name="#id_cp_club"]').val('');
                 $('input[name="#photo_club"]').val('');
                 $('input[name="delete_photopopup"]').prop("checked", false);
+                $('.photos-block, .instruments-block, .header').removeClass("blur");
                 $scope.selectedClub = '';
-            };
+            }
 
             $scope.createArenaPhoto = function(photo_id, arena_id) {
                 ArenaPhoto.create({arena:arena_id, photo:photo_id}, function(photo) {

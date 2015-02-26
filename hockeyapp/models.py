@@ -280,8 +280,12 @@ class Club(TitleBaseModel):
     opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
     closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
     logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True,
-                            on_delete=models.SET_NULL)
+                           on_delete=models.SET_NULL)
     site = models.URLField(_('Site'), blank=True)
+    email = models.CharField(
+        _('E-mail'), max_length=255, blank=True, null=True)
+    phone = models.CharField(
+        _('Phone'), max_length=255, blank=True, null=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
     #socials
@@ -865,9 +869,9 @@ class Timeline(LocaleAttrMixin, models.Model):
     ru_text = models.TextField(_('Text (RU)'), blank=True, null=True)
     en_text = models.TextField(_('Text (EN)'), blank=True, null=True)
     media = FilerImageField(verbose_name=_('Media'), null=True, blank=True)
-    # media_credit = models.CharField(
-    #     _('Media credit'), max_length=255, blank=True, null=True)
-    # media_caption = models.TextField(_('Media caption'), blank=True, null=True)
+    media_credit = models.CharField(
+        _('Media credit'), max_length=255, blank=True, null=True)
+    media_caption = models.TextField(_('Media caption'), blank=True, null=True)
     type = models.CharField(
         _('Type'), max_length=255, blank=True, null=True)
     tag = models.CharField(
@@ -876,6 +880,9 @@ class Timeline(LocaleAttrMixin, models.Model):
     # related objects
     player = models.ForeignKey(
         Player, verbose_name=_('Player'), on_delete=models.SET_NULL,
+        blank=True, null=True)
+    club = models.ForeignKey(
+        Club, verbose_name=_('Club'), on_delete=models.SET_NULL,
         blank=True, null=True)
 
     class Meta(object):
