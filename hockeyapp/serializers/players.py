@@ -31,7 +31,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     def get_clubplayers(self, obj):
         clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
         if clubplayers_data is None:
-            clubplayers = obj.clubplayer_set.all()
+            clubplayers = obj.clubplayer_set.order_by('-end_date', '-pk')
         else:
             clubplayers = clubplayers_data.get(obj.pk)
         return ClubPlayerSerializer(
