@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 __author__='smirnov.ev'
 
 from django.db import models
-from django.db.models import Max, Min
+from django.db.models import Q, Max, Min
 from django.db.models.loading import get_model
 
 from base.models import Season
@@ -75,7 +75,20 @@ class ManagerMixin(object):
             clubplayermatch.adv_stats = obj
             clubplayermatch.save(update_fields=['adv_stats'])
 
-class MatchGoalHistoryManager(ManagerMixin, models.Manager):
+
+class MatchFKQuerySetMixin(object):
+    def by_club(self, club, player):
+        q_home = Q(
+            match__home_team=club,
+            match__home_players__player=player)
+        q_guest = Q(
+            match__guest_team=club,
+            match__guest_players__player=player)
+        return self.filter(q_home | q_guest)
+
+
+class MatchGoalHistoryQuerySet(
+        MatchFKQuerySetMixin, ManagerMixin, models.QuerySet):
     b''' Мененжер истории голов матча '''
     def create_goal(self, match, **goal_data):
         b''' Создаем запись в БД о голе '''
@@ -227,7 +240,7 @@ class MatchManager(ManagerMixin, models.Manager):
         return (model.objects.get_or_create(fio=j) for j in judges)
 
 
-class ClubPlayerMatchQuerySet(models.QuerySet):
+class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
     # Вообще кверисет должен возвращать кверисет. А там, где нужно убрать дубли,
     # лучше заюзать set(queryset) и циклы, как ниже описаны. Но Queryset должен
     # быть queryset

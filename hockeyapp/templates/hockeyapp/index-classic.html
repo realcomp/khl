@@ -163,18 +163,23 @@
                         <div class="event-block event-block_green" style="text-align: center">
                             <a href="{{ event.url }}" style="position: relative">
                                 {% if event.image %}
-
                                 <span class=" float-left ribbon">{{ event.type }}</span>
                                     <img src="{{ event.image }}" alt="" class="event-picture">
                                 {% endif %}
-                                {% if event.logo %}
+                                {% if event.logos %}
                                 <div class="event-match">
                                     <span class=" float-left match-ribbon">{{ event.type }}</span>
                                     <div class="event-picture" style="text-align: center">
-                                        <!--<img src="{{ event.logo }}" alt="" class="event-club-logo">
-                                        <img src="{{ event.logo }}" alt="" class="event-club-logo">-->
+                                        {% for logo in event.logos %}
+                                            {% if forloop.counter == 1 %}
+                                                <img src="{{ logo }}" alt="" class="event-club-logo event-club-logo-left">
+                                            {% endif %}
+                                            {% if forloop.counter == 1 %}
+                                                <img src="{{ logo }}" alt="" class="event-club-logo event-club-logo-right">
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
-                                    {% if event.logo %}
+                                    {% if event.logos %}
                                     <div class="event-info">
                                         <span class="event-date event-game-date">{{ event.date }}</span></div>
                                     {% endif %}

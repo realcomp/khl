@@ -674,7 +674,7 @@ class ClubPlayerMatch(models.Model):
 
 class MatchGoalHistory(models.Model):
     b'''Хранит историю матча. Заброшенные шайбы'''
-    objects = managers.match.MatchGoalHistoryManager()
+    objects = managers.match.MatchGoalHistoryQuerySet.as_manager()
     match = models.ForeignKey('hockeyapp.Match')
     parity = models.PositiveSmallIntegerField(choices=PARITY_VALUES, default=0)
     time = models.CharField(max_length=16, blank=True)

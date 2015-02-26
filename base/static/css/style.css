@@ -5226,8 +5226,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 #player-timeline .media-image img{
     max-height: 170px !important;
     max-width: 140px !important;
-    height: 170px;
-    width: 140px;
 }
 .events-row{
     width: 96% !important;
