@@ -280,8 +280,12 @@ class Club(TitleBaseModel):
     opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
     closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
     logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True,
-                            on_delete=models.SET_NULL)
+                           on_delete=models.SET_NULL)
     site = models.URLField(_('Site'), blank=True)
+    email = models.CharField(
+        _('E-mail'), max_length=255, blank=True, null=True)
+    phone = models.CharField(
+        _('Phone'), max_length=255, blank=True, null=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
     #socials
