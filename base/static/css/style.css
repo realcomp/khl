@@ -5137,7 +5137,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border-radius: .3125em
 }
 .instagram-photos-container{
-    width: 1250px !important;
+    /*width: 1250px !important;*/
     margin: 0 auto;
     background: #fff;
 }
@@ -5167,11 +5167,11 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     top: 5px;
 }
 .instagram-photos-container .photos-block{
-    width: 78%;
+    width: 82%;
     display: inline-block;
 }
 .instagram-photos-container .instruments-block{
-    width: 20%;
+    width: 260px;
     display: inline-block;
     vertical-align: top;
     margin-top: 10px;
