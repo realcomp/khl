@@ -8,4 +8,5 @@ urlpatterns = patterns('api.hockey',
     url(r'^club/$', 'admin.club_list', name='club_list'),
     url(r'^club/(?P<pk>\d+)/$', 'admin.club_detail', name='club'),
     url(r'^match/$', 'admin.match_list', name='match_list'),
+    url(r'^player/$', 'admin.player_list', name='player_list'),
 )

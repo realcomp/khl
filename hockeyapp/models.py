@@ -267,7 +267,7 @@ class ArenaInstaPhoto(models.Model):
                                 on_delete=models.SET_NULL,)
     club = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
                                 on_delete=models.SET_NULL,)
-    player_numbers = models.CharField(max_length=1024, blank=True)
+    players = models.ManyToManyField(Player, null=True, blank=True,)
     comment = models.CharField(_('Comment'), max_length=1024, blank=True)
     processed = models.BooleanField(default=False)
     proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,)    

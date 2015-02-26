@@ -28,7 +28,7 @@
                 <hr class="hr">
             </form>
         </div>
-        {% verbatim %}
+{% verbatim %}
         <div id="#switcher" class="player-partners-popup no-transition" style="min-width:1100px; z-index: 99999; position: fixed">
             <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
             <div>
@@ -46,7 +46,7 @@
                         Текущая команда
                         <input type="text" id="curr_team" disabled ng-model="PhotoPopup.club.ru_title">
                     </div>
-                    {% endverbatim %}
+{% endverbatim %}
                     <br/>
                     <div class="ui icon input m-t-5">
                         <label>Ввести название команды вручную:
@@ -56,7 +56,7 @@
                                           url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
                         </label>
                     </div>
-                    {% verbatim %}
+{% verbatim %}
                     <br>
                     <div ng-if="PhotoPopup.matches.length" class="m-t-5">
                         <div> Или выбрать из прошедших матчей:</div>
@@ -74,7 +74,14 @@
                     <div class="ui icon input m-t-5">
                         <label>Номера игроков:</label>
                         <div>
-                            <input id="id_aip_player_numbers" name="aip_player_numbers" type="text" value="{{PhotoPopup.data.player_numbers}}" style="max-width: 80px">
+{% endverbatim %}
+                            <angucomplete id="players_filter"
+                                          pause="300" minlength="1"
+                                          selectedobject="selectedPlayer"
+                                          url="{% url 'api:hockey:player_list' %}?club={{PhotoPopup.club.id}}&number=" titlefield="number"/>
+{% verbatim %}
+                            <input ng-show="selectedPlayer" id="id_aip_player" name="aip_player" type="hidden" value="{{selectedPlayer.originalObject.id}}">
+                            <input id="id_aip_player_numbers" name="aip_player_numbers" type="hidden" value="{{PhotoPopup.data.players}}" style="max-width: 80px">
                         </div>
                     </div>
                     <br/>
@@ -148,6 +155,12 @@
 
         services.factory('Match', function($resource){
             return $resource("{% url 'api:hockey:match_list' %}"+":id/", {}, {
+                query: {method:'GET', params:{id:null}, isArray:true}
+            });
+        });
+
+        services.factory('Player', function($resource){
+            return $resource("{% url 'api:hockey:player_list' %}"+":id/", {}, {
                 query: {method:'GET', params:{id:null}, isArray:true}
             });
         });
