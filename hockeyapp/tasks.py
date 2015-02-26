@@ -22,6 +22,7 @@ from base.utils import str2int_safe, str2sec_safe, str2float_safe
 
 from . import parsers
 from . import models
+from . import utils
 
 
 @app.task(ignore_result=True, track_started=True)
@@ -252,49 +253,45 @@ insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
 @app.task(ignore_result=True, track_started=True)
-def get_instagram_pictures(insta_loc_id, clubs, min_timestamp,
+def get_instagram_pictures(insta_loc_id, arena, min_timestamp,
                             max_timestamp=None, max_id=None
 ):
-    _fn = clubs.last() and clubs.last().image_folder_name or 'Instaphotos'
     data, next = insta_api.location_recent_media(location_id=insta_loc_id,
                                                 min_timestamp=min_timestamp,
                                                 max_timestamp=max_timestamp,
                                                 max_id=max_id)
     if data:
+        _fn = arena.image_folder_name or 'Instaphotos'
         for item in data:
             if item.type == 'image':
                 iif = InstagramImageFile.objects.get_or_create_iif(item, _fn)
-                if iif and clubs:
-                    _crtr = models.ClubPhotos.objects.get_or_create
-                    for club in clubs:
-                        _crtr(club=club,photo=iif)
+                if iif and arena:
+                    _crtr = models.ArenaInstaPhoto.objects.get_or_create
+                    _crtr(arena=arena,photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
-        get_instagram_pictures.delay(  insta_loc_id, club,
+        get_instagram_pictures.delay(  insta_loc_id, arena,
                                         min_timestamp=min_timestamp,
                                         max_timestamp=max_timestamp,
                                         max_id=max_id)
 
 
 @app.task(ignore_result=True, track_started=True)
-def get_clubs_instagram_pictures(min_timestamp=None, max_timestamp=None):
+def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
-        min_timestamp = min_timestamp
+        min_t = min_timestamp
     else:
         _ts_min = datetime.datetime.today()-datetime.timedelta(days=1)
-        min_timestamp = int(time.mktime(_ts_min.timetuple()))
+        min_t = int(time.mktime(_ts_min.timetuple()))
     if max_timestamp:
-        max_timestamp = max_timestamp
+        max_t = max_timestamp
     else:
-        max_timestamp = int(time.mktime(datetime.datetime.today().timetuple()))
-    arenas = models.Arena.objects.filter(club__isnull=False)
+        max_t = int(time.mktime(datetime.datetime.today().timetuple()))
+    arenas = models.Arena.objects.exclude(coords='')
     for arena in arenas:
-        if arena.arenainstagram_set.exists():
-            caims = arena.arenainstagram_set.all()
-            clubs = arenas.club_set.all()
-            for obj in caims:
-                get_instagram_pictures.delay(   obj.im_id, clubs,
-                                                min_timestamp, max_timestamp)
+        locations = utils.get_arena_instagram_locations(arena.coords)
+        for loc_id in locations:
+                get_instagram_pictures.delay(loc_id, arena, min_t, max_t)
 
 
 #@app.task(ignore_result=True, track_started=True)

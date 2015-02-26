@@ -32,7 +32,7 @@ get_code:
 deploy:
 	git pull origin master
 	pip install -r requirments.txt --upgrade
-	python manage.py migrate
+	python manage.py migrate --noinput
 	python manage.py compilemessages
 	python manage.py collectstatic --no-post-process --noinput
 	sudo service nginx reload

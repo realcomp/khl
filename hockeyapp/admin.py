@@ -21,7 +21,7 @@ from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
 from .models import PlayerCoachJudge, ClubSocial, PlayerSocial, CoachSocial
-from .models import JudgeSocial, ArenaInstagram, ClubPhotos, Timeline
+from .models import JudgeSocial, ArenaPhotos, ArenaInstaPhoto, Timeline
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -146,18 +146,13 @@ class ClubTitleAliasInline(TabularInlineReadOnly):
     readonly_fields = ( object_link, 'club', 'alias')
     fields = readonly_fields
 
-class ClubPhotosInline(TabularInlineReadOnly):
-    model = ClubPhotos
-    readonly_fields = ( object_link, 'photo')
-    fields = readonly_fields
-
 class ClubSocialsInline(admin.TabularInline):
     model = ClubSocial
     fields = ('url', 'stype')
 
 class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
-                ClubTitleAliasInline,)# ClubPhotosInline)# ClubSocialsInline)
+                ClubTitleAliasInline,)# ClubSocialsInline)
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields
@@ -184,23 +179,21 @@ class ScheduleAdmin(BaseAdmin):
                     'season', 'date',)
 admin.site.register(Schedule, ScheduleAdmin)
 
-for _model in (League, LeagueClub, CoachClub, ClubTitleAlias, ArenaInstagram):
+for _model in (League, LeagueClub, CoachClub, ClubTitleAlias):
     admin.site.register(_model, BaseListAdmin)
-for _model in (LogoClubHistory, PlayerCoachJudge,): #ClubPhotos,):
+for _model in (LogoClubHistory, PlayerCoachJudge,):
     admin.site.register(_model, NoFilterAdmin)
 
 class ArenaPhotosInline(admin.TabularInline):
     model = ArenaPhotos
     extra=0
 
-class ArenaInstagramInline(admin.TabularInline):
-    model = ArenaInstagram
+class ArenaInstaPhotoInline(admin.TabularInline):
+    model = ArenaInstaPhoto
     extra=0
-    readonly_fields = object_link, 'name', 'im_id', 'lat', 'lng'
-    fields = readonly_fields
 
 class ArenaAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
-    inlines = (ArenaPhotosInline, ArenaInstagramInline)
+    inlines = (ArenaPhotosInline,)
     list_filter = ('ru_title', 'country', 'league',
                     ('capacity', SimpleRangeFilter),
     )
