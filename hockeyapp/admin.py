@@ -51,7 +51,9 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
-                        'spectators', 'judges', 'line_judges', 'challenge_type',)
+                        'spectators', 'judges', 'line_judges', 'challenge_type',
+                        'title',
+                    )
         }),
         (None, {
             'classes': ('suit-tab suit-tab-hometeam',),
@@ -75,7 +77,7 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
                                     'guest_coach')
     linked_m2m_readonly_fields = (  'home_players', 'guest_players', 'judges',
                                     'line_judges',)
-    readonly_fields = linked_readonly_fields + linked_m2m_readonly_fields
+    readonly_fields = ('title',) + linked_readonly_fields + linked_m2m_readonly_fields
 
     def get_list_display(self, request):
         if self.list_display:
@@ -119,6 +121,7 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
                     ('height', SimpleRangeFilter),
                     ('birth_date', DateRangeFilter),
     )
+    readonly_fields = ('fio',)
 admin.site.register(Player, PlayerAdmin)
 
 
@@ -162,11 +165,12 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
     select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
                         'junior_club',
     )
-    fields = (  'ru_title', 'en_title', 'address', 'coach', 'coaches',
+    fields = (  'ru_title', 'en_title', 'title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
                 'players', 'style',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
+    readonly_fields = ('title',)
 admin.site.register(Club, ClubAdmin)
 
 
@@ -201,6 +205,7 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
                     ('capacity', SimpleRangeFilter),
     )
     list_display = ('ru_title', 'country', 'league', 'capacity', 'coords')
+    readonly_fields = ('title',)
 admin.site.register(Arena, ArenaAdmin)
 
 
@@ -235,6 +240,7 @@ class JudgeSocialsInline(admin.TabularInline):
 
 class JudgeAdmin(BaseListAdmin):
     inlines = (JudgeMatchesInline,LineJudgeMatchesInline,)# JudgeSocialsInline)
+    readonly_fields = ('fio',)
 admin.site.register(Judge, JudgeAdmin)
 
 
@@ -244,6 +250,7 @@ class CoachSocialsInline(admin.TabularInline):
 
 class CoachAdmin(BaseListAdmin):
     inlines = (CoachClubInline,CoachSocialsInline)
+    readonly_fields = ('fio',)
 admin.site.register(Coach, CoachAdmin)
 
 class ClubPlayerMatchInline(TabularInlineReadOnly):
@@ -343,10 +350,10 @@ admin.site.register(Name, NameAdmin)
 def generate_timeline(modeladmin, request, queryset):
     from . import tasks
     pks = Player.objects.values_list('pk', flat=True)
-    # for i in range(0, len(pks), 1000):  # 1000 players per task
-    #     tasks.player_generate_timeline.delay(pks[i:i + 1000])
-    tasks.player_generate_timeline.delay([1830, 2210])  # dev mode
-    tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
+    for i in range(0, len(pks), 1000):  # 1000 players per task
+        tasks.player_generate_timeline.delay(pks[i:i + 1000])
+    # tasks.player_generate_timeline.delay([1830, 2210])  # dev mode
+    # tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
 generate_timeline.short_description = _('Generate new timeline events')
 
 
