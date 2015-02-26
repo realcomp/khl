@@ -165,9 +165,11 @@
                                 {% if event.image %}
                                     <img src="{{ event.image }}" alt="" class="event-picture">
                                 {% endif %}
-                                {% if event.logo %}
+                                {% if event.logos %}
                                     <div class="event-picture" style="text-align: center">
-                                        <img src="{{ event.logo }}" alt="">
+                                        {% for logo in event.logos %}
+                                            <img src="{{ logo }}" alt="">
+                                        {% endfor %}
                                     </div>
                                 {% endif %}
                             </a>

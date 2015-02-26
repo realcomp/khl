@@ -12,7 +12,7 @@ class EventSerializer(serializers.Serializer):
     type = serializers.CharField()
     url = serializers.URLField()
     image = serializers.URLField()
-    logo = serializers.URLField()
+    logos = serializers.ReadOnlyField()
 
     def get_title(self, event):
         request = self.context.get('request')
@@ -31,4 +31,4 @@ class EventSerializer(serializers.Serializer):
             return '{} - {}'.format(*teams)
 
     class Meta(object):
-        fields = 'date', 'title', 'type', 'url', 'image', 'logo'
+        fields = 'date', 'title', 'type', 'url', 'image', 'logos'

@@ -30,7 +30,7 @@ class Event(object):
         pass
 
     @property
-    def logo(self):
+    def logos(self):
         pass
 
     @property
@@ -77,8 +77,13 @@ class HomeMatchEvent(MatchEvent):
             'hockeyapp:club-news', kwargs={'pk': self.obj.home_team_id})
 
     @property
-    def logo(self):
-        return self.obj.home_team.logo and self.obj.home_team.logo.url
+    def logos(self):
+        result = []
+        if self.obj.home_team.logo:
+            result.append(self.obj.home_team.logo.url)
+        if self.obj.guest_team.logo:
+            result.append(self.obj.guest_team.logo.url)
+        return result
 
 
 class GuestMatchEvent(MatchEvent):
@@ -91,8 +96,13 @@ class GuestMatchEvent(MatchEvent):
             'hockeyapp:club-news', kwargs={'pk': self.obj.guest_team_id})
 
     @property
-    def logo(self):
-        return self.obj.guest_team.logo and self.obj.guest_team.logo.url
+    def logos(self):
+        result = []
+        if self.obj.guest_team.logo:
+            result.append(self.obj.guest_team.logo.url)
+        if self.obj.home_team.logo:
+            result.append(self.obj.home_team.logo.url)
+        return result
 
 
 class EventFactory(object):
