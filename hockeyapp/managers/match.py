@@ -112,6 +112,7 @@ class MatchManager(ManagerMixin, models.Manager):
         sm = get_model('base', 'Season')
         sm = sm.objects.get_or_create_season
         self._season['season'], _crt = sm(**self._season)
+        _scheduler = self._get_scheduled_match(kwargs.get('khl_id'))
         _match = {
                 'home_team': self._get_team(**kwargs.pop('home_team', {})),
                 'home_coach': self._get_coach(kwargs.pop('home_coach', {})),
@@ -123,17 +124,21 @@ class MatchManager(ManagerMixin, models.Manager):
                 'line_judges': self._get_judges(kwargs.pop('line_judges', None)),
                 'goals_history': kwargs.pop('goals_history', {}),
                 'penalties_history': kwargs.pop('penalties_history', {}),
+                'schedule': _scheduler,
         }
         kwargs['home_team']=_match.get('home_team')
         kwargs['home_coach']=_match.get('home_coach')
         kwargs['guest_team']=_match.get('guest_team')
         kwargs['guest_coach']=_match.get('guest_coach')
-
+        kwargs['challenge_type']=_scheduler and _scheduler.challenge_type
         match = self.filter(khl_id = kwargs.get('khl_id')).last()
         if match:
             self.filter(pk=match.pk).update(**kwargs)
         else:
             match = self.create(**kwargs)
+        if _scheduler:
+            match.schedule.processed=True
+            match.schedule.save(update_fields=['schedule'])
         #relations
         match.judges.add(*(j[0].pk for j in _match.get('judges')))
         match.line_judges.add(*(j[0].pk for j in _match.get('line_judges')))
@@ -149,6 +154,11 @@ class MatchManager(ManagerMixin, models.Manager):
         ))
         self._create_match_history(match, match_data=_match)
         return match
+
+    def _get_scheduled_match(self, khl_id):
+        if khl_id:
+            schedule_m = get_model(CURRENT_APP, 'Schedule')
+            return schedule_m.objects.filter(khl_id=khl_id).last()
 
     def _create_match_history(self, match, match_data=None):
         b''' создаем историю матча '''
@@ -214,7 +224,6 @@ class MatchManager(ManagerMixin, models.Manager):
         b''' получить судей '''
         judges = judges or []
         model = get_model(CURRENT_APP, 'Judge')
-        print(judges)
         return (model.objects.get_or_create(fio=j) for j in judges)
 
 
