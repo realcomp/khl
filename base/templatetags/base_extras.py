@@ -60,3 +60,15 @@ def fcfl(admin_field):
             urls = ["<a href='{}'>{}</a>".format(admin_url(v), v) for v in value.all()]
             displayed = ", ".join(urls)
     return mark_safe(displayed)
+
+
+@register.simple_tag
+def lcb():
+    ''' left curly brackets '''
+    return '{{'
+
+
+@register.simple_tag
+def rcb():
+    ''' right curly brackets '''
+    return '}}'
