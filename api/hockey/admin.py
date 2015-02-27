@@ -9,7 +9,7 @@ import rest_framework as drf
 
 from api.base.permissions import SportoAdminPermission
 from api.base.paginators import AltPaginationSerializer
-from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player
+from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
 
 from . import serializers
 
@@ -40,6 +40,20 @@ aip_list = ArenaInstaPhotoList.as_view()
 class ArenaInstaPhotoDetail(CPAPIBase, drf.generics.RetrieveUpdateDestroyAPIView):
     b''' Обновление данных фото из инстаграмма '''
 aip_detail = ArenaInstaPhotoDetail.as_view()
+
+
+class ArenaList(drf.generics.ListAPIView):
+    queryset = Arena.objects.all()
+    serializer_class = serializers.ArenaMinimalSerialiser
+    permission_classes = (SportoAdminPermission,)
+arena_list = ArenaList.as_view()
+
+
+class ArenaDetail(drf.generics.RetrieveAPIView):
+    queryset = Arena.objects.all()
+    serializer_class = serializers.ArenaMinimalSerialiser
+    permission_classes = (SportoAdminPermission,)
+arena_detail = ArenaList.as_view()
 
 
 class ClubList(drf.generics.ListAPIView):

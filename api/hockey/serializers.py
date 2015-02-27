@@ -4,7 +4,14 @@ from __future__ import unicode_literals
 import rest_framework as drf
 
 from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
-from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player
+from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
+
+
+class ArenaMinimalSerialiser(drf.serializers.ModelSerializer):
+    class Meta:
+        model = Arena
+        fields = 'id', 'ru_title', 'club_set'
+        read_only_fields = fields
 
 
 class ClubMinimalSerialiser(drf.serializers.ModelSerializer):

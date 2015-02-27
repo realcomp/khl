@@ -155,6 +155,12 @@
             });
         });
 
+        services.factory('Arena', function($resource){
+            return $resource("{% url 'api:hockey:arena_list' %}"+":id/", {}, {
+                get: { method: 'GET'}
+            });
+        });
+
         services.factory('Club', function($resource){
             return $resource("{% url 'api:hockey:club_list' %}"+":id/", {}, {
                 get: { method: 'GET'}
