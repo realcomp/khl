@@ -16,7 +16,7 @@
                         <!--<input type="hidden" id="photo_id_aip_{{item.id}}" value="{{item.photo.id}}">-->
                         <img src="{{item.photo.img.file}}" alt="{{item.photo.img.name}}" class="item-photo" width="150" height="150" ng-click="checkedInputImg(item.id)">
                         <div class="item-data">
-                            <a href="#" class="popup-show-button" ng-click="PhotoPopupShow(item.id, $index, $event)">Увеличить</a>
+                            <a href="#" id="{{item.id}}" class="popup-show-button" ng-click="PhotoPopupShow(item.id, $index, $event)">Увеличить</a>
                             <input id="id_aip_{{item.id}}" name="cp" type="checkbox" value="{{item.id}}" style="float: right; margin-top: 3px">
                         </div>
                     </div>
@@ -76,14 +76,12 @@
                     <div class="ui icon input m-t-5">
                         <label>Номера игроков:</label>
                         <div>
-{% endverbatim %}
-                            <angucomplete id="players_filter"
+                            <!--<angucomplete id="players_filter"
                                           pause="300" minlength="1"
-                                          selectedobject="selectedPlayer"
-                                          url="{% url 'api:hockey:player_list' %}?club={{PhotoPopup.club.id}}&number=" titlefield="number"/>
-{% verbatim %}
+                                          selectedobject="selectedPlayer"-->
+
                             <input ng-show="selectedPlayer" id="id_aip_player" name="aip_player" type="hidden" value="{{selectedPlayer.originalObject.id}}">
-                            <input id="id_aip_player_numbers" name="aip_player_numbers" type="hidden" value="{{PhotoPopup.data.players}}" style="max-width: 80px">
+                            <input id="id_aip_player_numbers" name="aip_player_numbers" value="{{PhotoPopup.data.players}}" style="max-width: 80px">
                         </div>
                     </div>
                     <br/>
@@ -166,17 +164,6 @@
         services.factory('Club', function($resource){
             return $resource("{% url 'api:hockey:club_list' %}"+":id/", {}, {
                 get: { method: 'GET'}
-                /*transformResponse: function(data, header){
-                    //Getting string data in response
-                    var jsonData = JSON.parse(data); //or angular.fromJson(data)
-                    var respData = [];
-
-                    angular.forEach(jsonData, function(item){
-                        respData.push(item);
-                    });
-
-                    return respData;
-                }*/
             });
         });
 
@@ -225,13 +212,12 @@
                 }
             });
             var closePopupBtn = $('#close-popup-btn');
-            var instrumentsBlock = $('#instruments-block');
             closePopupBtn.on('click', function(e) {
                 e.preventDefault();
                 $(this).parent().hide(300);
                 $scope.clearPopupFields();
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
-                $scope.selectedClub = '';
+                $scope.selectedClub = null;
             });
             $('.photos-block, #instruments-block, .header').on('click', function(event){
                 if(!$(event.target).is('.player-partners-popup') &&
@@ -247,22 +233,11 @@
                     $.each(data.results, function(index, value){
                         $scope.photos.push(value)
                     });
-                    //$scope.photos = data.results;
                     $scope.next_page = data.next_page;
                     if(!$scope.next_page) {
                         $('#nextpagebutton').remove();
                     }
                 });
-            };
-
-            $scope.delCP = function(id, index) {
-                ArenaInstaPhoto.delete({id:id});
-                $scope.photos.splice(index, 1);
-            };
-
-            $scope.procCP = function(id, index) {
-                ArenaInstaPhoto.update({id:id}, {processed:true});
-                $scope.photos.splice(index, 1);
             };
 
             $scope.deleteAll = function() {
@@ -273,7 +248,6 @@
                         $("#item_" + $(value).attr('id')).css('opacity', '0');
                     });
                     $('input[name="delete_all"]').prop("checked", false);
-                    //window.location.reload();
                 }
             };
             $scope.allAsArenaPhoto = function(){
@@ -287,7 +261,6 @@
                         });
                     });
                 $scope.uncheckedAllInputs();
-                    //window.location.reload();
             };
             $scope.agree = function(){
                 $('input[name="delete_all"]').prop("checked", !$('input[name="delete_all"]').prop("checked"));
@@ -295,22 +268,18 @@
             $scope.agreePopup = function(){
                 $('input[name="delete_photopopup"]').prop("checked", !$('input[name="delete_photopopup"]').prop("checked"));
             };
-
             $scope.addAll = function() {
                 var inputs = $('input[name="cp"]:checked');
                 $.each(inputs, function(index, value) {
                     ArenaInstaPhoto.update({id:$(value).val()}, {processed:true});
                     $("#item_" + $(value).attr('id')).css('opacity', '0');
                 });
-                //window.location.reload();
             };
-
             $scope.nextPage = function() {
                 if($scope.next_page) {
                     $scope.getPage($scope.next_page);
                 }
             };
-            $scope.getPage($scope.next_page);
 
             $scope.checkedInputImg = function(id) {
                 $('#id_aip_'+id).prop("checked", !$('#id_aip_'+id).prop("checked"))
@@ -330,6 +299,8 @@
 
             $scope.PhotoPopupShow = function(id, index, event) {
                 $scope.PhotoPopup.clubSet = [];
+                if(event && event.currentTarget)
+                $scope.PhotoPopup.domIndex = parseInt(angular.element(event.currentTarget).attr('id'));
                 $scope.PhotoPopup.data = ArenaInstaPhoto.get({id:id}, function(photo) {
                     if (photo.club) {
                         $scope.PhotoPopup.club = Club.get({id:photo.club});
@@ -341,7 +312,6 @@
                         $scope.PhotoPopup.arena = Arena.get({id:photo.arena}, function(arena){
                             $.each(arena.club_set, function(index, value){
                                 Club.get({id:value}, function(club){
-                                    console.log(club);
                                     $scope.PhotoPopup.clubSet.push(club);
                                 })
                             })
@@ -352,6 +322,8 @@
                     }
                     var params = {date:photo.photo.created, arena:photo.arena};
                     $scope.PhotoPopup.matches = Match.query(params);
+                }, function(){
+                    return $scope.nextPhoto();
                 });
                 $scope.PhotoPopup.index = index;
                 $('.photos-block, .instruments-block, .header').addClass("blur");
@@ -360,6 +332,7 @@
             $scope.nextPhoto = function(){
                 var index = $scope.PhotoPopup.index + 1;
                 if($scope.photos[index]){
+                    $scope.PhotoPopup.domIndex = $scope.photos[index].id;
                     $scope.PhotoPopupShow($scope.photos[index].id, index);
                     $scope.clearPopupFields();
                 }
@@ -367,25 +340,29 @@
             $scope.prevPhoto = function(){
                 var index = $scope.PhotoPopup.index + -1;
                 if($scope.photos[index]){
+                    $scope.PhotoPopup.domIndex = $scope.photos[index].id;
                     $scope.PhotoPopupShow($scope.photos[index].id, index);
                     $scope.clearPopupFields();
                 }
             };
 
-            $scope.delCPPopup = function(id, index) {
-                if($('input[name="delete_photopopup"]').prop("checked")){
-                    $scope.delCP(id, index);
-                    $scope.deletePhotopopup=false;
-                    $('.player-partners-popup').hide(300);
-                    $scope.clearPopupFields();
-                    $('.photos-block, .instruments-block, .header').removeClass("blur");
-                }
-            };
             $scope.clearPopupFields = function(){
                 $('input[name="aip_player_numbers"]').val('');
                 $('input[name="delete_photopopup"]').prop("checked", false);
                 $('#photo_club').val('');
                 $('#id_aip_club').val('');
+                $scope.deletePhotopopup = false;
+            };
+
+            $scope.delCPPopup = function(id, index) {
+                if($('input[name="delete_photopopup"]').prop("checked")){
+                    ArenaInstaPhoto.delete({id:id});
+                    $scope.deletePhotopopup=false;
+                    $('.player-partners-popup').hide(300);
+                    $scope.clearPopupFields();
+                    $('.photos-block, .instruments-block, .header').removeClass("blur");
+                    $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
+                }
             };
 
             $scope.procCPPopup = function(id, index) {
@@ -393,15 +370,15 @@
                 var new_club = $('input[name="aip_club"]').val();
                 if(new_club) {
                     data['club'] = parseInt(new_club);
-                };
+                }
                 data['comment'] = $('input[name="aip_comment"]').val();
-                data['player_numbers'] = $('input[name="aip_player_numbers"]').val();
+                if($('input[name="aip_player_numbers"]').val())
+                data['players'] = $('input[name="aip_player_numbers"]').val().replace(',', '').split(' ');
                 ArenaInstaPhoto.update({id:id}, data);
-                $scope.photos.splice(index, 1);
-                $scope.deletePhotopopup = false;
                 $('.player-partners-popup').hide(300);
                 $scope.clearPopupFields();
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
+                $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
             };
 
             $scope.createArenaPhoto = function(id, index) {
@@ -413,6 +390,7 @@
                 $('#id_aip_club').val(team.id);
             };
 
+            $scope.getPage($scope.next_page);
         }]);
     })();
 </script>
