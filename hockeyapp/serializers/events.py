@@ -7,12 +7,16 @@ from ..views.events import BirthdayEvent, MatchEvent, GuestMatchEvent
 
 
 class EventSerializer(serializers.Serializer):
-    date = serializers.DateField()
+    date = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
     type = serializers.CharField()
     url = serializers.URLField()
     image = serializers.URLField()
     logos = serializers.ReadOnlyField()
+    logos_urls = serializers.ReadOnlyField()
+
+    def get_date(self, event):
+        return event.date.strftime('%Y-%M-%dT%H:%m%Z')
 
     def get_title(self, event):
         request = self.context.get('request')
@@ -31,4 +35,4 @@ class EventSerializer(serializers.Serializer):
             return '{} - {}'.format(*teams)
 
     class Meta(object):
-        fields = 'date', 'title', 'type', 'url', 'image', 'logos'
+        fields = 'date', 'title', 'type', 'url', 'image', 'logos', 'logos_urls'

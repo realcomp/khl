@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load base_extras %}
 
 {% block body %}
 <section class="content">
@@ -161,31 +162,30 @@
                 {% for event in events %}
                     <div class="three wide column">
                         <div class="event-block event-block_green" style="text-align: center">
-                            <a href="{{ event.url }}" style="position: relative">
-                                {% if event.image %}
+                            {% if event.image %}
                                 <span class=" float-left ribbon">{{ event.type }}</span>
+                                <a href="{{ event.url }}" style="position: relative">
                                     <img src="{{ event.image }}" alt="" class="event-picture">
-                                {% endif %}
-                                {% if event.logos %}
+                                </a>
+                            {% endif %}
+                            {% if event.logos %}
                                 <div class="event-match">
                                     <span class=" float-left match-ribbon">{{ event.type }}</span>
                                     <div class="event-picture" style="text-align: center">
-                                        {% for logo in event.logos %}
-                                            {% if forloop.counter == 1 %}
-                                                <img src="{{ logo }}" alt="" class="event-club-logo event-club-logo-left">
-                                            {% endif %}
-                                            {% if forloop.counter == 2 %}
-                                                <img src="{{ logo }}" alt="" class="event-club-logo event-club-logo-right">
-                                            {% endif %}
-                                        {% endfor %}
+                                        <a href="{{ event.logos_urls.0 }}" style="position: relative">
+                                            <img src="{{ event.logos.0 }}" alt="" class="event-club-logo event-club-logo-left">
+                                        </a>
+                                        <a href="{{ event.logos_urls.1 }}" style="position: relative">
+                                            <img src="{{ event.logos.1 }}" alt="" class="event-club-logo event-club-logo-right">
+                                        </a>
                                     </div>
-                                    {% if event.logos %}
                                     <div class="event-info">
-                                        <span class="event-date event-game-date">{{ event.date }}</span></div>
-                                    {% endif %}
+                                        <span class="event-date event-game-date">
+                                            {% lcb %} "{{ event.date }}" | date:'dd MMMM yyyy' {% rcb %}
+                                        </span>
+                                    </div>
                                 </div>
-                                {% endif %}
-                            </a>
+                            {% endif %}
                             <div class="event-info">
                                 <!--<span class="event-more"><i class="align justify icon"></i></span>-->
                                 <!-- <span class="event-label">{% trans 'Hockey' %}</span> -->

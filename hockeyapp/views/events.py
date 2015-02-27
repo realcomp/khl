@@ -26,11 +26,19 @@ class Event(object):
         pass
 
     @property
+    def url(self):
+        pass
+
+    @property
     def image(self):
         pass
 
     @property
     def logos(self):
+        pass
+
+    @property
+    def logos_urls(self):
         pass
 
     @property
@@ -52,7 +60,7 @@ class BirthdayEvent(Event):
 
     @property
     def type(self):
-        return _('Birth day')
+        return _('Birthday')
 
 
 class MatchEvent(Event):
@@ -72,11 +80,6 @@ class HomeMatchEvent(MatchEvent):
     Clubs's home matches
     """
     @property
-    def url(self):
-        return reverse(
-            'hockeyapp:club-news', kwargs={'pk': self.obj.home_team_id})
-
-    @property
     def logos(self):
         result = []
         if self.obj.home_team.logo:
@@ -85,24 +88,24 @@ class HomeMatchEvent(MatchEvent):
             result.append(self.obj.guest_team.logo.url)
         return result
 
+    @property
+    def logos_urls(self):
+        return map(lambda pk: reverse(
+            'hockeyapp:club-news', kwargs={'pk': pk}),
+            (self.obj.home_team_id, self.obj.guest_team_id))
 
-class GuestMatchEvent(MatchEvent):
+
+class GuestMatchEvent(HomeMatchEvent):
     """
     Clubs's guest matches
     """
     @property
-    def url(self):
-        return reverse(
-            'hockeyapp:club-news', kwargs={'pk': self.obj.guest_team_id})
+    def logos(self):
+        return reversed(super(GuestMatchEvent, self).logos)
 
     @property
-    def logos(self):
-        result = []
-        if self.obj.guest_team.logo:
-            result.append(self.obj.guest_team.logo.url)
-        if self.obj.home_team.logo:
-            result.append(self.obj.home_team.logo.url)
-        return result
+    def logos_urls(self):
+        return reversed(super(GuestMatchEvent, self).logos_urls)
 
 
 class EventFactory(object):
