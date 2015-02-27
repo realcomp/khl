@@ -113,6 +113,14 @@
         </div>
         <div id="#instruments-block" class="instruments-block">
             <ul class="team-controls player-controls-block">
+                <div class="float-left" style="margin-left: 10px">
+                    <div class="inline-block float-left">
+                        <div class="ui icon input">
+                            До <input type="number" style="width: 100px !important; margin-left: 20px" ng-model="max_id">
+                            <i class="fa fa-refresh pointer" style="width: 20px" onclick="window.location.reload()"></i>
+                        </div>
+                    </div>
+                </div>
                 <a class="ui blue button control-button" ng-click="checkedAllInputs()">ВЫДЕЛИТЬ ВСЕ</a>
                 <a class="ui blue button control-button" ng-click="uncheckedAllInputs()">СНЯТЬ ВЫДЕЛЕНИЕ</a>
                 <div class="m-t-20"></div>
@@ -178,18 +186,26 @@
             $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             $resourceProvider.defaults.stripTrailingSlashes = false;
         }]);
-        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match', function($scope, ArenaInstaPhoto, Club, Match) {
+        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','$location', function($scope, ArenaInstaPhoto, Club, Match, $location) {
             $scope.next_page = 1;
             $scope.arenaInstaPhoto = null;
             $scope.deletePhotopopup = false;
             $scope.selectedClub = '';
             $scope.photos = [];
+            $scope.params = $location.search();
+            $scope.min_id = 1;
+            $scope.max_id = parseInt($scope.params.max_id) || 100;
             $scope.$watch('selectedClub', function(newval, oldval){
                 if(newval && newval.length > 0){
                     $('#photo_club').val(newval.title);
                     $scope.PhotoPopup.club.ru_title = '';
                 }
             });
+            $scope.$watch('max_id', function(newval, oldval){
+                if(newval){
+                    $location.search('max_id', newval)
+                }
+            })
             var closePopupBtn = $('#close-popup-btn');
             var instrumentsBlock = $('#instruments-block');
             var instagramBlock = $('#instagram-photos-container');
@@ -216,7 +232,7 @@
                 $scope.selectedClub = '';
             });
             $scope.getPage = function() {
-                ArenaInstaPhoto.query({page:$scope.next_page}).$promise.then(function(data) {
+                ArenaInstaPhoto.query({page:$scope.next_page, min_id: $scope.min_id, max_id: $scope.max_id}).$promise.then(function(data) {
                     $.each(data.results, function(index, value){
                         $scope.photos.push(value)
                     });
@@ -308,7 +324,7 @@
                     }
                     else {
                         $scope.PhotoPopup.club = null;   
-                    };
+                    }
                     var params = {date:photo.photo.created, arena:photo.arena};
                     $scope.PhotoPopup.matches = Match.query(params);
                 });
