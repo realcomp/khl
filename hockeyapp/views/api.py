@@ -23,7 +23,8 @@ from ..serializers import (
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, PlayerTimelineSerializer)
+    ClubTitlesSerializer)
+from ..serializers.timeline import PlayerTimelineSerializer
 
 
 class PlayersSearch(

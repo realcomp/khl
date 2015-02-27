@@ -360,7 +360,8 @@ class TimelineAdmin(admin.ModelAdmin):
     actions = generate_timeline, regenerate_timeline,
     form = TimelineForm
     list_display = (
-        'start_date', 'end_date', 'ru_headline', 'en_headline', 'type')
+        'player', 'start_date', 'end_date', 'ru_headline', 'en_headline',
+        'type')
     list_filter = 'type',
     search_fields = 'ru_headline', 'en_headline', 'ru_text', 'en_text', 'tag'
 admin.site.register(Timeline, TimelineAdmin)

@@ -831,9 +831,14 @@ class Timeline(LocaleAttrMixin, models.Model):
     ru_text = models.TextField(_('Text (RU)'), blank=True, null=True)
     en_text = models.TextField(_('Text (EN)'), blank=True, null=True)
     media = FilerImageField(verbose_name=_('Media'), null=True, blank=True)
-    media_credit = models.CharField(
-        _('Media credit'), max_length=255, blank=True, null=True)
-    media_caption = models.TextField(_('Media caption'), blank=True, null=True)
+    ru_media_credit = models.CharField(
+        _('Media credit (RU)'), max_length=255, blank=True, null=True)
+    en_media_credit = models.CharField(
+        _('Media credit (EN)'), max_length=255, blank=True, null=True)
+    ru_media_caption = models.CharField(
+        _('Media caption (RU)'), max_length=255, blank=True, null=True)
+    en_media_caption = models.CharField(
+        _('Media caption (EN)'), max_length=255, blank=True, null=True)
     type = models.CharField(
         _('Type'), max_length=255, blank=True, null=True)
     tag = models.CharField(

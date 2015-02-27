@@ -12,6 +12,7 @@ logger = get_task_logger(__name__)
 
 from django.conf import settings
 from django.db.models import Q
+from django.utils import timezone
 
 from sportomatics.celery import app
 
@@ -371,13 +372,23 @@ def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
 
 @app.task(ignore_result=True, track_started=True)
 def player_generate_timeline(ids):
+    tz = timezone.get_current_timezone()
+
+    def date2datetime(date):
+        dt = datetime.datetime(
+            date.year, date.month, date.day, 12, 0, 0)
+        return timezone.make_aware(dt, tz)
+
     def birthday_events(players):
+        players = players.filter(birth_date__isnull=False)
         # birthday events
-        timelines = models.Timeline.objects.filter(type='birthday')
-        for player in players.exclude(
-                pk__in=timelines.values_list('player_id', flat=True)):
+        players_pks = (
+            models.Timeline.objects
+            .filter(type='birthday')
+            .values_list('player_id', flat=True))
+        for player in players.exclude(pk__in=players_pks):
             models.Timeline.objects.create(
-                start_date=player.birth_date,
+                start_date=date2datetime(player.birth_date),
                 ru_headline='День рождения',
                 en_headline='Birth day',
                 ru_text='День рождения',
@@ -388,9 +399,11 @@ def player_generate_timeline(ids):
 
     def first_event(players, **kwargs):
         ''' abstract 1st event factory '''
-        timelines = models.Timeline.objects.filter(type=kwargs['type'])
-        for player in players.exclude(
-                pk__in=timelines.values_list('player_id', flat=True)):
+        players_pks = (
+            models.Timeline.objects
+            .filter(type=kwargs['type'])
+            .values_list('player_id', flat=True))
+        for player in players.exclude(pk__in=players_pks):
             try:
                 date = kwargs['date_query'](player)
             except kwargs['date_model'].DoesNotExist:
@@ -622,15 +635,21 @@ def player_generate_timeline(ids):
 
     def club_change_events(players):
         for player in players:
-            dates = (
-                models.Timeline.objects
-                .filter(type='club_change', player=player)
-                .values_list('start_date', flat=True))
             clubplayers = (
                 models.ClubPlayer.objects
                 .filter(player=player)
-                .exclude(start_date__in=dates)
                 .order_by('start_date'))
+
+            timelines = models.Timeline.objects.filter(
+                type='club_change', player=player)
+            if timelines.exists():
+                # ~Q & ~Q & ~Q
+                q_existing = reduce(operator.and_, map(
+                    lambda x: ~Q(
+                        start_date__gte=x.start_date.date(),
+                        end_date__lte=x.end_date.date()),
+                    timelines))
+                clubplayers = clubplayers.filter(q_existing)
 
             # group by club
             timelines = {}
@@ -639,14 +658,15 @@ def player_generate_timeline(ids):
                 en_club = clubplayer.club.en_title
                 url = clubplayer.club_url
                 timeline = models.Timeline(
-                    start_date=clubplayer.start_date,
-                    end_date=clubplayer.end_date,
+                    start_date=date2datetime(clubplayer.start_date),
+                    end_date=date2datetime(clubplayer.end_date),
                     ru_headline='В составе клуба "%s"' % ru_club,
                     en_headline='Membership in a club "%s"' % en_club,
                     ru_text='В составе клуба "%s"' % ru_club,
                     en_text='Membership in a club "%s"' % en_club,
                     media=clubplayer.club.logo,
-                    media_caption='<a href="%s">-&gt;</a>' % url,
+                    ru_media_caption='<a href="%s">%s</a>' % (url, ru_club),
+                    en_media_caption='<a href="%s">%s</a>' % (url, en_club),
                     type='club_change',
                     player=player,
                     club=clubplayer.club)
@@ -655,11 +675,12 @@ def player_generate_timeline(ids):
                     timelines[clubplayer.club.pk] = [timeline]
                 else:
                     date_a = timelines[clubplayer.club.pk][-1].end_date
-                    date_b = clubplayer.start_date
+                    date_b = date2datetime(clubplayer.start_date)
                     # extra day between the same events is ignored
                     if date_a + datetime.timedelta(days=1) >= date_b:
                         # combine events by shifting end date
-                        timelines[clubplayer.club.pk][-1].end_date = clubplayer.end_date
+                        dt = date2datetime(clubplayer.end_date)
+                        timelines[clubplayer.club.pk][-1].end_date = dt
                     else:
                         timelines[clubplayer.club.pk].append(timeline)
             models.Timeline.objects.bulk_create(
@@ -752,3 +773,10 @@ def player_generate_timeline(ids):
     club_change_events(players)
     first_club_goal_event(players)
     series_0_loose_goals_event(players)
+
+
+@app.task(ignore_result=True, track_started=True)
+def periodic_player_generate_timeline():
+    pks = models.Player.objects.values_list('pk', flat=True)
+    for i in range(0, len(pks), 1000):  # 1000 players per task
+        player_generate_timeline.delay(pks[i:i + 1000])

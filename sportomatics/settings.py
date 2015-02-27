@@ -113,6 +113,10 @@ CELERYBEAT_SCHEDULE = {
         #'task': 'hockeyapp.tasks.get_clubs_instagram_pictures',
         #'schedule': local_celery_crontab(hour=0, minute=0),
     #},
+    'hockeyapp-periodic-player-generate-timeline': {
+        'task': 'hockeyapp.tasks.periodic_player_generate_timeline',
+        'schedule': local_celery_crontab(hour=3, minute=0),
+    },
 }
 CELERY_IGNORE_RESULT = True
 
