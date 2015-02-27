@@ -39,7 +39,10 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     def get_rating(self, obj):
         rated_by = self.context['request'].GET.get('rated_by', '')
         if rated_by:
-            return getattr(obj, rated_by, None)
+            rating = getattr(obj, rated_by, None)
+            if type(rating) == float:
+                rating = '%.3f' % rating
+            return rating
 
     def get_rating_index(self, obj):
         rating = getattr(self.context['view'], 'rating', {})

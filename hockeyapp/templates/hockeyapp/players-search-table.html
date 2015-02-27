@@ -207,25 +207,25 @@
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'goals_average'">
                             <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
-                                {% trans 'Avg goals per game' %}
+                                {% trans 'G/G' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'assists_average'">
                             <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
-                                {% trans 'Avg assists per game' %}
+                                {% trans 'A/G' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'points_average'">
                             <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
-                                {% trans 'Avg points per game' %}
+                                {% trans 'P/G' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'rating' }"
                             ng-show="params.ratedBy === 'plus_minus_average'">
                             <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'rating')">
-                                {% trans 'Avg "+/-" per game' %}
+                                {% trans 'Helpfulness' %}
                             </a>
                         </th>
                         <th ng-class="{ 'column-sort':params.orderBy === 'matches_total' }"
