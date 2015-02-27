@@ -54,6 +54,9 @@ def periodic_update_schedules():
     )
     for _parser, id in _parsers:
         _parser().put_data_in_db_from_page(id,update=True, challenge_type=1)
+    _parser, id, ct = parsers.schedule.KHLScheduleParser, 267, 2
+    # KHL playoff
+    _parser().put_data_in_db_from_page(id,update=True, challenge_type=ct)
 
 
 @app.task(ignore_result=True, track_started=True)

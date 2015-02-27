@@ -247,7 +247,7 @@ class Arena(TitleBaseModel):
 
     def get_absolute_url(self):
         if self.pk:
-            club = self.club_set.last()
+            club = self.club_set.latest('pk')
             return reverse('hockeyapp:club-home', kwargs={'pk': club.pk})
 
     class Meta:
