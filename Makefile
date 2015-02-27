@@ -14,7 +14,7 @@ requirements:
 	$(PIP) install -r $(PROJECT_DIR)/requirments.txt
 
 migrate:
-	$(PYTHON) $(PROJECT_DIR)/manage.py migrate
+	$(PYTHON) $(PROJECT_DIR)/manage.py migrate --noinput
 
 clean: clean_venv
 
