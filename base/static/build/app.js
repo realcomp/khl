@@ -1103,8 +1103,8 @@ angular.module('Sportomatics')
 
 angular.module('Sportomatics')
 .controller('ClubStatsController', [
-    '$route', '$http', '$scope', 'PlayersSearchService',
-    function($route, $http, $scope, PlayersSearchService) {
+    '$http', '$scope', 'PlayersSearchService',
+    function($http, $scope, PlayersSearchService) {
     $scope.PlayersSearchService = PlayersSearchService;
 
     $scope.data = {};
