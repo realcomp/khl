@@ -7,12 +7,11 @@ from django.db.models import Avg, Sum
 from rest_framework import serializers
 
 from . import (
-    LangDepSerializer,
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
     SeasonSerializer, BaseClubSerializer,
     CoachSerializer, CountrySerializer, ClubPlayerSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, Timeline)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -40,7 +39,10 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     def get_rating(self, obj):
         rated_by = self.context['request'].GET.get('rated_by', '')
         if rated_by:
-            return getattr(obj, rated_by, None)
+            rating = getattr(obj, rated_by, None)
+            if type(rating) == float:
+                rating = '%.3f' % rating
+            return rating
 
     def get_rating_index(self, obj):
         rating = getattr(self.context['view'], 'rating', {})
@@ -211,66 +213,3 @@ class ClubTitlesSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
         model = Club
-
-
-class TimelineSerializer(LangDepSerializer):
-    startDate = serializers.SerializerMethodField()
-    endDate = serializers.SerializerMethodField()
-    headline = serializers.SerializerMethodField()
-    text = serializers.SerializerMethodField()
-    asset = serializers.SerializerMethodField()
-
-    get_headline = lambda self, obj: self._get_field(obj, 'headline')
-    get_text = lambda self, obj: self._get_field(obj, 'text')
-
-    def _get_date(self, date):
-        if date:
-            return '%d,%d,%d' % (date.year, date.month, date.day)
-
-    def get_startDate(self, obj):
-        return self._get_date(obj.start_date)
-
-    def get_endDate(self, obj):
-        return self._get_date(obj.end_date)
-
-    def get_asset(self, obj):
-        return {
-            'media': obj.media and obj.media.url,
-            'thumbnail': obj.media and obj.media.url,
-            'credit': obj.media_credit,
-            'caption': obj.media_caption,
-        }
-
-    class Meta(object):
-        fields = (
-            'startDate', 'endDate', 'headline', 'text', 'tag', 'asset')
-        model = Timeline
-
-
-class PlayerTimelineSerializer(AbstractManSerializer):
-    headline = serializers.SerializerMethodField()
-    text = serializers.SerializerMethodField()
-    asset = serializers.SerializerMethodField()
-    type = serializers.SerializerMethodField()
-    date = TimelineSerializer(many=True, source='timeline_set')
-
-    def get_headline(self, obj):
-        return ' '.join((
-            self._get_field(obj, 'lastname'), self._get_field(obj, 'name')))
-
-    def get_text(self, obj):
-        return 'TEXT'
-
-    def get_asset(self, obj):
-        return {
-            'media': obj.photo and obj.photo.url,
-            'thumbnail': obj.photo and obj.photo.url,
-        }
-
-    def get_type(self, obj):
-        return 'default'
-
-    class Meta(object):
-        fields = (
-            'headline', 'text', 'asset', 'type', 'date')
-        model = Player

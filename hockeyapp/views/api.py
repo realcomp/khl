@@ -23,7 +23,8 @@ from ..serializers import (
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, PlayerTimelineSerializer)
+    ClubTitlesSerializer)
+from ..serializers.timeline import PlayerTimelineSerializer
 
 
 class PlayersSearch(
@@ -73,6 +74,11 @@ class PlayersSearch(
         if 'player' in self.request.GET:
             pk = int(self.request.GET['player'])
             qs = qs.ranged_filter(lambda player: player.pk == pk, 5)
+
+        if 'club' in request.GET:
+            clubplayers = clubplayers.filter(club=request.GET['club'])
+            players = clubplayers.values_list('player_id', flat=True)
+            qs = qs.filter(pk__in=players)
 
         instance = qs
         page = self.paginate_queryset(instance)
