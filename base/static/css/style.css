@@ -2267,17 +2267,22 @@ i.icon {
 /* line 1421, ../sass/_base.sass */
 .event-block {
   padding: 14px 0;
-  border-bottom: 1px solid #e6e6e6;
+  /*border-bottom: 1px solid #e6e6e6;*/
 }
 /* line 1424, ../sass/_base.sass */
 .event-block .event-picture {
   width: 100%;
   border-radius: 8px;
 }
+.event-block .event-logo {
+    width: 100%;
+    border-radius: 8px;
+}
 /* line 1427, ../sass/_base.sass */
 .event-block .event-info {
-  font-size: 11px;
+  font-size: 9px;
   margin-top: 10px;
+    height: 13.5px;
 }
 /* line 1430, ../sass/_base.sass */
 .event-block .event-label {
@@ -2296,10 +2301,12 @@ i.icon {
 }
 /* line 1439, ../sass/_base.sass */
 .event-block .event-title {
-  margin: 10px 0 5px;
+    margin-top: -20px;
+    margin-bottom: -10px;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
+    text-align: left;
 }
 /* line 1444, ../sass/_base.sass */
 .event-block .event-views, .event-block .event-comments {
@@ -5130,7 +5137,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border-radius: .3125em
 }
 .instagram-photos-container{
-    width: 1250px !important;
+    /*width: 1250px !important;*/
     margin: 0 auto;
     background: #fff;
 }
@@ -5160,11 +5167,11 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     top: 5px;
 }
 .instagram-photos-container .photos-block{
-    width: 78%;
+    width: 82%;
     display: inline-block;
 }
 .instagram-photos-container .instruments-block{
-    width: 20%;
+    width: 260px;
     display: inline-block;
     vertical-align: top;
     margin-top: 10px;
@@ -5219,6 +5226,104 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 #player-timeline .media-image img{
     max-height: 170px !important;
     max-width: 140px !important;
-    height: 170px;
-    width: 140px;
+}
+.events-row{
+    width: 96% !important;
+}
+.float-left{
+    float: left !important;
+}
+.ribbon {
+    position: absolute;
+    left: -4px;
+    top: -14px;
+    height: 18px;
+    background: #30782a;
+    border-radius: 0 3px 3px 0;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 9px;
+    text-transform: uppercase;
+    padding: 0 3px 0 3px;
+}
+/* line 2941, ../sass/_base.sass */
+.ribbon:before {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 5px 3px 0;
+    border-color: transparent #193f16 transparent transparent;
+}
+.match-ribbon {
+    position: absolute;
+    left: -4px;
+    top: 55px;
+    height: 18px;
+    background: #2a9ecb;
+    border-radius: 0 3px 3px 0;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 9px;
+    text-transform: uppercase;
+    padding: 0 3px 0 3px;
+}
+/* line 2941, ../sass/_base.sass */
+.match-ribbon:before {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 5px 3px 0;
+    border-color: transparent #217da0 transparent transparent;
+}
+.event-match{
+    border: 2px solid #c0c0c0;
+    border-radius: 10px;
+    width: 100%;
+    height: 80px;
+    position: relative;
+}
+.event-club-logo{
+    width: 30%;
+    margin-top: 8%;
+}
+.event-club-logo-left{
+    float: left;
+    margin-left: 15px;
+}
+.event-club-logo-right{
+    float: right;
+    margin-right: 15px;
+}
+.event-game-date{
+    text-decoration: none;
+    position: absolute;
+    top: 57px;
+    right: 40px;
+}
+.event-game-title{
+    margin-top: -20px;
+    margin-bottom: -10px;
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: left;
+    color: #217da0;
+}
+.text-shadow-around{
+    text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+.text-shadow-right-bottom{
+    text-shadow: 1px 1px #000;
 }
