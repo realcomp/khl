@@ -35,7 +35,7 @@
                 <div class="rightleft" ng-click="prevPhoto()">
                     <i class="fa fa-angle-left"></i>
                 </div>
-                <div style="width:650px;display: inline-block;">
+                <div style="width:648px;display: inline-block;">
                     <img alt="" class="item-photo popup-photo" ng-src="{{ PhotoPopup.data.photo.img.file }}">
                 </div>
                 <div class="rightleft" ng-click="nextPhoto()">
@@ -43,13 +43,15 @@
                 </div>
                 <div style="display:inline-block;margin-left: 30px; vertical-align: top">
                     <div class="ui icon input">
-                        Текущая команда
-                        <input type="text" id="curr_team" disabled ng-model="PhotoPopup.club.ru_title">
+                        Возможные клубы:
+                        <div ng-repeat="club in PhotoPopup.clubSet track by $index">
+                            <a class="pointer" ng-click="setTeam(club)"> {{club.ru_title}} </a>
+                        </div>
                     </div>
 {% endverbatim %}
                     <br/>
                     <div class="ui icon input m-t-5">
-                        <label>Ввести название команды вручную:
+                        <label>Ввести название клуба вручную:
                             <angucomplete id="clubs_filter"
                                           pause="300" minlength="2"
                                           selectedobject="selectedClub"
@@ -164,6 +166,17 @@
         services.factory('Club', function($resource){
             return $resource("{% url 'api:hockey:club_list' %}"+":id/", {}, {
                 get: { method: 'GET'}
+                /*transformResponse: function(data, header){
+                    //Getting string data in response
+                    var jsonData = JSON.parse(data); //or angular.fromJson(data)
+                    var respData = [];
+
+                    angular.forEach(jsonData, function(item){
+                        respData.push(item);
+                    });
+
+                    return respData;
+                }*/
             });
         });
 
@@ -192,7 +205,7 @@
             $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             $resourceProvider.defaults.stripTrailingSlashes = false;
         }]);
-        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','$location', function($scope, ArenaInstaPhoto, Club, Match, $location) {
+        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','Arena', '$location', function($scope, ArenaInstaPhoto, Club, Match, Arena,  $location) {
             $scope.next_page = 1;
             $scope.arenaInstaPhoto = null;
             $scope.deletePhotopopup = false;
@@ -204,38 +217,30 @@
             $scope.$watch('selectedClub', function(newval, oldval){
                 if(newval && newval.length > 0){
                     $('#photo_club').val(newval.title);
-                    $scope.PhotoPopup.club.ru_title = '';
                 }
             });
             $scope.$watch('max_id', function(newval, oldval){
                 if(newval){
                     $location.search('max_id', newval)
                 }
-            })
+            });
             var closePopupBtn = $('#close-popup-btn');
             var instrumentsBlock = $('#instruments-block');
-            var instagramBlock = $('#instagram-photos-container');
-            instagramBlock.on('click', function(event){
-                if(!$(event.target).is('.player-partners-popup') &&
-                    !$(event.target).parents('.player-partners-popup').is('.player-partners-popup') &&
-                    !$(event.target).is('.popup-show-button')){
-                    $('.player-partners-popup').hide(300);
-                    $('input[name="aip_player_numbers"]').val('');
-                    $('input[name="id_aip_club"]').val('');
-                    $('input[name="photo_club"]').val('');
-                    $('input[name="delete_photopopup"]').prop("checked", false);
-                    $('.photos-block, .instruments-block, .header').removeClass("blur");
-                }
-            });
             closePopupBtn.on('click', function(e) {
                 e.preventDefault();
                 $(this).parent().hide(300);
-                $('input[name="aip_player_numbers"]').val('');
-                $('input[name="#id_aip_club"]').val('');
-                $('input[name="#photo_club"]').val('');
-                $('input[name="delete_photopopup"]').prop("checked", false);
+                $scope.clearPopupFields();
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
                 $scope.selectedClub = '';
+            });
+            $('.photos-block, #instruments-block, .header').on('click', function(event){
+                if(!$(event.target).is('.player-partners-popup') &&
+                        !$(event.target).parents('.player-partners-popup').is('.player-partners-popup') &&
+                        !$(event.target).is('.popup-show-button')){
+                    $('.player-partners-popup').hide(300);
+                    $scope.clearPopupFields();
+                    $('.photos-block, .instruments-block, .header').removeClass("blur");
+                }
             });
             $scope.getPage = function() {
                 ArenaInstaPhoto.query({page:$scope.next_page, min_id: $scope.min_id, max_id: $scope.max_id}).$promise.then(function(data) {
@@ -324,12 +329,26 @@
             };
 
             $scope.PhotoPopupShow = function(id, index, event) {
+                $scope.PhotoPopup.clubSet = [];
                 $scope.PhotoPopup.data = ArenaInstaPhoto.get({id:id}, function(photo) {
                     if (photo.club) {
                         $scope.PhotoPopup.club = Club.get({id:photo.club});
                     }
                     else {
                         $scope.PhotoPopup.club = null;   
+                    }
+                    if(photo.arena){
+                        $scope.PhotoPopup.arena = Arena.get({id:photo.arena}, function(arena){
+                            $.each(arena.club_set, function(index, value){
+                                Club.get({id:value}, function(club){
+                                    console.log(club);
+                                    $scope.PhotoPopup.clubSet.push(club);
+                                })
+                            })
+                        })
+                    }
+                    else{
+
                     }
                     var params = {date:photo.photo.created, arena:photo.arena};
                     $scope.PhotoPopup.matches = Match.query(params);
@@ -340,13 +359,17 @@
             };
             $scope.nextPhoto = function(){
                 var index = $scope.PhotoPopup.index + 1;
-                if($scope.photos[index])
-                $scope.PhotoPopupShow($scope.photos[index].id, index);
+                if($scope.photos[index]){
+                    $scope.PhotoPopupShow($scope.photos[index].id, index);
+                    $scope.clearPopupFields();
+                }
             };
             $scope.prevPhoto = function(){
                 var index = $scope.PhotoPopup.index + -1;
-                if($scope.photos[index])
+                if($scope.photos[index]){
                     $scope.PhotoPopupShow($scope.photos[index].id, index);
+                    $scope.clearPopupFields();
+                }
             };
 
             $scope.delCPPopup = function(id, index) {
@@ -354,13 +377,15 @@
                     $scope.delCP(id, index);
                     $scope.deletePhotopopup=false;
                     $('.player-partners-popup').hide(300);
-                    $('input[name="aip_player_numbers"]').val('');
-                    $('input[name="#id_aip_club"]').val('');
-                    $('input[name="#photo_club"]').val('');
-                    $('input[name="delete_photopopup"]').prop("checked", false);
+                    $scope.clearPopupFields();
                     $('.photos-block, .instruments-block, .header').removeClass("blur");
-                    $scope.selectedClub = '';
                 }
+            };
+            $scope.clearPopupFields = function(){
+                $('input[name="aip_player_numbers"]').val('');
+                $('input[name="delete_photopopup"]').prop("checked", false);
+                $('#photo_club').val('');
+                $('#id_aip_club').val('');
             };
 
             $scope.procCPPopup = function(id, index) {
@@ -375,23 +400,17 @@
                 $scope.photos.splice(index, 1);
                 $scope.deletePhotopopup = false;
                 $('.player-partners-popup').hide(300);
-                $('input[name="aip_player_numbers"]').val('');
-                $('input[name="#id_aip_club"]').val('');
-                $('input[name="#photo_club"]').val('');
-                $('input[name="delete_photopopup"]').prop("checked", false);
+                $scope.clearPopupFields();
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
-                $scope.selectedClub = '';
-            }
+            };
 
             $scope.createArenaPhoto = function(id, index) {
                 $scope.procCPPopup(id, index);
             };
 
             $scope.setTeam = function(team) {
-                //$('#photo_club').attr('href', team.get_absolute_url);
                 $('#photo_club').val(team.ru_title);
                 $('#id_aip_club').val(team.id);
-                $scope.PhotoPopup.club.ru_title = '';
             };
 
         }]);
