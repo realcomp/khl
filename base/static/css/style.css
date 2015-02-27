@@ -5327,3 +5327,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .text-shadow-right-bottom{
     text-shadow: 1px 1px #000;
 }
+.underline{
+    text-decoration: underline;
+}
