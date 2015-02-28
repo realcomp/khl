@@ -39,10 +39,12 @@ class ScheduleManager(models.Manager):
             m['challenge_type'] = challenge_type
             if m.get('khl_id') and (not _match or not _match.match):
                 m['match'] = self._get_match(m)
-                m['processed'] = True
+                if m['match']:
+                    m['processed'] = True
             if _match and _match.title == m.get('title'):
                 self.filter(pk=_match.pk).update(**m)
             else:
+                m['title'] = m.get('title', '').encode('utf-8')
                 self.create(**m)
 
     def update_schedule(self, **kwargs):
