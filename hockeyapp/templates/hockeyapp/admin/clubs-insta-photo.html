@@ -29,7 +29,7 @@
             </form>
         </div>
 {% verbatim %}
-        <div id="#switcher" class="player-partners-popup no-transition" style="min-width:1220px; z-index: 99999; position: fixed">
+        <div id="#switcher" class="player-partners-popup no-transition" style="min-width:1250px; z-index: 99999; position: fixed">
             <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
             <div>
                 <div class="rightleft" ng-click="prevPhoto()">
@@ -180,8 +180,8 @@
         });
 
         services.factory('PlayerList', function($resource){
-            return $resource("{% url 'api:hockey:player_list' %}"+":club/", {}, {
-                query: {method:'GET', params:{club:null}, isArray:true}
+            return $resource("{% url 'api:hockey:player_list' %}", {}, {
+                query: {method:'GET', params:{club:null, number: null}, isArray: true}
             });
         });
 
@@ -344,14 +344,18 @@
                     $scope.PhotoPopup.domIndex = $scope.photos[index].id;
                     $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'next');
                     $scope.clearPopupFields();
+                } else {
+                    $scope.PhotoPopup.index--;
                 }
             };
             $scope.prevPhoto = function(){
-                var index = $scope.PhotoPopup.index + -1;
+                var index = $scope.PhotoPopup.index - 1;
                 if($scope.photos[index]){
                     $scope.PhotoPopup.domIndex = $scope.photos[index].id;
                     $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'prev');
                     $scope.clearPopupFields();
+                } else {
+                    $scope.PhotoPopup.index++;
                 }
             };
 
@@ -381,10 +385,24 @@
                     data['club'] = parseInt(new_club);
                 }
                 data['comment'] = $('input[name="aip_comment"]').val();
-                if($('input[name="aip_player_numbers"]').val())
-                data['players'] = $('input[name="aip_player_numbers"]').val().replace(/[^0-9.]/g, " ").split(' ').clean("").map(function(e){ return parseInt(e);});
+                if($('input[name="aip_player_numbers"]').val()){
+                    data['players'] = $('input[name="aip_player_numbers"]').val().replace(/[^0-9.]/g, " ").split(' ').clean("").map(function(e){ return parseInt(e);});
+                    if(new_club){
+                        return (function(){
+                            PlayerList.query({club: parseInt(new_club), number: data['players']}, function(list){
+                                data['players'] = list.map(function(e){ return e['id']; });
+                                ArenaInstaPhoto.update({id:id}, data);
+                                $('.player-partners-popup').hide(300);
+                                $scope.clearPopupFields();
+                                $('.photos-block, .instruments-block, .header').removeClass("blur");
+                                $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
+                            });
+                        }())
+                    } else {
+                        return alert('Укажите название клуба, в котором играют указанные игроки');
+                    }
+                }
                 ArenaInstaPhoto.update({id:id}, data);
-                PlayerList.get({club: parseInt(new_club), number: data['players']});
                 $('.player-partners-popup').hide(300);
                 $scope.clearPopupFields();
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
