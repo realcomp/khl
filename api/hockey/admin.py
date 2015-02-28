@@ -100,10 +100,10 @@ class PlayerList(drf.generics.ListAPIView):
         club = self.request.GET.get('club')
         q = Q()
         if club:
-            q&= Q(clubs__in=set(club))
-            number = self.request.GET.get('number')
+            q&= Q(club__in=set(club))
+            number = self.request.GET.getlist('number')
             if number:
-                q&= Q(number=number)
+                q&= Q(number__in=set(number))
             return qs.filter(q)
         else:
             return qs.none()
