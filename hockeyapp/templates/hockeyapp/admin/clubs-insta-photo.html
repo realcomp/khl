@@ -331,6 +331,7 @@
                     }
                     var params = {date:photo.photo.created, arena:photo.arena};
                     $scope.PhotoPopup.matches = Match.query(params);
+                    $scope.lastSucceedIndex = index;
                 }, function(){
                     return (position === 'next') ? $scope.nextPhoto() : $scope.prevPhoto()
                 });
@@ -345,7 +346,7 @@
                     $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'next');
                     $scope.clearPopupFields();
                 } else {
-                    $scope.PhotoPopup.index--;
+                    $scope.PhotoPopupShow($scope.photos[$scope.lastSucceedIndex].id, $scope.lastSucceedIndex);
                 }
             };
             $scope.prevPhoto = function(){
@@ -355,7 +356,7 @@
                     $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'prev');
                     $scope.clearPopupFields();
                 } else {
-                    $scope.PhotoPopup.index++;
+                    $scope.PhotoPopupShow($scope.photos[$scope.lastSucceedIndex].id, $scope.lastSucceedIndex);
                 }
             };
 
