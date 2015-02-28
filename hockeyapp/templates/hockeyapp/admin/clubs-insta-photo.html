@@ -29,7 +29,7 @@
             </form>
         </div>
 {% verbatim %}
-        <div id="#switcher" class="player-partners-popup no-transition" style="min-width:1100px; z-index: 99999; position: fixed">
+        <div id="#switcher" class="player-partners-popup no-transition" style="min-width:1220px; z-index: 99999; position: fixed">
             <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
             <div>
                 <div class="rightleft" ng-click="prevPhoto()">
@@ -200,13 +200,19 @@
             $scope.photos = [];
             $scope.params = $location.search();
             $scope.min_id = 1;
-            $scope.max_id = parseInt($scope.params.max_id) || 10000;
+            if($scope.params.max_id){
+                $scope.max_id = parseInt($scope.params.max_id);
+            }
             $scope.$watch('selectedClub', function(newval, oldval){
+
                 if(newval && newval.length > 0){
                     $('#photo_club').val(newval.title);
                 }
             });
             $scope.$watch('max_id', function(newval, oldval){
+                if(!newval){
+                    $location.url($location.path());
+                }
                 if(newval){
                     $location.search('max_id', newval)
                 }
@@ -229,7 +235,7 @@
                 }
             });
             $scope.getPage = function() {
-                ArenaInstaPhoto.query({page:$scope.next_page, min_id: $scope.min_id, max_id: $scope.max_id}).$promise.then(function(data) {
+                ArenaInstaPhoto.query({page:$scope.next_page, min_id: $scope.min_id, max_id: $scope.max_id ? $scope.max_id : 1000000}).$promise.then(function(data) {
                     $.each(data.results, function(index, value){
                         $scope.photos.push(value)
                     });
@@ -371,7 +377,7 @@
                 }
                 data['comment'] = $('input[name="aip_comment"]').val();
                 if($('input[name="aip_player_numbers"]').val())
-                data['players'] = $('input[name="aip_player_numbers"]').val().replace(',', '').split(' ');
+                data['players'] = $('input[name="aip_player_numbers"]').val().replace(/[^0-9.]/g, " ").split(' ').clean("").map(function(e){ return parseInt(e);});
                 ArenaInstaPhoto.update({id:id}, data);
                 $('.player-partners-popup').hide(300);
                 $scope.clearPopupFields();
@@ -390,6 +396,16 @@
 
             $scope.getPage($scope.next_page);
         }]);
+        Array.prototype.clean = function(deleteValue) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i] == deleteValue) {
+                    this.splice(i, 1);
+                    i--;
+                }
+            }
+            return this;
+        };
     })();
+
 </script>
 {% endblock %}
