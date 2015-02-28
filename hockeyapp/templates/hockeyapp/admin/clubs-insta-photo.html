@@ -297,11 +297,12 @@
                 index: null
             };
 
-            $scope.PhotoPopupShow = function(id, index, event) {
+            $scope.PhotoPopupShow = function(id, index, event, position) {
                 $scope.PhotoPopup.clubSet = [];
                 if(event && event.currentTarget)
                 $scope.PhotoPopup.domIndex = parseInt(angular.element(event.currentTarget).attr('id'));
                 $scope.PhotoPopup.data = ArenaInstaPhoto.get({id:id}, function(photo) {
+                    $scope.PhotoPopup.data.players = '';
                     if (photo.club) {
                         $scope.PhotoPopup.club = Club.get({id:photo.club});
                     }
@@ -317,13 +318,10 @@
                             })
                         })
                     }
-                    else{
-
-                    }
                     var params = {date:photo.photo.created, arena:photo.arena};
                     $scope.PhotoPopup.matches = Match.query(params);
                 }, function(){
-                    return $scope.nextPhoto();
+                    return (position === 'next') ? $scope.nextPhoto() : $scope.prevPhoto()
                 });
                 $scope.PhotoPopup.index = index;
                 $('.photos-block, .instruments-block, .header').addClass("blur");
@@ -333,7 +331,7 @@
                 var index = $scope.PhotoPopup.index + 1;
                 if($scope.photos[index]){
                     $scope.PhotoPopup.domIndex = $scope.photos[index].id;
-                    $scope.PhotoPopupShow($scope.photos[index].id, index);
+                    $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'next');
                     $scope.clearPopupFields();
                 }
             };
@@ -341,7 +339,7 @@
                 var index = $scope.PhotoPopup.index + -1;
                 if($scope.photos[index]){
                     $scope.PhotoPopup.domIndex = $scope.photos[index].id;
-                    $scope.PhotoPopupShow($scope.photos[index].id, index);
+                    $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'prev');
                     $scope.clearPopupFields();
                 }
             };
