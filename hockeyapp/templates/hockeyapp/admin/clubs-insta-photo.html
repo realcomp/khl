@@ -179,6 +179,12 @@
             });
         });
 
+        services.factory('PlayerList', function($resource){
+            return $resource("{% url 'api:hockey:player_list' %}"+":club/", {}, {
+                query: {method:'GET', params:{club:null}, isArray:true}
+            });
+        });
+
         services.factory('InstagramUser', function($resource){
             return $resource("{% url 'api:base:iu_list' %}"+":id/", {}, {
                 query: {method:'GET', params:{id:null}, isArray:true},
@@ -192,7 +198,7 @@
             $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             $resourceProvider.defaults.stripTrailingSlashes = false;
         }]);
-        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','Arena', '$location', function($scope, ArenaInstaPhoto, Club, Match, Arena,  $location) {
+        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','Arena', '$location','PlayerList', function($scope, ArenaInstaPhoto, Club, Match, Arena,  $location, PlayerList) {
             $scope.next_page = 1;
             $scope.arenaInstaPhoto = null;
             $scope.deletePhotopopup = false;
@@ -204,7 +210,6 @@
                 $scope.max_id = parseInt($scope.params.max_id);
             }
             $scope.$watch('selectedClub', function(newval, oldval){
-
                 if(newval && newval.length > 0){
                     $('#photo_club').val(newval.title);
                 }
@@ -379,6 +384,7 @@
                 if($('input[name="aip_player_numbers"]').val())
                 data['players'] = $('input[name="aip_player_numbers"]').val().replace(/[^0-9.]/g, " ").split(' ').clean("").map(function(e){ return parseInt(e);});
                 ArenaInstaPhoto.update({id:id}, data);
+                PlayerList.get({club: parseInt(new_club), number: data['players']});
                 $('.player-partners-popup').hide(300);
                 $scope.clearPopupFields();
                 $('.photos-block, .instruments-block, .header').removeClass("blur");
