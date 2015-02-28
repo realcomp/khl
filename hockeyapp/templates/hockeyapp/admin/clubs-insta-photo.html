@@ -45,7 +45,7 @@
                     <div class="ui icon input">
                         Возможные клубы:
                         <div ng-repeat="club in PhotoPopup.clubSet track by $index">
-                            <a class="pointer underline" ng-click="setTeam(club)"> {{club.ru_title}} </a>
+                            <a class="pointer underline font-14" ng-click="setTeam(club)"> {{club.ru_title}} </a>
                         </div>
                     </div>
 {% endverbatim %}
@@ -129,7 +129,7 @@
                     <input id="id_delete_all" name="delete_all" type="checkbox"><span ng-click="agree()" class="pointer"> я понимаю, что удалю фото насовсем</span>
                 </div>
                 <div class="m-t-20"></div>
-                <a class="ui green button control-button m-t-20" style="background: #e74c3c !important;" ng-click="allAsArenaPhoto()">ФОТО АРЕНЫ</a>
+                <a class="ui green button control-button m-t-20" style="margin-top: 40px !important; background: #f1c40f !important;" ng-click="allAsArenaPhoto()">ФОТО АРЕНЫ</a>
                 <a class="ui green button control-button m-t-20" ng-click="addAll()">ДОБАВИТЬ ВЫБРАННОЕ</a>
             </ul>
         </div>
@@ -264,14 +264,14 @@
             $scope.allAsArenaPhoto = function(){
                     var inputs = $('input[name="cp"]:checked');
                     $.each(inputs, function(index, value) {
-                        console.log(value);
                         var arena_id = $(value).attr('id');
                         var club = $("#club_" + arena_id).val();
-                        ArenaInstaPhoto.update({id:$(value).val()}, {club:club.id, processed:true}, function(photo) {
+                        $("#item_" + arena_id + " img").css('width', '142px').css('height', '142px').css('border', '4px solid #e74c3c', 'important');
+                        /*ArenaInstaPhoto.update({id:$(value).val()}, {club:club.id, processed:true}, function(photo) {
                             $("#item_" + arena_id + " img").css('width', '142px').css('height', '142px').css('border', '4px solid #e74c3c', 'important');
-                        });
+                        });*/
                     });
-                $scope.uncheckedAllInputs();
+                //$scope.uncheckedAllInputs();
             };
             $scope.agree = function(){
                 $('input[name="delete_all"]').prop("checked", !$('input[name="delete_all"]').prop("checked"));
@@ -348,6 +348,7 @@
                 } else {
                     $scope.PhotoPopupShow($scope.photos[$scope.lastSucceedIndex].id, $scope.lastSucceedIndex);
                 }
+                $scope.selectedClub = null;
             };
             $scope.prevPhoto = function(){
                 var index = $scope.PhotoPopup.index - 1;
@@ -365,6 +366,7 @@
                 $('input[name="delete_photopopup"]').prop("checked", false);
                 $('#photo_club').val('');
                 $('#id_aip_club').val('');
+                $('#clubs_filter_value').val('');
                 $scope.deletePhotopopup = false;
             };
 
@@ -415,6 +417,7 @@
             };
 
             $scope.setTeam = function(team) {
+                $('#clubs_filter_value').val('');
                 $('#photo_club').val(team.ru_title);
                 $('#id_aip_club').val(team.id);
             };

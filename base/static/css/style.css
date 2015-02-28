@@ -5330,3 +5330,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .underline{
     text-decoration: underline;
 }
+.font-14{
+    font-size: 14px !important;
+}
