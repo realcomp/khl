@@ -200,7 +200,7 @@
             $scope.photos = [];
             $scope.params = $location.search();
             $scope.min_id = 1;
-            $scope.max_id = parseInt($scope.params.max_id) || 100;
+            $scope.max_id = parseInt($scope.params.max_id) || 10000;
             $scope.$watch('selectedClub', function(newval, oldval){
                 if(newval && newval.length > 0){
                     $('#photo_club').val(newval.title);
