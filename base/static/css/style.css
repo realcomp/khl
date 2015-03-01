@@ -5103,6 +5103,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .m-r-20{
     margin-right: 20px !important;
 }
+.m-r-30{
+    margin-right: 30px !important;
+}
 .m-l-8{
     margin-left: 8px !important;
 }
@@ -5111,6 +5114,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .m-l-50{
     margin-left: 50px !important;
+}
+.m-t-30{
+    margin-top: 30px !important;
 }
 .m-t-20{
     margin-top: 20px !important;
@@ -5164,7 +5170,19 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .instagram-photos-container .player-partners-popup{
     border: 1px;
-    top: 5px;
+    max-width: 1500px !important;
+    min-width: 1220px;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 1000px;
+    height: 640px;
+    min-height: 640px;
+    z-index: 99999;
 }
 .instagram-photos-container .photos-block{
     width: 82%;
@@ -5194,7 +5212,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .rightleft{
     margin-top: 250px;
     vertical-align: top;
-    width: 30px;
     display: inline-block;
     font-size: 72px;
     text-shadow: 2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 1px 1px #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
@@ -5208,6 +5225,8 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     user-select: none;
 }
 .rightleft:hover{
+    text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+
     color: #000000;
 }
 .no-transition{
@@ -5232,6 +5251,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .float-left{
     float: left !important;
+}
+.float-right{
+    float:  right !important;
 }
 .ribbon {
     position: absolute;
@@ -5329,4 +5351,86 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .underline{
     text-decoration: underline;
+}
+.font-14{
+    font-size: 14px !important;
+}
+.font-16{
+    font-size: 16px !important;
+}
+.href{
+    text-decoration: underline;
+    cursor: pointer;
+    color: #1a0dab;
+}
+.instagram-profile-picture{
+    width: 60px;
+    height: 60px;
+}
+.instagram-user-str{
+    width: 180px;
+    max-width: 180px;
+    height: 71px;
+    max-height: 71px;
+    border: 2px solid #000000;
+}
+.instagram-arena-photo-button{
+    width: 110px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    border: 2px solid #000000;
+    border-radius: 0;
+    padding: 0 5px 0 5px;
+    cursor: pointer;
+    color: #ffffff;
+}
+.blue-button{
+    background: #6ECFF5;
+}
+.red-button{
+    background: #E96633;
+}
+.green-button{
+    background: #58cb73;
+}
+.instagram-helper{
+    min-width: 300px;
+    border: 2px solid #000000;
+    min-height: 150px;
+    margin-right: 20px;
+}
+.instagram-helper-label{
+    margin-top: -15px;
+    width: 85px;
+    font-size: 16px;
+    background: #ffffff;
+    margin-left: 10px;
+}
+.instagram-helper-homeclubs{
+    margin-left: 10px;
+}
+.instagram-helper-games{
+    margin-left: 10px;
+}
+.text-right{
+    text-align: right;
+}
+.overlay-black{
+    background-color: #000; /* Чёрный фон */
+    height: 100%; /* Высота максимальна */
+    left: 0; /* Нулевой отступ слева */
+    opacity: 0.80; /* Степень прозрачности */
+    position: fixed; /* Фиксированное положение */
+    top: 0; /* Нулевой отступ сверху */
+    width: 100%; /* Ширина максимальна */
+    z-index: 100; /* Заведомо быть НАД другими элементами */
+}
+.photo-prev{
+    position: absolute;
+    left: 15px;
+}
+.photo-next{
+    position: absolute;
+    left: 600px;
 }
