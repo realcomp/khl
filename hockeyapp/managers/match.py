@@ -150,8 +150,9 @@ class MatchManager(ManagerMixin, models.Manager):
         else:
             match = self.create(**kwargs)
         if _scheduler:
-            match.schedule.processed=True
-            match.schedule.save(update_fields=['schedule'])
+            _scheduler.processed=True
+            _scheduler.match = match
+            match.schedule.save(update_fields=['schedule', 'match'])
         #relations
         match.judges.add(*(j[0].pk for j in _match.get('judges')))
         match.line_judges.add(*(j[0].pk for j in _match.get('line_judges')))
