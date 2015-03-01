@@ -93,7 +93,8 @@ def async_hockey_match_parser(parser_id, matchid, update=False):
     try:
         parser_id = int(parser_id)
         parser = {  1: parsers.match.HockeyMHLMatchParser,
-                    2: parsers.match.HockeyKHLMatchParser,
+                    #2: parsers.match.HockeyKHLMatchParser,
+                    2: parsers.match.KHLPlayoff2015MatchParser,
                     3: parsers.match.HockeyVHLMatchParser,
                     4: parsers.match.HockeyMHL2MatchParser,
         }.get(parser_id, parsers.match.HockeyMHLMatchParser)

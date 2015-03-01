@@ -1,8 +1,10 @@
 #coding: utf-8
 from __future__ import unicode_literals
 import datetime
+import re
 import urllib
 
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import  Q, Avg, Sum
@@ -17,6 +19,10 @@ from base.models import TitleAlias, SocialAbstract, InstagramImageFile
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from .choices import CHALLENGE_TYPE
 from . import managers
+
+def rgb_validator(value):
+    if not re.match(r'^rgba\([0-9]+,[0-9]+,[0-9]+\,[0-9]+\.[0-9]+\)$', value):
+        raise ValidationError('Incorrect format. Expected `rgb(#,#,#, #opacity)`.')
 
 
 class AbstractMan(LocaleAttrMixin, models.Model):
@@ -305,6 +311,8 @@ class Club(TitleBaseModel):
         _('Phone'), max_length=255, blank=True, null=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
+    rgb = models.CharField(_('RGB'), blank=True, null=True, max_length=255,
+                            validators=[rgb_validator,])
     #socials
     vk = models.URLField('VK account URL', blank=True, max_length=1024)
     ok = models.URLField('OK account URL', blank=True, max_length=1024)

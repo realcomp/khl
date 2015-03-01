@@ -159,12 +159,10 @@ class HockeyMHLMatchParser(GrabParser):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
         '''
-        print(id, bool(data))
         if not data:
             data = self.get_page(id)
         if data and self.model_name:
             model = get_model('hockeyapp', self.model_name)
-            print(id, bool(data))
             return model.objects.get_or_create_match(**data)
 
     def get_page(self, id=None):
@@ -515,8 +513,7 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
 
     def python_date(self, date, month_dict = xpathes.MD):
         b''' парсит дату в datetime object '''
-        print('!{}!'.format(date))
-        if date:
+        if date or not date.strip() == ',':
             _date_dict = date.strip().lower().split(',')
             _dt = _date_dict[:1]
             _dt.append(_date_dict[2])
@@ -754,6 +751,14 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
                     'sf': str2float_safe(item[10]),
                     'gamingtime': str2sec_safe(item[15]),
             }
+
+
+class KHLPlayoff2015MatchParser(HockeyKHLMatchParser):
+    b'''Парсер хоккейной статистики матча с сайта КХЛ
+        Playoff сезон 14/15
+    '''
+    url = xpathes.KHL_SITE_URL+'/game/267/'
+    absolute_url = url
 ################################################################################
 ################################################################################
 ################################################################################
