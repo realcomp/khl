@@ -36,6 +36,7 @@ def club_async_update(links, parser):
 
 @app.task(ignore_result=True, track_started=True)
 def periodic_update_clubs():
+    try:
         for links, club_parser in ( 
             (parsers.club.KHLClubURLs().get_page(), parsers.club.KHLClubInfo), 
             (parsers.club.VHLClubURLs().get_page(), parsers.club.VHLClubInfo),
@@ -44,36 +45,45 @@ def periodic_update_clubs():
         ):
             if club_parser:
                 club_async_update.delay(links, club_parser)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
 
 
 @app.task(ignore_result=True, track_started=True)
 def periodic_update_schedules():
-    _parsers = ((parsers.schedule.KHLScheduleParser, 266),
-                (parsers.schedule.VHLScheduleParser, 269),
-                (parsers.schedule.MHLScheduleParser, 272),
-                (parsers.schedule.MHL2ScheduleParser, 274),
-    )
-    for _parser, id in _parsers:
-        _parser().put_data_in_db_from_page(id,update=True, challenge_type=1)
-    _parser, id, ct = parsers.schedule.KHLScheduleParser, 267, 2
-    # KHL playoff
-    _parser().put_data_in_db_from_page(id,update=True, challenge_type=ct)
+    try:
+        _parsers = ((parsers.schedule.KHLScheduleParser, 266),
+                    (parsers.schedule.VHLScheduleParser, 269),
+                    (parsers.schedule.MHLScheduleParser, 272),
+                    (parsers.schedule.MHL2ScheduleParser, 274),
+        )
+        for _parser, id in _parsers:
+            _parser().put_data_in_db_from_page(id,update=True, challenge_type=1)
+        _parser, id, ct = parsers.schedule.KHLScheduleParser, 267, 2
+        # KHL playoff
+        _parser().put_data_in_db_from_page(id,update=True, challenge_type=ct)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
 
 
 @app.task(ignore_result=True, track_started=True)
 def periodic_get_matches():
-    matches = models.Schedule.objects.filter(khl_id__isnull=False,
-                                            processed=False,
-                                            match__isnull=True)
-    for m in matches:
-        parser_id = {
-                        'MHL': 1,
-                        'KHL': 2,
-                        'VHL': 3,
-                        'MHL-2': 4,
-        }.get(m.league.en_title)
-        if parser_id:
-            async_hockey_match_parser.delay(parser_id, m.khl_id)
+    try:
+        matches = models.Schedule.objects.filter(khl_id__isnull=False,
+                                                processed=False,
+                                                match__isnull=True)
+        for m in matches:
+            parser_id = {
+                            'MHL': 1,
+                            'KHL': 2,
+                            'VHL': 3,
+                            'MHL-2': 4,
+            }.get(m.league.en_title)
+            print(parser_id)
+            if parser_id:
+                async_hockey_match_parser.delay(parser_id, m.khl_id)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
 
 
 @app.task(ignore_result=True, track_started=True)

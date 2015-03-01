@@ -99,15 +99,15 @@ BROKER_URL = 'redis://localhost:6379/0'
 CELERYBEAT_SCHEDULE = {
     'hockeyapp-periodic-update-clubs-every-monday-midnight': {
         'task': 'hockeyapp.tasks.periodic_update_clubs',
-        'schedule': local_celery_crontab(hour=0, minute=0, day_of_week=1),
+        'schedule': local_celery_crontab(hour=1, minute=30, day_of_week=1),
     },
     'hockeyapp-periodic-update-schedules-every-day-midnight': {
         'task': 'hockeyapp.tasks.periodic_update_schedules',
-        'schedule': local_celery_crontab(hour=0, minute=0),
+        'schedule': local_celery_crontab(hour=1, minute=30),
     },
     'hockeyapp-periodic-get-matches-every-day-midnight': {
         'task': 'hockeyapp.tasks.periodic_get_matches',
-        'schedule': local_celery_crontab(hour=1, minute=0),
+        'schedule': local_celery_crontab(hour=2, minute=10),
     },
     #'hockeyapp-periodic_get-clubs-instagram_pictures-every-day-midnight': {
         #'task': 'hockeyapp.tasks.get_clubs_instagram_pictures',

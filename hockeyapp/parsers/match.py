@@ -513,6 +513,7 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
 
     def python_date(self, date, month_dict = xpathes.MD):
         b''' парсит дату в datetime object '''
+        print(date)
         if date:
             _date_dict = date.strip().lower().split(',')
             _dt = _date_dict[:1]
