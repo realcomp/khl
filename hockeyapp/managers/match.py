@@ -152,7 +152,7 @@ class MatchManager(ManagerMixin, models.Manager):
         if _scheduler:
             _scheduler.processed=True
             _scheduler.match = match
-            match.schedule.save(update_fields=['schedule', 'match'])
+            match.schedule.save(update_fields=['processed', 'match'])
         #relations
         match.judges.add(*(j[0].pk for j in _match.get('judges')))
         match.line_judges.add(*(j[0].pk for j in _match.get('line_judges')))
