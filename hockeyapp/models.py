@@ -237,6 +237,8 @@ class Arena(TitleBaseModel):
     contacts = models.TextField(_('Contacts'), blank=True)
     tickets_url = models.URLField(_('Tickets'), blank=True)
     photo = FilerImageField(verbose_name=_('Main photo'), null=True, blank=True)
+    address = models.ForeignKey(Address, null=True, blank=True,
+                                verbose_name=Address._meta.verbose_name,)
     country = models.ForeignKey(Country, null=True, blank=True,
                                 verbose_name=Country._meta.verbose_name,)
     league = models.ForeignKey('League', null=True, blank=True)

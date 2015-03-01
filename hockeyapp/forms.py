@@ -6,7 +6,6 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import ugettext_lazy as _
 
 from django_select2 import AutoModelSelect2Field, AutoHeavySelect2Widget
-
 from suit.widgets import SuitDateWidget
 
 from base.admin import LinkedSelect2, select2_options

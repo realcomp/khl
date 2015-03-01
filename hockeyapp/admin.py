@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 import itertools
 
+from django import forms
 from django.contrib import admin
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
+from django_select2 import Select2MultipleWidget
 from daterange_filter.filter import DateRangeFilter
 from relatives.utils import object_link
 
@@ -21,7 +23,7 @@ from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
 from .models import PlayerCoachJudge, ClubSocial, PlayerSocial, CoachSocial
-from .models import JudgeSocial, ArenaPhotos, ArenaInstaPhoto, Timeline
+from .models import JudgeSocial, ArenaInstaPhoto, Timeline
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -192,13 +194,37 @@ class ArenaInstaPhotoInline(admin.TabularInline):
     model = ArenaInstaPhoto
     extra=0
 
+class ArenaForm(forms.ModelForm):
+    club_set = forms.ModelMultipleChoiceField(label=_('Clubs'),
+                queryset=Club.objects.all().order_by('ru_title'),
+                widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
+    )
+    class Meta:
+        model = Arena
+
 class ArenaAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     inlines = (ArenaPhotosInline,)
-    list_filter = ('ru_title', 'country', 'league',
+    list_filter = ('ru_title', 'address',
                     ('capacity', SimpleRangeFilter),
     )
-    list_display = ('ru_title', 'country', 'league', 'capacity', 'coords')
+    list_display = ('ru_title', 'address', 'capacity', 'coords')
     readonly_fields = ('title',)
+    fields = (  'title', 'ru_title', 'en_title', 'capacity', 'coords', 'site',
+                'address', 'contacts', 'tickets_url', 'photo', 'club_set'
+            )
+    def save_model(self, request, obj, form, change):
+        obj.club_set = form.cleaned_data['club_set']
+        obj.save()
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj:
+            self.form.base_fields['club_set'] = forms.ModelMultipleChoiceField(
+                        label=_('Clubs'),
+                        queryset=Club.objects.all().order_by('ru_title'),
+                        initial = obj.club_set.all(),
+                        widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
+            )
+        return super(ArenaAdmin, self).get_form(request, obj)
 admin.site.register(Arena, ArenaAdmin)
 
 

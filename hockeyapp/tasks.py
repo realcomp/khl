@@ -79,7 +79,6 @@ def periodic_get_matches():
                             'VHL': 3,
                             'MHL-2': 4,
             }.get(m.league.en_title)
-            print(parser_id)
             if parser_id:
                 async_hockey_match_parser.delay(parser_id, m.khl_id)
     except Exception, exc:

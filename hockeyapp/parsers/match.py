@@ -159,10 +159,12 @@ class HockeyMHLMatchParser(GrabParser):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
         '''
+        print(id, bool(data))
         if not data:
             data = self.get_page(id)
         if data and self.model_name:
             model = get_model('hockeyapp', self.model_name)
+            print(id, bool(data))
             return model.objects.get_or_create_match(**data)
 
     def get_page(self, id=None):
@@ -513,7 +515,7 @@ class HockeyMHL2MatchParser(HockeyMHLMatchParser):
 
     def python_date(self, date, month_dict = xpathes.MD):
         b''' парсит дату в datetime object '''
-        print(date)
+        print('!{}!'.format(date))
         if date:
             _date_dict = date.strip().lower().split(',')
             _dt = _date_dict[:1]
