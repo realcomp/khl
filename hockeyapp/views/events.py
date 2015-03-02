@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 import datetime
 
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -108,6 +109,20 @@ class GuestMatchEvent(HomeMatchEvent):
         return reversed(super(GuestMatchEvent, self).logos_urls)
 
 
+class TimelineEvent(Event):
+    @property
+    def url(self):
+        return self.obj.player.get_absolute_url()
+
+    @property
+    def image(self):
+        return self.obj.player.photo.url
+
+    @property
+    def type(self):
+        return _('Event')
+
+
 class EventFactory(object):
     '''
     Event aggregation factory
@@ -122,6 +137,9 @@ class EventFactory(object):
         events += self.get_birthday_events(date)
         events += self.get_home_match_events(date)
         events += self.get_guest_match_events(date)
+        events += self.get_timeline_events(date)
+        # import random
+        # random.shuffle(events)
         return events
 
     def get_birthday_events(self, date):
@@ -155,4 +173,19 @@ class EventFactory(object):
                     date__gte=date,
                     date__lte=date + datetime.timedelta(days=7)):
                 events.append(GuestMatchEvent(date, schedule))
+        return events
+
+    def get_timeline_events(self, date):
+        events = []
+        timelines = self.sources.get('timeline')
+        q_completed_event = Q(
+            start_date__gte=date - datetime.timedelta(days=366),
+            end_date__isnull=True)
+        q_running_event = Q(
+            start_date__lte=date,
+            end_date__gte=date)
+        if timelines:
+            for timeline in timelines.filter(
+                    q_completed_event | q_running_event):
+                events.append(TimelineEvent(date, timeline))
         return events
