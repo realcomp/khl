@@ -241,7 +241,7 @@
             var closePopupBtn = $('#close-popup-btn');
             closePopupBtn.on('click', function(e) {
                 e.preventDefault();
-                $(this).parent().hide(300);
+                $(this).parent().hide();
                 $scope.clearPopupFields();
                 $('.overlay-black').css('visibility', 'hidden');
                 $scope.selectedClub = null;
@@ -250,7 +250,7 @@
                 if(!$(event.target).is('.player-partners-popup') &&
                         !$(event.target).parents('.player-partners-popup').is('.player-partners-popup') &&
                         !$(event.target).is('.popup-show-button')){
-                    $('.player-partners-popup').hide(300);
+                    $('.player-partners-popup').hide();
                     $('.overlay-black').css('visibility', 'hidden');
                     $scope.clearPopupFields();
                 }
@@ -365,9 +365,8 @@
                     return (position === 'next') ? $scope.nextPhoto() : $scope.prevPhoto()
                 });
                 $scope.PhotoPopup.index = index;
-
                 $('.overlay-black').css('visibility', 'visible');
-                $('.player-partners-popup:hidden').show(500);
+                $('.player-partners-popup:hidden').show();
             };
             $scope.nextPhoto = function(){
                 var index = $scope.PhotoPopup.index + 1;
@@ -376,7 +375,12 @@
                     $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'next');
                     $scope.clearPopupFields();
                 } else {
-                    $scope.PhotoPopupShow($scope.photos[$scope.lastSucceedIndex].id, $scope.lastSucceedIndex);
+                    if($scope.PhotoPopup.index !== $scope.lastSucceedIndex){
+                        $scope.PhotoPopupShow($scope.photos[$scope.lastSucceedIndex].id, $scope.lastSucceedIndex);
+                    }
+                    else{
+                        $('.player-partners-popup').hide();
+                    }
                 }
                 $scope.selectedClub = null;
             };
@@ -401,16 +405,16 @@
             };
             $scope.removeUserStr = function(){
                 $(".instagram-user-str").val('');
-            }
+            };
 
             $scope.delCPPopup = function(id, index) {
                 if($('input[name="delete_photopopup"]').prop("checked")){
                     ArenaInstaPhoto.delete({id:id});
                     $scope.deletePhotopopup=false;
-                    $('.player-partners-popup').hide(300);
                     $scope.clearPopupFields();
                     $('.overlay-black').css('visibility', 'hidden');
                     $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
+                    $scope.nextPhoto();
                 }
             };
 
@@ -430,7 +434,7 @@
                             PlayerList.query({club: parseInt(new_club), number: data['players']}, function(list){
                                 data['players'] = list.map(function(e){ return e['id']; });
                                 ArenaInstaPhoto.update({id:id}, data);
-                                $('.player-partners-popup').hide(300);
+                                $('.player-partners-popup').hide();
                                 $scope.clearPopupFields();
                                 $('.overlay-black').css('visibility', 'hidden');
                                 $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
@@ -441,10 +445,11 @@
                     }
                 }
                 ArenaInstaPhoto.update({id:id}, data);
-                $('.player-partners-popup').hide(300);
-                $scope.clearPopupFields();
+                //$('.player-partners-popup').hide(300);
                 $('.overlay-black').css('visibility', 'hidden');
+                $scope.clearPopupFields();
                 $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
+                $scope.nextPhoto();
             };
 
             $scope.createArenaPhoto = function(id, index) {
