@@ -156,17 +156,16 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
                 ClubTitleAliasInline,)# ClubSocialsInline)
     list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
-    readonly_fields = linked_m2m_readonly_fields
-    list_editable = 'league',
+    readonly_fields = linked_m2m_readonly_fields + ('title', 'instagram_photo_link')
+    #list_editable = 'league',
     select_related = (  'league', 'address', 'coach', 'arena', 'farm_club',
                         'junior_club',
     )
     fields = (  'ru_title', 'en_title', 'title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
-                'players', 'style', 'rgb',
+                'players', 'style', 'rgb', 'instagram_photo_link',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
-    readonly_fields = ('title',)
 admin.site.register(Club, ClubAdmin)
 
 

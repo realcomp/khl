@@ -8,7 +8,7 @@ from django.db import models
 from . import DataCleanMixin
 
 
-class ArenaManager(DataCleanMixin, models.Manager):
+class ArenaQuerySet(DataCleanMixin, models.QuerySet):
     b''' Менеджер арены '''
     def create_or_update_arena(self, update=False, data=None):
         b''' Создание или обновление арены '''
@@ -27,3 +27,22 @@ class ArenaManager(DataCleanMixin, models.Manager):
                 else:
                     _arena = self.create(**data)
             return _arena
+
+class ArenaInstaPhotoQuerySet(DataCleanMixin, models.QuerySet):
+    b''' Менеджер инстаграмм фото арены '''
+    def to_view(self):
+        b''' прошедшие модерацию фото '''
+        return self.filter(processed=True)
+
+    def for_moderation(self):
+        b''' непрошедшие модерацию фото '''
+        return self.filter(processed=False)
+
+    def arena_photo(self, arena):
+        return self.to_view().filter(arena=arena)
+
+    def club_photo(self, club):
+        return self.to_view().filter(club=club)
+
+    def player_photo(self, player):
+        return self.to_view().filter(player__in=(player,))

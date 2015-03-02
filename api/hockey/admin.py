@@ -15,7 +15,7 @@ from . import serializers
 
 
 class CPAPIBase(object):
-    queryset = ArenaInstaPhoto.objects.filter(processed=False)
+    queryset = ArenaInstaPhoto.objects.all()
     serializer_class = serializers.ArenaInstaPhotoSerializer
     permission_classes = (SportoAdminPermission,)
     pagination_serializer_class = AltPaginationSerializer
@@ -26,8 +26,16 @@ class ArenaInstaPhotoList(CPAPIBase, drf.generics.ListAPIView):
     b''' Список необработанных свежих фото из инстаграмма '''
     def filter_queryset(self, qs):
         qs = super(ArenaInstaPhotoList, self).filter_queryset(qs)
+        processed = self.request.GET.get('processed')
+        if processed:
+            qs = qs.to_view()
+        else:
+            qs = qs.for_moderation()
         max_id = self.request.GET.get('max_id')
         min_id = self.request.GET.get('min_id')
+        club = self.request.GET.get('club')
+        if club:
+            qs = qs.club_photo(club)
         q = Q()
         if max_id:
             q&= Q(id__lt=max_id)

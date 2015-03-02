@@ -16,7 +16,7 @@ class EventSerializer(serializers.Serializer):
     logos_urls = serializers.ReadOnlyField()
 
     def get_date(self, event):
-        return event.date.strftime('%Y-%M-%dT%H:%m%Z')
+        return event.date.strftime('%Y-%m-%dT%H:%M%Z')
 
     def get_title(self, event):
         request = self.context.get('request')
