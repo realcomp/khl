@@ -45,8 +45,12 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
             return rating
 
     def get_rating_index(self, obj):
-        rating = getattr(self.context['view'], 'rating', {})
-        return rating.get(obj.pk, 0)
+        rated_by = self.context['request'].GET.get('rated_by', '')
+        if rated_by:
+            return getattr(obj, '%s_index' % rated_by)
+        else:
+            rating = getattr(self.context['view'], 'rating', {})
+            return rating.get(obj.pk)
 
     class Meta(object):
         fields = (

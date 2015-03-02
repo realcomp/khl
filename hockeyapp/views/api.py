@@ -56,12 +56,12 @@ class PlayersSearch(
         rating_index = 0
         rating_value = None
         for player in rated_qs:
-            if rated_by:
-                if (getattr(player, rated_by) < rating_value or
-                        rating_value is None):
-                    rating_index += 1
-                    rating_value = getattr(player, rated_by)
-            else:
+            if not rated_by:
+            #     if (getattr(player, rated_by) < rating_value or
+            #             rating_value is None):
+            #         rating_index += 1
+            #         rating_value = getattr(player, rated_by)
+            # else:
                 rating_index += 1
             self.rating[player.pk] = rating_index
 

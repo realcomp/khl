@@ -263,6 +263,14 @@ def player_recalc_counters(ids):
         logger.error(exc, exc_info=sys.exc_info())
 
 
+@app.task(ignore_result=True, track_started=True)
+def player_recalc_rating():
+    try:
+        models.Player.recalc_rating()
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
