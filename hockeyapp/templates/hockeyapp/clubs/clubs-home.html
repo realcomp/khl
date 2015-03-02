@@ -879,6 +879,9 @@
                 <div class="team-track">
                     <div class="heading">Как добраться</div>
                     <div class="team-track-map">
+                        <div class="google-map-overlay" style="position: relative;width: 932px; height: 486px; z-index: 999; background: rgba(0,0,0,0.1); top: 486px; margin-top: -486px;" onclick="style.pointerEvents = 'none'">
+
+                        </div>
                         <iframe src="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
                                 name="GoogleMap" width="932" height="486" frameborder="0" style="border:0"></iframe>
                         <a href="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
