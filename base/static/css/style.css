@@ -5379,20 +5379,24 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     height: 30px;
     line-height: 30px;
     font-size: 16px;
-    border: 2px solid #000000;
-    border-radius: 0;
+    border-radius: 4px;
     padding: 0 5px 0 5px;
     cursor: pointer;
     color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 .blue-button{
     background: #6ECFF5;
+    border: 2px solid #6ECFF5;
 }
 .red-button{
     background: #E96633;
+    border: 2px solid #E96633;
 }
 .green-button{
     background: #58cb73;
+    border: 2px solid #58cb73;
 }
 .instagram-helper{
     min-width: 300px;
