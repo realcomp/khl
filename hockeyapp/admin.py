@@ -102,10 +102,11 @@ class PlayerSocialsInline(admin.TabularInline):
 
 
 def recalc_counters(modeladmin, request, queryset):
-    from .tasks import player_recalc_counters
+    from .tasks import player_recalc_counters, player_recalc_rating
     pks = queryset.values_list('pk', flat=True)
     for i in range(0, len(pks), 1000):  # 1000 players per task
         player_recalc_counters.delay(pks[i:i + 1000])
+    player_recalc_rating.delay()
 recalc_counters.short_description = _('Recalculate counters')
 
 

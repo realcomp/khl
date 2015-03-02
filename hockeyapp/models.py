@@ -1,6 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
 import datetime
+import itertools
 import re
 import urllib
 
@@ -99,6 +100,27 @@ class Player(AbstractMan):
     assists_average = models.FloatField(_('Assists Average'), null=True)
     points_average = models.FloatField(_('Points Average'), null=True)
     plus_minus_average = models.FloatField(_('Points Average'), null=True)
+    # players rating (do recalc_rating to update)
+    seasons_total_index = models.IntegerField(
+        _('Seasons Total Index'), null=True)
+    matches_total_index = models.IntegerField(
+        _('Matches Total Index'), null=True)
+    goals_total_index = models.IntegerField(
+        _('Goals Total Index'), null=True)
+    assists_total_index = models.IntegerField(
+        _('Assists Total Index'), null=True)
+    points_total_index = models.IntegerField(
+        _('Points Total Index'), null=True)
+    plus_minus_total_index = models.IntegerField(
+        _('Points Total Index'), null=True)
+    goals_average_index = models.IntegerField(
+        _('Goals Average Index'), null=True)
+    assists_average_index = models.IntegerField(
+        _('Assists Average Index'), null=True)
+    points_average_index = models.IntegerField(
+        _('Points Average Index'), null=True)
+    plus_minus_average_index = models.IntegerField(
+        _('Points Average Index'), null=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
@@ -107,24 +129,46 @@ class Player(AbstractMan):
             Q(clubplayermatch__match__challenge_type__isnull=False) &
             Q(clubplayermatch__match__challenge_type__gt=0))
         clubplayers = self.clubplayer_set.filter(q_rated_matches)
+        # clubplayers = self.clubplayer_set.all()  # dev mode
         fields = 'goals', 'assists', 'points', 'plus_minus'
         kwargs = {}
+
         kwargs.update({
             '%s_total' % field: Sum('clubplayermatch__%s' % field)
             for field in fields
         })
-        if kwargs['matches_total'] >= 10:
+
+        if clubplayers.count() >= 10:
             kwargs.update({
                 '%s_average' % field: Avg('clubplayermatch__%s' % field)
                 for field in fields
             })
-        else:
-            kwargs.update({'%s_average' % field: 0 for field in fields})
 
         for k, v in clubplayers.aggregate(**kwargs).items():
-            setattr(self, k, v or 0)
+            value = v or 0
+            if k.endswith('_average') and clubplayers.count() < 10:
+                value = 0
+            setattr(self, k, value)
+
         self.seasons_total = len(set(clubplayers.values_list('season')))
         self.matches_total = clubplayers.count()
+
+    @classmethod
+    def recalc_rating(cls):
+        fields = ('seasons_total', 'matches_total') + tuple(
+            itertools.chain(*map(
+                lambda x: ('%s_total' % x, '%s_average' % x),
+                ('goals', 'assists', 'points', 'plus_minus'))))
+        for field in fields:
+            rating_index = 0
+            rating_value = None
+            for player in cls.objects.order_by('-%s' % field, '-pk'):
+                if (getattr(player, field) < rating_value or
+                        rating_value is None):
+                    rating_index += 1
+                    rating_value = getattr(player, field)
+                setattr(player, '%s_index' % field, rating_index)
+                player.save(update_fields=('%s_index' % field,))
 
     def save(self, **kwargs):
         if self.pk and not self.line:
