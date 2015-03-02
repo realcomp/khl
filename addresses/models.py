@@ -35,3 +35,4 @@ class Address(TitleBaseModel):
     class Meta:
         verbose_name=_('Address')
         verbose_name_plural=_('Addresses')
+        ordering = ('ru_title', 'en_title', 'title', 'pk')

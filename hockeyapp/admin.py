@@ -198,6 +198,7 @@ class ArenaForm(BaseForm):
 
 class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (ArenaPhotosInline,)
+    ordering = ('address','ru_title', 'en_title', 'title',)
     form = ArenaForm
     list_filter = ('ru_title', 'address',
                     ('capacity', SimpleRangeFilter),
