@@ -210,8 +210,8 @@
                             {% verbatim %}
                             <div  ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && PlayerCardIndicatorsCtrl.indicatorsType !== 'table' || onSeason ">
                                 <span class="season-buttons-label"> Выбрать сезон:</span>
-                                <div class="season-buttons-container" >
-                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index}">
+                                <div class="season-buttons-container">
+                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season)}" >
                                         <div ng-bind="result.season.title" ng-click="moveToSeason(result.season, $index)"></div>
                                     </a>
                                 </div>

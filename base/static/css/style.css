@@ -4874,6 +4874,10 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     margin-left: -5px;
     padding-left: 3%;
 }
+.disabled{
+    opacity: 0.3;
+    cursor: default !important;
+}
 .players-search-page .alphabet-btn {
     margin: 0 5px 10px 0;
     padding: 0;

@@ -81,6 +81,9 @@ angular.module('Sportomatics')
                     })
             })
     };
+    $scope.isDisabled = function(season){
+        return (self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 );
+    };
     $scope.setGroupBy = function(groupby){
         self.groupBy = groupby;
         self.data = (groupby === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
@@ -92,6 +95,8 @@ angular.module('Sportomatics')
 
     };
     $scope.moveToSeason = function(season, index){
+
+        if((self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 )) return;
         zoomData.startDate = season.start_date;
         zoomData.endDate = season.end_date;
         $scope.onSeason = true;
@@ -141,7 +146,6 @@ angular.module('Sportomatics')
                                 "lineThickness": 0
                             });
                         })
-
                     }
                     if(self.club){
                         $scope.chart.guides = [];
@@ -235,7 +239,7 @@ angular.module('Sportomatics')
         }
     };
 })
-    .run(function (AmChartsFactory) {})
+.run(function (AmChartsFactory) {});
 Array.prototype.contains = function(obj) {
     var i = this.length;
     while (i--) {
@@ -244,7 +248,7 @@ Array.prototype.contains = function(obj) {
         }
     }
     return false;
-}
+};
 function generateChartData(data, field) {
     var chartData = [];
     var dates = data.map(function(e){

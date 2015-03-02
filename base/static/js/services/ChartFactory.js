@@ -10,8 +10,6 @@ angular.module('Sportomatics')
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
-                // generate some random data first
-
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
@@ -30,12 +28,17 @@ angular.module('Sportomatics')
                 // category
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
-                categoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
-                //categoryAxis.minorGridEnabled = true;
-                categoryAxis.autoGridCount =  false;
+                categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
+                categoryAxis.minorGridEnabled = true;
+                categoryAxis.autoGridCount =  true;
+                categoryAxis.grudCount = 12;
+                categoryAxis.minHorizontalGap = 40;
                 categoryAxis.gridAlpha = 0.1;
+                categoryAxis.boldPeriodBeginning = false;
                 categoryAxis.axisColor = "#DADADA";
                 categoryAxis.twoLineMode = true;
+                categoryAxis.tickLength = 12;
+                categoryAxis.markPeriodChange = false;
                 categoryAxis.dateFormats = [{
                     period: 'fff',
                     format: 'JJ:NN:SS'
@@ -141,7 +144,6 @@ angular.module('Sportomatics')
                 legend.marginLeft = 110;
                 legend.useGraphSettings = true;
                 chart.addLegend(legend);
-                console.log(locale.fieldNames[field].fullName);
 
                 // LABEL
                 chart.allLabels = [{

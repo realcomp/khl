@@ -288,8 +288,6 @@ angular.module('Sportomatics')
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
-                // generate some random data first
-
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
@@ -308,12 +306,17 @@ angular.module('Sportomatics')
                 // category
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
-                categoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
-                //categoryAxis.minorGridEnabled = true;
-                categoryAxis.autoGridCount =  false;
+                categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
+                categoryAxis.minorGridEnabled = true;
+                categoryAxis.autoGridCount =  true;
+                categoryAxis.grudCount = 12;
+                categoryAxis.minHorizontalGap = 40;
                 categoryAxis.gridAlpha = 0.1;
+                categoryAxis.boldPeriodBeginning = false;
                 categoryAxis.axisColor = "#DADADA";
                 categoryAxis.twoLineMode = true;
+                categoryAxis.tickLength = 12;
+                categoryAxis.markPeriodChange = false;
                 categoryAxis.dateFormats = [{
                     period: 'fff',
                     format: 'JJ:NN:SS'
@@ -419,7 +422,6 @@ angular.module('Sportomatics')
                 legend.marginLeft = 110;
                 legend.useGraphSettings = true;
                 chart.addLegend(legend);
-                console.log(locale.fieldNames[field].fullName);
 
                 // LABEL
                 chart.allLabels = [{
@@ -1263,6 +1265,9 @@ angular.module('Sportomatics')
                     })
             })
     };
+    $scope.isDisabled = function(season){
+        return (self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 );
+    };
     $scope.setGroupBy = function(groupby){
         self.groupBy = groupby;
         self.data = (groupby === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
@@ -1274,6 +1279,8 @@ angular.module('Sportomatics')
 
     };
     $scope.moveToSeason = function(season, index){
+
+        if((self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 )) return;
         zoomData.startDate = season.start_date;
         zoomData.endDate = season.end_date;
         $scope.onSeason = true;
@@ -1323,7 +1330,6 @@ angular.module('Sportomatics')
                                 "lineThickness": 0
                             });
                         })
-
                     }
                     if(self.club){
                         $scope.chart.guides = [];
@@ -1417,7 +1423,7 @@ angular.module('Sportomatics')
         }
     };
 }])
-    .run(["AmChartsFactory", function (AmChartsFactory) {}])
+.run(["AmChartsFactory", function (AmChartsFactory) {}]);
 Array.prototype.contains = function(obj) {
     var i = this.length;
     while (i--) {
@@ -1426,7 +1432,7 @@ Array.prototype.contains = function(obj) {
         }
     }
     return false;
-}
+};
 function generateChartData(data, field) {
     var chartData = [];
     var dates = data.map(function(e){
