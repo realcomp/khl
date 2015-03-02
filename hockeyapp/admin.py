@@ -67,8 +67,7 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         }),      
         (None, {
             'classes': ('suit-tab suit-tab-servinfo',),
-            'fields': ( 'khl_id', 'url', 'html_body', 'is_championship',
-                        'is_playoff')
+            'fields': ( 'khl_id', 'url', 'html_body',)
         }),
     )
 
