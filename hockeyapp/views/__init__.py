@@ -11,7 +11,7 @@ from addresses.models import Country
 from base.models import Season
 
 from .events import EventFactory
-from ..models import Club, Player, ClubPlayer, CoachClub, Schedule
+from ..models import Club, Player, ClubPlayer, CoachClub, Schedule, Timeline
 from ..serializers import (
     CountrySerializer, SeasonSerializer,
     PlayerCardSerializer, PlayerCardDetailSerializer,
@@ -28,6 +28,7 @@ class EventsMixin(object):
         efactory = EventFactory(sources={
             'player': Player.objects.all(),
             'schedule': Schedule.objects.all(),
+            'timeline': Timeline.objects.all(),
         })
         return efactory.get_events(datetime.datetime.now().date())
 

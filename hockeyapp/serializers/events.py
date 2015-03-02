@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 from rest_framework import serializers
 
-from ..views.events import BirthdayEvent, MatchEvent, GuestMatchEvent
+from ..views.events import (
+    BirthdayEvent, MatchEvent, GuestMatchEvent, TimelineEvent)
 
 
 class EventSerializer(serializers.Serializer):
@@ -33,6 +34,8 @@ class EventSerializer(serializers.Serializer):
             if isinstance(event, GuestMatchEvent):
                 teams.reverse()
             return '{} - {}'.format(*teams)
+        elif isinstance(event, TimelineEvent):
+            return event.obj.get_locale_attr('headline', request=request)
 
     class Meta(object):
         fields = 'date', 'title', 'type', 'url', 'image', 'logos', 'logos_urls'
