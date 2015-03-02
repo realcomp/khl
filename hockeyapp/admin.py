@@ -12,7 +12,7 @@ from django_select2 import Select2MultipleWidget
 from daterange_filter.filter import DateRangeFilter
 from relatives.utils import object_link
 
-from base.admin import AutocompleteFieldFilter, SimpleRangeFilter
+from base.admin import AutocompleteFieldFilter, SimpleRangeFilter, BaseForm
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin, BaseListAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
 
@@ -194,16 +194,12 @@ class ArenaInstaPhotoInline(admin.TabularInline):
     model = ArenaInstaPhoto
     extra=0
 
-class ArenaForm(forms.ModelForm):
-    club_set = forms.ModelMultipleChoiceField(label=_('Clubs'),
-                queryset=Club.objects.all().order_by('ru_title'),
-                widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
-    )
-    class Meta:
-        model = Arena
+class ArenaForm(BaseForm):
+    pass
 
-class ArenaAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
+class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     inlines = (ArenaPhotosInline,)
+    form = ArenaForm
     list_filter = ('ru_title', 'address',
                     ('capacity', SimpleRangeFilter),
     )
