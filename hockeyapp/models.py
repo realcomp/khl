@@ -112,10 +112,14 @@ class Player(AbstractMan):
             '%s_total' % field: Sum('clubplayermatch__%s' % field)
             for field in fields
         })
-        kwargs.update({
-            '%s_average' % field: Avg('clubplayermatch__%s' % field)
-            for field in fields
-        })
+        if kwargs['matches_total'] >= 10:
+            kwargs.update({
+                '%s_average' % field: Avg('clubplayermatch__%s' % field)
+                for field in fields
+            })
+        else:
+            kwargs.update({'%s_average' % field: 0 for field in fields})
+
         for k, v in clubplayers.aggregate(**kwargs).items():
             setattr(self, k, v or 0)
         self.seasons_total = len(set(clubplayers.values_list('season')))
