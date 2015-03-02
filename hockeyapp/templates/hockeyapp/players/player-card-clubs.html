@@ -1,6 +1,10 @@
 {% extends "hockeyapp/players/base.html" %}
 {% load i18n %}
 
+{% block title %}
+{{fio}}: клубы, хоккей  - Sportomatics.ru
+{% endblock %}
+
 {% block body %}
 <section class="content">
     <div class="container player-card-short-page">
@@ -22,6 +26,7 @@
             </div>
         </div>
         {% include "hockeyapp/players/card.html" %}
+
 
         <div class="page-content page-container">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-clubs" %}
