@@ -373,7 +373,7 @@ generate_timeline.short_description = _('Generate new timeline events')
 
 def regenerate_timeline(modeladmin, request, queryset):
     Timeline.objects.all().delete()
-    # generate_timeline(modeladmin, request, queryset)
+    generate_timeline(modeladmin, request, queryset)
 regenerate_timeline.short_description = _('Re-generate timeline events')
 
 
