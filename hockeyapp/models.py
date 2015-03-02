@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import  Q, Avg, Sum
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -239,7 +240,7 @@ class PlayerCoachJudge(models.Model):
 
 
 class Arena(TitleBaseModel):
-    objects = managers.arena.ArenaManager()
+    objects = managers.arena.ArenaQuerySet.as_manager()
     capacity = models.PositiveIntegerField(_('Capacity'), null=True)
     coords = models.CharField(_('Latitude and Longitude'),
                                 max_length=1024, blank=True)
@@ -273,6 +274,7 @@ class ArenaPhotos(models.Model):
 
 
 class ArenaInstaPhoto(models.Model):
+    objects = managers.arena.ArenaInstaPhotoQuerySet.as_manager()
     arena = models.ForeignKey(Arena, verbose_name=Arena._meta.verbose_name)
     photo = models.ForeignKey(InstagramImageFile)
     match = models.ForeignKey('hockeyapp.Match', null=True, blank=True,
@@ -405,6 +407,18 @@ class Club(TitleBaseModel):
         i = seasons.index(season)
         if i < len(seasons) - 1:
             return seasons[i + 1]
+
+    def get_instagam_photo(self):
+        return self.pk and self.arenainstaphoto_set.club_photo(self)
+
+    def instagram_photo_link(self):
+        link = reverse('hockeyapp:club-insta-photo')
+        link = link +'?club={}&processed=1'.format(self.pk)
+        if self.get_instagam_photo():
+            return format_html('<a href="{}">{}</a>', link, 
+                                _('Club instagram photo link')
+            )
+    instagram_photo_link.allow_tags = True
 
     class Meta:
         verbose_name = _('Club')
