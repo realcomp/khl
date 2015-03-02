@@ -116,7 +116,7 @@ class TimelineEvent(Event):
 
     @property
     def image(self):
-        return self.obj.player.photo.url
+        return self.obj.player.photo and self.obj.player.photo.url
 
     @property
     def type(self):
@@ -179,13 +179,16 @@ class EventFactory(object):
         events = []
         timelines = self.sources.get('timeline')
         q_completed_event = Q(
-            start_date__gte=date - datetime.timedelta(days=1),
+            start_date__gte=date - datetime.timedelta(days=45),
             end_date__isnull=True)
-        q_running_event = Q(
-            start_date__lte=date,
-            end_date__gte=date)
+        q_recent_running_event = Q(
+            start_date__gte=date - datetime.timedelta(days=45),
+            end_date__isnull=False)
+        # q_running_event = Q(
+        #     start_date__lte=date,
+        #     end_date__gte=date)
         if timelines:
             for timeline in timelines.filter(
-                    q_completed_event | q_running_event):
+                    q_completed_event | q_recent_running_event):
                 events.append(TimelineEvent(date, timeline))
         return events
