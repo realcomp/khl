@@ -4838,7 +4838,22 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     background: #ecf0f1;
     font-size: 12px;
     color: #000000;
-    border: 1px solid #8ebd5d;
+    border: 1px solid #ecf0f1;
+    font-weight: normal;
+    border-radius: 2px;
+    padding: 3px;
+    cursor: pointer;
+    margin: 5px;
+    width: 120px;
+    max-width: 120px;
+    display: inline-block;
+    text-align: center;
+}
+.active-season-button{
+    background: #FFFFFF !important;
+    font-size: 12px;
+    color: #8ebd5d !important;
+    border: 1px solid #8ebd5d !important;
     font-weight: normal;
     border-radius: 2px;
     padding: 3px;

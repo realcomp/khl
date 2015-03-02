@@ -91,13 +91,14 @@ angular.module('Sportomatics')
     $scope.unload = function(){
 
     };
-    $scope.moveToSeason = function(season){
+    $scope.moveToSeason = function(season, index){
         zoomData.startDate = season.start_date;
         zoomData.endDate = season.end_date;
         $scope.onSeason = true;
         self.groupBy = 'month';
         self.data = $scope.dataByMonth;
         self.list(true);
+        $scope.activeSeason = index;
     };
     this.list = function(switched) {
         var data;
