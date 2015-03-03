@@ -1,22 +1,18 @@
 angular.module('Sportomatics')
 .controller('ClubStatsController', [
-    '$http', '$scope', 'PlayersSearchService',
-    function($http, $scope, PlayersSearchService) {
+    '$http', '$scope', 'PlayersSearchService', '$location',
+    function($http, $scope, PlayersSearchService, $location) {
+
     $scope.PlayersSearchService = PlayersSearchService;
+    $scope.$location = $location;
 
     $scope.data = {};
     $scope.loader = false;
 
-    $scope.params = {
-        orderBy: '[%22%s_lastname%22,%22%s_name%22]',
-        orderByReversed: false,
-        ratedBy: '',
-        alphabetFilter: null,
-        isPlaying: true,
-        playersFilter: null,
-        clubsFilter: {
-            pk: +$('[name="club"]').val()
-        },
+    $location.search('club', +$('[name="club"]').val());
+    $scope.params = $location.search();
+
+    $scope.sparams = {
         countriesSelected: [],
         leaguesSelected: []
     };
@@ -40,10 +36,6 @@ angular.module('Sportomatics')
                 top: event.pageY
             });
         }
-    };
-
-    $scope.moreClubs = function(e) {
-        $(e).closest('td').toggleClass('show-more-clubs')
     };
 
     $scope.setPlayersFilter = function(obj) {

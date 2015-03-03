@@ -179,10 +179,10 @@ class EventFactory(object):
         events = []
         timelines = self.sources.get('timeline')
         q_completed_event = Q(
-            start_date__gte=date - datetime.timedelta(days=45),
+            start_date__gte=date - datetime.timedelta(days=30),
             end_date__isnull=True)
         q_recent_running_event = Q(
-            start_date__gte=date - datetime.timedelta(days=45),
+            start_date__gte=date - datetime.timedelta(days=30),
             end_date__isnull=False)
         # q_running_event = Q(
         #     start_date__lte=date,

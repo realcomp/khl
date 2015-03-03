@@ -83,10 +83,14 @@ class PlayerQuerySet(models.QuerySet):
         start = 0
         end = 0
         count = self.count()
+        found = False
         for obj in self:
             if filter_(obj):
+                found = True
                 break
             i += 1
+        if not found:
+            return self.none()
         start = i - range_
         end = i + range_
         if i - range_ < 0:

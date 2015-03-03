@@ -95,11 +95,15 @@ class Player(AbstractMan):
     goals_total = models.IntegerField(_('Goals Total'), null=True)
     assists_total = models.IntegerField(_('Assists Total'), null=True)
     points_total = models.IntegerField(_('Points Total'), null=True)
-    plus_minus_total = models.IntegerField(_('Points Total'), null=True)
+    plus_minus_total = models.IntegerField(_('Plus/minus Total'), null=True)
+    penalty_time_total = models.IntegerField(
+        _('Penalty Time Total'), null=True)
     goals_average = models.FloatField(_('Goals Average'), null=True)
     assists_average = models.FloatField(_('Assists Average'), null=True)
     points_average = models.FloatField(_('Points Average'), null=True)
-    plus_minus_average = models.FloatField(_('Points Average'), null=True)
+    plus_minus_average = models.FloatField(_('Plus/minus Average'), null=True)
+    penalty_time_average = models.FloatField(
+        _('Penalty Time Average'), null=True)
     # players rating (do recalc_rating to update)
     seasons_total_index = models.IntegerField(
         _('Seasons Total Index'), null=True)
@@ -112,7 +116,9 @@ class Player(AbstractMan):
     points_total_index = models.IntegerField(
         _('Points Total Index'), null=True)
     plus_minus_total_index = models.IntegerField(
-        _('Points Total Index'), null=True)
+        _('Plus/minus Total Index'), null=True)
+    penalty_time_total_index = models.IntegerField(
+        _('Penalty Time Total Index'), null=True)
     goals_average_index = models.IntegerField(
         _('Goals Average Index'), null=True)
     assists_average_index = models.IntegerField(
@@ -120,7 +126,9 @@ class Player(AbstractMan):
     points_average_index = models.IntegerField(
         _('Points Average Index'), null=True)
     plus_minus_average_index = models.IntegerField(
-        _('Points Average Index'), null=True)
+        _('Plus/minus Average Index'), null=True)
+    penalty_time_average_index = models.IntegerField(
+        _('Penalty Time Average Index'), null=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
@@ -128,9 +136,9 @@ class Player(AbstractMan):
         q_rated_matches = (
             Q(clubplayermatch__match__challenge_type__isnull=False) &
             Q(clubplayermatch__match__challenge_type__gt=0))
-        clubplayers = self.clubplayer_set.filter(q_rated_matches)
-        # clubplayers = self.clubplayer_set.all()  # dev mode
-        fields = 'goals', 'assists', 'points', 'plus_minus'
+        # clubplayers = self.clubplayer_set.filter(q_rated_matches)
+        clubplayers = self.clubplayer_set.all()  # dev mode
+        fields = 'goals', 'assists', 'points', 'plus_minus', 'penalty_time'
         kwargs = {}
 
         kwargs.update({
@@ -158,7 +166,7 @@ class Player(AbstractMan):
         fields = ('seasons_total', 'matches_total') + tuple(
             itertools.chain(*map(
                 lambda x: ('%s_total' % x, '%s_average' % x),
-                ('goals', 'assists', 'points', 'plus_minus'))))
+                ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
         for field in fields:
             rating_index = 0
             rating_value = None

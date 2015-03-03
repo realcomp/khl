@@ -1,6 +1,7 @@
 angular.module('Sportomatics')
-.controller('PlayersSearchController', ['$http', '$scope', 'PlayersSearchService',
-    function($http, $scope, PlayersSearchService) {
+.controller('PlayersSearchController', [
+    '$http', '$scope', 'PlayersSearchService', '$location',
+    function($http, $scope, PlayersSearchService, $location) {
     var self = this,
         getUnchecker = function(isDefault, defaultValue) {
             return function() {
@@ -12,19 +13,15 @@ angular.module('Sportomatics')
         };
 
     $scope.PlayersSearchService = PlayersSearchService;
+    $scope.$location = $location;
 
     $scope.data = {};
     $scope.countries = null;
     $scope.loader = false;
 
-    $scope.params = {
-        orderBy: '[%22%s_lastname%22,%22%s_name%22]',
-        orderByReversed: false,
-        ratedBy: '',
-        alphabetFilter: null,
-        isPlaying: true,
-        playersFilter: null,
-        clubsFilter: null,
+    $scope.params = $location.search();
+
+    $scope.sparams = {
         countriesSelected: [],
         leaguesSelected: []
     };
@@ -48,10 +45,6 @@ angular.module('Sportomatics')
                 top: event.pageY
             });
         }
-    };
-
-    $scope.moreClubs = function(e) {
-        $(e).closest('td').toggleClass('show-more-clubs')
     };
 
     $scope.lineCheck = function(e) {

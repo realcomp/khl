@@ -66,74 +66,112 @@
                                 <tbody>
                                     <tr>
                                         <td>{% trans 'Seasons' %}</td>
-                                        <td align="center">{{ seasons_count }}</td>
+                                        <td align="center">{{ seasons_total }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=seasons_total" class="player-place-link">
+                                                {{ seasons_total_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Matches' %}</td>
-                                        <td align="center">{{ matches_count }}</td>
+                                        <td align="center">{{ matches_total }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=matches_total" class="player-place-link">
+                                                {{ matches_total_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Goals' %}</td>
-                                        <td align="center">{{ goals_count }}</td>
+                                        <td align="center">{{ goals_total }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=goals_total" class="player-place-link">
+                                                {{ goals_total_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Transfers' %}</td>
-                                        <td align="center">{{ assisted_count }}</td>
+                                        <td align="center">{{ assists_total }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=assists_total" class="player-place-link">
+                                                {{ assists_total_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Scored' %}</td>
-                                        <td align="center">{{ scored_count }}</td>
+                                        <td align="center">{{ points_total }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=points_total" class="player-place-link">
+                                                {{ points_total_index }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans 'Penalty time, min' %}</td>
+                                        <td align="center">{{ penalty_time_total }}</td>
+                                        <td align="center">
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=penalty_time_total" class="player-place-link">
+                                                {{ penalty_time_total_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     {% comment %}
                                     <tr>
                                         <td>{% trans 'Plus/minus' %}</td>
-                                        <td align="center"></td>
+                                        <td align="center">{{ plus_minus_total }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=plus_minus_total" class="player-place-link">
+                                                {{ plus_minus_total_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     {% endcomment %}
                                     <tr>
                                         <td>{% trans 'Average goals count per game' %}</td>
-                                        <td align="center">{{ goals_avg|floatformat:2 }}</td>
+                                        <td align="center">{{ goals_average|floatformat:3 }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=goals_average" class="player-place-link">
+                                                {{ goals_average_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Average transfers count per game' %}</td>
-                                        <td align="center">{{ assisted_avg }}</td>
+                                        <td align="center">{{ assists_average|floatformat:3 }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=assists_average" class="player-place-link">
+                                                {{ assists_average_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Average score count per game' %}</td>
-                                        <td align="center">{{ scored_avg|floatformat:2 }}</td>
+                                        <td align="center">{{ points_average|floatformat:3 }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=points_average" class="player-place-link">
+                                                {{ points_average_index }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans 'Average penalty time' %}</td>
+                                        <td align="center">{{ penalty_time_average|floatformat:3 }}</td>
+                                        <td align="center">
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=penalty_time_average" class="player-place-link">
+                                                {{ penalty_time_average_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>{% trans 'Average "plus/minus" per game' %}</td>
-                                        <td align="center">{{ plus_minus_avg|floatformat:2 }}</td>
+                                        <td align="center">{{ plus_minus_average|floatformat:3 }}</td>
                                         <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=plus_minus_average" class="player-place-link">
+                                                {{ plus_minus_average_index }}
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
