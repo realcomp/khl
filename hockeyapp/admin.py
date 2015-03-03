@@ -213,13 +213,12 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
         obj.save()
 
     def get_form(self, request, obj=None, **kwargs):
-        if obj:
-            self.form.base_fields['club_set'] = forms.ModelMultipleChoiceField(
-                        label=_('Clubs'),
-                        queryset=Club.objects.all().order_by('ru_title'),
-                        initial = obj.club_set.all(),
-                        widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
-            )
+        self.form.base_fields['club_set'] = forms.ModelMultipleChoiceField(
+                    label=_('Clubs'),
+                    queryset=Club.objects.all().order_by('ru_title'),
+                    initial=obj and obj.club_set.all(),
+                    widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
+        )
         return super(ArenaAdmin, self).get_form(request, obj)
 admin.site.register(Arena, ArenaAdmin)
 
