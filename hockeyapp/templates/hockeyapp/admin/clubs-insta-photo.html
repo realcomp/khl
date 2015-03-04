@@ -163,6 +163,15 @@
             });
         });
 
+        services.factory('ClubInstaPhoto', function($resource){
+            return $resource("{% url 'api:hockey:cip_list' %}", {}, {
+                query: {method:'GET', params:{processed: 1}},
+                get: { method: 'GET'},
+                update: { method: 'PATCH'},
+                delete: { method: 'DELETE'}
+            });
+        });
+
         services.factory('Arena', function($resource){
             return $resource("{% url 'api:hockey:arena_list' %}"+":id/", {}, {
                 get: { method: 'GET'}
@@ -206,14 +215,14 @@
             $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
             $resourceProvider.defaults.stripTrailingSlashes = false;
         }]);
-        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','Arena', '$location','PlayerList','InstagramUser', function($scope, ArenaInstaPhoto, Club, Match, Arena,  $location, PlayerList, InstagramUser) {
+        app.controller('AdminArenaInstaPhotoController', ['$scope', 'ArenaInstaPhoto', 'Club', 'Match','Arena', '$location','PlayerList','InstagramUser','ClubInstaPhoto', function($scope, ArenaInstaPhoto, Club, Match, Arena,  $location, PlayerList, InstagramUser, ClubInstaPhoto) {
             $scope.yyyymmdd = function(input){
                 input = new Date(input);
                 var del = '.';
                 var yyyy = input.getFullYear().toString();
                 var mm = (input.getMonth()+1).toString(); // getMonth() is zero-based
                 var dd  = input.getDate().toString();
-                return yyyy + del + (mm[1]?mm:"0"+mm[0]) + del+ (dd[1]?dd:"0"+dd[0]); // padding
+                return yyyy + del + (mm[1]?mm:"0"+mm[0]) + del+ (dd[1]?dd:"0"+dd[0]);
             };
             $scope.next_page = 1;
             $scope.arenaInstaPhoto = null;
@@ -226,6 +235,12 @@
             if($scope.params.max_id){
                 $scope.max_id = parseInt($scope.params.max_id);
             }
+            if($scope.params.processed){
+                $scope.processed = parseInt($scope.params.processed);
+            }
+            if($scope.params.club){
+                $scope.club_id = parseInt($scope.params.club);
+            }
             $scope.$watch('selectedClub', function(newval, oldval){
                 if(newval && newval.length > 0){
                     $('#photo_club').val(newval.title);
@@ -233,20 +248,22 @@
             });
             $scope.$watch('max_id', function(newval, oldval){
                 if(!newval){
-                    $location.url($location.path());
+                    $scope.params.max_id = null;
+                    //$location.url($location.path());
+                    $location.search($scope.params);
                 }
                 if(newval){
                     $location.search('max_id', newval)
                 }
             });
-            $scope.$watch('club_id', function(newval, oldval){
-                if(!newval){
+            /*$scope.$watch('club_id', function(newval, oldval){
+                if(!newval && !$scope.params){
                     $location.url($location.path());
                 }
                 if(newval){
                     $location.search('club_id', newval)
                 }
-            });
+            });*/
             var closePopupBtn = $('#close-popup-btn');
             closePopupBtn.on('click', function(e) {
                 e.preventDefault();
@@ -265,16 +282,40 @@
                 }
             });
             $scope.getPage = function() {
-                var get_params = {page:$scope.next_page, min_id: $scope.min_id, max_id: $scope.max_id ? $scope.max_id : 1000000, club: $scope.club_id};
-                ArenaInstaPhoto.query(get_params).$promise.then(function(data) {
-                    $.each(data.results, function(index, value){
-                        $scope.photos.push(value)
+                if(!$scope.processed || !$scope.club_id) {
+                    var get_params = {
+                        page: $scope.next_page,
+                        min_id: $scope.min_id,
+                        max_id: $scope.max_id ? $scope.max_id : 1000000,
+                        club: $scope.club_id
+                    };
+                    ArenaInstaPhoto.query(get_params).$promise.then(function (data) {
+                        $.each(data.results, function (index, value) {
+                            $scope.photos.push(value)
+                        });
+                        $scope.next_page = data.next_page;
+                        if (!$scope.next_page) {
+                            $('#nextpagebutton').remove();
+                        }
                     });
-                    $scope.next_page = data.next_page;
-                    if(!$scope.next_page) {
-                        $('#nextpagebutton').remove();
-                    }
-                });
+                } else {
+                    var get_params = {
+                        page: $scope.next_page,
+                        min_id: $scope.min_id,
+                        max_id: $scope.max_id ? $scope.max_id : 1000000,
+                        club: $scope.club_id,
+                        processed: 1
+                    };
+                    ArenaInstaPhoto.query(get_params).$promise.then(function (data) {
+                        $.each(data.results, function (index, value) {
+                            $scope.photos.push(value)
+                        });
+                        $scope.next_page = data.next_page;
+                        if (!$scope.next_page) {
+                            $('#nextpagebutton').remove();
+                        }
+                    });
+                }
             };
 
             $scope.deleteAll = function() {
