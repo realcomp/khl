@@ -29,7 +29,42 @@
 
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-photos" %}
-            <div class="page-inner-container">
+            <div class="page-inner-container" ng-controller="PhotosController">
+                {% verbatim %} <!-- Popup -->
+                <div id="#switcher" class=" player-partners-popup photo-popup no-transition">
+                    <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
+                    <div>
+                        <div style="display: inline-block;">
+                            <div class="rightleft" ng-show="currentIndex !== 0">
+                                <i class="fa fa-angle-left photo-prev" ng-click="prevPhoto()"></i>
+                            </div>
+                            <img alt="" class="item-photo popup-photo float-left" ng-src="{{ PhotoPopup.data.photo.img.file }}">
+                            <div class="rightleft" ng-show="currentIndex !== 3 ">
+                                <i class="fa fa-angle-right photo-next" ng-click="nextPhoto()"></i>
+                            </div>
+                        </div>
+                        <div style="display:inline-block;margin-left: 20px; vertical-align: top; background: #ffffff !important; width: inherit">
+                            <div class="m-t-20 m-r-30">
+                                <div class="inline-block vertical-top m-r-5">
+                                    <div>
+                                        <img class="instagram-profile-picture" src="{{PhotoPopup.instagramUser.profile_picture}}" alt="" class="item-photo" width="150" height="150">
+                                    </div>
+                                    <div class="instagram-user-name">
+                                        <a href="https://instagram.com/{{PhotoPopup.instagramUser.username}}" target="_blank">{{PhotoPopup.instagramUser.username}}</a>
+                                    </div>
+                                </div>
+                                <div class="inline-block ">
+                                                <textarea class="instagram-user-str" disabled>
+                                                </textarea>
+                                </div>
+                            </div>
+                            <!--<div class="m-t-20">
+                                <strong class="font-16">{{PhotoPopup.arena.ru_title}}</strong>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                {% endverbatim %}
                 <div class="clubs-photos-tabs">
                     <div class="ui grid">
                         <div class="row">
@@ -52,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" id="photos-new" data-tab="photos-new">
+                        <div class="row" id="photos-new" data-tab="photos-new" >
                             <div class="sixteen wide column">
                                 <div class="masonry-clubs-photos masonry">
                                     <div class="item item_add">
@@ -193,6 +228,20 @@
                                             <a href="#" class="item-comments"><i class="like icon"></i>10</a>
                                         </div>
                                     </div>
+                                    {% verbatim %}
+                                    <div ng-repeat="item in photos track by $index" class="item" ng-class="{'w2': $index %2 === 0}">
+                                        <img src="{{item.photo.img.file}}" alt="" class="item-photo pointer" ng-click="PhotoPopupShow(item.id, $index, $event)">
+                                        <a href="#" class="item-photo-author">
+                                            <span class="item-author-avatar"><img src="/static/images/player1.png" alt="" class="item-author-image"></span>
+                                            <span class="item-author-name">Иванов Александр</span>
+                                        </a>
+                                        <div class="item-data">12 августа 2014</div>
+                                        <div class="item-info">
+                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
+                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        </div>
+                                    </div>
+                                    {% endverbatim %}
                                 </div>
                                 <hr class="hr">
                                 <div class="align-center">
@@ -350,63 +399,7 @@
                                 <br>
                             </div>
                         </div> <!-- Masonry clubs photos popular -->
-                        <div  class="row" ng-controller="PhotosController">
-                            {% verbatim %}
-                            <div id="#switcher" class=" player-partners-popup photo-popup no-transition">
-                                <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
-                                <div>
-                                    <div style="display: inline-block;">
-                                        <div class="rightleft" ng-show="currentIndex !== 0">
-                                            <i class="fa fa-angle-left photo-prev" ng-click="prevPhoto()"></i>
-                                        </div>
-                                        <img alt="" class="item-photo popup-photo float-left" ng-src="{{ PhotoPopup.data.photo.img.file }}">
-                                        <div class="rightleft" ng-show="currentIndex !== photos.length - 1">
-                                            <i class="fa fa-angle-right photo-next" ng-click="nextPhoto()"></i>
-                                        </div>
-                                    </div>
-                                    <div style="display:inline-block;margin-left: 20px; vertical-align: top; background: #ffffff !important; width: inherit">
-                                        <div class="m-t-20 m-r-30">
-                                            <div class="inline-block vertical-top m-r-5">
-                                                <div>
-                                                    <img class="instagram-profile-picture" src="{{PhotoPopup.instagramUser.profile_picture}}" alt="" class="item-photo" width="150" height="150">
-                                                </div>
-                                                <div class="instagram-user-name">
-                                                    <a href="https://instagram.com/{{PhotoPopup.instagramUser.username}}" target="_blank">{{PhotoPopup.instagramUser.username}}</a>
-                                                </div>
-                                            </div>
-                                            <div class="inline-block ">
-                                                <textarea class="instagram-user-str" disabled>
-                                                </textarea>
-                                            </div>
-                                        </div>
-                                        <!--<div class="m-t-20">
-                                            <strong class="font-16">{{PhotoPopup.arena.ru_title}}</strong>
-                                        </div>-->
-                                    </div>
-                                </div>
-                            </div>
-                            {% endverbatim %}
-                            <!-- grid for new photos testing -->
-                            <!--<div class="row" id="photos-popular-new" data-tab="photos-popular">-->
-                                <div class="sixteen wide column">
-                                    <div class="masonry-clubs-photos masonry">
-                                        {% verbatim %}
-                                        <div ng-repeat="item in photos track by $index" class="item" ng-class="{'w2': $index %2 === 0}">
-                                            <img src="{{item.photo.img.file}}" alt="" class="item-photo pointer" ng-click="PhotoPopupShow(item.id, $index, $event)">
-                                            <a href="#" class="item-photo-author">
-                                                <span class="item-author-avatar"><img src="/static/images/player1.png" alt="" class="item-author-image"></span>
-                                                <span class="item-author-name">Иванов Александр</span>
-                                            </a>
-                                            <div class="item-data">12 августа 2014</div>
-                                            <div class="item-info">
-                                                <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                                <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                            </div>
-                                        </div>
-                                        {% endverbatim %}
-                                    </div>
-                                </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

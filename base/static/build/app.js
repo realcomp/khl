@@ -1262,6 +1262,7 @@ angular.module('Sportomatics')
                 $.each(data.results, function (index, value) {
                     $scope.photos.push(value)
                 });
+                console.log($scope.photos.length);
                 $scope.next_page = data.next_page;
                 if (!$scope.next_page && $('#nextpagebutton').length) {
                     $('#nextpagebutton').remove();
@@ -1282,6 +1283,7 @@ angular.module('Sportomatics')
 
         $scope.PhotoPopupShow = function(id, index, event, position){
                 //$scope.PhotoPopup.data = ClubInstaPhoto.get({id:id}, function(photo) {
+            console.log(index)
             $scope.currentIndex = index;
             var photo = $scope.photos[index];
            // console.log($scope.photos[index]);
