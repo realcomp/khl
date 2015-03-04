@@ -2,13 +2,13 @@
 <div class="row">
     <div class="four wide column">
         <a href="" class="option-btn"
-           ng-class="{ 'option-btn_active':params.is_playing }"
-           ng-click="PlayersSearchService.setPlaying(this, true)">
+           ng-class="{ 'option-btn_active':params.is_playing !== 'false'}"
+           ng-click="PlayersSearchService.setPlaying(this, 'true')">
             Сейчас играют
         </a>
         <a href="" class="option-btn"
-           ng-class="{ 'option-btn_active':!params.is_playing }"
-           ng-click="PlayersSearchService.setPlaying(this, false)">
+           ng-class="{ 'option-btn_active':params.is_playing === 'false' }"
+           ng-click="PlayersSearchService.setPlaying(this, 'false')">
             Все
         </a>
         <ul class="options-list">

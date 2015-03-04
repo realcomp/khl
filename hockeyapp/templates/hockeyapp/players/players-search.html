@@ -73,28 +73,32 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[0,1,2,3]" checked="checked"
+                                        <input type="checkbox" name="line" value=""
+                                               ng-checked="!params.line.length"
                                                onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[2]"
+                                        <input type="checkbox" name="line" value="2"
+                                               ng-checked="params.line.indexOf('2') >= 0"
                                                onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>защитник</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[3]"
+                                        <input type="checkbox" name="line" value="3"
+                                               ng-checked="params.line.indexOf('3') >= 0"
                                                onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>нападающий</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="line" value="[1]"
+                                        <input type="checkbox" name="line" value="1"
+                                               ng-checked="params.line.indexOf('1') >= 0"
                                                onchange="angular.element(this).scope().lineCheck(this)">
                                         <label>вратарь</label>
                                     </div>
@@ -106,7 +110,8 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" id="isCitizenshipAll" checked="checked"
+                                        <input type="checkbox" id="isCitizenshipAll"
+                                               ng-checked="!params.citizenship1 && params.citizenship_other !== 'true'"
                                                onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>все</label>
                                     </div>
@@ -115,6 +120,7 @@
                                     <div class="ui checkbox">
                                         <input type="hidden" id="citizenshipRussia" value="{{ russia.pk }}">
                                         <input type="checkbox" id="isCitizenshipRussia"
+                                               ng-checked="params.citizenship1"
                                                onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>{{ russia.title }}</label>
                                     </div>
@@ -122,6 +128,7 @@
                                 <div class="inline">
                                     <div class="ui checkbox">
                                         <input type="checkbox" id="isCitizenshipOther"
+                                               ng-checked="params.citizenship_other === 'true'"
                                                onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>иное</label>
                                     </div>

@@ -59,10 +59,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             qs = qs.filter(pk__in=players)
 
         if 'line' in request.GET:
-            # union of sets
-            lines = reduce(operator.or_, map(set, map(
-                json.loads, request.GET.getlist('line'))))
-            qs = qs.filter(line__in=lines)
+            qs = qs.filter(line__in=request.GET.getlist('line'))
 
         q_citizenship = Q()
         if 'citizenship' in request.GET:

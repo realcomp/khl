@@ -877,28 +877,36 @@ angular.module('Sportomatics')
     this.setOrderBy = function($scope, order_by) {
         if (!$scope.loader) {
             if ($scope.params.order_by === order_by) { // same field -> reverse
-                $scope.$location.search('reversed', !$scope.params.reversed);
+                if ($scope.params.reversed === 'true') {
+                    $scope.$location.search('reversed', null);
+                } else {
+                    $scope.$location.search('reversed', 'true');
+                }
             } else { // other field -> reset
-                $scope.$location.search('reversed', false);
+                $scope.$location.search('reversed', null);
             }
-            $scope.$location.search('order_by', order_by);
+            $scope.$location.search('order_by', order_by || null);
             this.search($scope);
         }
     };
 
     this.setPlaying = function($scope, is_playing) {
         if (!$scope.loader && $scope.params.is_playing !== is_playing) {
-            $scope.$location.search('is_playing', is_playing);
+            if (is_playing === 'false') {
+                $scope.$location.search('is_playing', is_playing);
+            } else {
+                $scope.$location.search('is_playing', null);
+            }
             this.search($scope);
         }
     }
 
     this.setRatedBy = function($scope, rated_by) {
         if (!$scope.loader && $scope.params.rated_by !== rated_by) {
-            $scope.$location.search('rated_by', rated_by);
+            $scope.$location.search('rated_by', rated_by || null);
             if (rated_by) { // by rating -> set ordering
                 $scope.$location.search('order_by', 'rating');
-                $scope.$location.search('reversed', true);
+                $scope.$location.search('reversed', 'true');
                 this.search($scope);
             } else { // by alphabet -> reset ordering
                 this.setOrderBy($scope, '');
@@ -942,43 +950,68 @@ angular.module('Sportomatics')
     this.search = function($scope) {
         var f = function() {
             var url = $('#PlayersSearchLink').attr('href'),
-            citizenship = [], line = [], params = '';
+            line = [], params = '', i;
 
             if ($('#isCitizenshipRussia').is(':checked')) {
-                citizenship.push($('#citizenshipRussia').val());
+                $scope.$location.search('citizenship1', $('#citizenshipRussia').val());
+            } else {
+                $scope.$location.search('citizenship1', null);
             }
             if ($('#isCitizenshipOther').is(':checked')) {
-                if ($('#citizenshipOther').val()) {
-                    citizenship.push($('#citizenshipOther').val());
-                } else {
-                    $scope.$location.search('citizenship_other', true);
+                $scope.$location.search('citizenship_other', 'true');
+                if ($scope.$location.search().citizenship2) {
+                    $('#citizenshipOther').val($scope.$location.search().citizenship2);
                 }
+                if ($('#citizenshipOther').val()) {
+                    $scope.$location.search('citizenship2', $('#citizenshipOther').val());
+                }
+            } else {
+                $scope.$location.search('citizenship_other', null);
             }
-            $scope.$location.search('citizenship', citizenship);
 
             $.each($('[name="line"]:checked'), function() {
-                line.push($(this).val());
+                var value = $(this).val();
+                if (value) {
+                    line.push(value);
+                }
             });
             $scope.$location.search('line', line);
 
+            if (!$scope.sparams.leaguesLoaded) {
+                $scope.sparams.leaguesLoaded = true;
+                if ($scope.params.league) {
+                    if (Array.isArray($scope.params.league)) {
+                        $scope.sparams.leaguesSelected = $scope.params.league;
+                    } else {
+                        $scope.sparams.leaguesSelected = [$scope.params.league];
+                    }
+                }
+            }
+            $scope.$location.search('league', $scope.sparams.leaguesSelected);
+
             $scope.params = $scope.$location.search();
 
-            params += '&order_by=' + ($scope.params.reversed ? '-' : '') +
+            params += '&order_by=' + ($scope.params.reversed === 'true' ? '-' : '') +
                 ($scope.params.order_by || '["%s_lastname","%s_name"]');
 
-            $.each($scope.params.citizenship, function() {
-                params += '&citizenship=' + this;
-            });
-            $.each($scope.params.line, function() {
-                params += '&line=' + this;
-            });
-            if ($scope.params.citizenship_other) {
-                params += '&citizenship_other=' + $scope.params.citizenship_other;
+            if ($scope.params.line.length) {
+                $.each($scope.params.line, function() {
+                    params += '&line=' + this;
+                });
+            }
+            if ($scope.params.citizenship1) {
+                params += '&citizenship=' + $scope.params.citizenship1;
+            }
+            if ($scope.params.citizenship2) {
+                params += '&citizenship=' + $scope.params.citizenship2;
+            }
+            if ($scope.params.citizenship_other === 'true') {
+                params += '&citizenship_other=true';
             }
             if ($scope.params.rated_by) {
                 params += '&rated_by=' + $scope.params.rated_by;
             }
-            if ($scope.params.is_playing) {
+            if ($scope.params.is_playing !== 'false') {
                 params += '&is_playing=true';
             }
             if ($scope.params.alphabet) {
@@ -990,9 +1023,11 @@ angular.module('Sportomatics')
             if ($scope.params.player) {
                 params += '&player=' + $scope.params.player;
             }
-            $.each($scope.sparams.leaguesSelected, function() {
-                params += '&league=' + this;
-            });
+            if ($scope.params.league) {
+                $.each($scope.params.league, function() {
+                    params += '&league=' + this;
+                });
+            }
             $scope.data = {};
             $scope.loader = true;
             $http.get(url + '?' + params).success(function(data) {
@@ -1140,7 +1175,8 @@ angular.module('Sportomatics')
 
     $scope.sparams = {
         countriesSelected: [],
-        leaguesSelected: []
+        leaguesSelected: [],
+        leaguesSelectedLoaded: false
     };
 
     $scope.PlayerPartnersPopup = {
@@ -1674,7 +1710,8 @@ angular.module('Sportomatics')
 
     $scope.sparams = {
         countriesSelected: [],
-        leaguesSelected: []
+        leaguesSelected: [],
+        leaguesSelectedLoaded: false
     };
 
     $scope.PlayerPartnersPopup = {
@@ -1699,7 +1736,7 @@ angular.module('Sportomatics')
     };
 
     $scope.lineCheck = function(e) {
-        var defaultValue = '[0,1,2,3]',
+        var defaultValue = '',
             isDefault;
         isDefault = $(e).attr('value') === defaultValue;
         if ($(e).is(':checked')) {
