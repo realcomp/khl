@@ -290,7 +290,7 @@ class PlayerCoachJudge(models.Model):
         verbose_name_plural=verbose_name
 
 
-class Arena(TitleBaseModel):
+class Arena(AdminLinkMixin, TitleBaseModel):
     objects = managers.arena.ArenaQuerySet.as_manager()
     capacity = models.PositiveIntegerField(_('Capacity'), null=True)
     coords = models.CharField(_('Latitude and Longitude'),

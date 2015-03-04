@@ -17,6 +17,7 @@ from relatives.utils import object_link
 from base.admin import AutocompleteFieldFilter, SimpleRangeFilter, BaseForm
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin, BaseListAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
+from base.admin import YesNoListFilter
 
 from .forms import TimelineForm
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
@@ -166,11 +167,12 @@ def obj_color_text(obj):
 class ClubAdmin(NoActionMixin, BaseAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
                 ClubTitleAliasInline,)# ClubSocialsInline)
-    list_display = ('ru_title', 'addresscity', 'has_en_title', 'has_address',
+    list_display = ('ru_title', 'address', 'has_en_title', 'has_address',
                     'has_head_coach', 'has_help_coaches', 'has_opening_dt',
                     'has_logo', '_arena', '_farm_club', '_junior_club', '_site',
                     '_email', '_phone', '_css', '_socials')
-    list_filter = ('ru_title', 'coach','league', 'site', 'arena',)
+    list_filter = ('ru_title', 'coach','league', 'site', 
+                    ('arena', YesNoListFilter),)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields + ('title', 'instagram_photo_link')
     #list_editable = 'league',
@@ -182,12 +184,6 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
                 'players', 'style', 'rgb', 'instagram_photo_link',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
-
-    def addresscity(self, obj):
-        if obj:
-            return '{}'.format(obj.address and obj.address.city)
-    addresscity.short_description = _('City')
-    addresscity.allow_tags = True
 
     def has_en_title(self, obj):
         if obj:
@@ -234,7 +230,10 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
     def _arena(self, obj):
         if obj:
             color, text = obj_color_text(obj.arena)
-            text = obj.arena or text
+            if obj.arena:
+                text = format_html('<a href="{}">{}</a>',
+                                    obj.arena.admin_change_link(),
+                                    obj.arena)
             return format_html('<p style="color:{}">{}</p>', color, text)
     _arena.short_description = _('ARENA')
     _arena.allow_tags = True
@@ -265,8 +264,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
         if obj:
             color, text = obj_color_text(obj.site)
             if obj.site:
-                text = format_html('<a href="{}">{}({})</a>',obj.site, text,
-                                    obj.site)
+                text = format_html('<a href="{}">{}</a>',obj.site, text)
             return format_html('<p style="color:{}">{}</p>', color, text)
     _site.short_description = _('WWW')
     _site.allow_tags = True

@@ -163,6 +163,38 @@ class SimpleRangeFilter(admin.filters.FieldListFilter):
             return queryset
 #admin.filters.FieldListFilter.register( lambda f: True, SimpleRangeFilter)
 
+#class YesNoListFilter(admin.SimpleListFilter):
+    #parameter_name = 'id'
+    #def lookups(self, request, model_admin):
+        #return (
+            #(False, _('Yes')),
+            #(True, _('No')),
+        #)
+    #def queryset(self, request, queryset):
+        #name = '{}__isnull'.format(self.parameter_name)
+        #fltr=dict()
+        #fltr[name] = self.value()
+        #return queryset.filter(**fltr)
+class YesNoListFilter(admin.BooleanFieldListFilter):
+    def __init__(self, field, request, params, model, model_admin, field_path):
+        super(YesNoListFilter, self).__init__(field,
+                                request, params, model, model_admin, field_path)
+        self.lookup_kwarg = '%s__isnull' % field_path
+        self.lookup_kwarg2 = self.lookup_kwarg
+
+    def choices(self, cl):
+        for lookup, title in (
+                                (None, _('All')),
+                                ('1', _('No')),
+                                ('0', _('Yes'))
+        ):
+            yield {
+                'selected': self.lookup_val == lookup and not self.lookup_val2,
+                'query_string': cl.get_query_string({self.lookup_kwarg: lookup,
+                                                    }, [self.lookup_kwarg2]),
+                'display': title,
+            }
+
 
 for m in (TitleAlias, Season, SocialNetValue, InstagramImageFile):
     admin.site.register(m, BaseAdmin)
