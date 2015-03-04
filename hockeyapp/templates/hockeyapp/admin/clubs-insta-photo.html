@@ -385,6 +385,7 @@
                 if(event && event.currentTarget)
                 $scope.PhotoPopup.domIndex = parseInt(angular.element(event.currentTarget).attr('id'));
                 $scope.PhotoPopup.data = ArenaInstaPhoto.get({id:id}, function(photo) {
+                    if(photo.processed) return (position === 'next') ? $scope.nextPhoto() : $scope.prevPhoto();
                     $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user});
                     $scope.PhotoPopup.userStr = photo.photo.user_str;
                     $(".instagram-user-str").val(photo.photo.user_str);
@@ -489,6 +490,7 @@
                                 $scope.clearPopupFields();
                                 $('.overlay-black').css('visibility', 'hidden');
                                 $("#item_id_aip_" + $scope.PhotoPopup.domIndex.toString()).css('opacity', '0');
+                                $scope.nextPhoto();
                             });
                         }())
                     } else {
