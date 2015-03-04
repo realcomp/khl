@@ -30,6 +30,7 @@
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-photos" %}
             <div class="page-inner-container" ng-controller="PhotosController">
+
                 {% verbatim %} <!-- Popup -->
                 <div id="#switcher" class=" player-partners-popup photo-popup no-transition">
                     <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
@@ -71,7 +72,7 @@
                             <div class="column">
                                 <div class="ui tabular menu content-tabs">
                                     <div class="heading">Фотографии</div>
-                                    <div class="ui selection dropdown">
+                                    <div class="ui selection dropdown" ng-show="photos.length">
                                             <input type="hidden" name="season">
                                             <div class="default text">Выберите сезон</div>
                                             <i class="dropdown icon"></i>
@@ -79,17 +80,27 @@
                                                 <div class="item" data-value="1">Текущий сезон</div>
                                                 <div class="item" data-value="0">СЕЗОН 2013-2014</div>
                                             </div>
-                                        </div>
-                                        <ul>
+                                    </div>
+                                        <ul ng-show="photos.length">
                                             <li><a href="#photos-new" class="item tab-btn" data-tab="photos-new">Сначала новые</a></li>
                                             <li><a href="#photos-popular" class="item tab-btn" data-tab="photos-popular">Сначала популярные</a></li>
                                         </ul> 
                                 </div>
                             </div>
                         </div>
+                        <div style="position:relative;text-align: center; top: 50px; right: 34px" ng-show="photoDataLoader">
+                            <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                        </div>
+
                         {% verbatim %}
+
                         <div class="row" id="photos-new" data-tab="photos-new" >
+
                             <div class="sixteen wide column">
+
+                                <div ng-show="!photos.length && !photoDataLoader" class="text-center">
+                                    Нет фотографий
+                                </div>
                                 <div class="masonry-clubs-photos masonry" style="min-height: 200px !important;">
                                     <div ng-hide="photoDataLoader" ng-repeat="item in photos track by $index" class="item" ng-class="{'w25': $index %2 === 0, 'w2': $index % 5 === 0}">
                                         <img src="{{item.photo.img.file}}" alt="" class="item-photo pointer" ng-click="PhotoPopupShow(item.id, $index, $event)">
@@ -106,7 +117,7 @@
                                 </div>
                                 <hr class="hr">
                                 <div class="align-center">
-                                    <a class="ui small green button">ПОКАЗАТЬ ЕЩЕ</a>
+                                    <a class="ui small green button" ng-show="photos.length && next_page">ПОКАЗАТЬ ЕЩЕ</a>
                                 </div>
                             </div>
                         </div>
@@ -256,7 +267,7 @@
                                 </div>
                                 <hr class="hr">
                                 <div class="align-center">
-                                    <a class="ui small green button">ПОКАЗАТЬ ЕЩЕ</a>
+                                    <a class="ui small green button" ng-show="photos.length && next_page">ПОКАЗАТЬ ЕЩЕ</a>
                                 </div>
                                 <br>
                             </div>
