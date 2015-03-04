@@ -1269,9 +1269,8 @@ angular.module('Sportomatics')
 .controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "$resource", function($scope, ClubInstaPhoto, InstagramUser, $resource){
 
         var playerClubsMasonry = $('.masonry-clubs-photos');
-
-
         var closePopupBtn = $('#close-popup-btn');
+
         closePopupBtn.on('click', function(e) {
             e.preventDefault();
             $(this).parent().hide();
@@ -1330,49 +1329,30 @@ angular.module('Sportomatics')
         };
 
         $scope.PhotoPopupShow = function(id, index, event, position){
-                //$scope.PhotoPopup.data = ClubInstaPhoto.get({id:id}, function(photo) {
             console.log(index)
             $scope.currentIndex = index;
             var photo = $scope.photos[index];
-           // console.log($scope.photos[index]);
             $scope.PhotoPopup.data = $scope.photos[index];
-            $scope.photoDataLoader = true;
-                $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user}, function(){
-                    $scope.photoDataLoader = false;
-                    $scope.PhotoPopup.userStr = photo.photo.user_str;
-                    $(".instagram-user-str").val(photo.photo.user_str);
-                    $scope.PhotoPopup.data.players = '';
-                    /*if(photo.arena){
-                     $scope.PhotoPopup.arena = Arena.get({id:photo.arena}, function(arena){
-                     $.each(arena.club_set, function(index, value){
-                     Club.get({id:value}, function(club){
-                     $scope.PhotoPopup.clubSet.push(club);
-                     })
-                     })
-                     })
-                     }*/
-                    var params = {date:photo.photo.created, arena:photo.arena};
-                    $scope.lastSucceedIndex = index;
-                    /*}, function(a){
-                     console.log(a)
-                     });*/
-                    $scope.PhotoPopup.index = index;
-                    $('.overlay-black').css('visibility', 'visible');
-                    $('.photo-popup').show();
-                });
+            $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user}, function(){
+
+            });
+            $scope.PhotoPopup.userStr = photo.photo.user_str;
+            $(".instagram-user-str").val(photo.photo.user_str);
+            $('.overlay-black').css('visibility', 'visible');
+            $('.photo-popup').show();
+            $scope.PhotoPopup.index = index;
 
         };
         $scope.nextPhoto = function(){
             var index = $scope.PhotoPopup.index + 1;
+            $scope.currentIndex++;
             if($scope.photos[index]){
-                $scope.PhotoPopup.domIndex = $scope.photos[index].id;
                 $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'next');
             }
         };
         $scope.prevPhoto = function(){
             var index = $scope.PhotoPopup.index - 1;
             if($scope.photos[index]){
-                $scope.PhotoPopup.domIndex = $scope.photos[index].id;
                 $scope.PhotoPopupShow($scope.photos[index].id, index, null, 'prev');
             }
         };

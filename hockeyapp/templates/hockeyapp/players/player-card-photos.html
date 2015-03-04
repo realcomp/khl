@@ -32,12 +32,12 @@
                 <div id="#switcher" class=" player-partners-popup photo-popup no-transition">
                     <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
                     <div>
-                        <div style="display: inline-block;">
+                        <div style="display: inline-block; width: 645px">
                             <div class="rightleft" ng-show="currentIndex !== 0">
                                 <i class="fa fa-angle-left photo-prev" ng-click="prevPhoto()"></i>
                             </div>
                             <img alt="" class="item-photo popup-photo float-left" ng-src="{{ PhotoPopup.data.photo.img.file }}">
-                            <div class="rightleft" ng-show="currentIndex !== 3 ">
+                            <div class="rightleft" ng-show="currentIndex !== photos.length - 1 ">
                                 <i class="fa fa-angle-right photo-next" ng-click="nextPhoto()"></i>
                             </div>
                         </div>

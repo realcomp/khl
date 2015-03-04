@@ -4993,6 +4993,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .inline-block{
     display: inline-block;
 }
+.block{
+    display: block !important;
+}
 .ui.breadcrumb a:last-of-type{
     text-decoration: none !important;
 }
@@ -5475,7 +5478,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .photo-popup{
     border: 1px;
     max-width: 1500px !important;
-    min-width: 1200px;
+    min-width: 1100px;
     padding: 0 !important;
     position: fixed;
     top: 0;
