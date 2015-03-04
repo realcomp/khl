@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import  Q, Avg, Sum
-from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -24,7 +23,7 @@ from . import managers
 
 def rgb_validator(value):
     if not re.match(r'^rgba\([0-9]+,[0-9]+,[0-9]+\,[0-9]+\.[0-9]+\)$', value):
-        raise ValidationError('Incorrect format. Expected `rgb(#,#,#, #opacity)`.')
+        raise ValidationError('Incorrect format. Expected `rgba(#,#,#, #opacity)`.')
 
 
 class AbstractMan(LocaleAttrMixin, models.Model):
@@ -356,7 +355,7 @@ class League(TitleBaseModel):
         verbose_name_plural=_('Leagues')
 
 
-class Club(TitleBaseModel):
+class Club(AdminLinkMixin, TitleBaseModel):
     objects = managers.club.ClubQuerySet.as_manager()
     opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
     closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
@@ -462,15 +461,6 @@ class Club(TitleBaseModel):
 
     def get_instagam_photo(self):
         return self.pk and self.arenainstaphoto_set.club_photo(self)
-
-    def instagram_photo_link(self):
-        link = reverse('hockeyapp:club-insta-photo')
-        link = link +'?club={}&processed=1'.format(self.pk)
-        if self.get_instagam_photo():
-            return format_html('<a href="{}">{}</a>', link, 
-                                _('Club instagram photo link')
-            )
-    instagram_photo_link.allow_tags = True
 
     class Meta:
         verbose_name = _('Club')

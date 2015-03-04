@@ -5,7 +5,9 @@ import itertools
 
 from django import forms
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
 from django_select2 import Select2MultipleWidget
@@ -152,10 +154,23 @@ class ClubSocialsInline(admin.TabularInline):
     model = ClubSocial
     fields = ('url', 'stype')
 
-class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
+GREEN = '#51a351;'
+RED = '#b94a48;'
+
+def obj_color_text(obj):
+    if obj:
+        return GREEN, _('Yes')
+    else:
+        return RED, _('No')
+
+class ClubAdmin(NoActionMixin, BaseAdmin):
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
                 ClubTitleAliasInline,)# ClubSocialsInline)
-    list_display = ('ru_title', 'address', 'coach','league', 'site', 'arena',)
+    list_display = ('ru_title', 'addresscity', 'has_en_title', 'has_address',
+                    'has_head_coach', 'has_help_coaches', 'has_opening_dt',
+                    'has_logo', '_arena', '_farm_club', '_junior_club', '_site',
+                    '_email', '_phone', '_css', '_socials')
+    list_filter = ('ru_title', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields + ('title', 'instagram_photo_link')
     #list_editable = 'league',
@@ -167,6 +182,136 @@ class ClubAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
                 'players', 'style', 'rgb', 'instagram_photo_link',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
+
+    def addresscity(self, obj):
+        if obj:
+            return '{}'.format(obj.address and obj.address.city)
+    addresscity.short_description = _('City')
+    addresscity.allow_tags = True
+
+    def has_en_title(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.en_title)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    has_en_title.short_description = _('TE')
+    has_en_title.allow_tags = True
+
+    def has_address(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.address)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    has_address.short_description = _('ADR')
+    has_address.allow_tags = True
+
+    def has_head_coach(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.coach)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    has_head_coach.short_description = _('HEAD C')
+    has_head_coach.allow_tags = True
+
+    def has_help_coaches(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.coaches.exists())
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    has_help_coaches.short_description = _('HELP C')
+    has_help_coaches.allow_tags = True
+
+    def has_opening_dt(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.opening_dt)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    has_opening_dt.short_description = _('FD')
+    has_opening_dt.allow_tags = True
+
+    def has_logo(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.logo)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    has_logo.short_description = _('LOGO')
+    has_logo.allow_tags = True
+
+    def _arena(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.arena)
+            text = obj.arena or text
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _arena.short_description = _('ARENA')
+    _arena.allow_tags = True
+
+    def _farm_club(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.farm_club)
+            if obj.farm_club:
+                text = format_html('<a href="{}">{}</a>',
+                                    obj.farm_club.admin_change_link(),
+                                    obj.farm_club)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _farm_club.short_description = _('FARM')
+    _farm_club.allow_tags = True
+
+    def _junior_club(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.junior_club)
+            if obj.junior_club:
+                text = format_html('<a href="{}">{}</a>',
+                                    obj.junior_club.admin_change_link(),
+                                    obj.junior_club)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _junior_club.short_description = _('JUNIOR')
+    _junior_club.allow_tags = True
+
+    def _site(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.site)
+            if obj.site:
+                text = format_html('<a href="{}">{}({})</a>',obj.site, text,
+                                    obj.site)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _site.short_description = _('WWW')
+    _site.allow_tags = True
+
+    def _email(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.email)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _email.short_description = _('EMAIL')
+    _email.allow_tags = True
+
+    def _phone(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.phone)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _phone.short_description = _('PHONE')
+    _phone.allow_tags = True
+
+    def _css(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.style)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _css.short_description = _('CSS')
+    _css.allow_tags = True
+
+    def _socials(self, obj):
+        if obj:
+            res=0
+            for f in ('vk','ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut'):
+                if getattr(obj,f):
+                    res+=1
+            color, text = obj_color_text(res)
+            if res: text = res
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _socials.short_description = _('SOCIALS')
+    _socials.allow_tags = True
+
+    def instagram_photo_link(self, obj):
+        link = reverse('hockeyapp:club-insta-photo')
+        link = link +'?club={}&processed=1'.format(obj.pk)
+        if obj.get_instagam_photo():
+            return format_html('<a href="{}">{}</a>', link, 
+                                _('Club instagram photo link')
+            )
+    instagram_photo_link.allow_tags = True
 admin.site.register(Club, ClubAdmin)
 
 
