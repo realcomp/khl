@@ -386,7 +386,6 @@
                 if(event && event.currentTarget)
                 $scope.PhotoPopup.domIndex = parseInt(angular.element(event.currentTarget).attr('id'));
                 $scope.PhotoPopup.data = ArenaInstaPhoto.get({id:id}, function(photo) {
-                    console.log(photo.processed);
                     if(photo.processed && !$scope.processed) return (position === 'next') ? $scope.nextPhoto() : $scope.prevPhoto();
                     $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user});
                     $scope.PhotoPopup.userStr = photo.photo.user_str;

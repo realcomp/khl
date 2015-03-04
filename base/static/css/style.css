@@ -3710,6 +3710,15 @@ i.icon {
 .masonry .item.w2 {
   width: 40%;
 }
+.masonry .item.w30 {
+     width: 30%;
+ }
+.masonry .item.w25 {
+    width: 25%;
+}
+.masonry .item.wHalf {
+    width: 10%;
+}
 /* line 2337, ../sass/_base.sass */
 .masonry .item-add-photo-btn {
   height: 210px;

@@ -1268,6 +1268,9 @@ angular.module('Sportomatics')
 }])
 .controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "$resource", function($scope, ClubInstaPhoto, InstagramUser, $resource){
 
+        var playerClubsMasonry = $('.masonry-clubs-photos');
+
+
         var closePopupBtn = $('#close-popup-btn');
         closePopupBtn.on('click', function(e) {
             e.preventDefault();
@@ -1294,11 +1297,20 @@ angular.module('Sportomatics')
                 max_id: 10000000,
                 club: $scope.club_id
             };
+            $scope.photoDataLoader = true;
             ClubInstaPhoto.query(get_params).$promise.then(function (data) {
+                $scope.photoDataLoader = false;
                 $.each(data.results, function (index, value) {
                     $scope.photos.push(value)
                 });
-                console.log($scope.photos.length);
+                setTimeout(function(){
+                    playerClubsMasonry.imagesLoaded(function(){
+                        playerClubsMasonry.masonry({
+                            itemSelector: '.item',
+                            gutterWidth: 20
+                        })
+                    });
+                }, 100);
                 $scope.next_page = data.next_page;
                 if (!$scope.next_page && $('#nextpagebutton').length) {
                     $('#nextpagebutton').remove();

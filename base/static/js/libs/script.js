@@ -116,19 +116,11 @@ $(document).ready(function(){
 
     playerPhotosMasonry.imagesLoaded(function(){
         setTimeout(function(){
-            console.log('a')
             playerPhotosMasonry.masonry({
                 itemSelector: '.item',
                 gutterWidth: 20
             });
         }, 2000)
-    });
-
-    playerClubsMasonry.imagesLoaded(function(){
-        playerClubsMasonry.masonry({
-            itemSelector: '.item',
-            gutterWidth: 20
-        });
     });
 
     playerNewsMasonry.imagesLoaded(function(){
