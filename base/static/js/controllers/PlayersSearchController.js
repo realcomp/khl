@@ -23,7 +23,8 @@ angular.module('Sportomatics')
 
     $scope.sparams = {
         countriesSelected: [],
-        leaguesSelected: []
+        leaguesSelected: [],
+        leaguesSelectedLoaded: false
     };
 
     $scope.PlayerPartnersPopup = {
@@ -48,7 +49,7 @@ angular.module('Sportomatics')
     };
 
     $scope.lineCheck = function(e) {
-        var defaultValue = '[0,1,2,3]',
+        var defaultValue = '',
             isDefault;
         isDefault = $(e).attr('value') === defaultValue;
         if ($(e).is(':checked')) {

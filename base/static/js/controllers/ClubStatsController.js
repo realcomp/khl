@@ -14,7 +14,8 @@ angular.module('Sportomatics')
 
     $scope.sparams = {
         countriesSelected: [],
-        leaguesSelected: []
+        leaguesSelected: [],
+        leaguesSelectedLoaded: false
     };
 
     $scope.PlayerPartnersPopup = {
