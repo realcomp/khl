@@ -115,10 +115,13 @@ $(document).ready(function(){
     });
 
     playerPhotosMasonry.imagesLoaded(function(){
-        playerPhotosMasonry.masonry({
-            itemSelector: '.item',
-            gutterWidth: 20
-        });
+        setTimeout(function(){
+            console.log('a')
+            playerPhotosMasonry.masonry({
+                itemSelector: '.item',
+                gutterWidth: 20
+            });
+        }, 2000)
     });
 
     playerClubsMasonry.imagesLoaded(function(){
