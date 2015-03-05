@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import serializers
 
 from ..views.events import (
@@ -9,8 +11,8 @@ from ..views.events import (
 
 class EventSerializer(serializers.Serializer):
     date = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
-    type = serializers.CharField()
     url = serializers.URLField()
     image = serializers.URLField()
     logos = serializers.ReadOnlyField()
@@ -18,6 +20,15 @@ class EventSerializer(serializers.Serializer):
 
     def get_date(self, event):
         return event.date.strftime('%Y-%m-%dT%H:%M%Z')
+
+    def get_type(self, event):
+        request = self.context.get('request')
+        if isinstance(event, BirthdayEvent):
+            return '%s: %s %s' % (_('Birthday'), event.obj.age[0], _('years'))
+        elif isinstance(event, MatchEvent):
+            return _('Match')
+        elif isinstance(event, TimelineEvent):
+            return event.obj.get_locale_attr('headline', request=request)
 
     def get_title(self, event):
         request = self.context.get('request')
@@ -35,7 +46,9 @@ class EventSerializer(serializers.Serializer):
                 teams.reverse()
             return '{} - {}'.format(*teams)
         elif isinstance(event, TimelineEvent):
-            return event.obj.get_locale_attr('headline', request=request)
+            name = event.obj.player.get_locale_attr('name', request=request)
+            lastname = event.obj.player.get_locale_attr('lastname', request=request)
+            return '%s %s' % (lastname, name)
 
     class Meta(object):
         fields = 'date', 'title', 'type', 'url', 'image', 'logos', 'logos_urls'

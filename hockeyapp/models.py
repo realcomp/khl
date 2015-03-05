@@ -5,10 +5,13 @@ import itertools
 import re
 import urllib
 
+from dateutil import relativedelta
+
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import  Q, Avg, Sum
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -51,6 +54,15 @@ class AbstractMan(LocaleAttrMixin, models.Model):
                             editable=False)
 
     __unicode__ = lambda self: self.ru_fio
+
+    @property
+    def age(self):
+        ''' returns age as (years, months) '''
+        if self.birth_date:
+            delta = relativedelta.relativedelta(
+                timezone.now().date(), self.birth_date)
+            return delta.years, delta.months
+        return None, None
 
     def save(self, **kwargs):
         if self.ru_fio and (not self.ru_name or not self.ru_lastname):
@@ -761,6 +773,12 @@ class MatchGoalHistory(models.Model):
     guest_five_numbers = models.CharField(max_length=1024, blank=True)
 
     __unicode__ = lambda self: '{}'.format(self.pk,)
+
+    @property
+    def gamingtime(self):
+        ''' returns gamingtime in seconds '''
+        time = datetime.datetime.strptime(self.time, '%H:%M').time()
+        return (time.hour * 60 + time.minute) * 60
 
     class Meta:
         verbose_name=_('Match goal entry')

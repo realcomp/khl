@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
+
 import itertools
 import json
 
@@ -11,16 +13,19 @@ from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
 
+from .events import EventFactory
 from .mixins import PaginationMixin
 from ..filters import (
     PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter)
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, Timeline
+from ..models import (
+    Club, Player, ClubPlayer, ClubPlayerMatch, Timeline, Schedule, Timeline)
 from ..serializers import (
     CountryLeaguesSerializer,
     ClubListSerializer,
     MetricsPlayerSerializer,
 )
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
+from ..serializers.events import EventSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
     ClubTitlesSerializer)
@@ -229,3 +234,19 @@ class ClubTitlesSearch(generics.ListAPIView):
                 '%s_title__istartswith' % self.request.LANGUAGE_CODE: s,
             })
         return qs.order_by('%s_title' % self.request.LANGUAGE_CODE)
+
+
+class NewsList(generics.ListAPIView):
+    serializer_class = EventSerializer
+
+    def get_queryset(self):
+        efactory = EventFactory(sources={
+            'player': Player.objects.all(),
+            'schedule': Schedule.objects.all(),
+            'timeline': Timeline.objects.all(),
+        })
+        date = datetime.datetime.now().date()
+        if 'date' in self.request.GET:
+            date = datetime.datetime.strptime(
+                self.request.GET['date'], '%Y-%m-%d').date()
+        return efactory.get_events(date)

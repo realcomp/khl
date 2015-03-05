@@ -5,7 +5,8 @@ from . import views
 from .views import api
 
 
-urlpatterns = patterns('hockeyapp.views',
+urlpatterns = (
+    'hockeyapp.views',
     # TODO: move to separate namespace
     # REST API
     url(r'^api/leagues/$', api.LeagueList.as_view(),
@@ -36,6 +37,7 @@ urlpatterns = patterns('hockeyapp.views',
         name='club-team-compare-api'),
     url(r'^api/metrics/$', api.MetricsPlayers.as_view(),
         name='metrics-list-api'),
+    url(r'^api/news/$', api.NewsList.as_view(), name='news-list-api'),
     # Django CBV's'
     url(r'^$', views.Index.as_view(),
         name='index'),

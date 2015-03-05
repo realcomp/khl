@@ -151,70 +151,84 @@
                 </div>
             </div>
         </div>
-        <div class="ui grid">
+        <div class="ui grid"
+             ng-controller="NewsListController as NewsListCtrl">
+            <a class="hidden" id="NewsListLink"
+               href="{% url 'hockeyapp:news-list-api' %}"></a>
             <div class="row">
                 <div class="column">
                     <div class="relative">
                         <ul class="events-list">
                             <li class="event-item"><a href="#" class="event-link">Мои</a></li>
-                            <li class="event-item"><a href="#" class="event-link event-link_active">Все события ({{ events|length }})</a></li>
+                            {% verbatim %}
+                                <li class="event-item"><a href="#" class="event-link event-link_active">Все события ({{ data.length }})</a></li>
+                            {% endverbatim %}
                         </ul>
                         <div class="page-title">События</div>
                     </div>
                 </div>
             </div>
             <div class="row events-row" style="width: 80% !important;">
-                {% for event in events %}
-                    <div class="three wide column">
-                        <div class="event-block event-block_green" style="text-align: center">
-                            {% if event.image %}
-                                <a href="{{ event.url }}" style="position: relative">
-                                    <span class=" float-left ribbon">{{ event.type }}</span>
-                                    <img src="{{ event.image }}" alt="" class="event-picture">
-                                </a>
-                            {% endif %}
-                            {% if event.logos %}
-                                <div class="event-match">
-                                    <span class=" float-left match-ribbon">{{ event.type }}</span>
-                                    <div class="event-picture" style="text-align: center">
-                                        <a href="{{ event.logos_urls.0 }}" style="position: relative">
-                                            <img src="{{ event.logos.0 }}" alt="" class="event-club-logo event-club-logo-left">
-                                        </a>
-                                        <a href="{{ event.logos_urls.1 }}" style="position: relative">
-                                            <img src="{{ event.logos.1 }}" alt="" class="event-club-logo event-club-logo-right">
-                                        </a>
-                                    </div>
-                                    <div class="event-info">
-                                        <span class="event-date event-game-date">
-                                            {% lcb %} "{{ event.date }}" | date:'dd MMMM yyyy' {% rcb %}
-                                        </span>
-                                    </div>
+                <div class="three wide column"
+                     ng-repeat="column in columns">
+                    <div class="event-block"
+                         ng-show="column === 1 && data">
+                        <img src="{{ STATIC_URL }}images/welcome-banner.png" alt="" class="event-picture">
+                    </div>
+                    <div class="event-block event-block_green" style="text-align: center"
+                         ng-repeat="event in getColumn(data, limit, column)">
+                        {% verbatim %}
+                            <a href="{{ event.url }}" style="position: relative"
+                               ng-show="event.image">
+                                <span class=" float-left ribbon">{{ event.type }}</span>
+                                <img src="{{ event.image }}" alt="" class="event-picture">
+                            </a>
+                            <div class="event-match"
+                                 ng-show="event.logos">
+                                <span class=" float-left match-ribbon">{{ event.type }}</span>
+                                <div class="event-picture" style="text-align: center">
+                                    <a href="{{ event.logos_urls[0] }}" style="position: relative">
+                                        <img src="{{ event.logos[0] }}" alt="" class="event-club-logo event-club-logo-left">
+                                    </a>
+                                    <a href="{{ event.logos_urls[1] }}" style="position: relative">
+                                        <img src="{{ event.logos[1] }}" alt="" class="event-club-logo event-club-logo-right">
+                                    </a>
                                 </div>
-                            {% endif %}
+                                <div class="event-info">
+                                    <span class="event-date event-game-date">
+                                        {{ event.date|date:'dd MMMM yyyy' }}
+                                    </span>
+                                </div>
+                            </div>
                             <div class="event-info">
                                 <!--<span class="event-more"><i class="align justify icon"></i></span>-->
                                 <!-- <span class="event-label">{% trans 'Hockey' %}</span> -->
                                 <!--<span class="event-date">{{ event.date }}</span>-->
                             </div>
-                            {% if event.image %}
-                                <div class="event-title">{{ event.title }}</div>
-                            {% endif %}
-                            {% if event.logos %}
-                                <div class="event-game-title">{{ event.title }}</div>
-                            {% endif %}
+                            <div class="event-title"
+                                 ng-show="event.image">{{ event.title }}</div>
+                            <div class="event-game-title"
+                                 ng-show="event.logos">{{ event.title }}</div>
                             <!--<span class="event-views"><i class="unhide icon"></i>1206</span>
                             <span class="event-comments"><i class="comment icon"></i>10</span>-->
-                        </div>
+
+                        {% endverbatim %}
                     </div>
-                    {% if forloop.counter == 8 %}
-                        <div class="three wide column">
-                            <div class="event-block">
-                                <img src="{{ STATIC_URL }}images/welcome-banner.png" alt="" class="event-picture">
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                </div>
             </div>
+
+            <div class="row events-row">
+                <div class="column" style="text-align: center;">
+                     <img src="{{ STATIC_URL }}images/loader-large.gif"
+                          ng-hide="loaded" />
+                     <a href="" class="event-link event-link_active"
+                        ng-click="next()"
+                        ng-show="loaded && hasNext()">
+                         показать еще 50
+                     </a>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>

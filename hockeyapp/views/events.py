@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 '''
 
 import datetime
+import random
 
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -42,10 +43,6 @@ class Event(object):
     def logos_urls(self):
         pass
 
-    @property
-    def type(self):
-        pass
-
 
 class BirthdayEvent(Event):
     """
@@ -59,10 +56,6 @@ class BirthdayEvent(Event):
     def image(self):
         return self.obj.photo.url
 
-    @property
-    def type(self):
-        return _('Birthday')
-
 
 class MatchEvent(Event):
     """
@@ -70,10 +63,6 @@ class MatchEvent(Event):
     """
     def __init__(self, date, obj):
         super(MatchEvent, self).__init__(obj.date.date(), obj)
-
-    @property
-    def type(self):
-        return _('Match')
 
 
 class HomeMatchEvent(MatchEvent):
@@ -118,10 +107,6 @@ class TimelineEvent(Event):
     def image(self):
         return self.obj.player.photo and self.obj.player.photo.url
 
-    @property
-    def type(self):
-        return _('Event')
-
 
 class EventFactory(object):
     '''
@@ -138,8 +123,7 @@ class EventFactory(object):
         events += self.get_home_match_events(date)
         events += self.get_guest_match_events(date)
         events += self.get_timeline_events(date)
-        # import random
-        # random.shuffle(events)
+        random.shuffle(events)
         return events
 
     def get_birthday_events(self, date):
@@ -156,33 +140,29 @@ class EventFactory(object):
         return events
 
     def get_home_match_events(self, date):
-        events = []
         schedules = self.sources.get('schedule')
         if schedules:
             for schedule in schedules.filter(
                     date__gte=date,
                     date__lte=date + datetime.timedelta(days=7)):
-                events.append(HomeMatchEvent(date, schedule))
-        return events
+                yield HomeMatchEvent(date, schedule)
 
     def get_guest_match_events(self, date):
-        events = []
         schedules = self.sources.get('schedule')
         if schedules:
             for schedule in schedules.filter(
                     date__gte=date,
                     date__lte=date + datetime.timedelta(days=7)):
-                events.append(GuestMatchEvent(date, schedule))
-        return events
+                yield GuestMatchEvent(date, schedule)
 
     def get_timeline_events(self, date):
-        events = []
         timelines = self.sources.get('timeline')
+        days = 14
         q_completed_event = Q(
-            start_date__gte=date - datetime.timedelta(days=7),
+            start_date__gte=date - datetime.timedelta(days=days),
             end_date__isnull=True)
         q_recent_running_event = Q(
-            start_date__gte=date - datetime.timedelta(days=7),
+            start_date__gte=date - datetime.timedelta(days=days),
             end_date__isnull=False)
         # q_running_event = Q(
         #     start_date__lte=date,
@@ -190,5 +170,4 @@ class EventFactory(object):
         if timelines:
             for timeline in timelines.filter(
                     q_completed_event | q_recent_running_event):
-                events.append(TimelineEvent(date, timeline))
-        return events
+                yield TimelineEvent(date, timeline)

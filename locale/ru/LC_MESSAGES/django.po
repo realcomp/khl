@@ -2116,10 +2116,8 @@ msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 msgstr "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЭЮЯ"
 
 #: hockeyapp/views/events.py:64
-#, fuzzy
-#| msgid "Birth date"
 msgid "Birthday"
-msgstr "Дата рождения"
+msgstr "День рождения"
 
 #: hockeyapp/views/events.py:123
 msgid "Event"

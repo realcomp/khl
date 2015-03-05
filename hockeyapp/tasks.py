@@ -705,55 +705,44 @@ def player_generate_timeline(ids):
                 itertools.chain(*timelines.values()))
 
     def first_club_goal_event(players):
-        club_changes = (
-            models.Timeline.objects
-            .filter(type='club_change', player__in=players))
-
         for player in players:
-            player_club_changes = club_changes.filter(player=player)
-
-            timelines = (
-                models.Timeline.objects
-                .filter(type='first_club_goal', player=player))
-            if timelines.exists():
-                # ~Q & ~Q & ~Q
-                q_existing = reduce(operator.and_, map(
-                    lambda x: ~Q(start_date=x.start_date, club=x.club),
-                    timelines))
-                player_club_changes = player_club_changes.filter(q_existing)
-
-            for club_change in player_club_changes:
+            clubplayers = player.clubplayer_set.all()
+            timelines = models.Timeline.objects.filter(
+                player=player, type='first_club_goal')
+            clubs = (
+                models.Club.objects
+                .filter(pk__in=clubplayers.values_list('club', flat=True))
+                .exclude(pk__in=timelines.values_list('club', flat=True)))
+            for club in clubs:
                 try:
                     history = (
                         models.MatchGoalHistory.objects
-                        .filter(
-                            scorer=club_change.player,
-                            match__date__gte=club_change.start_date,
-                            match__date__lte=club_change.end_date)
-                        .by_club(club_change.club, club_change.player)
+                        .filter(scorer=player)
+                        .by_club(club, player)
                         .earliest('match__date'))
                 except models.MatchGoalHistory.DoesNotExist:
                     pass
                 else:
-                    ru_club = club_change.club.ru_title
-                    en_club = club_change.club.en_title
+                    ru_club = club.ru_title
+                    en_club = club.en_title
                     models.Timeline.objects.get_or_create(
                         start_date=history.match.date,
                         ru_headline='Первая шайба в клубе "%s"' % ru_club,
                         en_headline='First goal in a club "%s"' % en_club,
                         ru_text='Первая шайба в клубе "%s"' % ru_club,
                         en_text='First goal in a club "%s"' % en_club,
-                        media=club_change.club.logo,
+                        media=club.logo,
                         type='first_club_goal',
-                        player=club_change.player,
-                        club=club_change.club)
+                        player=player,
+                        club=club)
 
     def series_0_loose_goals_event(players):
         for player in players:
             matches = (
                 models.ClubPlayerMatch.objects
                 .filter(
-                    clubplayer__player=player, clubplayer__line=1)
+                    clubplayer__player=player, clubplayer__line=1,
+                    gamingtime__gt=0)
                 .order_by('match__date'))
             i = 0
             for match in matches:
