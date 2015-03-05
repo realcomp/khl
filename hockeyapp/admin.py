@@ -304,7 +304,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
 
     def instagram_photo_link(self, obj):
         link = reverse('hockeyapp:club-insta-photo')
-        link = link +'?club={}&processed=1'.format(obj.pk)
+        link = link +'#?club={}&processed=1'.format(obj.pk)
         if obj.get_instagam_photo():
             return format_html('<a href="{}">{}</a>', link, 
                                 _('Club instagram photo link')
