@@ -171,8 +171,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
                     'has_head_coach', 'has_help_coaches', 'has_opening_dt',
                     'has_logo', '_arena', '_farm_club', '_junior_club', '_site',
                     '_email', '_phone', '_css', '_socials')
-    list_filter = ('ru_title', 'coach','league', 'site', 
-                    ('arena', YesNoListFilter),)
+    list_filter = ('ru_title', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields + ('title', 'instagram_photo_link')
     #list_editable = 'league',
@@ -304,7 +303,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
 
     def instagram_photo_link(self, obj):
         link = reverse('hockeyapp:club-insta-photo')
-        link = link +'?club={}&processed=1'.format(obj.pk)
+        link = link +'#?club={}&processed=1'.format(obj.pk)
         if obj.get_instagam_photo():
             return format_html('<a href="{}">{}</a>', link, 
                                 _('Club instagram photo link')

@@ -3,6 +3,29 @@
 
 {% block extrahead %}
     <script src="{{ STATIC_URL }}hockey/js/clubs-team.js"></script>
+    {% if object.rgb %}
+    <style>
+        .clubs-page .ui.red.button, .clubs-page .ui.red.buttons .button {
+        background-color: rgba({{object.rgb}}, 0.6) !important; /* номер игрока secondary */
+        color: #ffffff; /* подходящий цвет для текста на кнопке */
+        }
+        .clubs-page .ui.tabular.menu .item {
+        color: rgba({{object.rgb}}, 0.6); /* текст табов secondary */
+        }
+        .clubs-team-page .team-player-number{
+        background: rgba({{object.rgb}}, 0.6) !important; /* номер игрока secondary */
+        }
+        .clubs-page .heading{
+        color: rgba({{object.rgb}}, 0.6) !important; /* заголовок сезонов secondary */
+        }
+        .clubs-page .team-info .info-item .icon{
+            color: rgba(0,0,0, 1); /* иконки над меню primary */
+        }
+        .clubs-page .page-menu.ui.green.menu {
+            background: rgba(0,0,0, 1) !important; /* цвет меню primary */
+        }
+    </style>
+    {% endif %}
 {% endblock %}
 
 {% block ngapp %}SportomaticsClubsTeam{% endblock %}

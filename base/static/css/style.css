@@ -3710,6 +3710,15 @@ i.icon {
 .masonry .item.w2 {
   width: 40%;
 }
+.masonry .item.w30 {
+     width: 30%;
+ }
+.masonry .item.w25 {
+    width: 25%;
+}
+.masonry .item.wHalf {
+    width: 10%;
+}
 /* line 2337, ../sass/_base.sass */
 .masonry .item-add-photo-btn {
   height: 210px;
@@ -4944,7 +4953,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     top: 0;
     background: #ffffff;
     width: 1000px !important ;
-    z-index:99999;
+    z-index:600;
 }
 .team-name-inner{
     margin: 0 auto;
@@ -4983,6 +4992,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .inline-block{
     display: inline-block;
+}
+.block{
+    display: block !important;
 }
 .ui.breadcrumb a:last-of-type{
     text-decoration: none !important;
@@ -5393,6 +5405,11 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     max-height: 71px;
     border: 2px solid #000000;
 }
+.instagram-user-name{
+    min-width: 70px;
+    min-height: 15px;
+    font-size: 12px !important;
+}
 .instagram-arena-photo-button{
     width: 110px;
     height: 30px;
@@ -5447,7 +5464,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     position: fixed; /* Фиксированное положение */
     top: 0; /* Нулевой отступ сверху */
     width: 100%; /* Ширина максимальна */
-    z-index: 100; /* Заведомо быть НАД другими элементами */
+    z-index: 999; /* Заведомо быть НАД другими элементами */
 }
 .photo-prev{
     position: absolute;
@@ -5456,4 +5473,22 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .photo-next{
     position: absolute;
     left: 600px;
+}
+
+.photo-popup{
+    border: 1px;
+    max-width: 1500px !important;
+    min-width: 1100px;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 1000px;
+    height: 640px;
+    min-height: 640px;
+    z-index: 99999;
+    display: none;
 }

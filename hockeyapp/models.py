@@ -25,8 +25,8 @@ from .choices import CHALLENGE_TYPE
 from . import managers
 
 def rgb_validator(value):
-    if not re.match(r'^rgba\([0-9]+,[0-9]+,[0-9]+\,[0-9]+\.[0-9]+\)$', value):
-        raise ValidationError('Incorrect format. Expected `rgba(#,#,#, #opacity)`.')
+    if not re.match(r"(\d+),\s*(\d+),\s*(\d+)", value):
+        raise ValidationError('Incorrect format. Expected `#,#,#`.')
 
 
 class AbstractMan(LocaleAttrMixin, models.Model):

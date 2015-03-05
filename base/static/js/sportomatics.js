@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router'])
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router', 'ngResource'])
 .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {

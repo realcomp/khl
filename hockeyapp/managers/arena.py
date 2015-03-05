@@ -45,4 +45,4 @@ class ArenaInstaPhotoQuerySet(DataCleanMixin, models.QuerySet):
         return self.to_view().filter(club=club)
 
     def player_photo(self, player):
-        return self.to_view().filter(player__in=(player,))
+        return self.to_view().filter(players__in=(player,))
