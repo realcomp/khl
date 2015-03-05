@@ -83,7 +83,7 @@ class IIFQuerySet(GetFilerImage, models.QuerySet):
                             link=iif_obj.link,
                             data=iif_obj,
                             created=_dt,
-                            comment=iif_obj.caption and iif_obj.caption.text,
+                            comment=iif_obj.caption and iif_obj.caption.text or '',
                             img=filer_image,
                             instagram_user=self._get_instagram_user(iif_obj))
                 iif, _crt = self.get_or_create(**data)
