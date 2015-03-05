@@ -1245,7 +1245,7 @@ angular.module('Sportomatics')
     });
 }])
 .factory('PlayerInstaPhoto', ["$resource", function($resource){
-    return $resource("{% url 'api:hockey:cip_list' %}", {}, {
+    return $resource("/ru/api/hockey/playerinstaphoto/", {}, {
         query: {method:'GET', params:{processed: 1}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
@@ -1266,7 +1266,7 @@ angular.module('Sportomatics')
         get: { method: 'GET'}
     });
 }])
-.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "$resource", function($scope, ClubInstaPhoto, InstagramUser, $resource){
+.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "PlayerInstaPhoto", "$resource", function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto, $resource){
 
         var playerClubsMasonry = $('.masonry-clubs-photos');
         var closePopupBtn = $('#close-popup-btn');
@@ -1285,6 +1285,7 @@ angular.module('Sportomatics')
 
         $scope.club_id = $('#team-id').val();
         $scope.player_id = $('#player-id').val();
+
         $scope.photos = [];
         $scope.next_page = 1;
         $scope.currentIndex = 0;
@@ -1294,27 +1295,52 @@ angular.module('Sportomatics')
                 page: $scope.next_page,
                 min_id: 0,
                 max_id: 10000000,
-                club: $scope.club_id
+                club: $scope.club_id,
+                player: $scope.player_id
             };
             $scope.photoDataLoader = true;
-            ClubInstaPhoto.query(get_params).$promise.then(function (data) {
-                $scope.photoDataLoader = false;
-                $.each(data.results, function (index, value) {
-                    $scope.photos.push(value)
-                });
-                setTimeout(function(){
-                    playerClubsMasonry.imagesLoaded(function(){
-                        playerClubsMasonry.masonry({
-                            itemSelector: '.item',
-                            gutterWidth: 20
-                        })
+            if($scope.club_id){
+                ClubInstaPhoto.query(get_params).$promise.then(function (data) {
+                    $scope.photoDataLoader = false;
+                    $.each(data.results, function (index, value) {
+                        $scope.photos.push(value)
                     });
-                }, 100);
-                $scope.next_page = data.next_page;
-                if (!$scope.next_page && $('#nextpagebutton').length) {
-                    $('#nextpagebutton').remove();
-                }
-            });
+                    setTimeout(function(){
+                        playerClubsMasonry.imagesLoaded(function(){
+                            playerClubsMasonry.masonry({
+                                itemSelector: '.item',
+                                gutterWidth: 20
+                            })
+                        });
+                    }, 100);
+                    $scope.next_page = data.next_page;
+                    if (!$scope.next_page && $('#nextpagebutton').length) {
+                        $('#nextpagebutton').remove();
+                    }
+                });
+            } else if ($scope.player_id){
+                PlayerInstaPhoto.query(get_params).$promise.then(function (data) {
+                    $scope.photoDataLoader = false;
+                    $.each(data.results, function (index, value) {
+                        $scope.photos.push(value)
+                    });
+                    setTimeout(function(){
+                        playerClubsMasonry.imagesLoaded(function(){
+                            playerClubsMasonry.masonry({
+                                itemSelector: '.item',
+                                gutterWidth: 20
+                            })
+                        });
+                    }, 100);
+                    $scope.next_page = data.next_page;
+                    if (!$scope.next_page && $('#nextpagebutton').length) {
+                        $('#nextpagebutton').remove();
+                    }
+                }, function(){
+                    $scope.photoDataLoader = false;
+                });
+            }
+
         };
 
         $scope.nextPage = function(){
