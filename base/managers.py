@@ -79,11 +79,13 @@ class IIFQuerySet(GetFilerImage, models.QuerySet):
                 iif = self.filter(instagram_id=iif_obj.id).last()
             else:
                 _dt = timezone.make_aware(iif_obj.created_time, current_tz)
+                _cmnt = iif_obj.caption and iif_obj.caption.text or ''
+                if len(_cmnt) > 1024: _cmnt = _cmnt[:1024]
                 data = dict(instagram_id=iif_obj.id,
                             link=iif_obj.link,
                             data=iif_obj,
                             created=_dt,
-                            comment=iif_obj.caption and iif_obj.caption.text or '',
+                            comment=_cmnt,
                             img=filer_image,
                             instagram_user=self._get_instagram_user(iif_obj))
                 iif, _crt = self.get_or_create(**data)
