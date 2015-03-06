@@ -45,7 +45,7 @@ class Event(object):
 
     @property
     def rgb(self):
-        return '48,120,42'
+        return '#3078a2'
 
 
 class BirthdayEvent(Event):
