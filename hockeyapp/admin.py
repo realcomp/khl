@@ -121,7 +121,7 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     )
     list_filter = ( ('khl_id', AutocompleteFieldFilter), 
                     ('ru_fio', AutocompleteFieldFilter),
-                    'line', 
+                    'line', 'pos',
                     ('weight', SimpleRangeFilter),
                     ('height', SimpleRangeFilter),
                     ('birth_date', DateRangeFilter),

@@ -145,6 +145,27 @@ def rhockey_players_parser():
 
 
 @app.task(ignore_result=True, track_started=True)
+def probrosanet_player_parser(player):
+    try:
+        d = parsers.player.ProbrosanetPlayerInfoParser().get_page(player.khl_id)
+        if d.get('pos'):
+            player.pos = d['pos']
+            player.save(update_fields=['pos'])
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def probrosanet_players_parser():
+    plrs = models.Player.objects.filter(line=3, khl_id__isnull=False)
+    for obj in plrs:
+        try:
+            probrosanet_player_parser.delay(obj)
+        except Exception, exc:
+            logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
 def async_hockey_player_update(id, parser_id):
     b'''
         Обновление инфо о игроке
