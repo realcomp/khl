@@ -181,7 +181,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
     fields = (  'ru_title', 'en_title', 'title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
-                'players', 'style', 'rgb', 'instagram_photo_link',
+                'players', 'rgb', 'instagram_photo_link',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
 
     def has_en_title(self, obj):

@@ -180,14 +180,14 @@
                         {% verbatim %}
                             <a href="{{ event.url }}" style="position: relative"
                                ng-show="event.image">
-                                <span class=" float-left ribbon" style="background: rgba({{ event.rgb }}, 0.9)">
+                                <span class=" float-left ribbon" style="background: {{ event.rgb }};">
                                     {{ event.type }}
                                 </span>
                                 <img src="{{ event.image }}" alt="" class="event-picture">
                             </a>
                             <div class="event-match"
                                  ng-show="event.logos">
-                                <span class=" float-left match-ribbon" style="background: rgba({{ event.rgb }}, 0.9)">
+                                <span class=" float-left match-ribbon" style="background: {{ event.rgb }};">
                                     {{ event.type }}
                                 </span>
                                 <div class="event-picture" style="text-align: center">

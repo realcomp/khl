@@ -29,6 +29,11 @@ def rgb_validator(value):
         raise ValidationError('Incorrect format. Expected `#,#,#`.')
 
 
+def hex_validator(value):
+    if not re.match(r'#[0-9a-fA-F]{6}', value):
+        raise ValidationError('Incorrect format. Expected hex.')
+
+
 class AbstractMan(LocaleAttrMixin, models.Model):
     ru_fio = models.CharField(_('Full name (rus)'), max_length=4096, blank=True)
     ru_name = models.CharField(_('Name (rus)'), max_length=4096, blank=True, null=True)
@@ -386,7 +391,8 @@ class Club(AdminLinkMixin, TitleBaseModel):
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
     rgb = models.CharField(_('RGB'), blank=True, null=True, max_length=255,
-                            help_text=_('Color hex. Example: #00ffaa'))
+                            help_text=_('Color hex. Example: #00ffaa'),
+                            validators=[hex_validator])
     #socials
     vk = models.URLField('VK account URL', blank=True, max_length=1024)
     ok = models.URLField('OK account URL', blank=True, max_length=1024)
