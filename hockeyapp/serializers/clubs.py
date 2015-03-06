@@ -21,6 +21,7 @@ from ..models import Club, ClubPlayer, Coach, Player, League, LeagueClub
 
 
 class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
+    url = serializers.ReadOnlyField(source='get_absolute_url')
     line_display = serializers.ReadOnlyField(source='get_line_display')
     birth_date_short = serializers.SerializerMethodField()
     citizenship = CountrySerializer()
