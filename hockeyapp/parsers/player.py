@@ -508,7 +508,7 @@ class RhockeyPlayerInfoParser(GrabParser):
                     plrs = model.objects.filter(fio=fio)
                     data.pop('birth_date', None)
                 if plrs.exists():
-                    plrs.update(data)
+                    plrs.update(**data)
 
     def get_page(self, id=None):
         b'''  смотрим протокол матча '''
@@ -541,7 +541,8 @@ class RhockeyPlayerInfoParser(GrabParser):
             _res = _res[0].strip().split()
             if len(_res) > 1:
                 _res = _res[1].strip('.')
-                return datetime.datetime.strptime(_res, '%d.%m.%Y')
+                if _res:
+                    return datetime.datetime.strptime(_res, '%d.%m.%Y')
         return ''
 
     def get_birth_place(self):
