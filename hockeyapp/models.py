@@ -386,7 +386,7 @@ class Club(AdminLinkMixin, TitleBaseModel):
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
     rgb = models.CharField(_('RGB'), blank=True, null=True, max_length=255,
-                            validators=[rgb_validator,])
+                            help_text=_('Color hex. Example: #00ffaa'))
     #socials
     vk = models.URLField('VK account URL', blank=True, max_length=1024)
     ok = models.URLField('OK account URL', blank=True, max_length=1024)

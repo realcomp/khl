@@ -170,7 +170,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
     list_display = ('ru_title', 'address', 'has_en_title', 'has_address',
                     'has_head_coach', 'has_help_coaches', 'has_opening_dt',
                     'has_logo', '_arena', '_farm_club', '_junior_club', '_site',
-                    '_email', '_phone', '_css', '_socials')
+                    '_email', '_phone', '_rgb', '_socials')
     list_filter = ('ru_title', 'coach','league', 'site', 'arena',)
     linked_m2m_readonly_fields = ('players', 'coaches')
     readonly_fields = linked_m2m_readonly_fields + ('title', 'instagram_photo_link')
@@ -288,6 +288,13 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
             return format_html('<p style="color:{}">{}</p>', color, text)
     _css.short_description = _('CSS')
     _css.allow_tags = True
+
+    def _rgb(self, obj):
+        if obj:
+            color, text = obj_color_text(obj.rgb)
+            return format_html('<p style="color:{}">{}</p>', color, text)
+    _rgb.short_description = _('RGB')
+    _rgb.allow_tags = True
 
     def _socials(self, obj):
         if obj:
