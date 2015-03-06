@@ -183,7 +183,7 @@
                                 <span class=" float-left ribbon" style="background: {{ event.rgb }};">
                                     {{ event.type }}
                                 </span>
-                                <img src="{{ event.image }}" alt="" class="event-picture">
+                                <img ng-src="{{ event.image }}" alt="" class="event-picture">
                             </a>
                             <div class="event-match"
                                  ng-show="event.logos">
@@ -192,10 +192,10 @@
                                 </span>
                                 <div class="event-picture" style="text-align: center">
                                     <a href="{{ event.logos_urls[0] }}" style="position: relative">
-                                        <img src="{{ event.logos[0] }}" alt="" class="event-club-logo event-club-logo-left">
+                                        <img ng-src="{{ event.logos[0] }}" alt="" class="event-club-logo event-club-logo-left">
                                     </a>
                                     <a href="{{ event.logos_urls[1] }}" style="position: relative">
-                                        <img src="{{ event.logos[1] }}" alt="" class="event-club-logo event-club-logo-right">
+                                        <img ng-src="{{ event.logos[1] }}" alt="" class="event-club-logo event-club-logo-right">
                                     </a>
                                 </div>
                                 <div class="event-info">
