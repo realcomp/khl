@@ -1232,7 +1232,6 @@ angular.module('Sportomatics')
     this.search();
 }])
 angular.module('Sportomatics')
-<<<<<<< HEAD
 .controller('NewsListController', [
     '$http', '$scope', '$location',
     function($http, $scope, $location) {
@@ -1284,7 +1283,7 @@ angular.module('Sportomatics')
     $scope.list($scope);
 }]);
 
-=======
+angular.module('Sportomatics')
     .config(['$resourceProvider', function($resourceProvider) {
         // Don't strip trailing slashes from calculated URLs
         $resourceProvider.defaults.stripTrailingSlashes = false;
@@ -1438,7 +1437,6 @@ angular.module('Sportomatics')
 
         $scope.getPage();
 }])
->>>>>>> 2377a353bb030cc4b6038a780d329b259209f209
 angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", "$q", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {
     //http://www.amcharts.com/lib/images/

@@ -5,7 +5,7 @@ from . import views
 from .views import api
 
 
-urlpatterns = (
+urlpatterns = patterns(
     'hockeyapp.views',
     # TODO: move to separate namespace
     # REST API
