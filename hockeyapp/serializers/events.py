@@ -15,6 +15,7 @@ class EventSerializer(serializers.Serializer):
     title = serializers.SerializerMethodField()
     url = serializers.URLField()
     image = serializers.URLField()
+    rgb = serializers.ReadOnlyField()
     logos = serializers.ReadOnlyField()
     logos_urls = serializers.ReadOnlyField()
 
@@ -51,4 +52,6 @@ class EventSerializer(serializers.Serializer):
             return '%s %s' % (lastname, name)
 
     class Meta(object):
-        fields = 'date', 'title', 'type', 'url', 'image', 'logos', 'logos_urls'
+        fields = (
+            'date', 'title', 'type', 'url', 'image', 'logos', 'logos_urls',
+            'rgb')

@@ -10,7 +10,7 @@ from dateutil import relativedelta
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import  Q, Avg, Sum
+from django.db.models import Q, Avg, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
