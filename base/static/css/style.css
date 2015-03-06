@@ -5403,7 +5403,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     max-width: 180px;
     height: 71px;
     max-height: 71px;
-    border: 2px solid #000000;
+    border: 1px solid #c0c0c0;
 }
 .instagram-user-name{
     min-width: 70px;
