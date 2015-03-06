@@ -28,7 +28,7 @@ class Event(object):
         pass
 
     @property
-    def url(self):
+    def type(self):
         pass
 
     @property
@@ -42,6 +42,10 @@ class Event(object):
     @property
     def logos_urls(self):
         pass
+
+    @property
+    def rgb(self):
+        return '48,120,42'
 
 
 class BirthdayEvent(Event):
@@ -84,6 +88,10 @@ class HomeMatchEvent(MatchEvent):
             'hockeyapp:club-news', kwargs={'pk': pk}),
             (self.obj.home_team_id, self.obj.guest_team_id))
 
+    @property
+    def rgb(self):
+        return self.obj.home_team.rgb or super(HomeMatchEvent, self).rgb
+
 
 class GuestMatchEvent(HomeMatchEvent):
     """
@@ -97,6 +105,10 @@ class GuestMatchEvent(HomeMatchEvent):
     def logos_urls(self):
         return reversed(super(GuestMatchEvent, self).logos_urls)
 
+    @property
+    def rgb(self):
+        return self.obj.guest_team.rgb or super(GuestMatchEvent, self).rgb
+
 
 class TimelineEvent(Event):
     @property
@@ -106,6 +118,12 @@ class TimelineEvent(Event):
     @property
     def image(self):
         return self.obj.player.photo and self.obj.player.photo.url
+
+    @property
+    def rgb(self):
+        return (
+            (self.obj.club and self.obj.club.rgb) or
+            super(TimelineEvent, self).rgb)
 
 
 class EventFactory(object):
@@ -157,7 +175,7 @@ class EventFactory(object):
 
     def get_timeline_events(self, date):
         timelines = self.sources.get('timeline')
-        days = 14
+        days = 7
         q_completed_event = Q(
             start_date__gte=date - datetime.timedelta(days=days),
             end_date__isnull=True)
