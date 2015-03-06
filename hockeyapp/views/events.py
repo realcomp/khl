@@ -54,7 +54,7 @@ class BirthdayEvent(Event):
 
     @property
     def image(self):
-        return self.obj.photo.url
+        return self.obj.photo and self.obj.photo.url
 
 
 class MatchEvent(Event):
