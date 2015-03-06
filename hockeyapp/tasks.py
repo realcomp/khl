@@ -126,7 +126,7 @@ def async_hockey_matches_parser(parser_id, match_id, matches, update=False):
             logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def rhockey_player_parser(player_id):
     try:
         player_id = int(player_id)
@@ -135,11 +135,32 @@ def rhockey_player_parser(player_id):
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
+#@app.task(ignore_result=True, track_started=True)
 def rhockey_players_parser():
     for i in range(1,99748):
         try:
             rhockey_player_parser.delay(i)
+        except Exception, exc:
+            logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def probrosanet_player_parser(player):
+    try:
+        d = parsers.player.ProbrosanetPlayerInfoParser().get_page(player.khl_id)
+        if d.get('pos'):
+            player.pos = d['pos']
+            player.save(update_fields=['pos'])
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def probrosanet_players_parser():
+    plrs = models.Player.objects.filter(line=3, khl_id__isnull=False)
+    for obj in plrs:
+        try:
+            probrosanet_player_parser.delay(obj)
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
 

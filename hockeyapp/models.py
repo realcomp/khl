@@ -86,6 +86,7 @@ class Player(AbstractMan):
     number = models.CharField(_('Number'), max_length=32, blank=True)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
+    pos = models.CharField(_('Offender position'), blank=True, max_length=255)
     weight = models.CharField(_('Weight'), max_length=32, blank=True)
     height = models.CharField(_('Height'), max_length=32, blank=True)
     grip = models.CharField(_('Grip'), max_length=32, blank=True)

@@ -563,3 +563,41 @@ class RhockeyPlayerInfoParser(GrabParser):
                 if _res[1].strip() != '?':
                     return _res[1].strip()
         return ''
+
+
+class ProbrosanetPlayerInfoParser(GrabParser):
+    b''' парсер данных о игроке с сайта http://probrosa.net/ '''
+    url = 'http://probrosa.net/player.php'
+    absolute_url = url
+    as_get_param = True
+    pk_kwarg = 'id'
+    body_xpath = 'body/div/div[@id="intro"]/div[@class="fl_right"]'
+    xpath_dict = {
+                    'pos': '/table/tr',
+    }
+    model_name = 'Player'
+
+    def get_page(self, id=None):
+        b'''  смотрим протокол матча '''
+        self.page_tree = super(ProbrosanetPlayerInfoParser, self).get_page(id)
+        if self.page_tree is not None:
+            return self.get_player_all_data()
+
+    def get_player_all_data(self):
+        b'''
+            Забираем данные o игроке через DOM-дерево
+        '''
+        if self.page_tree is not None:
+            _res = {
+                    'pos': self.get_pos(),
+            }
+            return _res
+
+    def get_pos(self):
+        b''' возьмем первую школу игрока '''
+        _res = self._get_value('pos')
+        if _res:
+            for tr in _res:
+                if tr.xpath('td')[0].text.strip() == 'Позиция:':
+                    return tr.xpath('td')[1].text.strip()
+        return ''
