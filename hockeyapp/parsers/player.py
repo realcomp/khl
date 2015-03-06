@@ -7,6 +7,7 @@ import datetime
 import re
 import requests
 
+from django.db.models.loading import get_model
 
 from . import GrabParser
 from . import xpathes
@@ -475,3 +476,89 @@ class VHLPlayerInfo(MHL2PlayerInfo):
             _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
+################################################################################
+################################################################################
+################################################################################
+
+
+class RhockeyPlayerInfoParser(GrabParser):
+    b''' парсер данных о игроке с сайта http://r-hockey.ru/ '''
+    url = 'http://r-hockey.ru/player.asp'
+    absolute_url = url
+    as_get_param = True
+    pk_kwarg = 'TXT'
+    body_xpath = 'body'
+    xpath_dict = {
+                    'fio': '/span[@id="Player"]/@value',
+                    'birth_date': '/table/tr/td/table/tr/td/h3/text()',
+                    'birth_place': '/table/tr/td/table/tr/td/h3/text()',
+                    'first_school': '/table/tr/td/table/tr/td/h3/text()',
+    }
+    model_name = 'Player'
+
+    def update_player(self, other_site_id):
+        data = self.get_page(other_site_id)
+        if data:
+            model = get_model('hockeyapp', self.model_name)
+            fio = data.pop('fio', None)
+            if fio:
+                plrs = model.objects.filter(fio=fio,
+                                            birth_date__isnull=True)
+                if not plrs.exists():
+                    plrs = model.objects.filter(fio=fio)
+                    data.pop('birth_date', None)
+                if plrs.exists():
+                    plrs.update(data)
+
+    def get_page(self, id=None):
+        b'''  смотрим протокол матча '''
+        self.page_tree = super(RhockeyPlayerInfoParser, self).get_page(id)
+        if self.page_tree is not None:
+            return self.get_player_all_data()
+
+    def get_player_all_data(self):
+        b'''
+            Забираем данные o игроке через DOM-дерево
+        '''
+        if self.page_tree is not None:
+            _res = {
+                    'fio': self.get_fio(),
+                    'birth_date': self.get_birth_date(),
+                    'birth_place': self.get_birth_place(),
+                    'first_school': self.get_first_school(),
+            }
+            return _res
+
+    def get_fio(self):
+        b''' возьмем ФИО игрока '''
+        _res = self._get_value('fio')
+        return _res[0].strip() if _res else ''
+
+    def get_birth_date(self):
+        b''' возьмем дату рождения игрока '''
+        _res = self._get_value('birth_date')
+        if _res:
+            _res = _res[0].strip().split()
+            if len(_res) > 1:
+                _res = _res[1].strip('.')
+                return datetime.datetime.strptime(_res, '%d.%m.%Y')
+        return ''
+
+    def get_birth_place(self):
+        b''' возьмем место рождения игрока '''
+        _res = self._get_value('birth_place')
+        if _res:
+            _res = _res[0].strip().split()
+            if len(_res) > 2 and _res[2][0] == '(':
+                return _res[2][1:-2]
+        return ''
+
+    def get_first_school(self):
+        b''' возьмем первую школу игрока '''
+        _res = self._get_value('first_school')
+        if _res:
+            _res = _res[0].strip().split('-')
+            if len(_res) > 1:
+                if _res[1].strip() != '?':
+                    return _res[1].strip()
+        return ''

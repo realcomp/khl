@@ -96,6 +96,10 @@ class Player(AbstractMan):
     last_club = models.ForeignKey(
         'hockeyapp.Club', verbose_name=_('Club'),
         related_name='last_players', null=True)
+    birth_place = models.CharField(_('Birth place'), blank=True,
+                                    max_length=255)
+    first_school = models.CharField(_('First school'), blank=True,
+                                    max_length=255)
     #serviceinfo
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)

@@ -127,6 +127,24 @@ def async_hockey_matches_parser(parser_id, match_id, matches, update=False):
 
 
 @app.task(ignore_result=True, track_started=True)
+def rhockey_player_parser(player_id):
+    try:
+        player_id = int(player_id)
+        parsers.player.RhockeyPlayerInfoParser().update_player(player_id)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def rhockey_players_parser():
+    for i in range(1,99748):
+        try:
+            rhockey_player_parser.delay(i)
+        except Exception, exc:
+            logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
 def async_hockey_player_update(id, parser_id):
     b'''
         Обновление инфо о игроке
