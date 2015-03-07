@@ -95,24 +95,28 @@
                         {% verbatim %}
 
                         <div class="row" id="photos-new" data-tab="photos-new" >
-
                             <div class="sixteen wide column">
-
                                 <div ng-show="!photos.length && !photoDataLoader" class="text-center">
                                     Нет фотографий
                                 </div>
-                                <div class="masonry-clubs-photos masonry" style="min-height: 200px !important;">
-                                    <div ng-hide="photoDataLoader" ng-repeat="item in photos track by $index" class="item" ng-class="{'w25': $index %2 === 0, 'w2': $index % 5 === 0}">
-                                        <img src="{{item.photo.img.file}}" alt="" class="item-photo pointer" ng-click="PhotoPopupShow(item.id, $index, $event)">
-                                        <a href="#" class="item-photo-author">
+                                <div class="" style="min-height: 200px !important;">
+                                    <div ng-hide="photoDataLoader" ng-repeat="item in photos track by $index" class="item instaphoto-container">
+                                        <div class="instaphoto-wrapper">
+                                            <div class="item-data text-center instaphoto-header">
+                                                <time id="instaphoto-header-time_photo_{{$index}}" class="instaphoto-header-time">12 августа 2014</time>
+                                            </div>
+                                            <img id="photo_{{$index}}" src="{{item.photo.img.file}}" alt="" class="item-photo pointer photo-square" ng-click="PhotoPopupShow(item.id, $index, $event)">
+                                            <div class="item-info text-center instaphoto-footer">
+                                                <div id="instaphoto-footer-stats_photo_{{$index}}" class="instaphoto-footer-stats">
+                                                    <a class="item-views no-decoration"><i class="unhide icon"></i>1206</a>
+                                                    <a class="item-comments no-decoration"><i class="like icon"></i>10</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--<a href="#" class="item-photo-author">
                                             <span class="item-author-avatar"><img src="/static/images/player1.png" alt="" class="item-author-image"></span>
                                             <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
+                                        </a>-->
                                     </div>
                                 </div>
                                 <hr class="hr">

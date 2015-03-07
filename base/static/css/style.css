@@ -5492,3 +5492,60 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     z-index: 99999;
     display: none;
 }
+.photo-square{
+    width: 160px !important;
+    height: 160px !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,.4),0 1px 0 1px rgba(255,255,255,.1);
+}
+.instaphoto-container{
+    width: 20%;
+    display: inline-block;
+    color: #999;
+    padding: 5px 0 4px;
+    vertical-align: top;
+    height: 225px !important;
+}
+.text-center{
+    text-align: center;
+}
+.no-decoration{
+    text-decoration: none !important;
+}
+.display-none{
+    display: none;
+}
+.instaphoto-wrapper{
+    margin: 0 13px;
+}
+.instaphoto-header, .instaphoto-footer{
+    position: relative;
+}
+.instaphoto-header{
+    height: 20px;
+    line-height: 20px;
+    padding-bottom: 6px;
+}
+.instaphoto-header-time, .instaphoto-footer-stats{
+    -webkit-transition: opacity .2s ease-out;
+    -moz-transition: opacity .2s ease-out;
+    -o-transition: opacity .2s ease-out;
+    transition: opacity .2s ease-out;
+    -webkit-transition-delay: 0;
+    -moz-transition-delay: 0;
+    -o-transition-delay: 0;
+    transition-delay: 0;
+    opacity: 0;
+    text-align: center;
+}
+.instaphoto-footer{
+    line-height: 20px;
+    padding-top: 4px;
+    -webkit-transition: opacity .3s ease-out 0;
+    -moz-transition: opacity .3s ease-out 0;
+    -o-transition: opacity .3s ease-out 0;
+    transition: opacity .3s ease-out 0;
+}
+.instaphoto-footer-stats{
+    margin: 0;
+    padding: 0;
+}

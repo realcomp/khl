@@ -12,7 +12,7 @@ angular.module('Sportomatics')
     });
 })
 .factory('PlayerInstaPhoto', function($resource){
-    return $resource("/ru/api/hockey/playerinstaphoto/", {}, {
+    return $resource("/ru/api/hockey/clubinstaphoto/", {}, {
         query: {method:'GET', params:{processed: 1}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
@@ -37,6 +37,7 @@ angular.module('Sportomatics')
 
         var playerClubsMasonry = $('.masonry-clubs-photos');
         var closePopupBtn = $('#close-popup-btn');
+
 
         closePopupBtn.on('click', function(e) {
             e.preventDefault();
@@ -73,11 +74,12 @@ angular.module('Sportomatics')
                         $scope.photos.push(value)
                     });
                     setTimeout(function(){
-                        playerClubsMasonry.imagesLoaded(function(){
-                            playerClubsMasonry.masonry({
-                                itemSelector: '.item',
-                                gutterWidth: 20
-                            })
+                        $('.photo-square').hover(function(){
+                            var id = $(this).attr('id');
+                            $('#instaphoto-header-time_'+id+', #instaphoto-footer-stats_'+id).css('opacity', '1');
+                        }, function(){
+                            var id = $(this).attr('id');
+                            $('#instaphoto-header-time_'+id+', #instaphoto-footer-stats_'+id).css('opacity', '0');
                         });
                     }, 100);
                     $scope.next_page = data.next_page;
@@ -92,11 +94,12 @@ angular.module('Sportomatics')
                         $scope.photos.push(value)
                     });
                     setTimeout(function(){
-                        playerClubsMasonry.imagesLoaded(function(){
-                            playerClubsMasonry.masonry({
-                                itemSelector: '.item',
-                                gutterWidth: 20
-                            })
+                        $('.photo-square').hover(function(){
+                            var id = $(this).attr('id');
+                            $('#instaphoto-header-time_'+id+', #instaphoto-footer-stats_'+id).css('opacity', '1');
+                        }, function(){
+                            var id = $(this).attr('id');
+                            $('#instaphoto-header-time_'+id+', #instaphoto-footer-stats_'+id).css('opacity', '0');
                         });
                     }, 100);
                     $scope.next_page = data.next_page;
