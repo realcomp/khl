@@ -12,7 +12,7 @@ angular.module('Sportomatics')
     });
 })
 .factory('PlayerInstaPhoto', function($resource){
-    return $resource("/ru/api/hockey/clubinstaphoto/", {}, {
+    return $resource("/ru/api/hockey/playerinstaphoto/", {}, {
         query: {method:'GET', params:{processed: 1}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
