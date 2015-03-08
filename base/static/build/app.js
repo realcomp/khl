@@ -1356,6 +1356,7 @@ angular.module('Sportomatics')
                 ClubInstaPhoto.query(get_params).$promise.then(function (data) {
                     $scope.photoDataLoader = false;
                     $.each(data.results, function (index, value) {
+                        value.created = new Date(value.photo.created).instagramDateFormat();
                         $scope.photos.push(value)
                     });
                     setTimeout(function(){
@@ -1376,6 +1377,7 @@ angular.module('Sportomatics')
                 PlayerInstaPhoto.query(get_params).$promise.then(function (data) {
                     $scope.photoDataLoader = false;
                     $.each(data.results, function (index, value) {
+                        value.created = new Date(value.photo.created).instagramDateFormat();
                         $scope.photos.push(value)
                     });
                     setTimeout(function(){
@@ -1395,7 +1397,6 @@ angular.module('Sportomatics')
                     $scope.photoDataLoader = false;
                 });
             }
-
         };
 
         $scope.nextPage = function(){
@@ -1410,7 +1411,6 @@ angular.module('Sportomatics')
         };
 
         $scope.PhotoPopupShow = function(id, index, event, position){
-            console.log(index)
             $scope.currentIndex = index;
             var photo = $scope.photos[index];
             $scope.PhotoPopup.data = $scope.photos[index];
@@ -1439,6 +1439,11 @@ angular.module('Sportomatics')
         };
 
         $scope.getPage();
+
+        Date.prototype.instagramDateFormat = function(){
+            var monthsRu = ["января", "февраля", "марта", "апреля", "мая","июня","июля", "августа", "сентября", "октября", "ноября", "декабря"];
+            return this.getDate() + ' ' + monthsRu[this.getMonth()] + ' ' + this.getFullYear();
+        }
 }])
 angular.module('Sportomatics')
 .controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", "$q", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {

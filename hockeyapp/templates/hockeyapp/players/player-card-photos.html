@@ -85,7 +85,7 @@
                                 <div ng-hide="photoDataLoader" ng-repeat="item in photos track by $index" class="item instaphoto-container">
                                     <div class="instaphoto-wrapper">
                                         <div class="item-data text-center instaphoto-header">
-                                            <time id="instaphoto-header-time_photo_{{$index}}" class="instaphoto-header-time">12 августа 2014</time>
+                                            <time id="instaphoto-header-time_photo_{{$index}}" class="instaphoto-header-time">{{item.created}}</time>
                                         </div>
                                         <img id="photo_{{$index}}" src="{{item.photo.img.file}}" alt="" class="item-photo pointer photo-square" ng-click="PhotoPopupShow(item.id, $index, $event)">
                                         <div class="item-info text-center instaphoto-footer">
