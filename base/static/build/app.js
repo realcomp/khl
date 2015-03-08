@@ -1417,8 +1417,8 @@ angular.module('Sportomatics')
             $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user}, function(){
 
             });
-            $scope.PhotoPopup.userStr = photo.photo.user_str;
-            $(".instagram-user-str").val(photo.photo.user_str);
+            $scope.PhotoPopup.comment = photo.photo.comment;
+            $(".instagram-comment").val(photo.photo.comment);
             $('.overlay-black').css('visibility', 'visible');
             $('.photo-popup').show();
             $scope.PhotoPopup.index = index;
