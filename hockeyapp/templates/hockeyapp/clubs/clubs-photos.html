@@ -48,7 +48,7 @@
                             <div class="m-t-20 m-r-30">
                                 <div class="inline-block vertical-top m-r-5">
                                     <div>
-                                        <img class="instagram-profile-picture" src="{{PhotoPopup.instagramUser.profile_picture}}" alt="" class="item-photo" width="150" height="150">
+                                        <img class="instagram-profile-picture" ng-src="{{PhotoPopup.instagramUser.profile_picture}}" alt="" class="item-photo" width="150" height="150">
                                     </div>
                                     <div class="instagram-user-name">
                                         <a href="https://instagram.com/{{PhotoPopup.instagramUser.username}}" target="_blank">{{PhotoPopup.instagramUser.username}}</a>
@@ -105,7 +105,7 @@
                                             <div class="item-data text-center instaphoto-header">
                                                 <time id="instaphoto-header-time_photo_{{$index}}" class="instaphoto-header-time">{{item.created}}</time>
                                             </div>
-                                            <img id="photo_{{$index}}" src="{{item.photo.img.file}}" alt="" class="item-photo pointer photo-square" ng-click="PhotoPopupShow(item.id, $index, $event)">
+                                            <img id="photo_{{$index}}" ng-src="{{item.photo.img.file}}" alt="" class="item-photo pointer photo-square" ng-click="PhotoPopupShow(item.id, $index, $event)">
                                             <div class="item-info text-center instaphoto-footer">
                                                 <div id="instaphoto-footer-stats_photo_{{$index}}" class="instaphoto-footer-stats">
                                                     <a class="item-views no-decoration"><i class="unhide icon"></i>1206</a>

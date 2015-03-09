@@ -3568,7 +3568,7 @@ i.icon {
   box-sizing: border-box;
 }
 /* line 2245, ../sass/_base.sass */
-.player-photos-slider .player-photo.player-photo_add .add-photo-icon {
+.player-photo_add .add-photo-icon {
   font-size: 36px;
   color: #fff;
   margin: 0;
@@ -3577,7 +3577,7 @@ i.icon {
   margin-top: 18px;
 }
 /* line 2252, ../sass/_base.sass */
-.player-photos-slider .player-photo.player-photo_add i.icon {
+.player-photo_add i.icon {
   margin: 0 auto;
 }
 
@@ -4412,14 +4412,14 @@ i.icon {
 /* line 2783, ../sass/_base.sass */
 .clubs-photos-slider .slides_container {
   width: 932px;
-  height: 119px;
+  height: 160px;
   border-radius: 8px;
   overflow: hidden;
 }
 /* line 2788, ../sass/_base.sass */
 .clubs-photos-slider .slides_container > div > div {
   width: 932px;
-  height: 119px;
+  height: 160px;
 }
 /* line 2791, ../sass/_base.sass */
 .clubs-photos-slider .prev, .clubs-photos-slider .next {
@@ -4459,7 +4459,7 @@ i.icon {
 .clubs-photos-slider .club-photo.club-photo_add {
   color: #fff;
   font-size: 15px;
-  line-height: 25px;
+  /*line-height: 25px;*/
   font-weight: 600;
   text-align: center;
   text-transform: uppercase;
@@ -4469,6 +4469,7 @@ i.icon {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+    height: 160px;
 }
 /* line 2824, ../sass/_base.sass */
 .clubs-photos-slider .club-photo.club-photo_add .add-photo-icon {
@@ -5551,4 +5552,31 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .instagram-comment{
     font-size: 16px;
+}
+.club-photo{
+    text-align: center;
+    height: 166px !important;
+}
+.photo-item{
+    max-width: 166px !important;
+    max-height: 166px !important;
+}
+.photo-item img{
+    max-width: 166px !important;
+    max-height: 166px !important;
+}
+.player-photo_add {
+    color: #fff;
+    font-size: 15px;
+    /*line-height: 25px;*/
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    background: #78aeae;
+    padding: 0 10px;
+    text-decoration: none;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 160px;
 }

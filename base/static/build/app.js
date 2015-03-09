@@ -1318,7 +1318,7 @@ angular.module('Sportomatics')
         get: { method: 'GET'}
     });
 }])
-.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "PlayerInstaPhoto", "$resource", function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto, $resource){
+.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "PlayerInstaPhoto", "$resource", "$timeout", function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto, $resource, $timeout){
 
         var playerClubsMasonry = $('.masonry-clubs-photos');
         var closePopupBtn = $('#close-popup-btn');
@@ -1338,6 +1338,8 @@ angular.module('Sportomatics')
 
         $scope.club_id = $('#team-id').val();
         $scope.player_id = $('#player-id').val();
+        $scope.photosSlider = [];
+        $scope.photosChunk = [];
 
         $scope.photos = [];
         $scope.next_page = 1;
@@ -1357,7 +1359,14 @@ angular.module('Sportomatics')
                     $scope.photoDataLoader = false;
                     $.each(data.results, function (index, value) {
                         value.created = new Date(value.photo.created).instagramDateFormat();
-                        $scope.photos.push(value)
+                        $scope.photos.push(value);
+                        if($scope.photosChunk.length < 5){
+                            $scope.photosChunk.push(value);
+                        }
+                        if($scope.photosChunk.length === 5 || index === data.results.length - 1){
+                            $scope.photosSlider.push($scope.photosChunk);
+                            $scope.photosChunk = [];
+                        }
                     });
                     setTimeout(function(){
                         $('.photo-square').hover(function(){
@@ -1379,6 +1388,13 @@ angular.module('Sportomatics')
                     $.each(data.results, function (index, value) {
                         value.created = new Date(value.photo.created).instagramDateFormat();
                         $scope.photos.push(value)
+                        if($scope.photosChunk.length < 5){
+                            $scope.photosChunk.push(value);
+                        }
+                        if($scope.photosChunk.length === 5 || index === data.results.length - 1){
+                            $scope.photosSlider.push($scope.photosChunk);
+                            $scope.photosChunk = [];
+                        }
                     });
                     setTimeout(function(){
                         $('.photo-square').hover(function(){
@@ -1411,12 +1427,11 @@ angular.module('Sportomatics')
         };
 
         $scope.PhotoPopupShow = function(id, index, event, position){
+            console.log(index);
             $scope.currentIndex = index;
             var photo = $scope.photos[index];
             $scope.PhotoPopup.data = $scope.photos[index];
-            $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user}, function(){
-
-            });
+            $scope.PhotoPopup.instagramUser = InstagramUser.get({id: photo.photo.instagram_user}, function(){});
             $scope.PhotoPopup.comment = photo.photo.comment;
             $(".instagram-comment").val(photo.photo.comment);
             $('.overlay-black').css('visibility', 'visible');
