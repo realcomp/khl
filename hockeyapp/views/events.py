@@ -135,6 +135,11 @@ class EventFactory(object):
     def __init__(self, sources):
         self.sources = sources
 
+    def _get_source(self, key):
+        source = self.sources.get(key)
+        if source:
+            return source
+
     def get_events(self, date):
         events = []
         events += self.get_birthday_events(date)
@@ -151,14 +156,14 @@ class EventFactory(object):
                 'extract(day from birth_date)=%d and '
                 'extract(month from birth_date)=%d' % (date.day, date.month)],
         }
-        players = self.sources.get('player')
+        players = self._get_source('player')
         if players:
             for player in players.extra(**x_birthdate):
                 events.append(BirthdayEvent(date, player))
         return events
 
     def get_home_match_events(self, date):
-        schedules = self.sources.get('schedule')
+        schedules = self._get_source('schedule')
         if schedules:
             for schedule in schedules.filter(
                     date__gte=date,
@@ -166,7 +171,7 @@ class EventFactory(object):
                 yield HomeMatchEvent(date, schedule)
 
     def get_guest_match_events(self, date):
-        schedules = self.sources.get('schedule')
+        schedules = self._get_source('schedule')
         if schedules:
             for schedule in schedules.filter(
                     date__gte=date,
@@ -174,7 +179,7 @@ class EventFactory(object):
                 yield GuestMatchEvent(date, schedule)
 
     def get_timeline_events(self, date):
-        timelines = self.sources.get('timeline')
+        timelines = self._get_source('timeline')
         days = 7
         q_completed_event = Q(
             start_date__gte=date - datetime.timedelta(days=days),

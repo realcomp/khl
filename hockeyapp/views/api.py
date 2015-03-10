@@ -241,9 +241,9 @@ class NewsList(generics.ListAPIView):
 
     def get_queryset(self):
         efactory = EventFactory(sources={
-            'player': Player.objects.all(),
-            'schedule': Schedule.objects.all(),
-            'timeline': Timeline.objects.all(),
+            'player': Player.objects,
+            'schedule': Schedule.objects,
+            'timeline': Timeline.objects,
         })
         date = datetime.datetime.now().date()
         if 'date' in self.request.GET:
