@@ -16,16 +16,10 @@ angular.module('Sportomatics')
     $scope.$location = $location;
 
     $scope.data = {};
-    $scope.countries = null;
+    $scope.countries = [];
     $scope.loader = false;
 
     $scope.params = $location.search();
-
-    $scope.sparams = {
-        countriesSelected: [],
-        leaguesSelected: [],
-        leaguesSelectedLoaded: false
-    };
 
     $scope.PlayerPartnersPopup = {
         data: null,
@@ -87,5 +81,6 @@ angular.module('Sportomatics')
         PlayersSearchService.setClubsFilter($scope, obj);
     };
 
-    PlayersSearchService.search($scope);
+    // PlayersSearchService.search($scope);
+    PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
 }]);

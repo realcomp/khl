@@ -47,7 +47,7 @@
                             <div class="column-title">Страна:</div>
                             <select id="players-search-country"
                                     class="select players-search-select" multiple="multiple" size="8"
-                                    ng-model="sparams.countriesSelected">
+                                    ng-model="countriesSelected">
                                 <option value="{{ country.pk }}"
                                         ng-repeat="country in countries"
                                         ng-selected="$index === 0">
@@ -59,9 +59,9 @@
                             <div class="column-title">Лига:</div>
                             <select id="players-search-league"
                                     class="select players-search-select" multiple="multiple" size="8"
-                                    ng-model="sparams.leaguesSelected">
+                                    ng-model="leaguesSelected">
                                 <option value="{{ league.pk }}"
-                                        ng-repeat="league in PlayersSearchService.getLeagues(countries, sparams.countriesSelected)"
+                                        ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)"
                                         ng-selected="$index === 0">
                                     {{ league.title }}
                                 </option>

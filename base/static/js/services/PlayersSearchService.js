@@ -1,24 +1,22 @@
 angular.module('Sportomatics')
 .service('PlayersSearchService', function($http) {
-    this.loadCountries = function($scope, callback) {
-        var url = $('#LeagueListLink').attr('href');
+    this.loadCountries = function($scope, $location, callback) {
+        var url = $('#LeagueListLink').attr('href'),
+        country;
         if (url) {
             $http.get(url).success(function(data) {
                 $scope.countries = data;
-                if ($scope.countries.length) { // has countries
-                    if (Array.isArray($scope.sparams.countriesSelected) &&
-                        $scope.sparams.countriesSelected.length === 0) { // array is expected
-                        $scope.sparams.countriesSelected = [String($scope.countries[0].pk)];
-                    } else {
-                        $scope.sparams.countriesSelected = $scope.countries[0].pk;
+                if ($scope.countries.length) {
+                    country = $scope.countries[0];
+                    if (!$location.search().country) {
+                        $location.search('country', String(country.pk));
+                        $scope.params = $location.search();
                     }
-                    if ($scope.countries[0].league_set.length) { // has leagues
-                        if (Array.isArray($scope.sparams.leaguesSelected) &&
-                            $scope.sparams.leaguesSelected.length === 0) { // array is expected
-                            $scope.sparams.leaguesSelected = [String($scope.countries[0].league_set[0].pk)];
-                        } else {
-                            $scope.sparams.leaguesSelected = $scope.countries[0].league_set[0].pk;
-                        }
+                    if (country.league_set.length &&
+                            !$location.search().league &&
+                            $location.search().league !== '') {
+                        $location.search('league', String(country.league_set[0].pk));
+                        $scope.params = $location.search();
                     }
                 }
                 if (callback && typeof callback === 'function') {
@@ -30,16 +28,26 @@ angular.module('Sportomatics')
         }
     };
 
-    this.getLeagues = function(countries, countriesSelected) {
+    this.getLeagues = function(countries, selected) {
         var result = [];
-        $.each(countriesSelected, function() {
-            var pk = this;
-            $.each(countries, function() {
-                if (this.pk == pk) {
-                    result = result.concat(this.league_set);
-                }
-            });
-        });
+        if (selected) {
+            if (Array.isArray(selected)) {
+                $.each(selected, function() {
+                    var pk = this;
+                    $.each(countries, function() {
+                        if (this.pk == pk) {
+                            result = result.concat(this.league_set);
+                        }
+                    });
+                });
+            } else {
+                $.each(countries, function() {
+                    if (this.pk == selected) {
+                        result = result.concat(this.league_set);
+                    }
+                });
+            }
+        }
         return result;
     };
 
@@ -52,7 +60,8 @@ angular.module('Sportomatics')
 
     this.setOrderBy = function($scope, order_by) {
         if (!$scope.loader) {
-            if ($scope.params.order_by === order_by) { // same field -> reverse
+            if ($scope.params.order_by === order_by ||
+                    (!$scope.params.order_by && !order_by)) { // same field -> reverse
                 if ($scope.params.reversed === 'true') {
                     $scope.$location.search('reversed', null);
                 } else {
@@ -153,17 +162,17 @@ angular.module('Sportomatics')
             });
             $scope.$location.search('line', line);
 
-            if (!$scope.sparams.leaguesLoaded) {
-                $scope.sparams.leaguesLoaded = true;
+            if (!$scope.leaguesLoaded) {
+                $scope.leaguesLoaded = true;
                 if ($scope.params.league) {
                     if (Array.isArray($scope.params.league)) {
-                        $scope.sparams.leaguesSelected = $scope.params.league;
+                        $scope.leaguesSelected = $scope.params.league;
                     } else {
-                        $scope.sparams.leaguesSelected = [$scope.params.league];
+                        $scope.leaguesSelected = [$scope.params.league];
                     }
                 }
             }
-            $scope.$location.search('league', $scope.sparams.leaguesSelected);
+            $scope.$location.search('league', $scope.leaguesSelected);
 
             $scope.params = $scope.$location.search();
 
@@ -212,11 +221,11 @@ angular.module('Sportomatics')
             });
         };
 
-        if (!$scope.countries) {
-             this.loadCountries($scope, f);
-        } else {
+        // if (!$scope.countries) {
+        //      this.loadCountries($scope, $scope.$location, f);
+        // } else {
             f($scope);
-        }
+        // }
     };
 
     this.next = function($scope, isAll) {

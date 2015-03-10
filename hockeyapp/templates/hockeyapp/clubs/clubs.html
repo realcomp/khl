@@ -36,32 +36,32 @@
                                 <div class="ui tabular menu content-tabs">
                                     <span class="heading">Все клубы </span>
                                     <div class="ui selection dropdown">
-                                        <input type="hidden" name="season" value="[{{ seasons.0.0 }},{{ seasons.0.1 }}]"
+                                        <input type="hidden" name="season" value="{{ current_season.pk|default:seasons.0.pk }}"
                                                onchange="angular.element(this).scope().setSeason(this)">
-                                        <div class="default text">{% trans 'SEASON' %} {{ seasons.0.0 }}-{{ seasons.0.1 }}</div>
+                                        <div class="default text">{{ current_season.label|default:seasons.0.label }}</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
                                             {% for season in seasons %}
-                                                <div class="item" data-value="[{{ season.0 }},{{ season.1 }}]">
-                                                    {% trans 'SEASON' %} {{ season.0 }}-{{ season.1 }}
+                                                <div class="item" data-value="{{ season.pk }}">
+                                                    {{ season.label }}
                                                 </div>
                                             {% endfor %}
                                         </div>
                                     </div>
                                     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                         <li class="ui-state-default ui-corner-top"
-                                            ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.leagues_selected === null }">
+                                            ng-class="{ 'ui-tabs-active ui-state-active':!params.league }">
                                             <a class="item tab-btn ui-tabs-anchor" href=""
-                                               ng-click="ClubListCtrl.setLeague(null)">
+                                               ng-click="setLeague('')">
                                                 {% trans 'ALL' %}
                                             </a>
                                         </li>
                                         {% verbatim %}
                                             <li class="ui-state-default ui-corner-top"
-                                                ng-class="{ 'ui-tabs-active ui-state-active':ClubListCtrl.leagues_selected === league.pk }"
-                                                ng-repeat="league in ClubListCtrl.getLeagues(ClubListCtrl.countries, [ClubListCtrl.countries_selected])">
+                                                ng-class="{ 'ui-tabs-active ui-state-active':params.league == league.pk }"
+                                                ng-repeat="league in PlayersSearchService.getLeagues(countries, [params.country])">
                                                 <a class="item tab-btn ui-tabs-anchor" href=""
-                                                   ng-click="ClubListCtrl.setLeague(league.pk)">
+                                                   ng-click="setLeague(league.pk)">
                                                     {{ league.title }}
                                                 </a>
                                             </li>
@@ -74,10 +74,10 @@
                             <div class="four wide column">
                                 {% verbatim %}
                                     <ul class="options-list clubs-countries-menu-list">
-                                        <li class="option-item" ng-repeat="country in ClubListCtrl.countries">
+                                        <li class="option-item" ng-repeat="country in countries">
                                             <a class="option-link"
-                                               ng-class="{ 'option-link_active':ClubListCtrl.countries_selected[0] == country.pk }"
-                                               ng-click="ClubListCtrl.setCountry(country.pk)">
+                                               ng-class="{ 'option-link_active':params.country == country.pk }"
+                                               ng-click="setCountry(country.pk)">
                                                 {{ country.title }}
                                             </a>
                                         </li>
@@ -89,26 +89,26 @@
                                 <table class="ui celled table segment clubs-table">
                                     <thead>
                                         <tr>
-                                            <th width="220" ng-class="{ 'column-sort':ClubListCtrl.order_by == '%s_title' }">
-                                                <a href="" ng-click="ClubListCtrl.list('%s_title')">Название</a>
+                                            <th width="220" ng-class="{ 'column-sort':!params.order_by }">
+                                                <a href="" ng-click="setOrderBy(null)">Название</a>
                                             </th>
-                                            <th width="130" ng-class="{ 'column-sort':ClubListCtrl.order_by == 'address__%s_title' }">
-                                                <a href="" ng-click="ClubListCtrl.list('address__%s_title')">Город</a>
+                                            <th width="130" ng-class="{ 'column-sort':params.order_by === 'address__%s_title' }">
+                                                <a href="" ng-click="setOrderBy('address__%s_title')">Город</a>
                                             </th>
-                                            <th width="80" ng-class="{ 'column-sort':ClubListCtrl.order_by == '%s_title__' }"> {# not implemented #}
-                                                <a href="" ng-click="ClubListCtrl.list('%s_title')">Место в чемпионате</a>
+                                            <th width="80" ng-class="{ 'column-sort':params.order_by === '%s_title' }"> {# not implemented #}
+                                                <a href="" ng-click="setOrderBy('%s_title')">Место в чемпионате</a>
                                             </th>
-                                            <th width="165" ng-class="{ 'column-sort':ClubListCtrl.order_by == 'arena__%s_title' }">
-                                                <a href="" ng-click="ClubListCtrl.list('arena__%s_title')">Домашняя площадка</a>
+                                            <th width="165" ng-class="{ 'column-sort':params.order_by === 'arena__%s_title' }">
+                                                <a href="" ng-click="setOrderBy('arena__%s_title')">Домашняя площадка</a>
                                             </th>
-                                            <th ng-class="{ 'column-sort':ClubListCtrl.order_by == 'coach__%s_fio' }">
-                                                <a href="" ng-click="ClubListCtrl.list('coach__%s_fio')">Главный тренер</a>
+                                            <th ng-class="{ 'column-sort':params.order_by === 'coach__%s_fio' }">
+                                                <a href="" ng-click="setOrderBy('coach__%s_fio')">Главный тренер</a>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% verbatim %}
-                                        <tr ng-repeat="club in ClubListCtrl.data.results">
+                                        <tr ng-repeat="club in data.results">
                                             <td>
                                                 <a class="clubs-link" href="{{ club.url }}">
                                                     <img ng-src="{{ club.logo }}" alt="" class="club-logo">
@@ -125,16 +125,16 @@
                                 </table>
                                 <div style="text-align: center">
                                     <img src="{{ STATIC_URL }}images/loader-large.gif"
-                                         ng-show="ClubListCtrl.loader">
+                                         ng-hide="loaded">
                                     <a class="option-btn" href=""
-                                       ng-click="ClubListCtrl.next()"
-                                       ng-show="!ClubListCtrl.loader && ClubListCtrl.data.next">
+                                       ng-click="next()"
+                                       ng-show="loaded && data.next">
                                         показать еще 50</a>
                                     {% verbatim %}
                                     <a class="option-btn" href=""
-                                       ng-click="ClubListCtrl.next(true)"
-                                       ng-show="!ClubListCtrl.loader && ClubListCtrl.data.next">
-                                        показать все {{ ClubListCtrl.data.count }}</a>
+                                       ng-click="next(true)"
+                                       ng-show="loaded && data.next">
+                                        показать все {{ data.count }}</a>
                                     {% endverbatim %}
                                 </div>
                             </div>

@@ -161,11 +161,12 @@ class ClubListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
-        year = get_season_end_date().year
-        context.update({
-            'seasons': map(
-                lambda x: (x - 1, x), range(year, year - 10, -1)),
-        })
+        context['request'] = self.request
+        seasons = (
+            Season.objects
+            .order_by('-start_date'))
+        context['seasons'] = SeasonSerializer(
+            seasons, context=context, many=True).data
         return context
 
 

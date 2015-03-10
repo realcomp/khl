@@ -59,20 +59,23 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                         _club.players = _plrs
             return _club
 
+    # def by_season(self, season):
+    #     '''
+    #     :param season: season years ('2014', '2015')
+    #     :type season: tuple
+    #     '''
+    #     season_start = get_season_start_date(year=season[0])
+    #     season_end = get_season_end_date(year=season[1])
+    #     q_start = (
+    #         Q(leagueclub__start_date__lte=season_start) |
+    #         Q(leagueclub__start_date__isnull=True))
+    #     q_end = (
+    #         Q(leagueclub__end_date__gte=season_end) |
+    #         Q(leagueclub__end_date__isnull=True))
+    #     return self.filter(q_start & q_end)
+
     def by_season(self, season):
-        '''
-        :param season: season years ('2014', '2015')
-        :type season: tuple
-        '''
-        season_start = get_season_start_date(year=season[0])
-        season_end = get_season_end_date(year=season[1])
-        q_start = (
-            Q(leagueclub__start_date__lte=season_start) |
-            Q(leagueclub__start_date__isnull=True))
-        q_end = (
-            Q(leagueclub__end_date__gte=season_end) |
-            Q(leagueclub__end_date__isnull=True))
-        return self.filter(q_start & q_end)
+        return self.filter(leagueclub__season=season)
 
     def by_title_alias(self, title):
         q_title = ( Q(ru_title=title) |

@@ -1,66 +1,111 @@
 angular.module('Sportomatics')
-.controller('ClubListController', ['$http', '$scope', function($http, $scope) {
-    var self = this,
-        url = $('#ClubListForm').attr('action');
-    this.data = {};
-    this.order_by = '%s_title';
-    this.order_by_reversed = false;
-    this.loader = false;
-    this.countries = {};
-    this.countries_selected = [];
-    this.leagues_selected = 1;
+.controller('ClubListController', [
+    '$http', '$scope', '$location', 'PlayersSearchService',
+    function($http, $scope, $location, PlayersSearchService) {
+    var url = $('#ClubListForm').attr('action');
+
+    $scope.$location = $location;
+    $scope.PlayersSearchService = PlayersSearchService;
+
+    $scope.countries = {};
+    $scope.sparams = {}
+
+    $scope.params = $location.search()
+
+    if ($scope.params.season) {
+        $('[name="season"]').attr('value', $scope.params.season);
+    }
 
     $scope.setSeason = function(e) {
-        // turn missing braces back
-        $(e).attr('value', '[' + $(e).val() + ']');
-        self.list();
+        // $(e).attr('value', $(e).val());
+        $location.search('season', $(e).val());
+        $scope.params = $location.search();
+        $scope.list();
     };
 
-    this.getCountries = getCountries($http);
-    this.getLeagues = getLeagues;
-
-    this.list = function(order_by, all) {
-        var self = this,
-            params = $('#ClubListForm').serialize();
-        if (order_by) {
-            if (self.order_by === order_by) { // same field -> reverse
-                self.order_by_reversed = !self.order_by_reversed;
+    $scope.setOrderBy = function(order_by) {
+        if ($scope.loaded) {
+            if ($scope.params.order_by === order_by ||
+                    (!$scope.params.order_by && !order_by)) { // same field -> reverse
+                if ($scope.params.reversed === 'true') {
+                    $scope.$location.search('reversed', null);
+                } else {
+                    $scope.$location.search('reversed', 'true');
+                }
             } else { // other field -> reset
-                self.order_by_reversed = false;
+                $scope.$location.search('reversed', null);
             }
-            self.order_by = order_by;
+            $scope.$location.search('order_by', order_by);
+            $scope.list($scope);
         }
-        // if(self.leagues_selected === null && !all) self.leagues_selected = 1; // to avoid waiting for getCountries league set
-        params = params + '&order_by=' + (self.order_by_reversed ? '-' : '') + self.order_by;
-        if (self.leagues_selected) {
-            params += '&league=' + self.leagues_selected;
+    };
+
+    $scope.setCountry = function(country) {
+        if ($scope.params.country != country) {
+            $location.search('country', country);
+            $scope.params = $location.search();
+            $scope.list();
         }
-        self.data = {};
-        self.loader = true;
+    };
+
+    $scope.setLeague = function(league) {
+        if ($scope.params.league != league) {
+            $location.search('league', league);
+            $scope.params = $location.search();
+            $scope.list();
+        }
+    };
+
+    $scope.list = function(all) {
+        var params = $('#ClubListForm').serialize();
+
+        params += '&order_by=' + ($scope.params.reversed === 'true' ? '-' : '') +
+            ($scope.params.order_by || '%s_title');
+
+        // if ($scope.sparams.leaguesSelected) {
+        //     $location.search('league', $scope.sparams.leaguesSelected);
+        // } else {
+        //     $location.search('league', null);
+        // }
+        // if ($scope.sparams.contriesSelected) {
+        //     $location.search('country', $scope.sparams.countriesSelected);
+        // } else {
+        //     $location.search('country', null);
+        // }
+
+        if ($scope.params.league) {
+            params += '&league=' + $scope.params.league;
+        }
+        if ($scope.params.country) {
+            params += '&country=' + $scope.params.country;
+        }
+
+        $scope.params = $location.search();
+        $scope.data = {};
+        $scope.loaded = false;
         $http.get(url + '?' + params)
             .success(function(data) {
-                self.data = data;
-                self.loader = false;
+                $scope.data = data;
+                $scope.loaded = true;
             });
     };
 
-    this.setCountry = function(country) {
-        if (this.countries_selected[0] != country) {
-            this.countries_selected = [country];
-            this.leagues_selected = null;
-            this.list();
+    $scope.next = function(isAll) {
+        var url = $scope.data.next;
+        if (isAll) {
+            url = url.replace(/&page=\d+$/, '&paginate_by=' + $scope.data.count);
         }
+        $scope.loaded = false;
+        $http.get(url).success(function(data) {
+            if (isAll) {
+                $scope.data = data;
+            } else {
+                $scope.data.next = data.next;
+                $scope.data.results = $scope.data.results.concat(data.results);
+            }
+            $scope.loaded = true;
+        });
     };
 
-    this.setLeague = function(league) {
-        if (self.leagues_selected != league) {
-            self.leagues_selected = league;
-            self.list();
-        }
-    };
-
-    this.next = next($http);
-    this.getCountries();
-    this.list();
-
+    PlayersSearchService.loadCountries($scope, $location, $scope.list);
 }]);

@@ -195,7 +195,7 @@ class ClubList(PaginationMixin, generics.ListAPIView):
         if 'season' in self.request.GET:
             season = self.request.GET['season']
             if season:
-                qs = qs.by_season(json.loads(season)).distinct()
+                qs = qs.by_season(season)#.distinct()
 
         return qs
 
