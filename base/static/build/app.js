@@ -403,11 +403,30 @@ angular.module('Sportomatics')
                 graph1.fillColors = "#408e3a";
                 graph1.fillAlphas = 1;
                 graph1.lineThickness = 0;
-                graph1.animationPlayed = true;
+                //graph1.animationPlayed = true;
                 graph1.type = 'column';
                 if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
                 graph1.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
+
+
+                var graph1Copy = new AmCharts.AmGraph();
+                graph1Copy.id = "g2";
+                graph1Copy.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                graph1Copy.title = field;
+                graph1Copy.valueField = "values1";
+                graph1Copy.bullet = "none";
+                graph1Copy.hideBulletsCount = 30;
+                graph1Copy.bulletBorderThickness = 1;
+                graph1Copy.lineColor = "#FF3232";
+                graph1Copy.fillColors = "#FF3232";
+                graph1Copy.fillAlphas = 1;
+                graph1Copy.lineThickness = 0;
+                graph1Copy.animationPlayed = true;
+                graph1Copy.type = 'column';
+                if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+                    graph1Copy.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
+                //chart.addGraph(graph1Copy);
 
                 var graph2 = new AmCharts.AmGraph();
                 graph2.id = "g2";
@@ -1560,7 +1579,7 @@ angular.module('Sportomatics')
                 $scope.chart.animateAgain();
             };
             //var chart = null;
-            $scope.addGraph = function (url) {
+            $scope.addGraph = function(url){
                 var params = 'group_by=month';
                 if (self.club !== null) {
                     params += '&club=' + self.club;
@@ -1585,8 +1604,8 @@ angular.module('Sportomatics')
                             }).then(function(){
                                 var data;
                                 data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
-                                var newChartData = updatedChartData($scope.chart, $scope.chartData, data.results, self.field);
-                                $scope.chart.dataProvider = newChartData.chartData;
+                                var newChartData = updatedChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject);
+                                $scope.chart.dataProvider = newChartData.chartData.data;
                                 $scope.chart.addGraph(newChartData.newGraph);
                                 $scope.chart.validateData();
                             })
@@ -1770,10 +1789,9 @@ angular.module('Sportomatics')
         }
         return chartData;
     }
-    function updatedChartData(chart, initialData, data, field){
+    function updatedChartData(chart, initialData, data, field, localeObject){
 
         var chartData = initialData;
-        console.log(chartData);
         var dates = data.map(function(e){
             if(e['date'] == null){
                 return new Date(e['season']['end_date']);
@@ -1782,37 +1800,64 @@ angular.module('Sportomatics')
         });
         var values = data.map(function(e){ return e[field]});
         var count = data.map(function(e){ return Math.ceil(e['count']/10)});
+        var realCount = data.map(function(e){ return e['count']});
         _.each(dates, function(date, index){
             var pushed = false;
-            _.each(chartData, function(e){
-                if(e['date'] === date){
-                    e['values1'] = values[index];
-                    e['count1'] = count[index];
-                    pushed = true;
+            _.each(chartData.data, function(e){
+                if(e['date'] == null){
+                    if(new Date(e['season']['end_date']).toString() === date.toString()){
+                        e['values1'] = values[index];
+                        e['count1'] = count[index];
+                        e['percentage1'] =  (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000;
+                        pushed = true;
+                    }
+                } else {
+                    if(new Date(e['date']).toString() === date.toString()){
+                        e['values1'] = values[index];
+                        e['count1'] = count[index];
+                        pushed = true;
+                    }
                 }
             });
+            console.log(pushed);
             if (!pushed) {
-                chartData.push({
+                /*chartData.data.push({
                     date: date,
                     values1: values[index],
-                    count1: count[index]
-                });
+                    count1: count[index],
+                    percentage1: (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000
+                });*/
             }
         });
         console.log(chartData);
-        var graph = new AmCharts.AmGraph();
-        graph.valueAxis = chart.valueAxes[0]; // we have to indicate which value axis should be used
-        graph.title = '926';
-        graph.valueField = 'values'+1;
-        graph.bullet = "round";
-        graph.hideBulletsCount = 30;
-        graph.bulletBorderThickness = 1;
-        graph.lineColor = '#000000'; //TODO: add more colors
-        graph.lineThickness = 4;
+        var graph1Copy = new AmCharts.AmGraph();
+        graph1Copy.id = "g23";
+        graph1Copy.valueAxis = chart.valueAxes[0]; // we have to indicate which value axis should be used
+        graph1Copy.title = 'Горохов Илья, '+field;
+        graph1Copy.valueField = "values1";
+        graph1Copy.bullet = "none";
+        graph1Copy.hideBulletsCount = 30;
+        graph1Copy.bulletBorderThickness = 1;
+        graph1Copy.lineColor = "#FF3232";
+        graph1Copy.fillColors = "#FF3232";
+        graph1Copy.fillAlphas = 1;
+        graph1Copy.lineThickness = 0;
+        graph1Copy.type = 'column';
+        if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+            graph1Copy.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values1]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage1]]</span>';
+        //chart.addGraph(graph1Copy);
         return {
             chartData: chartData,
-            newGraph: graph
+            newGraph: graph1Copy
         };
+    }
+    function getArrayElementIndex(array, field, value){
+        _.each(array, function(element, index){
+            if(element[field].toString() === value.toString()){
+                return index;
+            }
+        });
+        return null;
     }
 angular.module('Sportomatics')
 .controller('PlayersSearchController', [

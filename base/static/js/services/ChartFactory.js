@@ -125,11 +125,30 @@ angular.module('Sportomatics')
                 graph1.fillColors = "#408e3a";
                 graph1.fillAlphas = 1;
                 graph1.lineThickness = 0;
-                graph1.animationPlayed = true;
+                //graph1.animationPlayed = true;
                 graph1.type = 'column';
                 if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
                 graph1.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
+
+
+                var graph1Copy = new AmCharts.AmGraph();
+                graph1Copy.id = "g2";
+                graph1Copy.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                graph1Copy.title = field;
+                graph1Copy.valueField = "values1";
+                graph1Copy.bullet = "none";
+                graph1Copy.hideBulletsCount = 30;
+                graph1Copy.bulletBorderThickness = 1;
+                graph1Copy.lineColor = "#FF3232";
+                graph1Copy.fillColors = "#FF3232";
+                graph1Copy.fillAlphas = 1;
+                graph1Copy.lineThickness = 0;
+                graph1Copy.animationPlayed = true;
+                graph1Copy.type = 'column';
+                if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+                    graph1Copy.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
+                //chart.addGraph(graph1Copy);
 
                 var graph2 = new AmCharts.AmGraph();
                 graph2.id = "g2";
