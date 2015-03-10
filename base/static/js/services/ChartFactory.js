@@ -6,7 +6,8 @@ angular.module('Sportomatics')
 .factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(data, field, chartData, locale, graphsCount){
+        generateSerialChart: function(field, chartData, localeObject, graphsCount){
+            // Method accespts
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
@@ -94,26 +95,38 @@ angular.module('Sportomatics')
                 chart.addValueAxis(valueAxis3);
 
                 // GRAPHS
-                // first graph
-                for(var i = 0; i < graphsCount; i ++){
-                    var graph = generateGraph(i, data[i]['title'], valueAxis1);
-                    chart.addGraph(graph);
-                }
                 var graph1 = new AmCharts.AmGraph();
-
                 graph1.id = "g2";
                 graph1.valueAxis = valueAxis1; // we have to indicate which value axis should be used
                 graph1.title = field;
                 graph1.valueField = "values";
-                graph1.bullet = "round";
+                graph1.bullet = "none";
                 graph1.hideBulletsCount = 30;
                 graph1.bulletBorderThickness = 1;
                 graph1.lineColor = "#408e3a";
-                graph1.lineThickness = 4;
+                graph1.fillColors = "#408e3a";
+                graph1.fillAlphas = 1;
+                graph1.lineThickness = 0;
                 graph1.animationPlayed = true;
+                graph1.type = 'column';
                 if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
-                graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
+                graph1.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
                 chart.addGraph(graph1);
+
+                var graph2 = new AmCharts.AmGraph();
+                graph2.id = "g2";
+                graph2.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                graph2.title = field;
+                graph2.valueField = "values";
+                graph2.bullet = "none";
+                graph2.hideBulletsCount = 30;
+                graph2.bulletBorderThickness = 1;
+                graph2.lineColor = "#c0c0c0";
+                graph2.lineThickness = 1;
+                graph2.animationPlayed = true;
+                graph2.type = 'line';
+                graph2.balloonText = '';
+                //chart.addGraph(graph2);
 
                 // second graph
                 var gamesGraph = new AmCharts.AmGraph();
@@ -151,8 +164,21 @@ angular.module('Sportomatics')
                     y: 60,
                     alpha: 0.7,
                     bold: true,
-                    text: locale.fieldNames[field].fullName.toUpperCase()
+                    text: localeObject.fieldNames[field].fullName.toUpperCase()
                 }];
+
+                // CURSOR
+                var chartCursor = new AmCharts.ChartCursor();
+                chartCursor.cursorAlpha = 1;
+                chartCursor.cursorColor = "#8ebd5d";
+                chartCursor.categoryBalloonFunction = function(value){
+                    if(self.groupBy === 'month'){
+                        return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                    } else {
+                        return localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                    }
+                };
+                chart.addChartCursor(chartCursor);
 
                 deferred.resolve(chart);
             });
