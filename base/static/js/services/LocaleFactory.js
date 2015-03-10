@@ -254,7 +254,8 @@ angular.module('Sportomatics')
                 },
                 buttonNames: {
                     month: 'По месяцам',
-                    season: 'По сезонам'
+                    season: 'По сезонам',
+                    allSeasons: 'Все сезоны'
                 },
                 monthNames: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
                     "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],

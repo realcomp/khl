@@ -13,6 +13,7 @@
             this.data = [];
             this.graphData = {};
             this.chartsCount = 0;
+            $scope.activeSeason = -1;
 
             this.setIndicatorsType = function(type) {
                 this.indicatorsType = type;
@@ -91,6 +92,7 @@
                 self.data = (groupby === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
                 $scope.onSeason = false;
                 self.list();
+                $scope.activeSeason = -1;
                 $timeout(function(){}, 500);
             };
             $scope.moveToSeason = function(season, index){

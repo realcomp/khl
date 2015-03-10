@@ -347,14 +347,17 @@ angular.module('Sportomatics')
                     format: 'YYYY'
                 }];
                 categoryAxis.labelFunction = function(valueText, date, categoryAxis){
+                    var value = new Date(date);
                     if(chartData.groupBy === 'season'){
                         var endDate = valueText.substr(2, 2);
                         var startDate = (endDate === '00') ? '99' : (parseInt(endDate)-1).toString();
                         if(startDate.length === 1) startDate = '0'+ startDate;
                         return startDate + '/'+ endDate;
                     }
-                    if(valueText === 'Jan') return new Date(date).getFullYear();
-                    return '';
+                    if(valueText === 'Jan'){
+                        return localeObject.monthNames[value.getMonth()] + '\u000A' + value.getFullYear();
+                    }
+                    return localeObject.monthNames[value.getMonth()];
                 };
 
                 var currMax = Math.max.apply(Math, data.map(function(e){ return e['values']}));
@@ -469,7 +472,7 @@ angular.module('Sportomatics')
                     if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
                     } else {
-                        return localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                        return localeObject.words.season +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
                     }
                 };
                 chart.addChartCursor(chartCursor);
@@ -758,7 +761,8 @@ angular.module('Sportomatics')
                 },
                 buttonNames: {
                     month: 'По месяцам',
-                    season: 'По сезонам'
+                    season: 'По сезонам',
+                    allSeasons: 'Все сезоны'
                 },
                 monthNames: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн",
                     "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
@@ -1517,6 +1521,7 @@ angular.module('Sportomatics')
             this.data = [];
             this.graphData = {};
             this.chartsCount = 0;
+            $scope.activeSeason = -1;
 
             this.setIndicatorsType = function(type) {
                 this.indicatorsType = type;
@@ -1595,6 +1600,7 @@ angular.module('Sportomatics')
                 self.data = (groupby === 'month') ? $scope.dataByMonth : $scope.dataBySeason;
                 $scope.onSeason = false;
                 self.list();
+                $scope.activeSeason = -1;
                 $timeout(function(){}, 500);
             };
             $scope.moveToSeason = function(season, index){
