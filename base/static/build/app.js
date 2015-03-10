@@ -156,7 +156,7 @@ $(function() {
         }
         //player card
         if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-            console.log('player call ');
+            //console.log('player call ');
             $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
             $('#player-card-avatar').addClass('clipped-img');
             $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
@@ -165,7 +165,7 @@ $(function() {
             $('.page-container').css('margin-top', '68px');
             scrolledAfterPlayer = true;
         } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-            console.log('player reverse call ');
+            //console.log('player reverse call ');
             $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block player-card-inner'));
             $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
             $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important').css('box-shadow', '0','important'));
@@ -175,7 +175,7 @@ $(function() {
         }
         //team card
         if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-            console.log('team info call ');
+            //console.log('team info call ');
             $('.page-container').css('margin-top', '114px');
             $('.my-team-btn').css('margin-top', '4px');
             $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
@@ -184,7 +184,7 @@ $(function() {
             $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important').css('box-shadow', '0 4px 2px -2px gray','important'));
             scrolledAfterTeamInfo = true;
         } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-            console.log('team info reverse call ');
+            //console.log('team info reverse call ');
             $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
             $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
             $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
@@ -197,7 +197,7 @@ $(function() {
     var y = $(window).scrollTop();
     //player card
     if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-        console.log('player call ');
+        //console.log('player call ');
         $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
         $('#player-card-avatar').addClass('clipped-img');
         $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
@@ -206,7 +206,7 @@ $(function() {
         $('.page-container').css('margin-top', '68px');
         scrolledAfterPlayer = true;
     } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-        console.log('player reverse call ');
+        //console.log('player reverse call ');
         $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important'));
         $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
         $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
@@ -216,7 +216,7 @@ $(function() {
     }
     //team card
     if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-        console.log('team info call ');
+        //console.log('team info call ');
         $('.page-container').css('margin-top', '114px');
         $('.my-team-btn').css('margin-top', '4px');
         $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
@@ -225,7 +225,7 @@ $(function() {
         $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
         scrolledAfterTeamInfo = true;
     } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-        console.log('team info reverse call ');
+        //console.log('team info reverse call ');
         $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
         $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
         $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
@@ -285,17 +285,20 @@ angular.module('Sportomatics')
 
     return {
         generateSerialChart: function(field, chartData, localeObject, graphsCount){
-            // Method accespts
+            // Method accepts
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
+                var data = chartData.data;
+
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
-                chart.dataProvider = chartData;
+                chart.dataProvider = data;
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
                 chart.addClassNames = true;
+                chart.startDuration = 1;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
@@ -308,15 +311,15 @@ angular.module('Sportomatics')
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
                 categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
-                categoryAxis.minorGridEnabled = true;
-                categoryAxis.autoGridCount =  true;
-                categoryAxis.grudCount = 12;
+                //categoryAxis.minorGridEnabled = true;
+                //categoryAxis.autoGridCount =  true;
+                //categoryAxis.grudCount = 12;
                 categoryAxis.minHorizontalGap = 40;
-                categoryAxis.gridAlpha = 0.1;
+                categoryAxis.gridAlpha = 0; //categoryAxis.gridAlpha = 0.1;
                 categoryAxis.boldPeriodBeginning = false;
                 categoryAxis.axisColor = "#DADADA";
-                categoryAxis.twoLineMode = true;
-                categoryAxis.tickLength = 12;
+                //categoryAxis.twoLineMode = true;
+                //categoryAxis.tickLength = 12;
                 categoryAxis.markPeriodChange = false;
                 categoryAxis.dateFormats = [{
                     period: 'fff',
@@ -343,8 +346,20 @@ angular.module('Sportomatics')
                     period: 'YYYY',
                     format: 'YYYY'
                 }];
-                var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
-                var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
+                categoryAxis.labelFunction = function(valueText, date, categoryAxis){
+                    if(chartData.groupBy === 'season'){
+                        var endDate = valueText.substr(2, 2);
+                        var startDate = (endDate === '00') ? '99' : (parseInt(endDate)-1).toString();
+                        if(startDate.length === 1) startDate = '0'+ startDate;
+                        return startDate + '/'+ endDate;
+                    }
+                    if(valueText === 'Jan') return new Date(date).getFullYear();
+                    return '';
+                };
+
+                var currMax = Math.max.apply(Math, data.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, data.map(function(e){ return e['values']}));
+
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
@@ -404,6 +419,7 @@ angular.module('Sportomatics')
                 graph2.animationPlayed = true;
                 graph2.type = 'line';
                 graph2.balloonText = '';
+                graph2.visibleInLegend = false;
                 //chart.addGraph(graph2);
 
                 // second graph
@@ -450,7 +466,7 @@ angular.module('Sportomatics')
                 chartCursor.cursorAlpha = 1;
                 chartCursor.cursorColor = "#8ebd5d";
                 chartCursor.categoryBalloonFunction = function(value){
-                    if(self.groupBy === 'month'){
+                    if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
                     } else {
                         return localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
@@ -463,7 +479,7 @@ angular.module('Sportomatics')
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
-}])
+}]);
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 
 // this method is called when chart is first inited as we listen for "dataUpdated" event
@@ -681,7 +697,7 @@ angular.module('Sportomatics')
                     },
                     penalty_time: {
                         shortName: 'Штр',
-                        fullName: 'Штрафное время'
+                        fullName: 'Штрафное время, мин'
                     },
                     es_goals: {
                         shortName: 'ШР',
@@ -733,7 +749,7 @@ angular.module('Sportomatics')
                     },
                     gamingtime__avg: {
                         shortName: 'ВП/И',
-                        fullName: 'Среднее время на площадке за игру'
+                        fullName: 'Среднее время на площадке за игру, мин'
                     },
                     change_count__avg: {
                         shortName: 'См/И',
@@ -1489,7 +1505,6 @@ angular.module('Sportomatics')
     angular.module('Sportomatics')
         .controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", "$q", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {
             //http://www.amcharts.com/lib/images/
-
             var self = this,
                 url = $('#IndicatorsLink').attr('href');
             this.url = $('#IndicatorsLink').attr('href');
@@ -1536,6 +1551,9 @@ angular.module('Sportomatics')
             this.setGraphResults = function(results) {
 
             };
+            $scope.animateAgain = function(){
+                $scope.chart.animateAgain();
+            };
             //var chart = null;
             $scope.addGraph = function (url) {
                 var params = 'group_by=month';
@@ -1579,11 +1597,7 @@ angular.module('Sportomatics')
                 self.list();
                 $timeout(function(){}, 500);
             };
-            $scope.unload = function(){
-
-            };
             $scope.moveToSeason = function(season, index){
-
                 if((self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 )) return;
                 zoomData.startDate = season.start_date;
                 zoomData.endDate = season.end_date;
@@ -1603,7 +1617,7 @@ angular.module('Sportomatics')
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
-                $scope.chartData = generateChartData(data.results, self.field);
+                $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
                 ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
                     // WRITE
@@ -1637,8 +1651,9 @@ angular.module('Sportomatics')
                         })
 
                     }
+                    $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
                     $scope.chart.write("chartdiv");
-                    $scope.chart.addClassNames = false;
+                    //$scope.chart.addClassNames = false;
                     if(switched){
                         $scope.chart.zoomToDates(zoomStart, zoomEnd);
                     }
@@ -1714,6 +1729,7 @@ angular.module('Sportomatics')
             };
         }])
         .run(["AmChartsFactory", function (AmChartsFactory) {}]);
+
     Array.prototype.contains = function(obj) {
         var i = this.length;
         while (i--) {
@@ -1723,8 +1739,10 @@ angular.module('Sportomatics')
         }
         return false;
     };
-    function generateChartData(data, field) {
-        var chartData = [];
+    function generateChartData(data, field, groupBy) {
+        var chartData = {};
+        chartData.groupBy = groupBy;
+        chartData.data = [];
         var dates = data.map(function(e){
             if(e['date'] == null){
                 return new Date(e['season']['end_date']);
@@ -1737,7 +1755,7 @@ angular.module('Sportomatics')
         for(var i = 0; i< dates.length; i++){
             if(!((field === 'shots' || field === 'pis__avg' || field === 'shots__avg' || field === 'faceoff' || field === 'winfaceoff' || field === 'winfaceoff_p__avg' || field === 'gamingtime__avg' || field === 'change_count__avg')
                 && (dates[i].getFullYear() <= 2008)))
-                chartData.push({
+                chartData.data.push({
                     date: dates[i],
                     values: values[i],
                     count: count[i],

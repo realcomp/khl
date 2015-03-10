@@ -193,7 +193,7 @@ angular.module('Sportomatics')
                     },
                     penalty_time: {
                         shortName: 'Штр',
-                        fullName: 'Штрафное время'
+                        fullName: 'Штрафное время, мин'
                     },
                     es_goals: {
                         shortName: 'ШР',
@@ -245,7 +245,7 @@ angular.module('Sportomatics')
                     },
                     gamingtime__avg: {
                         shortName: 'ВП/И',
-                        fullName: 'Среднее время на площадке за игру'
+                        fullName: 'Среднее время на площадке за игру, мин'
                     },
                     change_count__avg: {
                         shortName: 'См/И',

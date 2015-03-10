@@ -206,6 +206,7 @@
                                 <a class="ui green button chart-button" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
                                 <a class="ui green button chart-button" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>
                                 <!--<a class="ui green button chart-button" ng-click="addGraph('/ru/hockey/api/players/926/indicators/')">Сравнить с игроком 926</a>-->
+                                <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
                             {% verbatim %}
                             <div  ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && PlayerCardIndicatorsCtrl.indicatorsType !== 'table' || onSeason ">

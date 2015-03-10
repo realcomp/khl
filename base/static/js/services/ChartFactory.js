@@ -7,17 +7,20 @@ angular.module('Sportomatics')
 
     return {
         generateSerialChart: function(field, chartData, localeObject, graphsCount){
-            // Method accespts
+            // Method accepts
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
+                var data = chartData.data;
+
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
-                chart.dataProvider = chartData;
+                chart.dataProvider = data;
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
                 chart.addClassNames = true;
+                chart.startDuration = 1;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
@@ -30,15 +33,15 @@ angular.module('Sportomatics')
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
                 categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
-                categoryAxis.minorGridEnabled = true;
-                categoryAxis.autoGridCount =  true;
-                categoryAxis.grudCount = 12;
+                //categoryAxis.minorGridEnabled = true;
+                //categoryAxis.autoGridCount =  true;
+                //categoryAxis.grudCount = 12;
                 categoryAxis.minHorizontalGap = 40;
-                categoryAxis.gridAlpha = 0.1;
+                categoryAxis.gridAlpha = 0; //categoryAxis.gridAlpha = 0.1;
                 categoryAxis.boldPeriodBeginning = false;
                 categoryAxis.axisColor = "#DADADA";
-                categoryAxis.twoLineMode = true;
-                categoryAxis.tickLength = 12;
+                //categoryAxis.twoLineMode = true;
+                //categoryAxis.tickLength = 12;
                 categoryAxis.markPeriodChange = false;
                 categoryAxis.dateFormats = [{
                     period: 'fff',
@@ -65,8 +68,20 @@ angular.module('Sportomatics')
                     period: 'YYYY',
                     format: 'YYYY'
                 }];
-                var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
-                var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
+                categoryAxis.labelFunction = function(valueText, date, categoryAxis){
+                    if(chartData.groupBy === 'season'){
+                        var endDate = valueText.substr(2, 2);
+                        var startDate = (endDate === '00') ? '99' : (parseInt(endDate)-1).toString();
+                        if(startDate.length === 1) startDate = '0'+ startDate;
+                        return startDate + '/'+ endDate;
+                    }
+                    if(valueText === 'Jan') return new Date(date).getFullYear();
+                    return '';
+                };
+
+                var currMax = Math.max.apply(Math, data.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, data.map(function(e){ return e['values']}));
+
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
@@ -126,6 +141,7 @@ angular.module('Sportomatics')
                 graph2.animationPlayed = true;
                 graph2.type = 'line';
                 graph2.balloonText = '';
+                graph2.visibleInLegend = false;
                 //chart.addGraph(graph2);
 
                 // second graph
@@ -172,7 +188,7 @@ angular.module('Sportomatics')
                 chartCursor.cursorAlpha = 1;
                 chartCursor.cursorColor = "#8ebd5d";
                 chartCursor.categoryBalloonFunction = function(value){
-                    if(self.groupBy === 'month'){
+                    if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
                     } else {
                         return localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
@@ -185,7 +201,7 @@ angular.module('Sportomatics')
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
-})
+});
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 
 // this method is called when chart is first inited as we listen for "dataUpdated" event

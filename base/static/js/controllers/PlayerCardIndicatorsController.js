@@ -1,7 +1,6 @@
     angular.module('Sportomatics')
         .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {
             //http://www.amcharts.com/lib/images/
-
             var self = this,
                 url = $('#IndicatorsLink').attr('href');
             this.url = $('#IndicatorsLink').attr('href');
@@ -48,6 +47,9 @@
             this.setGraphResults = function(results) {
 
             };
+            $scope.animateAgain = function(){
+                $scope.chart.animateAgain();
+            };
             //var chart = null;
             $scope.addGraph = function (url) {
                 var params = 'group_by=month';
@@ -91,11 +93,7 @@
                 self.list();
                 $timeout(function(){}, 500);
             };
-            $scope.unload = function(){
-
-            };
             $scope.moveToSeason = function(season, index){
-
                 if((self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 )) return;
                 zoomData.startDate = season.start_date;
                 zoomData.endDate = season.end_date;
@@ -115,7 +113,7 @@
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
-                $scope.chartData = generateChartData(data.results, self.field);
+                $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
                 ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
                     // WRITE
@@ -149,8 +147,9 @@
                         })
 
                     }
+                    $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
                     $scope.chart.write("chartdiv");
-                    $scope.chart.addClassNames = false;
+                    //$scope.chart.addClassNames = false;
                     if(switched){
                         $scope.chart.zoomToDates(zoomStart, zoomEnd);
                     }
@@ -226,6 +225,7 @@
             };
         })
         .run(function (AmChartsFactory) {});
+
     Array.prototype.contains = function(obj) {
         var i = this.length;
         while (i--) {
@@ -235,8 +235,10 @@
         }
         return false;
     };
-    function generateChartData(data, field) {
-        var chartData = [];
+    function generateChartData(data, field, groupBy) {
+        var chartData = {};
+        chartData.groupBy = groupBy;
+        chartData.data = [];
         var dates = data.map(function(e){
             if(e['date'] == null){
                 return new Date(e['season']['end_date']);
@@ -249,7 +251,7 @@
         for(var i = 0; i< dates.length; i++){
             if(!((field === 'shots' || field === 'pis__avg' || field === 'shots__avg' || field === 'faceoff' || field === 'winfaceoff' || field === 'winfaceoff_p__avg' || field === 'gamingtime__avg' || field === 'change_count__avg')
                 && (dates[i].getFullYear() <= 2008)))
-                chartData.push({
+                chartData.data.push({
                     date: dates[i],
                     values: values[i],
                     count: count[i],
