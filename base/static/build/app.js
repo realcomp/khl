@@ -1327,7 +1327,7 @@ angular.module('Sportomatics')
     // };
 
     $scope.hasNext = function() {
-        return $scope.limit + 50 <= $scope.data.length;
+        return $scope.limit < $scope.data.length;
     };
 
     $scope.next = function() {
