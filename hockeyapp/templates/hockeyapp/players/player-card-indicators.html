@@ -205,15 +205,18 @@
                             <div class="chart-button-panel" ng-show="localeObject">
                                 <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
                                 <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
-                                <a class="ui green button chart-button" ng-click="addGraph('/ru/hockey/api/players/2186/indicators/')">Сравнить с игроком 2186</a>
+                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/gorohov', 0)">Сравнить с игроком 2186</a>
+                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/soin', 1)">Сравнить с игроком 401</a>
                                 <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
                             {% verbatim %}
                             <div  ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && PlayerCardIndicatorsCtrl.indicatorsType !== 'table' || onSeason ">
                                 <span class="season-buttons-label"> Выбрать сезон:</span>
                                 <div class="season-buttons-container">
-                                    <a class="ui season-button" ng-click="setGroupBy('season')" ng-class="{'active-season-button': activeSeason === -1}"><span ng-bind="localeObject.buttonNames.allSeasons"></span></a>
-                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season)}" >
+                                    <a class="ui season-button" ng-class="{'active-season-button': activeSeason === -1}">
+                                        <div ng-bind="localeObject.buttonNames.allSeasons" ng-click="setGroupBy('season')"></div>
+                                    </a>
+                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season), 'm-l-1': $index === 0}">
                                         <div ng-bind="result.season.title" ng-click="moveToSeason(result.season, $index)"></div>
                                     </a>
                                </div>

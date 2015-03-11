@@ -294,10 +294,9 @@ angular.module('Sportomatics')
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
-                chart.dataProvider = data;
+                chart.dataProvider = data;//[{"date":"2010-06-30T00:00:00.000Z","values1":7,"count1":5,"percentage1":0.152,"values":9,"count":6,"percentage":0.173},{"date":"2011-06-30T00:00:00.000Z","values1":9,"count1":9,"percentage1":0.111,"values":6,"count":9,"percentage":0.067},{"date":"2012-06-30T00:00:00.000Z","values1":13,"count1":7,"percentage1":0.188,"values":7,"count":4,"percentage":0.206},{"date":"2013-06-30T00:00:00.000Z","values1":9,"count1":7,"percentage1":0.129,"values":11,"count":7,"percentage":0.177},{"date":"2014-06-30T00:00:00.000Z","values1":5,"count1":7,"percentage1":0.071,"values":9,"count":5,"percentage":0.22},{"date":"2015-06-30T00:00:00.000Z","values1":4,"count1":6,"percentage1":0.067,"values":3,"count":4,"percentage":0.094},{"date":"1998-06-30T00:00:00.000Z","values1":1,"count1":4,"percentage1":0.029},{"date":"1999-06-30T00:00:00.000Z","values1":6,"count1":5,"percentage1":0.146},{"date":"2000-06-30T00:00:00.000Z","values1":1,"count1":5,"percentage1":0.024},{"date":"2001-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.109},{"date":"2002-06-30T00:00:00.000Z","values1":3,"count1":5,"percentage1":0.068},{"date":"2003-06-30T00:00:00.000Z","values1":2,"count1":5,"percentage1":0.043},{"date":"2004-06-30T00:00:00.000Z","values1":0,"count1":4,"percentage1":0},{"date":"2005-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.105},{"date":"2006-06-30T00:00:00.000Z","values1":10,"count1":7,"percentage1":0.161},{"date":"2007-06-30T00:00:00.000Z","values1":4,"count1":5,"percentage1":0.082},{"date":"2008-06-30T00:00:00.000Z","values1":4,"count1":7,"percentage1":0.062},{"date":"2009-06-30T00:00:00.000Z","values1":2,"count1":4,"percentage1":0.05}];
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
-                chart.addClassNames = true;
                 chart.startDuration = 1;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
@@ -314,8 +313,10 @@ angular.module('Sportomatics')
                 //categoryAxis.minorGridEnabled = true;
                 //categoryAxis.autoGridCount =  true;
                 //categoryAxis.grudCount = 12;
+                categoryAxis.equalSpacing = true;
                 categoryAxis.minHorizontalGap = 40;
                 categoryAxis.gridAlpha = 0; //categoryAxis.gridAlpha = 0.1;
+                //categoryAxis.gridPosition = 'start';
                 categoryAxis.boldPeriodBeginning = false;
                 categoryAxis.axisColor = "#DADADA";
                 //categoryAxis.twoLineMode = true;
@@ -422,10 +423,7 @@ angular.module('Sportomatics')
                 graph1Copy.fillColors = "#FF3232";
                 graph1Copy.fillAlphas = 1;
                 graph1Copy.lineThickness = 0;
-                graph1Copy.animationPlayed = true;
-                graph1Copy.type = 'column';
-                if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
-                    graph1Copy.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
+                graph1Copy.type = 'column'
                 //chart.addGraph(graph1Copy);
 
                 var graph2 = new AmCharts.AmGraph();
@@ -1541,6 +1539,7 @@ angular.module('Sportomatics')
             this.graphData = {};
             this.chartsCount = 0;
             $scope.activeSeason = -1;
+            $scope.playersStats = [];
 
             this.setIndicatorsType = function(type) {
                 this.indicatorsType = type;
@@ -1579,38 +1578,59 @@ angular.module('Sportomatics')
                 $scope.chart.animateAgain();
             };
             //var chart = null;
-            $scope.addGraph = function(url){
-                var params = 'group_by=month';
-                if (self.club !== null) {
-                    params += '&club=' + self.club;
-                }
-                if (self.coach !== null) {
-                    params += '&coach=' + self.coach;
-                }
-                $http.get(url + '?' + params)
-                    .success(function(data) {
-                        $scope.dataByMonth = data;
-                        params = 'group_by=season';
-                        if (self.club !== null) {
-                            params += '&club=' + self.club;
-                        }
-                        if (self.coach !== null) {
-                            params += '&coach=' + self.coach;
-                        }
-                        $http.get(url + '?' + params)
-                            .success(function(data, status, headers) {
-                                $scope.dataBySeason = data;
-                                self.loader = false;
-                            }).then(function(){
-                                var data;
-                                data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
-                                var newChartData = updatedChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject);
-                                $scope.chart.dataProvider = newChartData.chartData.data;
-                                $scope.chart.addGraph(newChartData.newGraph);
-                                $scope.chart.validateData();
-                            })
-                    })
+            $scope.addGraph = function(url, local){
+                //TODO: make production version
+                var players = [
+                    {
+                        title: 'Горохов Илья',
+                        color: "#FF3232",
+                        id: '1',
+                        link: '/static/json/gorohov'
+                    },
+                    {
+                        title: 'Сергей Соин',
+                        color: "#3232FF",
+                        id: '2',
+                        link: '/static/json/soin'
+                    }
+                ];
+                var playerObject = players[local];
+                url = playerObject.link;
+                var localUrlMonths = url + '_months.json';
+                var localUrlSeasons = url + '_seasons.json';
+                    self.loader = true;
+                    var newPlayer = {};
+                    newPlayer.pk = 2186;
+                    newPlayer.name = 'Горохов Илья';
+                    $http.get(localUrlMonths)
+                        .success(function(data){
+                            newPlayer.dataByMonth = data;
+                        }).then(function(){
+                            $http.get(localUrlSeasons)
+                                .success(function(data){
+                                    newPlayer.dataBySeason = data;
+                                    self.loader = false;
+                                }).then(function(){
+                                    var data;
+                                    data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
+                                    var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
+                                    $scope.latestData = newChartData.chartData.data;
+                                    $scope.chart.dataProvider = newChartData.chartData.data;
+                                    console.log($scope.chart.dataProvider);
+                                    $scope.chart.addGraph(newChartData.newGraph);
+                                    //$scope.chart.validateData();
+                                    $scope.chart.write("chartdiv");
+                                })
+                        })
             };
+
+            $scope.makeChart = function(){
+                $.each($scope.playersStats, function(index, player){
+                    var currentPlayerData = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
+                    var currentChartData = generateChartData(currentPlayerData, self.field, self.groupBy);
+                })
+            };
+
             $scope.isDisabled = function(season){
                 return (self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 );
             };
@@ -1643,6 +1663,9 @@ angular.module('Sportomatics')
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
+                if($scope.playersStats.length > 0){
+                    $scope.chartData = concatenatedPlayersData();
+                }
                 ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
                     // WRITE
@@ -1789,8 +1812,7 @@ angular.module('Sportomatics')
         }
         return chartData;
     }
-    function updatedChartData(chart, initialData, data, field, localeObject){
-
+    function populateChartData(chart, initialData, data, field, localeObject, playerObject){
         var chartData = initialData;
         var dates = data.map(function(e){
             if(e['date'] == null){
@@ -1802,53 +1824,43 @@ angular.module('Sportomatics')
         var count = data.map(function(e){ return Math.ceil(e['count']/10)});
         var realCount = data.map(function(e){ return e['count']});
         _.each(dates, function(date, index){
-            var pushed = false;
-            _.each(chartData.data, function(e){
-                if(e['date'] == null){
-                    if(new Date(e['season']['end_date']).toString() === date.toString()){
-                        e['values1'] = values[index];
-                        e['count1'] = count[index];
-                        e['percentage1'] =  (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000;
-                        pushed = true;
-                    }
-                } else {
-                    if(new Date(e['date']).toString() === date.toString()){
-                        e['values1'] = values[index];
-                        e['count1'] = count[index];
-                        pushed = true;
-                    }
+            if(!((field === 'shots' || field === 'pis__avg' || field === 'shots__avg' || field === 'faceoff' || field === 'winfaceoff' || field === 'winfaceoff_p__avg' || field === 'gamingtime__avg' || field === 'change_count__avg')
+                && (date.getFullYear() <= 2008))){
+                if(playerObject.id === '1'){
+                    chartData.data.push({
+                        date: date,
+                        values1: values[index],
+                        count1: count[index],
+                        percentage1: (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000
+                    });
+                } else if(playerObject.id === '2'){
+                    chartData.data.push({
+                        date: date,
+                        values2: values[index],
+                        count2: count[index],
+                        percentage2: (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000
+                    });
                 }
-            });
-            console.log(pushed);
-            if (!pushed) {
-                /*chartData.data.push({
-                    date: date,
-                    values1: values[index],
-                    count1: count[index],
-                    percentage1: (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000
-                });*/
             }
         });
-        console.log(chartData);
-        var graph1Copy = new AmCharts.AmGraph();
-        graph1Copy.id = "g23";
-        graph1Copy.valueAxis = chart.valueAxes[0]; // we have to indicate which value axis should be used
-        graph1Copy.title = 'Горохов Илья, '+field;
-        graph1Copy.valueField = "values1";
-        graph1Copy.bullet = "none";
-        graph1Copy.hideBulletsCount = 30;
-        graph1Copy.bulletBorderThickness = 1;
-        graph1Copy.lineColor = "#FF3232";
-        graph1Copy.fillColors = "#FF3232";
-        graph1Copy.fillAlphas = 1;
-        graph1Copy.lineThickness = 0;
-        graph1Copy.type = 'column';
-        if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
-            graph1Copy.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values1]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage1]]</span>';
+        //console.log(chartData);
+        var a = _.map(_.toArray(_.groupBy(chartData.data, 'date')), function(e){
+            var object = {};
+            //if(e.length < 2) return null; //в случае если нужно будет сделать только общие сезоны
+            _.each(e, function(dateObject){
+                object = mergeJSON(object, dateObject);
+            });
+            object.date = new Date(object.date);
+            return object;
+        });
+        chartData.data = _.without(_.sortBy(_.toArray(a), 'date'), null);
+        //console.log(JSON.stringify(_.toArray(a)));
+        var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
         //chart.addGraph(graph1Copy);
+        console.log(newGraph);
         return {
             chartData: chartData,
-            newGraph: graph1Copy
+            newGraph: newGraph
         };
     }
     function getArrayElementIndex(array, field, value){
@@ -1858,6 +1870,49 @@ angular.module('Sportomatics')
             }
         });
         return null;
+    }
+    function mergeJSON(source1,source2){
+        /*
+         * Properties from the Souce1 object will be copied to Source2 Object.
+         * Note: This method will return a new merged object, Source1 and Source2 original values will not be replaced.
+         * */
+        var mergedJSON = source2;// Copying Source2 to a new Object
+
+        for (var attrname in source1) {
+            if(mergedJSON.hasOwnProperty(attrname)) {
+                if ( source1[attrname]!=null && source1[attrname].constructor==Object ) {
+                    /*
+                     * Recursive call if the property is an object,
+                     * Iterate the object and set all properties of the inner object.
+                     */
+                    mergedJSON[attrname] = mergeJSON(source1[attrname], mergedJSON[attrname]);
+                }
+            } else {//else copy the property from source1
+                mergedJSON[attrname] = source1[attrname];
+
+            }
+        }
+
+        return mergedJSON;
+    }
+    function makeGraph(id, title, color, field, valueAxis, localeObject){
+        var graph = new AmCharts.AmGraph();
+        graph.id = "gl"+id;
+        graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
+        graph.title = title + ' ' + field;
+        graph.valueField = "values" + id;
+        graph.bullet = "none";
+        graph.hideBulletsCount = 30;
+        graph.bulletBorderThickness = 1;
+        graph.lineColor = color;
+        graph.fillColors = color;
+        graph.fillAlphas = 1;
+        graph.lineThickness = 0;
+        graph.type = 'column';
+        if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+        graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
+
+        return graph;
     }
 angular.module('Sportomatics')
 .controller('PlayersSearchController', [
