@@ -297,7 +297,8 @@ angular.module('Sportomatics')
                 chart.dataProvider = data;//[{"date":"2010-06-30T00:00:00.000Z","values1":7,"count1":5,"percentage1":0.152,"values":9,"count":6,"percentage":0.173},{"date":"2011-06-30T00:00:00.000Z","values1":9,"count1":9,"percentage1":0.111,"values":6,"count":9,"percentage":0.067},{"date":"2012-06-30T00:00:00.000Z","values1":13,"count1":7,"percentage1":0.188,"values":7,"count":4,"percentage":0.206},{"date":"2013-06-30T00:00:00.000Z","values1":9,"count1":7,"percentage1":0.129,"values":11,"count":7,"percentage":0.177},{"date":"2014-06-30T00:00:00.000Z","values1":5,"count1":7,"percentage1":0.071,"values":9,"count":5,"percentage":0.22},{"date":"2015-06-30T00:00:00.000Z","values1":4,"count1":6,"percentage1":0.067,"values":3,"count":4,"percentage":0.094},{"date":"1998-06-30T00:00:00.000Z","values1":1,"count1":4,"percentage1":0.029},{"date":"1999-06-30T00:00:00.000Z","values1":6,"count1":5,"percentage1":0.146},{"date":"2000-06-30T00:00:00.000Z","values1":1,"count1":5,"percentage1":0.024},{"date":"2001-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.109},{"date":"2002-06-30T00:00:00.000Z","values1":3,"count1":5,"percentage1":0.068},{"date":"2003-06-30T00:00:00.000Z","values1":2,"count1":5,"percentage1":0.043},{"date":"2004-06-30T00:00:00.000Z","values1":0,"count1":4,"percentage1":0},{"date":"2005-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.105},{"date":"2006-06-30T00:00:00.000Z","values1":10,"count1":7,"percentage1":0.161},{"date":"2007-06-30T00:00:00.000Z","values1":4,"count1":5,"percentage1":0.082},{"date":"2008-06-30T00:00:00.000Z","values1":4,"count1":7,"percentage1":0.062},{"date":"2009-06-30T00:00:00.000Z","values1":2,"count1":4,"percentage1":0.05}];
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
-                chart.startDuration = 1;
+                chart.startDuration = 0.5;
+                chart.startEffect = "easeOutSine";
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
@@ -1557,7 +1558,7 @@ angular.module('Sportomatics')
                 this.field = field;
                 this.fieldName = LocaleFactory.getFieldName(field, self.locale);
                 $location.search('field', field);
-                this.list(true);
+                ($scope.playersStats.length > 0) ? $scope.makeChart() : this.list(true);
             };
 
             this.setClub = function(club) {
@@ -1594,6 +1595,7 @@ angular.module('Sportomatics')
                         link: '/static/json/soin'
                     }
                 ];
+                if(contains($scope.playersStats, 'id', (parseInt(local)+1).toString())) return;
                 var playerObject = players[local];
                 url = playerObject.link;
                 var localUrlMonths = url + '_months.json';
@@ -1604,15 +1606,17 @@ angular.module('Sportomatics')
                     newPlayer.name = 'Горохов Илья';
                     $http.get(localUrlMonths)
                         .success(function(data){
+                            playerObject.dataByMonth = data;
                             newPlayer.dataByMonth = data;
                         }).then(function(){
                             $http.get(localUrlSeasons)
                                 .success(function(data){
+                                    playerObject.dataBySeason = data;
                                     newPlayer.dataBySeason = data;
                                     self.loader = false;
                                 }).then(function(){
-                                    var data;
-                                    data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
+                                    $scope.playersStats.push(playerObject);
+                                    var data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
                                     var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
                                     $scope.latestData = newChartData.chartData.data;
                                     $scope.chart.dataProvider = newChartData.chartData.data;
@@ -1625,10 +1629,14 @@ angular.module('Sportomatics')
             };
 
             $scope.makeChart = function(){
-                $.each($scope.playersStats, function(index, player){
-                    var currentPlayerData = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
-                    var currentChartData = generateChartData(currentPlayerData, self.field, self.groupBy);
-                })
+                var newChartData = [];
+                _.each($scope.playersStats, function(player, index){
+                    var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
+                    newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, player);
+                    $scope.latestData = newChartData.chartData.data;
+                    $scope.chart.dataProvider = newChartData.chartData.data;
+                });
+                $scope.chart.validateData();
             };
 
             $scope.isDisabled = function(season){
@@ -1663,9 +1671,6 @@ angular.module('Sportomatics')
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
-                if($scope.playersStats.length > 0){
-                    $scope.chartData = concatenatedPlayersData();
-                }
                 ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
                     // WRITE
@@ -1913,6 +1918,14 @@ angular.module('Sportomatics')
         graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
 
         return graph;
+    }
+    function contains(array, field, value){
+        for(var i = 0; i < array.length; i++) {
+            if (array[i][field] === value) {
+                return true;
+            }
+        }
+        return false;
     }
 angular.module('Sportomatics')
 .controller('PlayersSearchController', [

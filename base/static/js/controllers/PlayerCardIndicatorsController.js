@@ -32,7 +32,7 @@
                 this.field = field;
                 this.fieldName = LocaleFactory.getFieldName(field, self.locale);
                 $location.search('field', field);
-                this.list(true);
+                ($scope.playersStats.length > 0) ? $scope.makeChart() : this.list(true);
             };
 
             this.setClub = function(club) {
@@ -69,6 +69,7 @@
                         link: '/static/json/soin'
                     }
                 ];
+                if(contains($scope.playersStats, 'id', (parseInt(local)+1).toString())) return;
                 var playerObject = players[local];
                 url = playerObject.link;
                 var localUrlMonths = url + '_months.json';
@@ -79,15 +80,17 @@
                     newPlayer.name = 'Горохов Илья';
                     $http.get(localUrlMonths)
                         .success(function(data){
+                            playerObject.dataByMonth = data;
                             newPlayer.dataByMonth = data;
                         }).then(function(){
                             $http.get(localUrlSeasons)
                                 .success(function(data){
+                                    playerObject.dataBySeason = data;
                                     newPlayer.dataBySeason = data;
                                     self.loader = false;
                                 }).then(function(){
-                                    var data;
-                                    data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
+                                    $scope.playersStats.push(playerObject);
+                                    var data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
                                     var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
                                     $scope.latestData = newChartData.chartData.data;
                                     $scope.chart.dataProvider = newChartData.chartData.data;
@@ -100,10 +103,14 @@
             };
 
             $scope.makeChart = function(){
-                $.each($scope.playersStats, function(index, player){
-                    var currentPlayerData = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
-                    var currentChartData = generateChartData(currentPlayerData, self.field, self.groupBy);
-                })
+                var newChartData = [];
+                _.each($scope.playersStats, function(player, index){
+                    var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
+                    newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, player);
+                    $scope.latestData = newChartData.chartData.data;
+                    $scope.chart.dataProvider = newChartData.chartData.data;
+                });
+                $scope.chart.validateData();
             };
 
             $scope.isDisabled = function(season){
@@ -138,9 +145,6 @@
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
-                if($scope.playersStats.length > 0){
-                    $scope.chartData = concatenatedPlayersData();
-                }
                 ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
                     // WRITE
@@ -388,4 +392,12 @@
         graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
 
         return graph;
+    }
+    function contains(array, field, value){
+        for(var i = 0; i < array.length; i++) {
+            if (array[i][field] === value) {
+                return true;
+            }
+        }
+        return false;
     }
