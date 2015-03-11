@@ -1,9 +1,13 @@
 # coding: utf-8
+from django.contrib.auth import views
 from django.views.generic import DetailView
 from registration.backends.default.views import RegistrationView
 
 from ..forms import RegForm
 from ..mixins import LoginReqMixin, ProfileMixin
+
+password_reset_confirm = views.password_reset_confirm
+password_reset_complete = views.password_reset_complete
 
 
 class Signup(RegistrationView):
