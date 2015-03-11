@@ -2,7 +2,8 @@
 
 from rest_framework import generics, permissions
 
-from ..serializers import ProfileSerializer, ProfileVersionSerializer
+from ..serializers import (
+    ProfileSerializer, ProfileVersionSerializer, RegistrationSer)
 
 
 class ProfileVersionView(generics.RetrieveUpdateAPIView):
@@ -19,3 +20,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class RegistrationView(generics.CreateAPIView):
+    serializer_class = RegistrationSer
