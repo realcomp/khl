@@ -170,11 +170,6 @@ SUIT_CONFIG = {
             'icon':'icon-edit', 
             'url': '/admin/hockeyapp/leagueclub_multi_add/'
         },
-        {
-            'label': _('Match parser form'), 
-            'icon':'icon-tasks', 
-            'url': '/admin/hockeyapp/matchparser_form/'
-        },
         {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
     ),
     'MENU_EXCLUDE': ('sites', 'auth'),

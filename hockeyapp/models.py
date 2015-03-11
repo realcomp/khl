@@ -21,8 +21,8 @@ from base.models import LocaleAttrMixin, TitleBaseModel, AdminLinkMixin, Season
 from base.models import TitleAlias, SocialAbstract, InstagramImageFile
 
 from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
-from .choices import CHALLENGE_TYPE
-from . import managers
+from .choices import CHALLENGE_TYPE, PARSERS
+from . import managers, parsers
 
 def rgb_validator(value):
     if not re.match(r"(\d+),\s*(\d+),\s*(\d+)", value):
@@ -873,10 +873,49 @@ class Match(AdminLinkMixin, TitleBaseModel):
         return self.ru_title
 
 
+class Challenge(TitleBaseModel):
+    khl_id = models.PositiveIntegerField(_('Other site calendar ID'))
+    url = models.URLField('Challenge calendar for parsing', blank=True)
+    parser_type = models.CharField('Parser', blank=True, max_length=255,
+                                    choices=PARSERS)
+    challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
+                                null=True, choices=CHALLENGE_TYPE)
+    season = models.ForeignKey(Season, null=True, blank=True)
+    league = models.ForeignKey(League)
+    processed = models.BooleanField(default=False)
+    proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,
+                                            null=True)
+
+    @property
+    def match_parser(self):
+        return {
+                'KHLScheduleParser': parsers.match.HockeyKHLMatchParser,
+                'VHLScheduleParser': parsers.match.HockeyVHLMatchParser,
+                'MHLScheduleParser': parsers.match.HockeyMHLMatchParser,
+                'MHL2ScheduleParser': parsers.match.HockeyMHL2MatchParser,
+            }.get(self.parser_type)
+
+    def match_url(self, match_id):
+        return {
+                'KHLScheduleParser': 'http://www.khl.ru/game/{}/{}/protocol/',
+                'VHLScheduleParser': 'http://www.vhlru.ru/report/{}/?idgame={}',
+                'MHLScheduleParser': 'http://mhl.khl.ru/report/{}/?idgame={}',
+                'MHL2ScheduleParser': 'http://mhl2.khl.ru/report/{}/?idgame={}',
+            }.get(self.parser_type).format(self.khl_id, match_id)
+
+    class Meta:
+        verbose_name=_('Challenge')
+        verbose_name_plural=_('Challenges')
+
+
 class Schedule(TitleBaseModel):
     objects = managers.ScheduleManager()
     khl_id = models.PositiveIntegerField(_('Other site ID'), null=True,)
+    match_url = models.URLField('Match Other site url', blank=True)
     date = models.DateTimeField(_('Match date'), null=True, blank=True)
+    challenge = models.ForeignKey(Challenge, null=True,
+                                verbose_name=Challenge._meta.verbose_name,
+                                on_delete=models.SET_NULL,)
     challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
                                 null=True, choices=CHALLENGE_TYPE)
     #relations
@@ -895,6 +934,12 @@ class Schedule(TitleBaseModel):
     processed = models.BooleanField(default=False)
     proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,
                                             null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.match_url and self.challenge and self.khl_id:
+            self.match_url = self.challenge.match_url(self.khl_id)
+        super(Schedule, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name=_('League Schedule')
         verbose_name_plural=_('League Schedules')

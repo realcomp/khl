@@ -53,3 +53,10 @@ CHALLENGE_TYPE = (
     (7, _('MHL qualifying tournament')),
     (8, _('MHL-2 Generation Cup'))
 )
+
+PARSERS =(
+    ('KHLScheduleParser', _('KHL Schedule Parser')),
+    ('VHLScheduleParser', _('VHL Schedule Parser')),
+    ('MHLScheduleParser', _('MHL Schedule Parser')),
+    ('MHL2ScheduleParser', _('MHL2 Schedule Parser')),
+)

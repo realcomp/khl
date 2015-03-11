@@ -52,6 +52,7 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                         func = model.objects.get_or_create
                         data['coach'] = func(fio=_coach_fio)[0]
                     if update and _club and _club.title:
+                        if _club.logo: data.pop('logo', None)
                         self.filter(title=title).update(**data)
                     else:
                         _club = self.create(**data)
