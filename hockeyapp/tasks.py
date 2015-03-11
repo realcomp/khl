@@ -82,7 +82,6 @@ def async_hockey_match_parser(match_id, update=False, challenge=None):
     try:
         parser = challenge.match_parser
         abs_url = challenge.match_url(match_id)
-        print(parser, abs_url, match_id)
         if update:
             m = models.Match.objects.filter(khl_id=match_id).last()
             if m:
