@@ -6,7 +6,6 @@ from django.views.generic import FormView, TemplateView
 
 from ..forms import ClubleaguesAddForm, MatchParserForm
 from ..models import LeagueClub, Match
-from hockeyapp.tasks import async_hockey_matches_parser
 
 
 class ClubleaguesAddView(FormView):
@@ -40,14 +39,13 @@ class MatchParserFormView(FormView):
         return Match.admin_list_link()
 
     def form_valid(self, form):
-        from_id = form.cleaned_data['from_id']
-        to_id = form.cleaned_data.get('to_id')
-        count = form.cleaned_data.get('count')
-        parser_id = form.cleaned_data.get('parser_id')
-        update = form.cleaned_data.get('update')
-        if not count:
-            count = to_id-from_id+1 if to_id else 1
-        async_hockey_matches_parser.delay(parser_id, from_id, count or 1,update)
+        #from_id = form.cleaned_data['from_id']
+        #to_id = form.cleaned_data.get('to_id')
+        #count = form.cleaned_data.get('count')
+        #parser_id = form.cleaned_data.get('parser_id')
+        #update = form.cleaned_data.get('update')
+        #if not count:
+            #count = to_id-from_id+1 if to_id else 1
         return super(MatchParserFormView, self).form_valid(form)
 matchparser_form = MatchParserFormView.as_view()
 

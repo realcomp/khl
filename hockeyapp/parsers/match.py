@@ -155,6 +155,12 @@ class HockeyMHLMatchParser(GrabParser):
     body_notexists = xpathes.MHL_BODY_NOTEXISTS
     body_notexists_alt = xpathes.MHL_BODY_NOTEXISTS_ALT
 
+    def _get_absolute_url(self, id=None, slash=True):
+        b'''определяем url страницы
+            По-умолчанию: self.absolute_url = self.url
+        '''
+        return self.absolute_url
+
     def put_data_in_db_from_page(self, id=None, data=None):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
@@ -751,14 +757,6 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
                     'sf': str2float_safe(item[10]),
                     'gamingtime': str2sec_safe(item[15]),
             }
-
-
-class KHLPlayoff2015MatchParser(HockeyKHLMatchParser):
-    b'''Парсер хоккейной статистики матча с сайта КХЛ
-        Playoff сезон 14/15
-    '''
-    url = xpathes.KHL_SITE_URL+'/game/267/'
-    absolute_url = url
 ################################################################################
 ################################################################################
 ################################################################################

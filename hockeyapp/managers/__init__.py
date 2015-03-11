@@ -30,6 +30,7 @@ class ScheduleManager(models.Manager):
         league_model = get_model(CURRENT_APP, 'League')
         _league, _crt = league_model.objects.get_or_create(en_title=_league)
         challenge_type = kwargs.pop('challenge_type', None)
+        challenge = kwargs.pop('challenge', None)
         for m in kwargs.get('matches',):
             _match = self.filter(khl_id = m.get('khl_id')).last()
             m['league'] = _league
@@ -37,6 +38,7 @@ class ScheduleManager(models.Manager):
             m['home_team'] = self._get_team(m.pop('home_team', None))
             m['guest_team'] = self._get_team(m.pop('guest_team', None))
             m['challenge_type'] = challenge_type
+            m['challenge'] = challenge
             if m.get('khl_id') and (not _match or not _match.match):
                 m['match'] = self._get_match(m)
                 if m['match']:
@@ -56,6 +58,7 @@ class ScheduleManager(models.Manager):
         league_model = get_model(CURRENT_APP, 'League')
         _league, _crt = league_model.objects.get_or_create(en_title=_league)
         challenge_type = kwargs.pop('challenge_type', None)
+        challenge = kwargs.pop('challenge', None)
         for m in kwargs.get('matches',):
             home_team= self._get_team(m.pop('home_team', None))
             guest_team= self._get_team(m.pop('guest_team', None))
@@ -64,6 +67,7 @@ class ScheduleManager(models.Manager):
                         season = _season,
                         home_team = home_team,
                         guest_team = guest_team,
+                        challenge = challenge,
             )
             if kwargs.get('without_khl_id', True):
                 qs['khl_id__isnull'] = True

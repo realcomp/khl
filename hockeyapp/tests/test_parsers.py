@@ -53,20 +53,24 @@ class HockeyAppParserTest(base.tests.BaseTest):
                                             ).get_page(self.vhl_player_id)
         self.assertIsNotNone(self.vhl_player_data)
         # test mhl match parser
-        self.mhl_match_data = parsers.match.HockeyMHLMatchParser(html=True
-                                                ).get_page(self.mhl_match_id)
+        self.mhl_match_data = parsers.match.HockeyMHLMatchParser(html=True,
+                    absolute_url='http://mhl.khl.ru/report/272/?idgame=44367'
+            ).get_page(self.mhl_match_id)
         self.assertIsNotNone(self.mhl_match_data)
         # test mhl2 match parser
-        self.mhl2_match_data = parsers.match.HockeyMHL2MatchParser(html=True
-                                                ).get_page(self.mhl2_match_id)
+        self.mhl2_match_data = parsers.match.HockeyMHL2MatchParser(html=True,
+                    absolute_url='http://mhl2.khl.ru/report/274/?idgame=45340'
+            ).get_page(self.mhl2_match_id)
         self.assertIsNotNone(self.mhl2_match_data)
         # test khl match parser
-        self.khl_match_data = parsers.match.HockeyKHLMatchParser(html=True
-                                                ).get_page(self.khl_match_id)
+        self.khl_match_data = parsers.match.HockeyKHLMatchParser(html=True,
+                    absolute_url='http://www.khl.ru/game/266/42100/protocol/'
+            ).get_page(self.khl_match_id)
         self.assertIsNotNone(self.khl_match_data)
         # test vhl match parser
-        self.vhl_match_data = parsers.match.HockeyVHLMatchParser(html=True
-                                                ).get_page(self.vhl_match_id)
+        self.vhl_match_data = parsers.match.HockeyVHLMatchParser(html=True,
+                    absolute_url='http://www.vhlru.ru/report/269/?idgame=43031'
+            ).get_page(self.vhl_match_id)
         self.assertIsNotNone(self.khl_match_data)
         # test clubs parser
         self.clublink = parsers.club.KHLClubURLs().get_page()[0][:-1]

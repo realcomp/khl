@@ -39,12 +39,13 @@ class KHLScheduleParser(GrabParser):
         b'''определяем url страницы
             По-умолчанию: self.absolute_url = self.url
         '''
-        if id:
-            self.absolute_url = self.absolute_url.replace('??', str(id))
+        #if id:
+            #self.absolute_url = self.absolute_url.replace('??', str(id))
         return self.absolute_url
 
-    def put_data_in_db_from_page(self, id=None, update=False,
-                                challenge_type=False, without_khl_id=True):
+    def put_data_in_db_from_page(self, id=None, update=False, 
+                                challenge=None, challenge_type=False,
+                                without_khl_id=True):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
         ''' 
@@ -52,6 +53,7 @@ class KHLScheduleParser(GrabParser):
         if data and self.model_name:
             model = get_model('hockeyapp', self.model_name)
             if challenge_type: data['challenge_type'] = challenge_type
+            if challenge: data['challenge'] = challenge
             if update:
                 data['without_khl_id'] = without_khl_id
                 model.objects.update_schedule(**data)

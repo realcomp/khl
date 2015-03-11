@@ -26,7 +26,7 @@ from .models import LogoClubHistory, ClubPlayerMatch, AdvancedPlayerStats
 from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
 from .models import PlayerCoachJudge, ClubSocial, PlayerSocial, CoachSocial
-from .models import JudgeSocial, ArenaInstaPhoto, Timeline
+from .models import JudgeSocial, ArenaInstaPhoto, Timeline, Challenge
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -331,7 +331,7 @@ admin.site.register(Schedule, ScheduleAdmin)
 
 for _model in (League, LeagueClub, CoachClub, ClubTitleAlias):
     admin.site.register(_model, BaseListAdmin)
-for _model in (LogoClubHistory, PlayerCoachJudge,):
+for _model in (LogoClubHistory, PlayerCoachJudge, Challenge):
     admin.site.register(_model, NoFilterAdmin)
 
 class ArenaPhotosInline(admin.TabularInline):
