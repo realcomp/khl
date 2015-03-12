@@ -22,7 +22,7 @@ class RegistrationSer(serializers.ModelSerializer):
 
     class Meta(object):
         model = get_user_model()
-        fields = 'username', 'fio', 'id', 'password'
+        fields = 'username', 'fio', 'id', 'password', 'email_notification'
         # write_only_fields = 'password',
         read_only_fields = 'id',
 
@@ -60,6 +60,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         return value
 
     class Meta(object):
-        fields = 'pk', 'username', 'email', 'fio', 'date_joined', 'avatar'
+        fields = (
+            'pk', 'username', 'email', 'fio', 'date_joined', 'avatar',
+            'name_visible', 'website')
         read_only_fields = 'username', 'date_joined'
         model = get_user_model()

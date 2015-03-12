@@ -2037,6 +2037,8 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
                 case 2:
                     return true;
+                case 3:
+                    return true;
             }
             return false;
         };
@@ -2065,16 +2067,18 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     break;
                 case 1:
                     if($scope.personalInfo){
-                        var data = {
+                        var url = '/ru/accounts/api/signup/',
+                        data = {
                             username: $scope.user.email,
-                            password: $scope.user.password
+                            password: $scope.user.password,
+                            email_notification: $scope.subscribe
                         }, config = {
                             'headers': {
                                 'X-CSRFToken': $cookies.csrftoken
                             },
                         };
                         localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
-                        $http.post('/ru/accounts/api/signup/', data, config).success(function(data) {
+                        $http.post(url, data, config).success(function(data) {
                             $scope.currentStep += 1;
                             $scope.currentStepTemplate = 'step'+ $scope.currentStep;
                         });
@@ -2082,9 +2086,38 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     break;
                 case 2:
                     if($scope.personalInfo){
-                        console.log($scope.personal);
-                        // $scope.currentStep += 1;
-                        // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                        var url = '/ru/accounts/api/profile/',
+                        data = {
+                            fio: $scope.personal.name,
+                            name_visible: !$scope.personal.hideName,
+                            website: $scope.personal.website
+                        }, config = {
+                            'headers': {
+                                'X-CSRFToken': $cookies.csrftoken
+                            },
+                        };
+                        $http.patch(url, data, config).success(function(data) {
+                            $scope.currentStep += 1;
+                            $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                        });
+                    }
+                    break;
+                case 3:
+                    if($scope.personalInfo){
+                        var url = '/ru/accounts/api/profile/',
+                        data = {
+                            sport_hockey: $scope.preferencesSports.hockey,
+                            sport_football: $scope.preferencesSports.football,
+                            sport_basketball: $scope.preferencesSports.basketball
+                        }, config = {
+                            'headers': {
+                                'X-CSRFToken': $cookies.csrftoken
+                            },
+                        };
+                        $http.patch(url, data, config).success(function(data) {
+                            $scope.currentStep += 1;
+                            $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                        });
                     }
                     break;
             }
@@ -2098,9 +2131,9 @@ angular.module('Sportomatics').controller('RegistrationController', [
             else alert('Введите все данные');
         };
         $scope.prevStep = function(){
-            // $scope.currentStep -= 1;
-            // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
-        }
+            $scope.currentStep -= 1;
+            $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+        };
     }
 ]);
         function validateEmail(email) {

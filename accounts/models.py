@@ -62,10 +62,10 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.fio.strip()
-    
+
     def get_short_name(self):
         return self.fio
-    
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
@@ -76,6 +76,13 @@ class User(AbstractUser):
         _('Account version'), max_length=8, default='CLASSIC',
         choices=choices.ACCOUNT_VERSIONS)
     avatar = FilerImageField(verbose_name=_('Avatar'), null=True, blank=True)
+    name_visible = models.BooleanField(_('Name visible'), default=True)
+    website = models.URLField(_('Website'), blank=True, max_length=1024)
+    email_notification = models.BooleanField(
+        _('E-mail notification'), default=True)
+    sport_hockey = models.BooleanField(_('Fav. hockey'), default=False)
+    sport_football = models.BooleanField(_('Fav. football'), default=False)
+    sport_basketball = models.BooleanField(_('Fav. basketball'), default=False)
 
     __unicode__ = lambda self: self.username
 
