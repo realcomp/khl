@@ -119,7 +119,7 @@ angular.module('Sportomatics')
                         graph.valueAxis = valueAxis1;
                         chart.addGraph(graph);
                     })
-                } else{
+                } else {
                     // GRAPHS
                     var graph1 = new AmCharts.AmGraph();
                     graph1.id = "g2";

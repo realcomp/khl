@@ -69,65 +69,78 @@
                         link: '/static/json/soin'
                     }
                 ];
-                if(contains($scope.playersStats, 'id', (parseInt(local)+1).toString())) return;
+                if(contains($scope.playersStats, 'id', (parseInt(local)+1).toString())){
+                    $scope.playersStats = _.without($scope.playersStats, _.findWhere($scope.playersStats, {id: (parseInt(local)+1).toString()}));
+                    return $scope.makeChart($scope.activeSeason > -1);
+                }
                 var playerObject = players[local];
                 url = playerObject.link;
                 var localUrlMonths = url + '_months.json';
                 var localUrlSeasons = url + '_seasons.json';
                     self.loader = true;
-                    var newPlayer = {};
-                    newPlayer.pk = 2186;
-                    newPlayer.name = 'Горохов Илья';
                     $http.get(localUrlMonths)
                         .success(function(data){
                             playerObject.dataByMonth = data;
-                            newPlayer.dataByMonth = data;
                         }).then(function(){
                             $http.get(localUrlSeasons)
                                 .success(function(data){
                                     playerObject.dataBySeason = data;
-                                    newPlayer.dataBySeason = data;
                                     self.loader = false;
                                 }).then(function(){
                                     $scope.playersStats.push(playerObject);
-                                    var data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
+                                    /*var data = (self.groupBy === 'month') ?  playerObject.dataByMonth : playerObject.dataBySeason;
                                     var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
                                     var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, self.field, $scope.chart.valueAxes[0], $scope.localeObject);
                                     //var newChartDataByMonth = populateChartData($scope.chart, $scope.chartData, newPlayer.dataByMonth.results, self.field, $scope.localeObject, playerObject);
                                     //var newChartDataBySeason = populateChartData($scope.chart, $scope.chartData, newPlayer.dataBySeason.results, self.field, $scope.localeObject, playerObject);
                                     $scope.latestData = newChartData.data;
                                     $scope.chart.dataProvider = newChartData.data;
-
                                     $scope.chart.addGraph(newGraph);
                                     //$scope.chart.validateData();
-                                    $scope.chart.write("chartdiv");
+                                    $scope.chart.write("chartdiv");*/
+                                    $scope.makeChart($scope.activeSeason > -1);
                                 })
                         })
             };
 
-            $scope.makeChart = function(){
+            $scope.makeChart = function(switched){
+
                 var initialData = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
+                var initialGraph = makeGraph('', $scope.playerObject.title, $scope.playerObject.color, self.field, null, $scope.localeObject);
                 var initialChartData = generateChartData(initialData.results, self.field, self.groupBy);
                 var newChartGraphs = [];
                 var newChartData = {};
+                newChartGraphs.push(initialGraph);
 
                 _.each($scope.playersStats, function(player, index) {
                     var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
                     newChartData = populateChartData($scope.chart, initialChartData, data.results, self.field, $scope.localeObject, player);
                     var newChartGraph = makeGraph(player.id, player.title, player.color, self.field, null, $scope.localeObject);
                     //$scope.latestData = newChartData.chartData.data;
-                    //$scope.chart.dataProvider = newChartData.chartData.data;
                     newChartGraphs.push(newChartGraph);
                 });
+                if(!$scope.playersStats.length) newChartData.data = initialData.results;
+                var datesArray = newChartData.data.map(function(e){ return new Date(e['date']) });
+                var min = Math.min.apply(null, datesArray);
+                var max = Math.max.apply(null, datesArray);
+                if(switched){
+                    var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
+                    var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
+                }
+                if(self.groupBy === 'season'){
+                    $scope.seasons = newChartData;
+                    console.log($scope.seasons);
+                }
+                if(!$scope.playersStats.length) newChartData = initialChartData;
                 ChartFactory.generateSerialChart(self.field, newChartData, $scope.localeObject, newChartGraphs).then(function(chart){
                     $scope.chart = chart;
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
                     console.log($scope.chart.dataProvider);
                     $scope.chart.write("chartdiv");
                     //$scope.chart.addClassNames = false;
-                    /*if(switched){
+                    if(switched){
                         $scope.chart.zoomToDates(zoomStart, zoomEnd);
-                    }*/
+                    }
                 });
             };
 
@@ -193,10 +206,9 @@
                                 "fillColor" : "#3498db"
                             });
                         })
-
                     }
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
-                    if ($scope.playersStats.length > 0) return $scope.makeChart();
+                    if ($scope.playersStats.length > 0) return $scope.makeChart(switched);
                     $scope.chart.write("chartdiv");
                     //$scope.chart.addClassNames = false;
                     if(switched){
@@ -205,7 +217,7 @@
                 });
             };
             $scope.getPlayerData = function(){
-                var playerObject = {
+                $scope.playerObject = {
                     id: $('#player-id').val(),
                     title: 'Player' + $('#player-id').val(),
                     color: "#408e3a"
@@ -219,20 +231,18 @@
                         $scope.localeObject = LocaleFactory['locale_'+self.locale];
                         self.fieldName = $scope.localeObject.fieldNames[self.field].fullName;
                         $scope.dataByMonth = data;
-                        playerObject.dataByMonth = data;
+                        $scope.playerObject.dataByMonth = data;
                         group = 'season';
                         params = 'group_by=' + group;
                         $http.get(url + '?' + params)
                             .success(function(data, status, headers) {
                                 $scope.dataBySeason = data;
-                                playerObject.dataBySeason = data;
+                                $scope.playerObject.dataBySeason = data;
                                 self.data = data; //for table view
                                 self.loader = false;
                             }).then(function(){
                                 //$scope.playersStats.push(playerObject);
                                 self.list();
-                                console.log($scope.dataByMonth);
-                                console.log($scope.dataBySeason);
                             })
                     })
             };
@@ -358,7 +368,6 @@
             return object;
         });
         chartData.data = _.without(_.sortBy(_.toArray(a), 'date'), null);
-        //var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
 
         return chartData;
     }
