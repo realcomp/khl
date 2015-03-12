@@ -369,6 +369,9 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
                     widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
         )
         return super(ArenaAdmin, self).get_form(request, obj)
+
+    class Media:
+        js = ("hockey/js/arenaadmin.js",)
 admin.site.register(Arena, ArenaAdmin)
 
 
