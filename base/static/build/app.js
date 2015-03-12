@@ -2011,7 +2011,6 @@ angular.module('Sportomatics')
             switch($scope.currentStep){
                 case 1:
                     return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
-
                 case 2:
                     return true;
             }
@@ -2029,38 +2028,50 @@ angular.module('Sportomatics')
         };
         $scope.saveStep = function(){
             switch($scope.currentStep){
-                case 1:
+                case 0:
                     if($scope.personalInfo){
                         var userToLocalStorage;
                         angular.copy($scope.user, userToLocalStorage);
                         userToLocalStorage.password = undefined;
                         userToLocalStorage.password2 = undefined;
                         localStorage.setItem('sportomatics_registrationUserInfo', JSON.stringify(userToLocalStorage));
+                        $scope.currentStep += 1;
+                        $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                    }
+                    break;
+                case 1:
+                    if($scope.personalInfo){
+                        var data = {
+                            username: $scope.user.email,
+                            password: $scope.user.password
+                        };
+                        localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
+                        $http.post('/ru/accounts/api/signup/', data).success(function(data) {
+                            console.log(data);
+                            $scope.currentStep += 1;
+                            $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                        });
                     }
                     break;
                 case 2:
-                    if($scope.personalInfo){
-                        localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
-                    }
-                    break;
-                case 3:
                     if($scope.e()){
-
+                        $scope.currentStep += 1;
+                        $scope.currentStepTemplate = 'step'+ $scope.currentStep;
                     }
                     break;
             }
         };
         $scope.nextStep = function(){
             if($scope.checkStep()) {
-                $scope.currentStep += 1;
-                $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                // $scope.currentStep += 1;
+                // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
                 $scope.saveStep();
             }
             else alert('Введите все данные');
         };
         $scope.prevStep = function(){
-            $scope.currentStep -= 1;
-            $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+            // $scope.currentStep -= 1;
+            // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
         }
     }]);
         function validateEmail(email) {
