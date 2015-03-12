@@ -44,13 +44,14 @@ class PlayersSearchOrderFilter(OrderFilter):
 
 class PlayersSearchFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
-        clubplayers = ClubPlayer.objects.all()
-
         if 'season' in request.GET:
-            clubplayers = clubplayers.by_season(self.request.GET['season'])
+            clubplayers = ClubPlayer.objects.by_season(
+                self.request.GET['season'])
         elif 'is_playing' in request.GET:
-            clubplayers = clubplayers.by_season(
+            clubplayers = ClubPlayer.objects.by_season(
                 Season.objects.latest('start_date'))
+        else:
+            clubplayers = ClubPlayer.objects.all()
 
         if 'league' in request.GET:
             leagues = request.GET.getlist('league')

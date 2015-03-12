@@ -7,6 +7,10 @@ from .views import api
 urlpatterns = [
     # TODO: move to separate namespace
     # REST API
+    url(r'^api/signup/$', api.RegistrationView.as_view(),
+        name='registration-api'),
+    url(r'^api/password_reset/$', api.PasswordResetView.as_view(),
+        name='password-reset-api'),
     url(r'^api/profile/version/$', api.ProfileVersionView.as_view(),
         name='profile-version-api'),
     url(r'^api/profile/$', api.ProfileView.as_view(),

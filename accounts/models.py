@@ -51,6 +51,10 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ()
 
+    @property
+    def email(self):
+        return self.username
+
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')

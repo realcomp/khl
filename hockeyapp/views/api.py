@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 import datetime
 
 import itertools
-import json
 
 from django.db.models import Avg, Sum
 from django.shortcuts import get_object_or_404
