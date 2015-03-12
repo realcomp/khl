@@ -284,7 +284,7 @@ angular.module('Sportomatics')
 .factory('ChartFactory', ["$q", "$rootScope", "AmChartsFactory", "zoomData", "LocaleFactory", function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(field, chartData, localeObject, graphsCount){
+        generateSerialChart: function(field, chartData, localeObject, graphs){
             // Method accepts
             var deferred = $q.defer();
             var chart;
@@ -392,24 +392,32 @@ angular.module('Sportomatics')
                 valueAxis3.axisThickness = 2;
                 chart.addValueAxis(valueAxis3);
 
-                // GRAPHS
-                var graph1 = new AmCharts.AmGraph();
-                graph1.id = "g2";
-                graph1.valueAxis = valueAxis1; // we have to indicate which value axis should be used
-                graph1.title = field;
-                graph1.valueField = "values";
-                graph1.bullet = "none";
-                graph1.hideBulletsCount = 30;
-                graph1.bulletBorderThickness = 1;
-                graph1.lineColor = "#408e3a";
-                graph1.fillColors = "#408e3a";
-                graph1.fillAlphas = 1;
-                graph1.lineThickness = 0;
-                //graph1.animationPlayed = true;
-                graph1.type = 'column';
-                if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
-                graph1.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
-                chart.addGraph(graph1);
+                if(graphs && graphs.length){
+                    _.each(graphs, function(graph){
+                        graph.valueAxis = valueAxis1;
+                        chart.addGraph(graph);
+                    })
+                } else{
+                    // GRAPHS
+                    var graph1 = new AmCharts.AmGraph();
+                    graph1.id = "g2";
+                    graph1.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                    graph1.title = field;
+                    graph1.valueField = "values";
+                    graph1.bullet = "none";
+                    graph1.hideBulletsCount = 30;
+                    graph1.bulletBorderThickness = 1;
+                    graph1.lineColor = "#408e3a";
+                    graph1.fillColors = "#408e3a";
+                    graph1.fillAlphas = 1;
+                    graph1.lineThickness = 0;
+                    //graph1.animationPlayed = true;
+                    graph1.type = 'column';
+                    if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+                        graph1.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
+                    chart.addGraph(graph1);
+                }
+
 
 
                 var graph1Copy = new AmCharts.AmGraph();
@@ -522,6 +530,25 @@ function generateGraph(i, title, axis){
 }
 function saveZoomParams(endDate, endIndex, endValue, startDate){
 
+}
+function makeGraph(id, title, color, field, valueAxis, localeObject){
+    var graph = new AmCharts.AmGraph();
+    graph.id = "gl"+id;
+    graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
+    graph.title = title + ' ' + field;
+    graph.valueField = "values" + id;
+    graph.bullet = "none";
+    graph.hideBulletsCount = 30;
+    graph.bulletBorderThickness = 1;
+    graph.lineColor = color;
+    graph.fillColors = color;
+    graph.fillAlphas = 1;
+    graph.lineThickness = 0;
+    graph.type = 'column';
+    if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+        graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
+
+    return graph;
 }
 angular.module('Sportomatics')
     .factory('LocaleFactory', ["$rootScope", function($rootScope){
@@ -1618,11 +1645,13 @@ angular.module('Sportomatics')
                                     $scope.playersStats.push(playerObject);
                                     var data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
                                     var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
+                                    var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, self.field, $scope.chart.valueAxes[0], $scope.localeObject);
                                     //var newChartDataByMonth = populateChartData($scope.chart, $scope.chartData, newPlayer.dataByMonth.results, self.field, $scope.localeObject, playerObject);
                                     //var newChartDataBySeason = populateChartData($scope.chart, $scope.chartData, newPlayer.dataBySeason.results, self.field, $scope.localeObject, playerObject);
-                                    $scope.latestData = newChartData.chartData.data;
-                                    $scope.chart.dataProvider = newChartData.chartData.data;
-                                    $scope.chart.addGraph(newChartData.newGraph);
+                                    $scope.latestData = newChartData.data;
+                                    $scope.chart.dataProvider = newChartData.data;
+
+                                    $scope.chart.addGraph(newGraph);
                                     //$scope.chart.validateData();
                                     $scope.chart.write("chartdiv");
                                 })
@@ -1634,20 +1663,18 @@ angular.module('Sportomatics')
                 var initialChartData = generateChartData(initialData.results, self.field, self.groupBy);
                 var newChartGraphs = [];
                 var newChartData = {};
+
                 _.each($scope.playersStats, function(player, index) {
                     var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
                     newChartData = populateChartData($scope.chart, initialChartData, data.results, self.field, $scope.localeObject, player);
+                    var newChartGraph = makeGraph(player.id, player.title, player.color, self.field, null, $scope.localeObject);
                     //$scope.latestData = newChartData.chartData.data;
                     //$scope.chart.dataProvider = newChartData.chartData.data;
-                    newChartGraphs.push(newChartData.newGraph);
+                    newChartGraphs.push(newChartGraph);
                 });
-                ChartFactory.generateSerialChart(self.field, newChartData.chartData, $scope.localeObject).then(function(chart){
+                ChartFactory.generateSerialChart(self.field, newChartData, $scope.localeObject, newChartGraphs).then(function(chart){
                     $scope.chart = chart;
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
-                    _.each(newChartGraphs, function(graph){
-                        console.log(graph);
-                        $scope.chart.addGraph(graph);
-                    });
                     console.log($scope.chart.dataProvider);
                     $scope.chart.write("chartdiv");
                     //$scope.chart.addClassNames = false;
@@ -1874,7 +1901,6 @@ angular.module('Sportomatics')
                 }
             }
         });
-        //console.log(chartData);
         var a = _.map(_.toArray(_.groupBy(chartData.data, 'date')), function(e){
             var object = {};
             //if(e.length < 2) return null; //в случае если нужно будет сделать только общие сезоны
@@ -1885,11 +1911,9 @@ angular.module('Sportomatics')
             return object;
         });
         chartData.data = _.without(_.sortBy(_.toArray(a), 'date'), null);
-        var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
-        return {
-            chartData: chartData,
-            newGraph: newGraph
-        };
+        //var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
+
+        return chartData;
     }
     function getArrayElementIndex(array, field, value){
         _.each(array, function(element, index){
@@ -1924,6 +1948,7 @@ angular.module('Sportomatics')
         return mergedJSON;
     }
     function makeGraph(id, title, color, field, valueAxis, localeObject){
+        console.log(id, title, color, field);
         var graph = new AmCharts.AmGraph();
         graph.id = "gl"+id;
         graph.valueAxis = valueAxis; // we have to indicate which value axis should be used

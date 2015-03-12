@@ -92,11 +92,13 @@
                                     $scope.playersStats.push(playerObject);
                                     var data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
                                     var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
+                                    var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, self.field, $scope.chart.valueAxes[0], $scope.localeObject);
                                     //var newChartDataByMonth = populateChartData($scope.chart, $scope.chartData, newPlayer.dataByMonth.results, self.field, $scope.localeObject, playerObject);
                                     //var newChartDataBySeason = populateChartData($scope.chart, $scope.chartData, newPlayer.dataBySeason.results, self.field, $scope.localeObject, playerObject);
-                                    $scope.latestData = newChartData.chartData.data;
-                                    $scope.chart.dataProvider = newChartData.chartData.data;
-                                    $scope.chart.addGraph(newChartData.newGraph);
+                                    $scope.latestData = newChartData.data;
+                                    $scope.chart.dataProvider = newChartData.data;
+
+                                    $scope.chart.addGraph(newGraph);
                                     //$scope.chart.validateData();
                                     $scope.chart.write("chartdiv");
                                 })
@@ -108,20 +110,18 @@
                 var initialChartData = generateChartData(initialData.results, self.field, self.groupBy);
                 var newChartGraphs = [];
                 var newChartData = {};
+
                 _.each($scope.playersStats, function(player, index) {
                     var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
                     newChartData = populateChartData($scope.chart, initialChartData, data.results, self.field, $scope.localeObject, player);
+                    var newChartGraph = makeGraph(player.id, player.title, player.color, self.field, null, $scope.localeObject);
                     //$scope.latestData = newChartData.chartData.data;
                     //$scope.chart.dataProvider = newChartData.chartData.data;
-                    newChartGraphs.push(newChartData.newGraph);
+                    newChartGraphs.push(newChartGraph);
                 });
-                ChartFactory.generateSerialChart(self.field, newChartData.chartData, $scope.localeObject).then(function(chart){
+                ChartFactory.generateSerialChart(self.field, newChartData, $scope.localeObject, newChartGraphs).then(function(chart){
                     $scope.chart = chart;
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
-                    _.each(newChartGraphs, function(graph){
-                        console.log(graph);
-                        $scope.chart.addGraph(graph);
-                    });
                     console.log($scope.chart.dataProvider);
                     $scope.chart.write("chartdiv");
                     //$scope.chart.addClassNames = false;
@@ -348,7 +348,6 @@
                 }
             }
         });
-        //console.log(chartData);
         var a = _.map(_.toArray(_.groupBy(chartData.data, 'date')), function(e){
             var object = {};
             //if(e.length < 2) return null; //в случае если нужно будет сделать только общие сезоны
@@ -359,11 +358,9 @@
             return object;
         });
         chartData.data = _.without(_.sortBy(_.toArray(a), 'date'), null);
-        var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
-        return {
-            chartData: chartData,
-            newGraph: newGraph
-        };
+        //var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
+
+        return chartData;
     }
     function getArrayElementIndex(array, field, value){
         _.each(array, function(element, index){
@@ -398,6 +395,7 @@
         return mergedJSON;
     }
     function makeGraph(id, title, color, field, valueAxis, localeObject){
+        console.log(id, title, color, field);
         var graph = new AmCharts.AmGraph();
         graph.id = "gl"+id;
         graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
