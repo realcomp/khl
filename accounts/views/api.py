@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import generics, permissions, response
@@ -37,12 +39,11 @@ class PasswordResetView(APIView):
                 'use_https': request.is_secure(),
                 'token_generator': default_token_generator,
                 'from_email': 'no-reply@sportomatics.ru',
-                'email_template_name': 'accounts/email/password_reset.html',
-                'subject_template_name': 'Password reset',
                 'request': request,
             }
             form.save(**opts)
             return response.Response({}, status=200)
         else:
-            print(form.errors)
-        return response.Response({}, status=400)
+            return response.Response({
+                'errors': json.loads(form.errors.as_json()),
+            }, status=400)
