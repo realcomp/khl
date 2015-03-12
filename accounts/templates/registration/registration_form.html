@@ -95,26 +95,23 @@
                     {% trans 'Profile photo:' %}
                 </div>
                 <div class="registration-input-photo inline-block">
-                    <div class="registration-personal-photo">
-                        <img src="{{STATIC_URL}}images/avatar-sample.png">
+                    <div class="user-card">
+                        <div class="user-avatar">
+                            <div class="user-avatar-hex1">
+                                <div class="user-avatar-hex2"
+                                     style="background-image: url('{{ STATIC_URL }}images/avatar-sample.png')">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <input type="file" class="file-input" name="avatar" id="avatar">
+                    <!-- <div class="registration-personal-photo"> -->
+                    <!--     <img src="{{STATIC_URL}}images/avatar-sample.png"> -->
+                    <!-- </div> -->
+                    <input type="file" class="file-input" name="avatar" id="avatar"
+                           onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
                     <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
                     <div class="avatar-upload-desc">Формат фото: jpg, jpeg, png</div>
                 </div>
-                <!--<div class="avatar-upload-block">
-                            <img alt="sample avatar" class="avatar-image" id="id_avatar"
-                                 src="/static/images/avatar-sample.png"
-                                 {% verbatim %}
-                                 ng-src="{{ ProfileCtrl.user.avatar }}">
-                                 {% endverbatim%}
-                            <div class="avatar-upload-controls">
-                                <input type="file" class="file-input" name="avatar" id="avatar"
-                                       onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
-                                <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
-                                <div class="avatar-upload-desc">Формат фото: jpg, jpeg, png</div>
-                            </div>
-                        </div>-->
             </div>
             <div class="row registration-content-row">
                 <div class="registration-label inline-block">

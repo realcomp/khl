@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import generics, permissions, response
@@ -29,6 +30,13 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
 class RegistrationView(generics.CreateAPIView):
     serializer_class = RegistrationSer
+
+    def perform_create(self, serializer):
+        super(RegistrationView, self).perform_create(serializer)
+        user = authenticate(
+            username=self.request.DATA['username'],
+            password=self.request.DATA['password'])
+        login(self.request, user)
 
 
 class PasswordResetView(APIView):

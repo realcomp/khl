@@ -15,10 +15,15 @@ from .utils import make_avatar
 
 
 class RegistrationSer(serializers.ModelSerializer):
+    def save(self):
+        obj = super(RegistrationSer, self).save()
+        obj.set_password(self.data['password'])
+        obj.save()
+
     class Meta(object):
         model = get_user_model()
         fields = 'username', 'fio', 'id', 'password'
-        write_only_fields = 'password',
+        # write_only_fields = 'password',
         read_only_fields = 'id',
 
 

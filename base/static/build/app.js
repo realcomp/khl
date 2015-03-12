@@ -1,5 +1,5 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router', 'ngResource'])
+angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router', 'ngResource', 'ngCookies'])
 .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {
@@ -1070,6 +1070,28 @@ angular.module('Sportomatics')
     };
 }]);
 
+angular.module('Sportomatics').service('ProfileService', ["$http", "$cookies", function($http, $cookies) {
+    this.setAvatar = function(files) {
+        var url = '/en/accounts/api/profile/',
+        fd = new FormData(),
+        config = {
+            'headers': {
+                'X-CSRFToken': $cookies.csrftoken,
+                'Content-Type': undefined
+            },
+            'withCredentials': true,
+            'transformRequest': angular.identity
+        };
+        fd.append('avatar', files[0]);
+        $http.patch(url, fd, config).success(function(data) {
+            $('.user-avatar-hex2').css(
+                'background-image', 'url(' + data.avatar + ')');
+        }).error(function(data) {
+            // TODO: handle image upload errors
+        });
+    };
+}]);
+
 angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $filter) {
     var clubs = [
         { "text": "Динамо Мск" },
@@ -1971,8 +1993,9 @@ angular.module('Sportomatics')
             });
     };
 }])
-angular.module('Sportomatics')
-    .controller('RegistrationController', ['$http', '$scope','$templateCache','$q','tags', function($http, $scope, $templateCache, $q, tags) {
+angular.module('Sportomatics').controller('RegistrationController', [
+    '$http', '$scope','$templateCache','$q', '$cookies', 'tags', 'ProfileService',
+    function($http, $scope, $templateCache, $q, $cookies, tags, ProfileService) {
         $scope.selectedType = 'social';
         $scope.user = {};
         $scope.personal = {};
@@ -1992,6 +2015,7 @@ angular.module('Sportomatics')
         };
         $scope.tags = [];
         $scope.countries = [];
+        $scope.setAvatar = ProfileService.setAvatar;
         $scope.loadTagsCountries = function (query) {
             return tags.loadCountries(query);
         };
@@ -2044,19 +2068,23 @@ angular.module('Sportomatics')
                         var data = {
                             username: $scope.user.email,
                             password: $scope.user.password
+                        }, config = {
+                            'headers': {
+                                'X-CSRFToken': $cookies.csrftoken
+                            },
                         };
                         localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
-                        $http.post('/ru/accounts/api/signup/', data).success(function(data) {
-                            console.log(data);
+                        $http.post('/ru/accounts/api/signup/', data, config).success(function(data) {
                             $scope.currentStep += 1;
                             $scope.currentStepTemplate = 'step'+ $scope.currentStep;
                         });
                     }
                     break;
                 case 2:
-                    if($scope.e()){
-                        $scope.currentStep += 1;
-                        $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                    if($scope.personalInfo){
+                        console.log($scope.personal);
+                        // $scope.currentStep += 1;
+                        // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
                     }
                     break;
             }
@@ -2073,7 +2101,8 @@ angular.module('Sportomatics')
             // $scope.currentStep -= 1;
             // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
         }
-    }]);
+    }
+]);
         function validateEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
