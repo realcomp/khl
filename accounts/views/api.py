@@ -1,12 +1,10 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import PasswordResetForm
+# -*- coding: utf-8 -*-
 from django.contrib.auth.tokens import default_token_generator
-from django.shortcuts import get_object_or_404
-
 
 from rest_framework import generics, permissions, response
 from rest_framework.views import APIView
 
+from ..forms import PasswordResetForm
 from ..serializers import (
     ProfileSerializer, ProfileVersionSerializer, RegistrationSer)
 
@@ -33,9 +31,7 @@ class RegistrationView(generics.CreateAPIView):
 
 class PasswordResetView(APIView):
     def post(self, request, *args, **kwargs):
-        username = request.DATA.get('username')
-        user = get_object_or_404(get_user_model(), username=username)
-        form = PasswordResetForm(request.DATA)
+        form = PasswordResetForm(request.POST)
         if form.is_valid():
             opts = {
                 'use_https': request.is_secure(),
