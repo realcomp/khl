@@ -32,7 +32,7 @@
                 this.field = field;
                 this.fieldName = LocaleFactory.getFieldName(field, self.locale);
                 $location.search('field', field);
-                ($scope.playersStats.length > 0) ? $scope.makeChart() : this.list(true);
+                this.list(true);
             };
 
             this.setClub = function(club) {
@@ -92,9 +92,10 @@
                                     $scope.playersStats.push(playerObject);
                                     var data = (self.groupBy === 'month') ?  newPlayer.dataByMonth : newPlayer.dataBySeason;
                                     var newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, playerObject);
+                                    //var newChartDataByMonth = populateChartData($scope.chart, $scope.chartData, newPlayer.dataByMonth.results, self.field, $scope.localeObject, playerObject);
+                                    //var newChartDataBySeason = populateChartData($scope.chart, $scope.chartData, newPlayer.dataBySeason.results, self.field, $scope.localeObject, playerObject);
                                     $scope.latestData = newChartData.chartData.data;
                                     $scope.chart.dataProvider = newChartData.chartData.data;
-                                    console.log($scope.chart.dataProvider);
                                     $scope.chart.addGraph(newChartData.newGraph);
                                     //$scope.chart.validateData();
                                     $scope.chart.write("chartdiv");
@@ -103,14 +104,31 @@
             };
 
             $scope.makeChart = function(){
-                var newChartData = [];
-                _.each($scope.playersStats, function(player, index){
+                var initialData = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
+                var initialChartData = generateChartData(initialData.results, self.field, self.groupBy);
+                var newChartGraphs = [];
+                var newChartData = {};
+                _.each($scope.playersStats, function(player, index) {
                     var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
-                    newChartData = populateChartData($scope.chart, $scope.chartData, data.results, self.field, $scope.localeObject, player);
-                    $scope.latestData = newChartData.chartData.data;
-                    $scope.chart.dataProvider = newChartData.chartData.data;
+                    newChartData = populateChartData($scope.chart, initialChartData, data.results, self.field, $scope.localeObject, player);
+                    //$scope.latestData = newChartData.chartData.data;
+                    //$scope.chart.dataProvider = newChartData.chartData.data;
+                    newChartGraphs.push(newChartData.newGraph);
                 });
-                $scope.chart.validateData();
+                ChartFactory.generateSerialChart(self.field, newChartData.chartData, $scope.localeObject).then(function(chart){
+                    $scope.chart = chart;
+                    $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
+                    _.each(newChartGraphs, function(graph){
+                        console.log(graph);
+                        $scope.chart.addGraph(graph);
+                    });
+                    console.log($scope.chart.dataProvider);
+                    $scope.chart.write("chartdiv");
+                    //$scope.chart.addClassNames = false;
+                    /*if(switched){
+                        $scope.chart.zoomToDates(zoomStart, zoomEnd);
+                    }*/
+                });
             };
 
             $scope.isDisabled = function(season){
@@ -135,8 +153,7 @@
                 $scope.activeSeason = index;
             };
             this.list = function(switched) {
-                var data;
-                data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
+                var data = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
                 var datesArray = (self.groupBy === 'month') ? data.results.map(function(e){ return new Date(e['date']) }) : data.results.map(function(e){ return new Date(e['season']['end_date']) });
                 var min = Math.min.apply(null, datesArray);
                 var max = Math.max.apply(null, datesArray);
@@ -179,6 +196,7 @@
 
                     }
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
+                    if ($scope.playersStats.length > 0) return $scope.makeChart();
                     $scope.chart.write("chartdiv");
                     //$scope.chart.addClassNames = false;
                     if(switched){
@@ -187,6 +205,11 @@
                 });
             };
             $scope.getPlayerData = function(){
+                var playerObject = {
+                    id: $('#player-id').val(),
+                    title: 'Player' + $('#player-id').val(),
+                    color: "#408e3a"
+                };
                 var group = 'month';
                 var params = 'group_by=' + group;
                 self.loader = true;
@@ -196,14 +219,17 @@
                         $scope.localeObject = LocaleFactory['locale_'+self.locale];
                         self.fieldName = $scope.localeObject.fieldNames[self.field].fullName;
                         $scope.dataByMonth = data;
+                        playerObject.dataByMonth = data;
                         group = 'season';
                         params = 'group_by=' + group;
                         $http.get(url + '?' + params)
                             .success(function(data, status, headers) {
                                 $scope.dataBySeason = data;
+                                playerObject.dataBySeason = data;
                                 self.data = data; //for table view
                                 self.loader = false;
                             }).then(function(){
+                                //$scope.playersStats.push(playerObject);
                                 self.list();
                                 console.log($scope.dataByMonth);
                                 console.log($scope.dataBySeason);
@@ -333,10 +359,7 @@
             return object;
         });
         chartData.data = _.without(_.sortBy(_.toArray(a), 'date'), null);
-        //console.log(JSON.stringify(_.toArray(a)));
         var newGraph = makeGraph(playerObject.id, playerObject.title, playerObject.color, field,  chart.valueAxes[0], localeObject);
-        //chart.addGraph(graph1Copy);
-        console.log(newGraph);
         return {
             chartData: chartData,
             newGraph: newGraph
