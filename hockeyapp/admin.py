@@ -183,6 +183,17 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
                 'players', 'rgb', 'instagram_photo_link',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
+    actions = ('make_notclubs_league',)
+
+    def make_notclubs_league(self, request, queryset):
+        l = League.objects.filter(en_title="Not clubs").last()
+        if l:
+            res = queryset.update(league=l)
+            self.message_user(request,
+                "{} successfully marked as not clubs.".format(res))
+        else:
+            self.message_user(request, "Not marked. League isn't exists.")
+    make_notclubs_league.short_description = _("Mark selected as not clubs")
 
     def has_en_title(self, obj):
         if obj:
