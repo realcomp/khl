@@ -2138,8 +2138,6 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         $.each($scope.tags, function() {
                             data.clubs.push(+this.pk);
                         });
-                        console.log($scope.countries);
-                        console.log($scope.tags);
                         $http.patch(profileURL, data, config).success(function(data) {
                             document.location = '/';
                             // $scope.currentStep += 1;
