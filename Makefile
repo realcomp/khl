@@ -40,3 +40,13 @@ deploy:
 	celery multi restart sportomatics_worker -B -A sportomatics --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log"
 
 deploy_with_test: get_code test deploy
+
+dev_deploy:
+	git pull origin develop
+	pip install -r requirments.txt --upgrade
+	python manage.py migrate --noinput
+	python manage.py compilemessages
+	python manage.py collectstatic --no-post-process --noinput
+	sudo service nginx reload
+	sudo supervisorctl restart sporto-dev
+	celery multi restart sportodev_worker -B -A sportodev --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log"
