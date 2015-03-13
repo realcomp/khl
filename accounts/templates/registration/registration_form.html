@@ -11,12 +11,40 @@
                     {% trans 'All fields are required' %}</p>
             </div>
             <div class="row registration-content-row">
+                {% comment %}
                 <div class="row">
                     <div class="registration-label inline-block">
                         {% trans 'Choose your login:' %}
                     </div>
                     <div class="registration-input inline-block">
                         <input type="text" ng-model="user.login">
+                    </div>
+                </div>
+                {% endcomment %}
+                <div class="row registration-content-row">
+                    <div class="registration-label inline-block">
+                        E-mail:
+                    </div>
+                    <div class="registration-input-email inline-block">
+                        <input type="email" ng-model="user.email" ng-hide="userCreated">
+                        <div ng-show="userCreated">
+                            {% verbatim %}
+                                {{ user.email }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                    <div class="registration-passwords-comparison-label inline-block">
+                        <div ng-if="errors.username">
+                            {% verbatim %}
+                            <i class="fa fa-thumbs-o-down"></i> {{ errors.username[0] }}
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row registration-content-row">
+                    <div class="registration-checkbox">
+                        <input type="checkbox" ng-model="subscribe">
+                        {% trans 'receive email notifications' %}
                     </div>
                 </div>
                 <div class="row registration-content-row">
@@ -41,20 +69,6 @@
                         <div ng-if="user.password && user.password2 && !passwordsMatch" ng-class="{'negative': !passwordsMatch}">
                             <i class="fa fa-thumbs-o-down"></i> {% trans 'Please make sure your passwords match' %}
                         </div>
-                    </div>
-                </div>
-                <div class="row registration-content-row">
-                    <div class="registration-label inline-block">
-                        E-mail:
-                    </div>
-                    <div class="registration-input-email inline-block">
-                        <input type="email" ng-model="user.email">
-                    </div>
-                </div>
-                <div class="row registration-content-row">
-                    <div class="registration-checkbox">
-                        <input type="checkbox" ng-model="subscribe">
-                        {% trans 'receive email notifications' %}
                     </div>
                 </div>
                 <div class="row">
@@ -104,11 +118,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="registration-personal-photo"> -->
-                    <!--     <img src="{{STATIC_URL}}images/avatar-sample.png"> -->
-                    <!-- </div> -->
                     <input type="file" class="file-input" name="avatar" id="avatar"
-                           onchange="angular.element(this).scope().setAvatar(this.files, '{{ csrf_token }}')">
+                           onchange="angular.element(this).scope().setAvatar(this.files)">
                     <label for="avatar" class="small ui blue button avatar-select-btn">Выберите файл</label>
                     <div class="avatar-upload-desc">Формат фото: jpg, jpeg, png</div>
                 </div>
@@ -119,6 +130,13 @@
                 </div>
                 <div class="registration-input inline-block">
                     <input type="text" ng-model="personal.website">
+                </div>
+                <div class="registration-passwords-comparison-label inline-block">
+                    <div ng-if="errors.website">
+                        {% verbatim %}
+                            <i class="fa fa-thumbs-o-down"></i> {{ errors.website[0] }}
+                        {% endverbatim %}
+                    </div>
                 </div>
             </div>
             <div class="row registration-content-row">
@@ -174,7 +192,7 @@
                         <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
                     </div>-->
                     <div class="inline-block">
-                        <tags-input ng-model="countries" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
+                        <tags-input display-property="title" ng-model="countries" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
                             <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTagsCountries($query)"></auto-complete>
                         </tags-input>
                     </div>
@@ -188,7 +206,7 @@
                             {% trans 'Hockey' %}
                         </div>
                         <div class="inline-block m-l-20">
-                            <tags-input ng-model="tags" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:450px !important;">
+                            <tags-input display-property="title" ng-model="tags" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:450px !important;">
                                 <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTags($query)"></auto-complete>
                             </tags-input>
                         </div>

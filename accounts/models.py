@@ -83,6 +83,10 @@ class User(AbstractUser):
     sport_hockey = models.BooleanField(_('Fav. hockey'), default=False)
     sport_football = models.BooleanField(_('Fav. football'), default=False)
     sport_basketball = models.BooleanField(_('Fav. basketball'), default=False)
+    countries = models.ManyToManyField(
+        'addresses.Country', verbose_name=_('Countries'))
+    clubs = models.ManyToManyField(
+        'hockeyapp.Club', verbose_name=_('Clubs'))
 
     __unicode__ = lambda self: self.username
 

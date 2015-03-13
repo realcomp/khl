@@ -1070,59 +1070,61 @@ angular.module('Sportomatics')
     };
 }]);
 
-angular.module('Sportomatics').service('ProfileService', ["$http", "$cookies", function($http, $cookies) {
-    this.setAvatar = function(files) {
-        var url = '/en/accounts/api/profile/',
-        fd = new FormData(),
-        config = {
-            'headers': {
-                'X-CSRFToken': $cookies.csrftoken,
-                'Content-Type': undefined
-            },
-            'withCredentials': true,
-            'transformRequest': angular.identity
+angular.module('Sportomatics').service('ProfileService',
+    ["$http", "$cookies", function($http, $cookies) {
+        this.setAvatar = function(files) {
+            var url = '/en/accounts/api/profile/',
+            fd = new FormData(),
+            config = {
+                'headers': {
+                    'X-CSRFToken': $cookies.csrftoken,
+                    'Content-Type': undefined
+                },
+                'withCredentials': true,
+                'transformRequest': angular.identity
+            };
+            fd.append('avatar', files[0]);
+            $http.patch(url, fd, config).success(function(data) {
+                $('.user-avatar-hex2').css(
+                    'background-image', 'url(' + data.avatar + ')');
+            }).error(function(data) {
+                // TODO: handle image upload errors
+            });
         };
-        fd.append('avatar', files[0]);
-        $http.patch(url, fd, config).success(function(data) {
-            $('.user-avatar-hex2').css(
-                'background-image', 'url(' + data.avatar + ')');
-        }).error(function(data) {
-            // TODO: handle image upload errors
-        });
-    };
-}]);
+    }]
+);
 
 angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $filter) {
     var clubs = [
-        { "text": "Динамо Мск" },
-        { "text": "СКА СПБ" },
-        { "text": "Трактор (Челябинск)" },
-        { "text": "Рубин (Краснодар)" },
-        { "text": "Спартак Мск" },
-        { "text": "Терек" },
-        { "text": "Цверна Звезда" }
+        { "pk": 1, "title": "Динамо Мск" },
+        { "pk": 2, "title": "СКА СПБ" },
+        { "pk": 3, "title": "Трактор (Челябинск)" },
+        { "pk": 4, "title": "Рубин (Краснодар)" },
+        { "pk": 5, "title": "Спартак Мск" },
+        { "pk": 6, "title": "Терек" },
+        { "pk": 7, "title": "Цверна Звезда" }
     ];
     var countries = [
-        { "text" : "Россия" },
-        { "text" : "США" },
-        { "text" : "Канада" },
-        { "text" : "Германия" }
+        { "pk": 1, "title" : "Россия" },
+        { "pk": 2, "title" : "США" },
+        { "pk": 3, "title" : "Канада" },
+        { "pk": 4, "title" : "Германия" }
     ];
     this.getClubs = function (sport) {
         //TODO: get clubs by selected sport in selected countries
     };
-
     this.loadCountries = function(query) {
         var deferred = $q.defer();
-        deferred.resolve($filter('filter')(countries, { text: query}));
+        deferred.resolve($filter('filter')(countries, { title: query}));
         return deferred.promise;
     };
     this.loadClubs = function(query) {
         var deferred = $q.defer();
-            deferred.resolve($filter('filter')(clubs, { text: query}));
-            return deferred.promise;
+        deferred.resolve($filter('filter')(clubs, { title: query}));
+        return deferred.promise;
     };
 }]);
+
 angular.module('Sportomatics')
 .controller('ClubListController', [
     '$http', '$scope', '$location', 'PlayersSearchService',
@@ -1998,6 +2000,9 @@ angular.module('Sportomatics').controller('RegistrationController', [
     function($http, $scope, $templateCache, $q, $cookies, tags, ProfileService) {
         $scope.selectedType = 'social';
         $scope.user = {};
+        $scope.avatar = null;
+        $scope.userCreated = false;
+        $scope.errors = {};
         $scope.personal = {};
         $scope.rememberPasswordData = {};
         $scope.preferences = {};
@@ -2034,7 +2039,8 @@ angular.module('Sportomatics').controller('RegistrationController', [
         $scope.checkStep = function(){
             switch($scope.currentStep){
                 case 1:
-                    return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+                    // return $scope.user.login && $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
+                    return $scope.user.password && $scope.user.password2 && $scope.user.password == $scope.user.password2 && $scope.user.email && validateEmail($scope.user.email);
                 case 2:
                     return true;
                 case 3:
@@ -2053,6 +2059,14 @@ angular.module('Sportomatics').controller('RegistrationController', [
             return false;
         };
         $scope.saveStep = function(){
+            var signupURL = $('#SignupApiLink').attr('href'),
+            profileURL = $('#ProfileApiLink').attr('href'),
+            config = {
+                'headers': {
+                    'X-CSRFToken': $cookies.csrftoken
+                },
+            };
+
             switch($scope.currentStep){
                 case 0:
                     if($scope.personalInfo){
@@ -2062,61 +2076,74 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         userToLocalStorage.password2 = undefined;
                         localStorage.setItem('sportomatics_registrationUserInfo', JSON.stringify(userToLocalStorage));
                         $scope.currentStep += 1;
-                        $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+                        $scope.currentStepTemplate = 'step' + $scope.currentStep;
                     }
                     break;
                 case 1:
                     if($scope.personalInfo){
-                        var url = '/ru/accounts/api/signup/',
-                        data = {
+                        var data = {
                             username: $scope.user.email,
                             password: $scope.user.password,
                             email_notification: $scope.subscribe
-                        }, config = {
-                            'headers': {
-                                'X-CSRFToken': $cookies.csrftoken
-                            },
                         };
                         localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
-                        $http.post(url, data, config).success(function(data) {
-                            $scope.currentStep += 1;
-                            $scope.currentStepTemplate = 'step'+ $scope.currentStep;
-                        });
+                        if ($scope.userCreated) {
+                            $http.patch(profileURL, data, config).success(function(data) {
+                                $scope.errors = {};
+                                $scope.currentStep += 1;
+                                $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                            }).error(function(data) {
+                                $scope.errors = data;
+                            });
+                        } else {
+                            $http.post(signupURL, data, config).success(function(data) {
+                                $scope.userCreated = true;
+                                $scope.errors = {};
+                                $scope.currentStep += 1;
+                                $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                            }).error(function(data) {
+                                $scope.errors = data;
+                            });
+                        }
                     }
                     break;
                 case 2:
                     if($scope.personalInfo){
-                        var url = '/ru/accounts/api/profile/',
-                        data = {
+                        var data = {
                             fio: $scope.personal.name,
                             name_visible: !$scope.personal.hideName,
                             website: $scope.personal.website
-                        }, config = {
-                            'headers': {
-                                'X-CSRFToken': $cookies.csrftoken
-                            },
                         };
-                        $http.patch(url, data, config).success(function(data) {
+                        $http.patch(profileURL, data, config).success(function(data) {
+                            $scope.errors = {};
                             $scope.currentStep += 1;
                             $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                        }).error(function(data) {
+                            $scope.errors = data;
                         });
                     }
                     break;
                 case 3:
                     if($scope.personalInfo){
-                        var url = '/ru/accounts/api/profile/',
-                        data = {
+                        var data = {
                             sport_hockey: $scope.preferencesSports.hockey,
                             sport_football: $scope.preferencesSports.football,
-                            sport_basketball: $scope.preferencesSports.basketball
-                        }, config = {
-                            'headers': {
-                                'X-CSRFToken': $cookies.csrftoken
-                            },
+                            sport_basketball: $scope.preferencesSports.basketball,
+                            countries: [],
+                            clubs: []
                         };
-                        $http.patch(url, data, config).success(function(data) {
-                            $scope.currentStep += 1;
-                            $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                        $.each($scope.countries, function() {
+                            data.countries.push(+this.pk);
+                        });
+                        $.each($scope.tags, function() {
+                            data.clubs.push(+this.pk);
+                        });
+                        console.log($scope.countries);
+                        console.log($scope.tags);
+                        $http.patch(profileURL, data, config).success(function(data) {
+                            document.location = '/';
+                            // $scope.currentStep += 1;
+                            // $scope.currentStepTemplate = 'step' + $scope.currentStep;
                         });
                     }
                     break;
@@ -2124,8 +2151,6 @@ angular.module('Sportomatics').controller('RegistrationController', [
         };
         $scope.nextStep = function(){
             if($scope.checkStep()) {
-                // $scope.currentStep += 1;
-                // $scope.currentStepTemplate = 'step'+ $scope.currentStep;
                 $scope.saveStep();
             }
             else alert('Введите все данные');
