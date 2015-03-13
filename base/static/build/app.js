@@ -1996,9 +1996,13 @@ angular.module('Sportomatics')
     };
 }])
 angular.module('Sportomatics').controller('RegistrationController', [
-    '$http', '$scope','$templateCache','$q', '$cookies', 'tags', 'ProfileService',
-    function($http, $scope, $templateCache, $q, $cookies, tags, ProfileService) {
+    '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
+    function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
+        $scope.params = $location.search();
         $scope.selectedType = 'social';
+        if ($scope.params.uidb64 && $scope.params.token) {
+            $scope.selectedType = 'remember';
+        }
         $scope.user = {};
         $scope.avatar = null;
         $scope.userCreated = false;
@@ -2156,6 +2160,20 @@ angular.module('Sportomatics').controller('RegistrationController', [
         $scope.prevStep = function(){
             $scope.currentStep -= 1;
             $scope.currentStepTemplate = 'step'+ $scope.currentStep;
+        };
+        $scope.remindPassword = function() {
+            var resetURL = $('#PasswordResetApiLink').attr('href'),
+            data = {
+                email: $scope.rememberPasswordData.login
+            },
+            config = {
+                'headers': {
+                    'X-CSRFToken': $cookies.csrftoken
+                },
+            };
+            $http.post(resetURL, data, config).success(function(data) {
+                console.log(data);
+            });
         };
     }
 ]);

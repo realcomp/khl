@@ -41,7 +41,7 @@ class RegistrationView(generics.CreateAPIView):
 
 class PasswordResetView(APIView):
     def post(self, request, *args, **kwargs):
-        form = PasswordResetForm(request.POST)
+        form = PasswordResetForm(request.DATA)
         if form.is_valid():
             opts = {
                 'use_https': request.is_secure(),

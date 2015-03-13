@@ -37,7 +37,7 @@ class UsrCrtForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-        
+
     class Meta:
         model = User
         fields = 'fio', 'username'
@@ -46,7 +46,7 @@ class UsrCrtForm(forms.ModelForm):
 class UsrChngForm(UserChangeForm):
     class Meta:
         model = User
-        fields= '__all__'
+        fields = '__all__'
         readonly_fields = 'username',
 
 

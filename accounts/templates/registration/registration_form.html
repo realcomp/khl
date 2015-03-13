@@ -226,17 +226,20 @@
         </div>
     </script>
     <script type="text/ng-template" id="rememberPasswordTemplate">
-            <div class="row registration-content-row">
+            <div class="row registration-content-row" ng-hide="params.uidb64">
                 <div class="inline-block">
+                    {% comment %}
                     <input class="m-r-10" type="radio" ng-model="rememberWithLogin" ng-value="true">
+                    {% endcomment %}
                     {% trans 'Your login:' %}
                 </div>
             </div>
-            <div class="row registration-content-row">
+            <div class="row registration-content-row" ng-hide="params.uidb64">
                 <div class="registration-input inline-block">
                     <input class="m-l-8" type="text" ng-model="rememberPasswordData.login">
                 </div>
             </div>
+            {% comment %}
             <div class="row registration-content-row">
                 {% trans 'or' %}
             </div>
@@ -251,8 +254,33 @@
                     <input class="m-l-8" type="text" ng-model="rememberPasswordData.password">
                 </div>
             </div>
-            <div class="row">
-                <button type="button" class="small ui green button registration-next" ng-click="endRegistration()">{% trans 'REMEMBER PASSWORD' %}</button>
+            {% endcomment %}
+            <div class="row" ng-hide="params.uidb64">
+                <button type="button" class="small ui green button registration-next" ng-click="remindPassword()">{% trans 'REMEMBER PASSWORD' %}</button>
+            </div>
+            <div class="row registration-content-row" ng-show="params.uidb64">
+                <div class="registration-label inline-block">
+                    {% trans 'Password' %}
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="password" ng-change="comparePasswords()" ng-model="user.password">
+                </div>
+            </div>
+            <div class="row registration-content-row" ng-show="params.uidb64">
+                <div class="registration-label inline-block">
+                    {% trans 'Verify password' %}
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="password" ng-change="comparePasswords()" ng-model="user.password2">
+                </div>
+                <div class="registration-passwords-comparison-label inline-block">
+                    <div ng-if="user.password && user.password2 && passwordsMatch" ng-class="{'positive': passwordsMatch}">
+                        <i class="fa fa-thumbs-o-up"></i> {% trans 'Passwords match' %}
+                    </div>
+                    <div ng-if="user.password && user.password2 && !passwordsMatch" ng-class="{'negative': !passwordsMatch}">
+                        <i class="fa fa-thumbs-o-down"></i> {% trans 'Please make sure your passwords match' %}
+                    </div>
+                </div>
             </div>
     </script>
     <!-- page code -->
