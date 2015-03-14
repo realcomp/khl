@@ -210,6 +210,28 @@
                                 <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
                             {% verbatim %}
+                            <div  ng-show="playersStats.length">
+                                <span class="season-buttons-label"> Игроки для сравнения:</span>
+                                <div class="player-comparison-container">
+                                    <div ng-repeat="player in playersStats">
+                                        <div class="player-comparison-block">
+                                            <div class="inline-block legend-container">
+                                                <div id="player-comparison-legend_{{player.id}}" class="player-comparison-legend inline-block" ng-style="{'background': player.color}">
+                                                </div>
+                                            </div>
+                                            <div class="player-comparison-label inline-block">
+                                                {{player.title}}
+                                            </div>
+                                            <div class="inline-block pointer" ng-click="disableGraph(player)">
+                                                <i class="fa fa-minus-square-o"></i> выключить
+                                            </div>
+                                            <div class="inline-block pointer" ng-click="removeGraph(player)">
+                                                <i class="fa fa-minus-square-o"></i> удалить
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div  ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && PlayerCardIndicatorsCtrl.indicatorsType !== 'table' || onSeason ">
                                 <span class="season-buttons-label"> Выбрать сезон:</span>
                                 <div class="season-buttons-container">

@@ -299,6 +299,7 @@ angular.module('Sportomatics')
                 chart.cursorColor = "#DADADA";
                 chart.startDuration = 0.5;
                 chart.startEffect = "easeOutSine";
+                chart.addClassNames = true;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
@@ -1606,6 +1607,17 @@ angular.module('Sportomatics')
                 $scope.chart.animateAgain();
             };
             //var chart = null;
+            $scope.removeGraph = function(player){
+                if(contains($scope.playersStats, 'id', (parseInt(player.id)).toString())){
+                    $scope.playersStats = _.without($scope.playersStats, _.findWhere($scope.playersStats, {id: (parseInt(player.id)).toString()}));
+                    $scope.makeChart($scope.activeSeason > -1);
+                }
+            };
+            $scope.disableGraph = function(player){
+                console.log( $('.amcharts-legend-item-gl'+player.id).length)
+                $('.amcharts-legend-item-gl'+player.id).trigger("click");
+                console.log($('.amcharts-legend-item-gl'+player.id)[0]);
+            };
             $scope.addGraph = function(url, local){
                 //TODO: make production version
                 var players = [
@@ -1657,43 +1669,32 @@ angular.module('Sportomatics')
             };
 
             $scope.makeChart = function(switched){
-
                 var initialData = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason;
                 var initialGraph = makeGraph('', $scope.playerObject.title, $scope.playerObject.color, self.field, null, $scope.localeObject);
                 var initialChartData = generateChartData(initialData.results, self.field, self.groupBy);
-                var newChartGraphs = [];
+                var newChartGraphs = [initialGraph];
                 var newChartData = {};
-                newChartGraphs.push(initialGraph);
-
                 _.each($scope.playersStats, function(player, index) {
                     var data = (self.groupBy === 'month') ? player.dataByMonth : player.dataBySeason;
                     newChartData = populateChartData($scope.chart, initialChartData, data.results, self.field, $scope.localeObject, player);
                     var newChartGraph = makeGraph(player.id, player.title, player.color, self.field, null, $scope.localeObject);
-                    //$scope.latestData = newChartData.chartData.data;
                     newChartGraphs.push(newChartGraph);
                 });
-                if(!$scope.playersStats.length) newChartData.data = initialData.results;
-                var datesArray = newChartData.data.map(function(e){ return new Date(e['date']) });
-                var min = Math.min.apply(null, datesArray);
-                var max = Math.max.apply(null, datesArray);
                 if(switched){
+                    if(!$scope.playersStats.length) newChartData.data = initialData.results;
+                    var datesArray = newChartData.data.map(function(e){ return new Date(e['date']) });
+                    var min = Math.min.apply(null, datesArray);
+                    var max = Math.max.apply(null, datesArray);
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
-                if(self.groupBy === 'season'){
-                    $scope.seasons = newChartData;
-                    console.log($scope.seasons);
-                }
                 if(!$scope.playersStats.length) newChartData = initialChartData;
+                //TODO: seasons for all players
                 ChartFactory.generateSerialChart(self.field, newChartData, $scope.localeObject, newChartGraphs).then(function(chart){
                     $scope.chart = chart;
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
-                    console.log($scope.chart.dataProvider);
                     $scope.chart.write("chartdiv");
-                    //$scope.chart.addClassNames = false;
-                    if(switched){
-                        $scope.chart.zoomToDates(zoomStart, zoomEnd);
-                    }
+                    if(switched) $scope.chart.zoomToDates(zoomStart, zoomEnd);
                 });
             };
 
@@ -1763,10 +1764,7 @@ angular.module('Sportomatics')
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
                     if ($scope.playersStats.length > 0) return $scope.makeChart(switched);
                     $scope.chart.write("chartdiv");
-                    //$scope.chart.addClassNames = false;
-                    if(switched){
-                        $scope.chart.zoomToDates(zoomStart, zoomEnd);
-                    }
+                    if(switched) $scope.chart.zoomToDates(zoomStart, zoomEnd);
                 });
             };
             $scope.getPlayerData = function(){
@@ -1894,21 +1892,12 @@ angular.module('Sportomatics')
         _.each(dates, function(date, index){
             if(!((field === 'shots' || field === 'pis__avg' || field === 'shots__avg' || field === 'faceoff' || field === 'winfaceoff' || field === 'winfaceoff_p__avg' || field === 'gamingtime__avg' || field === 'change_count__avg')
                 && (date.getFullYear() <= 2008))){
-                if(playerObject.id === '1'){
-                    chartData.data.push({
-                        date: date,
-                        values1: values[index],
-                        count1: count[index],
-                        percentage1: (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000
-                    });
-                } else if(playerObject.id === '2'){
-                    chartData.data.push({
-                        date: date,
-                        values2: values[index],
-                        count2: count[index],
-                        percentage2: (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000
-                    });
-                }
+                var dataObject = {};
+                dataObject['date'] = date;
+                dataObject['values'+playerObject.id] = values[index];
+                dataObject['count'+playerObject.id] = count[index];
+                dataObject['percentage'+playerObject.id] = (field === 'count') ? undefined : (count[index] === 0) ? undefined : Math.round(parseFloat(values[index]/realCount[index])*1000)/1000;
+                chartData.data.push(dataObject);
             }
         });
         var a = _.map(_.toArray(_.groupBy(chartData.data, 'date')), function(e){
@@ -1972,7 +1961,7 @@ angular.module('Sportomatics')
         graph.lineThickness = 0;
         graph.type = 'column';
         if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
-        graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
+        graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values' + id +']]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage'+ id +']]</span>';
 
         return graph;
     }

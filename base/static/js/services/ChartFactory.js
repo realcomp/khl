@@ -21,6 +21,7 @@ angular.module('Sportomatics')
                 chart.cursorColor = "#DADADA";
                 chart.startDuration = 0.5;
                 chart.startEffect = "easeOutSine";
+                chart.addClassNames = true;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);

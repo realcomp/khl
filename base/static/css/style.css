@@ -4935,7 +4935,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     padding-left: 3%;
     line-height: 30px;
 }
-.season-buttons-container{
+.season-buttons-container, .player-comparison-container{
     max-width: 900px;
     margin-top: 10px;
     margin-left: -5px;
@@ -5639,4 +5639,26 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     height: 160px;
+}
+.player-comparison-block{
+    width: 320px;
+    height: 60px;
+    background: #FFFFFF;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 2px;
+    padding: 3px;
+    margin: 5px;
+    max-width: 320px;
+    display: inline-block;
+}
+.player-comparison-legend{
+    width: 40px;
+    height: 5px;
+    margin-top: -4px;
+    vertical-align: middle;
+}
+.legend-container{
+    height: 10px;
+    padding: 3px;
 }
