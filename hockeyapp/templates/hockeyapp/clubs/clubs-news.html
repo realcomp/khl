@@ -13,6 +13,12 @@
                 <div class="divider"> / </div>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
                 <div class="divider"> / </div>
+                <a class="section" href="/ru/hockey/clubs/#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
+                <div class="divider"> / </div>
+                <a class="section" href="/ru/hockey/clubs/#?country=1&league={{league.pk}}">{{league.title}}</a>
+                <div class="divider"> / </div>
+                <a class="section" href="">{{title}}</a>
+                <div class="divider"> / </div>
                 <a class="active section">Новости и результаты матчей</a>
             </div>
             <div class="search-block">
