@@ -5580,3 +5580,6 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     box-sizing: border-box;
     height: 160px;
 }
+.players-search-page .ui.dropdown .menu .item{
+    font-size: 12px !important;
+}
