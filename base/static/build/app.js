@@ -1383,7 +1383,7 @@ angular.module('Sportomatics')
     });
 }])
 .factory('ArenaInstaPhoto', ["$resource", function($resource){
-    return $resource("{% url 'api:hockey:cip_list' %}", {}, {
+    return $resource("/ru/api/hockey/processedarenainstaphoto/", {}, {
         query: {method:'GET', params:{processed: 1}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
@@ -1396,7 +1396,7 @@ angular.module('Sportomatics')
         get: { method: 'GET'}
     });
 }])
-.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "PlayerInstaPhoto", "$resource", "$timeout", function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto, $resource, $timeout){
+.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "PlayerInstaPhoto", "ArenaInstaPhoto", "$resource", "$timeout", "$location", function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto,ArenaInstaPhoto, $resource, $timeout, $location){
 
         var playerClubsMasonry = $('.masonry-clubs-photos');
         var closePopupBtn = $('#close-popup-btn');
@@ -1416,8 +1416,10 @@ angular.module('Sportomatics')
 
         $scope.club_id = $('#team-id').val();
         $scope.player_id = $('#player-id').val();
+        $scope.arena_id = (document.URL.indexOf('photos') > -1) ? null : $('#team-arena-id').val();
         $scope.photosSlider = [];
         $scope.photosChunk = [];
+        console.log()
 
         $scope.photos = [];
         $scope.next_page = 1;
@@ -1429,10 +1431,45 @@ angular.module('Sportomatics')
                 min_id: 0,
                 max_id: 10000000,
                 club: $scope.club_id,
-                player: $scope.player_id
+                player: $scope.player_id,
+                arena: $scope.arena_id
             };
             $scope.photoDataLoader = true;
-            if($scope.club_id){
+            if($scope.arena_id){
+                get_params = {
+                    page: $scope.next_page,
+                    min_id: 0,
+                    max_id: 10000000,
+                    arena: $scope.arena_id
+                };
+                ArenaInstaPhoto.query(get_params).$promise.then(function (data) {
+                    $scope.photoDataLoader = false;
+                    $.each(data.results, function (index, value) {
+                        value.created = new Date(value.photo.created).instagramDateFormat();
+                        $scope.photos.push(value);
+                        if($scope.photosChunk.length < 5){
+                            $scope.photosChunk.push(value);
+                        }
+                        if($scope.photosChunk.length === 5 || index === data.results.length - 1){
+                            $scope.photosSlider.push($scope.photosChunk);
+                            $scope.photosChunk = [];
+                        }
+                    });
+                    setTimeout(function(){
+                        $('.photo-square').hover(function(){
+                            var id = $(this).attr('id');
+                            $('#instaphoto-header-time_'+id+', #instaphoto-footer-stats_'+id).css('opacity', '1');
+                        }, function(){
+                            var id = $(this).attr('id');
+                            $('#instaphoto-header-time_'+id+', #instaphoto-footer-stats_'+id).css('opacity', '0');
+                        });
+                    }, 100);
+                    $scope.next_page = data.next_page;
+                    if (!$scope.next_page && $('#nextpagebutton').length) {
+                        $('#nextpagebutton').remove();
+                    }
+                });
+            } else if( $scope.club_id){
                 ClubInstaPhoto.query(get_params).$promise.then(function (data) {
                     $scope.photoDataLoader = false;
                     $.each(data.results, function (index, value) {
