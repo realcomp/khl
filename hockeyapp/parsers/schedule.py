@@ -44,8 +44,8 @@ class KHLScheduleParser(GrabParser):
         return self.absolute_url
 
     def put_data_in_db_from_page(self, id=None, update=False, 
-                                challenge=None, challenge_type=False,
-                                without_khl_id=True):
+                                challenge=None, challenge_type=False
+        ):
         b'''Основной метод, берующий данные со стороннего сайта и кладущий
             в БД, если все хорошо
         ''' 
@@ -54,11 +54,7 @@ class KHLScheduleParser(GrabParser):
             model = get_model('hockeyapp', self.model_name)
             if challenge_type: data['challenge_type'] = challenge_type
             if challenge: data['challenge'] = challenge
-            if update:
-                data['without_khl_id'] = without_khl_id
-                model.objects.update_schedule(**data)
-            else:
-                model.objects.create_schedule(**data)
+            model.objects.create_or_update_schedule(**data)
 
     def get_page(self, id=None):
         b'''  смотрим страницу календаря '''

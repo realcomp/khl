@@ -55,7 +55,7 @@ def periodic_update_schedules():
         for chlng in models.Challenge.objects.filter(processed=False):
             _parser = getattr(parsers.schedule, chlng.parser_type)
             _parser(absolute_url=chlng.url
-                ).put_data_in_db_from_page( update=True, challenge = chlng,
+                ).put_data_in_db_from_page( challenge = chlng,
                                             challenge_type=chlng.challenge_type)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
