@@ -156,7 +156,7 @@ $(function() {
         }
         //player card
         if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-            console.log('player call ');
+            //console.log('player call ');
             $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
             $('#player-card-avatar').addClass('clipped-img');
             $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
@@ -165,7 +165,7 @@ $(function() {
             $('.page-container').css('margin-top', '68px');
             scrolledAfterPlayer = true;
         } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-            console.log('player reverse call ');
+            //console.log('player reverse call ');
             $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block player-card-inner'));
             $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
             $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important').css('box-shadow', '0','important'));
@@ -175,7 +175,7 @@ $(function() {
         }
         //team card
         if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-            console.log('team info call ');
+            //console.log('team info call ');
             $('.page-container').css('margin-top', '114px');
             $('.my-team-btn').css('margin-top', '4px');
             $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
@@ -184,7 +184,7 @@ $(function() {
             $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important').css('box-shadow', '0 4px 2px -2px gray','important'));
             scrolledAfterTeamInfo = true;
         } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-            console.log('team info reverse call ');
+            //console.log('team info reverse call ');
             $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
             $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
             $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
@@ -197,7 +197,7 @@ $(function() {
     var y = $(window).scrollTop();
     //player card
     if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-        console.log('player call ');
+        //console.log('player call ');
         $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
         $('#player-card-avatar').addClass('clipped-img');
         $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
@@ -206,7 +206,7 @@ $(function() {
         $('.page-container').css('margin-top', '68px');
         scrolledAfterPlayer = true;
     } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-        console.log('player reverse call ');
+        //console.log('player reverse call ');
         $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important'));
         $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
         $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
@@ -216,7 +216,7 @@ $(function() {
     }
     //team card
     if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-        console.log('team info call ');
+        //console.log('team info call ');
         $('.page-container').css('margin-top', '114px');
         $('.my-team-btn').css('margin-top', '4px');
         $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
@@ -225,7 +225,7 @@ $(function() {
         $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
         scrolledAfterTeamInfo = true;
     } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-        console.log('team info reverse call ');
+        //console.log('team info reverse call ');
         $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
         $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
         $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');

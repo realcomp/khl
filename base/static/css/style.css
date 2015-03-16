@@ -4809,19 +4809,25 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     background: #8ebd5d !important;
 
 }
-.chart-button-selected {
+
+.chart-button-noselect {
     color: #8ebd5d !important;
-    background: #ffffff !important;
+    background: white !important;
     border: 1px solid #8ebd5d !important;
     line-height: 4px !important;
 }
-
-.amcharts-graph-g2 {
+.chart-button-selected {
+    color: #ffffff !important;
+    background: #8ebd5d !important;
+    border: 1px solid #8ebd5d !important;
+    line-height: 4px !important;
+}
+/*.amcharts-graph-g2 {
     stroke-linejoin: round;
     stroke-linecap: round;
     stroke-dasharray: 500%;
-    stroke-dasharray: 0 \0/;    /* fixes IE prob */
-    stroke-dashoffset: 0 \0/;   /* fixes IE prob */
+    stroke-dasharray: 0 \0/;
+    stroke-dashoffset: 0 \0/;
     -webkit-animation: am-draw 5s;
     animation: am-draw 5s;
 }
@@ -4841,6 +4847,57 @@ th a:hover, .clubs-page .clubs-table th a:hover {
         stroke-dashoffset: 0px;
     }
 }
+
+.amcharts-graph-g2 {
+    stroke-dasharray: 3px 3px;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    -webkit-animation: am-moving-dashes 1s linear infinite;
+    animation: am-moving-dashes 1s linear infinite;
+}
+
+@-webkit-keyframes am-moving-dashes {
+    100% {
+        stroke-dashoffset: -31px;
+    }
+}
+@keyframes am-moving-dashes {
+    100% {
+        stroke-dashoffset: -31px;
+    }
+}*/
+
+
+
+.amcharts-graph-g2 {
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    -webkit-animation: am-moving-dashes 8s ease-in-out forwards;
+    animation: am-moving-dashes 8s ease-in-out forwards;
+}
+
+@-webkit-keyframes am-moving-dashes {
+    0% {
+        stroke-dasharray: 1px 100px;
+        stroke-dashoffset: -200%;
+    }
+    100% {
+        stroke-dasharray: 50px 0px;
+        stroke-dashoffset: -200%;
+    }
+}
+@keyframes am-moving-dashes {
+    0% {
+        stroke-dasharray: 1px 100px;
+        stroke-dashoffset: -200%;
+    }
+    100% {
+        stroke-dasharray: 50px 0px;
+        stroke-dashoffset: -200%;
+    }
+}
+
+
 .indicator-item{
     font-family: "Open Sans", sans-serif;
 }
@@ -4860,9 +4917,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     text-align: center;
 }
 .active-season-button{
-    background: #FFFFFF !important;
+    background: #8ebd5d !important;
     font-size: 12px;
-    color: #8ebd5d !important;
+    color: white !important;
     border: 1px solid #8ebd5d !important;
     font-weight: normal;
     border-radius: 2px;
@@ -4878,7 +4935,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     padding-left: 3%;
     line-height: 30px;
 }
-.season-buttons-container{
+.season-buttons-container, .player-comparison-container{
     max-width: 900px;
     margin-top: 10px;
     margin-left: -5px;
@@ -5137,6 +5194,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .m-r-30{
     margin-right: 30px !important;
+}
+.m-l-1{
+    margin-left: 1px !important;
 }
 .m-l-8{
     margin-left: 8px !important;
@@ -5580,6 +5640,28 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     box-sizing: border-box;
     height: 160px;
 }
-.players-search-page .ui.dropdown .menu .item{
-    font-size: 12px !important;
+.players-search-page .ui.dropdown .menu .item {
+            font-size: 12px !important;
+    }
+.player-comparison-block{
+    width: 320px;
+    height: 60px;
+    background: #FFFFFF;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 2px;
+    padding: 3px;
+    margin: 5px;
+    max-width: 320px;
+    display: inline-block;
+}
+.player-comparison-legend{
+    width: 40px;
+    height: 5px;
+    margin-top: -4px;
+    vertical-align: middle;
+}
+.legend-container{
+    height: 10px;
+    padding: 3px;
 }

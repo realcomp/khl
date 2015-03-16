@@ -203,18 +203,45 @@
                             </div>
 
                             <div class="chart-button-panel" ng-show="localeObject">
-                                <a class="ui green button chart-button" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
-                                <a class="ui green button chart-button" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>
-                                <!--<a class="ui green button chart-button" ng-click="addGraph('/ru/hockey/api/players/926/indicators/')">Сравнить с игроком 926</a>-->
+                                <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
+                                <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
+                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/gorohov', 0)">Сравнить с игроком 2186</a>
+                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/soin', 1)">Сравнить с игроком 401</a>
+                                <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
                             {% verbatim %}
+                            <div  ng-show="playersStats.length">
+                                <span class="season-buttons-label"> Игроки для сравнения:</span>
+                                <div class="player-comparison-container">
+                                    <div ng-repeat="player in playersStats">
+                                        <div class="player-comparison-block">
+                                            <div class="inline-block legend-container">
+                                                <div id="player-comparison-legend_{{player.id}}" class="player-comparison-legend inline-block" ng-style="{'background': player.color}">
+                                                </div>
+                                            </div>
+                                            <div class="player-comparison-label inline-block">
+                                                {{player.title}}
+                                            </div>
+                                            <div class="inline-block pointer" ng-click="disableGraph(player)">
+                                                <i class="fa fa-minus-square-o"></i> выключить
+                                            </div>
+                                            <div class="inline-block pointer" ng-click="removeGraph(player)">
+                                                <i class="fa fa-minus-square-o"></i> удалить
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div  ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && PlayerCardIndicatorsCtrl.indicatorsType !== 'table' || onSeason ">
                                 <span class="season-buttons-label"> Выбрать сезон:</span>
                                 <div class="season-buttons-container">
-                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season)}" >
+                                    <a class="ui season-button" ng-class="{'active-season-button': activeSeason === -1}">
+                                        <div ng-bind="localeObject.buttonNames.allSeasons" ng-click="setGroupBy('season')"></div>
+                                    </a>
+                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season), 'm-l-1': $index === 0}">
                                         <div ng-bind="result.season.title" ng-click="moveToSeason(result.season, $index)"></div>
                                     </a>
-                                </div>
+                               </div>
                             </div>
                             {% endverbatim %}
 

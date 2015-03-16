@@ -6,16 +6,21 @@ angular.module('Sportomatics')
 .factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(data, field, chartData, locale, graphsCount){
+        generateSerialChart: function(field, chartData, localeObject, graphs){
+            // Method accepts
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
+                var data = chartData.data;
+
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
-                chart.dataProvider = chartData;
+                chart.dataProvider = data;//[{"date":"2010-06-30T00:00:00.000Z","values1":7,"count1":5,"percentage1":0.152,"values":9,"count":6,"percentage":0.173},{"date":"2011-06-30T00:00:00.000Z","values1":9,"count1":9,"percentage1":0.111,"values":6,"count":9,"percentage":0.067},{"date":"2012-06-30T00:00:00.000Z","values1":13,"count1":7,"percentage1":0.188,"values":7,"count":4,"percentage":0.206},{"date":"2013-06-30T00:00:00.000Z","values1":9,"count1":7,"percentage1":0.129,"values":11,"count":7,"percentage":0.177},{"date":"2014-06-30T00:00:00.000Z","values1":5,"count1":7,"percentage1":0.071,"values":9,"count":5,"percentage":0.22},{"date":"2015-06-30T00:00:00.000Z","values1":4,"count1":6,"percentage1":0.067,"values":3,"count":4,"percentage":0.094},{"date":"1998-06-30T00:00:00.000Z","values1":1,"count1":4,"percentage1":0.029},{"date":"1999-06-30T00:00:00.000Z","values1":6,"count1":5,"percentage1":0.146},{"date":"2000-06-30T00:00:00.000Z","values1":1,"count1":5,"percentage1":0.024},{"date":"2001-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.109},{"date":"2002-06-30T00:00:00.000Z","values1":3,"count1":5,"percentage1":0.068},{"date":"2003-06-30T00:00:00.000Z","values1":2,"count1":5,"percentage1":0.043},{"date":"2004-06-30T00:00:00.000Z","values1":0,"count1":4,"percentage1":0},{"date":"2005-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.105},{"date":"2006-06-30T00:00:00.000Z","values1":10,"count1":7,"percentage1":0.161},{"date":"2007-06-30T00:00:00.000Z","values1":4,"count1":5,"percentage1":0.082},{"date":"2008-06-30T00:00:00.000Z","values1":4,"count1":7,"percentage1":0.062},{"date":"2009-06-30T00:00:00.000Z","values1":2,"count1":4,"percentage1":0.05}];
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
+                chart.startDuration = 0.5;
+                chart.startEffect = "easeOutSine";
                 chart.addClassNames = true;
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
@@ -29,15 +34,17 @@ angular.module('Sportomatics')
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
                 categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
-                categoryAxis.minorGridEnabled = true;
-                categoryAxis.autoGridCount =  true;
-                categoryAxis.grudCount = 12;
+                //categoryAxis.minorGridEnabled = true;
+                //categoryAxis.autoGridCount =  true;
+                //categoryAxis.grudCount = 12;
+                categoryAxis.equalSpacing = true;
                 categoryAxis.minHorizontalGap = 40;
-                categoryAxis.gridAlpha = 0.1;
+                categoryAxis.gridAlpha = 0; //categoryAxis.gridAlpha = 0.1;
+                //categoryAxis.gridPosition = 'start';
                 categoryAxis.boldPeriodBeginning = false;
                 categoryAxis.axisColor = "#DADADA";
-                categoryAxis.twoLineMode = true;
-                categoryAxis.tickLength = 12;
+                //categoryAxis.twoLineMode = true;
+                //categoryAxis.tickLength = 12;
                 categoryAxis.markPeriodChange = false;
                 categoryAxis.dateFormats = [{
                     period: 'fff',
@@ -64,8 +71,23 @@ angular.module('Sportomatics')
                     period: 'YYYY',
                     format: 'YYYY'
                 }];
-                var currMax = Math.max.apply(Math, chartData.map(function(e){ return e['values']}));
-                var currMin = Math.min.apply(Math, chartData.map(function(e){ return e['values']}));
+                categoryAxis.labelFunction = function(valueText, date, categoryAxis){
+                    var value = new Date(date);
+                    if(chartData.groupBy === 'season'){
+                        var endDate = valueText.substr(2, 2);
+                        var startDate = (endDate === '00') ? '99' : (parseInt(endDate)-1).toString();
+                        if(startDate.length === 1) startDate = '0'+ startDate;
+                        return startDate + '/'+ endDate;
+                    }
+                    if(valueText === 'Jan'){
+                        return localeObject.monthNames[value.getMonth()] + '\u000A' + value.getFullYear();
+                    }
+                    return localeObject.monthNames[value.getMonth()];
+                };
+
+                var currMax = Math.max.apply(Math, data.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, data.map(function(e){ return e['values']}));
+
                 // first value axis (on the left)
                 var valueAxis1 = new AmCharts.ValueAxis();
                 valueAxis1.axisColor = "#408e3a";
@@ -93,27 +115,64 @@ angular.module('Sportomatics')
                 valueAxis3.axisThickness = 2;
                 chart.addValueAxis(valueAxis3);
 
-                // GRAPHS
-                // first graph
-                for(var i = 0; i < graphsCount; i ++){
-                    var graph = generateGraph(i, data[i]['title'], valueAxis1);
-                    chart.addGraph(graph);
+                if(graphs && graphs.length){
+                    _.each(graphs, function(graph){
+                        graph.valueAxis = valueAxis1;
+                        chart.addGraph(graph);
+                    })
+                } else {
+                    // GRAPHS
+                    var graph1 = new AmCharts.AmGraph();
+                    graph1.id = "g2";
+                    graph1.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                    graph1.title = field;
+                    graph1.valueField = "values";
+                    graph1.bullet = "none";
+                    graph1.hideBulletsCount = 30;
+                    graph1.bulletBorderThickness = 1;
+                    graph1.lineColor = "#408e3a";
+                    graph1.fillColors = "#408e3a";
+                    graph1.fillAlphas = 1;
+                    graph1.lineThickness = 0;
+                    //graph1.animationPlayed = true;
+                    graph1.type = 'column';
+                    if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+                        graph1.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
+                    chart.addGraph(graph1);
                 }
-                var graph1 = new AmCharts.AmGraph();
 
-                graph1.id = "g2";
-                graph1.valueAxis = valueAxis1; // we have to indicate which value axis should be used
-                graph1.title = field;
-                graph1.valueField = "values";
-                graph1.bullet = "round";
-                graph1.hideBulletsCount = 30;
-                graph1.bulletBorderThickness = 1;
-                graph1.lineColor = "#408e3a";
-                graph1.lineThickness = 4;
-                graph1.animationPlayed = true;
-                if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
-                graph1.balloonText = '<span style="text-align: left; float: left">'+locale.fieldNames[field].shortName + ': [[values]]</span> <br><span class="percentage">' + locale.fieldNames[field].shortName +'/'+ locale.fieldNames['count'].shortName+': '+'[[percentage]]</span>';
-                chart.addGraph(graph1);
+
+
+                var graph1Copy = new AmCharts.AmGraph();
+                graph1Copy.id = "g2";
+                graph1Copy.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                graph1Copy.title = field;
+                graph1Copy.valueField = "values1";
+                graph1Copy.bullet = "none";
+                graph1Copy.hideBulletsCount = 30;
+                graph1Copy.bulletBorderThickness = 1;
+                graph1Copy.lineColor = "#FF3232";
+                graph1Copy.fillColors = "#FF3232";
+                graph1Copy.fillAlphas = 1;
+                graph1Copy.lineThickness = 0;
+                graph1Copy.type = 'column'
+                //chart.addGraph(graph1Copy);
+
+                var graph2 = new AmCharts.AmGraph();
+                graph2.id = "g2";
+                graph2.valueAxis = valueAxis1; // we have to indicate which value axis should be used
+                graph2.title = field;
+                graph2.valueField = "values";
+                graph2.bullet = "none";
+                graph2.hideBulletsCount = 30;
+                graph2.bulletBorderThickness = 1;
+                graph2.lineColor = "#c0c0c0";
+                graph2.lineThickness = 1;
+                graph2.animationPlayed = true;
+                graph2.type = 'line';
+                graph2.balloonText = '';
+                graph2.visibleInLegend = false;
+                //chart.addGraph(graph2);
 
                 // second graph
                 var gamesGraph = new AmCharts.AmGraph();
@@ -151,15 +210,28 @@ angular.module('Sportomatics')
                     y: 60,
                     alpha: 0.7,
                     bold: true,
-                    text: locale.fieldNames[field].fullName.toUpperCase()
+                    text: localeObject.fieldNames[field].fullName.toUpperCase()
                 }];
+
+                // CURSOR
+                var chartCursor = new AmCharts.ChartCursor();
+                chartCursor.cursorAlpha = 1;
+                chartCursor.cursorColor = "#8ebd5d";
+                chartCursor.categoryBalloonFunction = function(value){
+                    if(chartData.groupBy === 'month'){
+                        return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                    } else {
+                        return localeObject.words.season +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                    }
+                };
+                chart.addChartCursor(chartCursor);
 
                 deferred.resolve(chart);
             });
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
-})
+});
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 
 // this method is called when chart is first inited as we listen for "dataUpdated" event
@@ -181,4 +253,23 @@ function generateGraph(i, title, axis){
 }
 function saveZoomParams(endDate, endIndex, endValue, startDate){
 
+}
+function makeGraph(id, title, color, field, valueAxis, localeObject){
+    var graph = new AmCharts.AmGraph();
+    graph.id = "gl"+id;
+    graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
+    graph.title = title + ' ' + field;
+    graph.valueField = "values" + id;
+    graph.bullet = "none";
+    graph.hideBulletsCount = 30;
+    graph.bulletBorderThickness = 1;
+    graph.lineColor = color;
+    graph.fillColors = color;
+    graph.fillAlphas = 1;
+    graph.lineThickness = 0;
+    graph.type = 'column';
+    if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
+        graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
+
+    return graph;
 }
