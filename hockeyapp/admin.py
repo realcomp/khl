@@ -105,16 +105,21 @@ class PlayerSocialsInline(admin.TabularInline):
 
 
 def recalc_counters(modeladmin, request, queryset):
-    from .tasks import player_recalc_counters, player_recalc_rating
+    from .tasks import player_recalc_counters
     pks = queryset.values_list('pk', flat=True)
     for i in range(0, len(pks), 1000):  # 1000 players per task
         player_recalc_counters.delay(pks[i:i + 1000])
-    player_recalc_rating.delay()
 recalc_counters.short_description = _('Recalculate counters')
 
 
+def recalc_rating(modeladmin, request, queryset):
+    from .tasks import player_recalc_rating
+    player_recalc_rating.delay()
+recalc_rating.short_description = _('Recalculate rating')
+
+
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
-    actions = recalc_counters,
+    actions = recalc_counters, recalc_rating
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',

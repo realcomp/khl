@@ -207,11 +207,14 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'penalty_time_average_index',
             'bullet_matches_total', 'zero_goals_matches_total',
             'shots_received_total', 'saves_total', 'loose_goals_total',
-            'saves_p_average', 'sf_average',
+            'saves_p_average', 'sf_average', 'matches_win_total',
+            'matches_lose_total',
             'bullet_matches_total_index', 'zero_goals_matches_total_index',
             'shots_received_total_index', 'saves_total_index',
             'saves_p_average_index', 'sf_average_index',
-            'loose_goals_total_index')
+            'loose_goals_total_index', 'matches_win_total_index',
+            'matches_lose_total_index',
+            )
         model = Player
 
 

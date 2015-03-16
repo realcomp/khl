@@ -122,6 +122,24 @@
                                     </tr>
                                     {% if line == 1 %}
                                     <tr>
+                                        <td>{% trans 'Matches Win' %}</td>
+                                        <td align="center">{{ matches_win_total }}</td>
+                                        <td align="center">
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=matches_win_total" class="player-place-link">
+                                                {{ matches_win_total_index }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>{% trans 'Matches Lose' %}</td>
+                                        <td align="center">{{ matches_lose_total }}</td>
+                                        <td align="center">
+                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=matches_lose_total" class="player-place-link">
+                                                {{ matches_lose_total_index }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>{% trans 'Matches with series of bullet goals' %}</td>
                                         <td align="center">{{ bullet_matches_total }}</td>
                                         <td align="center">
