@@ -8,6 +8,20 @@ from filer.models import Image
 from base.models import InstagramImageFile, InstagramUser
 
 
+class LangDepSerializer(drf.serializers.ModelSerializer):
+    '''
+    Language-Dependent Serializer
+    '''
+    def _get_field(self, obj, field_name):
+        return obj.get_locale_attr(
+            field_name, request=self.context.get('request'))
+
+
+class TitleBaseSerializer(LangDepSerializer):
+    title = drf.serializers.SerializerMethodField()
+    get_title = lambda self, obj: self._get_field(obj, 'title')
+
+
 class FIFSerialiser(drf.serializers.ModelSerializer):
     class Meta:
         model = Image

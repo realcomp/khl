@@ -14,15 +14,13 @@ from addresses.models import Country
 
 from .events import EventFactory
 from .mixins import PaginationMixin
-from ..filters import (
-    PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter)
-from ..models import (
-    Club, Player, ClubPlayer, ClubPlayerMatch, Timeline, Schedule, Timeline)
-from ..serializers import (
-    CountryLeaguesSerializer,
-    ClubListSerializer,
-    MetricsPlayerSerializer,
-)
+
+from ..filters import PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter
+from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, Schedule
+from ..models import Timeline
+
+from ..serializers import CountryLeaguesSerializer, ClubListSerializer
+from ..serializers import MetricsPlayerSerializer
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.events import EventSerializer
 from ..serializers.players import (

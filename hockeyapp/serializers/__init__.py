@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from dateutil import relativedelta
 
 from django.core.urlresolvers import reverse
-from django.db.models import Avg, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -13,8 +12,7 @@ from rest_framework import serializers
 from addresses.models import Address, Country
 from base.models import Season
 
-from ..models import (
-    Coach, Arena, Club, Player, League, ClubPlayerMatch, ClubPlayer)
+from ..models import Coach, Arena, Club, Player, League, ClubPlayer
 
 
 class LangDepSerializer(serializers.ModelSerializer):

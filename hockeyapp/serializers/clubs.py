@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import operator
-
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 
+from api.addresses.serializers import AddressSerializer
 from base.models import Season
 
 from . import (
@@ -17,7 +15,7 @@ from . import (
     CoachSerializer,
     LeagueSerializer,
     CountrySerializer)
-from ..models import Club, ClubPlayer, Coach, Player, League, LeagueClub
+from ..models import Club, ClubPlayer, Coach, Player, League
 
 
 class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
@@ -55,6 +53,8 @@ class BaseClubTeamSerializer(BaseClubSerializer):
 
 class ClubTeamSerializer(BaseClubTeamSerializer):
     seasons = SeasonSerializer(many=True)
+    address = AddressSerializer()
+    league = LeagueSerializer()
     all_players = serializers.SerializerMethodField()  # for table view
     offender_players = serializers.SerializerMethodField()
     defender_players = serializers.SerializerMethodField()
@@ -145,7 +145,7 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'site', 'contacts', 'coach', 'arena',
-            'address', 'offender_players', 'all_players',
+            'address', 'offender_players', 'all_players', 'league',
             'defender_players', 'goalkeeper_players', 'coaches',
             'url', 'seasons', 'season', 'prev_season')
         model = Club
