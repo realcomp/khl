@@ -185,6 +185,10 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
     actions = ('make_notclubs_league',)
 
+    def get_queryset(self, request):
+        qs = super(ClubAdmin, self).get_queryset(request)
+        return qs.exclude(league__en_title="Not clubs")
+
     def make_notclubs_league(self, request, queryset):
         l = League.objects.filter(en_title="Not clubs").last()
         if l:
