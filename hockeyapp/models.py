@@ -110,6 +110,7 @@ class Player(AbstractMan):
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
+
     # clubplayermatch data (do recalc_counters to update)
     seasons_total = models.IntegerField(_('Seasons Total'), null=True)
     matches_total = models.IntegerField(_('Matches Total'), null=True)
@@ -125,6 +126,22 @@ class Player(AbstractMan):
     plus_minus_average = models.FloatField(_('Plus/minus Average'), null=True)
     penalty_time_average = models.FloatField(
         _('Penalty Time Average'), null=True)
+    # goalkeeper specific
+    bullet_matches_total = models.IntegerField(
+        _('Total Matches with Bullet'), null=True)
+    zero_goals_matches_total = models.IntegerField(
+        _('0 Goals Matches'), null=True)
+    shots_received_total = models.IntegerField(
+        _('Shots Received Total'), null=True)
+    saves_total = models.IntegerField(
+        _('Saves Goals Total'), null=True)
+    loose_goals_total = models.IntegerField(
+        _('Loose Goals'), null=True)
+    saves_p_average = models.FloatField(
+        _('Saves Goals, Average %'), null=True)
+    sf_average = models.FloatField(
+        _('Safety Factor Average'), null=True)
+
     # players rating (do recalc_rating to update)
     seasons_total_index = models.IntegerField(
         _('Seasons Total Index'), null=True)
@@ -150,6 +167,21 @@ class Player(AbstractMan):
         _('Plus/minus Average Index'), null=True)
     penalty_time_average_index = models.IntegerField(
         _('Penalty Time Average Index'), null=True)
+    # goalkeeper specific
+    bullet_matches_total_index = models.IntegerField(
+        _('Total Matches with Bullet Index'), null=True)
+    zero_goals_matches_total_index = models.IntegerField(
+        _('0 Goals Matches Index'), null=True)
+    shots_received_total_index = models.IntegerField(
+        _('Shots Received TOtal Index'), null=True)
+    saves_total_index = models.IntegerField(
+        _('Saves Goals Total Index'), null=True)
+    saves_p_average_index = models.IntegerField(
+        _('Saves Goals, Average % Index'), null=True)
+    sf_average_index = models.FloatField(
+        _('Safety Factor Average Index'), null=True)
+    loose_goals_total_index = models.IntegerField(
+        _('Loose Goals Index'), null=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
@@ -157,20 +189,22 @@ class Player(AbstractMan):
         q_rated_matches = (
             Q(clubplayermatch__match__challenge_type__isnull=False) &
             Q(clubplayermatch__match__challenge_type__gt=0))
-        # clubplayers = self.clubplayer_set.filter(q_rated_matches)
-        clubplayers = self.clubplayer_set.all()  # dev mode
-        fields = 'goals', 'assists', 'points', 'plus_minus', 'penalty_time'
-        kwargs = {}
+        clubplayers = self.clubplayer_set.filter(q_rated_matches)
+        # clubplayers = self.clubplayer_set.all()  # dev mode
 
-        kwargs.update({
+        kwargs = {
             '%s_total' % field: Sum('clubplayermatch__%s' % field)
-            for field in fields
-        })
+            for field in (
+                'goals', 'assists', 'points', 'plus_minus', 'penalty_time',
+                'saves', 'loose_goals')
+        }
 
         if clubplayers.count() >= 10:
             kwargs.update({
                 '%s_average' % field: Avg('clubplayermatch__%s' % field)
-                for field in fields
+                for field in (
+                    'goals', 'assists', 'points', 'plus_minus', 'penalty_time',
+                    'saves_p', 'sf')
             })
 
         for k, v in clubplayers.aggregate(**kwargs).items():
@@ -181,13 +215,23 @@ class Player(AbstractMan):
 
         self.seasons_total = len(set(clubplayers.values_list('season')))
         self.matches_total = clubplayers.count()
+        self.bullet_matches_total = (
+            clubplayers
+            .filter(clubplayermatch__bullet_goals__gt=0).count())
+        self.zero_goals_matches_total = (
+            clubplayers
+            .filter(clubplayermatch__loose_goals=0).count())
+        self.shots_received_total = self.saves_total + self.loose_goals_total
 
     @classmethod
     def recalc_rating(cls):
-        fields = ('seasons_total', 'matches_total') + tuple(
-            itertools.chain(*map(
-                lambda x: ('%s_total' % x, '%s_average' % x),
-                ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
+        fields = (
+            'seasons_total', 'matches_total', 'bullet_matches_total',
+            'shots_received_total', 'saves_total', 'loose_goals_total',
+            'saves_p_average', 'sf_average', 'zero_goals_matches_total',
+        ) + tuple(itertools.chain(*map(
+            lambda x: ('%s_total' % x, '%s_average' % x),
+            ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
         for field in fields:
             rating_index = 0
             rating_value = None

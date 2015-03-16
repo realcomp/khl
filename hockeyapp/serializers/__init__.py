@@ -192,7 +192,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
-            'photo', 'khl_url', 'birth_date_short', 'club',
+            'photo', 'khl_url', 'birth_date_short', 'club', 'line',
             'url', 'citizenship', 'grip', 'wiki_page', 'contract_type',
             'contract_to', 'number', 'line_display', 'name', 'lastname',
             'seasons_total', 'matches_total', 'goals_total', 'assists_total',
@@ -204,7 +204,14 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'plus_minus_total_index', 'penalty_time_total_index',
             'goals_average_index', 'assists_average_index',
             'points_average_index', 'plus_minus_average_index',
-            'penalty_time_average_index')
+            'penalty_time_average_index',
+            'bullet_matches_total', 'zero_goals_matches_total',
+            'shots_received_total', 'saves_total', 'loose_goals_total',
+            'saves_p_average', 'sf_average',
+            'bullet_matches_total_index', 'zero_goals_matches_total_index',
+            'shots_received_total_index', 'saves_total_index',
+            'saves_p_average_index', 'sf_average_index',
+            'loose_goals_total_index')
         model = Player
 
 
