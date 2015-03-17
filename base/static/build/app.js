@@ -636,6 +636,42 @@ angular.module('Sportomatics')
                     change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
+                    },
+                    shots_received: {
+                        shortName: 'Бр',
+                        fullName: 'Броски'
+                    },
+                    loose_goals: {
+                        shortName: 'ПШ',
+                        fullName: 'Пропущенные шайбы'
+                    },
+                    saves: {
+                        shortName: 'ОШ',
+                        fullName: 'Отраженные броски'
+                    },
+                    saves_p__avg: {
+                        shortName: '%ОШ',
+                        fullName: 'Процент отраженных бросков'
+                    },
+                    sf__avg: {
+                        shortName: 'КН',
+                        fullName: 'Коэффициент надежности'
+                    },
+                    matches_win: {
+                        shortName: 'В',
+                        fullName: 'Выигрыши'
+                    },
+                    matches_lose: {
+                        shortName: 'П',
+                        fullName: 'Проигрыши'
+                    },
+                    zero_goals_matches: {
+                        shortName: 'И"0"',
+                        fullName: '"Сухие игры"'
+                    },
+                    bullet_matches: {
+                        shortName: 'ИБ',
+                        fullName: 'Игры с буллитными сериями'
                     }
                 };
                 var fieldNamesEn = {
@@ -803,6 +839,42 @@ angular.module('Sportomatics')
                     change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
+                    },
+                    shots_received: {
+                        shortName: 'Бр',
+                        fullName: 'Броски'
+                    },
+                    loose_goals: {
+                        shortName: 'ПШ',
+                        fullName: 'Пропущенные шайбы'
+                    },
+                    saves: {
+                        shortName: 'ОШ',
+                        fullName: 'Отраженные броски'
+                    },
+                    saves_p__avg: {
+                        shortName: '%ОШ',
+                        fullName: 'Процент отраженных бросков'
+                    },
+                    sf__avg: {
+                        shortName: 'КН',
+                        fullName: 'Коэффициент надежности'
+                    },
+                    matches_win: {
+                        shortName: 'В',
+                        fullName: 'Выигрыши'
+                    },
+                    matches_lose: {
+                        shortName: 'П',
+                        fullName: 'Проигрыши'
+                    },
+                    zero_goals_matches: {
+                        shortName: 'И"0"',
+                        fullName: '"Сухие игры"'
+                    },
+                    bullet_matches: {
+                        shortName: 'ИБ',
+                        fullName: 'Игры с буллитными сериями'
                     }
                 },
                 buttonNames: {
@@ -914,6 +986,7 @@ angular.module('Sportomatics')
         }
 
     }])
+
 angular.module('Sportomatics')
 .service('PlayersSearchService', ["$http", function($http) {
     this.loadCountries = function($scope, $location, callback) {

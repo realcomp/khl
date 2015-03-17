@@ -87,9 +87,9 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
                         'plus_minus', 'penalty_time', 'ev_goals', 'pp_goals',
                         'es_goals', 'overtime_goals', 'win_goals', 'bullet_goals',
                         'shots', 'faceoff', 'winfaceoff', 'winfaceoff_p',
-                        'goals', 'assists', 'points')),
+                        'goals', 'assists', 'points', 'loose_goals', 'saves')),
                     map(Avg, (
-                        'shots', 'pis', 'winfaceoff_p')),
+                        'shots', 'pis', 'winfaceoff_p', 'saves_p', 'sf')),
                 ))
             return instance._aggregate
 
@@ -126,6 +126,15 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
     shots__avg = AggregateAvgField()
     gamingtime__avg = serializers.SerializerMethodField()
     change_count__avg = serializers.SerializerMethodField()
+    loose_goals = AggregateSumField()
+    saves = AggregateSumField()
+    saves_p__avg = AggregateAvgField()
+    sf__avg = AggregateAvgField()
+    shots_received = serializers.SerializerMethodField()
+    matches_win = serializers.SerializerMethodField()
+    matches_lose = serializers.SerializerMethodField()
+    zero_goals_matches = serializers.SerializerMethodField()
+    bullet_matches = serializers.SerializerMethodField()
 
     def get_count(self, obj):
         return obj.count()
@@ -159,6 +168,35 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         result = change_count_all or change_count
         return ('%0.2f' % result) if result else '0'
 
+    def get_shots_received(self, obj):
+        loose_goals = (
+            obj.aggregate(Sum('loose_goals'))
+            .get('loose_goals__sum') or 0)
+        saves = (
+            obj.aggregate(Sum('saves'))
+            .get('saves__sum') or 0)
+        return loose_goals + saves
+
+    def get_matches_win(self, obj):
+        home_matches = obj.home_matches_win()
+        guest_matches = obj.guest_matches_win()
+        return (
+            (home_matches and home_matches.count() or 0) +
+            (guest_matches and guest_matches.count() or 0))
+
+    def get_matches_lose(self, obj):
+        home_matches = obj.home_matches_lose()
+        guest_matches = obj.guest_matches_lose()
+        return (
+            (home_matches and home_matches.count() or 0) +
+            (guest_matches and guest_matches.count() or 0))
+
+    def get_zero_goals_matches(self, obj):
+        return obj.filter(loose_goals=0).count()
+
+    def get_bullet_matches(self, obj):
+        return obj.filter(bullet_goals__gt=0).count()
+
     class Meta(object):
         fields = (
             'count', 'date', 'season', 'goals', 'assists', 'points',
@@ -166,7 +204,9 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
             'overtime_goals', 'win_goals', 'bullet_goals', 'shots', 'pis__avg',
             'faceoff', 'winfaceoff', 'winfaceoff_p__avg',
             'shots__avg', 'gamingtime__avg', 'change_count__avg',
-            'start_date', 'end_date',
+            'start_date', 'end_date', 'loose_goals', 'saves', 'saves_p__avg',
+            'sf__avg', 'shots_received', 'matches_win', 'matches_lose',
+            'zero_goals_matches', 'bullet_matches',
         )
         model = ClubPlayerMatch
 

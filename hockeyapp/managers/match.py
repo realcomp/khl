@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 __author__='smirnov.ev'
 
 from django.db import models
-from django.db.models import Q, Max, Min
+from django.db.models import F, Q, Max, Min
 from django.db.models.loading import get_model
 
 from base.models import Season
@@ -242,6 +242,21 @@ class MatchManager(ManagerMixin, models.Manager):
 
 
 class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
+    X_HOME_WIN = {
+        'where': [
+            "hockeyapp_match.count ~ '^[0-9]:[0-9]' and "
+            "cast(split_part(left(hockeyapp_match.count, 3), ':', 1) as integer) > "
+            "cast(split_part(left(hockeyapp_match.count, 3), ':', 2) as integer)"
+        ],
+    }
+    X_GUEST_WIN = {
+        'where': [
+            "hockeyapp_match.count ~ '^[0-9]:[0-9]' and "
+            "cast(split_part(left(hockeyapp_match.count, 3), ':', 1) as integer) < "
+            "cast(split_part(left(hockeyapp_match.count, 3), ':', 2) as integer)"
+        ],
+    }
+
     # Вообще кверисет должен возвращать кверисет. А там, где нужно убрать дубли,
     # лучше заюзать set(queryset) и циклы, как ниже описаны. Но Queryset должен
     # быть queryset
@@ -285,6 +300,24 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
             season_qs.season = season
             result.append(season_qs)
         return result
+
+    def home_matches(self):
+        return self.filter(match__home_team=F('clubplayer__club'))
+
+    def guest_matches(self):
+        return self.filter(match__guest_team=F('clubplayer__club'))
+
+    def home_matches_win(self):
+        self.home_matches().extra(**self.X_HOME_WIN)
+
+    def home_matches_lose(self):
+        self.home_matches().extra(**self.X_GUEST_WIN)
+
+    def guest_matches_win(self):
+        self.guest_matches().extra(**self.X_GUEST_WIN)
+
+    def guest_matches_lose(self):
+        self.guest_matches().extra(**self.X_HOME_WIN)
 
     # def aggregate_by_player(self, key, player_id):
     #     cache_key = 'ClubPlayerMatchQuerySet/player/%s/%s' % (player_id, key)
