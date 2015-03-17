@@ -47,31 +47,44 @@ class PlayersSearchOrderFilter(OrderFilter):
 
 class PlayersSearchFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
-        if 'season' in request.GET:
-            clubplayers = ClubPlayer.objects.by_season(
-                self.request.GET['season'])
+        q = Q()
+        _season = request.GET.get('season')
+        if _season:
+            q &= Q(clubplayer__season=_season)
         elif 'is_playing' in request.GET:
-            clubplayers = ClubPlayer.objects.by_season(
-                Season.objects.latest('start_date'))
-        else:
-            clubplayers = ClubPlayer.objects.all()
+            q &= Q(clubplayer__season=Season.objects.latest('start_date'))
 
-        if 'league' in request.GET:
-            leagues = request.GET.getlist('league')
-            clubplayers = clubplayers.filter(league__in=leagues)
-            players = clubplayers.values_list('player_id', flat=True)
-            qs = qs.filter(pk__in=players)
+        _leagues = request.GET.getlist('league')
+        if _leagues:
+            q &= Q(clubplayer__league__in=_leagues)
 
-        if 'line' in request.GET:
-            qs = qs.filter(line__in=request.GET.getlist('line'))
+        _lines = request.GET.getlist('line')
+        if _lines:
+            q &= Q(line__in=_lines)
+        _club = request.GET.get('club')    
+        if _club:
+            #q &= Q(clubplayer__club=_club)
+            q &= Q(club=_club)
+        _qs = qs.filter(q)
 
-        q_citizenship = Q()
-        if 'citizenship' in request.GET:
-            citizenship = request.GET.getlist('citizenship')
-            q_citizenship |= Q(citizenship__in=citizenship)
+        _citizenships = request.GET.getlist('citizenship')
+        q_citizenships = Q()
+        if _citizenships:
+            q_citizenships |= Q(citizenship__in=_citizenships)
         if 'citizenship_other' in request.GET:
-            q_citizenship |= ~Q(citizenship__ru_title=b'Россия')
-        if q_citizenship:
-            qs = qs.filter(q_citizenship)
+            q_citizenships |= ~Q(citizenship__ru_title=b'Россия')
+        if q_citizenships: _qs = _qs.filter(q)
 
-        return qs
+        if '%s_lastname__startswith' in request.GET:
+            s = self.request.GET['%s_lastname__startswith']
+            _qs = _qs.filter(**{
+                '%s_lastname__startswith' % request.LANGUAGE_CODE: s,
+            })
+
+        _pk = request.GET.get('player')
+        if _pk:
+            _pk = int(_pk)
+            _qs = _qs.ranged_filter(lambda player: player.pk == _pk, 5)
+
+        qs_ids = set(_qs.values_list('pk', flat=True))
+        return qs.filter(pk__in=qs_ids)

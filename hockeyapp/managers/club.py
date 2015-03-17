@@ -10,7 +10,6 @@ from django.db.models.loading import get_model
 from .. import parsers
 
 from . import DataCleanMixin
-from ..utils import get_season_start_date, get_season_end_date
 
 CURRENT_APP = __package__.split('.')[0]
 

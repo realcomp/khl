@@ -36,18 +36,19 @@ class PlayersSearch(
 
     def list(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
-        # get clubplayers
-        self.clubplayers = {}
-        clubplayers = (
-            ClubPlayer.objects
-            .filter(pk__in=qs.values_list('clubplayer', flat=True))
-            .order_by('-end_date', '-pk'))
-        for clubplayer in clubplayers:
-            player_id = clubplayer.player_id
-            if player_id not in self.clubplayers:
-                self.clubplayers[player_id] = []
-            if clubplayer not in self.clubplayers[player_id]:
-                self.clubplayers[player_id].append(clubplayer)
+
+        ## get clubplayers
+        #self.clubplayers = {}
+        #clubplayers = ClubPlayer.objects.filter(
+                                #pk__in=qs.values_list('clubplayer', flat=True)
+                        #).order_by('-end_date', '-pk')
+        #for clubplayer in clubplayers:
+            #player_id = clubplayer.player_id
+            #if player_id not in self.clubplayers:
+                #self.clubplayers[player_id] = []
+            #if clubplayer not in self.clubplayers[player_id]:
+                #self.clubplayers[player_id].append(clubplayer)
+
         # get rating
         rated_qs = qs
         rated_by = self.request.GET.get('rated_by', '')
@@ -55,31 +56,10 @@ class PlayersSearch(
             rated_qs = qs.order_by('-' + rated_by)
         self.rating = {}
         rating_index = 0
-        rating_value = None
         for player in rated_qs:
             if not rated_by:
-            #     if (getattr(player, rated_by) < rating_value or
-            #             rating_value is None):
-            #         rating_index += 1
-            #         rating_value = getattr(player, rated_by)
-            # else:
                 rating_index += 1
             self.rating[player.pk] = rating_index
-
-        if '%s_lastname__startswith' in self.request.GET:
-            s = self.request.GET['%s_lastname__startswith']
-            qs = qs.filter(**{
-                '%s_lastname__startswith' % self.request.LANGUAGE_CODE: s,
-            })
-
-        if 'player' in self.request.GET:
-            pk = int(self.request.GET['player'])
-            qs = qs.ranged_filter(lambda player: player.pk == pk, 5)
-
-        if 'club' in request.GET:
-            clubplayers = clubplayers.filter(club=request.GET['club'])
-            players = clubplayers.values_list('player_id', flat=True)
-            qs = qs.filter(pk__in=players)
 
         instance = qs
         page = self.paginate_queryset(instance)

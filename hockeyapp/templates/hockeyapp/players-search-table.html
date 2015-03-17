@@ -308,9 +308,8 @@
                         </td>
                         {% verbatim %}
                         <td ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
-                            <a href="{{ player.clubplayers[0].club_url }}" class="club-link"
-                               ng-show="player.clubplayers.length > 0">
-                                {{ player.clubplayers[0].club.title_verbose }}
+                            <a href="{{ player.club_url }}" class="club-link">
+                                {{ player.club.title_verbose }}
                             </a>
                             <div ng-show="player.clubplayers.length > 1">
                                 <ul class="club-link-list hidden">

@@ -9,7 +9,7 @@ from rest_framework import serializers
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
     SeasonSerializer, BaseClubSerializer,
-    CoachSerializer, CountrySerializer, ClubPlayerSerializer)
+    CoachSerializer, CountrySerializer, ClubLightListSerializer)#ClubPlayerSerializer)
 from ..models import (
     AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
 
@@ -19,7 +19,8 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     photo = serializers.ReadOnlyField(source='photo.url')
     line_display = serializers.ReadOnlyField(source='get_line_display')
     citizenship = CountrySerializer()
-    clubplayers = serializers.SerializerMethodField()
+    #clubplayers = serializers.SerializerMethodField()
+    club = ClubLightListSerializer()
     age = serializers.SerializerMethodField()
     birth_date_short = serializers.SerializerMethodField()
     rating = serializers.SerializerMethodField()
@@ -27,14 +28,14 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     contract_to = serializers.SerializerMethodField()
     contract_type = serializers.ReadOnlyField(source='get_contract_type_display')
 
-    def get_clubplayers(self, obj):
-        clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
-        if clubplayers_data is None:
-            clubplayers = obj.clubplayer_set.order_by('-end_date', '-pk')
-        else:
-            clubplayers = clubplayers_data.get(obj.pk)
-        return ClubPlayerSerializer(
-            clubplayers, context=self.context, many=True).data
+    #def get_clubplayers(self, obj):
+        #clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
+        #if clubplayers_data is None:
+            #clubplayers = obj.clubplayer_set.order_by('-end_date', '-pk')
+        #else:
+            #clubplayers = clubplayers_data.get(obj.pk)
+        #return ClubPlayerSerializer(
+            #clubplayers, context=self.context, many=True).data
 
     def get_rating(self, obj):
         rated_by = self.context['request'].GET.get('rated_by', '')
@@ -55,7 +56,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     class Meta(object):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
-            'citizenship', 'clubplayers', 'age', 'birth_date_short',
+            'citizenship', 'club', 'age', 'birth_date_short',
             'rating', 'rating_index', 'fio', 'contract_to', 'contract_type',
             'weight', 'height', 'grip', 'matches_total')
         model = Player
