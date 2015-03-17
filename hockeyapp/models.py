@@ -10,7 +10,7 @@ from dateutil import relativedelta
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Q, Avg, Sum
+from django.db.models import F, Q, Avg, Sum
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -120,6 +120,7 @@ class Player(AbstractMan):
     plus_minus_total = models.IntegerField(_('Plus/minus Total'), null=True)
     penalty_time_total = models.IntegerField(
         _('Penalty Time Total'), null=True)
+    gamingtime_total = models.IntegerField(_('Gaming Time Total'), null=True)
     goals_average = models.FloatField(_('Goals Average'), null=True)
     assists_average = models.FloatField(_('Assists Average'), null=True)
     points_average = models.FloatField(_('Points Average'), null=True)
@@ -141,6 +142,9 @@ class Player(AbstractMan):
         _('Saves Goals, Average %'), null=True)
     sf_average = models.FloatField(
         _('Safety Factor Average'), null=True)
+    matches_win_total = models.IntegerField(_('Matches Win Total'), null=True)
+    matches_lose_total = models.IntegerField(
+        _('Matches Lose Total'), null=True)
 
     # players rating (do recalc_rating to update)
     seasons_total_index = models.IntegerField(
@@ -167,6 +171,8 @@ class Player(AbstractMan):
         _('Plus/minus Average Index'), null=True)
     penalty_time_average_index = models.IntegerField(
         _('Penalty Time Average Index'), null=True)
+    gamingtime_total_index = models.IntegerField(
+        _('Gaming Time Total Index'), null=True)
     # goalkeeper specific
     bullet_matches_total_index = models.IntegerField(
         _('Total Matches with Bullet Index'), null=True)
@@ -178,10 +184,14 @@ class Player(AbstractMan):
         _('Saves Goals Total Index'), null=True)
     saves_p_average_index = models.IntegerField(
         _('Saves Goals, Average % Index'), null=True)
-    sf_average_index = models.FloatField(
+    sf_average_index = models.IntegerField(
         _('Safety Factor Average Index'), null=True)
     loose_goals_total_index = models.IntegerField(
         _('Loose Goals Index'), null=True)
+    matches_win_total_index = models.IntegerField(
+        _('Matches Win Total Index'), null=True)
+    matches_lose_total_index = models.IntegerField(
+        _('Matches Lose Total Index'), null=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
@@ -189,6 +199,24 @@ class Player(AbstractMan):
         q_rated_matches = (
             Q(clubplayermatch__match__challenge_type__isnull=False) &
             Q(clubplayermatch__match__challenge_type__gt=0))
+        q_home_matches = (
+            Q(clubplayermatch__match__home_team=F('club')))
+        q_guest_matches = (
+            Q(clubplayermatch__match__guest_team=F('club')))
+        x_home_win = {
+            'where': [
+                "hockeyapp_match.count ~ '^[0-9]:[0-9]' and "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 1) as integer) > "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 2) as integer)"
+            ],
+        }
+        x_guest_win = {
+            'where': [
+                "hockeyapp_match.count ~ '^[0-9]:[0-9]' and "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 1) as integer) < "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 2) as integer)"
+            ],
+        }
         clubplayers = self.clubplayer_set.filter(q_rated_matches)
         # clubplayers = self.clubplayer_set.all()  # dev mode
 
@@ -196,7 +224,7 @@ class Player(AbstractMan):
             '%s_total' % field: Sum('clubplayermatch__%s' % field)
             for field in (
                 'goals', 'assists', 'points', 'plus_minus', 'penalty_time',
-                'saves', 'loose_goals')
+                'saves', 'loose_goals', 'gamingtime')
         }
 
         if clubplayers.count() >= 10:
@@ -215,6 +243,12 @@ class Player(AbstractMan):
 
         self.seasons_total = len(set(clubplayers.values_list('season')))
         self.matches_total = clubplayers.count()
+        self.matches_win_total = (
+            clubplayers.filter(q_home_matches).extra(**x_home_win).count() +
+            clubplayers.filter(q_guest_matches).extra(**x_guest_win).count())
+        self.matches_lose_total = (
+            clubplayers.filter(q_home_matches).extra(**x_guest_win).count() +
+            clubplayers.filter(q_guest_matches).extra(**x_home_win).count())
         self.bullet_matches_total = (
             clubplayers
             .filter(clubplayermatch__bullet_goals__gt=0).count())
@@ -224,24 +258,16 @@ class Player(AbstractMan):
         self.shots_received_total = self.saves_total + self.loose_goals_total
 
     @classmethod
-    def recalc_rating(cls):
-        fields = (
-            'seasons_total', 'matches_total', 'bullet_matches_total',
-            'shots_received_total', 'saves_total', 'loose_goals_total',
-            'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-        ) + tuple(itertools.chain(*map(
-            lambda x: ('%s_total' % x, '%s_average' % x),
-            ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-        for field in fields:
-            rating_index = 0
-            rating_value = None
-            for player in cls.objects.order_by('-%s' % field, '-pk'):
-                if (getattr(player, field) < rating_value or
-                        rating_value is None):
-                    rating_index += 1
-                    rating_value = getattr(player, field)
-                setattr(player, '%s_index' % field, rating_index)
-                player.save(update_fields=('%s_index' % field,))
+    def recalc_rating(cls, field):
+        rating_index = 0
+        rating_value = None
+        for player in cls.objects.order_by('-%s' % field, '-pk'):
+            if (getattr(player, field) < rating_value or
+                    rating_value is None):
+                rating_index += 1
+                rating_value = getattr(player, field)
+            setattr(player, '%s_index' % field, rating_index)
+            player.save(update_fields=('%s_index' % field,))
 
     def save(self, **kwargs):
         if self.pk and not self.line:

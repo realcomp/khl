@@ -1,0 +1,16 @@
+{% load i18n %}
+<tr>
+    <td>{% trans label %}</td>
+    <td align="center">
+        {% if key|slice:"-7:" == "average" %}
+            {{ value|floatformat:3 }}
+        {% else %}
+            {{ value }}
+        {% endif %}
+    </td>
+    <td align="center">
+        <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by={{ key }}" class="player-place-link">
+            {{ rating }}
+        </a>
+    </td>
+</tr>
