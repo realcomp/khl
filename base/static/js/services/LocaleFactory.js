@@ -250,6 +250,10 @@ angular.module('Sportomatics')
                     change_count__avg: {
                         shortName: 'См/И',
                         fullName: 'Среднее количество смен за игру'
+                    },
+                    position: {
+                        shortName: '',
+                        fullName: 'Место'
                     }
                 },
                 buttonNames: {
