@@ -3,8 +3,11 @@ from __future__ import unicode_literals
 
 import rest_framework as drf
 
+from api.addresses.serializers import AddressMinimalSerializer
 from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
+from api.base.serializers import TitleBaseSerializer
 from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
+from hockeyapp.serializers import CoachSerializer
 
 
 class ArenaMinimalSerialiser(drf.serializers.ModelSerializer):
@@ -46,3 +49,25 @@ class PlayerMinimalSerialiser(drf.serializers.ModelSerializer):
         model = Player
         fields = 'id', 'number', 'line', 'ru_fio', 'photo'
         read_only_fields = fields
+
+
+class ArenaClubListSerializer(TitleBaseSerializer):
+    url = drf.serializers.ReadOnlyField(source='get_absolute_url')
+    class Meta(object):
+        fields = 'pk', 'title', 'url',
+        model = Arena
+
+
+class ClubListSerializer(TitleBaseSerializer):
+    title_verbose = drf.serializers.SerializerMethodField()
+    def get_title_verbose(self, obj):
+        return obj.get_title_verbose(request=self.context.get('request'))
+    address = AddressMinimalSerializer()
+    arena = ArenaClubListSerializer()
+    coach = CoachSerializer()
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'title_verbose', 'logo', 'url', 'address', 'arena',
+            'coach',)
+        model = Club

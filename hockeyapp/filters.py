@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import json
-import operator
 
 from django.db.models import Q
 
@@ -13,6 +12,10 @@ from .models import ClubPlayer
 
 class OrderFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
+        self.ordering_queryset(request, qs, view)
+        return qs
+
+    def ordering_queryset(self, request, qs, view):
         if 'order_by' in request.GET:
             field = request.GET['order_by']
             reverse = field.startswith('-')

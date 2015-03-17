@@ -29,8 +29,6 @@ urlpatterns = patterns(
     url(r'^api/players/(?P<pk>\d+)/timeline/$',
         api.PlayerTimeline.as_view(),
         name='player-timeline-api'),
-    url(r'^api/clubs/$', api.ClubList.as_view(),
-        name='club-list-api'),
     url(r'^api/clubs/(?P<pk>\d+)/$', api.ClubTeam.as_view(),
         name='club-team-api'),
     url(r'^api/clubs/(?P<pk>\d+)/compare/$', api.ClubTeamCompare.as_view(),

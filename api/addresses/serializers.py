@@ -24,3 +24,8 @@ class AddressSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title', 'city'
         model = Address
+
+class AddressMinimalSerializer(TitleBaseSerializer):
+    class Meta(object):
+        fields = 'pk', 'title',
+        model = Address

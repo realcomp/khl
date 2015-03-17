@@ -6,7 +6,6 @@ import datetime
 import itertools
 
 from django.db.models import Avg, Sum
-from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, response, viewsets
 
@@ -15,11 +14,11 @@ from addresses.models import Country
 from .events import EventFactory
 from .mixins import PaginationMixin
 
-from ..filters import PlayersSearchFilter, OrderFilter, PlayersSearchOrderFilter
+from ..filters import PlayersSearchFilter, PlayersSearchOrderFilter
 from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, Schedule
 from ..models import Timeline
 
-from ..serializers import CountryLeaguesSerializer, ClubListSerializer
+from ..serializers import CountryLeaguesSerializer
 from ..serializers import MetricsPlayerSerializer
 from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
 from ..serializers.events import EventSerializer
@@ -165,36 +164,6 @@ class LeagueList(generics.ListAPIView):
 
     def get_queryset(self):
         return Country.objects.exclude(league__isnull=True)
-
-
-class ClubList(PaginationMixin, generics.ListAPIView):
-    filter_backends = OrderFilter,
-    serializer_class = ClubListSerializer
-
-    def get_queryset(self):
-        return Club.objects.all()
-
-    def filter_queryset(self, qs):
-        qs = super(ClubList, self).filter_queryset(qs)
-
-        country = Country.objects.filter(ru_title=b'Россия').last()
-        if 'country' in self.request.GET:
-            country = get_object_or_404(
-                Country, pk=self.request.GET['country'])
-        if country:
-            qs = qs.filter(leagueclub__league__country_id=country).distinct()
-
-        if 'league' in self.request.GET:
-            league = self.request.GET['league']
-            if league:
-                qs = qs.filter(leagueclub__league_id=league).distinct()
-
-        if 'season' in self.request.GET:
-            season = self.request.GET['season']
-            if season:
-                qs = qs.by_season(season)#.distinct()
-
-        return qs
 
 
 class ClubTeam(generics.RetrieveAPIView):
