@@ -62,8 +62,8 @@ class ClubListSerializer(TitleBaseSerializer):
     title_verbose = drf.serializers.SerializerMethodField()
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
-    logo = serializers.ReadOnlyField(source='logo.url')
-    url = serializers.ReadOnlyField(source='get_absolute_url')
+    logo = drf.serializers.ReadOnlyField(source='logo.url')
+    url = drf.serializers.ReadOnlyField(source='get_absolute_url')
     address = AddressMinimalSerializer()
     arena = ArenaClubListSerializer()
     coach = CoachSerializer()
