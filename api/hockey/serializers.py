@@ -62,12 +62,13 @@ class ClubListSerializer(TitleBaseSerializer):
     title_verbose = drf.serializers.SerializerMethodField()
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
+    url = drf.serializers.ReadOnlyField(source="get_absolute_url")
     address = AddressMinimalSerializer()
     arena = ArenaClubListSerializer()
     coach = CoachSerializer()
 
     class Meta(object):
         fields = (
-            'pk', 'title', 'title_verbose', 'logo', 'url', 'address', 'arena',
-            'coach',)
+            'pk', 'title', 'title_verbose', 'logo', 'url',
+            'address', 'arena', 'coach',)
         model = Club
