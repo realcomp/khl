@@ -177,9 +177,9 @@ def player_recalc_counters(ids):
 
 
 @app.task(ignore_result=True, track_started=True)
-def player_recalc_rating():
+def player_recalc_rating(field):
     try:
-        models.Player.recalc_rating()
+        models.Player.recalc_rating(field)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 

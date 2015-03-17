@@ -102,216 +102,32 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>{% trans 'Seasons' %}</td>
-                                        <td align="center">{{ seasons_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=seasons_total" class="player-place-link">
-                                                {{ seasons_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Matches' %}</td>
-                                        <td align="center">{{ matches_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=matches_total" class="player-place-link">
-                                                {{ matches_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    {% include "hockeyapp/players/indicators-row.html" with label="Seasons" key="seasons_total" value=seasons_total rating=seasons_total_index pk=pk %}
+                                    {% include "hockeyapp/players/indicators-row.html" with label="Matches" key="matches_total" value=matches_total rating=matches_total_index pk=pk %}
                                     {% if line == 1 %}
-                                    <tr>
-                                        <td>{% trans 'Matches Win' %}</td>
-                                        <td align="center">{{ matches_win_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=matches_win_total" class="player-place-link">
-                                                {{ matches_win_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Matches Lose' %}</td>
-                                        <td align="center">{{ matches_lose_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=matches_lose_total" class="player-place-link">
-                                                {{ matches_lose_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Matches with series of bullet goals' %}</td>
-                                        <td align="center">{{ bullet_matches_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=bullet_matches_total" class="player-place-link">
-                                                {{ bullet_matches_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Shots' %}</td>
-                                        <td align="center">{{ shots_received_total }}</td>
-                                        <td align="center">
-                                            <!-- <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=shots_received_total" class="player-place-link"> -->
-                                                {{ shots_received_total_index }}
-                                            <!-- </a> -->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Blocked shots' %}</td>
-                                        <td align="center">{{ saves_total }}</td>
-                                        <td align="center">
-                                            <!-- <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=saves_total" class="player-place-link"> -->
-                                                {{ saves_total_index }}
-                                            <!-- </a> -->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Blocked shots, %' %}</td>
-                                        <td align="center">{{ saves_p_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <!-- <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=saves_p_average" class="player-place-link"> -->
-                                                {{ saves_p_average_index }}
-                                            <!-- </a> -->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Safety factor' %}</td>
-                                        <td align="center">{{ sf_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <!-- <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=sf_average" class="player-place-link"> -->
-                                                {{ sf_average_index }}
-                                            <!-- </a> -->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Missed goals' %}</td>
-                                        <td align="center">{{ loose_goals_total }}</td>
-                                        <td align="center">
-                                            <!-- <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=loose_goals_total" class="player-place-link"> -->
-                                                {{ loose_goals_total_index }}
-                                            <!-- </a> -->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans '0 goals matches' %}</td>
-                                        <td align="center">{{ zero_goals_matches_total }}</td>
-                                        <td align="center">
-                                            <!-- <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=zero_goals_matches_total" class="player-place-link"> -->
-                                                {{ zero_goals_matches_total_index }}
-                                            <!-- </a> -->
-                                        </td>
-                                    </tr>
-
-
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Matches Win" key="matches_win_total" value=matches_win_total rating=matches_win_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Matches Lose" key="matches_lose_total" value=matches_lose_total rating=matches_lose_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Matches with series of bullet goals" key="bullet_matches_total" value=bullet_matches_total rating=bullet_matches_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Shots" key="shots_received_total" value=shots_received_total rating=shots_received_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots" key="saves_total" value=saves_total rating=saves_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots, %" key="saves_p_average" value=saves_p_average rating=saves_p_average_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Safety factor" key="sf_average" value=sf_average rating=sf_average_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Missed goals" key="loose_goals_total" value=loose_goals_total rating=loose_goals_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="0 goals matches" key="zero_goals_matches_total" value=zero_goals_matches_total rating=zero_goals_matches_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Gaming time" key="gamingtime_total" value=gamingtime_total rating=gamingtime_total_index pk=pk %}
                                     {% else %}
-                                    <tr>
-                                        <td>{% trans 'Goals' %}</td>
-                                        <td align="center">{{ goals_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=goals_total" class="player-place-link">
-                                                {{ goals_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Transfers' %}</td>
-                                        <td align="center">{{ assists_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=assists_total" class="player-place-link">
-                                                {{ assists_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Scored' %}</td>
-                                        <td align="center">{{ points_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=points_total" class="player-place-link">
-                                                {{ points_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% comment %}
-                                    <tr>
-                                        <td>{% trans 'Plus/minus' %}</td>
-                                        <td align="center">{{ plus_minus_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=plus_minus_total" class="player-place-link">
-                                                {{ plus_minus_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    {% endcomment %}
-                                    <tr>
-                                        <td>{% trans 'Average goals count per game' %}</td>
-                                        <td align="center">{{ goals_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=goals_average" class="player-place-link">
-                                                {{ goals_average_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Average transfers count per game' %}</td>
-                                        <td align="center">{{ assists_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=assists_average" class="player-place-link">
-                                                {{ assists_average_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Average score count per game' %}</td>
-                                        <td align="center">{{ points_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=points_average" class="player-place-link">
-                                                {{ points_average_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Average penalty time' %}</td>
-                                        <td align="center">{{ penalty_time_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=penalty_time_average" class="player-place-link">
-                                                {{ penalty_time_average_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{% trans 'Average "plus/minus" per game' %}</td>
-                                        <td align="center">{{ plus_minus_average|floatformat:3 }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=plus_minus_average" class="player-place-link">
-                                                {{ plus_minus_average_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Goals" key="goals_total" value=goals_total rating=goals_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Points" key="points_total" value=points_total rating=points_total_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Average goals count per game" key="goals_average" value=goals_average rating=goals_average_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Average transfers count per game" key="assists_average" value=assists_average rating=assists_average_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Average score count per game" key="points_average" value=points_average rating=points_average_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label="Average penalty time" key="penalty_time_average" value=penalty_time_average rating=penalty_time_average_index pk=pk %}
+                                        {% include "hockeyapp/players/indicators-row.html" with label='Average "plus/minus" per game' key="plus_minus_average" value=plus_minus_average rating=plus_minus_average_index pk=pk %}
                                     {% endif %}
-                                    <tr>
-                                        <td>{% trans 'Penalty time, min' %}</td>
-                                        <td align="center">{{ penalty_time_total }}</td>
-                                        <td align="center">
-                                            <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by=penalty_time_total" class="player-place-link">
-                                                {{ penalty_time_total_index }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>SM-индекс</td>
-                                        <td align="center">12</td>
-                                        <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>CORSI-индекс</td>
-                                        <td align="center">12</td>
-                                        <td align="center">
-                                            <a href="#" class="player-place-link">23</a>
-                                        </td>
-                                    </tr>
+                                    {% include "hockeyapp/players/indicators-row.html" with label="Penalty time, min" key="penalty_time_total" value=penalty_time_total rating=penalty_time_total_index pk=pk %}
+                                    {% include "hockeyapp/players/indicators-row.html" with label="SM-индекс" key="sm_index" value=12 rating=23 pk=pk %}
+                                    {% include "hockeyapp/players/indicators-row.html" with label="CORSI-индекс" key="corsi_index" value=12 rating=23 pk=pk %}
                                 </tbody>
                             </table>
                         </div>

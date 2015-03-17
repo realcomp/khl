@@ -198,7 +198,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'seasons_total', 'matches_total', 'goals_total', 'assists_total',
             'points_total', 'plus_minus_total', 'penalty_time_total',
             'goals_average', 'assists_average', 'points_average',
-            'plus_minus_average', 'penalty_time_average',
+            'plus_minus_average', 'penalty_time_average', 'gamingtime_total',
             'seasons_total_index', 'matches_total_index', 'goals_total_index',
             'assists_total_index', 'points_total_index',
             'plus_minus_total_index', 'penalty_time_total_index',
@@ -213,7 +213,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'shots_received_total_index', 'saves_total_index',
             'saves_p_average_index', 'sf_average_index',
             'loose_goals_total_index', 'matches_win_total_index',
-            'matches_lose_total_index',
+            'matches_lose_total_index', 'gamingtime_total_index',
             )
         model = Player
 

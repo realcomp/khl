@@ -120,6 +120,7 @@ class Player(AbstractMan):
     plus_minus_total = models.IntegerField(_('Plus/minus Total'), null=True)
     penalty_time_total = models.IntegerField(
         _('Penalty Time Total'), null=True)
+    gamingtime_total = models.IntegerField(_('Gaming Time Total'), null=True)
     goals_average = models.FloatField(_('Goals Average'), null=True)
     assists_average = models.FloatField(_('Assists Average'), null=True)
     points_average = models.FloatField(_('Points Average'), null=True)
@@ -170,6 +171,8 @@ class Player(AbstractMan):
         _('Plus/minus Average Index'), null=True)
     penalty_time_average_index = models.IntegerField(
         _('Penalty Time Average Index'), null=True)
+    gamingtime_total_index = models.IntegerField(
+        _('Gaming Time Total Index'), null=True)
     # goalkeeper specific
     bullet_matches_total_index = models.IntegerField(
         _('Total Matches with Bullet Index'), null=True)
@@ -221,7 +224,7 @@ class Player(AbstractMan):
             '%s_total' % field: Sum('clubplayermatch__%s' % field)
             for field in (
                 'goals', 'assists', 'points', 'plus_minus', 'penalty_time',
-                'saves', 'loose_goals')
+                'saves', 'loose_goals', 'gamingtime')
         }
 
         if clubplayers.count() >= 10:
@@ -255,25 +258,16 @@ class Player(AbstractMan):
         self.shots_received_total = self.saves_total + self.loose_goals_total
 
     @classmethod
-    def recalc_rating(cls):
-        fields = (
-            'seasons_total', 'matches_total', 'bullet_matches_total',
-            'shots_received_total', 'saves_total', 'loose_goals_total',
-            'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-            'matches_win_total', 'matches_lose_total',
-        ) + tuple(itertools.chain(*map(
-            lambda x: ('%s_total' % x, '%s_average' % x),
-            ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-        for field in fields:
-            rating_index = 0
-            rating_value = None
-            for player in cls.objects.order_by('-%s' % field, '-pk'):
-                if (getattr(player, field) < rating_value or
-                        rating_value is None):
-                    rating_index += 1
-                    rating_value = getattr(player, field)
-                setattr(player, '%s_index' % field, rating_index)
-                player.save(update_fields=('%s_index' % field,))
+    def recalc_rating(cls, field):
+        rating_index = 0
+        rating_value = None
+        for player in cls.objects.order_by('-%s' % field, '-pk'):
+            if (getattr(player, field) < rating_value or
+                    rating_value is None):
+                rating_index += 1
+                rating_value = getattr(player, field)
+            setattr(player, '%s_index' % field, rating_index)
+            player.save(update_fields=('%s_index' % field,))
 
     def save(self, **kwargs):
         if self.pk and not self.line:

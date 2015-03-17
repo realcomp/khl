@@ -114,7 +114,16 @@ recalc_counters.short_description = _('Recalculate counters')
 
 def recalc_rating(modeladmin, request, queryset):
     from .tasks import player_recalc_rating
-    player_recalc_rating.delay()
+    fields = (
+        'seasons_total', 'matches_total', 'bullet_matches_total',
+        'shots_received_total', 'saves_total', 'loose_goals_total',
+        'saves_p_average', 'sf_average', 'zero_goals_matches_total',
+        'matches_win_total', 'matches_lose_total', 'gamingtime_total',
+    ) + tuple(itertools.chain(*map(
+        lambda x: ('%s_total' % x, '%s_average' % x),
+        ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
+    for field in fields:
+        player_recalc_rating.delay(field)
 recalc_rating.short_description = _('Recalculate rating')
 
 
