@@ -5567,7 +5567,10 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     height: 225px !important;
 }
 .text-center{
-    text-align: center;
+    text-align: center !important;
+}
+.uppercase{
+    text-transform: uppercase !important;
 }
 .no-decoration{
     text-decoration: none !important;
@@ -5664,4 +5667,50 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .legend-container{
     height: 10px;
     padding: 3px;
+}
+.club-logo-container{
+    min-width: 210px;
+    height: 200px;
+
+}
+.club-portrait-coach img{
+    width: 70px;
+    height: 80px;
+}
+.club-portrait-coach p{
+    font-size: 11px;
+}
+.club-portrait-coaches{
+    min-width: 330px;
+}
+.club-portrait-coach{
+    display: inline-block;
+    margin-right: 8px;
+}
+.background-good{
+    background: #e3edb9 !important;
+}
+.background-bad{
+    background: #e2a5b4 !important;
+}
+hr.style-six {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+hr.style-six2 {
+    border: 0;
+    height: 0;
+    border-top: 2px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+}
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: -webkit-linear-gradient(left, #ccc, #333, #ccc);
+    background-image:    -moz-linear-gradient(left, #ccc, #333, #ccc);
+    background-image:     -ms-linear-gradient(left, #ccc, #333, #ccc);
+    background-image:      -o-linear-gradient(left, #ccc, #333, #ccc);
 }

@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{title}}: новости и результаты матчей, хоккей  - Sportomatics.ru
@@ -32,156 +33,231 @@
         </div>
         {% include "hockeyapp/clubs/team-info.html" %}
 
-        <div class="page-content page-container">
+        <div class="page-content page-container" ng-controller="ClubNewsController">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
             <div class="page-inner-container">
                 <div class="clubs-photos-tabs">
                     <div class="ui grid">
                         <div class="row">
                             <div class="column">
-                                <div class="ui tabular menu content-tabs">
-                                    <div class="heading">Новости и результаты матчей</div>
-                                </div>
+                                <div class="heading">Портрет клуба</div>
                             </div>
                         </div>
-                        <div class="row" id="photos-new" data-tab="photos-new">
-                            <div class="sixteen wide column">
-                                <div class="masonry-clubs-photos masonry">
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/240/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                        <div class="row">
+                            <div class="column club-logo-container">
+                                <img src="{{ logo|default:'' }}" style="width: 180px; height: 180px">
+                            </div>
+                            <div class="column" style="min-width: 700px">
+                                <div class="ui grid">
+                                    <div class="row">
+                                        <div class="column" style="min-width: 280px">
+                                            <div class="">
+                                                <h3>{{title}}</h3>
+                                                <p class="bold">{{address.title}}</p>
+                                            </div>
+                                            <ul class="info-list">
+                                                {% if site %}
+                                                <li class="info-item">{% trans "Site" %}: <a href="{{ site }}">{{ site }}</a></li>
+                                                {% endif %}
+                                                {% if email %}
+                                                <li class="info-item">E-mail: {{ email }}</li>
+                                                {% endif %}
+                                                {% if phone %}
+                                                <li class="info-item">{% trans "Tel." %}: {{ phone }}</li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+
+                                        <div class="column club-portrait-coaches" style="min-width: 400px">
+                                            <div class="column club-portrait-coach text-center">
+                                                <img src="/static/images/player-avatar.jpg">
+                                                <h5>Иван Петров</h5>
+                                                <p>главный тренер</p>
+                                            </div>
+                                            <div class="column club-portrait-coach text-center">
+                                                <img src="/static/images/player-avatar.jpg">
+                                                <h5>Александр Муратов</h5>
+                                                <p>второй тренер</p>
+                                            </div>
+                                            <div class="column club-portrait-coach text-center">
+                                                <img src="/static/images/player-avatar.jpg">
+                                                <h5>Иван Петров</h5>
+                                                <p>главный тренер</p>
+                                            </div>
+                                            <div class="column club-portrait-coach">
+
+                                            </div>
+                                            <div class="column club-portrait-coach">
+
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/220/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                    <hr class="style-six" style="width: 100%; margin-top: 20px">
+                                    <div class="row">
+                                        <div class="column" style="min-width: 280px">
+                                            Арена: ЛДС "Петровский", СПб, просп Стачек 18<br>
+                                            <a href="#">карта проезда</a>
                                         </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/260/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/230/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/186/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/160/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item w2">
-                                        <img src="http://lorempixel.com/372/240/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/210/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/222/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/100/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <img src="http://lorempixel.com/186/80/sports/" alt="" class="item-photo">
-                                        <a href="#" class="item-photo-author">
-                                            <span class="item-author-avatar"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="item-author-image"></span>
-                                            <span class="item-author-name">Иванов Александр</span>
-                                        </a>
-                                        <div class="item-data">12 августа 2014</div>
-                                        <div class="item-info">
-                                            <a href="#" class="item-views"><i class="unhide icon"></i>1206</a>
-                                            <a href="#" class="item-comments"><i class="like icon"></i>10</a>
+                                        <div class="column" style="min-width: 400px">
+                                            Офис: ЛДС "Петровский", СПб, просп Стачек 18<br>
+                                            <a href="#">карта проезда</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <hr class="style-six2" style="width: 100%; margin-top: 20px">
+                        <div class="row">
+                            <div class="column">
+                                    <div class="heading">Позиции команды в чемпионате</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="chartdiv" style="width: 100%; height:400px; ">
+
+                            </div>
+                        </div>
+                        <hr class="style-six" style="width: 95%; margin-top: 20px">
+                        {% verbatim %}
+                        <div class="row" style="">
+                            <div class="column">
+                                    <div class="heading">Сезон {{currentSeasonString}}<br>
+                                    </div>
+                                <p>Место в чемпионате - {{currentPlace}}</p>
+                            </div>
+                        </div>
+                        {% endverbatim %}
+                        <div class="row">
+                            <div class="column" style="width: 315px !important;">
+                                <table class="ui celled table segment player-select-table text-center">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th class="text-center uppercase">
+                                            Дата
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Матч
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Счет
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="match in matchData track by $index">
+                                        <td>
+                                            <span ng-bind="match.date"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0">
+                                            <span ng-bind="match.opponent"></span> -
+                                            <span ng-bind="match.club"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0">
+                                            <span ng-bind="match.club"></span> -
+                                            <span ng-bind="match.opponent"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultOpponent"></span> :
+                                            <span ng-bind="match.resultClub"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultClub"></span> :
+                                            <span ng-bind="match.resultOpponent"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="column" style="width: 315px !important;">
+                                <table class="ui celled table segment player-select-table text-center">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th class="text-center uppercase">
+                                            Дата
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Матч
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Счет
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="match in matchData track by $index">
+                                        <td>
+                                            <span ng-bind="match.date"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0">
+                                            <span ng-bind="match.opponent"></span> -
+                                            <span ng-bind="match.club"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0">
+                                            <span ng-bind="match.club"></span> -
+                                            <span ng-bind="match.opponent"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultOpponent"></span> :
+                                            <span ng-bind="match.resultClub"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultClub"></span> :
+                                            <span ng-bind="match.resultOpponent"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="column" style="width: 315px !important;">
+                                <table class="ui celled table segment player-select-table text-center">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th class="text-center uppercase">
+                                            Дата
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Матч
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Счет
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="match in matchData track by $index">
+                                        <td>
+                                            <span ng-bind="match.date"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0">
+                                            <span ng-bind="match.opponent"></span> -
+                                            <span ng-bind="match.club"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0">
+                                            <span ng-bind="match.club"></span> -
+                                            <span ng-bind="match.opponent"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultOpponent"></span> :
+                                            <span ng-bind="match.resultClub"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultClub"></span> :
+                                            <span ng-bind="match.resultOpponent"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+
                     </div>
                 </div>
             </div>

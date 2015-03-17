@@ -507,6 +507,144 @@ angular.module('Sportomatics')
                 deferred.resolve(chart);
             });
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
+        },
+        generateSerialLineChart: function(field, chartData, localeObject, graphs){
+            // Method accepts
+            var deferred = $q.defer();
+            var chart;
+            AmChartsFactory.ready().then(function () {
+                var data = chartData;
+
+                // SERIAL CHART
+                chart = new AmCharts.AmSerialChart();
+                chart.pathToImages = "http://www.amcharts.com/lib/images/";
+                chart.dataProvider = data;//[{"date":"2010-06-30T00:00:00.000Z","values1":7,"count1":5,"percentage1":0.152,"values":9,"count":6,"percentage":0.173},{"date":"2011-06-30T00:00:00.000Z","values1":9,"count1":9,"percentage1":0.111,"values":6,"count":9,"percentage":0.067},{"date":"2012-06-30T00:00:00.000Z","values1":13,"count1":7,"percentage1":0.188,"values":7,"count":4,"percentage":0.206},{"date":"2013-06-30T00:00:00.000Z","values1":9,"count1":7,"percentage1":0.129,"values":11,"count":7,"percentage":0.177},{"date":"2014-06-30T00:00:00.000Z","values1":5,"count1":7,"percentage1":0.071,"values":9,"count":5,"percentage":0.22},{"date":"2015-06-30T00:00:00.000Z","values1":4,"count1":6,"percentage1":0.067,"values":3,"count":4,"percentage":0.094},{"date":"1998-06-30T00:00:00.000Z","values1":1,"count1":4,"percentage1":0.029},{"date":"1999-06-30T00:00:00.000Z","values1":6,"count1":5,"percentage1":0.146},{"date":"2000-06-30T00:00:00.000Z","values1":1,"count1":5,"percentage1":0.024},{"date":"2001-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.109},{"date":"2002-06-30T00:00:00.000Z","values1":3,"count1":5,"percentage1":0.068},{"date":"2003-06-30T00:00:00.000Z","values1":2,"count1":5,"percentage1":0.043},{"date":"2004-06-30T00:00:00.000Z","values1":0,"count1":4,"percentage1":0},{"date":"2005-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.105},{"date":"2006-06-30T00:00:00.000Z","values1":10,"count1":7,"percentage1":0.161},{"date":"2007-06-30T00:00:00.000Z","values1":4,"count1":5,"percentage1":0.082},{"date":"2008-06-30T00:00:00.000Z","values1":4,"count1":7,"percentage1":0.062},{"date":"2009-06-30T00:00:00.000Z","values1":2,"count1":4,"percentage1":0.05}];
+                chart.categoryField = "date";
+                chart.cursorColor = "#DADADA";
+                chart.addClassNames = true;
+
+                // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
+                chart.addListener("dataUpdated", zoomChart);
+                chart.addListener("zoomed", function (chart) {
+                    zoomData.startDate = chart.startDate;
+                    zoomData.endDate = chart.endDate;
+                });
+                // AXES
+                // category
+                var categoryAxis = chart.categoryAxis;
+                categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
+                categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
+                categoryAxis.autoGridCount =  true;
+                categoryAxis.equalSpacing = true;
+                categoryAxis.minHorizontalGap = 40;
+                categoryAxis.gridAlpha = 0.1; //categoryAxis.gridAlpha = 0.1;
+                categoryAxis.boldPeriodBeginning = false;
+                categoryAxis.axisColor = "#DADADA";
+                categoryAxis.gridPosition =  "start";
+                categoryAxis.markPeriodChange = false;
+                categoryAxis.dateFormats = [{
+                    period: 'fff',
+                    format: 'JJ:NN:SS'
+                }, {
+                    period: 'ss',
+                    format: 'JJ:NN:SS'
+                }, {
+                    period: 'mm',
+                    format: 'JJ:NN'
+                }, {
+                    period: 'hh',
+                    format: 'JJ:NN'
+                }, {
+                    period: 'DD',
+                    format: 'DD'
+                }, {
+                    period: 'WW',
+                    format: 'DD'
+                }, {
+                    period: 'MM',
+                    format: 'MMM'
+                }, {
+                    period: 'YYYY',
+                    format: 'YYYY'
+                }];
+                categoryAxis.labelFunction = function(valueText, date, categoryAxis){
+                    var value = new Date(date);
+                    if(chartData.groupBy === 'season'){
+                        var endDate = valueText.substr(2, 2);
+                        var startDate = (endDate === '00') ? '99' : (parseInt(endDate)-1).toString();
+                        if(startDate.length === 1) startDate = '0'+ startDate;
+                        return startDate + '/'+ endDate;
+                    }
+                    if(valueText === 'Jan'){
+                        return  value.getFullYear();
+                    }
+                    return localeObject.monthNames[value.getMonth()];
+                };
+
+                var currMax = Math.max.apply(Math, data.map(function(e){ return e['values']}));
+                var currMin = Math.min.apply(Math, data.map(function(e){ return e['values']}));
+
+                // first value axis (on the left)
+                var valueAxis1 = new AmCharts.ValueAxis();
+                valueAxis1.axisColor = "#408e3a";
+                valueAxis1.axisThickness = 1;
+                valueAxis1.gridAlpha = 0.1;
+                valueAxis1.reversed = true;
+                valueAxis1.tickLength = 2;
+                valueAxis1.maximum = 18;//(currMax === 0) ? +2 : (currMax/10 > 0) ? currMax+(currMax/10)*5: currMax + currMax%10;
+                valueAxis1.minimum = 1;//(currMin === 0) ? -2 : (currMin/10 > 0) ? currMin-(currMin/10)*5 : currMin - Math.abs(currMin%10);
+                valueAxis1.labelFunction = function(value){
+                    if(value === 2 || value === 16){
+                        return value + ' место'
+                    }
+                    return '';
+                };
+                chart.addValueAxis(valueAxis1);
+
+                if(graphs && graphs.length){
+                    _.each(graphs, function(graph){
+                        console.log('a', graph.type);
+                        graph.valueAxis = valueAxis1;
+                        graph.visibleInLegend = false;
+                        chart.addGraph(graph);
+                    })
+                }
+
+
+                // LEGEND
+                var legend = new AmCharts.AmLegend();
+                legend.marginLeft = 110;
+                legend.useGraphSettings = true;
+                chart.addLegend(legend);
+
+                // LABEL
+                chart.allLabels = [{
+                    align: 'center',
+                    y: 60,
+                    alpha: 0.7,
+                    bold: true,
+                    text: localeObject.fieldNames[field].fullName.toUpperCase()
+                }];
+
+
+
+
+                // CURSOR
+                var chartCursor = new AmCharts.ChartCursor();
+                chartCursor.cursorAlpha = 1;
+                chartCursor.cursorColor = "#8ebd5d";
+                chartCursor.categoryBalloonFunction = function(value){
+                    if(chartData.groupBy === 'month'){
+                        return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                    } else {
+                        return localeObject.words.season +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                    }
+                };
+                chart.addChartCursor(chartCursor);
+
+                deferred.resolve(chart);
+            });
+            return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
         }
     }
 }]);
@@ -875,6 +1013,10 @@ angular.module('Sportomatics')
                     bullet_matches: {
                         shortName: 'ИБ',
                         fullName: 'Игры с буллитными сериями'
+                    },
+                    position: {
+                        shortName: '',
+                        fullName: 'Место'
                     }
                 },
                 buttonNames: {
@@ -1402,6 +1544,197 @@ angular.module('Sportomatics')
     PlayersSearchService.loadCountries($scope, $location, $scope.list);
 }]);
 
+angular.module('Sportomatics')
+    .controller('ClubNewsController', ["$scope", "$http", "ChartFactory", "LocaleFactory", "$timeout", function($scope, $http, ChartFactory, LocaleFactory, $timeout){
+        $scope.club = $("#team-name-hidden").length ? $("#team-name-hidden").val() : 'Club';
+        $scope.data = [
+            {
+                date: '2001',
+                values: 17
+            },
+            {
+                date: '2002',
+                values: 14
+            },
+            {
+                date: '2003',
+                values: 12
+            },
+            {
+                date: '2004',
+                values: 10
+            },
+            {
+                date: '2005',
+                values: 12
+            },
+            {
+                date: '2006',
+                values: 8
+            },
+            {
+                date: '2007',
+                values: 12
+            },
+            {
+                date: '2008',
+                values: 6
+            },
+            {
+                date: '2009',
+                values: 4
+            }
+        ];
+        $scope.matchData = [
+            {
+                date: '21.09.2014',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 1,
+                resultOpponent: 4
+            },
+            {
+                date: '14.01.2013',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 4,
+                resultOpponent: 1
+            },
+            {
+                date: '04.07.2012',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 4,
+                resultOpponent: 1
+            },
+            {
+                date: '30.11.2000',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 1,
+                resultOpponent: 4
+            },
+            {
+                date: '21.09.2014',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 1,
+                resultOpponent: 2,
+                resultNote: 'Б'
+            },
+            {
+                date: '14.01.2013',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 6,
+                resultOpponent: 1
+            },
+            {
+                date: '04.07.2012',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 4,
+                resultOpponent: 1
+            },
+            {
+                date: '30.11.2000',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 5,
+                resultOpponent: 4
+            },
+            {
+                date: '21.09.2014',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 3,
+                resultOpponent: 3
+            },
+            {
+                date: '14.01.2013',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 5,
+                resultOpponent: 2
+            },
+            {
+                date: '04.07.2012',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 4,
+                resultOpponent: 1
+            },
+            {
+                date: '30.11.2000',
+                club: $scope.club,
+                opponent: 'СКА',
+                resultClub: 1,
+                resultOpponent: 4
+            }
+        ];
+
+        $scope.setCurrentSeasonString = function(date, value){
+            $timeout(function(){
+
+                $scope.currentSeason = date;
+                $scope.currentPlace = value;
+                $scope.currentSeasonString = parseInt($scope.currentSeason)-1 + '/' + $scope.currentSeason;
+            }, 100)
+        };
+        $scope.setCurrentSeasonString(2001, 17);
+
+        $scope.makeGraph = function(id, title, color, field, valueAxis, localeObject){
+            console.log(id, title, color, field);
+            var graph = new AmCharts.AmGraph();
+            graph.id = "gl"+id;
+            graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
+            graph.title = title + ' ' + field;
+            graph.valueField = "values"+id;
+            graph.bullet = "none";
+            graph.hideBulletsCount = 30;
+            graph.bulletBorderThickness = 1;
+            graph.lineColor = color;
+            graph.fillColor = "#FFFFFF";
+            graph.fillAlphas = 0;
+            graph.lineThickness = 1;
+            graph.type = 'line';
+            return graph;
+        };
+
+
+        $scope.graph = $scope.makeGraph('', 'positions', "#408e3a", null, null, LocaleFactory.locale_ru);
+        $scope.graphs = [$scope.graph];
+        ChartFactory.generateSerialLineChart('position', $scope.data, LocaleFactory.locale_ru, $scope.graphs).then(function(chart){
+            chart.addListener("rendered", addListeners);
+
+            function addListeners(){
+                var categoryAxis = chart.categoryAxis;
+                categoryAxis.addListener("clickItem", handleClick);
+                categoryAxis.addListener("rollOverItem", handleOver);
+                categoryAxis.addListener("rollOutItem", handleOut);
+            }
+
+            function handleClick(event){
+                var value = _.where($scope.data, {date: event.value.toString()})[0].values;
+                console.log(event.value, value);
+                $scope.setCurrentSeasonString(event.value, value);
+            }
+
+            function handleOut(event){
+                event.target.setAttr("cursor", "default");
+                event.target.setAttr("fill", "#000000");
+            }
+
+
+            function handleOver(event){
+                event.target.setAttr("cursor", "pointer");
+                event.target.setAttr("fill", "#CC0000");
+            }
+
+            chart.write("chartdiv");
+
+        })
+    }])
 angular.module('Sportomatics')
 .controller('ClubStatsController', [
     '$http', '$scope', 'PlayersSearchService', '$location',

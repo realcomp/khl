@@ -322,6 +322,10 @@ angular.module('Sportomatics')
                     bullet_matches: {
                         shortName: 'ИБ',
                         fullName: 'Игры с буллитными сериями'
+                    },
+                    position: {
+                        shortName: '',
+                        fullName: 'Место'
                     }
                 },
                 buttonNames: {
