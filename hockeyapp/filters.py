@@ -49,9 +49,12 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
         q = Q()
         _season = request.GET.get('season')
+        _club = request.GET.get('club')
+        _is_playing = 'is_playing' in request.GET
+
         if _season:
             q &= Q(clubplayer__season=_season)
-        elif 'is_playing' in request.GET:
+        elif _is_playing:
             q &= Q(clubplayer__season=Season.objects.latest('start_date'))
 
         _leagues = request.GET.getlist('league')
@@ -61,10 +64,12 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _lines = request.GET.getlist('line')
         if _lines:
             q &= Q(line__in=_lines)
-        _club = request.GET.get('club')    
+
         if _club:
-            #q &= Q(clubplayer__club=_club)
-            q &= Q(club=_club)
+            if _is_playing:
+                q &= Q(club=_club)
+            else:
+                q &= Q(clubplayer__club=_club)
         _qs = qs.filter(q)
 
         _citizenships = request.GET.getlist('citizenship')
@@ -75,10 +80,13 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             q_citizenships |= ~Q(citizenship__ru_title=b'Россия')
         if q_citizenships: _qs = _qs.filter(q)
 
-        if '%s_lastname__startswith' in request.GET:
-            s = self.request.GET['%s_lastname__startswith']
+        _s = request.GET.get('%s_lastname__startswith')
+        if _s:
+            print({
+                '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
+            })
             _qs = _qs.filter(**{
-                '%s_lastname__startswith' % request.LANGUAGE_CODE: s,
+                '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
             })
 
         _pk = request.GET.get('player')
