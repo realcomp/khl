@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 import json
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, get_user_model, login
 from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
 
 from rest_framework import generics, permissions, response
 from rest_framework.views import APIView
 
 from ..forms import PasswordResetForm
 from ..serializers import (
-    ProfileSerializer, ProfileVersionSerializer, RegistrationSer)
+    ProfileSerializer, ProfileVersionSerializer, RegistrationSer,
+    PasswordResetConfirmSerializer)
 
 
 class ProfileVersionView(generics.RetrieveUpdateAPIView):
@@ -40,6 +42,10 @@ class RegistrationView(generics.CreateAPIView):
 
 
 class PasswordResetView(APIView):
+    """
+    POST:
+    email - user's email
+    """
     def post(self, request, *args, **kwargs):
         form = PasswordResetForm(request.DATA)
         if form.is_valid():
@@ -55,3 +61,7 @@ class PasswordResetView(APIView):
             return response.Response({
                 'errors': json.loads(form.errors.as_json()),
             }, status=400)
+
+
+class PasswordResetConfirmView(generics.CreateAPIView):
+    serializer_class = PasswordResetConfirmSerializer

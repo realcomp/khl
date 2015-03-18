@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-18 10:59+0300\n"
+"POT-Creation-Date: 2015-03-18 20:41+0300\n"
 "PO-Revision-Date: 2014-12-10 10:48+0000\n"
 "Last-Translator: Anonymous User <anonymous@user.tld>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: accounts/forms.py:19
 #: accounts/templates/registration/registration_form.html:53
-#: accounts/templates/registration/registration_form.html:266
+#: accounts/templates/registration/registration_form.html:273
 msgid "Password"
 msgstr "Пароль"
 
@@ -155,6 +155,12 @@ msgstr ""
 #: accounts/models.py:95
 msgid "User"
 msgstr "Пользователь"
+
+#: accounts/serializers.py:80 accounts/serializers.py:98
+#, fuzzy
+#| msgid "Password"
+msgid "Password reset unsuccessful"
+msgstr "Пароль"
 
 #: accounts/templates/accounts/profile/menu.html:4
 #: accounts/templates/accounts/profile/user-card4.html:16
@@ -423,162 +429,166 @@ msgstr "Все поля необходимы для заполнения"
 msgid "receive email notifications"
 msgstr "получать e-mail уведомления"
 
-#: accounts/templates/registration/registration_form.html:61
-#: accounts/templates/registration/registration_form.html:274
+#: accounts/templates/registration/registration_form.html:63
+#: accounts/templates/registration/registration_form.html:283
 msgid "Verify password"
 msgstr "Подтвердите пароль"
 
-#: accounts/templates/registration/registration_form.html:68
-#: accounts/templates/registration/registration_form.html:281
+#: accounts/templates/registration/registration_form.html:72
+#: accounts/templates/registration/registration_form.html:293
 msgid "Passwords match"
 msgstr "Пароли совпадают"
 
-#: accounts/templates/registration/registration_form.html:71
-#: accounts/templates/registration/registration_form.html:284
+#: accounts/templates/registration/registration_form.html:75
+#: accounts/templates/registration/registration_form.html:297
 msgid "Please make sure your passwords match"
 msgstr "Пожалуйста убедитесь что ваши пароли совпадают"
 
-#: accounts/templates/registration/registration_form.html:76
-#: accounts/templates/registration/registration_form.html:151
-#: accounts/templates/registration/registration_form.html:355
+#: accounts/templates/registration/registration_form.html:80
+#: accounts/templates/registration/registration_form.html:155
+#: accounts/templates/registration/registration_form.html:371
 msgid "Next"
 msgstr "Далее"
 
-#: accounts/templates/registration/registration_form.html:83
+#: accounts/templates/registration/registration_form.html:87
 msgid "Let's get to know each other! "
 msgstr ""
 
-#: accounts/templates/registration/registration_form.html:87
+#: accounts/templates/registration/registration_form.html:91
 msgid "STEP 2"
 msgstr "ШАГ 2"
 
-#: accounts/templates/registration/registration_form.html:93
+#: accounts/templates/registration/registration_form.html:97
 msgid "Tell us about yourself"
 msgstr "Расскажите нам о себе"
 
-#: accounts/templates/registration/registration_form.html:98
+#: accounts/templates/registration/registration_form.html:102
 msgid "Full name:"
 msgstr "Полное имя:"
 
-#: accounts/templates/registration/registration_form.html:105
+#: accounts/templates/registration/registration_form.html:109
 msgid "hide my name in the amateur version of the website"
 msgstr "скрывать имя в любительской версии сайта"
 
-#: accounts/templates/registration/registration_form.html:110
+#: accounts/templates/registration/registration_form.html:114
 msgid "Profile photo:"
 msgstr "Фото:"
 
-#: accounts/templates/registration/registration_form.html:130
+#: accounts/templates/registration/registration_form.html:134
 msgid "My website:"
 msgstr "Веб-сайт"
 
-#: accounts/templates/registration/registration_form.html:146
+#: accounts/templates/registration/registration_form.html:150
 msgid "I don't want to give any information about me"
 msgstr "Я не хочу давать никакой информации о себе"
 
-#: accounts/templates/registration/registration_form.html:150
-#: accounts/templates/registration/registration_form.html:224
+#: accounts/templates/registration/registration_form.html:154
+#: accounts/templates/registration/registration_form.html:228
 msgid "PREV"
 msgstr "НАЗАД"
 
-#: accounts/templates/registration/registration_form.html:157
+#: accounts/templates/registration/registration_form.html:161
 msgid "Customize the website!"
 msgstr "Настройте веб-сайт!"
 
-#: accounts/templates/registration/registration_form.html:160
+#: accounts/templates/registration/registration_form.html:164
 msgid "STEP 3"
 msgstr "ШАГ 3"
 
-#: accounts/templates/registration/registration_form.html:166
+#: accounts/templates/registration/registration_form.html:170
 msgid "Set up your preferences"
 msgstr "Выберите ваши предпочтения"
 
-#: accounts/templates/registration/registration_form.html:172
+#: accounts/templates/registration/registration_form.html:176
 msgid "I'm interested in:"
 msgstr "Мои интересы:"
 
-#: accounts/templates/registration/registration_form.html:176
-#: accounts/templates/registration/registration_form.html:207
+#: accounts/templates/registration/registration_form.html:180
+#: accounts/templates/registration/registration_form.html:211
 #: base/templates/partial/header/items.html:2
 #: base/templates/partial/header/top.html:7
 msgid "Hockey"
 msgstr "Хоккей"
 
-#: accounts/templates/registration/registration_form.html:180
+#: accounts/templates/registration/registration_form.html:184
 #: base/templates/partial/header/items.html:3
 msgid "Football"
 msgstr "Футбол"
 
-#: accounts/templates/registration/registration_form.html:184
+#: accounts/templates/registration/registration_form.html:188
 #: base/templates/partial/header/items.html:4
 msgid "Basketball"
 msgstr "Баскетбол"
 
-#: accounts/templates/registration/registration_form.html:189
+#: accounts/templates/registration/registration_form.html:193
 msgid "In countries:"
 msgstr "В странах:"
 
-#: accounts/templates/registration/registration_form.html:196
-#: accounts/templates/registration/registration_form.html:210
+#: accounts/templates/registration/registration_form.html:200
+#: accounts/templates/registration/registration_form.html:214
 msgid "start typing"
 msgstr ""
 
-#: accounts/templates/registration/registration_form.html:203
+#: accounts/templates/registration/registration_form.html:207
 msgid "My favourite clubs:"
 msgstr "Любимые клубы"
 
-#: accounts/templates/registration/registration_form.html:220
+#: accounts/templates/registration/registration_form.html:224
 msgid "I don't have any preferences"
 msgstr "У меня нет предпочтений"
 
-#: accounts/templates/registration/registration_form.html:225
+#: accounts/templates/registration/registration_form.html:229
 msgid "END"
 msgstr "ЗАВЕРШИТЬ"
 
-#: accounts/templates/registration/registration_form.html:236
+#: accounts/templates/registration/registration_form.html:241
 msgid "Your login:"
 msgstr "Ваш логин:"
 
-#: accounts/templates/registration/registration_form.html:262
+#: accounts/templates/registration/registration_form.html:267
 msgid "REMEMBER PASSWORD"
 msgstr "НАПОМНИТЬ ПАРОЛЬ"
 
-#: accounts/templates/registration/registration_form.html:293
+#: accounts/templates/registration/registration_form.html:302
+msgid "SAVE"
+msgstr "СОХРАНИТЬ"
+
+#: accounts/templates/registration/registration_form.html:309
 msgid "New User's Registration"
 msgstr "Регистрация нового пользователя"
 
-#: accounts/templates/registration/registration_form.html:297
+#: accounts/templates/registration/registration_form.html:313
 msgid "Thank you for your interest in our services."
 msgstr "Спасибо за ваш интерес в наших сервисах."
 
-#: accounts/templates/registration/registration_form.html:298
+#: accounts/templates/registration/registration_form.html:314
 msgid "There is nothing easier — just choose an appropriate way"
 msgstr ""
 
-#: accounts/templates/registration/registration_form.html:299
+#: accounts/templates/registration/registration_form.html:315
 msgid ""
 "We tried to do everything so that it does not take away from you more than 1 "
 "minute."
 msgstr ""
 
-#: accounts/templates/registration/registration_form.html:313
+#: accounts/templates/registration/registration_form.html:329
 msgid "Sign in with social account"
 msgstr "Войти под аккаунтом социальной сети"
 
-#: accounts/templates/registration/registration_form.html:319
+#: accounts/templates/registration/registration_form.html:335
 msgid "Registration form"
 msgstr "Форма регистрации"
 
-#: accounts/templates/registration/registration_form.html:325
+#: accounts/templates/registration/registration_form.html:341
 msgid "Remember password"
 msgstr "Напомнить пароль"
 
-#: accounts/templates/registration/registration_form.html:339
+#: accounts/templates/registration/registration_form.html:355
 msgid "Select any social account with which you want to sign in:"
 msgstr ""
 "Выберите любой аккаунт социальной сети с помощью которого вы хотите войти:"
 
-#: accounts/templates/registration/registration_form.html:347
+#: accounts/templates/registration/registration_form.html:363
 msgid "I don't have any of these accounts or I don't want to sign in with it"
 msgstr "У меня нет ни одного из этих аккаунтов или я не хочу его использовать"
 
@@ -983,7 +993,7 @@ msgstr "Нападающий"
 #: hockeyapp/templates/hockeyapp/players-search-table.html:200
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:197
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:202
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:198
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:199
 msgid "Goals"
 msgstr "Голы"
 
@@ -1502,7 +1512,8 @@ msgid "Latitude and Longitude"
 msgstr ""
 
 #: hockeyapp/models.py:390 hockeyapp/models.py:456
-#: hockeyapp/templates/hockeyapp/clubs/team-info.html:16
+#: hockeyapp/templates/hockeyapp/clubs/clubs-news.html:60
+#: hockeyapp/templates/hockeyapp/clubs/team-info.html:17
 msgid "Site"
 msgstr "Сайт"
 
@@ -1791,7 +1802,7 @@ msgstr ""
 #: hockeyapp/templates/hockeyapp/players-search-table.html:206
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:194
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:199
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:195
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:196
 msgid "Assists"
 msgstr "Передачи"
 
@@ -1809,49 +1820,49 @@ msgstr "Штрафное время"
 #: hockeyapp/models.py:804
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:209
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:214
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:210
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:211
 msgid "EV Goals"
 msgstr "Шайбы в меньшинстве"
 
 #: hockeyapp/models.py:805
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:212
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:217
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:213
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:214
 msgid "Power Play Goals"
 msgstr "Шайбы в большинстве"
 
 #: hockeyapp/models.py:806
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:215
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:220
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:216
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:217
 msgid "Even Strength Goals"
 msgstr "Шайбы в равенстве"
 
 #: hockeyapp/models.py:807
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:218
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:223
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:219
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:220
 msgid "Overtime Goals"
 msgstr "Шайбы в овертайме"
 
 #: hockeyapp/models.py:808
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:221
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:226
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:222
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:223
 msgid "Win Goals"
 msgstr "Победные шайбы"
 
 #: hockeyapp/models.py:809
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:224
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:229
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:225
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:226
 msgid "Win Bullet Goals"
 msgstr "Решающие буллиты"
 
 #: hockeyapp/models.py:810
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:227
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:232
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:228
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:229
 msgid "Shots count"
 msgstr "Броски по воротам"
 
@@ -1862,14 +1873,14 @@ msgstr "Процент реализованных бросков"
 #: hockeyapp/models.py:812
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:233
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:238
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:234
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:235
 msgid "Face-off"
 msgstr "Вбрасывания"
 
 #: hockeyapp/models.py:813
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:236
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:241
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:237
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:238
 msgid "Face-off Wins"
 msgstr "Выигранные вбрасывания"
 
@@ -1966,7 +1977,7 @@ msgstr "Матч"
 #: hockeyapp/templates/hockeyapp/players-search-table.html:194
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:191
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:196
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:192
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:193
 msgid "Matches"
 msgstr "Матчи"
 
@@ -2083,7 +2094,7 @@ msgid "years"
 msgstr "лет"
 
 #: hockeyapp/templates/admin/clubleagues_form.html:7
-#: sportomatics/settings.py:169
+#: sportomatics/settings.py:171
 msgid "Club leagues add form"
 msgstr ""
 
@@ -2108,6 +2119,11 @@ msgstr ""
 msgid "зрителей"
 msgstr ""
 
+#: hockeyapp/templates/hockeyapp/clubs/clubs-news.html:66
+#: hockeyapp/templates/hockeyapp/clubs/team-info.html:23
+msgid "Tel."
+msgstr "Тел."
+
 #: hockeyapp/templates/hockeyapp/clubs/clubs-team.html:182
 msgid "players"
 msgstr "игроков"
@@ -2116,10 +2132,6 @@ msgstr "игроков"
 #: hockeyapp/templates/hockeyapp/players-search-table.html:148
 msgid "ALL"
 msgstr "ВСЕ"
-
-#: hockeyapp/templates/hockeyapp/clubs/team-info.html:22
-msgid "Tel."
-msgstr "Тел."
 
 #: hockeyapp/templates/hockeyapp/metrics/player-card.html:44
 #: hockeyapp/templates/hockeyapp/player-partners-popup.html:59
@@ -2150,7 +2162,7 @@ msgstr "Штрафное время, мин"
 #: hockeyapp/templates/hockeyapp/players-search-table.html:224
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:203
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:208
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:204
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:205
 msgid "+/-"
 msgstr ""
 
@@ -2218,57 +2230,57 @@ msgstr "Кол-во матчей"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:185
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:190
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:186
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:187
 msgid "Date"
 msgstr "Дата"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:188
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:193
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:189
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:190
 msgid "Season"
 msgstr "Сезон"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:200
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:205
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:201
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:202
 msgid "Score"
 msgstr "Очки"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:206
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:211
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:207
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:208
 msgid "Penalty Time, sec"
 msgstr "Штрафное время, сек"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:230
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:235
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:231
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:232
 #, python-format
 msgid "Implemented Shots, %%"
 msgstr "Процент реализованных бросков"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:239
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:244
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:240
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:241
 #, python-format
 msgid "Face-off Wins, %%"
 msgstr "Процент выигранных вбрасываний"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:242
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:247
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:243
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:244
 msgid "Shots/match"
 msgstr "Среднее количество бросков по воротам за игру"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:245
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:250
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:246
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:247
 msgid "Time in game / match, sec"
 msgstr "Среднее время на площадке за игру"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-clubs.html:248
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:253
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:249
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:250
 msgid "Change count / match"
 msgstr "Среднее количество смен за игру"
 
@@ -2277,12 +2289,12 @@ msgid "mon."
 msgstr "мес."
 
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:163
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:112
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:113
 msgid "by month"
 msgstr "по месяцам"
 
 #: hockeyapp/templates/hockeyapp/players/player-card-coaches.html:164
-#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:113
+#: hockeyapp/templates/hockeyapp/players/player-card-indicators.html:114
 msgid "by season"
 msgstr "по сезонам"
 
@@ -2290,15 +2302,15 @@ msgstr "по сезонам"
 msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 msgstr "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЫЭЮЯ"
 
-#: sportomatics/settings.py:75
+#: sportomatics/settings.py:77
 msgid "Russian"
 msgstr "Русский"
 
-#: sportomatics/settings.py:76
+#: sportomatics/settings.py:78
 msgid "English"
 msgstr "Английский"
 
-#: sportomatics/settings.py:173
+#: sportomatics/settings.py:175
 msgid "Translation"
 msgstr ""
 

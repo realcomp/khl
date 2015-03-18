@@ -2,10 +2,11 @@
 from __future__ import unicode_literals
 
 from uuid import uuid4
-from StringIO import StringIO
-import PIL
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.utils.translation import ugettext as _
 
 from rest_framework import serializers
 
@@ -65,3 +66,38 @@ class ProfileSerializer(serializers.ModelSerializer):
             'name_visible', 'website', 'countries', 'clubs')
         read_only_fields = 'username', 'date_joined'
         model = get_user_model()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField(max_length=255)
+    token = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=255)
+
+    def validate_uidb64(self, value):
+        try:
+            urlsafe_base64_decode(value)
+        except (TypeError, ValueError, OverflowError):
+            raise serializers.ValidationError(_('Password reset unsuccessful'))
+        else:
+            return value
+
+    def _get_user(self):
+        User = get_user_model()
+        try:
+            uid = urlsafe_base64_decode(self.initial_data['uidb64'])
+            user = User._default_manager.get(pk=uid)
+        except User.DoesNotExist:
+            user = None
+        return user
+
+    def validate_token(self, value):
+        user = self._get_user()
+        if user is not None and default_token_generator.check_token(
+                user, value):
+            return value
+        raise serializers.ValidationError(_('Password reset unsuccessful'))
+
+    def save(self):
+        user = self._get_user()
+        user.set_password(self.data['password'])
+        user.save()

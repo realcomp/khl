@@ -2,9 +2,10 @@ angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
         $scope.params = $location.search();
-        $scope.selectedType = 'social';
         if ($scope.params.uidb64 && $scope.params.token) {
             $scope.selectedType = 'remember';
+        } else {
+            $scope.selectedType = 'social';
         }
         $scope.user = {};
         $scope.avatar = null;
@@ -55,14 +56,14 @@ angular.module('Sportomatics').controller('RegistrationController', [
             }
             return false;
         };
-        $scope.comparePasswords = function(){
-            if($scope.user.password && $scope.user.password2){
-                if($scope.user.password == $scope.user.password2) {
-                    $scope.passwordsMatch = true;
+        $scope.comparePasswords = function(password, password2) {
+            if(password && password2){
+                if(password == password2) {
+                    // $scope.passwordsMatch = true;
                     return true;
                 }
             }
-            $scope.passwordsMatch = false;
+            // $scope.passwordsMatch = false;
             return false;
         };
         $scope.saveStep = function(){
@@ -164,18 +165,30 @@ angular.module('Sportomatics').controller('RegistrationController', [
             $scope.currentStep -= 1;
             $scope.currentStepTemplate = 'step'+ $scope.currentStep;
         };
-        $scope.remindPassword = function() {
-            var resetURL = $('#PasswordResetApiLink').attr('href'),
-            data = {
-                email: $scope.rememberPasswordData.login
-            },
-            config = {
+        $scope.getAjaxConfig = function() {
+            return {
                 'headers': {
                     'X-CSRFToken': $cookies.csrftoken
                 },
             };
-            $http.post(resetURL, data, config).success(function(data) {
-                console.log(data);
+        };
+        $scope.remindPassword = function() {
+            var resetURL = $('#PasswordResetApiLink').attr('href'),
+            data = {
+                email: $scope.rememberPasswordData.login
+            };
+            $http.post(resetURL, data, $scope.getAjaxConfig()).success(function(data) {
+            });
+        };
+        $scope.setPassword = function() {
+            var confirmURL = $('#PasswordResetConfirmApiLink').attr('href'),
+            data = {
+                uidb64: $scope.params.uidb64,
+                token: $scope.params.token,
+                password: $scope.rememberPasswordData.password
+            };
+            console.log(data);
+            $http.post(confirmURL, data, $scope.getAjaxConfig()).success(function(data) {
             });
         };
     }
