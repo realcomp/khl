@@ -4822,7 +4822,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border: 1px solid #8ebd5d !important;
     line-height: 4px !important;
 }
-/*.amcharts-graph-g2 {
+.amcharts-graph-g2 {
     stroke-linejoin: round;
     stroke-linecap: round;
     stroke-dasharray: 500%;
@@ -4847,7 +4847,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
         stroke-dashoffset: 0px;
     }
 }
-
+/*
 .amcharts-graph-g2 {
     stroke-dasharray: 3px 3px;
     stroke-linejoin: round;
@@ -4865,10 +4865,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     100% {
         stroke-dashoffset: -31px;
     }
-}*/
-
-
-
+}
 .amcharts-graph-g2 {
     stroke-linejoin: round;
     stroke-linecap: round;
@@ -4896,7 +4893,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
         stroke-dashoffset: -200%;
     }
 }
-
+*/
 
 .indicator-item{
     font-family: "Open Sans", sans-serif;

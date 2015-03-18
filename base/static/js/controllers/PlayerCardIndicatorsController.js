@@ -175,8 +175,23 @@
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
-                ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
+                ChartFactory.generatePlayerIndicatorsLineChart(data.results, self.field, $scope.chartData, $scope.localeObject).then(function(chart){//ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
                     $scope.chart = chart;
+
+                    //line graphs
+                    var chartCursor = new AmCharts.ChartCursor();
+                    chartCursor.cursorAlpha = 1;
+                    chartCursor.cursorColor = "#8ebd5d";
+                    chartCursor.categoryBalloonFunction = function(value){
+                        if(self.groupBy === 'month'){
+                            return $scope.localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
+                        } else {
+                            return $scope.localeObject.words.season + ' ' +  (value.getFullYear()-1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2)
+                        }
+                    };
+                    $scope.chart.addChartCursor(chartCursor);
+                    //line graphs
+                    
                     // WRITE
                     if(self.coach){
                         $scope.chart.guides = [];
