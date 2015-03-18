@@ -36,7 +36,6 @@ class PlayersSearch(
 
     def list(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
-
         ## get clubplayers
         #self.clubplayers = {}
         #clubplayers = ClubPlayer.objects.filter(
@@ -60,7 +59,6 @@ class PlayersSearch(
             if not rated_by:
                 rating_index += 1
             self.rating[player.pk] = rating_index
-
         instance = qs
         page = self.paginate_queryset(instance)
         if page is not None:
