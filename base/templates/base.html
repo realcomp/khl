@@ -1,4 +1,5 @@
-{% load static %}
+{% load static from base_extras %}
+{% load get_static_prefix from static %}
 {% get_static_prefix as STATIC_PREFIX %}
 
 <!doctype html>
@@ -12,23 +13,23 @@
         <meta content="" name="description">
         <meta content="" name="keywords">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href='{{STATIC_PREFIX}}css/google.css' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/semantic.min.css">
-        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/style.css">
-        <link rel="stylesheet" href="{{STATIC_PREFIX}}font-awesome-4.3.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/ng-tags-input.css">
-        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/teams/ska.css">
+        <link rel="stylesheet" href="{% static 'css/google.css' %}" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'font-awesome-4.3.0/css/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/ng-tags-input.css' %}">
+        <link rel="stylesheet" href="{% static 'css/teams/ska.css' %}">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <script src="{{ STATIC_URL }}js/libs/jquery.min.js"></script>
-        <script src="{{ STATIC_URL }}js/angular.min.js"></script>
-        <script src="{{ STATIC_URL }}js/angular-cookies.js"></script>
-        <script src="{{ STATIC_URL }}js/angular-resource.js"></script>
-        <script src="{{ STATIC_URL }}js/angular-ui-router.min.js"></script>
-        <script src="{{ STATIC_URL }}js/angucomplete.js"></script>
-        <script src="{{ STATIC_URL }}js/ng-tags-input.js"></script>
+        <script src="{% static 'js/libs/jquery.min.js' %}"></script>
+        <script src="{% static 'js/angular.min.js' %}"></script>
+        <script src="{% static 'js/angular-cookies.js' %}"></script>
+        <script src="{% static 'js/angular-resource.js' %}"></script>
+        <script src="{% static 'js/angular-ui-router.min.js' %}"></script>
+        <script src="{% static 'js/angucomplete.js' %}"></script>
+        <script src="{% static 'js/ng-tags-input.js' %}"></script>
         {% block extrahead %}
         {% endblock %}
     </head>
@@ -46,9 +47,9 @@
 
         {% include "partial/footer.html" %}
 
-        <script src="{{ STATIC_URL }}build/app.js"></script>
-        <script src="{{STATIC_PREFIX}}build/libs.min.js"></script>
-        <script src="{{STATIC_PREFIX}}js/amcharts/amcharts.js"></script>
-        <script src="{{STATIC_PREFIX}}js/amcharts/serial.js"></script>
+        <script src="{% static 'build/app.js' %}"></script>
+        <script src="{% static 'build/libs.min.js' %}"></script>
+        <script src="{% static 'js/amcharts/amcharts.js' %}"></script>
+        <script src="{% static 'js/amcharts/serial.js' %}"></script>
     </body>
 </html>

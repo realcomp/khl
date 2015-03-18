@@ -1,11 +1,13 @@
 import re
 
 from django import template
+from django.conf import settings
 from django.contrib.admin.util import lookup_field
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import ForeignKey, ManyToManyField, OneToOneField
 from django.core.urlresolvers import NoReverseMatch
 from django.utils.safestring import mark_safe
+from django.templatetags.static import StaticNode
 
 from suit.templatetags.suit_tags import admin_url
 
@@ -72,3 +74,15 @@ def lcb():
 def rcb():
     ''' right curly brackets '''
     return '}}'
+
+
+class VersionStaticNode(StaticNode):
+    def url(self, context):
+        return (
+            super(VersionStaticNode, self).url(context) +
+            '?_=%s' % settings.PROJECT_VERSION)
+
+
+@register.tag('static')
+def do_static(parser, token):
+    return VersionStaticNode.handle_token(parser, token)

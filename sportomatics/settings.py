@@ -1,5 +1,6 @@
 #coding: utf-8
 import os
+import time
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -228,7 +229,11 @@ MIGRATION_MODULES = {
     'filer': 'filer.migrations_django',
 }
 
+# project frontend's version
+PROJECT_VERSION = int(time.time())
+
 try:
     from local_settings import *
 except ImportError:
     pass
+
