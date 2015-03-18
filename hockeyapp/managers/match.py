@@ -3,6 +3,8 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
+import itertools
+
 from django.db import models
 from django.db.models import F, Q, Max, Min
 from django.db.models.loading import get_model
@@ -264,42 +266,41 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         """
         returns list of QuerySet's
         """
-        result = []
         min_max = self.aggregate(Min('match__date'), Max('match__date'))
         start_date = min_max.get('match__date__min')
         end_date = min_max.get('match__date__max')
         if start_date and end_date:
-            dates = list(month_range(start_date, end_date))
-            for i in range(len(dates) - 1):
-                month_qs = self.filter(
-                    match__date__gt=dates[i],
-                    match__date__lte=dates[i + 1])
-                month_qs.date = dates[i]
-                if month_qs.exists():
-                    month_qs.season = month_qs[0].clubplayer.season
-                else:
-                    month_qs.season = None
-                result.append(month_qs)
-        return result
+            self._dates = list(month_range(start_date, end_date))
+            return map(self._month_qs, range(len(self._dates) - 1))
+        return []
+
+    def _month_qs(self, i):
+        month_qs = self.filter(
+            match__date__gt=self._dates[i],
+            match__date__lte=self._dates[i + 1])
+        month_qs.date = self._dates[i]
+        if month_qs.exists():
+            month_qs.season = month_qs.first().clubplayer.season
+        else:
+            month_qs.season = None
+        return month_qs
 
     def group_by_season(self):
         """
         returns list of QuerySet's
         """
-        result = []
-        seasons = (
-            Season.objects
-            .filter(pk__in=self.values_list('clubplayer__season_id'))
-            .order_by('start_date'))
-        for season in seasons:
-            season_qs = self.filter(clubplayer__season=season)
-            min_max = season_qs.aggregate(Min('match__date'),Max('match__date'))
-            season_qs.start_date = min_max.get('match__date__min')
-            season_qs.end_date = min_max.get('match__date__max')
-            season_qs.date = None
-            season_qs.season = season
-            result.append(season_qs)
-        return result
+        _s_ids = self.values_list('clubplayer__season_id')
+        seasons = Season.objects.filter(pk__in=_s_ids).order_by('start_date')
+        return map(self._season_qs, seasons)
+
+    def _season_qs(self, season):
+        season_qs = self.filter(clubplayer__season=season)
+        min_max = season_qs.aggregate(Min('match__date'),Max('match__date'))
+        season_qs.start_date = min_max.get('match__date__min')
+        season_qs.end_date = min_max.get('match__date__max')
+        season_qs.date = None
+        season_qs.season = season
+        return season_qs
 
     def home_matches(self):
         return self.filter(match__home_team=F('clubplayer__club'))
