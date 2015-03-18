@@ -254,18 +254,10 @@
                                     </tbody>
                                 </table>
                             </div>
-
-
                         </div>
-                        <div class="row">
+                        <div class="row"></div>
 
-                        </div>
-                        <div id="dropzone-container">
 
-                        </div>
-                        <!--<form action="/file-upload"
-                              class="dropzone"
-                              id="my-awesome-dropzone"></form>-->
 
                     </div>
                 </div>
@@ -273,4 +265,8 @@
         </div>
     </div>
 </section>
+{% endblock %}
+{% block extrahead %}
+<script src="{{ STATIC_URL }}js/libs/dropzone.js"></script>
+
 {% endblock %}
