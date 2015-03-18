@@ -7,12 +7,10 @@ from rest_framework import filters
 
 from base.models import Season
 
-from .models import ClubPlayer
-
 
 class OrderFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
-        self.ordering_queryset(request, qs, view)
+        qs = self.ordering_queryset(request, qs, view)
         return qs
 
     def ordering_queryset(self, request, qs, view):
@@ -82,9 +80,6 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
 
         _s = request.GET.get('%s_lastname__startswith')
         if _s:
-            print({
-                '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
-            })
             _qs = _qs.filter(**{
                 '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
             })
