@@ -5,7 +5,7 @@ import datetime
 
 import itertools
 
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Sum, Q
 
 from rest_framework import generics, response, viewsets
 
@@ -15,7 +15,7 @@ from .events import EventFactory
 from .mixins import PaginationMixin
 
 from ..filters import PlayersSearchFilter, PlayersSearchOrderFilter
-from ..models import Club, Player, ClubPlayer, ClubPlayerMatch, Schedule
+from ..models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
 from ..models import Timeline
 
 from ..serializers import CountryLeaguesSerializer
@@ -90,24 +90,21 @@ class PlayerCardIndicators(generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(PlayerCardIndicators, self).filter_queryset(qs)
+        _player_id = self.kwargs.get('player_id', 0)
 
-        clubplayers = (
-            ClubPlayer.objects
-            .filter(player_id=self.kwargs.get('player_id', 0)))
+        cp = ClubPlayer.objects.filter(player_id=_player_id)
 
         if 'season' in self.request.GET:
-            clubplayers = clubplayers.filter(
-                season_id=self.request.GET['season'])
+            cp = cp.filter(season_id=self.request.GET['season'])
 
         if 'club' in self.request.GET:
-            clubplayers = clubplayers.filter(club_id=self.request.GET['club'])
+            cp = cp.filter(club_id=self.request.GET['club'])
 
-        if 'coach' in self.request.GET:
-            clubplayers = clubplayers.filter(
-                club__coachclub__coach_id=self.request.GET['coach'],
-                season__coachclub__coach_id=self.request.GET['coach'])
-
-        qs = qs.filter(clubplayer__in=clubplayers)
+        _coach = self.request.GET.get('coach')
+        if _coach:
+            cp = cp.filter( club__coachclub__coach_id=_coach,
+                            season__coachclub__coach_id=_coach)
+        qs = qs.filter(clubplayer__in=cp)
 
         if self.request.GET.get('group_by') == 'season':
             return qs.group_by_season()
