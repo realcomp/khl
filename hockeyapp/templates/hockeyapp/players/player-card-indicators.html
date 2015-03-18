@@ -77,13 +77,14 @@
                                     {% if line == 1 %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="В" field="matches_win" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="П" field="matches_lose" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label='И"0"' field="zero_goals_matches" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="ИБ" field="bullet_matches" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="Бр" field="shots_received" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ПШ" field="loose_goals" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="ОБ" field="saves" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="%ОБ" field="saves_p__avg" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="КН" field="sf__avg" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ПШ" field="loose_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label='И"0"' field="zero_goals_matches" %}
                                     {% else %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="Ш" field="goals" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="О" field="points" %}
@@ -94,6 +95,7 @@
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="ШО" field="overtime_goals" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="ШП" field="win_goals" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="РБ" field="bullet_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ" field="shots" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="%БВ" field="pis__avg" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg" %}
@@ -102,7 +104,6 @@
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg" %}
                                         {% include "hockeyapp/players/indicators-menuitem.html" with label="См/И" field="change_count__avg" %}
                                     {% endif %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
                                     {% include "hockeyapp/players/indicators-menuitem.html" with label="Штр" field="penalty_time" %}
                                     {% include "hockeyapp/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg" %}
                                 </ul>
