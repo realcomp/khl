@@ -37,4 +37,4 @@ class AccountsTest(base.tests.BaseTest):
             reverse('accounts:password-reset-api'))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            response.data['errors']['email'][0]['code'], 'required')
+            response.data['email'][0]['code'], 'required')
