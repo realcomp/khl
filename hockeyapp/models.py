@@ -284,19 +284,6 @@ class Player(AbstractMan):
     def club(self):
         return self.last_club
 
-    # @property
-    # def last_clubs(self):
-    #     last_club_ids = set(
-    #         self.clubplayer_set
-    #         .exclude(club=self.club)  # exclude current club
-    #         .order_by('-end_date')
-    #         .values_list('club_id', flat=True))
-    #     clubs = list(Club.objects.filter(pk__in=last_club_ids))
-    #     clubs.sort(key=lambda x: last_club_ids.index(x.pk))
-    #     if self.club_set.exists():
-    #         clubs.insert(0, self.club)
-    #     return clubs
-
     @property
     def is_legionnaire(self):
         return self.citizenship and (self.citizenship.en_title != 'Russia')
@@ -454,13 +441,20 @@ class Club(AdminLinkMixin, TitleBaseModel):
     logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True,
                            on_delete=models.SET_NULL)
     site = models.URLField(_('Site'), blank=True)
-    email = models.CharField(
-        _('E-mail'), max_length=255, blank=True, null=True)
-    phone = models.CharField(
-        _('Phone'), max_length=255, blank=True, null=True)
+    email = models.CharField(_('E-mail'), max_length=255, blank=True, null=True)
+    phone = models.CharField(_('Phone'), max_length=255, blank=True, null=True)
     contacts = models.TextField(_('Contacts'), blank=True)
     style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
     rgb = models.CharField(_('RGB'), blank=True, null=True, max_length=255,
+                            help_text=_('Color hex. Example: #00ffaa'),
+                            validators=[hex_validator])
+    main_color = models.TextField(_('Main color'), blank=True,
+                            help_text=_('Color hex. Example: #00ffaa'),
+                            validators=[hex_validator])
+    secondary_color = models.TextField(_('2th color'), blank=True,
+                            help_text=_('Color hex. Example: #00ffaa'),
+                            validators=[hex_validator])
+    third_color = models.TextField(_('Third color'), blank=True,
                             help_text=_('Color hex. Example: #00ffaa'),
                             validators=[hex_validator])
     #socials

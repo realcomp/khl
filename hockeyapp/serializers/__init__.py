@@ -118,7 +118,8 @@ class ClubLightListSerializer(BaseClubSerializer):
 
     class Meta(object):
         fields = (
-            'pk', 'title', 'logo', 'url', 'title_verbose')
+            'pk', 'title', 'logo', 'url', 'title_verbose',
+            'main_color', 'secondary_color', 'third_color')
         model = Club
 
 

@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from addresses.models import Country
 from base.models import Season
 
-from ..models import Club, Player, ClubPlayer, CoachClub, Schedule, Timeline
+from ..models import Club, Player, ClubPlayer, CoachClub
 from ..serializers import (
     CountrySerializer, SeasonSerializer,
     PlayerCardSerializer, PlayerCardDetailSerializer,
@@ -16,7 +16,6 @@ from ..serializers import (
 )
 from ..serializers.players import (
     PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
-from ..utils import get_season_end_date
 
 
 class Index(TemplateView):
