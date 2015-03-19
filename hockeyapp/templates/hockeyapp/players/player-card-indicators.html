@@ -134,6 +134,7 @@
                                 <div id="chartdiv" style="width: 100%; height:400px; "></div>
                             </div>
 
+                            {% comment %}
                             <div class="chart-button-panel" ng-show="localeObject">
                                 <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
                                 <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
@@ -141,6 +142,7 @@
                                 <a class="ui green button chart-button" ng-click="addGraph('/static/json/soin', 1)">Сравнить с игроком 401</a>
                                 <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
+                            {% endcomment %}
                             {% verbatim %}
                             <div  ng-show="playersStats.length">
                                 <span class="season-buttons-label"> Игроки для сравнения:</span>
