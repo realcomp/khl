@@ -1320,9 +1320,10 @@ angular.module('Sportomatics')
 
             $scope.params = $scope.$location.search();
 
-            params += '&order_by=' + ($scope.params.reversed === 'true' ? '-' : '') +
-                ($scope.params.order_by || '["%s_lastname","%s_name"]');
-
+            params += '&order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
+            if ($scope.params.reversed) {
+                params += '&reversed=true';
+            }
             if ($scope.params.line.length) {
                 $.each($scope.params.line, function() {
                     params += '&line=' + this;
@@ -1506,8 +1507,10 @@ angular.module('Sportomatics')
     $scope.list = function(all) {
         var params = $('#ClubListForm').serialize();
 
-        params += '&order_by=' + ($scope.params.reversed === 'true' ? '-' : '') +
-            ($scope.params.order_by || '%s_title');
+        params += '&order_by=' + ($scope.params.order_by || '%s_title');
+        if ($scope.params.reversed) {
+            params += '&reversed=true';
+        }
 
         // if ($scope.sparams.leaguesSelected) {
         //     $location.search('league', $scope.sparams.leaguesSelected);
