@@ -2649,8 +2649,8 @@ angular.module('Sportomatics')
 angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
-        $scope.params = $location.search();
-        if ($scope.params.uidb64 && $scope.params.token) {
+        $scope.$location = $location;
+        if ($location.search().uidb64 && $location.search().token) {
             $scope.selectedType = 'remember';
         } else {
             $scope.selectedType = 'social';
@@ -2706,9 +2706,11 @@ angular.module('Sportomatics').controller('RegistrationController', [
         };
         $scope.comparePasswords = function(password, password2) {
             if(password && password2){
-                if(password == password2) {
+                if(password === password2) {
                     // $scope.passwordsMatch = true;
                     return true;
+                } else {
+                    return false;
                 }
             }
             // $scope.passwordsMatch = false;
@@ -2823,21 +2825,31 @@ angular.module('Sportomatics').controller('RegistrationController', [
         $scope.remindPassword = function() {
             var resetURL = $('#PasswordResetApiLink').attr('href'),
             data = {
-                email: $scope.rememberPasswordData.login
+                email: $scope.rememberPasswordData.email
             };
             $http.post(resetURL, data, $scope.getAjaxConfig()).success(function(data) {
+                $scope.rememberPasswordData.isSent = true;
+                $scope.rememberPasswordData.errors = null;
+            }).error(function(data) {
+                $scope.rememberPasswordData.errors = data;
             });
         };
         $scope.setPassword = function() {
             var confirmURL = $('#PasswordResetConfirmApiLink').attr('href'),
             data = {
-                uidb64: $scope.params.uidb64,
-                token: $scope.params.token,
+                uidb64: $location.search().uidb64,
+                token: $location.search().token,
                 password: $scope.rememberPasswordData.password
             };
-            console.log(data);
-            $http.post(confirmURL, data, $scope.getAjaxConfig()).success(function(data) {
-            });
+            if ($scope.rememberPasswordData.password && $scope.rememberPasswordData.password2 &&
+                   $scope.rememberPasswordData.password === $scope.rememberPasswordData.password2) {
+                $http.post(confirmURL, data, $scope.getAjaxConfig()).success(function(data) {
+                    $scope.rememberPasswordData.isComplete = true;
+                    $scope.rememberPasswordData.errors = null;
+                }).error(function(data) {
+                    $scope.rememberPasswordData.errors = data;
+                });
+            }
         };
     }
 ]);
