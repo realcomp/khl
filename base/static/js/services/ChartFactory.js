@@ -22,6 +22,16 @@ angular.module('Sportomatics')
                 chart.startDuration = 0.5;
                 chart.startEffect = "easeOutSine";
                 chart.addClassNames = true;
+                chart.depth3D = 60;
+                chart.angle = 30;
+                chart.exportConfig = {
+                    "menuTop":"45px",
+                        "menuRight":"5px",
+                        "menuItems": [{
+                        "icon": 'http://www.amcharts.com/lib/3/images/export.png',
+                        "format": 'png'
+                    }]
+                }
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
@@ -95,6 +105,7 @@ angular.module('Sportomatics')
                 valueAxis1.gridAlpha = 0.1;
                 valueAxis1.maximum = (currMax === 0) ? +2 : (currMax/10 > 0) ? currMax+(currMax/10)*5: currMax + currMax%10;
                 valueAxis1.minimum = (currMin === 0) ? -2 : (currMin/10 > 0) ? currMin-(currMin/10)*5 : currMin - Math.abs(currMin%10);
+                valueAxis1.stackType = "3d";
                 chart.addValueAxis(valueAxis1);
 
                 // second value axis (on the right)
@@ -217,6 +228,8 @@ angular.module('Sportomatics')
                 var chartCursor = new AmCharts.ChartCursor();
                 chartCursor.cursorAlpha = 1;
                 chartCursor.cursorColor = "#8ebd5d";
+                //chartCursor.avoidBalloonOverlapping = false;
+                chartCursor.oneBalloonOnly = true;
                 chartCursor.categoryBalloonFunction = function(value){
                     if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
