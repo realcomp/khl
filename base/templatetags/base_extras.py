@@ -78,9 +78,11 @@ def rcb():
 
 class VersionStaticNode(StaticNode):
     def url(self, context):
-        return (
-            super(VersionStaticNode, self).url(context) +
-            '?_=%s' % settings.PROJECT_VERSION)
+        url = super(VersionStaticNode, self).url(context)
+        if settings.DEBUG:
+            return url
+        else:
+            return '%s?_=%s' % (url, settings.PROJECT_VERSION)
 
 
 @register.tag('static')
