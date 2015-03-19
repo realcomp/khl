@@ -195,7 +195,8 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
     fields = (  'ru_title', 'en_title', 'title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
-                'players', 'rgb', 'instagram_photo_link',
+                'players', 'instagram_photo_link',
+                'rgb', 'main_color', 'secondary_color', 'third_color',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
     actions = ('make_notclubs_league',)
 
