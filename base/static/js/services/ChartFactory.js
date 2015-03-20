@@ -380,6 +380,35 @@ angular.module('Sportomatics')
                 deferred.resolve(chart);
             });
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
+        },
+        generateRadarChart: function(data, graphs){
+            // Method accepts
+            var deferred = $q.defer();
+            var chart;
+            AmChartsFactory.ready().then(function () {
+
+                chart = new AmCharts.AmRadarChart();
+                chart.dataProvider = data;
+                chart.categoryField = "field";
+
+                var valueAxis = new AmCharts.ValueAxis();
+                valueAxis.axisAlpha = 0.15;
+                valueAxis.minimum = 0;
+                valueAxis.maximum = 1;
+                valueAxis.dashLength = 3;
+                valueAxis.axisTitleOffset = 20;
+                valueAxis.gridCount = 5;
+                chart.addValueAxis(valueAxis);
+
+                _.each(graphs, function(graph){
+                    graph.valueAxis = valueAxis;
+                    chart.addGraph(graph);
+                });
+
+                deferred.resolve(chart);
+            });
+            return deferred.promise;
+
         }
     }
 });

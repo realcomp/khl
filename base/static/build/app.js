@@ -658,6 +658,35 @@ angular.module('Sportomatics')
                 deferred.resolve(chart);
             });
             return deferred.promise; //метод возвращает промис и ждет когда выполнится resolve, а он выполнится после полного создания графика
+        },
+        generateRadarChart: function(data, graphs){
+            // Method accepts
+            var deferred = $q.defer();
+            var chart;
+            AmChartsFactory.ready().then(function () {
+
+                chart = new AmCharts.AmRadarChart();
+                chart.dataProvider = data;
+                chart.categoryField = "field";
+
+                var valueAxis = new AmCharts.ValueAxis();
+                valueAxis.axisAlpha = 0.15;
+                valueAxis.minimum = 0;
+                valueAxis.maximum = 1;
+                valueAxis.dashLength = 3;
+                valueAxis.axisTitleOffset = 20;
+                valueAxis.gridCount = 5;
+                chart.addValueAxis(valueAxis);
+
+                _.each(graphs, function(graph){
+                    graph.valueAxis = valueAxis;
+                    chart.addGraph(graph);
+                });
+
+                deferred.resolve(chart);
+            });
+            return deferred.promise;
+
         }
     }
 }]);
@@ -2348,6 +2377,7 @@ angular.module('Sportomatics')
             this.data = [];
             this.graphData = {};
             this.chartsCount = 0;
+            this.playerId = $('#player-id').val();
             $scope.activeSeason = -1;
             $scope.playersStats = [];
 
@@ -2554,6 +2584,10 @@ angular.module('Sportomatics')
                         }
 
                     }
+                    $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));}));
+                    $scope.createRadar([self.playerId], $scope.lastSeason).then(function(){
+                        //$scope.createRadar(['1634']);
+                    });
                     $scope.chart.write("chartdiv");
                     if(switched) $scope.chart.zoomToDates(zoomStart, zoomEnd);
                 });
@@ -2615,9 +2649,207 @@ angular.module('Sportomatics')
                 }
             };
 
+
+            $scope.createRadar = function(players, season, sum){
+                $scope.playersInRadarChart = [];
+                $scope.playersRadarChartData = [{
+                    field: 'goals'
+                },{
+                    field: 'points'
+                }, {
+                    field: 'assists'
+                },{
+                    field: 'plus_minus'
+                }];
+                $scope.playersRadarChartGraphs = [];
+                var deferred = $q.defer();
+                if(players.length > 1){
+                    if(sum){
+                        var playersRequestArray = [];
+                        _.each(players, function(player){
+                            var url = 'http://127.0.0.1:8000/ru/hockey/api/players/'+ player + '/indicators/?group_by=season';
+                            playersRequestArray.push($http.get(url));
+                        });
+                        $q.all(playersRequestArray).then(function(results) {
+                            console.log('results');
+                            console.log(results);
+
+                            _.each(results, function(result){
+                                var playerSeasonsDataResults = result.data.results;
+                                var playerDataInSeason = _.filter(playerSeasonsDataResults, function(e){ return e.season.end_date.indexOf(season) > -1;})[0];
+                                _.each($scope.playersRadarChartData, function(radarChartDataCategory, index){
+                                    if(radarChartDataCategory['value']){
+                                        radarChartDataCategory['value'] += playerDataInSeason[radarChartDataCategory.field] / playerDataInSeason['count'];
+                                    }
+                                    else {
+                                        radarChartDataCategory['value'] = playerDataInSeason[radarChartDataCategory.field] / playerDataInSeason['count'];
+                                    }
+                                });
+                                $scope.playersInRadarChart.push({
+                                    player: player,
+                                    playerData: playerDataInSeason
+                                });
+                            });
+                            _.each($scope.playersRadarChartData, function(radarChartDataCategory, index){
+                                console.log(radarChartDataCategory)
+                                radarChartDataCategory['value'] = radarChartDataCategory['value'] / $scope.playersInRadarChart.length;
+                                console.log(radarChartDataCategory)
+                            });
+                            var graph = new AmCharts.AmGraph();
+                            graph.valueField = "value";
+                            graph.bullet = "round";
+                            graph.balloonText = "team [[value]]";
+                            $scope.playersRadarChartGraphs.push(graph);
+                            ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function(chart){
+                                $scope.chartRadar = chart;
+                                $scope.chartRadar.write('chartdiv2');
+                                deferred.resolve(true);
+                            })
+                        });
+
+
+                    } else {
+                        _.each(players, function(player){
+                            var url = 'http://127.0.0.1:8000/ru/hockey/api/players/'+ player + '/indicators/?group_by=season';
+                            $http.get(url)
+                                .success(function(playerSeasonsData){
+                                    var playerSeasonsDataResults = playerSeasonsData.results;
+                                    var playerDataInSeason = _.filter(playerSeasonsDataResults, function(e){ return e.season.end_date.indexOf(season) > -1;})[0];
+                                    if(playerDataInSeason){
+                                        _.each($scope.playersRadarChartData, function(radarChartDataCategory){
+                                            radarChartDataCategory['value' + player] = playerDataInSeason[radarChartDataCategory.field] / playerDataInSeason['count'] ;
+                                        });
+                                        var graph = new AmCharts.AmGraph();
+                                        graph.valueField = "value" + player;
+                                        graph.bullet = "round";
+                                        graph.balloonText = "player " + player + " [[value]]";
+                                        $scope.playersInRadarChart.push({
+                                            player: player,
+                                            playerData: playerDataInSeason
+                                        });
+                                        $scope.playersRadarChartGraphs.push(graph);
+                                    }
+                                }).then(function(){
+                                    ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function(chart){
+                                        $scope.chartRadar = chart;
+                                        $scope.chartRadar.write('chartdiv2');
+                                        deferred.resolve(true);
+                                    })
+                                });
+                        })
+                    }
+                } else {
+                    var player = players[0];
+                    var url = 'http://127.0.0.1:8000/ru/hockey/api/players/'+ player + '/indicators/?group_by=season';
+                    $http.get(url)
+                        .success(function(playerSeasonsData){
+                            var playerSeasonsDataResults = playerSeasonsData.results;
+                            var playerDataIn2013 = _.filter(playerSeasonsDataResults, function(e){ return e.season.end_date.indexOf(season) > -1;})[0];
+                            console.log(playerDataIn2013);
+                            _.each($scope.playersRadarChartData, function(radarChartDataCategory){
+                                radarChartDataCategory['value' + player] = playerDataIn2013[radarChartDataCategory.field] / playerDataIn2013['count'] ;
+                            });
+                            var graph = new AmCharts.AmGraph();
+                            graph.valueField = "value" + player;
+                            graph.bullet = "round";
+                            graph.balloonText = "player " + player + " [[value]]";
+                            $scope.playersInRadarChart.push({
+                                player: player,
+                                playerData: playerDataIn2013
+                            });
+                            $scope.playersRadarChartGraphs.push(graph);
+                        }).then(function(){
+                            ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function(chart){
+                                $scope.chartRadar = chart;
+                                $scope.chartRadar.write('chartdiv2');
+                                deferred.resolve(true);
+                            })
+                        });
+                }
+                return deferred.promise;
+            };
+            $scope.generateRadarChart = function(){
+                var players = [
+                    {
+                        title: 'Горохов Илья',
+                        color: "#FF3232",
+                        id: '1',
+                        link: '/static/json/gorohov'
+                    },
+                    {
+                        title: 'Сергей Соин',
+                        color: "#3232FF",
+                        id: '2',
+                        link: '/static/json/soin'
+                    }
+                ];
+                var playerObject = players[1];
+                var url = playerObject.link;
+                var localUrlMonths = url + '_months.json';
+                var localUrlSeasons = url + '_seasons.json';
+                $http.get(localUrlMonths)
+                    .success(function(data){
+                        playerObject.dataByMonth = data;
+                    }).then(function(){
+                        $http.get(localUrlSeasons)
+                            .success(function(data){ //1634
+                                playerObject.dataBySeason = data;
+                                $scope.soin2013 = playerObject.dataBySeason.results[14];
+                                console.log($scope.soin2013);
+                                $scope.radarPlayerData2013 = [{
+                                    field: 'goals',
+                                    value: ($scope.soin2013.goals+$scope.soin2013.ev_goals+$scope.soin2013.es_goals) / $scope.soin2013.count
+                                },{
+                                    field: 'points',
+                                    value: $scope.soin2013.points / $scope.soin2013.count
+                                }, {
+                                    field: 'assists',
+                                    value: $scope.soin2013.assists / $scope.soin2013.count
+                                },{
+                                    field: 'plus_minus',
+                                    value: $scope.soin2013.plus_minus / $scope.soin2013.count
+                                }];
+                            }).then(function(){
+                                $http.get('http://127.0.0.1:8000/ru/hockey/api/players/1634/indicators/?group_by=season')
+                                    .success(function(konkov){
+                                        console.log(konkov.results[14])
+                                        $scope.konkov2013 = konkov.results[14];
+                                        _.each($scope.radarPlayerData2013, function(value){
+                                            value['value2'] = $scope.konkov2013[value.field] / $scope.konkov2013['count'] ;
+                                        })
+                                    }).then(function(){
+                                        $http.get('http://127.0.0.1:8000/ru/hockey/api/players/1373/indicators/?group_by=season')
+                                            .success(function(radulov){
+                                                console.log(radulov.results[5])
+                                                $scope.radulov2013 = radulov.results[5];
+                                                _.each($scope.radarPlayerData2013, function(value){
+                                                    value['value3'] = $scope.radulov2013[value.field] / $scope.radulov2013['count'] ;
+                                                })
+                                            }).then(function(){
+                                                ChartFactory.generateRadarChart($scope.radarPlayerData2013).then(function(chart){
+                                                    $scope.chartRadar = chart;
+                                                    $scope.chartRadar.write('chartdiv2');
+                                                })
+                                            })
+                                    })
+
+                            })
+                    })
+
+            };
+
+
             $scope.getPlayerData();
             $scope.getCoachData();
             $scope.getClubData();
+            //$scope.generateRadarChart();
+            $scope.sumRadars = function(){
+               // $scope.createRadar(['1373', '1634'], '2013', true).then(function(){
+                    //$scope.createRadar(['1634']);
+               //})
+            };
+
+
 
         }])
         .factory('AmChartsFactory', ["$q", "$rootScope", "$document", function ($q, $rootScope, $document) {
@@ -2644,6 +2876,12 @@ angular.module('Sportomatics')
         }
         return false;
     };
+    function generateRadarChartData(){
+
+    }
+    function makeRadarGraph(){
+
+    }
     function generateChartData(data, field, groupBy) {
         var chartData = {};
         chartData.groupBy = groupBy;
