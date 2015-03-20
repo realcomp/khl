@@ -1,7 +1,6 @@
-(function() {
-    var app = angular.module('SportomaticsClubsTeam', []);
-
-    app.controller('ClubTeamController', ['$http', '$scope', function($http, $scope) {
+angular.module('Sportomatics').controller('ClubTeamController', [
+    '$http', '$scope',
+    function($http, $scope) {
         var self = this,
         url = $('#ClubTeamForm').attr('action'),
         popup = null;
@@ -210,6 +209,5 @@
         };
 
         this.list(this.compare);
-    }]);
-
-})();
+    }
+]);

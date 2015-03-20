@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
+from django.conf import settings
 from django.db.models import Q
 
 from rest_framework import filters
@@ -9,35 +10,58 @@ from base.models import Season
 
 
 class OrderFilter(filters.BaseFilterBackend):
+    ORDER_FIELDS = (
+        '%s_lastname',
+        '%s_name',
+        'last_club__%s_title',
+        'birth_date',
+        'contract_to',
+        'matches_total',
+        'address__%s_title',
+        '%s_title',
+        'arena__%s_title',
+        'coach__%s_fio',
+        'seasons_total',
+        'matches_total',
+        'goals_total',
+        'assists_total',
+        'points_total',
+        'penalty_time_total',
+        'plus_minus_total',
+        'goals_average',
+        'assists_average',
+        'points_average',
+        'penalty_time_average',
+        'plus_minus_average',
+    )
+
     def filter_queryset(self, request, qs, view):
         qs = self.ordering_queryset(request, qs, view)
         return qs
 
     def ordering_queryset(self, request, qs, view):
         if 'order_by' in request.GET:
-            field = request.GET['order_by']
-            reverse = field.startswith('-')
+            reverse = request.GET.get('reversed', 'false') == 'true'
             lc = request.LANGUAGE_CODE
-            is_array = (
-                field.lstrip('-').startswith('[') and
-                field.endswith(']'))
-            if is_array:
-                fields = json.loads(field.lstrip('-'))
-            else:
-                fields = [field.lstrip('-')]
-            fields = map(
-                lambda f: ('-' if reverse else '') + (f % lc if '%s' in f else f),
-                fields)
+            if lc not in zip(*settings.LANGUAGES)[0]:
+                lc = 'en'
+            fields = (
+                ('-' if reverse else '') + (f % lc if '%s' in f else f)
+                for f in request.GET['order_by'].split(',')
+                if f in self.ORDER_FIELDS)
             return qs.order_by(*fields)
         return qs
 
 
 class PlayersSearchOrderFilter(OrderFilter):
     def filter_queryset(self, request, qs, view):
-        if request.GET.get('order_by', '').lstrip('-') == 'rating':
+        if request.GET.get('order_by', '') == 'rating':
             field = request.GET['rated_by']
-            reverse = request.GET.get('order_by', '').startswith('-')
-            return qs.order_by('%s%s' % ('-' if reverse else '', field))
+            reverse = request.GET.get('reversed', 'false') == 'true'
+            if field in self.ORDER_FIELDS:
+                return qs.order_by('%s%s' % ('-' if reverse else '', field))
+            else:
+                return qs
         else:
             return super(PlayersSearchOrderFilter, self).filter_queryset(
                 request, qs, view)

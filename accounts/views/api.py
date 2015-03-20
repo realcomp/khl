@@ -58,9 +58,8 @@ class PasswordResetView(APIView):
             form.save(**opts)
             return response.Response({}, status=200)
         else:
-            return response.Response({
-                'errors': json.loads(form.errors.as_json()),
-            }, status=400)
+            return response.Response(
+                json.loads(form.errors.as_json()), status=400)
 
 
 class PasswordResetConfirmView(generics.CreateAPIView):

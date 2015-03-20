@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, TemplateView
 from django.utils.translation import ugettext_lazy as _
 
 from addresses.models import Country
 from base.models import Season
 
+from .mixins import SeasonsMixin
 from ..models import Club, Player, ClubPlayer, CoachClub
 from ..serializers import (
     CountrySerializer, SeasonSerializer,
@@ -161,36 +161,19 @@ class ClubListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
         context['request'] = self.request
-        seasons = (
-            Season.objects
-            .order_by('-start_date'))
+        seasons = Season.objects.order_by('-start_date')
         context['seasons'] = SeasonSerializer(
             seasons, context=context, many=True).data
         return context
 
 
-class ClubView(DetailView):
+class ClubView(SeasonsMixin, DetailView):
     model = Club
     template_name = 'hockeyapp/clubs/clubs-team.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubView, self).get_context_data(**kwargs)
         context['request'] = self.request
-        seasons = (
-            Season.objects
-            .filter(
-                pk__in=self.get_object().clubplayer_set
-                .values_list('season_id'))
-            .order_by('-start_date'))
-        context['seasons'] = SeasonSerializer(
-            seasons, context=context, many=True).data
-        if 'season' in self.request.GET:
-            default_season = get_object_or_404(
-                Season, pk=self.request.GET['season'])
-        else:
-            default_season = seasons[0] if seasons else None
-        context['default_season'] = SeasonSerializer(
-            default_season, context=context).data
         context.update(ClubListSerializer(
             self.get_object(), context=context).data)
         return context

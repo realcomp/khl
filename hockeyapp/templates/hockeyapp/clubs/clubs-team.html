@@ -2,13 +2,8 @@
 {% load i18n %}
 
 {% block extrahead %}
-    <script src="{{ STATIC_URL }}hockey/js/clubs-team.js"></script>
     {% if object.rgb %}
     <style>
-        .clubs-page .ui.red.button, .clubs-page .ui.red.buttons .button {
-        background-color: {{object.rgb}} !important; /* номер игрока secondary */
-        color: #ffffff; /* подходящий цвет для текста на кнопке */
-        }
         .clubs-page .ui.tabular.menu .item {
         color: {{object.rgb}} !important; /* текст табов secondary */
         }
@@ -19,10 +14,10 @@
         color: {{object.rgb}} !important; /* заголовок сезонов secondary */
         }
         .clubs-page .team-info .info-item .icon{
-            color: rgba(0,0,0, 1) !important; /* иконки над меню primary */
+        color: {{object.rgb}} !important; /* иконки над меню primary */
         }
         .clubs-page .page-menu.ui.green.menu {
-            background: rgba(0,0,0, 1) !important; /* цвет меню primary */
+        background: {{object.rgb}} !important; /* цвет меню primary */
         }
         .clubs-page .ui-tabs-nav .ui-state-active {
             color: #000000 !important;
@@ -30,11 +25,12 @@
         .clubs-page .ui.tabular.menu .ui-tabs-active .item{
             color: #000000 !important;
         }
+        .team-player-name{
+            color: {{object.rgb}} !important;
+        }
     </style>
     {% endif %}
 {% endblock %}
-
-{% block ngapp %}SportomaticsClubsTeam{% endblock %}
 
 {% block title %}
 {{title}}: состав команды, хоккей  - Sportomatics.ru
