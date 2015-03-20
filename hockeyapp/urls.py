@@ -33,6 +33,8 @@ urlpatterns = patterns(
         name='club-team-api'),
     url(r'^api/clubs/(?P<pk>\d+)/compare/$', api.ClubTeamCompare.as_view(),
         name='club-team-compare-api'),
+    url(r'^api/clubs/(?P<pk>\d+)/calendar/$', api.ClubCalendar.as_view(),
+        name='club-calendar-api'),
     url(r'^api/metrics/$', api.MetricsPlayers.as_view(),
         name='metrics-list-api'),
     url(r'^api/news/$', api.NewsList.as_view(), name='news-list-api'),

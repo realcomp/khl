@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{title}}: календарь игр, хоккей  - Sportomatics.ru
@@ -32,32 +33,56 @@
         </div>
         {% include "hockeyapp/clubs/team-info.html" %}
 
-        <div class="page-content page-container">
+        <div class="page-content page-container"
+             ng-controller="ClubCalendarController as ClubCalendarCtrl"
+             ng-init="url = '{% url 'hockeyapp:club-calendar-api' pk=pk %}'">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-calendar" %}
             <div class="page-inner-container">
                 <div class="team-calendar">
-                    <div class="ui tabular menu team-calendar-menu content-tabs">
+                    <div class="ui tabular menu team-calendar-menu-off content-tabs">
                         <span class="calendar-desc">
                             <span class="calendar-desc-home"><i class="sign icon"></i> ДОМАШНИЕ МАТЧИ</span>
                             <span class="calendar-desc-elsewhere"><i class="sign icon"></i> ВЫЕЗДНЫЕ МАТЧИ</span>
                         </span>
                         <span class="heading"><i class="calendar icon"></i> КАЛЕНДАРЬ ИГР </span>
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="season">
-                            <div class="default text">Выберите сезон</div>
+                            <input type="hidden" name="season" value="{{ default_season.pk }}"
+                                   ng-model="season"
+                                   onchange="angular.element(this).scope().setSeason(this)">
+                            <div class="default text">{{ default_season.label }}</div>
                             <i class="dropdown icon"></i>
                             <div class="menu">
-                                <div class="item" data-value="1">СЕЗОН 2014-2015</div>
-                                <div class="item" data-value="0">СЕЗОН 2013-2014</div>
+                                {% for season in seasons %}
+                                    <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                {% endfor %}
                             </div>
                         </div>
-                        <ul>
-                            <li><a href="#games-all" class="item" data-tab="games-all">ВСЕ</a></li>
-                            <li><a href="#games-home" class="item item-orange" data-tab="games-home">ДОМА</a></li>
-                            <li><a href="#games-elsewhere" class="item item-blue" data-tab="games-elsewhere">ВЫЕЗД</a></li>
-                        </ul> 
+                        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                            <li class="ui-state-default ui-corner-top"
+                                ng-class="{ 'ui-tabs-active ui-state-active':!params.type }">
+                                <a class="item tab-btn ui-tabs-anchor" href=""
+                                   ng-click="setType('')">
+                                    {% trans 'ALL' %}
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-top"
+                                ng-class="{ 'ui-tabs-active ui-state-active':params.type === 'home' }">
+                                <a class="item item-orange tab-btn ui-tabs-anchor" href=""
+                                   ng-click="setType('home')">
+                                    {% trans 'AS HOME' %}
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-top"
+                                ng-class="{ 'ui-tabs-active ui-state-active':params.type === 'guest' }">
+                                <a class="item item-blue tab-btn ui-tabs-anchor" href=""
+                                   ng-click="setType('guest')">
+                                    {% trans 'AS GUEST' %}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="ui tab" id="games-all" data-tab="games-all">
+
+                    <div ng-hide="params.type">
                         <ul class="calendars-list">
                             <li class="calendar-item">
                                 <table class="ui celled table segment clubs-calendars-table">
@@ -820,7 +845,8 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="ui tab" id="games-home" data-tab="games-home">
+
+                    <div ng-show="params.type === 'home'">
                         <ul class="calendars-list">
                             <li class="calendar-item">
                                 <table class="ui celled table segment clubs-calendars-table">
@@ -1577,7 +1603,8 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="ui tab" id="games-elsewhere" data-tab="games-elsewhere">
+
+                    <div ng-show="params.type === 'guest'">
                         <ul class="calendars-list">
                             <li class="calendar-item">
                                 <table class="ui celled table segment clubs-calendars-table">
@@ -2342,7 +2369,7 @@
                 <div class="team-track">
                     <div class="heading">МАРШРУТ ВЫЕЗДА 25,26, 27 СЕНТЯБРЯ</div>
                     <div class="team-track-map">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m29!1m12!1m3!1d4699650.3181077065!2d45.722230525521425!3d54.88973746113399!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m14!1i0!3e6!4m5!1s0x43d93a259216bce1%3A0xaceec0921eda92cc!2sUfa%2C+Republic+of+Bashkortostan%2C+Russia!3m2!1d54.738762099999995!2d55.972055399999995!4m5!1s0x46b54afc73d4b0c9%3A0x3d44d6cc5757cf4c!2sMoscow%2C+Russia!3m2!1d55.755826!2d37.6173!5e0!3m2!1sen!2sua!4v1414536584415" width="932" height="486" frameborder="0" style="border:0"></iframe>
+                        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m29!1m12!1m3!1d4699650.3181077065!2d45.722230525521425!3d54.88973746113399!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m14!1i0!3e6!4m5!1s0x43d93a259216bce1%3A0xaceec0921eda92cc!2sUfa%2C+Republic+of+Bashkortostan%2C+Russia!3m2!1d54.738762099999995!2d55.972055399999995!4m5!1s0x46b54afc73d4b0c9%3A0x3d44d6cc5757cf4c!2sMoscow%2C+Russia!3m2!1d55.755826!2d37.6173!5e0!3m2!1sen!2sua!4v1414536584415" width="932" height="486" frameborder="0" style="border:0"></iframe> -->
                     </div>
                 </div>
                 <div class="ui grid">

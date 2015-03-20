@@ -155,6 +155,13 @@ class ClubTeamCompare(generics.RetrieveAPIView):
         return Club.objects.all()
 
 
+class ClubCalendar(generics.RetrieveAPIView):
+    serializer_class = ClubTeamSerializer
+
+    def get_queryset(self):
+        return Club.objects.all()
+
+
 class MetricsPlayers(generics.ListAPIView):
     paginate_by = 100
     serializer_class = MetricsPlayerSerializer

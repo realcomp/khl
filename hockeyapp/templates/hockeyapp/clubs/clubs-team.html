@@ -2,7 +2,6 @@
 {% load i18n %}
 
 {% block extrahead %}
-    <script src="{{ STATIC_URL }}hockey/js/clubs-team.js"></script>
     {% if object.rgb %}
     <style>
         .clubs-page .ui.tabular.menu .item {
@@ -32,8 +31,6 @@
     </style>
     {% endif %}
 {% endblock %}
-
-{% block ngapp %}SportomaticsClubsTeam{% endblock %}
 
 {% block title %}
 {{title}}: состав команды, хоккей  - Sportomatics.ru
