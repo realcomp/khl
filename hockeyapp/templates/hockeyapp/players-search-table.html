@@ -4,12 +4,12 @@
         <a href="" class="option-btn"
            ng-class="{ 'option-btn_active':params.is_playing !== 'false'}"
            ng-click="PlayersSearchService.setPlaying(this, 'true')">
-            Сейчас играют
+            {% trans 'Playing now' %}
         </a>
         <a href="" class="option-btn"
            ng-class="{ 'option-btn_active':params.is_playing === 'false' }"
            ng-click="PlayersSearchService.setPlaying(this, 'false')">
-            Все
+            {% trans 'All' %}
         </a>
         <ul class="options-list">
             <li class="option-item">

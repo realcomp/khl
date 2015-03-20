@@ -770,7 +770,7 @@ class HockeyVHLMatchParser(HockeyMHLMatchParser):
     body_xpath = xpathes.VHL_MATCH_PROTOCOL_XPATH
     xpath_dict = xpathes.VHL_MATCH_REPORT_DICT
 
-    def python_date(self, date, month_dict = xpathes.MD_EN):
+    def python_date(self, date, month_dict = xpathes.MD):
         b''' парсит дату в datetime object '''
         if date:
             _date_dict = date.strip().lower().split(',')

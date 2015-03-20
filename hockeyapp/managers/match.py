@@ -3,8 +3,6 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
-import itertools
-
 from django.db import models
 from django.db.models import F, Q, Max, Min
 from django.db.models.loading import get_model

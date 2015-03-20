@@ -71,7 +71,7 @@ class HockeyAppParserTest(base.tests.BaseTest):
         self.vhl_match_data = parsers.match.HockeyVHLMatchParser(html=True,
                     absolute_url='http://www.vhlru.ru/report/269/?idgame=43031'
             ).get_page(self.vhl_match_id)
-        self.assertIsNotNone(self.khl_match_data)
+        self.assertIsNotNone(self.vhl_match_data)
         # test clubs parser
         self.clublink = parsers.club.KHLClubURLs().get_page()[0][:-1]
         self.assertIsNotNone(self.clublink)
