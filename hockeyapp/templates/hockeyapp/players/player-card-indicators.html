@@ -182,10 +182,17 @@
 
 
                             <div ng-show="playersRadarChartData" style="padding-left: 3%; margin-top: 20px">
+                                <hr class="style-six2">
+                                Круговая диаграмма
                                 <div id="chartdiv2" style="width: 100%; height:400px; ">
-
                                 </div>
 
+                                <a>Выберите сезон: </a>
+                                <select class="season-selector" ng-model="lastSeason" ng-options="season as season for season in playerSeasons"></select>
+                                <br><a>Выбранные поля: </a>
+                                <tags-input display-property="title" ng-model="selectedRadarFields" placeholder="Добавьте поле" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
+                                    <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadAvailableRadarFields($query)"></auto-complete>
+                                </tags-input>
                                 <a class="ui green button chart-button" ng-click="sumRadars()">Суммировать</a>
                             </div>
 

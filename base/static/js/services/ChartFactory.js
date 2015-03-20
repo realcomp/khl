@@ -398,10 +398,12 @@ angular.module('Sportomatics')
                 valueAxis.dashLength = 3;
                 valueAxis.axisTitleOffset = 20;
                 valueAxis.gridCount = 5;
+                //valueAxis.stackType = "regular";
                 chart.addValueAxis(valueAxis);
 
                 _.each(graphs, function(graph){
                     graph.valueAxis = valueAxis;
+
                     chart.addGraph(graph);
                 });
 
