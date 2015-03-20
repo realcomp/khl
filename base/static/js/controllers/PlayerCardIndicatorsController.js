@@ -1,6 +1,7 @@
     angular.module('Sportomatics')
         .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {
             //http://www.amcharts.com/lib/images/
+            $scope.disabled = true;
             var self = this,
                 url = $('#IndicatorsLink').attr('href');
             this.url = $('#IndicatorsLink').attr('href');
@@ -209,6 +210,16 @@
                     }
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
                     if ($scope.playersStats.length > 0) return $scope.makeChart(switched);
+                    if($scope.disabled){
+                        $scope.chart.chartCursor = null;
+                        $scope.chart.chartScrollbar = null;
+                        $scope.chart.startDuration = null;
+                        for(var i = 0; i < $scope.chart.graphs.length; i ++){
+                            $scope.chart.graphs[i].balloonText = '';
+                            $scope.chart.graphs[i].visibleInLegend = false;
+                        }
+
+                    }
                     $scope.chart.write("chartdiv");
                     if(switched) $scope.chart.zoomToDates(zoomStart, zoomEnd);
                 });
