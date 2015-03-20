@@ -17,4 +17,5 @@ urlpatterns = patterns('api.hockey',
 
 
     url(r'^clubs/$', 'views.club_list', name='club-list-api'),
+    url(r'^player/(?P<player_id>\d+)/partners/$', 'views.player_partners', name='player_partners'),
 )

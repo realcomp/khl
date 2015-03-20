@@ -5,7 +5,7 @@ import rest_framework as drf
 
 from filer.models import Image
 
-from base.models import InstagramImageFile, InstagramUser
+from base.models import InstagramImageFile, InstagramUser, Season
 
 
 class LangDepSerializer(drf.serializers.ModelSerializer):
@@ -40,3 +40,8 @@ class IIFMinimalSerializer(drf.serializers.ModelSerializer):
     class Meta:
         model = InstagramImageFile
         fields = 'id', 'img', 'created', 'instagram_user', 'comment'
+
+
+class SeasonSerializer(TitleBaseSerializer):
+    class Meta:
+        model = Season

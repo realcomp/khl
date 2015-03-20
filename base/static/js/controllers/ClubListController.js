@@ -59,8 +59,10 @@ angular.module('Sportomatics')
     $scope.list = function(all) {
         var params = $('#ClubListForm').serialize();
 
-        params += '&order_by=' + ($scope.params.reversed === 'true' ? '-' : '') +
-            ($scope.params.order_by || '%s_title');
+        params += '&order_by=' + ($scope.params.order_by || '%s_title');
+        if ($scope.params.reversed) {
+            params += '&reversed=true';
+        }
 
         // if ($scope.sparams.leaguesSelected) {
         //     $location.search('league', $scope.sparams.leaguesSelected);

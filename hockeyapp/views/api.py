@@ -5,7 +5,7 @@ import datetime
 
 import itertools
 
-from django.db.models import Avg, Sum, Q
+from django.db.models import Avg, Sum
 
 from rest_framework import generics, response, viewsets
 
@@ -36,21 +36,18 @@ class PlayersSearch(
 
     def list(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
-        ## get clubplayers
-        #self.clubplayers = {}
-        #clubplayers = ClubPlayer.objects.filter(
-                                #pk__in=qs.values_list('clubplayer', flat=True)
-                        #).order_by('-end_date', '-pk')
-        #for clubplayer in clubplayers:
-            #player_id = clubplayer.player_id
-            #if player_id not in self.clubplayers:
-                #self.clubplayers[player_id] = []
-            #if clubplayer not in self.clubplayers[player_id]:
-                #self.clubplayers[player_id].append(clubplayer)
+        self._get_rating(request, qs)
+        instance = qs
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_pagination_serializer(page)
+        else:
+            serializer = self.get_serializer(instance, many=True)
+        return response.Response(serializer.data)
 
-        # get rating
+    def _get_rating(self, request, qs):
         rated_qs = qs
-        rated_by = self.request.GET.get('rated_by', '')
+        rated_by = request.GET.get('rated_by', '')
         if rated_by:
             rated_qs = qs.order_by('-' + rated_by)
         self.rating = {}
@@ -59,12 +56,12 @@ class PlayersSearch(
             if not rated_by:
                 rating_index += 1
             self.rating[player.pk] = rating_index
-        instance = qs
-        page = self.paginate_queryset(instance)
-        if page is not None:
-            serializer = self.get_pagination_serializer(page)
-        else:
-            serializer = self.get_serializer(instance, many=True)
+
+
+class BestPlayer(PlayersSearch):
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.filter_queryset(self.get_queryset()).first()
+        serializer = self.get_serializer(instance)
         return response.Response(serializer.data)
 
 
@@ -150,6 +147,13 @@ class ClubTeam(generics.RetrieveAPIView):
 
 class ClubTeamCompare(generics.RetrieveAPIView):
     serializer_class = ClubTeamCompareSerializer
+
+    def get_queryset(self):
+        return Club.objects.all()
+
+
+class ClubCalendar(generics.RetrieveAPIView):
+    serializer_class = ClubTeamSerializer
 
     def get_queryset(self):
         return Club.objects.all()
