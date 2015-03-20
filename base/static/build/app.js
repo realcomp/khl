@@ -2089,7 +2089,7 @@ angular.module('Sportomatics')
     angular.module('Sportomatics')
         .controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", "$q", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q) {
             //http://www.amcharts.com/lib/images/
-            $scope.disabled = true;
+            $scope.disabled = false;
             var self = this,
                 url = $('#IndicatorsLink').attr('href');
             this.url = $('#IndicatorsLink').attr('href');
