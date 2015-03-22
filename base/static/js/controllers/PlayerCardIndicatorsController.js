@@ -212,7 +212,6 @@
                     }
                     $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));})).toString();
                     $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); })
-                    console.log($scope.playerSeasons)
                     $scope.createRadar([self.playerId], $scope.lastSeason).then(function(){
                         //$scope.createRadar(['1634']);
                     });
@@ -282,27 +281,42 @@
                 }
             };
 
+
             $scope.playersRadarChartDataInitial = [];
-            $scope.selectedRadarFields = ["goals", "points", "assists", "plus_minus"];
+            $scope.selectedRadarFields = [{
+                field: "goals"
+            }, {
+                field: "points"
+            }, {
+                field: "assists"
+            }, {
+                field: "plus_minus"
+            }];
             $scope.addField = "count";
-            $scope.availableFields = ["count", "goals", "assists", "points", "plus_minus", "penalty_time", "ev_goals", "pp_goals", "es_goals", "overtime_goals", "win_goals", "bullet_goals", "shots", "pis__avg", "faceoff", "winfaceoff", "winfaceoff_p__avg", "shots__avg", "gamingtime__avg", "change_count__avg", "start_date", "end_date", "loose_goals", "saves", "saves_p__avg", "sf__avg", "shots_received", "matches_win", "matches_lose", "zero_goals_matches", "bullet_matches"];
+            $scope.availableFields = _.toArray(LocaleFactory.locale_ru.fieldNames);
+            _.each($scope.availableFields, function(object){
+                object.ticked = (object.field === 'points' || object.field === 'goals' || object.field === 'assists' || object.field === 'plus_minus') ? true : false;
+            })
+            console.log(_.toArray(LocaleFactory.locale_ru.fieldNames));
+
             $scope.loadAvailableRadarFields = function(query) {
                 var deferred = $q.defer();
                 deferred.resolve($scope.availableFields);
                 return deferred.promise;
             };
-
             $scope.$watch('selectedRadarFields', function(newval){
                 if(newval && $scope.lastSeason){
+                    console.log(newval)
                     $scope.createRadar([self.playerId], $scope.lastSeason)
                 }
             }, true);
             $scope.createRadar = function(players, season, sum){
                 $scope.playersInRadarChart = [];
                 $scope.playersRadarChartData = [];
+                console.log($scope.selectedRadarFields)
                 _.each($scope.selectedRadarFields, function(field){
                     $scope.playersRadarChartData.push({
-                        field: field.title
+                        field: field.field
                     })
                 });
                 $scope.playersRadarChartGraphs = [];
@@ -421,6 +435,7 @@
                     //$scope.createRadar(['1634']);
                //})
             };
+            //$scope.createRadar([this.playerId], $scope.lastSeason)
 
 
 

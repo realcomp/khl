@@ -187,13 +187,29 @@
                                 <div id="chartdiv2" style="width: 100%; height:400px; ">
                                 </div>
 
-                                <a>Выберите сезон: </a>
-                                <select class="season-selector" ng-model="lastSeason" ng-options="season as season for season in playerSeasons"></select>
-                                <br><a>Выбранные поля: </a>
-                                <tags-input display-property="title" ng-model="selectedRadarFields" placeholder="Добавьте поле" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
+                                <div class="inline-block">
+                                    <a>Выберите сезон: </a>
+                                    <select class="season-selector" ng-model="lastSeason" ng-options="season as season for season in playerSeasons"></select>
+                                </div>
+                                <div class="inline-block">
+                                    <a>Выбранные поля: </a>
+                                </div>
+                                <div class="inline-block">
+
+                                    <div isteven-multi-select
+                                         input-model="availableFields"
+                                         output-model="selectedRadarFields"
+                                         button-label="shortName"
+                                         item-label="fullName"
+                                         tick-property="ticked">
+                                    </div>
+                                </div>
+                                <br>
+                                <!--<tags-input display-property="title" ng-model="selectedRadarFields" placeholder="Добавьте поле" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
                                     <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadAvailableRadarFields($query)"></auto-complete>
-                                </tags-input>
-                                <a class="ui green button chart-button" ng-click="sumRadars()">Суммировать</a>
+                                </tags-input>-->
+
+                                <a class="ui green button chart-button m-t-20" ng-click="sumRadars()">Суммировать</a>
                             </div>
 
                             <div ng-show="PlayerCardIndicatorsCtrl.indicatorsType === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
