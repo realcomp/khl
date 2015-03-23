@@ -199,7 +199,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     self.clubs.clubs.push({
                         'data': data,
                         'table': {
-                            'club': data.leagues[0].clubs,
+                            'club': data.leagues[0].clubs
                         },
                         'league': data.leagues[0]
                     });

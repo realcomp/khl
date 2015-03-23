@@ -5647,7 +5647,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
             font-size: 12px !important;
     }
 .player-comparison-block{
-    width: 320px;
+    width: 600px;
     height: 60px;
     background: #FFFFFF;
     font-size: 14px;
@@ -5655,7 +5655,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border-radius: 2px;
     padding: 3px;
     margin: 5px;
-    max-width: 320px;
+    max-width: 600px;
     display: inline-block;
 }
 .player-comparison-legend{
@@ -5748,4 +5748,14 @@ hr.style-one {
     width: 200px;
     height: 32px;
     margin-top: -1px;
+}
+.input-new{
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+    height: 22px;
+    padding: 2px;
+}
+.margin-auto{
+    margin-left: auto !important;
+    margin-right: auto !important;
 }

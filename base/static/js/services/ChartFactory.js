@@ -16,7 +16,7 @@ angular.module('Sportomatics')
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
-                chart.dataProvider = data;//[{"date":"2010-06-30T00:00:00.000Z","values1":7,"count1":5,"percentage1":0.152,"values":9,"count":6,"percentage":0.173},{"date":"2011-06-30T00:00:00.000Z","values1":9,"count1":9,"percentage1":0.111,"values":6,"count":9,"percentage":0.067},{"date":"2012-06-30T00:00:00.000Z","values1":13,"count1":7,"percentage1":0.188,"values":7,"count":4,"percentage":0.206},{"date":"2013-06-30T00:00:00.000Z","values1":9,"count1":7,"percentage1":0.129,"values":11,"count":7,"percentage":0.177},{"date":"2014-06-30T00:00:00.000Z","values1":5,"count1":7,"percentage1":0.071,"values":9,"count":5,"percentage":0.22},{"date":"2015-06-30T00:00:00.000Z","values1":4,"count1":6,"percentage1":0.067,"values":3,"count":4,"percentage":0.094},{"date":"1998-06-30T00:00:00.000Z","values1":1,"count1":4,"percentage1":0.029},{"date":"1999-06-30T00:00:00.000Z","values1":6,"count1":5,"percentage1":0.146},{"date":"2000-06-30T00:00:00.000Z","values1":1,"count1":5,"percentage1":0.024},{"date":"2001-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.109},{"date":"2002-06-30T00:00:00.000Z","values1":3,"count1":5,"percentage1":0.068},{"date":"2003-06-30T00:00:00.000Z","values1":2,"count1":5,"percentage1":0.043},{"date":"2004-06-30T00:00:00.000Z","values1":0,"count1":4,"percentage1":0},{"date":"2005-06-30T00:00:00.000Z","values1":6,"count1":6,"percentage1":0.105},{"date":"2006-06-30T00:00:00.000Z","values1":10,"count1":7,"percentage1":0.161},{"date":"2007-06-30T00:00:00.000Z","values1":4,"count1":5,"percentage1":0.082},{"date":"2008-06-30T00:00:00.000Z","values1":4,"count1":7,"percentage1":0.062},{"date":"2009-06-30T00:00:00.000Z","values1":2,"count1":4,"percentage1":0.05}];
+                chart.dataProvider = data;
                 chart.categoryField = "date";
                 chart.cursorColor = "#DADADA";
                 chart.startDuration = 0.5;
@@ -26,12 +26,12 @@ angular.module('Sportomatics')
                 chart.angle = 30;
                 chart.exportConfig = {
                     "menuTop":"45px",
-                        "menuRight":"5px",
-                        "menuItems": [{
+                    "menuRight":"5px",
+                    "menuItems": [{
                         "icon": 'http://www.amcharts.com/lib/3/images/export.png',
                         "format": 'png'
                     }]
-                }
+                };
 
                 // listen for "dataUpdated" event (fired when chart is inited) and call zoomChart method when it happens
                 chart.addListener("dataUpdated", zoomChart);
@@ -229,7 +229,7 @@ angular.module('Sportomatics')
                 chartCursor.cursorAlpha = 1;
                 chartCursor.cursorColor = "#8ebd5d";
                 //chartCursor.avoidBalloonOverlapping = false;
-                chartCursor.oneBalloonOnly = true;
+                //chartCursor.oneBalloonOnly = true;
                 chartCursor.categoryBalloonFunction = function(value){
                     if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
@@ -386,15 +386,21 @@ angular.module('Sportomatics')
             var deferred = $q.defer();
             var chart;
             AmChartsFactory.ready().then(function () {
-
+                var maximums = [];
+                for(var field in data[0]){
+                    maximums.push(Math.max.apply(Math,data.map(function(o){return o[field];})))
+                }
+                var max = Math.max.apply(null, _.filter(maximums, function(value){ return value > 0;}));
+                console.log(max);
                 chart = new AmCharts.AmRadarChart();
                 chart.dataProvider = data;
+                console.log(data)
                 chart.categoryField = "field";
 
                 var valueAxis = new AmCharts.ValueAxis();
                 valueAxis.axisAlpha = 0.15;
                 valueAxis.minimum = 0;
-                valueAxis.maximum = 1;
+                valueAxis.maximum = max;
                 valueAxis.dashLength = 3;
                 valueAxis.axisTitleOffset = 20;
                 valueAxis.gridCount = 5;
