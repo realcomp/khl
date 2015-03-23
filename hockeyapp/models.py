@@ -24,6 +24,7 @@ from .choices import PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES
 from .choices import CHALLENGE_TYPE, PARSERS
 from . import managers, parsers
 
+
 def rgb_validator(value):
     if not re.match(r"(\d+),\s*(\d+),\s*(\d+)", value):
         raise ValidationError('Incorrect format. Expected `#,#,#`.')
