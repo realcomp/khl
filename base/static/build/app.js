@@ -1535,6 +1535,7 @@ angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $f
 
 angular.module('Sportomatics').controller('ClubCalendarController', [
   '$scope', '$http', '$location', function($scope, $http, $location) {
+    $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.data = {};
     $scope.params = $location.search();
     $scope.setType = function(type) {
@@ -1580,12 +1581,28 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     };
     $scope.list = function() {
       var params;
+      $scope.params = $location.search();
       params = '';
-      $scope.calendar = $scope.getCalendar(2015, 0);
+      if ($scope.params.season) {
+        params += '&season=' + $scope.params.season;
+      }
       $scope.data = {};
       $scope.loaded = false;
       $http.get($scope.url + '?' + params).success(function(data) {
+        var m;
         $scope.data = data;
+        $scope.calendars = (function() {
+          var k, results;
+          results = [];
+          for (m = k = 0; k < 3; m = ++k) {
+            results.push({
+              'year': 2015,
+              'month': $scope.MONTHS[m],
+              'table': $scope.getCalendar(2015, m)
+            });
+          }
+          return results;
+        })();
         return $scope.loaded = true;
       });
     };
