@@ -5,7 +5,7 @@ import datetime
 
 import itertools
 
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Q, Sum
 
 from rest_framework import generics, response, viewsets
 
@@ -20,7 +20,8 @@ from ..models import Timeline
 
 from ..serializers import CountryLeaguesSerializer
 from ..serializers import MetricsPlayerSerializer
-from ..serializers.clubs import ClubTeamSerializer, ClubTeamCompareSerializer
+from ..serializers.clubs import (
+    ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer)
 from ..serializers.events import EventSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
@@ -152,11 +153,18 @@ class ClubTeamCompare(generics.RetrieveAPIView):
         return Club.objects.all()
 
 
-class ClubCalendar(generics.RetrieveAPIView):
-    serializer_class = ClubTeamSerializer
+class ClubCalendar(generics.ListAPIView):
+    queryset = Schedule.objects.all()
+    serializer_class = ClubCalendarSerializer
 
-    def get_queryset(self):
-        return Club.objects.all()
+    def filter_queryset(self, qs):
+        qs = super(ClubCalendar, self).filter_queryset(qs)
+        qs = qs.filter(
+            Q(home_team=self.kwargs.get('pk')) |
+            Q(guest_team=self.kwargs.get('pk')))
+        if 'season' in self.request.GET:
+            qs = qs.filter(season=self.request.GET['season'])
+        return qs
 
 
 class MetricsPlayers(generics.ListAPIView):

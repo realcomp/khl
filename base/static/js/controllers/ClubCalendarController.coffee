@@ -1,6 +1,9 @@
 angular.module('Sportomatics').controller('ClubCalendarController', [
     '$scope', '$http', '$location',
     ($scope, $http, $location) ->
+        $scope.MONTHS = [
+            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
+            'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
         $scope.data = {}
         $scope.params = $location.search()
 
@@ -49,13 +52,20 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return result
 
         $scope.list = () ->
+            $scope.params = $location.search()
             params = ''
-            $scope.calendar = $scope.getCalendar(2015, 0)
+            if $scope.params.season
+                params += '&season=' + $scope.params.season
             $scope.data = {};
             $scope.loaded = false;
             $http.get($scope.url + '?' + params
             ).success((data) ->
                 $scope.data = data
+                $scope.calendars = ({
+                    'year': 2015,
+                    'month': $scope.MONTHS[m],
+                    'table': $scope.getCalendar(2015, m)
+                } for m in [0...3])
                 $scope.loaded = true
             )
             return

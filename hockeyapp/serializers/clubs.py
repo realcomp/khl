@@ -15,7 +15,7 @@ from . import (
     CoachSerializer,
     LeagueSerializer,
     CountrySerializer)
-from ..models import Club, ClubPlayer, Coach, Player, League
+from ..models import Club, ClubPlayer, Coach, Player, League, Schedule
 
 
 class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
@@ -263,3 +263,10 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
             'pk', 'title', 'site', 'contacts', 'logo', 'url', 'source_season',
             'season', 'prev_season', 'leagues')
         model = Club
+
+
+class ClubCalendarSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        fields = (
+            'pk', 'date')
+        model = Schedule
