@@ -15,7 +15,7 @@ from . import (
     CoachSerializer,
     LeagueSerializer,
     CountrySerializer)
-from ..models import Club, ClubPlayer, Coach, Player, League
+from ..models import Club, ClubPlayer, Coach, Player, League, Schedule
 
 
 class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
@@ -263,3 +263,23 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
             'pk', 'title', 'site', 'contacts', 'logo', 'url', 'source_season',
             'season', 'prev_season', 'leagues')
         model = Club
+
+
+class ClubCalendarSerializer(serializers.ModelSerializer):
+    home_team = BaseClubSerializer()
+    guest_team = BaseClubSerializer()
+    is_home = serializers.SerializerMethodField()
+    is_guest = serializers.SerializerMethodField()
+
+    def get_is_home(self, obj):
+        view = self.context['view']
+        return int(view.kwargs.get('pk')) == obj.home_team.pk
+
+    def get_is_guest(self, obj):
+        view = self.context['view']
+        return int(view.kwargs.get('pk')) == obj.guest_team.pk
+
+    class Meta(object):
+        fields = (
+            'pk', 'date', 'home_team', 'guest_team', 'is_home', 'is_guest')
+        model = Schedule

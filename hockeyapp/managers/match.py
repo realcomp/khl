@@ -84,7 +84,13 @@ class MatchFKQuerySetMixin(object):
         q_guest = Q(
             match__guest_team=club,
             match__guest_players__player=player)
-        return self.filter(q_home | q_guest)
+        return self.is_active().filter(q_home | q_guest)
+
+    def is_active(self):
+        b'''Запись, которую необходимо учитывать при подсчете статистики'''
+        return self.filter( match__isnull=False,
+                            match__challenge_type__isnull=False,
+                            match__challenge_type__gt=0)
 
 
 class MatchGoalHistoryQuerySet(
@@ -273,7 +279,7 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         return []
 
     def _month_qs(self, i):
-        month_qs = self.filter(
+        month_qs = self.is_active().filter(
             match__date__gt=self._dates[i],
             match__date__lte=self._dates[i + 1])
         month_qs.date = self._dates[i]
@@ -292,7 +298,7 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         return map(self._season_qs, seasons)
 
     def _season_qs(self, season):
-        season_qs = self.filter(clubplayer__season=season)
+        season_qs = self.is_active().filter(clubplayer__season=season)
         min_max = season_qs.aggregate(Min('match__date'),Max('match__date'))
         season_qs.start_date = min_max.get('match__date__min')
         season_qs.end_date = min_max.get('match__date__max')
@@ -301,10 +307,10 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         return season_qs
 
     def home_matches(self):
-        return self.filter(match__home_team=F('clubplayer__club'))
+        return self.is_active().filter(match__home_team=F('clubplayer__club'))
 
     def guest_matches(self):
-        return self.filter(match__guest_team=F('clubplayer__club'))
+        return self.is_active().filter(match__guest_team=F('clubplayer__club'))
 
     def home_matches_win(self):
         self.home_matches().extra(**self.X_HOME_WIN)
@@ -317,18 +323,3 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
 
     def guest_matches_lose(self):
         self.guest_matches().extra(**self.X_HOME_WIN)
-
-    # def aggregate_by_player(self, key, player_id):
-    #     cache_key = 'ClubPlayerMatchQuerySet/player/%s/%s' % (player_id, key)
-    #     result = cache.get(cache_key)
-    #     if result is None:
-    #         field, _, op = key.rpartition('__')
-    #         OP = {
-    #             'sum': Sum,
-    #             'avg': Avg,
-    #             'count': Count,
-    #         }[op]
-    #         result = self.aggregate(OP(field)).get(key) or 0
-    #         # cache for a day
-    #         cache.set(cache_key, result, 60*60*24)
-    #     return result
