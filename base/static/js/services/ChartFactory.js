@@ -390,11 +390,9 @@ angular.module('Sportomatics')
                 for(var field in data[0]){
                     maximums.push(Math.max.apply(Math,data.map(function(o){return o[field];})))
                 }
-                var max = Math.max.apply(null, _.filter(maximums, function(value){ return value > 0;}));
-                console.log(max);
+                var max = Math.max.apply(null, _.filter(maximums, function(value){ return value >= 0;}));
                 chart = new AmCharts.AmRadarChart();
                 chart.dataProvider = data;
-                console.log(data)
                 chart.categoryField = "field";
 
                 var valueAxis = new AmCharts.ValueAxis();

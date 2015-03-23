@@ -121,6 +121,23 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.list(self.compare);
         };
 
+        $scope.workWithData = function(data){
+            var goalkeeper_players = data.goalkeeper_players;
+            var defender_players = data.defender_players;
+            var offender_players = data.offender_players;
+            var players = [];
+            _.each(offender_players, function(player){
+                players.push(player.pk);
+            });
+            _.each(defender_players, function(player){
+                players.push(player.pk);
+            });
+            _.each(goalkeeper_players, function(player){
+                players.push(player.pk);
+            });
+            console.log(players)
+        };
+
         self.getCell = function(table, cell_id) {
             var group;
             if (table.table && cell_id && Array.isArray(cell_id) && cell_id[1] !== null) {
@@ -152,11 +169,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         self.isPersonInCell = function(table, cell_id) {
             var cell;
             cell = this.getCell(table, cell_id);
-            if (cell) {
-                return true;
-            } else {
-                return false;
-            }
+            return cell;
         };
 
         self.list = function(callback) {
@@ -167,6 +180,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.clubs = [];
             $http.get(url + '?' + params)
             .success(function(data) {
+                    $scope.workWithData(data);
                 self.players.data = data;
                 self.players.table = {
                     'goalkeeper': data.goalkeeper_players,
