@@ -97,7 +97,7 @@
                                                 <td ng-repeat="cell in row"
                                                     ng-class="{ 'cell-calendar-event-other': isHome(cell), 'cell-calendar-event': isGuest(cell) }">
                                                     <img class="calendar-event-logo" alt=""
-                                                         ng-src="getLogo(cell)" ng-show="getLogo(cell)" />
+                                                         ng-src="{{ getLogo(cell) }}" ng-show="getLogo(cell)" />
                                                     <span class="calendar-date" ng-show="cell.date">
                                                         {{ cell.date.getDate() }}
                                                     </span>
