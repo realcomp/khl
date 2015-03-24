@@ -1554,7 +1554,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       $scope.params = $location.search();
       $scope.list();
     };
-    $scope.parseSchedules = function(data) {
+    $scope.getSchedules = function(data) {
       var getDate, k, len, result, s;
       result = {};
       getDate = $parse('date|date:"yyyy-MM-dd"');
@@ -1564,8 +1564,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       }
       return result;
     };
-    $scope.getSchedule = function(schedules, date) {
-      var strfdate;
+    $scope.getCalendar = function(year, month, schedules) {
+      var cell, day, daysInM, i, j, k, result, row, startDoW, strfdate;
+      daysInM = new Date(year, month + 1, 0).getDate();
+      startDoW = new Date(year, month, 1).getDay() - 1;
+      if (startDoW < 0) {
+        startDoW = 6;
+      }
+      result = [];
+      i = 0;
+      row = [];
       strfdate = function(date) {
         var d, m, y;
         y = 1900 + date.getYear();
@@ -1579,20 +1587,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         }
         return [y, m, d].join('-');
       };
-      return schedules[strfdate(date)];
-    };
-    $scope.getCalendar = function(date, schedules) {
-      var cell, day, daysInM, i, j, k, month, result, row, startDoW, year;
-      year = date.getYear() + 1900;
-      month = date.getMonth();
-      daysInM = new Date(year, month + 1, 0).getDate();
-      startDoW = new Date(year, month, 1).getDay() - 1;
-      if (startDoW < 0) {
-        startDoW = 6;
-      }
-      result = [];
-      i = 0;
-      row = [];
       while (i * 7 < daysInM + startDoW && i <= 6) {
         row = [];
         for (j = k = 0; k < 7; j = ++k) {
@@ -1602,7 +1596,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
           day = cell.cell - startDoW + 1;
           if ((1 <= day && day <= daysInM)) {
             cell['date'] = new Date(year, month, day);
-            cell['schedule'] = $scope.getSchedule(schedules, cell.date);
+            cell['schedule'] = schedules[strfdate(cell.date)];
           }
           row.push(cell);
         }
@@ -1626,13 +1620,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       }
       return null;
     };
-    $scope.monthDelta = function(date, deltaM) {
-      var d;
-      d = new Date(date);
-      d.setDate(1);
-      d.setMonth(d.getMonth() + deltaM);
-      return d;
-    };
     $scope.list = function() {
       var params;
       $scope.params = $location.search();
@@ -1643,46 +1630,23 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       $scope.data = {};
       $scope.loaded = false;
       $http.get($scope.url + '?' + params).success(function(data) {
-        var deltaM, now;
+        var m;
         $scope.data = data;
-        $scope.schedules = $scope.parseSchedules(data);
-        now = new Date();
-        $scope.calendars = [
-          (function() {
-            var k, len, ref, results;
-            ref = [-1, 0, 1];
-            results = [];
-            for (k = 0, len = ref.length; k < len; k++) {
-              deltaM = ref[k];
-              results.push({
-                'date': $scope.monthDelta(now, deltaM),
-                'month_display': $scope.MONTHS[$scope.monthDelta(now, deltaM).getMonth()],
-                'table': $scope.getCalendar($scope.monthDelta(now, deltaM), $scope.schedules)
-              });
-            }
-            return results;
-          })()
-        ];
+        $scope.schedules = $scope.getSchedules(data);
+        $scope.calendars = (function() {
+          var k, results;
+          results = [];
+          for (m = k = 0; k < 3; m = ++k) {
+            results.push({
+              'year': 2015,
+              'month': $scope.MONTHS[m],
+              'table': $scope.getCalendar(2015, m, $scope.schedules)
+            });
+          }
+          return results;
+        })();
         return $scope.loaded = true;
       });
-    };
-    $scope.previous = function() {
-      var date, deltaM;
-      date = $scope.calendars[$scope.calendars.length - 1][0].date;
-      return $scope.calendars.push((function() {
-        var k, len, ref, results;
-        ref = [-3, -2, -1];
-        results = [];
-        for (k = 0, len = ref.length; k < len; k++) {
-          deltaM = ref[k];
-          results.push({
-            'date': $scope.monthDelta(date, deltaM),
-            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-            'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
-          });
-        }
-        return results;
-      })());
     };
   }
 ]);
