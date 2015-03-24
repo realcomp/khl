@@ -104,16 +104,7 @@ class PlayerSocialsInline(admin.TabularInline):
     fields = ('url', 'stype')
 
 
-def recalc_counters(modeladmin, request, queryset):
-    from .tasks import player_recalc_counters
-    pks = queryset.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        player_recalc_counters.delay(pks[i:i + 1000])
-recalc_counters.short_description = _('Recalculate counters')
-
-
-def recalc_rating(modeladmin, request, queryset):
-    from .tasks import player_recalc_rating
+def get_recalc_counters_actions():
     fields = (
         'seasons_total', 'matches_total', 'bullet_matches_total',
         'shots_received_total', 'saves_total', 'loose_goals_total',
@@ -122,13 +113,25 @@ def recalc_rating(modeladmin, request, queryset):
     ) + tuple(itertools.chain(*map(
         lambda x: ('%s_total' % x, '%s_average' % x),
         ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
+
     for field in fields:
-        player_recalc_rating.delay(field)
-recalc_rating.short_description = _('Recalculate rating')
+        def action(modeladmin, request, queryset):
+            from .tasks import player_recalc_counters
+            player_recalc_counters.delay(field)
+        # make function unique for django
+        action.__name__ = str('action_%s' % field)
+        action.short_description = _('Recalculate counters for "%s"') % field
+        yield action
+
+    def action_all(modeladmin, request, queryset):
+        from .tasks import periodic_player_recalc_counters
+        periodic_player_recalc_counters.delay()
+    action_all.short_description = _('Recalculate all counters')
+    yield action_all
 
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
-    actions = recalc_counters, recalc_rating
+    actions = list(get_recalc_counters_actions())
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',

@@ -10,6 +10,7 @@ from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models import F, Q, Avg, Sum
 
 import filer
 
@@ -103,20 +104,96 @@ class PlayerQuerySet(models.QuerySet):
             start += (count - 1) - (i + range_)
         return self[start:end + 1]
 
-    # def by_season(self, club, season=None):
-    #     '''
-    #     :param season: season years ('2014', '2015')
-    #     :type season: tuple
-    #     '''
-    #     club_players = club.clubplayer_set
-    #     if season:
-    #         season_start = get_season_start_date(year=season[0])
-    #         season_end = get_season_end_date(year=season[1])
-    #         q_start = Q(start_date__lte=season_start)
-    #         q_end = Q(end_date__gte=season_end) | Q(end_date__isnull=True)
-    #         club_players = club_players.filter(q_start & q_end)
-    #     player_ids = club_players.values_list('player_id', flat=True)
-    #     return self.filter(pk__in=player_ids)
+    def recalc_counters(self, field):
+        q_rated_matches = (
+            Q(clubplayermatch__match__challenge_type__isnull=False) &
+            Q(clubplayermatch__match__challenge_type__gt=0))
+        q_home_matches = (
+            Q(clubplayermatch__match__home_team=F('club')))
+        q_guest_matches = (
+            Q(clubplayermatch__match__guest_team=F('club')))
+        x_home_win = {
+            'where': [
+                "hockeyapp_match.count ~ '^[0-9]:[0-9]' and "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 1) as integer) > "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 2) as integer)"
+            ],
+        }
+        x_guest_win = {
+            'where': [
+                "hockeyapp_match.count ~ '^[0-9]:[0-9]' and "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 1) as integer) < "
+                "cast(split_part(left(hockeyapp_match.count, 3), ':', 2) as integer)"
+            ],
+        }
+
+        for player in self:
+            clubplayers = player.clubplayer_set.filter(q_rated_matches)
+            value = None
+            if field in (
+                    'goals_total', 'assists_total', 'points_total',
+                    'plus_minus_total', 'penalty_time_total',
+                    'saves_total', 'loose_goals_total', 'gamingtime_total'):
+                value = clubplayers.aggregate(**{
+                    field: Sum('clubplayermatch__%s' % field.replace('_total', ''))
+                }).get(field, 0)
+            elif field in (
+                    'goals_average', 'assists_average', 'points_average',
+                    'plus_minus_average', 'penalty_time_average',
+                    'saves_p_average', 'sf_average'):
+                if clubplayers.count() >= 10:
+                    value = clubplayers.aggregate(**{
+                        field: Avg('clubplayermatch__%s' % field.replace('_average', ''))
+                    }).get(field, 0)
+                else:
+                    value = 0
+            elif field == 'seasons_total':
+                value = len(set(clubplayers.values_list('season')))
+            elif field == 'matches_total':
+                value = clubplayers.count()
+            elif field == 'matches_win_total':
+                value = (
+                    clubplayers.filter(q_home_matches)
+                    .extra(**x_home_win).count() +
+                    clubplayers.filter(q_guest_matches)
+                    .extra(**x_guest_win).count())
+            elif field == 'matches_lose_total':
+                value = (
+                    clubplayers.filter(q_home_matches)
+                    .extra(**x_guest_win).count() +
+                    clubplayers.filter(q_guest_matches)
+                    .extra(**x_home_win).count())
+            elif field == 'bullet_matches_total':
+                value = (
+                    clubplayers
+                    .filter(clubplayermatch__bullet_goals__gt=0).count())
+            elif field == 'zero_goals_matches_total':
+                value = (
+                    clubplayers
+                    .filter(clubplayermatch__loose_goals=0).count())
+            elif field == 'shots_received_total':
+                value = player.saves_total + player.loose_goals_total
+
+            setattr(player, field, value)
+            player.save(update_fields=[field])
+
+        rating_index = 0
+        rating_value = None
+
+        def less(a, b):
+            ''' a < b '''
+            if type(a) == float and type(b) == float:
+                return round(a, 3) < round(b, 3)
+            else:
+                return a < b
+
+        for player in self.order_by('-%s' % field, '-pk'):
+            if (less(getattr(player, field), rating_value) or
+                    rating_value is None):
+                rating_index += 1
+                rating_value = getattr(player, field)
+            setattr(player, '%s_index' % field, rating_index)
+            player.save(update_fields=('%s_index' % field,))
 
 
 class ClubPlayerQuerySet(models.QuerySet):

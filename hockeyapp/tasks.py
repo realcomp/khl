@@ -2,6 +2,7 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
+import itertools
 import re
 import sys
 import time
@@ -151,7 +152,7 @@ def async_hockey_player_update(id, parser_id):
 
 
 @app.task(ignore_result=True, track_started=True)
-def player_recalc_counters(ids):
+def player_recalc_counters(field):
     b'''
         Пересчет полей игрока на основе данных по матчам
         seasons_total
@@ -164,21 +165,26 @@ def player_recalc_counters(ids):
         assists_average
         points_average
         plus_minus_average
+        ...
     '''
     try:
-        for player in models.Player.objects.filter(id__in=ids):
-            player.recalc_counters()
-            player.save()
+        models.Player.objects.recalc_counters(field)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
 
 @app.task(ignore_result=True, track_started=True)
-def player_recalc_rating(field):
-    try:
-        models.Player.recalc_rating(field)
-    except Exception, exc:
-        logger.error(exc, exc_info=sys.exc_info())
+def periodic_player_recalc_counters():
+    fields = (
+        'seasons_total', 'matches_total', 'bullet_matches_total',
+        'shots_received_total', 'saves_total', 'loose_goals_total',
+        'saves_p_average', 'sf_average', 'zero_goals_matches_total',
+        'matches_win_total', 'matches_lose_total', 'gamingtime_total',
+    ) + tuple(itertools.chain(*map(
+        lambda x: ('%s_total' % x, '%s_average' % x),
+        ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
+    for field in fields:
+        player_recalc_counters.delay(field)
 
 
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,

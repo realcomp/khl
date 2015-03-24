@@ -1342,6 +1342,7 @@ angular.module('Sportomatics')
 
     this.setRatedBy = function($scope, rated_by) {
         if (!$scope.loader && $scope.params.rated_by !== rated_by) {
+            $scope.$location.search('alphabet', null);
             $scope.$location.search('rated_by', rated_by || null);
             if (rated_by) { // by rating -> set ordering
                 $scope.$location.search('order_by', 'rating');
