@@ -5517,6 +5517,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .text-right{
     text-align: right;
 }
+.text-left{
+    text-align: left;
+}
 .overlay-black{
     background-color: #000; /* Чёрный фон */
     height: 100%; /* Высота максимальна */
@@ -5761,4 +5764,12 @@ hr.style-one {
 }
 .amcharts-balloon-div div{
     max-width: 350px !important;
+}
+.balloon-div{
+}
+.season-balloon{
+    min-height: 100%;
+    vertical-align: top;
+    background: #c0c0c0;
+    display: none !important;
 }

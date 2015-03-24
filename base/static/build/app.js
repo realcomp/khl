@@ -413,13 +413,17 @@ angular.module('Sportomatics')
                 var balloon = new AmCharts.AmBalloon();
                 balloon.maxWidth = 300;
                 if(graphs && graphs.length){
-                    var oneBalloon = "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span></p>";
-                    var balloons = "";
+                    var oneBalloon = "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'>[[value]]</span></p>";
+                    var balloons = "<div class='inline-block text-left'><p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>"+localeObject.fieldNames[field].fullName+"</b></span></p>";
                     _.each(graphs, function(graph, index){
                         console.log(graph);
                         balloons+= createBalloon(graph.valueField, graph.title);
                         graph.valueAxis = valueAxis1;
-                        graph.balloonText = (index < graphs.length -1 ) ? '' : balloons;
+                        graph.balloonText = (index < graphs.length -1 ) ? '' : balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
+                       //chart.addGraph(graph);
+                    });
+                    _.each(graphs, function(graph, index){
+                        graph.balloonText = balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
                         chart.addGraph(graph);
                     })
                 } else {
@@ -520,7 +524,7 @@ angular.module('Sportomatics')
                 chartCursor.cursorAlpha = 1;
                 chartCursor.cursorColor = "#8ebd5d";
                 //chartCursor.avoidBalloonOverlapping = false;
-                //chartCursor.oneBalloonOnly = true;
+                chartCursor.oneBalloonOnly = true;
                 chartCursor.categoryBalloonFunction = function(value){
                     if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
@@ -693,6 +697,12 @@ angular.module('Sportomatics')
                 //valueAxis.stackType = "regular";
                 chart.addValueAxis(valueAxis);
 
+                // LEGEND
+                var legend = new AmCharts.AmLegend();
+                legend.marginLeft = 110;
+                legend.useGraphSettings = true;
+                chart.addLegend(legend);
+
                 _.each(graphs, function(graph, index){
                     console.log(graph)
                     graph.valueAxis = valueAxis;
@@ -750,7 +760,7 @@ function makeGraph(id, title, color, field, valueAxis, localeObject){
 }
 function createBalloon(valueField, text){
     console.log(text)
-    return "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>" + text + ": [[" + valueField + "]]</b></span></p>";
+    return "<div style='text-align: left; min-width: 60%; max-width: 80%; display: inline-block'><span style='font-size:14px; color:#000000;'>" + text + ": </span></div><div class='vertical-middle inline-block' style='width: 20%;'><div class='float-right'>[[" + valueField + "]]</div></div> ";
 }
 angular.module('Sportomatics')
     .factory('LocaleFactory', ["$rootScope", function($rootScope){
@@ -2562,6 +2572,16 @@ angular.module('Sportomatics')
             $scope.setDataType = function(type){
                 $scope.dataType = type;
                 if(type === 'graph-radar'){
+                    if($scope.playerToCompare.id){
+                        $http.get('/ru/hockey/api/players/'+$scope.playerToCompare.id)
+                            .success(function(data){
+                                $timeout(function(){
+                                    $scope.playerToCompare.photo = data.photo;
+                                    $scope.playerToCompare.name = data.name + ' ' + data.lastname + ' ( ' + data.club.title + ' )';
+                                    $scope.playerToCompare.club = data.club;
+                                }, 100)
+                            })
+                    }
                     $scope.createRadar($scope.radarPlayers, $scope.lastSeason).then(function(){});
                 }
             };
@@ -2630,7 +2650,7 @@ angular.module('Sportomatics')
                     $scope.playerToCompare = {};
                     $location.search('compare_to', null);
                 }
-            })
+            });
             $scope.addGraph = function(id){
                 //TODO: make production version
                 if(!id) return;
@@ -2638,7 +2658,7 @@ angular.module('Sportomatics')
                 $http.get('/ru/hockey/api/players/'+id)
                     .success(function(data){
                         $scope.playerToCompare.photo = data.photo;
-                        $scope.playerToCompare.name = data.name + ' ' + data.lastname + ' ( ' + data.club.title + ' )';
+                        $scope.playerToCompare.name = data.name + ' ' + data.lastname;
                         $scope.playerToCompare.club = data.club;
                         /*if(contains($scope.playersStats, 'id', (parseInt(id)).toString())){
                          $scope.playersStats = _.without($scope.playersStats, _.findWhere($scope.playersStats, {id: (parseInt(id)).toString()}));
@@ -2940,6 +2960,7 @@ angular.module('Sportomatics')
                     } else if (players.length > 1) {
                         _.each(players, function (player) {
                             var url = '/ru/hockey/api/players/' + player + '/indicators/?group_by=season';
+                            //$http.get(player)
                             $http.get(url)
                                 .success(function (playerSeasonsData) {
                                     var playerSeasonsDataResults = playerSeasonsData.results;
@@ -2951,8 +2972,6 @@ angular.module('Sportomatics')
                                     var playerDataInSeason = _.filter(playerSeasonsDataResults, function (e) {
                                         return e.season.end_date.indexOf(season) > -1;
                                     })[0];
-                                    console.log(player, playerDataInSeason)
-                                    //if(playerDataInSeason){
                                     _.each($scope.playersRadarChartData, function (radarChartDataCategory) {
                                         if (playerDataInSeason && playerDataInSeason['count']) {
                                             radarChartDataCategory['value' + player] = playerDataInSeason[radarChartDataCategory.field] / playerDataInSeason['count'];
@@ -2960,23 +2979,28 @@ angular.module('Sportomatics')
                                             radarChartDataCategory['value' + player] = 0;
                                         }
                                     });
-                                    var graph = new AmCharts.AmGraph();
-                                    graph.valueField = "value" + player;
-                                    graph.bullet = "round";
-                                    graph.balloonText = "player " + player + " [[value]]";
-                                    $scope.playersInRadarChart.push({
-                                        player: player,
-                                        playerData: playerDataInSeason
-                                    });
-                                    $scope.playersRadarChartGraphs.push(graph);
-                                    //  }
-                                }).then(function () {
-                                    ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function (chart) {
-                                        $scope.chartRadar = chart;
-                                        $scope.chartRadar.write('chartdiv2');
-                                        deferred.resolve(true);
-                                    })
-                                });
+                                    $http.get('/ru/hockey/api/players/'+player)
+                                        .success(function(playerInfo){
+                                            var playerName = playerInfo.name + ' ' + playerInfo.lastname;
+                                            var graph = new AmCharts.AmGraph();
+                                            graph.valueField = "value" + player;
+                                            graph.bullet = "round";
+                                            graph.balloonText = playerName + " [[value]]";
+                                            graph.title = playerName;
+                                            $scope.playersInRadarChart.push({
+                                                player: player,
+                                                playerData: playerDataInSeason
+                                            });
+                                            $scope.playersRadarChartGraphs.push(graph);
+                                        }).then(function () {
+
+                                            ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function (chart) {
+                                                $scope.chartRadar = chart;
+                                                $scope.chartRadar.write('chartdiv2');
+                                                deferred.resolve(true);
+                                            })
+                                        });
+                                })
                         })
                     }
                     else { // 1 player
@@ -2995,7 +3019,8 @@ angular.module('Sportomatics')
                          var graph = new AmCharts.AmGraph();
                          graph.valueField = "value" + player;
                          graph.bullet = "round";
-                         graph.balloonText = "player " + player + " [[value]]";
+                         graph.balloonText = self.playerName + " [[value]]";
+                         graph.title = self.playerName;
                          graph.balloonFunction = function(a,b){
                             return a.category + ': ' + a.values.value;
                          };
@@ -3167,7 +3192,7 @@ angular.module('Sportomatics')
         var graph = new AmCharts.AmGraph();
         graph.id = "gl"+id;
         graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
-        graph.title = title + ' ' + field;
+        graph.title = title;
         graph.valueField = "values" + id;
         graph.bullet = "none";
         graph.hideBulletsCount = 30;

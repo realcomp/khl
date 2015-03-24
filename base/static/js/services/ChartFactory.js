@@ -129,13 +129,17 @@ angular.module('Sportomatics')
                 var balloon = new AmCharts.AmBalloon();
                 balloon.maxWidth = 300;
                 if(graphs && graphs.length){
-                    var oneBalloon = "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span></p>";
-                    var balloons = "";
+                    var oneBalloon = "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'>[[value]]</span></p>";
+                    var balloons = "<div class='inline-block text-left'><p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>"+localeObject.fieldNames[field].fullName+"</b></span></p>";
                     _.each(graphs, function(graph, index){
                         console.log(graph);
                         balloons+= createBalloon(graph.valueField, graph.title);
                         graph.valueAxis = valueAxis1;
-                        graph.balloonText = (index < graphs.length -1 ) ? '' : balloons;
+                        graph.balloonText = (index < graphs.length -1 ) ? '' : balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
+                       //chart.addGraph(graph);
+                    });
+                    _.each(graphs, function(graph, index){
+                        graph.balloonText = balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
                         chart.addGraph(graph);
                     })
                 } else {
@@ -236,7 +240,7 @@ angular.module('Sportomatics')
                 chartCursor.cursorAlpha = 1;
                 chartCursor.cursorColor = "#8ebd5d";
                 //chartCursor.avoidBalloonOverlapping = false;
-                //chartCursor.oneBalloonOnly = true;
+                chartCursor.oneBalloonOnly = true;
                 chartCursor.categoryBalloonFunction = function(value){
                     if(chartData.groupBy === 'month'){
                         return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
@@ -409,6 +413,12 @@ angular.module('Sportomatics')
                 //valueAxis.stackType = "regular";
                 chart.addValueAxis(valueAxis);
 
+                // LEGEND
+                var legend = new AmCharts.AmLegend();
+                legend.marginLeft = 110;
+                legend.useGraphSettings = true;
+                chart.addLegend(legend);
+
                 _.each(graphs, function(graph, index){
                     console.log(graph)
                     graph.valueAxis = valueAxis;
@@ -466,5 +476,5 @@ function makeGraph(id, title, color, field, valueAxis, localeObject){
 }
 function createBalloon(valueField, text){
     console.log(text)
-    return "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>" + text + ": [[" + valueField + "]]</b></span></p>";
+    return "<div style='text-align: left; min-width: 60%; max-width: 80%; display: inline-block'><span style='font-size:14px; color:#000000;'>" + text + ": </span></div><div class='vertical-middle inline-block' style='width: 20%;'><div class='float-right'>[[" + valueField + "]]</div></div> ";
 }

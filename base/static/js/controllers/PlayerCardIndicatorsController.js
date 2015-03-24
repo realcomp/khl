@@ -29,6 +29,16 @@
             $scope.setDataType = function(type){
                 $scope.dataType = type;
                 if(type === 'graph-radar'){
+                    if($scope.playerToCompare.id){
+                        $http.get('/ru/hockey/api/players/'+$scope.playerToCompare.id)
+                            .success(function(data){
+                                $timeout(function(){
+                                    $scope.playerToCompare.photo = data.photo;
+                                    $scope.playerToCompare.name = data.name + ' ' + data.lastname + ' ( ' + data.club.title + ' )';
+                                    $scope.playerToCompare.club = data.club;
+                                }, 100)
+                            })
+                    }
                     $scope.createRadar($scope.radarPlayers, $scope.lastSeason).then(function(){});
                 }
             };
@@ -97,7 +107,7 @@
                     $scope.playerToCompare = {};
                     $location.search('compare_to', null);
                 }
-            })
+            });
             $scope.addGraph = function(id){
                 //TODO: make production version
                 if(!id) return;
@@ -105,7 +115,7 @@
                 $http.get('/ru/hockey/api/players/'+id)
                     .success(function(data){
                         $scope.playerToCompare.photo = data.photo;
-                        $scope.playerToCompare.name = data.name + ' ' + data.lastname + ' ( ' + data.club.title + ' )';
+                        $scope.playerToCompare.name = data.name + ' ' + data.lastname;
                         $scope.playerToCompare.club = data.club;
                         /*if(contains($scope.playersStats, 'id', (parseInt(id)).toString())){
                          $scope.playersStats = _.without($scope.playersStats, _.findWhere($scope.playersStats, {id: (parseInt(id)).toString()}));
@@ -407,6 +417,7 @@
                     } else if (players.length > 1) {
                         _.each(players, function (player) {
                             var url = '/ru/hockey/api/players/' + player + '/indicators/?group_by=season';
+                            //$http.get(player)
                             $http.get(url)
                                 .success(function (playerSeasonsData) {
                                     var playerSeasonsDataResults = playerSeasonsData.results;
@@ -418,8 +429,6 @@
                                     var playerDataInSeason = _.filter(playerSeasonsDataResults, function (e) {
                                         return e.season.end_date.indexOf(season) > -1;
                                     })[0];
-                                    console.log(player, playerDataInSeason)
-                                    //if(playerDataInSeason){
                                     _.each($scope.playersRadarChartData, function (radarChartDataCategory) {
                                         if (playerDataInSeason && playerDataInSeason['count']) {
                                             radarChartDataCategory['value' + player] = playerDataInSeason[radarChartDataCategory.field] / playerDataInSeason['count'];
@@ -427,23 +436,28 @@
                                             radarChartDataCategory['value' + player] = 0;
                                         }
                                     });
-                                    var graph = new AmCharts.AmGraph();
-                                    graph.valueField = "value" + player;
-                                    graph.bullet = "round";
-                                    graph.balloonText = "player " + player + " [[value]]";
-                                    $scope.playersInRadarChart.push({
-                                        player: player,
-                                        playerData: playerDataInSeason
-                                    });
-                                    $scope.playersRadarChartGraphs.push(graph);
-                                    //  }
-                                }).then(function () {
-                                    ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function (chart) {
-                                        $scope.chartRadar = chart;
-                                        $scope.chartRadar.write('chartdiv2');
-                                        deferred.resolve(true);
-                                    })
-                                });
+                                    $http.get('/ru/hockey/api/players/'+player)
+                                        .success(function(playerInfo){
+                                            var playerName = playerInfo.name + ' ' + playerInfo.lastname;
+                                            var graph = new AmCharts.AmGraph();
+                                            graph.valueField = "value" + player;
+                                            graph.bullet = "round";
+                                            graph.balloonText = playerName + " [[value]]";
+                                            graph.title = playerName;
+                                            $scope.playersInRadarChart.push({
+                                                player: player,
+                                                playerData: playerDataInSeason
+                                            });
+                                            $scope.playersRadarChartGraphs.push(graph);
+                                        }).then(function () {
+
+                                            ChartFactory.generateRadarChart($scope.playersRadarChartData, $scope.playersRadarChartGraphs).then(function (chart) {
+                                                $scope.chartRadar = chart;
+                                                $scope.chartRadar.write('chartdiv2');
+                                                deferred.resolve(true);
+                                            })
+                                        });
+                                })
                         })
                     }
                     else { // 1 player
@@ -462,7 +476,8 @@
                          var graph = new AmCharts.AmGraph();
                          graph.valueField = "value" + player;
                          graph.bullet = "round";
-                         graph.balloonText = "player " + player + " [[value]]";
+                         graph.balloonText = self.playerName + " [[value]]";
+                         graph.title = self.playerName;
                          graph.balloonFunction = function(a,b){
                             return a.category + ': ' + a.values.value;
                          };
@@ -634,7 +649,7 @@
         var graph = new AmCharts.AmGraph();
         graph.id = "gl"+id;
         graph.valueAxis = valueAxis; // we have to indicate which value axis should be used
-        graph.title = title + ' ' + field;
+        graph.title = title;
         graph.valueField = "values" + id;
         graph.bullet = "none";
         graph.hideBulletsCount = 30;
