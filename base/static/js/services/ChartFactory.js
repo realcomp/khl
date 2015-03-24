@@ -410,6 +410,7 @@ angular.module('Sportomatics')
                 chart.addValueAxis(valueAxis);
 
                 _.each(graphs, function(graph, index){
+                    console.log(graph)
                     graph.valueAxis = valueAxis;
                     graph.lineThickness = 3;
                     chart.addGraph(graph);
