@@ -82,14 +82,15 @@
                         </ul>
                     </div>
 
-                    <div>
+                    <div ng-repeat="row in calendars">
                         <ul class="calendars-list">
-                            <li class="calendar-item" ng-repeat="calendar in calendars">
+                            <li class="calendar-item" ng-repeat="calendar in row">
                                 <table class="ui celled table segment clubs-calendars-table">
                                     {% verbatim %}
                                         <thead>
                                             <tr>
-                                                <th colspan="7">{{ calendar.month }} {{ calendar.year }}</th>
+                                                <!-- <th colspan="7">{{ calendar.date|date:"MMMM yyyy" }}</th> -->
+                                                <th colspan="7">{{ calendar.month_display }} {{ calendar.date|date:"yyyy" }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -110,7 +111,11 @@
                         </ul>
                     </div>
 
-                    <div class="align-center"><a class="ui green small button">Показать еще</a></div>
+                    <div class="align-center" ng-show="calendars.length < 4">
+                        <a class="ui green small button" href="" ng-click="previous()">
+                            Показать еще
+                        </a>
+                    </div>
                 </div>
 
                 <hr class="hr">

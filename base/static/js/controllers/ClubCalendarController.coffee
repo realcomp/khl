@@ -21,23 +21,14 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             $scope.list()
             return
 
-        $scope.getSchedules = (data) ->
+        $scope.parseSchedules = (data) ->
             result = {}
             getDate = $parse('date|date:"yyyy-MM-dd"')
             for s in data
                 result[getDate(s)] = s
             return result
 
-        $scope.getCalendar = (year, month, schedules) ->
-            daysInM = new Date(year, month + 1, 0).getDate()
-            # day of week, shift left because sunday is 0
-            startDoW = new Date(year, month, 1).getDay() - 1
-            if startDoW < 0
-                startDoW = 6
-
-            result = []
-            i = 0
-            row = []
+        $scope.getSchedule = (schedules, date) ->
             strfdate = (date) ->
                 y = 1900 + date.getYear()
                 m = String(date.getMonth() + 1)
@@ -47,6 +38,20 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 if d.length < 2
                     d = '0' + d
                 [y, m, d].join('-')
+            return schedules[strfdate(date)]
+
+        $scope.getCalendar = (date, schedules) ->
+            year = date.getYear() + 1900
+            month = date.getMonth()
+            daysInM = new Date(year, month + 1, 0).getDate()
+            # day of week, shift left because sunday is 0
+            startDoW = new Date(year, month, 1).getDay() - 1
+            if startDoW < 0
+                startDoW = 6
+
+            result = []
+            i = 0
+            row = []
             # last day not in row + infinite loop protection
             # while row.indexOf(daysInM) == -1 and i <= 6
             while i * 7 < daysInM + startDoW and i <= 6
@@ -58,7 +63,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     day = cell.cell - startDoW + 1
                     if 1 <= day <= daysInM
                         cell['date'] = new Date(year, month, day)
-                        cell['schedule'] = schedules[strfdate(cell.date)]
+                        cell['schedule'] = $scope.getSchedule(schedules, cell.date)
                     row.push(cell)
                 result.push(row)
                 i += 1
@@ -84,6 +89,12 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 return cell.schedule.home_team.logo
             return null
 
+        $scope.monthDelta = (date, deltaM) ->
+            d = new Date(date)
+            d.setDate(1)
+            d.setMonth(d.getMonth() + deltaM)
+            return d
+
         $scope.list = () ->
             $scope.params = $location.search()
             params = ''
@@ -94,15 +105,24 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             $http.get($scope.url + '?' + params
             ).success((data) ->
                 $scope.data = data
-                $scope.schedules = $scope.getSchedules(data)
-                $scope.calendars = ({
-                    'year': 2015,
-                    'month': $scope.MONTHS[m],
-                    'table': $scope.getCalendar(2015, m, $scope.schedules)
-                } for m in [0...3])
+                $scope.schedules = $scope.parseSchedules(data)
+                now = new Date()
+                $scope.calendars = [({
+                    'date': $scope.monthDelta(now, deltaM),
+                    'month_display': $scope.MONTHS[$scope.monthDelta(now, deltaM).getMonth()],
+                    'table': $scope.getCalendar($scope.monthDelta(now, deltaM), $scope.schedules)
+                } for deltaM in [-1, 0, 1])]
                 $scope.loaded = true
             )
             return
+
+        $scope.previous = () ->
+            date = $scope.calendars[$scope.calendars.length - 1][0].date
+            $scope.calendars.push({
+                'date': $scope.monthDelta(date, deltaM),
+                'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
+            } for deltaM in [-3, -2, -1])
 
         return
 ])
