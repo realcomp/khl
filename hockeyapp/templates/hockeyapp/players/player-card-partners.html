@@ -41,46 +41,34 @@
                         <div class="four wide column">
                             <ul class="tabs-list">
                                 <li class="tabs-item">
-                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing !== 'false'}" ng-click="PlayersPartnersService.setPlaying(this, 'true')">{% trans 'Playing now' %}</a>
+                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 1}" ng-click="setPlaying(1)">{% trans 'Playing now' %}</a>
                                 </li>
                                 <li class="tabs-item">
-                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 'false' }" ng-click="PlayersPartnersService.setPlaying(this, 'false')">{% trans 'All' %}</a>
+                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 0 }" ng-click="setPlaying(0)">{% trans 'All' %}</a>
                                 </li>
                             </ul>
                             <ul class="options-list player-partner-menu-list">
                                 <li class="option-item">
-                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rated_by !== 'false' }" ng-click="PlayersPartnersService.setRatedBy(this, 'true')">{% trans 'Oldest' %}</a>
+                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by !== 0 }" ng-click="setRatedBy(1)">{% trans 'Oldest' %}</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rated_by === 'false' }" ng-click="PlayersPartnersService.setRatedBy(this, 'false')">{% trans 'Most inseparable' %}</a>
+                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === 0 }" ng-click="setRatedBy(0)">{% trans 'Most inseparable' %}</a>
                                 </li>
                             </ul>
                         </div>
+                        {% verbatim %}
                         <div class="twelve wide column">
                             <div class="partners-block-container">
-                                <div class="partners-block">
-                                    <div class="partners-heading">{{seasons_count}}</div>
+                                <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index">
+                                    <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">
-                                        <li class="player-partners-item">
-                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                        <li class="player-partners-item pointer" ng-repeat="player in players.players | limitTo : 5">
+                                            <a  href="/ru/hockey/players/{{player.id}}" class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
-                                                <div class="player-partners-name">Акинфеев</div>
-                                                <div class="player-partners-name">Игорь</div>
-                                                <div class="player-partners-country">Россия</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="partners-block">
-                                    <div class="partners-heading">5 сезонов вместе</div>
-                                    <ul class="player-partners-list">
-                                        <li class="player-partners-item">
-                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
-                                            <div class="player-partners-info">
-                                                <div class="player-partners-name">Акинфеев</div>
-                                                <div class="player-partners-name">Игорь</div>
-                                                <div class="player-partners-country">Россия</div>
+                                                <div class="player-partners-name">{{player.lastname}}</div>
+                                                <div class="player-partners-name">{{player.name}}</div>
+                                                <div class="player-partners-country">{{player.citizenship.title}}</div>
+                                                <div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>
                                             </div>
                                         </li>
                                     </ul>
@@ -137,6 +125,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endverbatim %}
                     </div>
                 </div>
                 <ul class="team-controls player-controls-block">
