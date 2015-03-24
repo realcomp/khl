@@ -196,5 +196,9 @@ class YesNoListFilter(admin.BooleanFieldListFilter):
             }
 
 
-for m in (TitleAlias, Season, SocialNetValue, InstagramImageFile):
+for m in (Season, SocialNetValue, InstagramImageFile):
     admin.site.register(m, BaseAdmin)
+
+class TitleAliasAdmin(BaseAdmin):
+    prepopulated_fields = {"en_title": ("ru_title",)}
+admin.site.register(TitleAlias, TitleAliasAdmin)
