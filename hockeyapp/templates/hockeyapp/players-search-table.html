@@ -130,7 +130,7 @@
                               titlefield="lastname,name"
                               onchangecallback="setPlayersFilter" />
             </div>
-            {% block clubsfilter %}
+            {% if not club_hidden %}
                 <div class="ui selection dropdown dropdown-small-inline">
                     <angucomplete id="clubs_filter" placeholder="Команду..."
                                   pause="300" minlength="2"
@@ -139,7 +139,7 @@
                                   titlefield="title"
                                   onchangecallback="setClubsFilter" />
                 </div>
-            {% endblock %}
+            {% endif %}
         </div>
         <div class="row">
             <a href="" class="option-btn alphabet-btn"
@@ -166,11 +166,13 @@
                                 {% trans 'Name' %}
                             </a>
                         </th>
-                        <th ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
-                            <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'last_club__%s_title')">
-                                {% trans 'Team' %}
-                            </a>
-                        </th>
+                        {% if not club_hidden %}
+                            <th ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
+                                <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'last_club__%s_title')">
+                                    {% trans 'Team' %}
+                                </a>
+                            </th>
+                        {% endif %}
                         <th ng-class="{ 'column-sort':params.order_by === 'birth_date' }">
                             <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'birth_date')">
                                 {% trans 'Age' %}
@@ -306,50 +308,54 @@
                                 {% endverbatim %}
                             </div>
                         </td>
+                        {% if not club_hidden %}
+                            {% verbatim %}
+                                <td ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
+                                    <a href="{{ player.club.url }}" class="club-link">
+                                        {{ player.club.title_verbose }}
+                                    </a>
+                                    <div ng-show="player.clubplayers.length > 1">
+                                        <ul class="club-link-list hidden">
+                                            <li ng-repeat="clubplayer in player.clubplayers">
+                                                <a href="{{ clubplayer.club_url }}" class="club-link"
+                                                   ng-hide="$first">
+                                                    {{ clubplayer.season.short_title }}:
+                                                    {{ clubplayer.club.title_verbose }}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <a class="more-clubs-btn more-clubs-btn_open"
+                                           onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>показать еще {{ player.clubplayers.length - 1 }} команд</span><i class="triangle down icon"></i></a>
+                                        <a class="more-clubs-btn more-clubs-btn_close"
+                                           onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
+                                    </div>
+                                </td>
+                            {% endverbatim %}
+                        {% endif %}
                         {% verbatim %}
-                        <td ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
-                            <a href="{{ player.club.url }}" class="club-link">
-                                {{ player.club.title_verbose }}
-                            </a>
-                            <div ng-show="player.clubplayers.length > 1">
-                                <ul class="club-link-list hidden">
-                                    <li ng-repeat="clubplayer in player.clubplayers">
-                                        <a href="{{ clubplayer.club_url }}" class="club-link"
-                                           ng-hide="$first">
-                                            {{ clubplayer.season.short_title }}:
-                                            {{ clubplayer.club.title_verbose }}
-                                        </a>
-                                    </li>
-                                </ul>
-                                <a class="more-clubs-btn more-clubs-btn_open"
-                                   onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>показать еще {{ player.clubplayers.length - 1 }} команд</span><i class="triangle down icon"></i></a>
-                                <a class="more-clubs-btn more-clubs-btn_close"
-                                   onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
-                            </div>
-                        </td>
-                       <td align="center"
-                           ng-class="{ 'column-sort':params.order_by === 'birth_date' }">
-                            {{ player.age[0] }}
-                            <div class="player-desc">{{ player.birth_date_short }}</div>
-                        </td>
-                        <td align="center"
-                            ng-class="{ 'column-sort':params.order_by === 'rating' }"
-                            ng-show="params.rated_by">
-                            {{ player.rating }}
-                        </td>
-                        <td align="center"
-                            ng-class="{ 'column-sort':params.order_by === 'contract_to' }"
-                            ng-hide="params.rated_by">
-                            {{ player.contract_to }}
-                            <span class="player-desc">{{ player.contract_type }}</span>
-                        </td>
-                        <td align="center"
-                            ng-class="{ 'column-sort':params.order_by === 'matches_total' }"
-                            ng-show="PlayersSearchService.isMatchesTotalVisible(this)">
-                            {{ player.matches_total }}
-                        </td>
-                        <td align="center">2837</td>
-                        <td align="center">3274</td>
+                            <td align="center"
+                               ng-class="{ 'column-sort':params.order_by === 'birth_date' }">
+                                {{ player.age[0] }}
+                                <div class="player-desc">{{ player.birth_date_short }}</div>
+                            </td>
+                            <td align="center"
+                                ng-class="{ 'column-sort':params.order_by === 'rating' }"
+                                ng-show="params.rated_by">
+                                {{ player.rating }}
+                            </td>
+                            <td align="center"
+                                ng-class="{ 'column-sort':params.order_by === 'contract_to' }"
+                                ng-hide="params.rated_by">
+                                {{ player.contract_to }}
+                                <span class="player-desc">{{ player.contract_type }}</span>
+                            </td>
+                            <td align="center"
+                                ng-class="{ 'column-sort':params.order_by === 'matches_total' }"
+                                ng-show="PlayersSearchService.isMatchesTotalVisible(this)">
+                                {{ player.matches_total }}
+                            </td>
+                            <td align="center">2837</td>
+                            <td align="center">3274</td>
                         {% endverbatim %}
                     </tr>
                 </tbody>

@@ -4,10 +4,17 @@ var uglify = require('gulp-uglify');
 var minifyCSS = require('gulp-minify-css');
 var ngAnnotate = require('gulp-ng-annotate');
 var closure = require('gulp-jsclosure');
+var coffee = require('gulp-coffee');
 var paths = {
     scripts: ['base/static/js/sportomatics.js', 'base/static/js/router.js', 'base/static/js/services/*.js', 'base/static/js/controllers/*.js'],
     libs: ['base/static/js/libs/*.js']
 };
+
+gulp.task('coffee', function() {
+  gulp.src('base/static/js/controllers/*.coffee')
+      .pipe(coffee({bare: true}))
+      .pipe(gulp.dest('base/static/js/controllers'))
+});
 
 gulp.task('scripts', function () {
     gulp.src(paths.scripts)
@@ -34,8 +41,9 @@ gulp.task('minify-css', function() {
 });
 
 gulp.task('watch', function() {
+    gulp.watch(['base/static/js/controllers/*.coffee'], ['coffee']);
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.libs, ['libs']);
 });
 
-gulp.task('default', ['watch', 'scripts','libs']);
+gulp.task('default', ['watch', 'coffee', 'scripts', 'libs']);
