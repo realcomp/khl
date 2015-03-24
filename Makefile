@@ -11,7 +11,7 @@ virtualenv:
 pip: requirements
 
 requirements:
-	$(PIP) install -r $(PROJECT_DIR)/requirments.txt
+	$(PIP) install -r $(PROJECT_DIR)/requirements.txt
 
 migrate:
 	$(PYTHON) $(PROJECT_DIR)/manage.py migrate --noinput
@@ -26,12 +26,12 @@ test:
 
 get_code:
 	git pull origin master
-	pip install -r requirments.txt
+	pip install -r requirements.txt
 	python manage.py migrate
 
 deploy:
 	git pull origin master
-	pip install -r requirments.txt --upgrade
+	pip install -r requirements.txt --upgrade
 	python manage.py migrate --noinput
 	python manage.py compilemessages
 	python manage.py collectstatic --no-post-process --noinput
@@ -43,7 +43,7 @@ deploy_with_test: get_code test deploy
 
 dev_deploy:
 	git pull origin develop
-	pip install -r requirments.txt --upgrade
+	pip install -r requirements.txt --upgrade
 	python manage.py migrate --noinput
 	python manage.py compilemessages
 	python manage.py collectstatic --no-post-process --noinput
