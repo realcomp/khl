@@ -180,7 +180,7 @@ class PlayerQuerySet(models.QuerySet):
         rating_index = 0
         rating_value = None
         for player in self.order_by('-%s' % field, '-pk'):
-            if (getattr(player, field) < rating_value or
+            if (round(getattr(player, field), 3) < round(rating_value, 3) or
                     rating_value is None):
                 rating_index += 1
                 rating_value = getattr(player, field)
