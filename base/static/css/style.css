@@ -5759,3 +5759,6 @@ hr.style-one {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+.amcharts-balloon-div div{
+    max-width: 350px !important;
+}

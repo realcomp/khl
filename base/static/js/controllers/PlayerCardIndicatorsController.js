@@ -16,6 +16,7 @@
             this.graphData = {};
             this.chartsCount = 0;
             this.playerId = $('#player-id').val();
+            this.playerName = $('#player-name').val();
             this.playerUrl = ''
             $scope.activeSeason = -1;
             $scope.playersStats = [];
@@ -81,9 +82,7 @@
                 }
             };
             $scope.disableGraph = function(player){
-                console.log( $('.amcharts-legend-item-gl'+player.id).length)
                 $('.amcharts-legend-item-gl'+player.id).trigger("click");
-                console.log($('.amcharts-legend-item-gl'+player.id)[0]);
             };
             $scope.$watch('playerToCompare.id', function(newval){
                 if(newval){
@@ -258,7 +257,7 @@
             $scope.getPlayerData = function(){
                 $scope.playerObject = {
                     id: $('#player-id').val(),
-                    title: 'Player' + $('#player-id').val(),
+                    title: $('#player-name').val(),
                     color: "#408e3a"
                 };
                 var group = 'month';

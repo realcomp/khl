@@ -126,9 +126,16 @@ angular.module('Sportomatics')
                 valueAxis3.axisThickness = 2;
                 chart.addValueAxis(valueAxis3);
 
+                var balloon = new AmCharts.AmBalloon();
+                balloon.maxWidth = 300;
                 if(graphs && graphs.length){
-                    _.each(graphs, function(graph){
+                    var oneBalloon = "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span></p>";
+                    var balloons = "";
+                    _.each(graphs, function(graph, index){
+                        console.log(graph);
+                        balloons+= createBalloon(graph.valueField, graph.title);
                         graph.valueAxis = valueAxis1;
+                        graph.balloonText = (index < graphs.length -1 ) ? '' : balloons;
                         chart.addGraph(graph);
                     })
                 } else {
@@ -361,9 +368,6 @@ angular.module('Sportomatics')
                     text: localeObject.fieldNames[field].fullName.toUpperCase()
                 }];
 
-
-
-
                 // CURSOR
                 var chartCursor = new AmCharts.ChartCursor();
                 chartCursor.cursorAlpha = 1;
@@ -405,9 +409,9 @@ angular.module('Sportomatics')
                 //valueAxis.stackType = "regular";
                 chart.addValueAxis(valueAxis);
 
-                _.each(graphs, function(graph){
+                _.each(graphs, function(graph, index){
                     graph.valueAxis = valueAxis;
-
+                    graph.lineThickness = 3;
                     chart.addGraph(graph);
                 });
 
@@ -458,4 +462,8 @@ function makeGraph(id, title, color, field, valueAxis, localeObject){
         graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
 
     return graph;
+}
+function createBalloon(valueField, text){
+    console.log(text)
+    return "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>" + text + ": [[" + valueField + "]]</b></span></p>";
 }

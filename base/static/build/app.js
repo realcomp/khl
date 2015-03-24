@@ -410,9 +410,16 @@ angular.module('Sportomatics')
                 valueAxis3.axisThickness = 2;
                 chart.addValueAxis(valueAxis3);
 
+                var balloon = new AmCharts.AmBalloon();
+                balloon.maxWidth = 300;
                 if(graphs && graphs.length){
-                    _.each(graphs, function(graph){
+                    var oneBalloon = "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>[[value]]</b></span></p>";
+                    var balloons = "";
+                    _.each(graphs, function(graph, index){
+                        console.log(graph);
+                        balloons+= createBalloon(graph.valueField, graph.title);
                         graph.valueAxis = valueAxis1;
+                        graph.balloonText = (index < graphs.length -1 ) ? '' : balloons;
                         chart.addGraph(graph);
                     })
                 } else {
@@ -645,9 +652,6 @@ angular.module('Sportomatics')
                     text: localeObject.fieldNames[field].fullName.toUpperCase()
                 }];
 
-
-
-
                 // CURSOR
                 var chartCursor = new AmCharts.ChartCursor();
                 chartCursor.cursorAlpha = 1;
@@ -689,9 +693,9 @@ angular.module('Sportomatics')
                 //valueAxis.stackType = "regular";
                 chart.addValueAxis(valueAxis);
 
-                _.each(graphs, function(graph){
+                _.each(graphs, function(graph, index){
                     graph.valueAxis = valueAxis;
-
+                    graph.lineThickness = 3;
                     chart.addGraph(graph);
                 });
 
@@ -742,6 +746,10 @@ function makeGraph(id, title, color, field, valueAxis, localeObject){
         graph.balloonText = '<span style="text-align: left; float: left">'+localeObject.fieldNames[field].shortName + ': [[values2]]</span> <br><span class="percentage">' + localeObject.fieldNames[field].shortName +'/'+ localeObject.fieldNames['count'].shortName+': '+'[[percentage2]]</span>';
 
     return graph;
+}
+function createBalloon(valueField, text){
+    console.log(text)
+    return "<p style='text-align: left;'><span style='font-size:14px; color:#000000;'><b>" + text + ": [[" + valueField + "]]</b></span></p>";
 }
 angular.module('Sportomatics')
     .factory('LocaleFactory', ["$rootScope", function($rootScope){
@@ -2540,6 +2548,7 @@ angular.module('Sportomatics')
             this.graphData = {};
             this.chartsCount = 0;
             this.playerId = $('#player-id').val();
+            this.playerName = $('#player-name').val();
             this.playerUrl = ''
             $scope.activeSeason = -1;
             $scope.playersStats = [];
@@ -2605,9 +2614,7 @@ angular.module('Sportomatics')
                 }
             };
             $scope.disableGraph = function(player){
-                console.log( $('.amcharts-legend-item-gl'+player.id).length)
                 $('.amcharts-legend-item-gl'+player.id).trigger("click");
-                console.log($('.amcharts-legend-item-gl'+player.id)[0]);
             };
             $scope.$watch('playerToCompare.id', function(newval){
                 if(newval){
@@ -2782,7 +2789,7 @@ angular.module('Sportomatics')
             $scope.getPlayerData = function(){
                 $scope.playerObject = {
                     id: $('#player-id').val(),
-                    title: 'Player' + $('#player-id').val(),
+                    title: $('#player-name').val(),
                     color: "#408e3a"
                 };
                 var group = 'month';
