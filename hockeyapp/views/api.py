@@ -37,7 +37,7 @@ class PlayersSearch(
 
     def list(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
-        self._get_rating(request, qs)
+        self.rating = self._get_rating(request, qs)
 
         _pk = request.GET.get('player')
         if _pk:
@@ -54,16 +54,13 @@ class PlayersSearch(
         return response.Response(serializer.data)
 
     def _get_rating(self, request, qs):
-        rated_qs = qs
-        rated_by = request.GET.get('rated_by', '')
-        if rated_by:
-            rated_qs = qs.order_by('-' + rated_by)
-        self.rating = {}
+        result = {}
         rating_index = 0
-        for player in rated_qs:
-            if not rated_by:
+        if not request.GET.get('rated_by', ''):
+            for player in qs:
                 rating_index += 1
-            self.rating[player.pk] = rating_index
+            result[player.pk] = rating_index
+        return result
 
 
 class BestPlayer(PlayersSearch):
