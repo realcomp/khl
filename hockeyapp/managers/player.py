@@ -179,8 +179,16 @@ class PlayerQuerySet(models.QuerySet):
 
         rating_index = 0
         rating_value = None
+
+        def less(a, b):
+            ''' a < b '''
+            if type(a) == float and type(b) == float:
+                return round(a, 3) < round(b, 3)
+            else:
+                return a < b
+
         for player in self.order_by('-%s' % field, '-pk'):
-            if (round(getattr(player, field), 3) < round(rating_value, 3) or
+            if (less(getattr(player, field), rating_value) or
                     rating_value is None):
                 rating_index += 1
                 rating_value = getattr(player, field)
