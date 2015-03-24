@@ -38,6 +38,13 @@ class PlayersSearch(
     def list(self, request, *args, **kwargs):
         qs = self.filter_queryset(self.get_queryset())
         self._get_rating(request, qs)
+
+        _pk = request.GET.get('player')
+        if _pk:
+            _pk = int(_pk)
+            # qs is turned into list
+            qs = qs.ranged_filter(lambda player: player.pk == _pk, 5)
+
         instance = qs
         page = self.paginate_queryset(instance)
         if page is not None:

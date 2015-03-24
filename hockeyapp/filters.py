@@ -108,10 +108,10 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
                 '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
             })
 
-        _pk = request.GET.get('player')
-        if _pk:
-            _pk = int(_pk)
-            _qs = _qs.ranged_filter(lambda player: player.pk == _pk, 5)
+        # _pk = request.GET.get('player')
+        # if _pk:
+        #     _pk = int(_pk)
+        #     _qs = _qs.ranged_filter(lambda player: player.pk == _pk, 5)
 
         qs_ids = set(_qs.values_list('pk', flat=True))
         return qs.filter(pk__in=qs_ids)
