@@ -5773,3 +5773,6 @@ hr.style-one {
     background: #c0c0c0;
     display: none !important;
 }
+.no-pointer-events{
+    pointer-events: none !important;
+}

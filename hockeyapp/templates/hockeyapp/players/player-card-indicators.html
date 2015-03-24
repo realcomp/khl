@@ -71,7 +71,7 @@
                         {% endcomment %}
                         <!-- <div class="ten wide column"> -->
                         <div class="sixteen wide column">
-                            <div class="graph-controls-block" ng-show="dataType === 'graph-serial'">
+                            <div class="graph-controls-block" ng-show="dataType === 'graph-serial'" ng-class="{'no-pointer-events': PlayerCardIndicatorsCtrl.loader}">
                                 <ul class="graph-controls-list">
                                     {% include "hockeyapp/players/indicators-menuitem.html" with label="И" field="count" %}
                                     {% if line == 1 %}
@@ -138,7 +138,7 @@
                                 </li>
                             </ul>-->
                             <a id="IndicatorsLink" class="hidden" href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px" ng-show="PlayerCardIndicatorsCtrl.loader">
+                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="PlayerCardIndicatorsCtrl.loader">
                                 <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
                             <div ng-show="dataType === 'graph-serial'">

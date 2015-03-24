@@ -18,6 +18,7 @@
             this.playerId = $('#player-id').val();
             this.playerName = $('#player-name').val();
             this.playerUrl = '';
+
             $scope.activeSeason = -1;
             $scope.playersStats = [];
             $scope.radarPlayers = [self.playerId];
@@ -109,11 +110,13 @@
                 }
             });
             $scope.addGraph = function(id){
+                //$('#chartdiv').empty();
                 //TODO: make production version
                 if(!id) return;
                 $location.search('compare_to', id);
                 $http.get('/ru/hockey/api/players/'+id)
                     .success(function(data){
+                        
                         $scope.playerToCompare.photo = data.photo;
                         $scope.playerToCompare.name = data.name + ' ' + data.lastname;
                         $scope.playerToCompare.club = data.club;

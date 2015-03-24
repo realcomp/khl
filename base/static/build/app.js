@@ -2562,6 +2562,7 @@ angular.module('Sportomatics')
             this.playerId = $('#player-id').val();
             this.playerName = $('#player-name').val();
             this.playerUrl = '';
+
             $scope.activeSeason = -1;
             $scope.playersStats = [];
             $scope.radarPlayers = [self.playerId];
@@ -2653,11 +2654,13 @@ angular.module('Sportomatics')
                 }
             });
             $scope.addGraph = function(id){
+                //$('#chartdiv').empty();
                 //TODO: make production version
                 if(!id) return;
                 $location.search('compare_to', id);
                 $http.get('/ru/hockey/api/players/'+id)
                     .success(function(data){
+                        
                         $scope.playerToCompare.photo = data.photo;
                         $scope.playerToCompare.name = data.name + ' ' + data.lastname;
                         $scope.playerToCompare.club = data.club;
@@ -3224,6 +3227,20 @@ angular.module('Sportomatics')
         }
         return color;
     }
+angular.module('Sportomatics')
+    .controller('PlayerPartnersController', ["$scope", "$rootScope", "$timeout", "$http", function($scope, $rootScope, $timeout, $http){
+        $scope.player_id = $('#player-id').val();
+        $scope.url = $('#url').val();
+        console.log($scope.url);
+        $scope.params = {
+            'is_playing': 'hui'
+        };
+
+        $http.get($scope.url + '?'+ $.param( $scope.params ))
+            .success(function(data){
+                console.log(data)
+            })
+    }])
 angular.module('Sportomatics')
 .controller('PlayersSearchController', [
     '$http', '$scope', 'PlayersSearchService', '$location',
