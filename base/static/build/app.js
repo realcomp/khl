@@ -3374,8 +3374,7 @@ angular.module('Sportomatics')
             $scope.loader = true;
             $http.get($scope.url)
                 .success(function(data){
-                    console.log($scope.url);
-                    console.log(data);
+                    $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
                     $scope.loader = false;
                     if($scope.params.rate_by){
                         $scope.playersBySeasonTime = data;
