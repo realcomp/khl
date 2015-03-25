@@ -2,12 +2,18 @@ angular.module('Sportomatics')
     .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
         console.log($scope.url);
+        $scope.rate_by_param = parseInt($location.search()['rate_by']);
+        $scope.is_playing_param = parseInt($location.search()['is_playing']);
 
         $scope.params = {
-            rate_by: '',
+            rate_by: $scope.rate_by_param || '',
             is_playing: ''
         };
-        $scope.go = function(path){
+
+        $scope.go = function(href){
+            var path = href;
+            if($scope.rate_by_param) path+= "#?rate_by=" + $scope.rate_by_param;
+            console.log(path);
             window.location.href = path;
         };
         $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
@@ -17,10 +23,14 @@ angular.module('Sportomatics')
         };
         $scope.setPlaying = function(value){
             $scope.params['is_playing'] = value;
+            $scope.is_playing_param = value;
+            $location.search('is_playing', value);
             $scope.getPartners();
         };
-        $scope.setRateBy = function(type){
-            $scope.params['rate_by'] = type;
+        $scope.setRateBy = function(value){
+            $scope.params['rate_by'] = value;
+            $scope.rate_by_param = value;
+            $location.search('rate_by', value);
             $scope.getPartners();
         };
         $scope.getPartners = function(){

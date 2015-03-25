@@ -67,7 +67,7 @@
                                 <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index" ng-show="!playersBySeasonTime.length">
                                     <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">
-                                        <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
+                                        <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
                                             <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{player.lastname}}</div>
@@ -87,7 +87,7 @@
                                 <div class="partners-block" ng-show="playersBySeasonTime" ng-repeat="data in playersBySeasonTime track by $index">
                                     <div class="partners-heading">{{data.season.title}}</div>
                                     <ul class="player-partners-list">
-                                        <li class="player-partners-item pointer" ng-repeat="player in data.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
+                                        <li class="player-partners-item pointer" ng-repeat="player in data.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
                                             <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{player.lastname}}</div>
