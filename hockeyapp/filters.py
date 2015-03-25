@@ -72,7 +72,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         q = Q()
         _season = request.GET.get('season')
         _club = request.GET.get('club')
-        _is_playing = 'is_playing' in request.GET
+        _is_playing = request.GET.get('is_playing')
 
         if _season:
             q &= Q(clubplayer__season=_season)

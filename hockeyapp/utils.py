@@ -1,14 +1,11 @@
 import datetime
 import json
-import re
 
 from django.conf import settings
 from django.db.models.loading import get_model
 from django.utils import timezone
 
 from instagram.client import InstagramAPI
-
-from base.models import InstagramImageFile
 
 
 CURRENT_APP = __package__.split('.')[0]
@@ -88,3 +85,9 @@ def get_arena_instagram_locations(coords):
     lat, lng = coords.split(',')
     data = insta_api.location_search(lat=lat, lng=lng)
     return set([l.id for l in data])
+
+
+def delete_club_duplicates_with_relation():
+    club_m = get_model(CURRENT_APP, 'Club')
+    clubs = club_m.objects.all()
+    return clubs
