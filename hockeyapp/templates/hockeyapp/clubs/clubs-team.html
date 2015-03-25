@@ -110,7 +110,7 @@
                                                     <div class="tab"><a href="" ng-click="setType('table')" >таблица</a>|<a href="" ng-click="setType('photos')" >фото</a></div>
                                                 </div>
                                                 <!--Player Card Deffender-->
-                                                <div class="player-item" ng-repeat="player in players.defender_players">
+                                                <div class="player-item" ng-repeat="player in players.defender_players" ng-click="go('/ru/hockey/players/'+player.id)">
                                                     <div class="img-wrap">
                                                         <img src="{{player.photo}}" alt="">
                                                         <div class="player-number ui teal ribbon label">{{player.number}}</div>

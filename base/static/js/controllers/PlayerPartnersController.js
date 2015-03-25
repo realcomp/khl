@@ -1,8 +1,8 @@
 angular.module('Sportomatics')
     .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
-        $scope.url = $('#url').val();
         console.log($scope.url);
+
         $scope.params = {
             rate_by: '',
             is_playing: ''

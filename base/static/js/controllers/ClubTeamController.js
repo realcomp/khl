@@ -8,6 +8,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.setType = function(type){
             $scope.type = type;
         };
+        $scope.go = function(path){
+            window.location.href = path;
+        };
 
         $scope.PlayerPartnersPopup = {
             data: null,

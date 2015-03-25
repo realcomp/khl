@@ -2125,6 +2125,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.setType = function(type){
             $scope.type = type;
         };
+        $scope.go = function(path){
+            window.location.href = path;
+        };
 
         $scope.PlayerPartnersPopup = {
             data: null,
@@ -3348,8 +3351,8 @@ angular.module('Sportomatics')
 angular.module('Sportomatics')
     .controller('PlayerPartnersController', ["$scope", "$rootScope", "$timeout", "$http", "$location", function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
-        $scope.url = $('#url').val();
         console.log($scope.url);
+
         $scope.params = {
             rate_by: '',
             is_playing: ''
