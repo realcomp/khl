@@ -35,7 +35,7 @@
 
         <div class="page-content page-container"
              ng-controller="ClubCalendarController as ClubCalendarCtrl"
-             ng-init="url = '{% url 'hockeyapp:club-calendar-api' pk=pk %}'">
+             ng-init="url = '{% url 'hockeyapp:club-calendar-api' pk=pk %}'; urlPopup = '{% url 'hockeyapp:schedule-api' pk=0 %}'">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-calendar" %}
             <div class="page-inner-container">
                 <div class="team-calendar">
@@ -96,9 +96,11 @@
                                         <tbody>
                                             <tr ng-repeat="row in calendar.table">
                                                 <td ng-repeat="cell in row"
-                                                    ng-class="{ 'cell-calendar-event-other': isHome(cell), 'cell-calendar-event': isGuest(cell) }">
+                                                    ng-class="{ 'cell-calendar-event-other': isHome(cell), 'cell-calendar-event': isGuest(cell) }"
+                                                    onclick="angular.element(this).scope().CalendarEventPopupShow(this, event);">
                                                     <img class="calendar-event-logo" alt=""
-                                                         ng-src="{{ getLogo(cell) }}" ng-show="getLogo(cell)" />
+                                                         ng-src="{{ getLogo(cell) }}"
+                                                         ng-show="getLogo(cell)" />
                                                     <span class="calendar-date" ng-show="cell.date">
                                                         {{ cell.date.getDate() }}
                                                     </span>
@@ -117,6 +119,8 @@
                         </a>
                     </div>
                 </div>
+
+                {% include "hockeyapp/clubs/clubs-calendar-popup.html" %}
 
                 <hr class="hr">
 
