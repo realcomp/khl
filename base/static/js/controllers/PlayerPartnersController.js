@@ -4,7 +4,7 @@ angular.module('Sportomatics')
         $scope.url = $('#url').val();
         console.log($scope.url);
         $scope.params = {
-            rate_by: 1,
+            rate_by: 0,
             is_playing: 0
         };
         $scope.go = function(path){
@@ -36,8 +36,10 @@ angular.module('Sportomatics')
                     $scope.loader = false;
                     if($scope.params.rate_by){
                         $scope.playersBySeasonTime = data;
-                    } else
-                    $scope.playersBySeasonCount = _.filter(_.sortBy(data, 'seasons_count').reverse(), function(el){ return el.seasons_count > 0});
+                    } else {
+                        $scope.playersBySeasonTime = [];
+                        $scope.playersBySeasonCount = _.filter(_.sortBy(data, 'seasons_count').reverse(), function(el){ return el.seasons_count > 0});
+                    }
                 })
         };
         $scope.getPartners();

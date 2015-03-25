@@ -64,7 +64,7 @@
                             </div>
                             {% verbatim %}
                             <div class="partners-block-container" ng-show="!loader">
-                                <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index">
+                                <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index" ng-show="!playersBySeasonTime.length">
                                     <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
