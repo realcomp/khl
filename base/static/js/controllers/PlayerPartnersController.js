@@ -6,13 +6,13 @@ angular.module('Sportomatics')
         $scope.params = {
         };
         $scope.go = function(path){
-            window.open(path);
-        }
+            window.location.href = path;
+        };
         $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
         $scope.increaseLimit = function(index){
             console.log(index);
             $scope.limit[index] += 4;
-        }
+        };
         $scope.setPlaying = function(value){
             $scope.params['is_playing'] = 1;
             $scope.getPartners();

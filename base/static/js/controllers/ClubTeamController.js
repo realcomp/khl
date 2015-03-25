@@ -126,6 +126,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
             var players = [];
+            console.log('def', defender_players)
             _.each(offender_players, function(player){
                 players.push(player.pk);
             });
@@ -135,7 +136,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             _.each(goalkeeper_players, function(player){
                 players.push(player.pk);
             });
-            console.log(players)
+            //console.log(players)
         };
 
         self.getCell = function(table, cell_id) {
@@ -181,6 +182,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             $http.get(url + '?' + params)
             .success(function(data) {
                     $scope.workWithData(data);
+                    $scope.players = data;
                 self.players.data = data;
                 self.players.table = {
                     'goalkeeper': data.goalkeeper_players,

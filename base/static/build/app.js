@@ -2243,6 +2243,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
             var players = [];
+            console.log('def', defender_players)
             _.each(offender_players, function(player){
                 players.push(player.pk);
             });
@@ -2252,7 +2253,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             _.each(goalkeeper_players, function(player){
                 players.push(player.pk);
             });
-            console.log(players)
+            //console.log(players)
         };
 
         self.getCell = function(table, cell_id) {
@@ -2298,6 +2299,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             $http.get(url + '?' + params)
             .success(function(data) {
                     $scope.workWithData(data);
+                    $scope.players = data;
                 self.players.data = data;
                 self.players.table = {
                     'goalkeeper': data.goalkeeper_players,
@@ -3347,13 +3349,13 @@ angular.module('Sportomatics')
         $scope.params = {
         };
         $scope.go = function(path){
-            window.open(path);
-        }
+            window.location.href = path;
+        };
         $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
         $scope.increaseLimit = function(index){
             console.log(index);
             $scope.limit[index] += 4;
-        }
+        };
         $scope.setPlaying = function(value){
             $scope.params['is_playing'] = 1;
             $scope.getPartners();
