@@ -96,6 +96,10 @@ font-weight: bold;}
 .clubs-team-wrap .out-block .player-item .ui.teal.ribbon.label{background-color: #909090 !important ;border-color: #909090 !important ;}
 .clubs-team-wrap .out-block .player-item .ui.teal.ribbon.label:before{background-color: #909090 !important ;border-width: 0px 0px 1px 0px}
 .clubs-team-wrap .out-block .player-name{color:#7D7D7D;}
+.prew-table-foto a{display: inline-block;text-transform: uppercase;color: #408E3A;margin-bottom: 5px}
+.prew-table-foto a:hover{text-decoration: none}
+.ui.grid > .row .prew-table-foto{font-size: 15px;}
+
 
 /*clubs-team END*/
 
