@@ -3246,10 +3246,17 @@ i.icon {
 .partners-block .player-partners-item {
   float: left;
   width: 150px;
-  margin-left: 18px;
+  margin-right: 18px;
   border-bottom: 1px solid #e0e0e0;
   padding: 10px 0;
     height: 63px;
+}
+.partners-block .player-partners-add-label{
+    float: left;
+    width: 150px;
+    margin-right: 18px;
+    padding: 10px 0;
+    height: 24px;
 }
 /* line 2040, ../sass/_base.sass */
 .partners-block .player-partners-item:nth-child(6n+1) {

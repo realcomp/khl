@@ -56,19 +56,29 @@
                                 </li>
                             </ul>
                         </div>
-                        {% verbatim %}
+
+
                         <div class="twelve wide column">
-                            <div class="partners-block-container">
+                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="loader">
+                                <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                            </div>
+                            {% verbatim %}
+                            <div class="partners-block-container" ng-show="!loader">
                                 <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index">
                                     <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">
-                                        <li class="player-partners-item pointer" ng-repeat="player in players.players | limitTo : 5" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
+                                        <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
                                             <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{player.lastname}}</div>
                                                 <div class="player-partners-name">{{player.name}}</div>
                                                 <div class="player-partners-country">{{player.citizenship.title}}</div>
                                                 <div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-add-label pointer" ng-click="increaseLimit($index)" ng-if="limit[$index] < players.players.length">
+                                            <div class="player-partners-info">
+                                                <div>Показать еще</div>
                                             </div>
                                         </li>
                                     </ul>
@@ -124,8 +134,9 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endverbatim %}
                         </div>
-                        {% endverbatim %}
+
                     </div>
                 </div>
                 <ul class="team-controls player-controls-block">
