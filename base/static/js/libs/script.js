@@ -23,6 +23,7 @@ $(document).ready(function(){
     // $('.clubs-tabs').tabs();
     $('.clubs-photos-tabs').tabs();
     $('.clubs-team-tabs').tabs();
+    $('.clubs-team-inner-tabs').tabs();
     $('.team-view-type-tabs').tabs();
     $('.season-last-tabs').tabs();
     $('.season-prev-tabs').tabs();

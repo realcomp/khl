@@ -4,6 +4,10 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         var self = this,
         url = $('#ClubTeamForm').attr('action'),
         popup = null;
+        $scope.type = 'photos';
+        $scope.setType = function(type){
+            $scope.type = type;
+        };
 
         $scope.PlayerPartnersPopup = {
             data: null,
@@ -126,7 +130,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
             var players = [];
-            console.log('def', defender_players)
+            //console.log('def', defender_players)
             _.each(offender_players, function(player){
                 players.push(player.pk);
             });
