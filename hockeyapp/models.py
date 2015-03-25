@@ -926,6 +926,10 @@ class Schedule(TitleBaseModel):
     proccesed_time = models.DateTimeField(_('Processed time'), auto_now=True,
                                             null=True, blank=True)
 
+    @property
+    def arena(self):
+        return self.home_team.arena
+
     def save(self, *args, **kwargs):
         if not self.match_url and self.challenge and self.khl_id:
             self.match_url = self.challenge.match_url(self.khl_id)

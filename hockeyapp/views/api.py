@@ -6,10 +6,13 @@ import datetime
 import itertools
 
 from django.db.models import Avg, Q, Sum
+from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, response, viewsets
 
 from addresses.models import Country
+
+from base.models import Season
 
 from .events import EventFactory
 from .mixins import PaginationMixin
@@ -21,11 +24,13 @@ from ..models import Timeline
 from ..serializers import CountryLeaguesSerializer
 from ..serializers import MetricsPlayerSerializer
 from ..serializers.clubs import (
-    ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer)
+    ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
+    ClubCalendarPaginationSerializer)
 from ..serializers.events import EventSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
     ClubTitlesSerializer)
+from ..serializers.schedule import ScheduleSerializer
 from ..serializers.timeline import PlayerTimelineSerializer
 
 
@@ -160,6 +165,8 @@ class ClubTeamCompare(generics.RetrieveAPIView):
 class ClubCalendar(generics.ListAPIView):
     queryset = Schedule.objects.all()
     serializer_class = ClubCalendarSerializer
+    paginate_by = 99999
+    pagination_serializer_class = ClubCalendarPaginationSerializer
 
     def filter_queryset(self, qs):
         qs = super(ClubCalendar, self).filter_queryset(qs)
@@ -169,6 +176,11 @@ class ClubCalendar(generics.ListAPIView):
         if 'season' in self.request.GET:
             qs = qs.filter(season=self.request.GET['season'])
         return qs
+
+    def list(self, request, *args, **kwargs):
+        self.season = get_object_or_404(
+            Season, pk=self.request.GET.get('season', 0))
+        return super(ClubCalendar, self).list(request, *args, **kwargs)
 
 
 class MetricsPlayers(generics.ListAPIView):
@@ -207,3 +219,8 @@ class NewsList(generics.ListAPIView):
             date = datetime.datetime.strptime(
                 self.request.GET['date'], '%Y-%m-%d').date()
         return efactory.get_events(date)
+
+
+class ScheduleView(generics.RetrieveAPIView):
+    queryset = Schedule.objects.all()
+    serializer_class = ScheduleSerializer

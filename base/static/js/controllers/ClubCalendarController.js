@@ -3,6 +3,29 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.data = {};
     $scope.params = $location.search();
+    $scope.CalendarEventPopup = {};
+    $scope.CalendarEventPopupShow = function(e, event) {
+      var params;
+      if ($('.calendar-event-popup:hidden').length && this.cell.schedule) {
+        $scope.CalendarEventPopup.data = null;
+        $scope.CalendarEventPopup.is_home = this.cell.schedule.is_home;
+        $scope.CalendarEventPopup.is_guest = this.cell.schedule.is_guest;
+        params = '';
+        if (this.cell.schedule.is_home) {
+          params = '?is_home=true';
+        }
+        if (this.cell.schedule.is_guest) {
+          params = '?is_guest=true';
+        }
+        $http.get($scope.urlPopup.replace(0, this.cell.schedule.pk) + params).success(function(data) {
+          $scope.CalendarEventPopup.data = data;
+        });
+        $('.calendar-event-popup:hidden').show(500).offset({
+          'left': event.pageX,
+          'top': event.pageY
+        });
+      }
+    };
     $scope.setType = function(type) {
       $location.search('type', type || null);
       $scope.params = $location.search();
@@ -16,11 +39,12 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       $scope.list();
     };
     $scope.parseSchedules = function(data) {
-      var getDate, k, len, result, s;
+      var getDate, k, len, ref, result, s;
       result = {};
       getDate = $parse('date|date:"yyyy-MM-dd"');
-      for (k = 0, len = data.length; k < len; k++) {
-        s = data[k];
+      ref = data.results;
+      for (k = 0, len = ref.length; k < len; k++) {
+        s = ref[k];
         result[getDate(s)] = s;
       }
       return result;
@@ -94,6 +118,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       d.setMonth(d.getMonth() + deltaM);
       return d;
     };
+    $scope.getMinEndDate = function(data) {
+      var a, b;
+      a = new Date();
+      b = new Date(data.season.end_date);
+      if (a < b) {
+        return a;
+      } else {
+        return b;
+      }
+    };
     $scope.list = function() {
       var params;
       $scope.params = $location.search();
@@ -104,10 +138,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       $scope.data = {};
       $scope.loaded = false;
       $http.get($scope.url + '?' + params).success(function(data) {
-        var deltaM, now;
+        var date, deltaM;
         $scope.data = data;
         $scope.schedules = $scope.parseSchedules(data);
-        now = new Date();
+        date = $scope.getMinEndDate(data);
         $scope.calendars = [
           (function() {
             var k, len, ref, results;
@@ -116,9 +150,9 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             for (k = 0, len = ref.length; k < len; k++) {
               deltaM = ref[k];
               results.push({
-                'date': $scope.monthDelta(now, deltaM),
-                'month_display': $scope.MONTHS[$scope.monthDelta(now, deltaM).getMonth()],
-                'table': $scope.getCalendar($scope.monthDelta(now, deltaM), $scope.schedules)
+                'date': $scope.monthDelta(date, deltaM),
+                'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
               });
             }
             return results;

@@ -7,6 +7,28 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.data = {}
         $scope.params = $location.search()
 
+        $scope.CalendarEventPopup = {}
+        $scope.CalendarEventPopupShow = (e, event) ->
+            if $('.calendar-event-popup:hidden').length and this.cell.schedule
+                $scope.CalendarEventPopup.data = null
+                $scope.CalendarEventPopup.is_home = this.cell.schedule.is_home
+                $scope.CalendarEventPopup.is_guest = this.cell.schedule.is_guest
+                params = ''
+                if this.cell.schedule.is_home
+                    params = '?is_home=true'
+                if this.cell.schedule.is_guest
+                    params = '?is_guest=true'
+                $http.get($scope.urlPopup.replace(0, this.cell.schedule.pk) + params
+                ).success((data) ->
+                    $scope.CalendarEventPopup.data = data;
+                    return
+                )
+                $('.calendar-event-popup:hidden').show(500).offset({
+                    'left': event.pageX,
+                    'top': event.pageY,
+                })
+                return
+
         $scope.setType = (type) ->
             $location.search('type', type or null)
             $scope.params = $location.search()
@@ -24,7 +46,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.parseSchedules = (data) ->
             result = {}
             getDate = $parse('date|date:"yyyy-MM-dd"')
-            for s in data
+            for s in data.results
                 result[getDate(s)] = s
             return result
 
@@ -95,6 +117,14 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             d.setMonth(d.getMonth() + deltaM)
             return d
 
+        $scope.getMinEndDate = (data) ->
+            a = new Date()
+            b = new Date(data.season.end_date)
+            if a < b
+                return a
+            else
+                return b
+
         $scope.list = () ->
             $scope.params = $location.search()
             params = ''
@@ -102,15 +132,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 params += '&season=' + $scope.params.season
             $scope.data = {};
             $scope.loaded = false;
+
             $http.get($scope.url + '?' + params
             ).success((data) ->
                 $scope.data = data
                 $scope.schedules = $scope.parseSchedules(data)
-                now = new Date()
+                date = $scope.getMinEndDate(data)
                 $scope.calendars = [({
-                    'date': $scope.monthDelta(now, deltaM),
-                    'month_display': $scope.MONTHS[$scope.monthDelta(now, deltaM).getMonth()],
-                    'table': $scope.getCalendar($scope.monthDelta(now, deltaM), $scope.schedules)
+                    'date': $scope.monthDelta(date, deltaM),
+                    'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                    'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
                 } for deltaM in [-1, 0, 1])]
                 $scope.loaded = true
             )

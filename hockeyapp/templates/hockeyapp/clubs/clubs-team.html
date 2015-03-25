@@ -102,64 +102,231 @@
                         </div>
                         <div class="row" id="team-all" data-tab="team-all">
                             <div class="column">
-                                <div class="team-view-type-tabs">
-                                    <ul class="team-view-list">
-                                        <li class="team-view-item">
-                                            <a class="item tab-btn team-view-link" href="#team-photos" data-tab="team-photos">фотографии</a>
-                                        </li>
-                                        <li class="team-view-item">
-                                            <a class="item tab-btn team-view-link" href="#team-tables" data-tab="team-tables">таблица</a>
-                                        </li>
-                                    </ul>
+                                
+
 
                                     <div id="team-photos" data-tab="team-photos">
-                                        <table class="clubs-team-photos-table"
-                                               ng-show="ClubTeamCtrl.players.data">
-                                            <thead>
-                                                <tr>
-                                                    <th class="cell-defender" colspan="7">защитники</th>
-                                                    <th class="cell-forward" colspan="3">нападающие</th>
-                                                    <th class="cell-goalkeeper"></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% verbatim %}
-                                                    <tr ng-repeat="row in ClubTeamCtrl.PLAYERS_TABLE">
-                                                        <td ng-repeat="cell_id in row"
-                                                            class="cell-{{ cell_id[0] }}">
-                                                            <a class="team-player-photo-link"
-                                                               href=""
-                                                               onclick="angular.element(this).scope().PlayerPartnersPopupShow(this, event);"
-                                                               ng-class="{'opacity-30' : !ClubTeamCtrl.isPersonVisible(ClubTeamCtrl.players, cell_id)}"
-                                                                    ng-show="ClubTeamCtrl.isPersonInCell(ClubTeamCtrl.players, cell_id)">
-                                                                <span class="team-player-number"
-                                                                      ng-show="ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number">
-                                                                    {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).number }}
-                                                                </span>
-                                                                <img alt="" class="team-player-photo"
-                                                                     ng-src="{{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).photo || '/static/images/nophoto.gif' }}">
-                                                                <span class="team-player-name">
-                                                                    {{ ClubTeamCtrl.getCell(ClubTeamCtrl.players, cell_id).fio }}</span>
-                                                                <span class="team-player-name"></span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                {% endverbatim %}
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td class="cell-defender" colspan="3"></td>
-                                                    <td class="cell-trainer" colspan="7">тренера</td>
-                                                    <td class="cell-goalkeeper">вратари</td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                        <div class="clubs-team-wrap">
+    <div class="deffender-block players-block">
+        <div class="head-player-block">
+            <div class="position">Защитники</div>
+            <div class="tab"><a href="#">таблица</a>|<a href="#">фото</a></div>
+        </div>
+    <!--Player Card Deffender-->
+      <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">88</div>
+                <div class="player-name">
+                <p>asdasdasdasd
+                sdasdasdasd</p>
+            </div>
+            </div>
+            
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">8</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">88</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">8</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+    
+    <!--Player Card Deffender End-->
+
+    </div>
+    <div class="forward-block players-block">
+    <div class="head-player-block">
+        <div class="position">Нападающие</div>
+        <div class="tab"><a href="#">таблица</a>|<a href="#">фото</a></div>
+    </div>
+    <!--Player Card  Forward                                -->
+     <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Krasnoslobotchev</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Krasnoslobotchev</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>vichevski Aleksandrovich</p>
+            </div>
+        </div>
+            <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksa</p>
+            </div>
+        </div>
+            <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>ibragimovichevski Aleksandrovich</p>
+            </div>
+        </div>
+        <!--Player Card Forward END                                 -->
+    </div>
+    
+    <div class="goalkeep-block one-block">
+    <div class="head-player-block">
+        <div class="position">Вратари</div>
+        
+    </div>
+    <!--Player Card  Goalk                                -->
+      <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>имя</p>
+            </div>
+        </div>
+    <!--Player Card Goalk END                                 -->
+    </div>
+    
+    <div class="coach-block one-block">
+    <div class="head-player-block">
+        <div class="position">Тренеры</div>
+        
+    </div>
+    <!--Player Card     Coach                            -->
+    <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>имя</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">23</div>
+            </div>
+            <div class="player-name">
+                <p>имя</p>
+            </div>
+        </div>
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">13</div>
+            </div>
+            <div class="player-name">
+                <p>имя</p>
+            </div>
+        </div>
+    <!--Player Card Coach END                                 -->
+    </div>
+    
+    <div class="out-block one-block">
+    <div class="head-player-block">
+        <div class="position">Выбыли</div>
+    </div>
+    <!--Player Card       Out                        -->
+        <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">14</div>
+            </div>
+            <div class="player-name">
+                <p>имя</p>
+            </div>
+       </div>
+       <div class="player-item">
+            <div class="img-wrap">
+                <img src="Untitled-1.jpg" alt="">
+                <div class="player-number ui teal ribbon label">5</div>
+            </div>
+            <div class="player-name">
+                <p>имя</p>
+            </div>
+        </div>
+      <!--Player Card  Out END                                 -->
+    </div>
+ </div>
+
+
                                         <div style="text-align: center">
                                             <img src="{{ STATIC_URL }}images/loader-large.gif"
                                                  ng-show="ClubTeamCtrl.players.loader">
                                         </div>
 
                                         <a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
+                                       
+
+
                                         <div class="season-tabs season-last-tabs"
                                              ng-repeat="clubs in ClubTeamCtrl.clubs.clubs">
                                             <div class="ui tabular menu content-tabs">
@@ -259,8 +426,10 @@
 
                                 </div>
                             </div>
+ <!--end-->
                         </div>
-                    </div>
+                    
+                   </div>
                     {% include 'hockeyapp/player-partners-popup.html' %}
                     </form>
                 </div>
