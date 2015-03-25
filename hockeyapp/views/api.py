@@ -59,7 +59,7 @@ class PlayersSearch(
         if not request.GET.get('rated_by', ''):
             for player in qs:
                 rating_index += 1
-            result[player.pk] = rating_index
+                result[player.pk] = rating_index
         return result
 
 
