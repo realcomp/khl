@@ -3245,10 +3245,11 @@ i.icon {
 /* line 2034, ../sass/_base.sass */
 .partners-block .player-partners-item {
   float: left;
-  width: 100px;
+  width: 150px;
   margin-left: 18px;
   border-bottom: 1px solid #e0e0e0;
   padding: 10px 0;
+    height: 63px;
 }
 /* line 2040, ../sass/_base.sass */
 .partners-block .player-partners-item:nth-child(6n+1) {
@@ -3260,7 +3261,7 @@ i.icon {
 }
 /* line 2044, ../sass/_base.sass */
 .partners-block .player-partners-photo {
-  width: 30px;
+  width: 50px;
   border-radius: 3px;
   float: left;
   margin-right: 12px;
@@ -3271,11 +3272,11 @@ i.icon {
 }
 /* line 2051, ../sass/_base.sass */
 .partners-block .player-partners-name {
-  font-size: 10px;
+  font-size: 14px;
 }
 /* line 2053, ../sass/_base.sass */
 .partners-block .player-partners-country {
-  font-size: 8px;
+  font-size: 10px;
 }
 
 /* line 2056, ../sass/_base.sass */

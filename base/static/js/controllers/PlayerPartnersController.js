@@ -1,11 +1,13 @@
 angular.module('Sportomatics')
-    .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http){
+    .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
         $scope.url = $('#url').val();
         console.log($scope.url);
         $scope.params = {
         };
-
+        $scope.go = function(path){
+            window.open(path);
+        }
         $scope.setPlaying = function(value){
             $scope.params['is_playing'] = 1;
             $scope.getPartners();
