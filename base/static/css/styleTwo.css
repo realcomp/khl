@@ -67,14 +67,14 @@
 	
 }
 .clubs-team-wrap .img-wrap{position: relative;text-align: center;}
-.clubs-team-wrap .player-item{
+.clubs-team-wrap .player-item {
     font-size: 11px;
     color: #649792;
 	width: 105px;
     float: left;
     margin: 10px 0px;
     height: 125px;
-    
+    cursor: pointer;
 }
 .clubs-team-wrap .player-name{text-align: center;font-size: 95%;padding: 0px 5px;box-sizing: border-box;-webkit-box-sizing: border-box; -0-box-sizing: border-box;-moz-box-sizing: border-box;}
 .clubs-team-wrap .player-name p{overflow: hidden;}
