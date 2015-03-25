@@ -89,17 +89,6 @@ class SeasonSerializer(TitleBaseSerializer):
         model = Season
 
 
-class ArenaSerializer(TitleBaseSerializer):
-    photo = serializers.ReadOnlyField(source='photo.url')
-    url = serializers.ReadOnlyField(source='get_absolute_url')
-
-    class Meta(object):
-        fields = (
-            'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url',
-            'coords')
-        model = Arena
-
-
 class BaseClubSerializer(TitleBaseSerializer):
     logo = serializers.ReadOnlyField(source='logo.url')
     url = serializers.ReadOnlyField(source='get_absolute_url')
@@ -121,6 +110,18 @@ class ClubLightListSerializer(BaseClubSerializer):
             'pk', 'title', 'logo', 'url', 'title_verbose',
             'main_color', 'secondary_color', 'third_color')
         model = Club
+
+
+class ArenaSerializer(TitleBaseSerializer):
+    photo = serializers.ReadOnlyField(source='photo.url')
+    url = serializers.ReadOnlyField(source='get_absolute_url')
+    club_set = ClubLightListSerializer(many=True)
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url',
+            'coords', 'club_set')
+        model = Arena
 
 
 class ClubListSerializer(ClubLightListSerializer):
