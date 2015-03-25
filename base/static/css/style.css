@@ -5784,3 +5784,6 @@ hr.style-one {
 .no-pointer-events{
     pointer-events: none !important;
 }
+#map {
+    height: 180px;
+}

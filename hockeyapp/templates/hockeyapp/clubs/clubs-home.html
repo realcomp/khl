@@ -905,15 +905,15 @@
 
                 <hr class="hr">
 
-                <div class="team-track">
+                <div class="team-track" ng-controller="ClubHomeMapController">
                     <div class="heading">Как добраться</div>
-                    <div class="team-track-map">
+                    <!--<div class="team-track-map">
                         <div class="google-map-overlay-lock" style="position: relative;width: 932px; height: 486px; z-index: 999; background: rgba(0,0,0,0); top: 486px; margin-top: -486px; " >
-                            <!--<i class="fa fa-refresh" style="position: absolute; right: 95px; top: 10px; font-size: 30px; color: #ffffff; pointer-events: auto"></i>-->
+                            <!--<i class="fa fa-refresh" style="position: absolute; right: 95px; top: 10px; font-size: 30px; color: #ffffff; pointer-events: auto"></i>
                             <i class="fa fa-lock" style="position: absolute; right: 60px; top: 10px; color: #ffffff;font-size: 30px;" onclick="$('.google-map-overlay-lock').hide(); $('.google-map-overlay-unlock').show();"></i>
                         </div>
                         <div class="google-map-overlay-unlock" style="position: relative;width: 932px; height: 486px; z-index:10000; background: rgba(0,0,0,0); top: 486px; margin-top: -486px;display: none; pointer-events: none;">
-                            <!--<i class="fa fa-refresh" style="position: absolute; right: 95px; top: 10px; font-size: 30px; color: #ffffff; pointer-events: auto"></i>-->
+                            <!--<i class="fa fa-refresh" style="position: absolute; right: 95px; top: 10px; font-size: 30px; color: #ffffff; pointer-events: auto"></i>
                             <i class="fa fa-unlock" style="position: absolute; right: 60px;  top: 10px;font-size: 30px; color: #ffffff; pointer-events: auto !important;" onclick="$('.google-map-overlay-unlock').hide(); $('.google-map-overlay-lock').show();"></i>
                         </div>
                         <iframe src="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
@@ -922,7 +922,8 @@
                            target="GoogleMap">
                             Сбросить масштабирование
                         </a>
-                    </div>
+                    </div>-->
+                    <div id="map"></div>
                 </div>
 
                 <ul class="team-controls player-controls-block">

@@ -213,7 +213,7 @@ $(function() {
         scrolledAfterPlayer = true;
     } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
         //console.log('player reverse call ');
-        $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important'));
+        $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important').css('font-weight', '400', 'important'));
         $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
         $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
         $('.page-container').css('margin-top', '0px');

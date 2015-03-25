@@ -420,7 +420,6 @@ angular.module('Sportomatics')
                 chart.addLegend(legend);
 
                 _.each(graphs, function(graph, index){
-                    console.log(graph)
                     graph.valueAxis = valueAxis;
                     graph.lineThickness = 3;
                     chart.addGraph(graph);
