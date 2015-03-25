@@ -44,7 +44,7 @@
                                     <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 1}" ng-click="setPlaying(1)">{% trans 'Playing now' %}</a>
                                 </li>
                                 <li class="tabs-item">
-                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 0 }" ng-click="setPlaying(0)">{% trans 'All' %}</a>
+                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === '' }" ng-click="setPlaying('')">{% trans 'All' %}</a>
                                 </li>
                             </ul>
                             <ul class="options-list player-partner-menu-list">
@@ -52,7 +52,7 @@
                                     <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === 1 }" ng-click="setRateBy(1)">{% trans 'Oldest' %}</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === 0 }" ng-click="setRateBy(0)">{% trans 'Most inseparable' %}</a>
+                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === '' }" ng-click="setRateBy('')">{% trans 'Most inseparable' %}</a>
                                 </li>
                             </ul>
                         </div>

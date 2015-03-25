@@ -4,8 +4,8 @@ angular.module('Sportomatics')
         $scope.url = $('#url').val();
         console.log($scope.url);
         $scope.params = {
-            rate_by: 0,
-            is_playing: 0
+            rate_by: '',
+            is_playing: ''
         };
         $scope.go = function(path){
             window.location.href = path;
