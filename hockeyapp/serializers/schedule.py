@@ -4,7 +4,7 @@ from rest_framework import serializers
 from . import (
     CountrySerializer, AddressSerializer, ArenaSerializer,
     ClubLightListSerializer)
-from ..models import Arena, Schedule
+from ..models import Arena, Match, Schedule
 
 
 class ScheduleArenaSerializer(ArenaSerializer):
@@ -18,9 +18,16 @@ class ScheduleArenaSerializer(ArenaSerializer):
         model = Arena
 
 
+class ScheduleMatchSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        fields = 'pk', 'date', 'count'
+        model = Match
+
+
 class ScheduleSerializer(serializers.ModelSerializer):
     arena = ScheduleArenaSerializer()
     team = serializers.SerializerMethodField()
+    related_match = ScheduleMatchSerializer()
 
     def get_team(self, obj):
         request = self.context.get('request')
@@ -32,6 +39,5 @@ class ScheduleSerializer(serializers.ModelSerializer):
                 obj.home_team, context=self.context).data
 
     class Meta(object):
-        fields = (
-            'pk', 'date', 'arena', 'team')
+        fields = 'pk', 'date', 'arena', 'team', 'related_match'
         model = Schedule
