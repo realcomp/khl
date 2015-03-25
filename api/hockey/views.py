@@ -94,7 +94,7 @@ class PlayerPartners(drf.generics.ListAPIView):
     def filter_queryset(self, qs):
         _player_id = self.kwargs.get('player_id')
         qs = super(PlayerPartners, self).filter_queryset(qs)
-        _is_playing = 'is_playing' in self.request.GET
+        _is_playing = self.request.GET.get('is_playing')
         if _is_playing:
             qs = qs.filter(clubplayer__season=Season.objects.latest('start_date'))
         if not self._plrs_seasons:

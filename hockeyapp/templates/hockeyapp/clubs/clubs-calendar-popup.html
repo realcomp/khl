@@ -24,7 +24,11 @@
     <div class="event-details">
         {% verbatim %}
             <p>Начало: {{ CalendarEventPopup.data.date|date:"HH:mm" }} МСК</p>
-            <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+            <p ng-show="CalendarEventPopup.data.related_match">
+                <a href="#">Прошлые встречи</a>:
+                {{ CalendarEventPopup.data.related_match.date|date:"dd.MM" }},
+                счет {{ CalendarEventPopup.data.related_match.count }}
+            </p>
             <p><a href="#">Превью матча</a></p>
         {% endverbatim %}
     </div>
@@ -64,8 +68,8 @@
                 <div class="clearfix"></div>
             </div>
         </div>
+        <div class="align-center">
+            <a href="{{ CalendarEventPopup.data.arena.url }}" class="how-to-reach">Как добраться</a>
+        </div>
     {% endverbatim %}
-    <div class="align-center">
-        <a href="#" class="how-to-reach">Как добраться</a>
-    </div>
 </div>

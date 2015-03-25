@@ -44,15 +44,15 @@
                                     <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 1}" ng-click="setPlaying(1)">{% trans 'Playing now' %}</a>
                                 </li>
                                 <li class="tabs-item">
-                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === 0 }" ng-click="setPlaying(0)">{% trans 'All' %}</a>
+                                    <a href="" class="tabs-link" ng-class="{ 'tabs-link_active':params.is_playing === '' }" ng-click="setPlaying('')">{% trans 'All' %}</a>
                                 </li>
                             </ul>
                             <ul class="options-list player-partner-menu-list">
                                 <li class="option-item">
-                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by !== 0 }" ng-click="setRatedBy(1)">{% trans 'Oldest' %}</a>
+                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === 1 }" ng-click="setRateBy(1)">{% trans 'Oldest' %}</a>
                                 </li>
                                 <li class="option-item">
-                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === 0 }" ng-click="setRatedBy(0)">{% trans 'Most inseparable' %}</a>
+                                    <a href="" class="option-link" ng-class="{ 'option-link_active': params.rate_by === '' }" ng-click="setRateBy('')">{% trans 'Most inseparable' %}</a>
                                 </li>
                             </ul>
                         </div>
@@ -64,7 +64,7 @@
                             </div>
                             {% verbatim %}
                             <div class="partners-block-container" ng-show="!loader">
-                                <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index">
+                                <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index" ng-show="!playersBySeasonTime.length">
                                     <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
@@ -84,19 +84,25 @@
                                     </ul>
                                 </div>
 
-                                <!--<div class="partners-block">
-                                    <div class="partners-heading">{{season.title}}</div>
+                                <div class="partners-block" ng-show="playersBySeasonTime" ng-repeat="data in playersBySeasonTime track by $index">
+                                    <div class="partners-heading">{{data.season.title}}</div>
                                     <ul class="player-partners-list">
-                                        <li class="player-partners-item">
-                                            <a href="#" class="player-partners-link"><img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-partners-photo"></a>
+                                        <li class="player-partners-item pointer" ng-repeat="player in data.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners')">
+                                            <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
-                                                <div class="player-partners-name">Акинфеев</div>
-                                                <div class="player-partners-name">Игорь</div>
-                                                <div class="player-partners-country">Россия</div>
+                                                <div class="player-partners-name">{{player.lastname}}</div>
+                                                <div class="player-partners-name">{{player.name}}</div>
+                                                <div class="player-partners-country">{{player.citizenship.title}}</div>
+                                                <div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-add-label pointer" ng-click="increaseLimit($index)" ng-if="limit[$index] < data.players.length">
+                                            <div class="player-partners-info">
+                                                <div>Показать еще</div>
                                             </div>
                                         </li>
                                     </ul>
-                                </div>-->
+                                </div>
 
                                 <div class="player-partners-popup popup">
                                     <a href="#" class="close-popup-btn">&times;</a>

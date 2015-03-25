@@ -930,6 +930,20 @@ class Schedule(TitleBaseModel):
     def arena(self):
         return self.home_team.arena
 
+    @property
+    def related_match(self):
+        '''
+        Previous completed match between the same teams
+        '''
+        q_same_teams = (
+            Q(home_team=self.home_team, guest_team=self.guest_team) |
+            Q(home_team=self.guest_team, guest_team=self.home_team))
+        q_previous = Q(date__lt=self.date)
+        q_completed = Q(date__lt=datetime.datetime.now())
+        s = Schedule.objects.filter(q_same_teams & q_previous & q_completed)
+        if s.exists():
+            return s.latest('date').match
+
     def save(self, *args, **kwargs):
         if not self.match_url and self.challenge and self.khl_id:
             self.match_url = self.challenge.match_url(self.khl_id)

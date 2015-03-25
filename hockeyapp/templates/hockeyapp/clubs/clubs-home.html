@@ -905,7 +905,7 @@
 
                 <hr class="hr">
 
-                <div class="team-track">
+                <div class="team-track" ng-controller="ClubHomeMapController">
                     <div class="heading">Как добраться</div>
                     <div class="team-track-map">
                         <div class="google-map-overlay-lock" style="position: relative;width: 932px; height: 486px; z-index: 999; background: rgba(0,0,0,0); top: 486px; margin-top: -486px; " >
@@ -923,6 +923,9 @@
                             Сбросить масштабирование
                         </a>
                     </div>
+                    <!--<input id="coordinates" type="hidden" value="{{ arena.coords|default:arena.contacts|escape }}">
+                    <input id="place-title" type="hidden" value="{{ arena.title }}">
+                    <div id="map"></div>-->
                 </div>
 
                 <ul class="team-controls player-controls-block">
