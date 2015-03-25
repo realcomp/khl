@@ -1742,9 +1742,15 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 
 angular.module('Sportomatics')
     .controller('ClubHomeMapController', ["$scope", "$rootScope", function($scope, $rootScope){
+        /*var coordinates = $('#coordinates').val();
+        var coordinate1 = coordinates.split(',')[0];
+        var coordinate2 = coordinates.split(',')[1];
+        var title = $('#place-title').val();
 
+        console.log(coordinate1, coordinate2)
+        console.log(coordinates.replace(' ', '+'));
         // create a map in the "map" div, set the view to a given place and zoom
-        var map = L.map('map').setView([51.505, -0.09], 13);
+        var map = L.map('map').setView([coordinate1, coordinate2], 15);
 
         // add an OpenStreetMap tile layer
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -1752,9 +1758,9 @@ angular.module('Sportomatics')
         }).addTo(map);
 
         // add a marker in the given location, attach some popup content to it and open the popup
-        L.marker([51.5, -0.09]).addTo(map)
-            .bindPopup('A pretty CSS3 popup. <br> Easily customizable.')
-            .openPopup();
+        L.marker([coordinate1, coordinate2]).addTo(map)
+            .bindPopup(title + '<br>')
+            .openPopup();*/
     }])
 angular.module('Sportomatics')
 .controller('ClubListController', [
