@@ -3257,6 +3257,12 @@ i.icon {
     margin-right: 18px;
     padding: 10px 0;
     height: 24px;
+    font-size: 10px;
+    color: blue;
+    text-decoration: underline;
+}
+.partners-block .player-partners-add-label:hover{
+    text-decoration: none;
 }
 /* line 2040, ../sass/_base.sass */
 .partners-block .player-partners-item:nth-child(6n+1) {
