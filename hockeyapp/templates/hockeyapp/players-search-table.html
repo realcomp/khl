@@ -184,9 +184,9 @@
                         <th ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
                             <a href="" ng-click="PlayersSearchService.setOrderBy(this, 'last_club__%s_title')">
                                 {% if club_hidden %}
-                                    {% trans 'Team' %}
+                                    {% trans 'Current playing team' %}
                                 {% else %}
-                                    {% trans 'Current team' %}
+                                    {% trans 'Team' %}
                                 {% endif %}
                             </a>
                         </th>
@@ -325,30 +325,28 @@
                                 {% endverbatim %}
                             </div>
                         </td>
-                        {% if not club_hidden %}
-                            {% verbatim %}
-                                <td ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
-                                    <a href="{{ player.club.url }}" class="club-link">
-                                        {{ player.club.title_verbose }}
-                                    </a>
-                                    <div ng-show="player.clubplayers.length > 1">
-                                        <ul class="club-link-list hidden">
-                                            <li ng-repeat="clubplayer in player.clubplayers">
-                                                <a href="{{ clubplayer.club_url }}" class="club-link"
-                                                   ng-hide="$first">
-                                                    {{ clubplayer.season.short_title }}:
-                                                    {{ clubplayer.club.title_verbose }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <a class="more-clubs-btn more-clubs-btn_open"
-                                           onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>показать еще {{ player.clubplayers.length - 1 }} команд</span><i class="triangle down icon"></i></a>
-                                        <a class="more-clubs-btn more-clubs-btn_close"
-                                           onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
-                                    </div>
-                                </td>
-                            {% endverbatim %}
-                        {% endif %}
+                        {% verbatim %}
+                            <td ng-class="{ 'column-sort':params.order_by === 'last_club__%s_title' }">
+                                <a href="{{ player.club.url }}" class="club-link">
+                                    {{ player.club.title_verbose }}
+                                </a>
+                                <div ng-show="player.clubplayers.length > 1">
+                                    <ul class="club-link-list hidden">
+                                        <li ng-repeat="clubplayer in player.clubplayers">
+                                            <a href="{{ clubplayer.club_url }}" class="club-link"
+                                               ng-hide="$first">
+                                                {{ clubplayer.season.short_title }}:
+                                                {{ clubplayer.club.title_verbose }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <a class="more-clubs-btn more-clubs-btn_open"
+                                       onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>показать еще {{ player.clubplayers.length - 1 }} команд</span><i class="triangle down icon"></i></a>
+                                    <a class="more-clubs-btn more-clubs-btn_close"
+                                       onclick="$(this).closest('td').toggleClass('show-more-clubs')"><span>скрыть прошлые команды</span><i class="triangle up icon"></i></a>
+                                </div>
+                            </td>
+                        {% endverbatim %}
                         {% verbatim %}
                             <td align="center"
                                ng-class="{ 'column-sort':params.order_by === 'birth_date' }">
