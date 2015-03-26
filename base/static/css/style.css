@@ -1412,7 +1412,7 @@ i.icon {
 }
 /* line 861, ../sass/_base.sass */
 .graph-controls-block .graph-control-link.graph-control-link_active {
-  background: #31782a;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
 }
 /* line 864, ../sass/_base.sass */
@@ -2965,7 +2965,7 @@ i.icon {
 }
 /* line 1850, ../sass/_base.sass */
 .player-card-short-page .graph-controls-block .graph-control-link.graph-control-link_active {
-  background: #31782a;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
 }
 /* line 1853, ../sass/_base.sass */

@@ -140,6 +140,8 @@ angular.module('Sportomatics')
                     });
                     _.each(graphs, function(graph, index){
                         graph.balloonText = balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
+                        graph.lineColorField = 'lineColor';
+                        graph.fillColorsField = 'lineColor';
                         chart.addGraph(graph);
                     })
                 } else {
@@ -156,6 +158,8 @@ angular.module('Sportomatics')
                     graph1.fillColors = "#408e3a";
                     graph1.fillAlphas = 1;
                     graph1.lineThickness = 0;
+                    graph1.lineColorField = 'lineColor';
+                    graph1.fillColorsField = 'lineColor';
                     //graph1.animationPlayed = true;
                     graph1.type = 'column';
                     if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )

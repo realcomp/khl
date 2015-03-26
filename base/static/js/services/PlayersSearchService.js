@@ -177,7 +177,7 @@ angular.module('Sportomatics')
 
             $scope.params = $scope.$location.search();
 
-            params += '&order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
+            params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
             if ($scope.params.reversed) {
                 params += '&reversed=true';
             }
@@ -209,6 +209,9 @@ angular.module('Sportomatics')
             }
             if ($scope.params.player) {
                 params += '&player=' + $scope.params.player;
+            }
+            if ($scope.params.season) {
+                params += '&season=' + $scope.params.season;
             }
             if ($scope.params.league) {
                 $.each($scope.params.league, function() {

@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 
-from addresses.models import Address, Country
+from addresses.models import Address, Country, City
 from base.models import Season
 
 from ..models import Coach, Arena, Club, Player, League, ClubPlayer
@@ -43,17 +43,24 @@ class TitleBaseSerializer(LangDepSerializer):
     title = serializers.SerializerMethodField()
     get_title = lambda self, obj: self._get_field(obj, 'title')
 
-
-class AddressSerializer(TitleBaseSerializer):
-    class Meta(object):
-        fields = 'pk', 'title'
-        model = Address
-
-
 class CountrySerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
         model = Country
+
+class CitySerializer(TitleBaseSerializer):
+    country = CountrySerializer()
+
+    class Meta(object):
+        fields = 'pk', 'title', 'country'
+        model = City
+
+class AddressSerializer(TitleBaseSerializer):
+    city = CitySerializer()
+
+    class Meta(object):
+        fields = 'pk', 'title', 'city'
+        model = Address
 
 
 class LeagueSerializer(TitleBaseSerializer):
@@ -128,11 +135,12 @@ class ClubListSerializer(ClubLightListSerializer):
     address = AddressSerializer()
     arena = ArenaSerializer()
     coach = CoachSerializer()
+    league = LeagueSerializer()
 
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
-            'coach', 'site', 'email', 'phone')
+            'coach', 'site', 'email', 'phone', 'league')
         model = Club
 
 
