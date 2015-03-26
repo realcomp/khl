@@ -148,46 +148,60 @@
                                 <div class="row">
                                     <div class="eight wide column">
                                         <ul class="player-links-list">
-                                            <li class="player-links-item">
-                                                <a href="{{ khl_url }}" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/khl-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Профиль на сайте КХЛ</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Профиль на сайте НХЛ</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="{{ wiki_page }}" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/wiki-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Статья в Википедии</span>
-                                                </a>
-                                            </li>
+                                            {% if khl_url %}
+                                                <li class="player-links-item">
+                                                    <a href="{{ khl_url }}" class="player-links-link">
+                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/khl-logo.png" alt="" class="player-links-logo"></span>
+                                                        <span class="player-links-title">Профиль на сайте КХЛ</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% comment %}
+                                                <li class="player-links-item">
+                                                    <a href="#" class="player-links-link">
+                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="player-links-logo"></span>
+                                                        <span class="player-links-title">Профиль на сайте НХЛ</span>
+                                                    </a>
+                                                </li>
+                                            {% endcomment %}
+                                            {% if wiki_page %}
+                                                <li class="player-links-item">
+                                                    <a href="{{ wiki_page }}" class="player-links-link">
+                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/wiki-logo.png" alt="" class="player-links-logo"></span>
+                                                        <span class="player-links-title">Статья в Википедии</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                     <div class="eight wide column">
-                                        <ul class="player-links-list">
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/fb-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Страница на Facebook</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/vk-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Страница ВКонтакте</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link player-links-link_internet">
-                                                    +ЕЩЕ В ИНТЕРНЕТ
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        {% if fb or vk %}
+                                            <ul class="player-links-list">
+                                                {% if fb %}
+                                                    <li class="player-links-item">
+                                                        <a href="{{ fb }}" class="player-links-link">
+                                                            <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/fb-logo.png" alt="" class="player-links-logo"></span>
+                                                            <span class="player-links-title">Страница на Facebook</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if vk %}
+                                                    <li class="player-links-item">
+                                                        <a href="{{ vk }}" class="player-links-link">
+                                                            <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/vk-logo.png" alt="" class="player-links-logo"></span>
+                                                            <span class="player-links-title">Страница ВКонтакте</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% comment %}
+                                                    <li class="player-links-item">
+                                                        <a href="#" class="player-links-link player-links-link_internet">
+                                                            +ЕЩЕ В ИНТЕРНЕТ
+                                                        </a>
+                                                    </li>
+                                                {% endcomment %}
+                                            </ul>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

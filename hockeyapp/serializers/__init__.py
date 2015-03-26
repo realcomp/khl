@@ -224,6 +224,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'saves_p_average_index', 'sf_average_index',
             'loose_goals_total_index', 'matches_win_total_index',
             'matches_lose_total_index', 'gamingtime_total_index',
+            'fb', 'vk',
             )
         model = Player
 
