@@ -93,6 +93,16 @@
                             <li class="stadium-info-item">
                                 <span>Сайт:</span> <a href="{{ arena.site }}">{{ arena.site }}</a>
                             </li>
+                            {% if arena.club_set.count > 1 %}
+                                <li class="stadium-info-item">
+                                    <span>Также, это домашняя площадка для:</span>
+                                    {% for club in arena.club_set %}
+                                        {% if club.pk != pk %}
+                                            <a href="{{ club.url }}">{{ club.title_verbose }}</a><br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
