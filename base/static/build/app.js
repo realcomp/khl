@@ -424,6 +424,8 @@ angular.module('Sportomatics')
                     });
                     _.each(graphs, function(graph, index){
                         graph.balloonText = balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
+                        graph.lineColorField = 'lineColor';
+                        graph.fillColorsField = 'lineColor';
                         chart.addGraph(graph);
                     })
                 } else {
@@ -440,6 +442,8 @@ angular.module('Sportomatics')
                     graph1.fillColors = "#408e3a";
                     graph1.fillAlphas = 1;
                     graph1.lineThickness = 0;
+                    graph1.lineColorField = 'lineColor';
+                    graph1.fillColorsField = 'lineColor';
                     //graph1.animationPlayed = true;
                     graph1.type = 'column';
                     if(field === 'goals' || field === 'assists' || field === 'points' || field === 'plus_minus' || field === 'penalty_time' )
@@ -2859,38 +2863,27 @@ angular.module('Sportomatics')
                     $scope.chart = chart;
                     // WRITE
                     if(self.coach){
-                        $scope.chart.guides = [];
-                        _.each($scope.coachData.results, function(result){
-                            var seasonEnd = new Date(result.season.end_date);
-                            var prevSeasonEndString = (parseInt(result.season.end_date.substr(0,4))-1).toString() + result.season.end_date.substr(4);
-                            var prevSeasonEnd = new Date(prevSeasonEndString);
-                            $scope.chart.guides.push({
-                                "fillAlpha" : 0.3,
-                                "date" : (prevSeasonEnd.getTime() >= min) ? prevSeasonEnd : new Date(min),
-                                "toDate": seasonEnd,
-                                "fillColor" : "#3498db",
-                                "lineThickness": 0
-                            });
-                        })
+                        _.each($scope.chart.dataProvider, function(data){
+                            _.each($scope.coachData.results, function(coachData){
+                                if(new Date(data.date).getFullYear() === new Date(coachData.end_date).getFullYear()){
+                                    data.lineColor = "#3498db"
+                                }
+                            })
+                        });
                     }
                     if(self.club){
-                        $scope.chart.guides = [];
-                        _.each($scope.clubData.results, function(result){
-                            var seasonEnd = new Date(result.season.end_date);
-                            var prevSeasonEndString = (parseInt(result.season.end_date.substr(0,4))-1).toString() + result.season.end_date.substr(4);
-                            var prevSeasonEnd = new Date(prevSeasonEndString);
-                            $scope.chart.guides.push({
-                                "fillAlpha" : 0.3,
-                                "date" : (prevSeasonEnd.getTime() >= min) ? prevSeasonEnd : new Date(min),
-                                "toDate": seasonEnd,
-                                "fillColor" : "#3498db"
-                            });
-                        })
+                        _.each($scope.chart.dataProvider, function(data){
+                            _.each($scope.clubData.results, function(clubData){
+                                if(new Date(data.date).getFullYear() === new Date(clubData.end_date).getFullYear()){
+                                    data.lineColor = "#3498db"
+                                }
+                            })
+                        });
                     }
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
 
-                    if ($scope.playersStats.length > 0) return $scope.makeChart(switched);
-                    if($scope.disabled){
+                    if ($scope.playersStats.length > 0) return $scope.makeChart(switched); //player comparison
+                    if($scope.disabled){ //not registered users
                         $scope.chart.chartCursor = null;
                         $scope.chart.chartScrollbar = null;
                         $scope.chart.startDuration = null;
@@ -2908,8 +2901,7 @@ angular.module('Sportomatics')
             };
             $scope.$watch('lastSeason', function(newval){
                 if(newval)
-                    $scope.createRadar($scope.radarPlayers, newval).then(function(){
-                    });
+                $scope.createRadar($scope.radarPlayers, newval)
             });
             $scope.getPlayerData = function(){
                 $scope.playerObject = {
@@ -2932,12 +2924,21 @@ angular.module('Sportomatics')
                         $http.get(url + '?' + params)
                             .success(function(data, status, headers) {
                                 $scope.dataBySeason = data;
+                                console.log($scope.dataBySeason)
                                 $scope.playerObject.dataBySeason = data;
                                 self.data = data; //for table view
                                 self.loader = false;
                             }).then(function(){
                                 //$scope.playersStats.push(playerObject);
-                                self.list();
+                                if(self.coach){
+                                    $scope.getCoachData();
+                                }
+                                else if(self.club) {
+                                    $scope.getClubData();
+                                }
+                                else {
+                                    self.list();
+                                }
                             })
                     })
             };
@@ -2946,10 +2947,12 @@ angular.module('Sportomatics')
                 var params = 'group_by=' + group;
                 if (self.coach !== null) {
                     params += '&coach=' + self.coach;
+                    self.loader = true;
                     $http.get(url + '?' + params)
                         .success(function(data, status, headers) {
                             $scope.coachData = data;
                         }).then(function(){
+                            self.loader = false;
                             self.list();
                         })
                 }
@@ -2959,10 +2962,12 @@ angular.module('Sportomatics')
                 var params = 'group_by=' + group;
                 if (self.club !== null) {
                     params += '&club=' + self.club;
+                    self.loader = true;
                     $http.get(url + '?' + params)
                         .success(function(data, status, headers) {
                             $scope.clubData = data;
                         }).then(function(){
+                            self.loader = false;
                             self.list();
                         })
                 }
@@ -3169,8 +3174,8 @@ angular.module('Sportomatics')
 
 
             $scope.getPlayerData();
-            $scope.getCoachData();
-            $scope.getClubData();
+            //$scope.getCoachData();
+            //$scope.getClubData();
             //$scope.generateRadarChart();
             $scope.sumRadars = function(){
                 // $scope.createRadar(['1373', '1634'], '2013', true).then(function(){
