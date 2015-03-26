@@ -133,3 +133,7 @@ font-weight: bold;}
 .ui-datepicker .ui-datepicker-prev{background: url(../images/arrowDatePrew.png) no-repeat center;}
 .ui-datepicker .ui-datepicker-next{background: url(../images/arrowDateNext.png) no-repeat center;}
 /*Datepicker End*/
+/*Clubs HTML */
+.clubs-tabs .heading{display: inline-block;margin: 5px 15px}
+
+/*Clubs HTML END*/
