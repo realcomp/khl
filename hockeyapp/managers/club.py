@@ -9,12 +9,12 @@ from django.db.models.loading import get_model
 
 from .. import parsers
 
-from . import DataCleanMixin
+from . import DataCleanMixin, LocaleOrderMixin
 
 CURRENT_APP = __package__.split('.')[0]
 
 
-class ClubQuerySet(DataCleanMixin, models.QuerySet):
+class ClubQuerySet(LocaleOrderMixin, DataCleanMixin, models.QuerySet):
     b''' Менеджер клуба '''
     def _get_data(self, url):
         b''' Берем данные со стороннего сайта парсером '''

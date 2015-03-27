@@ -5,15 +5,10 @@ from django.views.generic import DetailView, TemplateView
 from django.utils.translation import ugettext_lazy as _
 
 from addresses.models import Country
-from base.models import Season
 
-from .mixins import SeasonsMixin
 from ..models import Club, Player, ClubPlayer, CoachClub
 from ..serializers import (
-    CountrySerializer, SeasonSerializer,
-    PlayerCardSerializer, PlayerCardDetailSerializer,
-    ClubListSerializer,
-)
+    CountrySerializer, PlayerCardSerializer, PlayerCardDetailSerializer)
 from ..serializers.players import (
     PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
 
@@ -95,21 +90,12 @@ class PlayerCardClubs(PlayerCard):
 
     def get_context_data(self, **kwargs):
         context = super(PlayerCardClubs, self).get_context_data(**kwargs)
-        clubplayers = (
-            ClubPlayer.objects
-            .filter(player=self.get_object())
-            .order_by('season__start_date'))
-        clubs = {}
-        for clubplayer in clubplayers:
-            pk = clubplayer.club_id
-            if pk not in clubs:
-                clubs[pk] = clubplayer.club
-            if not hasattr(clubs[pk], 'selected_seasons'):
-                clubs[pk].selected_seasons = []
-            if clubplayer.season not in clubs[pk].selected_seasons:
-                clubs[pk].selected_seasons.append(clubplayer.season)
+        clubs = (
+            Club.objects
+            .filter(clubplayer__player=self.get_object())
+            .locale_order_by(self.request, '%s_title').distinct())
         context['clubs'] = PlayerCardClubsSerializer(
-            clubs.values(), many=True, context=context).data
+            clubs, many=True, context=context).data
         return context
 
 
@@ -153,59 +139,6 @@ class PlayerCardCommunication(PlayerCard):
 
 class PlayerCardNews(PlayerCard):
     template_name = 'hockeyapp/players/player-card-news.html'
-
-
-class ClubListView(TemplateView):
-    template_name = 'hockeyapp/clubs/clubs.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ClubListView, self).get_context_data(**kwargs)
-        context['request'] = self.request
-        seasons = Season.objects.order_by('-start_date')
-        context['seasons'] = SeasonSerializer(
-            seasons, context=context, many=True).data
-        return context
-
-
-class ClubView(SeasonsMixin, DetailView):
-    model = Club
-    template_name = 'hockeyapp/clubs/clubs-team.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ClubView, self).get_context_data(**kwargs)
-        context['request'] = self.request
-        context.update(ClubListSerializer(
-            self.get_object(), context=context).data)
-        return context
-
-
-class ClubCalendarView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-calendar.html'
-
-
-class ClubHomeView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-home.html'
-
-
-class ClubFanZoneView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-fan.html'
-
-
-class ClubPhotosView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-photos.html'
-
-
-class ClubStatsView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-stats.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ClubStatsView, self).get_context_data(**kwargs)
-        context['alphabet'] = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-        return context
-
-
-class ClubNewsView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-news.html'
 
 
 class MetricsPlayers(TemplateView):
