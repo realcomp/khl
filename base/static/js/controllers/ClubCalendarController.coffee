@@ -9,16 +9,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 
         $scope.CalendarEventPopup = {}
         $scope.CalendarEventPopupShow = (e, event) ->
-            if $('.calendar-event-popup:hidden').length and this.cell.schedule
+            if $('.calendar-event-popup:hidden').length and @cell.schedule
                 $scope.CalendarEventPopup.data = null
-                $scope.CalendarEventPopup.is_home = this.cell.schedule.is_home
-                $scope.CalendarEventPopup.is_guest = this.cell.schedule.is_guest
+                $scope.CalendarEventPopup.is_home = @cell.schedule.is_home
+                $scope.CalendarEventPopup.is_guest = @cell.schedule.is_guest
                 params = ''
-                if this.cell.schedule.is_home
+                if @cell.schedule.is_home
                     params = '?is_home=true'
-                if this.cell.schedule.is_guest
+                if @cell.schedule.is_guest
                     params = '?is_guest=true'
-                $http.get($scope.urlPopup.replace(0, this.cell.schedule.pk) + params
+                $http.get($scope.urlPopup.replace(0, @cell.schedule.pk) + params
                 ).success((data) ->
                     $scope.CalendarEventPopup.data = data;
                     return

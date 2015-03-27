@@ -1,4 +1,12 @@
 /*clubs-team*/
+.tab-photo-wrap{position: relative;width: 100%;text-align: center;margin-top: 25px}
+.tab-photo-wrap .ui.small.button, .ui.small.buttons .button, .ui.small.buttons .or{
+	font-size: 0.675rem;
+}
+.tab-photo-wrap .ui.buttons .or:before{content: ''!important;}
+.tab-photo-wrap .ui.button{width: 100px; background-color: #fff;color: rgba(64, 142, 58, 1);}
+.tab-photo-wrap .active-photo-table{background-color: rgba(64, 142, 58, 1) !important;color: #fff !important;}
+
 .clubs-team-wrap{
 	width: 960px;
 	margin: 0 auto;
@@ -13,6 +21,8 @@
     -o-transition: all 0.2s linear 0s;
     
 }
+
+
 .clubs-team-wrap .players-block{
 	width: 320px;
 	float: left;
@@ -123,3 +133,7 @@ font-weight: bold;}
 .ui-datepicker .ui-datepicker-prev{background: url(../images/arrowDatePrew.png) no-repeat center;}
 .ui-datepicker .ui-datepicker-next{background: url(../images/arrowDateNext.png) no-repeat center;}
 /*Datepicker End*/
+/*Clubs HTML */
+.clubs-tabs .heading{display: inline-block;margin: 5px 15px}
+
+/*Clubs HTML END*/

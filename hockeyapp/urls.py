@@ -3,6 +3,7 @@ from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
+from .views import club
 
 
 urlpatterns = patterns(
@@ -82,19 +83,19 @@ urlpatterns = patterns(
     url(r'^players/(?P<pk>\d+)/news/$', views.PlayerCardNews.as_view(),
         name='player-card-news'),
     # clubs
-    url(r'^clubs/$', views.ClubListView.as_view(), name='club-list'),
-    url(r'^clubs/(?P<pk>\d+)/$', views.ClubView.as_view(), name='club'),
-    url(r'^clubs/(?P<pk>\d+)/calendar/$', views.ClubCalendarView.as_view(),
+    url(r'^clubs/$', club.ClubListView.as_view(), name='club-list'),
+    url(r'^clubs/(?P<pk>\d+)/$', club.ClubView.as_view(), name='club'),
+    url(r'^clubs/(?P<pk>\d+)/calendar/$', club.ClubCalendarView.as_view(),
         name='club-calendar'),
-    url(r'^clubs/(?P<pk>\d+)/stats/$', views.ClubStatsView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/stats/$', club.ClubStatsView.as_view(),
         name='club-stats'),
-    url(r'^clubs/(?P<pk>\d+)/home/$', views.ClubHomeView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/home/$', club.ClubHomeView.as_view(),
         name='club-home'),
-    url(r'^clubs/(?P<pk>\d+)/photos/$', views.ClubPhotosView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/photos/$', club.ClubPhotosView.as_view(),
         name='club-photos'),
-    url(r'^clubs/(?P<pk>\d+)/fanzone/$', views.ClubFanZoneView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/fanzone/$', club.ClubFanZoneView.as_view(),
         name='club-fanzone'),
-    url(r'^clubs/(?P<pk>\d+)/news/$', views.ClubNewsView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/news/$', club.ClubNewsView.as_view(),
         name='club-news'),
 
     #admin

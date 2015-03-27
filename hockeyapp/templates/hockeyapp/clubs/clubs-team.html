@@ -57,7 +57,7 @@
                 <div class="divider"> / </div>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}#?country=1&league={{league.pk}}">{{league.title}}</a>
                 <div class="divider"> / </div>
-                <a class="section" href="">{{title}}</a>
+                <a class="section" href="">{{title}} ({{address.city.title}})</a>
                 <div class="divider"> / </div>
                 <a class="active section">Состав команды</a>
             </div>
@@ -108,14 +108,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row clubs-team-inner-tabs" id="team-all" data-tab="team-all">
+                            <div class="tab-photo-wrap">
+                              <div id="sel" class="ui small buttons">
+                                <div class="ui button active-photo-table" ng-click="setType('photos')">фото</div>
+                                <div class="or"></div>
+                                <div class="ui button" ng-click="setType('table')">таблица</div>
+                              </div>
+                            </div>
+                              <div class="row clubs-team-inner-tabs" id="team-all" data-tab="team-all">
                                  <div class="row " id="team-photos" ng-show="type === 'photos'">
                                         {% verbatim %}
                                         <div class="clubs-team-wrap">
                                             <div class="deffender-block players-block">
                                                 <div class="head-player-block">
                                                     <div class="position">Защитники</div>
-                                                    <div class="tab"><a href="" ng-click="setType('table')" >таблица</a>|<a href="" ng-click="setType('photos')" >фото</a></div>
+                                                    
                                                 </div>
                                                 <!--Player Card Deffender-->
                                                 <div class="player-item" ng-repeat="player in players.defender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
@@ -132,7 +139,7 @@
                                             <div class="forward-block players-block">
                                                 <div class="head-player-block">
                                                     <div class="position">Нападающие</div>
-                                                    <div class="tab"><a href="#" ng-click="setType('table')" >таблица</a>|<a href="#" ng-click="setType('photos')" >фото</a></div>
+                                                   
                                                 </div>
                                                 <!--Player Card  Forward                                -->
                                                 <div class="player-item" ng-repeat="player in players.offender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
@@ -262,7 +269,7 @@
                                     <div class="row" id="team-tables"  ng-show="type === 'table'">
                                         <input type="hidden" name="seasonz" value="">
                                         <div class="heading">Сезон 2013-2014</div>
-                                        <div class="prew-table-foto"><a href="#">Фото</a></div>
+                                    
                                         <table class="ui celled table segment clubs-team-table">
                                             <thead>
                                             <tr>

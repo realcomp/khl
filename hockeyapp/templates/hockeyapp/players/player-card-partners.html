@@ -13,6 +13,12 @@
                 <div class="divider"> / </div>
                 <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
                 <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
+                <div class="divider"> / </div>
                 <a class="active section">{% trans 'Team partners' %}</a>
             </div>
             <div class="search-block">
