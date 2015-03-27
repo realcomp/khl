@@ -199,6 +199,8 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
 
 
 class PlayerCardDetailSerializer(PlayerCardSerializer):
+    club = ClubListSerializer()
+
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',

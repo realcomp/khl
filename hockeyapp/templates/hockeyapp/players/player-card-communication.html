@@ -1,4 +1,5 @@
 {% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{fio}}: общение, хоккей  - Sportomatics.ru
@@ -9,11 +10,17 @@
     <div class="container player-card-short-page">
         <div class="breadcrumbs">
             <div class="ui small breadcrumb">
-                <a class="section" href="/">ХОККЕЙ</a>
+                <a class="section" href="/">{% trans 'Hockey' %}</a>
                 <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
                 <div class="divider"> / </div>
-                <a class="active section">Общение</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
+                <div class="divider"> / </div>
+                <a class="active section">{% trans 'Communication' %}</a>
             </div>
             <div class="search-block">
                 <div class="item">
