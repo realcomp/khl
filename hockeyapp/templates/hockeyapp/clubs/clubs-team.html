@@ -97,13 +97,14 @@
                                         </div>
                                         <ul>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'all'">Все</a></li>
+                                                   ng-click="unMakeTransferArrows()">Все</a></li>
+                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="makeTransferArrows()">Пришли в этом сезоне</a></li>
+                                                   <!--ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли в этом сезоне</a></li>-->
+
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли в этом сезоне</a></li>
+                                                   ng-click="unMakeTransferArrows()">Ушли в этом сезоне</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'left'">Ушли в этом сезоне</a></li>
-                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Легионеры</a></li>
+                                                   ng-click="unMakeTransferArrows()">Легионеры</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -122,10 +123,9 @@
                                             <div class="deffender-block players-block">
                                                 <div class="head-player-block">
                                                     <div class="position">Защитники</div>
-                                                    
                                                 </div>
                                                 <!--Player Card Deffender-->
-                                                <div class="player-item" ng-repeat="player in players.defender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                                <div class="player-item" ng-repeat="player in players.defender_players track by $index" ng-click="go('/ru/hockey/players/'+player.pk)" id="playerd_{{$index}}">
                                                     <div class="img-wrap">
                                                         <img src="{{player.photo}}" alt="">
                                                         <div class="player-number ui teal ribbon label">{{player.number}}</div>
@@ -235,9 +235,9 @@
                                             <table class="clubs-team-logos-table" id="leagues-all" data-tab="leagues-all">
                                                 <tbody>
                                                 {% verbatim %}
-                                                <tr ng-repeat="row in ClubTeamCtrl.CLUBS_TABLE">
+                                                <tr ng-repeat="row in ClubTeamCtrl.CLUBS_TABLE track by $index">
                                                     <td ng-repeat="cell_id in row"
-                                                        class="cell-{{ cell_id[0] }}">
+                                                        class="cell-{{ cell_id[0] }}" id="club_{{$index}}">
                                                         <a class="team-player-photo-link"
                                                            href="{{ ClubTeamCtrl.getCell(clubs, cell_id).url }}"
                                                            ng-show="ClubTeamCtrl.getCell(clubs, cell_id)">
