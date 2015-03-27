@@ -47,14 +47,15 @@
                     </div>
                     <div class="row">
                         <div class="four wide column">
-                            <ul class="options-list player-clubs-list">
+                            <ul class="options-list player-clubs-list"
+                                {% if coaches %} ng-init="PlayerCardIndicatorsCtrl.coach = {{ coaches.0.pk }}" {% endif %}>
                                 {% for coach in coaches %}
                                     <li class="option-item">
                                         <a href="" class="option-link"
                                            ng-class="{ 'option-link_active':PlayerCardIndicatorsCtrl.coach === {{ coach.pk }} }"
                                            ng-click="PlayerCardIndicatorsCtrl.setCoach({{ coach.pk }})">
-                                            {{ coach.fio }}
-                                            ({{ coach.years_months.0 }} {% trans 'years' %} {{ coach.years_months.1 }} {% trans 'mon.' %})
+                                            {# <img src="{{ coach.photo }}" width="20" height="20" /> #}
+                                            {{ coach.lastname }} {{ coach.name }}
                                         </a>
                                     </li>
                                 {% endfor %}

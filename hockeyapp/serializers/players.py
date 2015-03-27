@@ -218,14 +218,8 @@ class PlayerCardClubsSerializer(BaseClubSerializer):
 
 
 class PlayerCardCoachesSerializer(CoachSerializer):
-    years_months = serializers.SerializerMethodField()
-
-    def get_years_months(self, obj):
-        total_months = obj.total_days / 30
-        return [total_months / 12, total_months % 12]
-
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname', 'years_months'
+        fields = 'pk', 'fio', 'name', 'lastname'
         model = Coach
 
 

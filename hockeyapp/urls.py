@@ -3,7 +3,7 @@ from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
-from .views import club
+from .views import club, player
 
 
 urlpatterns = patterns(
@@ -62,25 +62,26 @@ urlpatterns = patterns(
         views.MetricsPlayersCompareGraph.as_view(),
         name='metrics-compare-graph'),
     # players
-    url(r'^players/$', views.PlayersSearch.as_view(),
+    url(r'^players/$', player.PlayersSearch.as_view(),
         name='players-search'),
-    url(r'^players/(?P<pk>\d+)/$', views.PlayerCard.as_view(),
+    url(r'^players/(?P<pk>\d+)/$', player.PlayerCard.as_view(),
         name='player-card'),
     url(r'^players/(?P<pk>\d+)/indicators/$',
-        views.PlayerCardIndicators.as_view(),
+        player.PlayerCardIndicators.as_view(),
         name='player-card-indicators'),
-    url(r'^players/(?P<pk>\d+)/clubs/$', views.PlayerCardClubs.as_view(),
+    url(r'^players/(?P<pk>\d+)/clubs/$', player.PlayerCardClubs.as_view(),
         name='player-card-clubs'),
-    url(r'^players/(?P<pk>\d+)/coaches/$', views.PlayerCardCoaches.as_view(),
+    url(r'^players/(?P<pk>\d+)/coaches/$', player.PlayerCardCoaches.as_view(),
         name='player-card-coaches'),
-    url(r'^players/(?P<pk>\d+)/partners/$', views.PlayerCardPartners.as_view(),
+    url(r'^players/(?P<pk>\d+)/partners/$',
+        player.PlayerCardPartners.as_view(),
         name='player-card-partners'),
-    url(r'^players/(?P<pk>\d+)/photos/$', views.PlayerCardPhotos.as_view(),
+    url(r'^players/(?P<pk>\d+)/photos/$', player.PlayerCardPhotos.as_view(),
         name='player-card-photos'),
     url(r'^players/(?P<pk>\d+)/communication/$',
-        views.PlayerCardCommunication.as_view(),
+        player.PlayerCardCommunication.as_view(),
         name='player-card-communication'),
-    url(r'^players/(?P<pk>\d+)/news/$', views.PlayerCardNews.as_view(),
+    url(r'^players/(?P<pk>\d+)/news/$', player.PlayerCardNews.as_view(),
         name='player-card-news'),
     # clubs
     url(r'^clubs/$', club.ClubListView.as_view(), name='club-list'),
