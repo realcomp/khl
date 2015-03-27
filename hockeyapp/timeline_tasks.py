@@ -127,7 +127,8 @@ class PlayerTimelineGenerator(Task):
             obj = models.ClubPlayerMatch.objects.is_active(
                                     ).filter(   clubplayer__player=player,
                                                 clubplayer__line=1,
-                                                loose_goals=0
+                                                loose_goals=0,
+                                                gamingtime__gte=58*60
                                     ).order_by('match__date').first()
             return obj and obj.match and obj.match.date
 

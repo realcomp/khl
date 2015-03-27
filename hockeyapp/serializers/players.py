@@ -192,7 +192,8 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
             (guest_matches and guest_matches.count() or 0))
 
     def get_zero_goals_matches(self, obj):
-        return obj.filter(loose_goals=0).count()
+        # at least 58 minutes
+        return obj.filter(loose_goals=0, gamingtime__gte=58*60).count()
 
     def get_bullet_matches(self, obj):
         return obj.filter(bullet_goals__gt=0).count()
