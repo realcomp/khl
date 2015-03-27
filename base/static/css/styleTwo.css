@@ -1,10 +1,19 @@
-/*clubs-team*/
+/*HEADER*/
+/*menu buttons*/
+.user-card-menu .ui.inverted.button {box-shadow: 0px 1px 1px #f1f2e9 !important}
+.breadcrumbs .search-block{margin-right: 10px}
+
+
+/*menu buttons*/
+.bottom-line .ui.menu.user-card-menu{margin-left: 0px;}
+/*HEADER END*/
+/*clubs-team.html*/
 .tab-photo-wrap{position: relative;width: 100%;text-align: center;margin-top: 25px}
 .tab-photo-wrap .ui.small.button, .ui.small.buttons .button, .ui.small.buttons .or{
 	font-size: 0.675rem;
 }
 .tab-photo-wrap .ui.buttons .or:before{content: ''!important;}
-.tab-photo-wrap .ui.button{width: 100px; background-color: #fff;color: rgba(64, 142, 58, 1);}
+.tab-photo-wrap .ui.button{width: 100px; background-color: #e4e5da;color: rgba(64, 142, 58, 1);font-size: 16px}
 .tab-photo-wrap .active-photo-table{background-color: rgba(64, 142, 58, 1) !important;color: #fff !important;}
 
 .clubs-team-wrap{
@@ -23,14 +32,20 @@
 }
 
 
-.clubs-team-wrap .players-block{
+.clubs-team-wrap .deffender-block{
 	width: 320px;
 	float: left;
 	margin-right: 10px;
 
 }
+.clubs-team-wrap .forward-block{
+	width: 420px;
+	float: left;
+	margin-right: 10px;
 
-.players-block .head-player-block{width: 315px;}
+}
+.deffender-block .head-player-block{width: 315px;}
+.forward-block .head-player-block{width: 415px;}
 .head-player-block{
 	padding: 10px 0px;
 	float: left;
@@ -106,6 +121,7 @@ font-weight: bold;}
 .clubs-team-wrap .out-block .player-item .ui.teal.ribbon.label{background-color: #909090 !important ;border-color: #909090 !important ;}
 .clubs-team-wrap .out-block .player-item .ui.teal.ribbon.label:before{background-color: #909090 !important ;border-width: 0px 0px 1px 0px}
 .clubs-team-wrap .out-block .player-name{color:#7D7D7D;}
+.clubs-team-wrap .player-name p{  width: 70px;margin: 0 auto;font-size: 110%}
 .prew-table-foto a{display: inline-block;text-transform: uppercase;color: #408E3A;margin-bottom: 5px}
 .prew-table-foto a:hover{text-decoration: none}
 .ui.grid > .row .prew-table-foto{font-size: 15px;}
@@ -137,3 +153,8 @@ font-weight: bold;}
 .clubs-tabs .heading{display: inline-block;margin: 5px 15px}
 
 /*Clubs HTML END*/
+
+
+/*Footer*/
+.footer .socials .button{margin-bottom: 20px;margin-top: 0px}
+/*Footer END*/
