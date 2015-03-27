@@ -212,27 +212,8 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
 
 
 class PlayerCardClubsSerializer(BaseClubSerializer):
-    seasons_title = serializers.SerializerMethodField()
-
-    def get_seasons_title(self, obj):
-        # clubleague = LeagueClub.objects.get(
-        #     club=obj, season=obj.selected_seasons[0])
-        league_title = ''
-        if obj.league:
-            league_title = '%s: ' % obj.league.get_locale_attr(
-                'title', request=self.context.get('request'))
-        return '%(league)s%(club)s (%(seasons)s)' % {
-            'league': league_title,
-            'club': obj.get_locale_attr(
-                'title', request=self.context.get('request')),
-            'seasons': ' '.join(map(
-                attrgetter('short_title'),
-                filter(None, obj.selected_seasons))),
-        }
-
     class Meta(object):
-        fields = (
-            'pk', 'title', 'logo', 'url', 'seasons_title')
+        fields = 'pk', 'title', 'logo', 'url'
         model = Club
 
 
