@@ -136,24 +136,68 @@ def delete_club_duplicates_with_relation():
             _model.objects.filter(club__pk__in=dup_club_ids
                           ).update(club_id=club_id)
             _qs = _model.objects.filter(club_id=club_id)
-            delete_duplicates(_qs)
+            delete_duplicates(_qs, _model)
         for _model in _hg_models:
             _model.objects.filter(home_team__pk__in=dup_club_ids
                          ).update(home_team_id=club_id)
             _qs = _model.objects.filter(home_team_id=club_id)
-            delete_duplicates(_qs)
+            #delete_duplicates(_qs)
             _model.objects.filter(guest_team__pk__in=dup_club_ids
                          ).update(guest_team_id=club_id)
             _qs = _model.objects.filter(guest_team_id=club_id)
-            delete_duplicates(_qs)
+            #delete_duplicates(_qs)
 
 
-def delete_duplicates(qs):
+def delete_duplicates(qs, model=None, exclude_field=None):
     _rows = qs.values()
+    CPM = get_model(CURRENT_APP, 'ClubPlayerMatch')
+    CP = get_model(CURRENT_APP, 'ClubPlayer')
+    for row in _rows:
+        row.pop('id', None)
+        if exclude_field:
+            row.pop(exclude_field, None)
+        _vals = qs.filter(**row)
+        if _vals.count() > 1:
+            _ids = set(_vals.values_list('pk', flat=True))
+            cur_id = _ids.pop()
+            if model == CP:
+                _cur_cp = CP.objects.get(pk=cur_id)
+                _cp_qs = CP.objects.filter(pk__in=_ids)
+                _cpm_qs = CPM.objects.filter(clubplayer__in=_ids)
+                for _cp in _cp_qs:
+                    _cur_cp.homematches.add(*_cp.homematches.all())
+                    _cur_cp.guestmatches.add(*_cp.guestmatches.all())
+                _cpm_qs.update(clubplayer_id=cur_id)
+                _qs = CPM.objects.filter(clubplayer_id=cur_id)
+                delete_duplicates(_qs)
+            qs.filter(pk__in=_ids).delete()
+
+
+
+def delete_club_players_duplicates():
+    CP = get_model(CURRENT_APP, 'ClubPlayer')
+    qs = CP.objects.all()
+    _rows = qs.values()
+    CPM = get_model(CURRENT_APP, 'ClubPlayerMatch')
     for row in _rows:
         row.pop('id', None)
         _vals = qs.filter(**row)
         if _vals.count() > 1:
             _ids = set(_vals.values_list('pk', flat=True))
-            _ids.pop()
+            cur_id = _ids.pop()
+            _cur_cp = CP.objects.get(pk=cur_id)
+            _cp_qs = CP.objects.filter(pk__in=_ids)
+            _cpm_qs = CPM.objects.filter(clubplayer__in=_ids)
+            for _cp in _cp_qs:
+                _cur_cp.homematches.add(*_cp.homematches.all())
+                _cur_cp.guestmatches.add(*_cp.guestmatches.all())
+            _cpm_qs.update(clubplayer_id=cur_id)
+            _qs = CPM.objects.filter(clubplayer_id=cur_id)
+            delete_duplicates(_qs, exclude_field='adv_stats_id')
             qs.filter(pk__in=_ids).delete()
+
+
+def delete_cpm_duplicates():
+    CPM = get_model(CURRENT_APP, 'ClubPlayerMatch')
+    _qs = CPM.objects.all()
+    delete_duplicates(_qs, exclude_field='adv_stats_id')

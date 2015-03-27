@@ -86,4 +86,8 @@ class LocaleOrderMixin(object):
         return self.order_by(*args)
 
 
+class AbstractManQuerySet(LocaleOrderMixin, models.QuerySet):
+    pass
+
+
 from . import arena, club, match, player

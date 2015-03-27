@@ -36,6 +36,8 @@ def hex_validator(value):
 
 
 class AbstractMan(LocaleAttrMixin, models.Model):
+    objects = managers.AbstractManQuerySet.as_manager()
+
     ru_fio = models.CharField(_('Full name (rus)'), max_length=4096, blank=True)
     ru_name = models.CharField(_('Name (rus)'), max_length=4096, blank=True, null=True)
     ru_lastname = models.CharField(_('Last name (rus)'), max_length=4096, blank=True, null=True)
