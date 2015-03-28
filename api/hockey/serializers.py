@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import rest_framework as drf
 
+from rest_framework import serializers
 from api.addresses.serializers import AddressMinimalSerializer, CountrySerializer
 from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
@@ -88,10 +89,12 @@ class ClubListSerializer(TitleBaseSerializer):
 
 class PartnerPlayerSerializer(PlayerMinimalSerialiser):
     citizenship = CountrySerializer()
+    line_display = serializers.ReadOnlyField(source='get_line_display')
+
     class Meta:
         model = Player
         fields = (  'id', 'number', 'line', 'ru_fio', 'photo', 'fio', 'name', 
-                    'lastname', 'citizenship')
+                    'lastname', 'citizenship', 'line_display')
         read_only_fields = fields
 
 

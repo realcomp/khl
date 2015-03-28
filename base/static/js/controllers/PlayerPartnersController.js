@@ -1,7 +1,6 @@
 angular.module('Sportomatics')
     .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
-        console.log($scope.url);
         $scope.rate_by_param = parseInt($location.search()['rate_by']);
         $scope.is_playing_param = parseInt($location.search()['is_playing']);
 
@@ -18,7 +17,6 @@ angular.module('Sportomatics')
         };
         $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
         $scope.increaseLimit = function(index){
-            console.log(index);
             $scope.limit[index] += 4;
         };
         $scope.setPlaying = function(value){
@@ -34,22 +32,42 @@ angular.module('Sportomatics')
             $scope.getPartners();
         };
         $scope.getPartners = function(){
-            $scope.url = $('#url').val();
-            if(($scope.params && $scope.params.is_playing) || ($scope.params && $scope.params.rate_by)){
-                $scope.url += '?'+ $.param($scope.params)
-            }
-            $scope.loader = true;
-            $http.get($scope.url)
+            $http.get('/static/json/countries-json-ru-codes.json')
                 .success(function(data){
-                    $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
-                    $scope.loader = false;
-                    if($scope.params.rate_by){
-                        $scope.playersBySeasonTime = data;
-                    } else {
-                        $scope.playersBySeasonTime = [];
-                        $scope.playersBySeasonCount = _.filter(_.sortBy(data, 'seasons_count').reverse(), function(el){ return el.seasons_count > 0});
+                    $scope.countryCodes = data;
+                }).then(function(){
+                    $scope.url = $('#url').val();
+                    if(($scope.params && $scope.params.is_playing) || ($scope.params && $scope.params.rate_by)){
+                        $scope.url += '?'+ $.param($scope.params)
                     }
-                })
+                    $scope.loader = true;
+                    $http.get($scope.url)
+                        .success(function(data){
+                            _.each(data, function(object){
+                                _.each(object.players, function(player){
+                                    if(player.citizenship){
+                                        if(!player.citizenship.code){
+                                            _.each($scope.countryCodes, function(country){
+                                                if(player.citizenship.title)
+                                                if(country.name === player.citizenship.title){
+                                                    player.citizenship.code = country.code;
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            });
+                            console.log(data);
+                            $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
+                            $scope.loader = false;
+                            if($scope.params.rate_by){
+                                $scope.playersBySeasonTime = data;
+                            } else {
+                                $scope.playersBySeasonTime = [];
+                                $scope.playersBySeasonCount = _.filter(_.sortBy(data, 'seasons_count').reverse(), function(el){ return el.seasons_count > 0});
+                            }
+                        })
+                });
         };
         $scope.getPartners();
 
