@@ -177,9 +177,9 @@
                                             <div class="player-comparison-label inline-block">
                                                 {{player.title}}
                                             </div>
-                                            <div class="inline-block pointer" ng-click="disableGraph(player)">
+                                            <!--<div class="inline-block pointer" ng-click="disableGraph(player)">
                                                 <i class="fa fa-minus-square-o"></i> выключить
-                                            </div>
+                                            </div>-->
                                             <div class="inline-block pointer" ng-click="removeGraph(player)">
                                                 <i class="fa fa-minus-square-o"></i> удалить
                                             </div>
@@ -226,10 +226,6 @@
                                 <div id="chartdiv2" style="width: 100%; height:400px; ">
                                 </div>
 
-
-                                <!--<tags-input display-property="title" ng-model="selectedRadarFields" placeholder="Добавьте поле" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
-                                    <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadAvailableRadarFields($query)"></auto-complete>
-                                </tags-input>-->
                                 <div class="m-t-20">
                                     <input class="input-new" type="text" ng-model="playerToCompare.id">
                                     <a class="ui green button chart-button" ng-click="addRadarGraph(playerToCompare.id)">Сравнить с игроком {{playerToCompare.id}} {{playerToCompare.name}}</a>

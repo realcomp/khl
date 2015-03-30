@@ -5796,3 +5796,8 @@ hr.style-one {
 .player-partners-item i.flag:not(.icon):before{
     height: 14px;
 }
+
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important;
+}
