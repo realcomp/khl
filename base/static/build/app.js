@@ -2298,6 +2298,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         return cell.is_left;
                     case 'legionnaire':
                         return cell.is_legionnaire;
+                    case 'home':
+                        return cell.is_home;
                 }
             } else {
                 return false;
