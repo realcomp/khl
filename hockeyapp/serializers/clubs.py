@@ -28,12 +28,13 @@ class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
     is_joined = serializers.ReadOnlyField()
     is_left = serializers.ReadOnlyField()
     is_legionnaire = serializers.ReadOnlyField()
+    is_home = serializers.ReadOnlyField()
 
     class Meta(object):
         fields = (
             'pk', 'url', 'number', 'line_display', 'name', 'lastname',
             'birth_date_short', 'citizenship', 'contract_to', 'photo',
-            'is_joined', 'is_left', 'is_legionnaire', 'fio')
+            'is_joined', 'is_left', 'is_legionnaire', 'fio', 'is_home')
         model = Player
 
 
@@ -90,6 +91,8 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
         for player in self._players:
             player.is_joined = player in joined
             player.is_left = player in left
+            # воспитанник
+            player.is_home = player.birth_place == obj.address.city
         return self._players
 
     def _get_coaches(self, obj):

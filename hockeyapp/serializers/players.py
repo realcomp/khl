@@ -4,7 +4,7 @@ from operator import attrgetter
 
 from django.db.models import Avg, Sum
 
-from rest_framework import serializers
+from rest_framework import pagination, serializers
 
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
@@ -203,6 +203,16 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
             'zero_goals_matches', 'bullet_matches',
         )
         model = ClubPlayerMatch
+
+
+class ClubPlayerMatchPaginationSerilizer(pagination.PaginationSerializer):
+    is_limited = serializers.SerializerMethodField()
+
+    def get_is_limited(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return True
+        return False
 
 
 class PlayerCardClubsSerializer(BaseClubSerializer):

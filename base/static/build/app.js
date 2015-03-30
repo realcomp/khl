@@ -2359,6 +2359,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         return cell.is_left;
                     case 'legionnaire':
                         return cell.is_legionnaire;
+                    case 'home':
+                        return cell.is_home;
                 }
             } else {
                 return false;
@@ -3854,7 +3856,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
         $scope.$location = $location;
-        if ($location.search().uidb64 && $location.search().token) {
+        if (($location.search().uidb64 && $location.search().token) || $location.search().remember) {
             $scope.selectedType = 'remember';
         } else {
             $scope.selectedType = 'social';
