@@ -608,16 +608,16 @@ i.icon {
 }
 /* line 329, ../sass/_base.sass */
 .team-controls .team-control-btn .ui.button {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 /* line 332, ../sass/_base.sass */
 
 /* line 334, ../sass/_base.sass */
-.footer .container {
+/*.footer .container {
   border-top: 1px solid #9b9b9b;
   box-shadow: 0 -1px 0 0 #a6a6a6;
-}
+}*/
 /* line 337, ../sass/_base.sass */
 .footer .copyright {
   color: #000;
@@ -2520,7 +2520,6 @@ i.icon {
 }
 /* line 1576, ../sass/_base.sass */
 .players-search-page .player-controls-block {
-  border-top: 1px solid #d9d9d9;
   margin-top: 20px;
 }
 

@@ -16,6 +16,7 @@
 /*HEADER END*/
 /*CONTENT*/
 .content{
+	padding-bottom: 20px;
 	background: url(../images/bgTwoContent.jpg) no-repeat center; 
 	background-size: cover; 
 	/*-webkit-background-position: cover; 
@@ -53,7 +54,7 @@
 	overflow: hidden;
 
 }
-.ui.grid > .row .clubs-team-wrap{font-size: 12px;}
+.ui.grid > .row .clubs-team-wrap{font-size: 12px;padding:0px 15px }
 .clubs-team-wrap .head-player-block a{
 	transition: all 0.2s linear 0s;
     -webkit-transition: all 0.2s linear 0s;
@@ -61,101 +62,20 @@
     -o-transition: all 0.2s linear 0s;
     
 }
-
-
-.clubs-team-wrap .deffender-block{
-	width: 320px;
-	float: left;
-	margin-right: 10px;
-
-}
-.clubs-team-wrap .forward-block{
-	width: 420px;
-	float: left;
-	margin-right: 10px;
-
-}
-.deffender-block .head-player-block{width: 315px;}
-.forward-block .head-player-block{width: 415px;}
-.head-player-block{
-	padding: 10px 0px;
-	float: left;
-	width: 100%;
-	border-bottom: 2px solid green;
-	color: #408E3A;
-	font-family: "Open Sans",sans-serif;
-	}
-.head-player-block a{color: #408E3A;text-decoration: none;font-weight: normal;margin: 0px 5px;text-transform: uppercase;font-size: 80%}
-.head-player-block a:active,
-.head-player-block a:focus
-{color: #408E3A;font-weight: bold; text-decoration: none;font-size: 85%}
-.head-player-block .position{
-	float: left;
-	width: 55%;
-	text-transform: uppercase
-
-}
-.head-player-block .tab{
-	float: right;
-	width: 40%;
-	
-}
-.clubs-team-wrap .one-block{
-	width: 90px;
-	float: left;
-    margin-right: 10px;
-}
-.clubs-team-wrap .one-block .position
-{
-	text-align: center;
-	width: 100%;
-}
-.clubs-team-wrap .one-block .player-item
-{
-	width: 93px;
-}
-.clubs-team-wrap .player-item img{
-	display: inline-block;
-	width: 70px;
-	height: 90px;
-	border-radius: 10px;
-	border: 1px solid #f2f2f2;
-	
-}
-.clubs-team-wrap .img-wrap{position: relative;text-align: center;}
-.clubs-team-wrap .player-item {
-    font-size: 11px;
-    color: #649792;
-	width: 105px;
-    float: left;
-    margin: 10px 0px;
-    height: 125px;
-    cursor: pointer;
-}
-.clubs-team-wrap .player-name{text-align: center;font-size: 95%;padding: 0px 5px;box-sizing: border-box;-webkit-box-sizing: border-box; -0-box-sizing: border-box;-moz-box-sizing: border-box;}
-.clubs-team-wrap .player-name p{overflow: hidden;}
+.player-block-wrap{float: left;}
+.player-item {position: relative; width: 180px; border-bottom: 1px solid grey;float: left;margin-right: 10px;cursor: pointer;}
+.players-list{position: relative;}
+.players-list img{width: 60px;height: 80px;float: left;border-radius: 4px}
+.players-list img:after{content: "";display: inline-block;position: relative;overflow: hidden;clear: both}
+.player-club-info{margin-left: 65px;}
 .clubs-team-wrap .player-item .ui.teal.ribbon.label{position: absolute;width: 24px; background-color: #73A755 ;border-color: #73A755 ;height: 21px;font-size: 90%;
 font-weight: bold;}
 .clubs-team-wrap .player-item .ui.teal.ribbon.label:before{background-color: #73A755 ;border-width: 0px 0px 1px 0px}
 .clubs-team-wrap .player-item .ui.teal.ribbon.label:after{border-width: 0px 6px 6px 0px;opacity: .5}
 .clubs-team-wrap .player-item .ribbon{top: 15px;}
-.clubs-team-wrap .player-item .ribbon.label{left: 10px;}
+.clubs-team-wrap .player-item .ribbon.label{left: -8px;top: 25px;}
 .clubs-team-wrap .player-item .ui.label{padding: 2px 6px}
 .clubs-team-wrap .one-block .player-item .ribbon.label{left: 4px;}
-
-.clubs-team-wrap .out-block .position{color: #909090;}
-.clubs-team-wrap .out-block .head-player-block{border-bottom: 2px solid #909090;}
-.clubs-team-wrap .out-block .player-item img{
-	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale"); /* Firefox 10+, Firefox on Android */
-    filter: gray; 
-    -webkit-filter: grayscale(100%); }
-.clubs-team-wrap .out-block .player-item .ui.teal.ribbon.label{background-color: #909090 !important ;border-color: #909090 !important ;}
-.clubs-team-wrap .out-block .player-item .ui.teal.ribbon.label:before{background-color: #909090 !important ;border-width: 0px 0px 1px 0px}
-.clubs-team-wrap .out-block .player-name{color:#7D7D7D;}
-.clubs-team-wrap .player-name p{  width: 70px;margin: 0 auto;font-size: 110%}
-.prew-table-foto a{display: inline-block;text-transform: uppercase;color: #408E3A;margin-bottom: 5px}
-.prew-table-foto a:hover{text-decoration: none}
-.ui.grid > .row .prew-table-foto{font-size: 15px;}
 
 
 /*clubs-team END*/
@@ -190,4 +110,7 @@ font-weight: bold;}
 
 /*Footer*/
 .footer .socials .button{margin-bottom: 20px;margin-top: 0px}
+.footer{
+	background: #F1F2E9;
+}
 /*Footer END*/
