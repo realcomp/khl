@@ -2,7 +2,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
         $scope.$location = $location;
-        if ($location.search().uidb64 && $location.search().token) {
+        if (($location.search().uidb64 && $location.search().token) || $location.search().remember) {
             $scope.selectedType = 'remember';
         } else {
             $scope.selectedType = 'social';
