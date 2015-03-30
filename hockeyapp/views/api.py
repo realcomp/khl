@@ -76,6 +76,7 @@ class BestPlayer(PlayersSearch):
 
 
 class PlayerCardIndicators(generics.ListAPIView):
+    queryset = ClubPlayerMatch.objects.all()
     paginate_by = 99999
     serializer_class = ClubPlayerMatchSerilizer
 
@@ -89,9 +90,6 @@ class PlayerCardIndicators(generics.ListAPIView):
                 'shots', 'pis', 'winfaceoff_p', 'gamingtime',
                 'change_count')),
         ))
-
-    def get_queryset(self):
-        return ClubPlayerMatch.objects.all()
 
     def filter_queryset(self, qs):
         qs = super(PlayerCardIndicators, self).filter_queryset(qs)

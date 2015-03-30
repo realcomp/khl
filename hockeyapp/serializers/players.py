@@ -178,18 +178,11 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         return loose_goals + saves
 
     def get_matches_win(self, obj):
-        home_matches = obj.home_matches_win()
-        guest_matches = obj.guest_matches_win()
-        return (
-            (home_matches and home_matches.count() or 0) +
-            (guest_matches and guest_matches.count() or 0))
+        return obj.home_matches_win().count() + obj.guest_matches_win().count()
 
     def get_matches_lose(self, obj):
-        home_matches = obj.home_matches_lose()
-        guest_matches = obj.guest_matches_lose()
         return (
-            (home_matches and home_matches.count() or 0) +
-            (guest_matches and guest_matches.count() or 0))
+            obj.home_matches_lose().count() + obj.guest_matches_lose().count())
 
     def get_zero_goals_matches(self, obj):
         # at least 58 minutes

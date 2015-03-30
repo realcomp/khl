@@ -65,106 +65,39 @@
                         <div class="twelve wide column">
                             <div class="graph-controls-block">
                                 <ul class="graph-controls-list">
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'count'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('count')">И</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('goals')">Ш</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'assists'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('assists')">А</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'points'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('points')">О</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'plus_minus'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('plus_minus')">+/-</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'penalty_time'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('penalty_time')">Штр</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'es_goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('es_goals')">ШР</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'pp_goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('pp_goals')">ШБ</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'ev_goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('ev_goals')">ШМ</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'overtime_goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('overtime_goals')">ШО</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'win_goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('win_goals')">ШП</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'bullet_goals'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('bullet_goals')">РБ</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'shots'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('shots')">БВ</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'pis__avg'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('pis__avg')">%БВ</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'shots__avg'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('shots__avg')">БВ/И</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'faceoff'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('faceoff')">Вбр</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'winfaceoff'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('winfaceoff')">ВВбр</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'winfaceoff_p__avg'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('winfaceoff_p__avg')">%Вбр</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'gamingtime__avg'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('gamingtime__avg')">ВП/И</a>
-                                    </li>
-                                    <li class="graph-control-item">
-                                        <a href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === 'change_count__avg'}"
-                                           ng-click="PlayerCardIndicatorsCtrl.setField('change_count__avg')">См/И</a>
-                                    </li>
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="И" field="count" %}
+                                    {% if line == 1 %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="В" field="matches_win" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="П" field="matches_lose" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ИБ" field="bullet_matches" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="Бр" field="shots_received" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ОБ" field="saves" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="%ОБ" field="saves_p__avg" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="КН" field="sf__avg" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ПШ" field="loose_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label='И"0"' field="zero_goals_matches" %}
+                                    {% else %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="Ш" field="goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="О" field="points" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="+/-" field="plus_minus" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШР" field="es_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШБ" field="pp_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШМ" field="ev_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШО" field="overtime_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШП" field="win_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="РБ" field="bullet_goals" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ" field="shots" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="%БВ" field="pis__avg" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="Вбр" field="faceoff" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ВВбр" field="winfaceoff" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg" %}
+                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="См/И" field="change_count__avg" %}
+                                    {% endif %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Штр" field="penalty_time" %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg" %}
                                 </ul>
                             </div>
                             <!--<ul class="indicators-list">
