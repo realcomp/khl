@@ -1,32 +1,21 @@
 angular.module('Sportomatics').service('ClubsMapService', function(){
-        var coordinates = document.getElementById('coordinates');
-        var clubs_map = document.getElementById('clubs-map');
-        var title = $('#place-title').val();
-        var coordinate1 = 59;
-        var coordinate2 = 38;
-        this.a = 'abc';
+        var startCoordinate1 = 55.749792; // Moscow latitude
+        var startCoordinate2 = 37.632495; // Moscow longitude
+
+        // Variables:
+        this.mapsDivName = 'clubs-map';
+        this.clubs_map = document.getElementById(this.mapsDivName);
         this.rendered = false;
 
-
-        this.createClubsMap = function(clubs){
+        // Methods:
+        this.createClubsMap = function(clubs){ // creates clubs map inside maps-div marked as mapsDivName
             // create a map in the "map" div, set the view to a given place and zoom
-            var map = L.map('clubs-map').setView([coordinate1, coordinate2], 4);
+            var map = L.map(this.mapsDivName).setView([startCoordinate1, startCoordinate2], 4);
             // add an OpenStreetMap tile layer
             L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
-
             // add a marker in the given location, attach some popup content to it and open the popup
-
-            var myIcon = L.icon({
-                iconUrl: 'http://dev.sportomatics.ru/media/filer_public/cf/4b/cf4b1a63-4f02-4f84-8953-27185077e6cc/7b84c940f884393f3b79dbd94dd9fa15.jpg',
-                iconSize: [24, 24],
-                iconAnchor: [22, 94],
-                popupAnchor: [-4, -76],
-                shadowUrl: 'http://127.0.0.1:8000/static/leaflet-0.7.3/images/marker-icon-2x.png',
-                shadowSize: [34, 48],
-                shadowAnchor: [27, 94]
-            });
             _.each(clubs, function(club, index){
                 var coords = club.arena.coords;
                 if(coords != null){
@@ -46,10 +35,15 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
                     L.marker([coordinate1, coordinate2], {icon: clubIcon}).addTo(map).bindPopup(club.title + '<br>');
                 }
             });
-            //L.marker([50.505, 30.57], {icon: myIcon}).addTo(map).bindPopup('Авангард' + '<br>');
             this.rendered = true;
+        };
+
+        this.isRendered = function(){ // return map rendered state
+            return this.rendered;
+        };
+
+        this.setRendered = function(value){ // set boolean state for map rendered variable
+            if(value !== true && value !== false) return;
+            this.rendered = value;
         }
-    this.isRendered = function(){
-        return this.rendered;
-    }
 });
