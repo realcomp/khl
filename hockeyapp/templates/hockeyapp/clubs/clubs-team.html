@@ -47,21 +47,26 @@
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-team-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb" >
-                <a class="section" href="/">Хоккей</a>
-                <div class="divider"> / </div>
+         <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+         <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                 <a class="section" href="/">Хоккей</a>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="">{{title}}</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="active section">Состав команды</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -70,6 +75,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+
         {% include "hockeyapp/clubs/team-info.html" %}
 
         <div class="page-content page-container">
@@ -97,11 +105,15 @@
                                         </div>
                                         <ul>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
+                                                   ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Ростер</a></li>
+                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="ClubTeamCtrl.players.status = 'all'">Все</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли в этом сезоне</a></li>
+                                                   ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'left'">Ушли в этом сезоне</a></li>
+                                                   ng-click="ClubTeamCtrl.players.status = 'left'">Ушли</a></li>
+                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
+                                                   ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Воспитанники</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Легионеры</a></li>
                                         </ul>

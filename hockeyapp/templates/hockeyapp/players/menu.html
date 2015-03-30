@@ -1,8 +1,8 @@
-<div class="ui green inverted menu page-menu">
+<div class="ui green menu player-menu">
     <a class="{% if players_menu_active == 'player-card' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card' pk %}">Краткая информация</a>
+       href="{% url 'hockeyapp:player-card' pk %}">Главное</a>
     <a class="{% if players_menu_active == 'player-card-indicators' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-indicators' pk %}">Спортивные показатели</a>
+       href="{% url 'hockeyapp:player-card-indicators' pk %}">Статистика</a>
     <a class="{% if players_menu_active == 'player-card-clubs' %}active {% endif %}item"
        href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
     <a class="{% if players_menu_active == 'player-card-coaches' %}active {% endif %}item"

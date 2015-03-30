@@ -29,15 +29,20 @@
 
     <div class="overlay-black" style="visibility: hidden"></div>
     <div class="container player-card-short-page">
-        <div class="breadcrumbs">
+      <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+            <div class="breadcrumbs">
             <div class="ui small breadcrumb">
                 <a class="section" href="/">ХОККЕЙ</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="active section">Краткая информация</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -46,6 +51,8 @@
                 </div>
             </div>
         </div>
+    </div>
+
         {% include "hockeyapp/players/card.html" %}
 
         <div class="page-content page-container" ng-controller="PhotosController">

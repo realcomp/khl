@@ -366,10 +366,10 @@ i.icon {
 }
 
 /* line 166, ../sass/_base.sass */
-.breadcrumbs {
+/*.breadcrumbs {
   border-top: 1px solid #dedede;
   border-bottom: 1px solid #dedede;
-}
+}*/
 /* line 169, ../sass/_base.sass */
 .breadcrumbs .breadcrumb {
   margin: 0;
@@ -392,8 +392,9 @@ i.icon {
 }
 /* line 181, ../sass/_base.sass */
 .breadcrumbs .search-block .ui.icon.input input {
-  padding: 2px 10px;
-  margin-top: 6px;
+    
+/*  padding: 2px 10px;
+  margin-top: 6px;*/
 }
 /* line 184, ../sass/_base.sass */
 .breadcrumbs .search-block .icon.search {
@@ -405,13 +406,14 @@ i.icon {
 /* line 189, ../sass/_base.sass */
 .team-info {
   text-align: center;
-  margin-bottom: 11px;
+  background: #fff;
 }
 /* line 192, ../sass/_base.sass */
 .team-info .team-heading {
   position: relative;
   text-align: center;
-  margin-top: 12px;
+  background: #fff;
+
 }
 /* line 196, ../sass/_base.sass */
 .team-info .team-logo {
@@ -470,18 +472,18 @@ i.icon {
 
 /* line 235, ../sass/_base.sass */
 .page-container {
-  background: #ecede4;
-  border-radius: 5px;
+  background: #fff !important;
+  border-radius: 0px 0px 5px 5px;
   padding: 0 5px 5px;
 }
 
 /* line 240, ../sass/_base.sass */
 .page-inner-container {
   background: #fff;
-  border: 1px dashed #ccc;
+  
   border-radius: 0 0 8px 8px;
   border-top: none;
-  padding: 28px;
+  padding: 0px 25px 25px 25px;
 }
 
 /* line 248, ../sass/_base.sass */
@@ -610,9 +612,7 @@ i.icon {
 }
 
 /* line 332, ../sass/_base.sass */
-.footer {
-  margin-top: 20px;
-}
+
 /* line 334, ../sass/_base.sass */
 .footer .container {
   border-top: 1px solid #9b9b9b;
@@ -2778,7 +2778,7 @@ i.icon {
 
 /* line 1737, ../sass/_base.sass */
 .player-card-short-page .player-card-block {
-  margin: 20px 0;
+  margin: 20px 25px;
 }
 /* line 1739, ../sass/_base.sass */
 .player-card-short-page .player-card-block .player-card-desc {
@@ -3968,9 +3968,9 @@ i.icon {
   /*border-bottom: none;*/
 }
 /* line 2487, ../sass/_base.sass */
-.clubs-page .page-inner-container {
+/*.clubs-page .page-inner-container {
   border-top: 1px dashed #ccc;
-}
+}*/
 /* line 2490, ../sass/_base.sass */
 .clubs-page .clubs-menu .heading {
   color: #31782a;
@@ -4213,10 +4213,10 @@ i.icon {
 }
 
 /* line 2639, ../sass/_base.sass */
-.clubs-stats-page .breadcrumbs {
+/*.clubs-stats-page .breadcrumbs {
   border-bottom: 1px solid #dedede;
 }
-
+*/
 /* line 2643, ../sass/_base.sass */
 .clubs-calendar-page .heading {
   color: #649791;

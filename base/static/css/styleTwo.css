@@ -6,7 +6,38 @@
 
 /*menu buttons*/
 .bottom-line .ui.menu.user-card-menu{margin-left: 0px;}
+/*.ui.green.menu{background-color:  #408e3a}*/
+.ui.green.menu a{font-size: 15px;/*text-transform: uppercase;*/}
+.ui.green.menu .active.item{color: #fff !important;background-color:  #408e3a}
+.ui.green.menu .item{padding: 20px 16px;}
+.ui.green.menu.player-menu .item{padding: 20px 22px;}
+.player-card-short-page{background: #fff}
+
 /*HEADER END*/
+/*CONTENT*/
+.content{
+	background: url(../images/bgTwoContent.jpg) no-repeat center; 
+	background-size: cover; 
+	/*-webkit-background-position: cover; 
+	-moz-background-position: cover; 
+	-o-background-position: cover; */
+}
+.ui.menu{margin-top: 0px}
+.player-card-short-page{background: #fff}
+/*CONTENT END*/
+
+
+
+/*Player-Table.html*/
+
+.players-search-page .ui.checkbox label{font-size: 13px}
+.search-block .ui.icon.input input{font-size: 15px}
+/*.breadcrumb-search{border-bottom: 1px solid rgb(224, 218, 218);border-top: 1px solid rgb(224, 218, 218);}*/
+.breadcrumb-search{margin: 0px !important;background: #fff}
+
+
+/*Player-Table.html END*/
+
 /*clubs-team.html*/
 .tab-photo-wrap{position: relative;width: 100%;text-align: center;margin-top: 25px}
 .tab-photo-wrap .ui.small.button, .ui.small.buttons .button, .ui.small.buttons .or{
@@ -149,6 +180,8 @@ font-weight: bold;}
 .ui-datepicker .ui-datepicker-prev{background: url(../images/arrowDatePrew.png) no-repeat center;}
 .ui-datepicker .ui-datepicker-next{background: url(../images/arrowDateNext.png) no-repeat center;}
 /*Datepicker End*/
+
+
 /*Clubs HTML */
 .clubs-tabs .heading{display: inline-block;margin: 5px 15px}
 
