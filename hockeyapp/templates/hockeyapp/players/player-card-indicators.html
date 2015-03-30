@@ -153,7 +153,7 @@
 
 
                             {% verbatim %}
-                            <div class="chart-button-panel" ng-if="!disabled && localeObject && dataType === 'graph-serial'" >
+                            <div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
                                 <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
                                 <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
                                 <!--<a class="ui green button chart-button" ng-click="addGraph('/static/json/gorohov', 1    )">Сравнить с игроком 2186</a>
@@ -165,7 +165,7 @@
                                 </div>
                                 <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
-                            <div  ng-show="playersStats.length && dataType=== 'graph-serial'">
+                            <div  ng-show="playersStats.length && dataType === 'graph-serial' && !limited">
                                 <span class="season-buttons-label"> Игроки для сравнения:</span>
                                 <div class="player-comparison-container">
                                     <div ng-repeat="player in playersStats">

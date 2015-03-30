@@ -310,7 +310,6 @@ angular.module('Sportomatics')
             var chart;
             AmChartsFactory.ready().then(function () {
                 var data = chartData.data;
-
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";
@@ -2783,7 +2782,7 @@ angular.module('Sportomatics')
             this.playerId = document.getElementById('player-id').value;
             this.playerName = document.getElementById('player-name').value;
             $scope.apiPlayersUrl = document.getElementById('api-players-url').value;
-            $scope.disabled = false; //
+            $scope.limited = false; //
             $scope.activeSeason = -1; // all seasons selected by default
             $scope.playersStats = [];
             $scope.radarPlayers = [self.playerId]; // array of players to compare in radar chart
@@ -2992,7 +2991,7 @@ angular.module('Sportomatics')
                     $scope.chart.categoryAxis.minPeriod = (self.groupBy === 'month') ? 'MM' : 'YYYY';
 
                     if ($scope.playersStats.length > 0) return $scope.makeChart(switched); //player comparison
-                    if ($scope.disabled) { //not registered users
+                    if ($scope.limited) { //not registered users
                         $scope.chart.chartCursor = null;
                         $scope.chart.chartScrollbar = null;
                         $scope.chart.startDuration = null;
@@ -3000,6 +2999,8 @@ angular.module('Sportomatics')
                             $scope.chart.graphs[i].balloonText = '';
                             $scope.chart.graphs[i].visibleInLegend = false;
                         }
+                        delete $scope.chart.exportConfig
+
                     }
                     $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));})).toString();
                     $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); })
@@ -3023,6 +3024,7 @@ angular.module('Sportomatics')
                 self.loader = true;
                 $http.get(url + '?group_by=month')
                     .success(function(data, status, headers) {
+                        if(data.is_limited) $scope.limited = true;
                         self.locale = headers()['content-language']; // determine language locale
                         $scope.localeObject = LocaleFactory['locale_'+self.locale]; // set locale object to use in js
                         self.fieldName = $scope.localeObject.fieldNames[self.field].fullName;
