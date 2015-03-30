@@ -313,13 +313,13 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         return self.is_active().filter(match__guest_team=F('clubplayer__club'))
 
     def home_matches_win(self):
-        self.home_matches().extra(**self.X_HOME_WIN)
+        return self.home_matches().extra(**self.X_HOME_WIN)
 
     def home_matches_lose(self):
-        self.home_matches().extra(**self.X_GUEST_WIN)
+        return self.home_matches().extra(**self.X_GUEST_WIN)
 
     def guest_matches_win(self):
-        self.guest_matches().extra(**self.X_GUEST_WIN)
+        return self.guest_matches().extra(**self.X_GUEST_WIN)
 
     def guest_matches_lose(self):
-        self.guest_matches().extra(**self.X_HOME_WIN)
+        return self.guest_matches().extra(**self.X_HOME_WIN)
