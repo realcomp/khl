@@ -114,6 +114,7 @@ function getDateOfWeek(w, y) {
     return new Date(y, 0, d);
 }
 //TODO: make expressions to check if already scrolled (for performance)
+/*
 $(function() {
     var top = null;
     var topSecondary = null;
@@ -279,7 +280,7 @@ $(function() {
             } else ($('.page-container').css('margin-top', '0px'))
         }
     }
-});
+});*/
 /*$(function(){
     if($('.breadcrumb').length){
         ($('.breadcrumb').first().find($('.section').last()).css('text-decoration', 'none'));
@@ -2202,6 +2203,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.type = 'photos';
         $scope.setType = function(type){
             $scope.type = type;
+            $scope.unMakeTransferArrows()
         };
         $scope.go = function(path){
             window.location.href = path;
@@ -2436,12 +2438,17 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.makeTransferArrows = function(){
             createTransferArrow('#club_2', '#playerd_3', 1);
             createTransferArrow('#club_4', '#playerd_2', 2);
-
-        }
+            $( ".player-item" ).each(function() {
+                if($(this).attr('id') !== 'playerd_3' && $(this).attr('id') !== 'playerd_2')
+                $( this ).addClass("opacity-30");
+            });
+        };
         $scope.unMakeTransferArrows = function(){
             $('canvas').remove();
-
-        }
+            $( ".player-item" ).each(function() {
+                $( this ).removeClass("opacity-30");
+            });
+        };
         this.list(this.compare, false);
 
         function canvas_arrow(context, fromx, fromy, tox, toy){
@@ -2458,35 +2465,49 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             //variables to be used when creating the arrow
             var ctx = c;
             var headlen = 10;
-
             var angle = Math.atan2(toy-fromy,tox-fromx);
-
             //starting path of the arrow from the start square to the end square and drawing the stroke
             ctx.beginPath();
             ctx.moveTo(fromx, fromy);
-            ctx.lineTo(tox, toy);
-           // ctx.strokeStyle = "#cc0000";
-            ctx.lineWidth = 10;
-            ctx.stroke();
+            var amount = 0;
+            (function myLoop (amount) {
+               setTimeout(function () {
+                   amount += 0.05; // change to alter duration
+                    ctx.lineWidth = 10;
+                    ctx.lineTo(fromx + (tox - fromx) * amount,
+                             fromy + (toy - fromy) * amount);
+                    ctx.stroke();
 
-            //starting a new path from the head of the arrow to one of the sides of the point
-            ctx.beginPath();
-            ctx.moveTo(tox, toy);
-            ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
+                    if (amount < 1){
+                       myLoop(amount);
+                    }
+                    else {
+                         //starting a new path from the head of the arrow to one of the sides of the point
+                        ctx.beginPath();
+                        ctx.moveTo(tox, toy);
+                        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
 
-            //path from the side point of the arrow, to the other side point
-            ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
+                        //path from the side point of the arrow, to the other side point
+                        ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
 
-            //path from the side point back to the tip of the arrow, and then again to the opposite side point
-            ctx.lineTo(tox, toy);
-            ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
+                        //path from the side point back to the tip of the arrow, and then again to the opposite side point
+                        ctx.lineTo(tox, toy);
+                        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
 
-            //draws the paths created above
+                        //draws the paths created above
+                        //ctx.strokeStyle = "#cc0000";
+                        ctx.lineWidth = 10;
+                        ctx.stroke();
+                        ctx.fillStyle = "red";
+
+                        ctx.fill();
+                    }
+               }, 30)
+            })(0);
+            //ctx.lineTo(tox, toy);
             //ctx.strokeStyle = "#cc0000";
-            ctx.lineWidth = 10;
-            ctx.stroke();
-            //ctx.fillStyle = "#000";
-            ctx.fill();
+            //ctx.lineWidth = 10;
+            //ctx.stroke();
         }
 
 
