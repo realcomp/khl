@@ -93,7 +93,7 @@ angular.module('Sportomatics')
                 $scope.clubs = data.results;
                 $scope.loaded = true;
             }).then(function(){
-                if(!ClubsMapService.isRendered())
+                if(ClubsMapService.isRendered()) ClubsMapService.remove();
                 ClubsMapService.createClubsMap($scope.clubs);
             });
     };
@@ -110,8 +110,12 @@ angular.module('Sportomatics')
             } else {
                 $scope.data.next = data.next;
                 $scope.data.results = $scope.data.results.concat(data.results);
+                $scope.clubs = $scope.clubs.concat(data.results);
             }
             $scope.loaded = true;
+        }).then(function(){
+            if(ClubsMapService.isRendered()) ClubsMapService.remove();
+            ClubsMapService.createClubsMap($scope.clubs);
         });
     };
 
