@@ -797,7 +797,8 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
             var ggl = new L.Google('ROADMAP');
             self.map.addLayer(ggl);
             self.map.addControl(new L.Control.Layers( {'Google':ggl, 'OpenStreetMap': osm}, {}));
-            // add a marker in the given location, attach some popup content to it and open the popup
+            var markers = new L.MarkerClusterGroup({ spiderfyOnMaxZoom: false, showCoverageOnHover: false });
+
             _.each(clubs, function(club, index){
                 if(club.arena)
                 var coords = club.arena.coords;
@@ -815,9 +816,10 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
                     shadowAnchor: [27, 94]
                 });
                 if(coordinate1 && coordinate2){
-                    L.marker([coordinate1, coordinate2], {icon: clubIcon}).addTo(self.map).bindPopup(club.title + '<br>');
+                    markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {icon: clubIcon}).bindPopup(club.title + '<br>'));
                 }
             });
+            self.map.addLayer(markers);
             this.rendered = true;
         };
 
