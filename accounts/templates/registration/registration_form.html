@@ -1,6 +1,6 @@
 {% extends "registration/layout.html" %}
 {% load i18n %}
-{% load ulogin_tags %}
+{% load accounts_extras %}
 
 {% block content %}
     {% include "registration/form/step1.html" %}
@@ -59,11 +59,15 @@
                                 <input  class="m-r-8" type="radio" ng-model="selectedRegistrationType" ng-value="'social'">
                                 {% trans 'Select any social account with which you want to sign in:' %}
                             </div>
-                            {% ulogin_widget %}
                             {% comment %}
                             <script src="//ulogin.ru/js/ulogin.js"></script>
                             <div class="uLogin-registration" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,odnoklassniki,twitter,google,yandex,mailru;hidden=other;redirect_uri=http%3A%2F%2Fdev.sportomatics.ru"></div>
                             {% endcomment %}
+                        </div>
+                        <div class="row registration-content-row">
+                            <div class="inline-block">
+                                {% social_auth_widget %}
+                            </div>
                         </div>
                         <div class="row registration-content-row">
                             <div class="inline-block">
