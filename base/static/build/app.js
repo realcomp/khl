@@ -780,6 +780,9 @@ function createBalloon(valueField, text){
     return "<div style='text-align: left; min-width: 60%; max-width: 80%; display: inline-block'><span style='font-size:14px; color:#000000;'>" + text + ": </span></div><div class='vertical-middle inline-block' style='width: 20%;'><div class='float-right'>[[" + valueField + "]]</div></div> ";
 }
 angular.module('Sportomatics').service('ClubsMapService', function(){
+    
+})
+angular.module('Sportomatics').service('ClubsMapService', function(){
         var self = this;
         var startCoordinate1 = 55.749792; // Moscow latitude
         var startCoordinate2 = 37.632495; // Moscow longitude
@@ -2328,6 +2331,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         $scope.workWithData = function(data){
+            console.log(data)
             var goalkeeper_players = data.goalkeeper_players;
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
@@ -2463,7 +2467,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 }
                 self.clubs.loader = false;
                 if(arg !== false){
-
                 }
             });
         };

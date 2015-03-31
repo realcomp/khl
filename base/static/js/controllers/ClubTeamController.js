@@ -130,6 +130,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         $scope.workWithData = function(data){
+            console.log(data)
             var goalkeeper_players = data.goalkeeper_players;
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
@@ -265,7 +266,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 }
                 self.clubs.loader = false;
                 if(arg !== false){
-
                 }
             });
         };
