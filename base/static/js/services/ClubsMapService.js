@@ -11,12 +11,11 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
 
         // Methods:
         this.createClubsMap = function(clubs){ // creates clubs map inside maps-div marked as mapsDivName
-            // create a map in the "map" div, set the view to a given place and zoom
             self.map = L.map(self.mapsDivName).setView([startCoordinate1, startCoordinate2], 4);
-            // add an OpenStreetMap tile layer
-            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(self.map);
+            var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            var ggl = new L.Google('ROADMAP');
+            self.map.addLayer(ggl);
+            self.map.addControl(new L.Control.Layers( {'Google':ggl, 'OpenStreetMap': osm}, {}));
             // add a marker in the given location, attach some popup content to it and open the popup
             _.each(clubs, function(club, index){
                 if(club.arena)
@@ -26,7 +25,7 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
                     var coordinate2 = coords.split(',')[1];
                 }
                 var clubIcon = L.icon({
-                    iconUrl: 'http://dev.sportomatics.ru'+ club.logo,
+                    iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo :  '/static/leaflet-0.7.3/images/marker-icon-2x.png',
                     iconSize: [24, 24],
                     iconAnchor: [22, 94],
                     popupAnchor: [-4, -76],
@@ -51,6 +50,7 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
         };
 
         this.remove = function(){
-            self.map.remove();
+            $('#'+self.mapsDivName).remove();
+            $('#'+self.mapsDivName + '-container').append('<div id="' + self.mapsDivName + '"></div>');
         };
 });
