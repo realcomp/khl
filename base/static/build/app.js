@@ -3090,6 +3090,7 @@ angular.module('Sportomatics')
                     $scope.chart = chart;
                     // WRITE
                     if(self.coach){
+                        console.log($scope.coachData)
                         _.each($scope.chart.dataProvider, function(data){
                             _.each($scope.coachData.results, function(coachData){
                                 if(new Date(data.date).getFullYear() === new Date(coachData.end_date).getFullYear()){
@@ -3174,7 +3175,7 @@ angular.module('Sportomatics')
                 if(self.coach == null) return;
                 var params = '?group_by=season&coach=' + self.coach;
                 self.loader = true;
-                $http.get(url + '?' + params)
+                $http.get(url + params)
                 .success(function(data) {
                     $scope.coachData = data;
                     self.loader = false;
@@ -3186,7 +3187,7 @@ angular.module('Sportomatics')
                 if(self.club == null) return;
                 var params = '?group_by=season&club=' + self.club;
                 self.loader = true;
-                $http.get(url + '?' + params)
+                $http.get(url + params)
                     .success(function(data) {
                         $scope.clubData = data;
                         self.loader = false;
