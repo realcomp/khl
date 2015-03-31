@@ -136,7 +136,7 @@
                                     
                                 <div class="player-block-wrap">
                                      <ul class="players-list">
-                                        <li class="player-item" ng-repeat="player in players.defender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                        <li class="player-item" ng-repeat="player in players.defender_players track by $index" id="playerd_{{$index}}" ng-click="go('/ru/hockey/players/'+player.pk)">
                                             <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
                                             </a> 
                                             <div class="player-number ui teal ribbon label">{{player.number}}</div>
@@ -147,7 +147,7 @@
                                                 <i class="flag" ng-class="player.citizenship.code"></i>
                                             </div>
                                         </li>
-                                         <li class="player-item"  ng-repeat="player in players.offender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                         <li class="player-item"  ng-repeat="player in players.offender_players track by $index" ng-click="go('/ru/hockey/players/'+player.pk)">
                                             <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
                                             </a> 
                                             <div class="player-number ui teal ribbon label">{{player.number}}</div>
@@ -159,7 +159,7 @@
   
                                             </div>
                                         </li>
-                                     <li class="player-item"  ng-repeat="player in players.goalkeeper_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                     <li class="player-item"  ng-repeat="player in players.goalkeeper_players track by $index" ng-click="go('/ru/hockey/players/'+player.pk)">
                                             <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
                                             </a> 
                                             <div class="player-number ui teal ribbon label">{{player.number}}</div>
@@ -170,7 +170,7 @@
                                                 <i class="flag" ng-class="player.citizenship.code"></i>
                                             </div>
                                         </li>
-                                        <li class="player-item" ng-repeat="player in players.coaches" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                        <li class="player-item" ng-repeat="player in players.coaches track by $index" ng-click="go('/ru/hockey/players/'+player.pk)">
                                             <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
                                             </a> 
                                             <div class="player-number ui teal ribbon label">{{player.number}}</div>

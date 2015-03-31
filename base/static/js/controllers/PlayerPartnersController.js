@@ -57,7 +57,6 @@ angular.module('Sportomatics')
                                     }
                                 })
                             });
-                            console.log(data);
                             $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
                             $scope.loader = false;
                             if($scope.params.rate_by){

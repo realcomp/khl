@@ -134,17 +134,45 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
             var players = [];
-            //console.log('def', defender_players)
             _.each(offender_players, function(player){
                 players.push(player.pk);
+                if(player.citizenship){
+                    if(!player.citizenship.code){
+                        _.each($scope.countryCodes, function(country){
+                            if(player.citizenship.title)
+                            if(country.name === player.citizenship.title){
+                                player.citizenship.code = country.code;
+                            }
+                        })
+                    }
+                }
             });
             _.each(defender_players, function(player){
                 players.push(player.pk);
+                if(player.citizenship){
+                    if(!player.citizenship.code){
+                        _.each($scope.countryCodes, function(country){
+                            if(player.citizenship.title)
+                            if(country.name === player.citizenship.title){
+                                player.citizenship.code = country.code;
+                            }
+                        })
+                    }
+                }
             });
             _.each(goalkeeper_players, function(player){
                 players.push(player.pk);
+                if(player.citizenship){
+                    if(!player.citizenship.code){
+                        _.each($scope.countryCodes, function(country){
+                            if(player.citizenship.title)
+                            if(country.name === player.citizenship.title){
+                                player.citizenship.code = country.code;
+                            }
+                        })
+                    }
+                }
             });
-            //console.log(players)
         };
 
         self.getCell = function(table, cell_id) {
@@ -191,16 +219,20 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.clubs = [];
             $http.get(url + '?' + params)
             .success(function(data) {
-                    $scope.players = data;
+                $scope.players = data;
                 self.players.data = data;
                 self.players.table = {
                     'goalkeeper': data.goalkeeper_players,
                     'defender': data.defender_players,
                     'forward': data.offender_players,
                     'trainer': data.coaches
-                }
-
-                    $scope.workWithData(data);
+                };
+                $http.get('/static/json/countries-json-ru-codes.json')
+                .success(function(data){
+                    $scope.countryCodes = data;
+                }).then(function(){
+                    $scope.workWithData($scope.players);
+                });
                 self.players.loader = false;
                 if (typeof callback === 'function') {
                     callback(callbackArg);
@@ -209,7 +241,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         this.compare = function(arg) {
-            //console.log('a')
             var url = $('#ClubTeamCompareLink').attr('href'),
             club = self.clubs.getLastClub(),
             params, leagues;
@@ -281,7 +312,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     ctx.lineTo(fromx + (tox - fromx) * amount,
                              fromy + (toy - fromy) * amount);
                     ctx.stroke();
-
                     if (amount < 1){
                        myLoop(amount);
                     }
@@ -302,8 +332,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         //ctx.strokeStyle = "#cc0000";
                         ctx.lineWidth = 10;
                         ctx.stroke();
-                        ctx.fillStyle = "red";
-
                         ctx.fill();
                     }
                }, 30)
@@ -347,10 +375,10 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 }).appendTo($('body'))[0].getContext('2d');
 
                 // draw line
-                var x1 = ofrom.x - p.x ;
+                var x1 = ofrom.x - p.x + 10;
                 var y1 = ofrom.y - p.y - 30;
-                var x2 = oto.x - p.x +20;
-                var y2 = oto.y - p.y + 20;
+                var x2 = oto.x - p.x; //+20
+                var y2 = oto.y - p.y + 40;
                 c.strokeStyle = '#000';
                 //c.lineWidth = 20;
                 c.beginPath();
@@ -359,7 +387,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 c.moveTo(x2, y2);
                 c.rotate(Math.PI /2)
                 c.lineTo(x2+20, y2);*/
-                drawArr(c, x1,y1,x2,y2,1,2)
+                drawArr(c, x1,y1,x2,y2,1,2);
                 //canvas_arrow(c,x1,y1,x2,y2)
                 c.stroke();
         }

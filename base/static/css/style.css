@@ -5808,6 +5808,3 @@ hr.style-one {
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-canvas{
-    pointer-events: none;
-}
