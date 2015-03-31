@@ -114,6 +114,7 @@ function getDateOfWeek(w, y) {
     return new Date(y, 0, d);
 }
 //TODO: make expressions to check if already scrolled (for performance)
+/*
 $(function() {
     var top = null;
     var topSecondary = null;
@@ -279,7 +280,7 @@ $(function() {
             } else ($('.page-container').css('margin-top', '0px'))
         }
     }
-});
+});*/
 /*$(function(){
     if($('.breadcrumb').length){
         ($('.breadcrumb').first().find($('.section').last()).css('text-decoration', 'none'));
@@ -2497,7 +2498,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         //ctx.strokeStyle = "#cc0000";
                         ctx.lineWidth = 10;
                         ctx.stroke();
-                        //ctx.fillStyle = "#000";
+                        ctx.fillStyle = "red";
+
                         ctx.fill();
                     }
                }, 30)

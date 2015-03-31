@@ -302,7 +302,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         //ctx.strokeStyle = "#cc0000";
                         ctx.lineWidth = 10;
                         ctx.stroke();
-                        //ctx.fillStyle = "#000";
+                        ctx.fillStyle = "red";
+
                         ctx.fill();
                     }
                }, 30)
