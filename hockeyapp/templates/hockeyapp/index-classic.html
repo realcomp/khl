@@ -10,11 +10,16 @@
 {% block body %}
 <section class="content">
     <div class="container home-page">
-        <div class="breadcrumbs">
+       <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+            <div class="breadcrumbs">
             <div class="ui small breadcrumb">
-                <div class="active section">Главная</div>
+               <div class="active section">Главная</div>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -23,7 +28,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
         <div class="ui grid">
             <div class="row">
                 <div class="twelve wide column">
@@ -159,9 +164,9 @@
                 <div class="column">
                     <div class="relative">
                         <ul class="events-list">
-                            <li class="event-item"><a href="#" class="event-link">Мои</a></li>
+                            <li class="event-item"><a href="#" class="event-link ui button red">Мои</a></li>
                             {% verbatim %}
-                                <li class="event-item"><a href="#" class="event-link event-link_active">Все события ({{ data.length }})</a></li>
+                                <li class="event-item"><a href="#" class="event-link event-link_active ui button red">Все события ({{ data.length }})</a></li>
                             {% endverbatim %}
                         </ul>
                         <div class="page-title">События</div>

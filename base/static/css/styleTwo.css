@@ -25,6 +25,16 @@
 }
 .ui.menu{margin-top: 0px}
 .player-card-short-page{background: #fff}
+.home-page{
+  background: #fff;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  border-radius: 0px 0px 8px 8px;
+  
+}
 /*CONTENT END*/
 
 
