@@ -8,21 +8,26 @@
 <section class="content">
     <div class="overlay-black" style="visibility: hidden"></div>
     <div class="container clubs-page clubs-photos-page">
+    <div class="ui grid  breadcrumb-search">
+        <div class="twelve wide column">
         <div class="breadcrumbs">
             <div class="ui small breadcrumb">
                 <a class="section" href="/">Хоккей</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="/ru/hockey/clubs/#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="/ru/hockey/clubs/#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="">{{title}} ({{address.city.title}})</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="">{{title}}</a>
+                <i class="right chevron icon divider"></i>
                 <a class="active section">Фотографии</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -31,6 +36,8 @@
                 </div>
             </div>
         </div>
+    </div>
+
         {% include "hockeyapp/clubs/team-info.html" %}
 
         <div class="page-content page-container">

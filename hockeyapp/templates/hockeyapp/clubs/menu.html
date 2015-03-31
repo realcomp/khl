@@ -1,8 +1,9 @@
-<div class="ui green inverted menu page-menu">
+<div class="ui green menu ">
+    <a class="{% if clubs_menu_active == 'club-news' %}active {% endif %}item"
+       href="{% url 'hockeyapp:club-news' pk %}">Главное</a>
     <a class="{% if clubs_menu_active == 'club' %}active {% endif %}item"
        href="{% url 'hockeyapp:club' pk %}">Состав команды</a>
-    <a class="{% if clubs_menu_active == 'club-news' %}active {% endif %}item"
-       href="{% url 'hockeyapp:club-news' pk %}">Новости и результаты матчей</a>
+
     <a class="{% if clubs_menu_active == 'club-calendar' %}active {% endif %}item"
        href="{% url 'hockeyapp:club-calendar' pk %}">Календарь игр</a>
     <a class="{% if clubs_menu_active == 'club-stats' %}active {% endif %}item"
@@ -17,4 +18,16 @@
     <!--    href="#">Форум</a> -->
     <!-- <a class="{% if clubs_menu_active == 'club-shop' %}active {% endif %}item" -->
     <!--    href="#">Магазин</a> -->
+</div> 
+
+<!-- 
+<div class="ui menu">
+  <a class="item">
+    Home
+  </a>
+  <a class="item">
+    Messages
+  </a>
+
 </div>
+ -->
