@@ -206,8 +206,9 @@
                     $scope.chart = chart;
                     // WRITE
                     if(self.coach){
-                        console.log($scope.coachData)
                         _.each($scope.chart.dataProvider, function(data){
+                            if($scope.activeSeason !== -1) data.lineColor = "#408e3a";
+                            else
                             _.each($scope.coachData.results, function(coachData){
                                 if(new Date(data.date).getFullYear() === new Date(coachData.end_date).getFullYear()){
                                     data.lineColor = "#699c97"
@@ -217,6 +218,8 @@
                     }
                     if(self.club){
                         _.each($scope.chart.dataProvider, function(data){
+                            if($scope.activeSeason === -1) data.lineColor = "#408e3a";
+                            else
                             _.each($scope.clubData.results, function(clubData){
                                 if(new Date(data.date).getFullYear() === new Date(clubData.end_date).getFullYear()){
                                     data.lineColor = "#699c97"

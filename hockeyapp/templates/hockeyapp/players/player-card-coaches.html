@@ -129,6 +129,17 @@
                             <div ng-show="PlayerCardIndicatorsCtrl.indicatorsType === 'graph'">
                                 <div id="chartdiv" style="width: 100%; height:400px; "></div>
                             </div>
+                            <div ng-if="!disabled && PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && dataType === 'graph-serial' || onSeason ">
+                                <span class="season-buttons-label"> Выбрать сезон:</span>
+                                <div class="season-buttons-container">
+                                    <a class="ui season-button" ng-class="{'active-season-button': activeSeason === -1}">
+                                        <div ng-bind="localeObject.buttonNames.allSeasons" ng-click="setGroupBy('season')"></div>
+                                    </a>
+                                    <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season), 'm-l-1': $index === 0}">
+                                        <div ng-bind="result.season.title" ng-click="moveToSeason(result.season, $index)"></div>
+                                    </a>
+                               </div>
+                            </div>
                             <div ng-show="PlayerCardIndicatorsCtrl.indicators_type === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <table class="ui celled table segment player-select-table">
                                     <thead>
