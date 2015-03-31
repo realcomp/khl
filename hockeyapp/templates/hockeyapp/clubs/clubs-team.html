@@ -47,21 +47,26 @@
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-team-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb" >
-                <a class="section" href="/">Хоккей</a>
-                <div class="divider"> / </div>
+         <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+         <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                 <a class="section" href="/">Хоккей</a>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:club-list' %}#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="">{{title}} ({{address.city.title}})</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="">{{title}}</a>
+                <i class="right chevron icon divider"></i>
                 <a class="active section">Состав команды</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -70,6 +75,9 @@
                 </div>
             </div>
         </div>
+    </div>
+
+
         {% include "hockeyapp/clubs/team-info.html" %}
 
         <div class="page-content page-container">
@@ -97,14 +105,15 @@
                                         </div>
                                         <ul>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
+                                                   ng-click="unMakeTransferArrows()">Ростер</a></li>
+                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="unMakeTransferArrows()">Все</a></li>
-                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="makeTransferArrows()">Пришли в этом сезоне</a></li>
-                                                   <!--ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли в этом сезоне</a></li>-->
-
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Ушли в этом сезоне</a></li>
+                                                   ng-click="makeTransferArrows()">Пришли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Легионеры</a></li>
+                                                   ng-click="unMakeTransferArrows()">Ушли</a></li>
+                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
+                                                   ng-click="unMakeTransferArrows()">Воспитанники</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="unMakeTransferArrows()">Воспитанники</a></li>
                                         </ul>
@@ -121,91 +130,65 @@
                               <div class="row clubs-team-inner-tabs" id="team-all" data-tab="team-all">
                                  <div class="row " id="team-photos" ng-show="type === 'photos'">
                                         {% verbatim %}
-                                        <div class="clubs-team-wrap">
-                                            <div class="deffender-block players-block">
-                                                <div class="head-player-block">
-                                                    <div class="position">Защитники</div>
-                                                </div>
-                                                <!--Player Card Deffender-->
-                                                <div class="player-item" ng-repeat="player in players.defender_players track by $index" ng-click="go('/ru/hockey/players/'+player.pk)" id="playerd_{{$index}}">
-                                                    <div class="img-wrap">
-                                                        <img src="{{player.photo}}" alt="">
-                                                        <div class="player-number ui teal ribbon label">{{player.number}}</div>
-                                                    </div>
-                                                    <div class="player-name">
-                                                        <p>{{player.fio}}</p>
-                                                    </div>
-                                                </div>
-                                                <!--Player Card Deffender End-->
-                                            </div>
-                                            <div class="forward-block players-block">
-                                                <div class="head-player-block">
-                                                    <div class="position">Нападающие</div>
-                                                   
-                                                </div>
-                                                <!--Player Card  Forward                                -->
-                                                <div class="player-item" ng-repeat="player in players.offender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
-                                                    <div class="img-wrap">
-                                                        <img src="{{player.photo}}" alt="">
-                                                        <div class="player-number ui teal ribbon label">{{player.number}}</div>
-                                                    </div>
-                                                    <div class="player-name">
-                                                        <p>{{player.fio}}</p>
-                                                    </div>
-                                                </div>
-                                                <!--Player Card Forward END                                 -->
-                                            </div>
-                                            <div class="goalkeep-block one-block">
-                                                <div class="head-player-block">
-                                                    <div class="position">Вратари</div>
-                                                </div>
-                                                <!--Player Card  Goalk                                -->
-                                                <div class="player-item" ng-repeat="player in players.goalkeeper_players" ng-click="go('/ru/hockey/players/'+player.pk)">
-                                                    <div class="img-wrap">
-                                                        <img src="{{player.photo}}" alt="">
-                                                        <div class="player-number ui teal ribbon label">{{player.number}}</div>
-                                                    </div>
-                                                    <div class="player-name">
-                                                        <p>{{player.fio}}</p>
-                                                    </div>
-                                                </div>
-                                                <!--Player Card Goalk END                                 -->
-                                            </div>
 
-                                            <div class="coach-block one-block">
-                                                <div class="head-player-block">
-                                                    <div class="position">Тренеры</div>
-                                                </div>
-                                                <!--Player Card     Coach                            -->
-                                                <div class="player-item" ng-repeat="player in players.coaches" ng-click="go('/ru/hockey/players/'+player.pk)">
-                                                    <div class="img-wrap">
-                                                        <img src="{{player.photo}}" alt="">
-                                                        <div class="player-number ui teal ribbon label">{{player.number}}</div>
-                                                    </div>
-                                                    <div class="player-name">
-                                                        <p>{{player.fio}}</p>
-                                                    </div>
-                                                </div>
-                                                <!--Player Card Coach END                                 -->
-                                            </div>
+                                     <div class="clubs-team-wrap">
 
-                                            <div class="out-block one-block">
-                                                <div class="head-player-block">
-                                                    <div class="position">Выбыли</div>
-                                                </div>
-                                                <!--Player Card       Out                        -->
-                                                <div class="player-item">
-                                                    <div class="img-wrap">
-                                                        <img src="" alt="">
-                                                        <div class="player-number ui teal ribbon label">14</div>
-                                                    </div>
-                                                    <div class="player-name">
-                                                        <p>имя</p>
-                                                    </div>
-                                                </div>
-                                                <!--Player Card  Out END                                 -->
+                                    
+                                <div class="player-block-wrap">
+                                     <ul class="players-list">
+                                        <li class="player-item" ng-repeat="player in players.defender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                            <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
+                                            </a> 
+                                            <div class="player-number ui teal ribbon label">{{player.number}}</div>
+                                            <div class="player-club-info">
+                                                <div class="player-club-name">{{player.lastname}}</div>
+                                                <div class="player-club-name">{{player.name}}</div>
+                                                <div class="player-club-country">{{player.line_display}}</div>
+                                                <i class="flag" ng-class="player.citizenship.code"></i>
+  
+
                                             </div>
-                                        </div>
+                                        </li>
+                                         <li class="player-item"  ng-repeat="player in players.offender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                            <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
+                                            </a> 
+                                            <div class="player-number ui teal ribbon label">{{player.number}}</div>
+                                            <div class="player-club-info">
+                                                <div class="player-club-name">{{player.lastname}}</div>
+                                                <div class="player-club-name">{{player.name}}</div>
+                                                <div class="player-club-country">{{player.line_display}}</div>
+                                                <i class="flag" ng-class="player.citizenship.code"></i>
+  
+                                            </div>
+                                        </li>
+                                     <li class="player-item"  ng-repeat="player in players.goalkeeper_players" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                            <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
+                                            </a> 
+                                            <div class="player-number ui teal ribbon label">{{player.number}}</div>
+                                            <div class="player-club-info">
+                                                <div class="player-club-name">{{player.lastname}}</div>
+                                                <div class="player-club-name">{{player.name}}</div>
+                                                <div class="player-club-country">{{player.line_display}}</div>
+                                                <i class="flag" ng-class="player.citizenship.code"></i>
+  
+                                            </div>
+                                        </li>
+                                        <li class="player-item" ng-repeat="player in players.coaches" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                            <a class="player-link"><img src="{{player.photo}}" alt="" class="player-photo">
+                                            </a> 
+                                            <div class="player-number ui teal ribbon label">{{player.number}}</div>
+                                            <div class="player-club-info">
+                                                <div class="player-club-name">{{player.lastname}}</div>
+                                                <div class="player-club-name">{{player.name}}</div>
+                                                <div class="player-club-country">{{player.line_display}}</div>
+                                                <i class="flag" ng-class="player.citizenship.code"></i>
+  
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                      </div>
                                         {% endverbatim %}
 
                                         <div style="text-align: center">
@@ -322,7 +305,7 @@
 
     </div>
     {% include 'hockeyapp/player-partners-popup.html' %}
-    <hr class="hr">
+   
     <ul class="team-controls player-controls-block">
         <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
         <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>

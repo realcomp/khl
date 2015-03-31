@@ -778,6 +778,62 @@ function createBalloon(valueField, text){
     console.log(text)
     return "<div style='text-align: left; min-width: 60%; max-width: 80%; display: inline-block'><span style='font-size:14px; color:#000000;'>" + text + ": </span></div><div class='vertical-middle inline-block' style='width: 20%;'><div class='float-right'>[[" + valueField + "]]</div></div> ";
 }
+angular.module('Sportomatics').service('ClubsMapService', function(){
+        var self = this;
+        var startCoordinate1 = 55.749792; // Moscow latitude
+        var startCoordinate2 = 37.632495; // Moscow longitude
+
+        // Variables:
+        self.mapsDivName = 'clubs-map';
+        this.clubs_map = document.getElementById(self.mapsDivName);
+        this.rendered = false;
+        self.map = null;
+
+        // Methods:
+        this.createClubsMap = function(clubs){ // creates clubs map inside maps-div marked as mapsDivName
+            // create a map in the "map" div, set the view to a given place and zoom
+            self.map = L.map(self.mapsDivName).setView([startCoordinate1, startCoordinate2], 4);
+            // add an OpenStreetMap tile layer
+            L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(self.map);
+            // add a marker in the given location, attach some popup content to it and open the popup
+            _.each(clubs, function(club, index){
+                if(club.arena)
+                var coords = club.arena.coords;
+                if(coords != null){
+                    var coordinate1 = coords.split(',')[0];
+                    var coordinate2 = coords.split(',')[1];
+                }
+                var clubIcon = L.icon({
+                    iconUrl: 'http://dev.sportomatics.ru'+ club.logo,
+                    iconSize: [24, 24],
+                    iconAnchor: [22, 94],
+                    popupAnchor: [-4, -76],
+                    shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
+                    shadowSize: [34, 48],
+                    shadowAnchor: [27, 94]
+                });
+                if(coordinate1 && coordinate2){
+                    L.marker([coordinate1, coordinate2], {icon: clubIcon}).addTo(self.map).bindPopup(club.title + '<br>');
+                }
+            });
+            this.rendered = true;
+        };
+
+        this.isRendered = function(){ // return map rendered state
+            return this.rendered;
+        };
+
+        this.setRendered = function(value){ // set boolean state for map rendered variable
+            if(value !== true && value !== false) return;
+            this.rendered = value;
+        };
+
+        this.remove = function(){
+            self.map.remove();
+        };
+});
 angular.module('Sportomatics')
     .factory('LocaleFactory', ["$rootScope", function($rootScope){
         var chosen = 'ru';
@@ -1784,9 +1840,10 @@ angular.module('Sportomatics')
     }])
 angular.module('Sportomatics')
 .controller('ClubListController', [
-    '$http', '$scope', '$location', 'PlayersSearchService',
-    function($http, $scope, $location, PlayersSearchService) {
+    '$http', '$scope', '$location', 'PlayersSearchService', 'ClubsMapService',
+    function($http, $scope, $location, PlayersSearchService, ClubsMapService) {
     var url = $('#ClubListForm').attr('action');
+    this.map = true;
 
     $scope.$location = $location;
     $scope.PlayersSearchService = PlayersSearchService;
@@ -1871,8 +1928,13 @@ angular.module('Sportomatics')
         $scope.loaded = false;
         $http.get(url + '?' + params)
             .success(function(data) {
+                console.log(data)
                 $scope.data = data;
+                $scope.clubs = data.results;
                 $scope.loaded = true;
+            }).then(function(){
+                if(ClubsMapService.isRendered()) ClubsMapService.remove();
+                ClubsMapService.createClubsMap($scope.clubs);
             });
     };
 
@@ -1888,8 +1950,12 @@ angular.module('Sportomatics')
             } else {
                 $scope.data.next = data.next;
                 $scope.data.results = $scope.data.results.concat(data.results);
+                $scope.clubs = $scope.clubs.concat(data.results);
             }
             $scope.loaded = true;
+        }).then(function(){
+            if(ClubsMapService.isRendered()) ClubsMapService.remove();
+            ClubsMapService.createClubsMap($scope.clubs);
         });
     };
 
@@ -2136,6 +2202,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.type = 'photos';
         $scope.setType = function(type){
             $scope.type = type;
+            $scope.unMakeTransferArrows()
         };
         $scope.go = function(path){
             window.location.href = path;
@@ -2370,12 +2437,17 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.makeTransferArrows = function(){
             createTransferArrow('#club_2', '#playerd_3', 1);
             createTransferArrow('#club_4', '#playerd_2', 2);
-
-        }
+            $( ".player-item" ).each(function() {
+                if($(this).attr('id') !== 'playerd_3' && $(this).attr('id') !== 'playerd_2')
+                $( this ).addClass("opacity-30");
+            });
+        };
         $scope.unMakeTransferArrows = function(){
             $('canvas').remove();
-
-        }
+            $( ".player-item" ).each(function() {
+                $( this ).removeClass("opacity-30");
+            });
+        };
         this.list(this.compare, false);
 
         function canvas_arrow(context, fromx, fromy, tox, toy){
@@ -2392,35 +2464,48 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             //variables to be used when creating the arrow
             var ctx = c;
             var headlen = 10;
-
             var angle = Math.atan2(toy-fromy,tox-fromx);
-
             //starting path of the arrow from the start square to the end square and drawing the stroke
             ctx.beginPath();
             ctx.moveTo(fromx, fromy);
-            ctx.lineTo(tox, toy);
-           // ctx.strokeStyle = "#cc0000";
-            ctx.lineWidth = 10;
-            ctx.stroke();
+            var amount = 0;
+            (function myLoop (amount) {
+               setTimeout(function () {
+                   amount += 0.05; // change to alter duration
+                    ctx.lineWidth = 10;
+                    ctx.lineTo(fromx + (tox - fromx) * amount,
+                             fromy + (toy - fromy) * amount);
+                    ctx.stroke();
 
-            //starting a new path from the head of the arrow to one of the sides of the point
-            ctx.beginPath();
-            ctx.moveTo(tox, toy);
-            ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
+                    if (amount < 1){
+                       myLoop(amount);
+                    }
+                    else {
+                         //starting a new path from the head of the arrow to one of the sides of the point
+                        ctx.beginPath();
+                        ctx.moveTo(tox, toy);
+                        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
 
-            //path from the side point of the arrow, to the other side point
-            ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
+                        //path from the side point of the arrow, to the other side point
+                        ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
 
-            //path from the side point back to the tip of the arrow, and then again to the opposite side point
-            ctx.lineTo(tox, toy);
-            ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
+                        //path from the side point back to the tip of the arrow, and then again to the opposite side point
+                        ctx.lineTo(tox, toy);
+                        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
 
-            //draws the paths created above
+                        //draws the paths created above
+                        //ctx.strokeStyle = "#cc0000";
+                        ctx.lineWidth = 10;
+                        ctx.stroke();
+                        //ctx.fillStyle = "#000";
+                        ctx.fill();
+                    }
+               }, 30)
+            })(0);
+            //ctx.lineTo(tox, toy);
             //ctx.strokeStyle = "#cc0000";
-            ctx.lineWidth = 10;
-            ctx.stroke();
-            //ctx.fillStyle = "#000";
-            ctx.fill();
+            //ctx.lineWidth = 10;
+            //ctx.stroke();
         }
 
 
@@ -3795,7 +3880,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
         $scope.$location = $location;
-        if ($location.search().uidb64 && $location.search().token) {
+        if (($location.search().uidb64 && $location.search().token) || $location.search().remember) {
             $scope.selectedType = 'remember';
         } else {
             $scope.selectedType = 'social';

@@ -8,13 +8,18 @@
 {% block body %}
 <section class="content">
     <div class="container players-search-page">
-        <div class="breadcrumbs">
+    <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+                    <div class="breadcrumbs">
             <div class="ui small breadcrumb">
                 <a class="section" href="/">ХОККЕЙ</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section">Игроки</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -23,6 +28,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
         <div class="page-content page-container"
              ng-controller="PlayersSearchController as PlayersSearchCtrl">
@@ -45,7 +51,31 @@
                         {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
-                            <select id="players-search-country"
+                              <div class="ui fluid search selection dropdown">
+                                <input type="hidden" name="country" class="search" >
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Выберите страну</div>
+                                <div class="menu">
+                                  <div class="item" data-value="ad"><i class="ad flag"></i>Andorra</div>
+                                  <div class="item" data-value="ae"><i class="ae flag"></i>United Arab Emirates</div>
+                                  <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
+                                  <div class="item" data-value="ag"><i class="ag flag"></i>Antigua</div>
+                                  <div class="item" data-value="ai"><i class="ai flag"></i>Anguilla</div>
+                                  <div class="item" data-value="al"><i class="al flag"></i>Albania</div>
+                                  <div class="item" data-value="am"><i class="am flag"></i>Armenia</div>
+                                  <div class="item" data-value="an"><i class="an flag"></i>Netherlands Antilles</div>
+                                  <div class="item" data-value="ad"><i class="ad flag"></i>Andorra</div>
+                                  <div class="item" data-value="ae"><i class="ae flag"></i>United Arab Emirates</div>
+                                  <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
+                                  <div class="item" data-value="ag"><i class="ag flag"></i>Antigua</div>
+                                  <div class="item" data-value="ai"><i class="ai flag"></i>Anguilla</div>
+                                  <div class="item" data-value="al"><i class="al flag"></i>Albania</div>
+                                  <div class="item" data-value="am"><i class="am flag"></i>Armenia</div>
+                                  <div class="item" data-value="an"><i class="an flag"></i>Netherlands Antilles</div>
+                                  </div>
+                              </div>
+
+                           <!--  <select id="players-search-country"
                                     class="select players-search-select" multiple="multiple" size="8"
                                     ng-model="countriesSelected">
                                 <option value="{{ country.pk }}"
@@ -53,11 +83,11 @@
                                         ng-selected="$index === 0">
                                     {{ country.title }}
                                 </option>
-                            </select>
+                            </select> -->
                         </div>
                         <div class="three wide column">
                             <div class="column-title">Лига:</div>
-                            <select id="players-search-league"
+                         <!--    <select id="players-search-league"
                                     class="select players-search-select" multiple="multiple" size="8"
                                     ng-model="leaguesSelected">
                                 <option value="{{ league.pk }}"
@@ -65,7 +95,21 @@
                                         ng-selected="$index === 0">
                                     {{ league.title }}
                                 </option>
-                            </select>
+                            </select> -->
+                            <div class="ui fluid search selection dropdown">
+                              <input type="hidden" name="lige" class="search" >
+                              <i class="dropdown icon"></i>
+                              <div class="default text">Выберите лигу</div>
+                              <div class="menu">
+                                <div class="item" data-value="кхл">КХЛ</div>
+                                <div class="item" data-value="вхл">ВХЛ</div>
+                                <div class="item" data-value="мхл">МХЛ</div>
+                                <div class="item" data-value="мхл-2">МХЛ-2</div>
+                                <div class="item" data-value="вхл">ВХЛ</div>
+                                <div class="item" data-value="суперлига">Суперлига</div>
+
+                                </div>
+                            </div>
                         </div>
                         {% endverbatim %}
                         <div class="two wide column">
@@ -105,7 +149,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="four wide column">
+                        <div class="three wide column">
                             <div class="column-title">Гражданство:</div>
                             <div class="ui form">
                                 <div class="inline">
@@ -131,7 +175,7 @@
                                                ng-checked="params.citizenship_other === 'true'"
                                                onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>иное</label>
-                                    </div>
+                                    </div><br>
                                     <div class="ui selection dropdown dropdown-small-inline">
                                         <input type="hidden" id="citizenshipOther" value="">
                                         <div class="default text">любое</div>
@@ -146,7 +190,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="four wide column">
+                        <div class="five wide column">
                             <div class="column-title">Контракт:</div>
                             <div class="ui form">
                                 <div class="inline">
@@ -188,18 +232,18 @@
                     <div class="row">
                         <div class="column">
                             <div class="align-center">
-                                <a class="ui tiny green button"
+                                <a class="ui small green button"
                                    ng-click="PlayersSearchService.search(this)">показать</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="page-inner-container">
-                <div class="ui grid">
+            <!-- <div class="page-inner-container">
+                 <div class="ui grid">
                     {% include "hockeyapp/players-search-table.html" %}
                 </div>
-            </div>
+            </div> -->
             {% include "hockeyapp/player-partners-popup.html" %}
             </form>
         </div>
