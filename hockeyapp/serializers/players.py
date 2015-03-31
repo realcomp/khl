@@ -210,9 +210,9 @@ class ClubPlayerMatchPaginationSerilizer(pagination.PaginationSerializer):
 
     def get_is_limited(self, obj):
         request = self.context.get('request')
-        if request and request.user.is_authenticated:
-            return True
-        return False
+        if request and request.user.is_authenticated():
+            return False
+        return True
 
 
 class PlayerCardClubsSerializer(BaseClubSerializer):
