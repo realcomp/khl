@@ -2045,10 +2045,11 @@ i.icon {
 .home-page .page-title {
   color: #a1173b;
   font-weight: 600;
-  font-size: 16px;
+  padding: 15px 0px 10px 0px;
+  font-size: 20px;
   line-height: 44px;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: uppercase; 
   border-bottom: 2px solid #a1173b;
 }
 
