@@ -3,6 +3,7 @@ from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
+from .views import club, player
 
 
 urlpatterns = patterns(
@@ -61,40 +62,41 @@ urlpatterns = patterns(
         views.MetricsPlayersCompareGraph.as_view(),
         name='metrics-compare-graph'),
     # players
-    url(r'^players/$', views.PlayersSearch.as_view(),
+    url(r'^players/$', player.PlayersSearch.as_view(),
         name='players-search'),
-    url(r'^players/(?P<pk>\d+)/$', views.PlayerCard.as_view(),
+    url(r'^players/(?P<pk>\d+)/$', player.PlayerCard.as_view(),
         name='player-card'),
     url(r'^players/(?P<pk>\d+)/indicators/$',
-        views.PlayerCardIndicators.as_view(),
+        player.PlayerCardIndicators.as_view(),
         name='player-card-indicators'),
-    url(r'^players/(?P<pk>\d+)/clubs/$', views.PlayerCardClubs.as_view(),
+    url(r'^players/(?P<pk>\d+)/clubs/$', player.PlayerCardClubs.as_view(),
         name='player-card-clubs'),
-    url(r'^players/(?P<pk>\d+)/coaches/$', views.PlayerCardCoaches.as_view(),
+    url(r'^players/(?P<pk>\d+)/coaches/$', player.PlayerCardCoaches.as_view(),
         name='player-card-coaches'),
-    url(r'^players/(?P<pk>\d+)/partners/$', views.PlayerCardPartners.as_view(),
+    url(r'^players/(?P<pk>\d+)/partners/$',
+        player.PlayerCardPartners.as_view(),
         name='player-card-partners'),
-    url(r'^players/(?P<pk>\d+)/photos/$', views.PlayerCardPhotos.as_view(),
+    url(r'^players/(?P<pk>\d+)/photos/$', player.PlayerCardPhotos.as_view(),
         name='player-card-photos'),
     url(r'^players/(?P<pk>\d+)/communication/$',
-        views.PlayerCardCommunication.as_view(),
+        player.PlayerCardCommunication.as_view(),
         name='player-card-communication'),
-    url(r'^players/(?P<pk>\d+)/news/$', views.PlayerCardNews.as_view(),
+    url(r'^players/(?P<pk>\d+)/news/$', player.PlayerCardNews.as_view(),
         name='player-card-news'),
     # clubs
-    url(r'^clubs/$', views.ClubListView.as_view(), name='club-list'),
-    url(r'^clubs/(?P<pk>\d+)/$', views.ClubView.as_view(), name='club'),
-    url(r'^clubs/(?P<pk>\d+)/calendar/$', views.ClubCalendarView.as_view(),
+    url(r'^clubs/$', club.ClubListView.as_view(), name='club-list'),
+    url(r'^clubs/(?P<pk>\d+)/$', club.ClubView.as_view(), name='club'),
+    url(r'^clubs/(?P<pk>\d+)/calendar/$', club.ClubCalendarView.as_view(),
         name='club-calendar'),
-    url(r'^clubs/(?P<pk>\d+)/stats/$', views.ClubStatsView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/stats/$', club.ClubStatsView.as_view(),
         name='club-stats'),
-    url(r'^clubs/(?P<pk>\d+)/home/$', views.ClubHomeView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/home/$', club.ClubHomeView.as_view(),
         name='club-home'),
-    url(r'^clubs/(?P<pk>\d+)/photos/$', views.ClubPhotosView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/photos/$', club.ClubPhotosView.as_view(),
         name='club-photos'),
-    url(r'^clubs/(?P<pk>\d+)/fanzone/$', views.ClubFanZoneView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/fanzone/$', club.ClubFanZoneView.as_view(),
         name='club-fanzone'),
-    url(r'^clubs/(?P<pk>\d+)/news/$', views.ClubNewsView.as_view(),
+    url(r'^clubs/(?P<pk>\d+)/news/$', club.ClubNewsView.as_view(),
         name='club-news'),
 
     #admin

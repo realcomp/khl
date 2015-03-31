@@ -4,7 +4,7 @@ from operator import attrgetter
 
 from django.db.models import Avg, Sum
 
-from rest_framework import serializers
+from rest_framework import pagination, serializers
 
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
@@ -178,21 +178,15 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         return loose_goals + saves
 
     def get_matches_win(self, obj):
-        home_matches = obj.home_matches_win()
-        guest_matches = obj.guest_matches_win()
-        return (
-            (home_matches and home_matches.count() or 0) +
-            (guest_matches and guest_matches.count() or 0))
+        return obj.home_matches_win().count() + obj.guest_matches_win().count()
 
     def get_matches_lose(self, obj):
-        home_matches = obj.home_matches_lose()
-        guest_matches = obj.guest_matches_lose()
         return (
-            (home_matches and home_matches.count() or 0) +
-            (guest_matches and guest_matches.count() or 0))
+            obj.home_matches_lose().count() + obj.guest_matches_lose().count())
 
     def get_zero_goals_matches(self, obj):
-        return obj.filter(loose_goals=0).count()
+        # at least 58 minutes
+        return obj.filter(loose_goals=0, gamingtime__gte=58*60).count()
 
     def get_bullet_matches(self, obj):
         return obj.filter(bullet_goals__gt=0).count()
@@ -211,40 +205,25 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         model = ClubPlayerMatch
 
 
+class ClubPlayerMatchPaginationSerilizer(pagination.PaginationSerializer):
+    is_limited = serializers.SerializerMethodField()
+
+    def get_is_limited(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return True
+        return False
+
+
 class PlayerCardClubsSerializer(BaseClubSerializer):
-    seasons_title = serializers.SerializerMethodField()
-
-    def get_seasons_title(self, obj):
-        # clubleague = LeagueClub.objects.get(
-        #     club=obj, season=obj.selected_seasons[0])
-        league_title = ''
-        if obj.league:
-            league_title = '%s: ' % obj.league.get_locale_attr(
-                'title', request=self.context.get('request'))
-        return '%(league)s%(club)s (%(seasons)s)' % {
-            'league': league_title,
-            'club': obj.get_locale_attr(
-                'title', request=self.context.get('request')),
-            'seasons': ' '.join(map(
-                attrgetter('short_title'),
-                filter(None, obj.selected_seasons))),
-        }
-
     class Meta(object):
-        fields = (
-            'pk', 'title', 'logo', 'url', 'seasons_title')
+        fields = 'pk', 'title', 'logo', 'url'
         model = Club
 
 
 class PlayerCardCoachesSerializer(CoachSerializer):
-    years_months = serializers.SerializerMethodField()
-
-    def get_years_months(self, obj):
-        total_months = obj.total_days / 30
-        return [total_months / 12, total_months % 12]
-
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname', 'years_months'
+        fields = 'pk', 'fio', 'name', 'lastname'
         model = Coach
 
 

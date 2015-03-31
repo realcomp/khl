@@ -1,6 +1,7 @@
 #coding: utf-8
 __author__='smirnov.ev'
 
+from django.conf import settings
 from django.db import models
 from django.db.models.loading import get_model
 
@@ -74,5 +75,19 @@ class ScheduleManager(models.Manager):
             _m.challenge_type = m.get('challenge_type')
             _m.save(update_fields=['challenge_type'])
         return _m
+
+
+class LocaleOrderMixin(object):
+    def locale_order_by(self, request, *args):
+        if request:
+            lc = getattr(request, 'LANGUAGE_CODE')
+            if lc in zip(*settings.LANGUAGES)[0]:
+                args = map(lambda x: x % lc if '%s' in x else x, args)
+        return self.order_by(*args)
+
+
+class AbstractManQuerySet(LocaleOrderMixin, models.QuerySet):
+    pass
+
 
 from . import arena, club, match, player

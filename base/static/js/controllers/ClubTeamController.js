@@ -1,6 +1,6 @@
 angular.module('Sportomatics').controller('ClubTeamController', [
-    '$http', '$scope',
-    function($http, $scope) {
+    '$http', '$scope', '$timeout',
+    function($http, $scope, $timeout) {
         var self = this,
         url = $('#ClubTeamForm').attr('action'),
         popup = null;
@@ -169,6 +169,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         return cell.is_left;
                     case 'legionnaire':
                         return cell.is_legionnaire;
+                    case 'home':
+                        return cell.is_home;
                 }
             } else {
                 return false;
@@ -180,7 +182,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             return cell;
         };
 
-        self.list = function(callback) {
+        self.list = function(callback, callbackArg) {
             var params = $('#ClubTeamForm').serialize();
             self.players.data = null;
             self.players.table = null;
@@ -188,7 +190,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.clubs = [];
             $http.get(url + '?' + params)
             .success(function(data) {
-                    $scope.workWithData(data);
                     $scope.players = data;
                 self.players.data = data;
                 self.players.table = {
@@ -197,14 +198,17 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     'forward': data.offender_players,
                     'trainer': data.coaches
                 }
+
+                    $scope.workWithData(data);
                 self.players.loader = false;
                 if (typeof callback === 'function') {
-                    callback();
+                    callback(callbackArg);
                 }
             });
         };
 
-        this.compare = function() {
+        this.compare = function(arg) {
+            //console.log('a')
             var url = $('#ClubTeamCompareLink').attr('href'),
             club = self.clubs.getLastClub(),
             params, leagues;
@@ -228,9 +232,116 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     });
                 }
                 self.clubs.loader = false;
+                if(arg !== false){
+
+                }
             });
         };
 
-        this.list(this.compare);
+        $scope.makeTransferArrows = function(){
+            createTransferArrow('#club_2', '#playerd_3', 1);
+            createTransferArrow('#club_4', '#playerd_2', 2);
+
+        }
+        $scope.unMakeTransferArrows = function(){
+            $('canvas').remove();
+
+        }
+        this.list(this.compare, false);
+
+        function canvas_arrow(context, fromx, fromy, tox, toy){
+            var headlen = 10;   // length of head in pixels
+            var angle = Math.atan2(toy-fromy,tox-fromx);
+            context.moveTo(fromx, fromy);
+            context.lineTo(tox, toy);
+            //context.moveTo(tox, toy);
+            context.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
+            context.moveTo(tox, toy);
+            context.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
+        }
+        function drawArr(c, fromx, fromy, tox, toy){
+            //variables to be used when creating the arrow
+            var ctx = c;
+            var headlen = 10;
+
+            var angle = Math.atan2(toy-fromy,tox-fromx);
+
+            //starting path of the arrow from the start square to the end square and drawing the stroke
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+           // ctx.strokeStyle = "#cc0000";
+            ctx.lineWidth = 10;
+            ctx.stroke();
+
+            //starting a new path from the head of the arrow to one of the sides of the point
+            ctx.beginPath();
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
+
+            //path from the side point of the arrow, to the other side point
+            ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
+
+            //path from the side point back to the tip of the arrow, and then again to the opposite side point
+            ctx.lineTo(tox, toy);
+            ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
+
+            //draws the paths created above
+            //ctx.strokeStyle = "#cc0000";
+            ctx.lineWidth = 10;
+            ctx.stroke();
+            //ctx.fillStyle = "#000";
+            ctx.fill();
+        }
+
+
+        function createTransferArrow(from, to, id){
+                var $from = $(from);
+                var $to = $(to);
+                // find offset positions for the word (t = this) and image (i)
+                var ofrom = {
+                    x: $from.offset().left + $from.width() / 2,
+                    y: $from.offset().top + $from.height() / 2
+                };
+                var oto = {
+                    x: $to.offset().left + $to.width() / 2,
+                    y: $to.offset().top + $to.height() / 2
+                };
+                // x,y = top left corner
+                // x1,y1 = bottom right corner
+                var p = {
+                    x: ofrom.x < oto.x ? ofrom.x : oto.x,
+                    x1: ofrom.x > oto.x ? ofrom.x : oto.x,
+                    y: ofrom.y < oto.y ? ofrom.y : oto.y,
+                    y1: ofrom.y > oto.y ? ofrom.y : oto.y
+                };
+                // create canvas between those potonts
+                var c = $('<canvas id="'+id+'" />').attr({
+                    'width': p.x1 - p.x + 20 ,
+                    'height': p.y1 - p.y + 20
+                }).css({
+                    'position': 'absolute',
+                    'left': p.x,
+                    'top': p.y,
+                    'z-index': 1
+                }).appendTo($('body'))[0].getContext('2d');
+
+                // draw line
+                var x1 = ofrom.x - p.x ;
+                var y1 = ofrom.y - p.y - 30;
+                var x2 = oto.x - p.x +20;
+                var y2 = oto.y - p.y + 20;
+                c.strokeStyle = '#000';
+                //c.lineWidth = 20;
+                c.beginPath();
+                 /*c.moveTo(x1,y1 );
+                 c.lineTo(x2,y2 );
+                c.moveTo(x2, y2);
+                c.rotate(Math.PI /2)
+                c.lineTo(x2+20, y2);*/
+                drawArr(c, x1,y1,x2,y2,1,2)
+                //canvas_arrow(c,x1,y1,x2,y2)
+                c.stroke();
+        }
     }
 ]);

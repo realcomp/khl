@@ -15,6 +15,12 @@
                 <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
                 <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
+                <i class="right chevron icon divider"></i>
                 <a class="active section">{% trans 'Team partners' %}</a>
             </div>
             </div>
@@ -79,8 +85,9 @@
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{player.lastname}}</div>
                                                 <div class="player-partners-name">{{player.name}}</div>
-                                                <div class="player-partners-country">{{player.citizenship.title}}</div>
-                                                <div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>
+                                                <div class="player-partners-country">{{player.line_display}}</div>
+                                                <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i>
+                                                <!--<div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>-->
                                             </div>
                                         </li>
                                         <li class="player-partners-add-label pointer" ng-click="increaseLimit($index)" ng-if="limit[$index] < players.players.length">

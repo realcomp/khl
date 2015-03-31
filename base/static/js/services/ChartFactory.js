@@ -12,7 +12,6 @@ angular.module('Sportomatics')
             var chart;
             AmChartsFactory.ready().then(function () {
                 var data = chartData.data;
-
                 // SERIAL CHART
                 chart = new AmCharts.AmSerialChart();
                 chart.pathToImages = "http://www.amcharts.com/lib/images/";

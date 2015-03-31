@@ -105,17 +105,17 @@
                                         </div>
                                         <ul>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Ростер</a></li>
+                                                   ng-click="unMakeTransferArrows()">Ростер</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'all'">Все</a></li>
+                                                   ng-click="unMakeTransferArrows()">Все</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'joined'">Пришли</a></li>
+                                                   ng-click="makeTransferArrows()">Пришли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'left'">Ушли</a></li>
+                                                   ng-click="unMakeTransferArrows()">Ушли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Воспитанники</a></li>
+                                                   ng-click="unMakeTransferArrows()">Воспитанники</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="ClubTeamCtrl.players.status = 'legionnaire'">Легионеры</a></li>
+                                                   ng-click="unMakeTransferArrows()">Воспитанники</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -130,6 +130,7 @@
                               <div class="row clubs-team-inner-tabs" id="team-all" data-tab="team-all">
                                  <div class="row " id="team-photos" ng-show="type === 'photos'">
                                         {% verbatim %}
+
                                      <div class="clubs-team-wrap">
 
                                     
@@ -145,6 +146,7 @@
                                                 <div class="player-club-country">{{player.line_display}}</div>
                                                 <i class="flag" ng-class="player.citizenship.code"></i>
   
+
                                             </div>
                                         </li>
                                          <li class="player-item"  ng-repeat="player in players.offender_players" ng-click="go('/ru/hockey/players/'+player.pk)">
@@ -218,9 +220,9 @@
                                             <table class="clubs-team-logos-table" id="leagues-all" data-tab="leagues-all">
                                                 <tbody>
                                                 {% verbatim %}
-                                                <tr ng-repeat="row in ClubTeamCtrl.CLUBS_TABLE">
+                                                <tr ng-repeat="row in ClubTeamCtrl.CLUBS_TABLE track by $index">
                                                     <td ng-repeat="cell_id in row"
-                                                        class="cell-{{ cell_id[0] }}">
+                                                        class="cell-{{ cell_id[0] }}" id="club_{{$index}}">
                                                         <a class="team-player-photo-link"
                                                            href="{{ ClubTeamCtrl.getCell(clubs, cell_id).url }}"
                                                            ng-show="ClubTeamCtrl.getCell(clubs, cell_id)">
@@ -250,7 +252,7 @@
                                         </div>
                                     </div>
                                     <div class="row" id="team-tables"  ng-show="type === 'table'">
-                                        <input type="hidden" name="seasonz" value="">
+                                        <input type="hidden" value="">
                                         <div class="heading">Сезон 2013-2014</div>
                                     
                                         <table class="ui celled table segment clubs-team-table">

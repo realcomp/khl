@@ -29,7 +29,7 @@ from ..serializers.clubs import (
 from ..serializers.events import EventSerializer
 from ..serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer)
+    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer)
 from ..serializers.schedule import ScheduleSerializer
 from ..serializers.timeline import PlayerTimelineSerializer
 
@@ -76,7 +76,9 @@ class BestPlayer(PlayersSearch):
 
 
 class PlayerCardIndicators(generics.ListAPIView):
+    queryset = ClubPlayerMatch.objects.all()
     paginate_by = 99999
+    pagination_serializer_class = ClubPlayerMatchPaginationSerilizer
     serializer_class = ClubPlayerMatchSerilizer
 
     def _get_aggregate(self, qs):
@@ -89,9 +91,6 @@ class PlayerCardIndicators(generics.ListAPIView):
                 'shots', 'pis', 'winfaceoff_p', 'gamingtime',
                 'change_count')),
         ))
-
-    def get_queryset(self):
-        return ClubPlayerMatch.objects.all()
 
     def filter_queryset(self, qs):
         qs = super(PlayerCardIndicators, self).filter_queryset(qs)

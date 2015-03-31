@@ -3001,7 +3001,7 @@ i.icon {
 }
 /* line 1869, ../sass/_base.sass */
 .player-card-short-page .player-clubs-list {
-  padding: 100px 0;
+  padding: 50px 0;
   box-shadow: inset -1px 0 #d7d7d7;
 }
 /* line 1872, ../sass/_base.sass */
@@ -3248,7 +3248,7 @@ i.icon {
   margin-right: 18px;
   border-bottom: 1px solid #e0e0e0;
   padding: 10px 0;
-    height: 63px;
+    height: 70px;
 }
 .partners-block .player-partners-add-label{
     float: left;
@@ -3273,7 +3273,7 @@ i.icon {
 }
 /* line 2044, ../sass/_base.sass */
 .partners-block .player-partners-photo {
-  width: 50px;
+  width: 60px;
   border-radius: 3px;
   float: left;
   margin-right: 12px;
@@ -5791,4 +5791,12 @@ hr.style-one {
 }
 #map {
     height: 300px;
+}
+.player-partners-item i.flag:not(.icon):before{
+    height: 14px;
+}
+
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important;
 }

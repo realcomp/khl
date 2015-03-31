@@ -1,4 +1,5 @@
 {% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{fio}}: новости, хоккей  - Sportomatics.ru
@@ -11,11 +12,17 @@
         <div class="twelve wide column">
             <div class="breadcrumbs">
             <div class="ui small breadcrumb">
-                <a class="section" href="/">ХОККЕЙ</a>
+                <a class="section" href="/">{% trans 'Hockey' %}</a>
                 <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
                 <i class="right chevron icon divider"></i>
-                <a class="active section">Новости</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="active section">{% trans 'News' %}</a>
             </div>
             </div>
         </div>

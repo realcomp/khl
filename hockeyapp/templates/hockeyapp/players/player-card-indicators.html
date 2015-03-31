@@ -12,11 +12,17 @@
         <div class="twelve wide column">
             <div class="breadcrumbs">
             <div class="ui small breadcrumb">
-                <a class="section" href="/">ХОККЕЙ</a>
+                <a class="section" href="/">{% trans 'Hockey' %}</a>
                 <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
                 <i class="right chevron icon divider"></i>
-                <a class="active section">Спортивные показатели</a>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="active section">{% trans 'Indicators' %}</a>
             </div>
             </div>
         </div>
@@ -154,7 +160,7 @@
 
 
                             {% verbatim %}
-                            <div class="chart-button-panel" ng-if="!disabled && localeObject && dataType === 'graph-serial'" >
+                            <div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
                                 <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
                                 <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
                                 <!--<a class="ui green button chart-button" ng-click="addGraph('/static/json/gorohov', 1    )">Сравнить с игроком 2186</a>
@@ -166,7 +172,7 @@
                                 </div>
                                 <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
-                            <div  ng-show="playersStats.length && dataType=== 'graph-serial'">
+                            <div  ng-show="playersStats.length && dataType === 'graph-serial' && !limited">
                                 <span class="season-buttons-label"> Игроки для сравнения:</span>
                                 <div class="player-comparison-container">
                                     <div ng-repeat="player in playersStats">
@@ -178,9 +184,9 @@
                                             <div class="player-comparison-label inline-block">
                                                 {{player.title}}
                                             </div>
-                                            <div class="inline-block pointer" ng-click="disableGraph(player)">
+                                            <!--<div class="inline-block pointer" ng-click="disableGraph(player)">
                                                 <i class="fa fa-minus-square-o"></i> выключить
-                                            </div>
+                                            </div>-->
                                             <div class="inline-block pointer" ng-click="removeGraph(player)">
                                                 <i class="fa fa-minus-square-o"></i> удалить
                                             </div>
@@ -227,10 +233,6 @@
                                 <div id="chartdiv2" style="width: 100%; height:400px; ">
                                 </div>
 
-
-                                <!--<tags-input display-property="title" ng-model="selectedRadarFields" placeholder="Добавьте поле" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
-                                    <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadAvailableRadarFields($query)"></auto-complete>
-                                </tags-input>-->
                                 <div class="m-t-20">
                                     <input class="input-new" type="text" ng-model="playerToCompare.id">
                                     <a class="ui green button chart-button" ng-click="addRadarGraph(playerToCompare.id)">Сравнить с игроком {{playerToCompare.id}} {{playerToCompare.name}}</a>

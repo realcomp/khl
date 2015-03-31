@@ -1,12 +1,13 @@
 {% extends "hockeyapp/players/base.html" %}
 {% load i18n %}
+{% load static from base_extras %}
 
 {% block extrahead %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="http://cdn.knightlab.com/libs/timeline/latest/css/timeline.css">
-    <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/timeline.js"></script>
-    <!-- <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/timeline-min.js"></script> -->
-    <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/storyjs-embed.js"></script>
+    <link href="{% static 'timelinejs/compiled/css/timeline.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'timelinejs/compiled/js/timeline.js' %}" type="text/javascript"></script>
+    {# <script src="{% static 'timelinejs/compiled/js/timeline-min.js' %}" type="text/javascript"></script> #}
+    <script src="{% static 'timelinejs/compiled/js/storyjs-embed.js' %}" type="text/javascript"></script>
     <script>
         $(document).ready(function() {
             createStoryJS({
@@ -38,6 +39,17 @@
                 <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
                 <i class="right chevron icon divider"></i>
                 <a class="active section">Краткая информация</a>
+                <a class="section" href="/">{% trans 'Hockey' %}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="active section">{% trans 'Brief Information' %}</a>
             </div>
             </div>
         </div>
@@ -155,46 +167,60 @@
                                 <div class="row">
                                     <div class="eight wide column">
                                         <ul class="player-links-list">
-                                            <li class="player-links-item">
-                                                <a href="{{ khl_url }}" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/khl-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Профиль на сайте КХЛ</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Профиль на сайте НХЛ</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="{{ wiki_page }}" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/wiki-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Статья в Википедии</span>
-                                                </a>
-                                            </li>
+                                            {% if khl_url %}
+                                                <li class="player-links-item">
+                                                    <a href="{{ khl_url }}" class="player-links-link">
+                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/khl-logo.png" alt="" class="player-links-logo"></span>
+                                                        <span class="player-links-title">Профиль на сайте КХЛ</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% comment %}
+                                                <li class="player-links-item">
+                                                    <a href="#" class="player-links-link">
+                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="player-links-logo"></span>
+                                                        <span class="player-links-title">Профиль на сайте НХЛ</span>
+                                                    </a>
+                                                </li>
+                                            {% endcomment %}
+                                            {% if wiki_page %}
+                                                <li class="player-links-item">
+                                                    <a href="{{ wiki_page }}" class="player-links-link">
+                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/wiki-logo.png" alt="" class="player-links-logo"></span>
+                                                        <span class="player-links-title">Статья в Википедии</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
                                         </ul>
                                     </div>
                                     <div class="eight wide column">
-                                        <ul class="player-links-list">
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/fb-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Страница на Facebook</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link">
-                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/vk-logo.png" alt="" class="player-links-logo"></span>
-                                                    <span class="player-links-title">Страница ВКонтакте</span>
-                                                </a>
-                                            </li>
-                                            <li class="player-links-item">
-                                                <a href="#" class="player-links-link player-links-link_internet">
-                                                    +ЕЩЕ В ИНТЕРНЕТ
-                                                </a>
-                                            </li>
-                                        </ul>
+                                        {% if fb or vk %}
+                                            <ul class="player-links-list">
+                                                {% if fb %}
+                                                    <li class="player-links-item">
+                                                        <a href="{{ fb }}" class="player-links-link">
+                                                            <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/fb-logo.png" alt="" class="player-links-logo"></span>
+                                                            <span class="player-links-title">Страница на Facebook</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% if vk %}
+                                                    <li class="player-links-item">
+                                                        <a href="{{ vk }}" class="player-links-link">
+                                                            <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/vk-logo.png" alt="" class="player-links-logo"></span>
+                                                            <span class="player-links-title">Страница ВКонтакте</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                                {% comment %}
+                                                    <li class="player-links-item">
+                                                        <a href="#" class="player-links-link player-links-link_internet">
+                                                            +ЕЩЕ В ИНТЕРНЕТ
+                                                        </a>
+                                                    </li>
+                                                {% endcomment %}
+                                            </ul>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
