@@ -377,6 +377,7 @@ i.icon {
 /* line 171, ../sass/_base.sass */
 .breadcrumbs .breadcrumb .divider {
   color: #666;
+  font-size: 9px !important;
 }
 /* line 173, ../sass/_base.sass */
 .breadcrumbs .section {

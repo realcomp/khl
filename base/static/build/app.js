@@ -3093,7 +3093,7 @@ angular.module('Sportomatics')
                         _.each($scope.chart.dataProvider, function(data){
                             _.each($scope.coachData.results, function(coachData){
                                 if(new Date(data.date).getFullYear() === new Date(coachData.end_date).getFullYear()){
-                                    data.lineColor = "#3498db"
+                                    data.lineColor = "#699c97"
                                 }
                             })
                         });
@@ -3102,7 +3102,7 @@ angular.module('Sportomatics')
                         _.each($scope.chart.dataProvider, function(data){
                             _.each($scope.clubData.results, function(clubData){
                                 if(new Date(data.date).getFullYear() === new Date(clubData.end_date).getFullYear()){
-                                    data.lineColor = "#3498db"
+                                    data.lineColor = "#699c97"
                                 }
                             })
                         });
