@@ -87,6 +87,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SOCIAL_AUTH_SLUGIFY_USERNAMES = False
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email']
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
 TWITTER_CONSUMER_KEY = ''
 TWITTER_CONSUMER_SECRET = ''
 FACEBOOK_APP_ID = ''

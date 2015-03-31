@@ -49,6 +49,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     objects = BaseUserManager()
     USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'username'
     REQUIRED_FIELDS = ()
 
     @property
