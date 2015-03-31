@@ -5792,6 +5792,9 @@ hr.style-one {
 #map {
     height: 300px;
 }
+#clubs-map {
+    height: 300px;
+}
 .player-partners-item i.flag:not(.icon):before{
     height: 14px;
 }
