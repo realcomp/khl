@@ -217,8 +217,9 @@
                         });
                     }
                     if(self.club){
+                        console.log($scope.clubData)
                         _.each($scope.chart.dataProvider, function(data){
-                            if($scope.activeSeason === -1) data.lineColor = "#408e3a";
+                            if($scope.activeSeason !== -1) data.lineColor = "#408e3a";
                             else
                             _.each($scope.clubData.results, function(clubData){
                                 if(new Date(data.date).getFullYear() === new Date(clubData.end_date).getFullYear()){
