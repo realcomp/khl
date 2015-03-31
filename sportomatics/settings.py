@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'relatives',
     'rest_framework',
     'rosetta',
+    'django_ulogin',
 
     'accounts',
     'addresses',

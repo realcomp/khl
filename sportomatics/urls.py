@@ -19,6 +19,7 @@ urlpatterns = patterns(
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^select2/', include('django_select2.urls')),
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', name='sitemap_xml'),
+    url(r'^ulogin/', include('django_ulogin.urls')),
 )
 
 if 'autocomplete_light' in settings.INSTALLED_APPS:
