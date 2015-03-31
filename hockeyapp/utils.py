@@ -89,7 +89,7 @@ def get_arena_instagram_locations(coords):
     return set([l.id for l in data])
 
 
-def delete_club_duplicates_with_relation():
+def delete_club_duplicates_with_relation(delete_dup=False):
     _clubs = {
                 10: (148,),
                 12: (218,),
@@ -133,21 +133,28 @@ def delete_club_duplicates_with_relation():
         get_model(CURRENT_APP, 'Match'),
         get_model(CURRENT_APP, 'Schedule')
     )
+    PM = get_model(CURRENT_APP, 'Player')
+    ClubM = get_model(CURRENT_APP, 'Club')
     for club_id, dup_club_ids in _clubs.items():
-        for _model in club_rel_models:
-            _model.objects.filter(club__pk__in=dup_club_ids
-                          ).update(club_id=club_id)
-            _qs = _model.objects.filter(club_id=club_id)
-            delete_duplicates(_qs, _model)
-        for _model in _hg_models:
-            _model.objects.filter(home_team__pk__in=dup_club_ids
-                         ).update(home_team_id=club_id)
-            _qs = _model.objects.filter(home_team_id=club_id)
-            #delete_duplicates(_qs)
-            _model.objects.filter(guest_team__pk__in=dup_club_ids
-                         ).update(guest_team_id=club_id)
-            _qs = _model.objects.filter(guest_team_id=club_id)
-            #delete_duplicates(_qs)
+        if delete_dup:
+            for dup in ClubM.objects.filter(pk__in=dup_club_ids): dup.players=[]
+            PM.objects.filter(last_club__pk__in=dup_club_ids
+                     ).update(last_club_id=club_id)
+        else:
+            for _model in club_rel_models:
+                _model.objects.filter(club__pk__in=dup_club_ids
+                              ).update(club_id=club_id)
+                _qs = _model.objects.filter(club_id=club_id)
+                delete_duplicates(_qs, _model)
+            for _model in _hg_models:
+                _model.objects.filter(home_team__pk__in=dup_club_ids
+                             ).update(home_team_id=club_id)
+                _qs = _model.objects.filter(home_team_id=club_id)
+                #delete_duplicates(_qs)
+                _model.objects.filter(guest_team__pk__in=dup_club_ids
+                             ).update(guest_team_id=club_id)
+                _qs = _model.objects.filter(guest_team_id=club_id)
+                #delete_duplicates(_qs)
 
 
 def delete_duplicates(qs, model=None, exclude_field=None):
