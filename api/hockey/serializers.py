@@ -59,7 +59,7 @@ class PlayerMinimalSerialiser(AbstractManSerializer):
     photo = FIFSerialiser()
     class Meta:
         model = Player
-        fields = (  'id', 'number', 'line', 'ru_fio', 'photo', 'fio')
+        fields = (  'id', 'number', 'line', 'ru_fio', 'photo', 'fio', 'name', 'lastname')
         read_only_fields = fields
 
 

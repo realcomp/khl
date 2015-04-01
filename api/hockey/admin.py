@@ -99,7 +99,7 @@ match_list = MatchList.as_view()
 
 
 class PlayerList(drf.generics.ListAPIView):
-    queryset = Player.objects.filter(number__isnull=False)
+    queryset = Player.objects.filter(number__isnull=False).exclude(number='')
     serializer_class = serializers.PlayerMinimalSerialiser
     permission_classes = (SportoAdminPermission,)
 
