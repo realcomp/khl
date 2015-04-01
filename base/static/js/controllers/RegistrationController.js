@@ -69,9 +69,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
             return false;
         };
         $scope.saveStep = function(){
-            var signupURL = $('#SignupApiLink').attr('href'),
-            profileURL = $('#ProfileApiLink').attr('href'),
-            config = {
+            var config = {
                 'headers': {
                     'X-CSRFToken': $cookies.csrftoken
                 },
@@ -98,7 +96,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         };
                         localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
                         if ($scope.userCreated) {
-                            $http.patch(profileURL, data, config).success(function(data) {
+                            $http.patch($scope.profileURL, data, config).success(function(data) {
                                 $scope.errors = {};
                                 $scope.currentStep += 1;
                                 $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -106,7 +104,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                                 $scope.errors = data;
                             });
                         } else {
-                            $http.post(signupURL, data, config).success(function(data) {
+                            $http.post($scope.registrationURL, data, config).success(function(data) {
                                 $scope.userCreated = true;
                                 $scope.errors = {};
                                 $scope.currentStep += 1;
@@ -124,7 +122,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                             name_visible: !$scope.personal.hideName,
                             website: $scope.personal.website
                         };
-                        $http.patch(profileURL, data, config).success(function(data) {
+                        $http.patch($scope.profileURL, data, config).success(function(data) {
                             $scope.errors = {};
                             $scope.currentStep += 1;
                             $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -148,7 +146,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         $.each($scope.tags, function() {
                             data.clubs.push(+this.pk);
                         });
-                        $http.patch(profileURL, data, config).success(function(data) {
+                        $http.patch($scope.profileURL, data, config).success(function(data) {
                             document.location = '/';
                             // $scope.currentStep += 1;
                             // $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -175,11 +173,10 @@ angular.module('Sportomatics').controller('RegistrationController', [
             };
         };
         $scope.remindPassword = function() {
-            var resetURL = $('#PasswordResetApiLink').attr('href'),
-            data = {
+            var data = {
                 email: $scope.rememberPasswordData.email
             };
-            $http.post(resetURL, data, $scope.getAjaxConfig()).success(function(data) {
+            $http.post($scope.passwordResetURL, data, $scope.getAjaxConfig()).success(function(data) {
                 $scope.rememberPasswordData.isSent = true;
                 $scope.rememberPasswordData.errors = null;
             }).error(function(data) {
@@ -187,15 +184,14 @@ angular.module('Sportomatics').controller('RegistrationController', [
             });
         };
         $scope.setPassword = function() {
-            var confirmURL = $('#PasswordResetConfirmApiLink').attr('href'),
-            data = {
+            var data = {
                 uidb64: $location.search().uidb64,
                 token: $location.search().token,
                 password: $scope.rememberPasswordData.password
             };
             if ($scope.rememberPasswordData.password && $scope.rememberPasswordData.password2 &&
                    $scope.rememberPasswordData.password === $scope.rememberPasswordData.password2) {
-                $http.post(confirmURL, data, $scope.getAjaxConfig()).success(function(data) {
+                $http.post($scope.passwordResetConfirmURL, data, $scope.getAjaxConfig()).success(function(data) {
                     $scope.rememberPasswordData.isComplete = true;
                     $scope.rememberPasswordData.errors = null;
                 }).error(function(data) {
