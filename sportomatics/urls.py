@@ -9,6 +9,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
+from accounts.views import RegistrationView
 
 urlpatterns = patterns(
     '',
@@ -56,17 +57,9 @@ urlpatterns += i18n_patterns('',
     url(r'^$', 'hockeyapp.views.index', name='index'),
     url(r'^accounts/', include('registration.urls')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
-    # password reset
-    # url(r'^accounts/password_reset/$',
-    #     auth_views.password_reset, name='password_reset'),
-    # url(r'^accounts/password_reset/done/$',
-    #     auth_views.password_reset_done, name='password_reset_done'),
     url(r'^accounts/signup/#\?uidb64=(?P<uidb64>[0-9A-Za-z_\-]+)&token=(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',
-        TemplateView.as_view(
-            template_name='registration/registration_form.html'),
+        RegistrationView.as_view(),
         name='password_reset_confirm'),
-    # url(r'^accounts/reset/done/$',
-    #     auth_views.password_reset_complete, name='password_reset_complete'),
 
     url(r'^api/', include('api.urls', namespace='api')),
     url(r'^base/', include('base.urls', namespace='base')),
