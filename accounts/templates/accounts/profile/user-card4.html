@@ -5,7 +5,7 @@
 <section class="content">
     <div class="container"
          ng-controller="ProfileController as ProfileCtrl"
-         ng-init="ProfileCtrl.user.fio = '{{ request.user.fio }}'">
+         ng-init="user.fio = '{{ request.user.fio }}'; profileURL = '{% url 'accounts:profile-api' %}'; emailConfirmationURL = '{% url 'accounts:email-confirmation-api' %}';">
         {% include "accounts/profile/user-info.html" %}
 
         <div class="page-content page-container">
@@ -16,8 +16,8 @@
                         <span class="heading">{% trans 'Personal data' %}</span>
                     </div>
                     <form name="profile-edit-form" method="POST" class="ui form contact-form"
-                          ng-init="ProfileCtrl.csrf_token = '{{ csrf_token }}'"
-                          ng-submit="ProfileCtrl.save()">
+                          ng-init="config.headers['X-CSRFToken'] = '{{ csrf_token }}'"
+                          ng-submit="save()">
                         <div class="inline field">
                             <label>Ваш логин:</label>
                             <a class="ui teal label">{{ username }}</a>
@@ -31,19 +31,22 @@
                         <div class="inline field">
                             <label>E-mail:</label>
                             <input type="text" name="email" value="{{ email }}"
-                                   ng-model="ProfileCtrl.user.email">
+                                   ng-init="user.email = '{{ email }}'"
+                                   ng-model="user.email">
                             <div class="ui checkbox">
                                 <input type="checkbox" name="news">
                                 <label>получать рассылку новостей с сайта</label>
                             </div>
                         </div>
-                        <div class="inline field">
-                            <button class="small ui green button">Подтвердить E-mail</button>
-                        </div>
+                        {% if not email_validated %}
+                            <div class="inline field">
+                                <button class="small ui green button" ng-click="confirmEmail()">Подтвердить E-mail</button>
+                            </div>
+                        {% endif %}
                         <div class="inline field">
                             <label>Имя Фамилия:</label>
                             <input type="text" name="fio" value="{{ fio }}"
-                                   ng-model="ProfileCtrl.user.fio">
+                                   ng-model="user.fio">
                             <div class="ui checkbox">
                                 <input type="checkbox" name="hide_name">
                                 <label>скрывать имя в "Любительской версии"</label>
@@ -54,10 +57,10 @@
                             <label>Изменить фотографию</label>
                         </div>
                         <div class="avatar-upload-block">
-                            <img alt="sample avatar" class="avatar-image" id="id_avatar"
-                                 src="/static/images/avatar-sample.png"
+                            <img alt="avatar" class="avatar-image" id="id_avatar"
+                                 src="{{ avatar }}"
                                  {% verbatim %}
-                                 ng-src="{{ ProfileCtrl.user.avatar }}">
+                                 ng-src="{{ user.avatar }}">
                                  {% endverbatim%}
                             <div class="avatar-upload-controls">
                                 <input type="file" class="file-input" name="avatar" id="avatar"

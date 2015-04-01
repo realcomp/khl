@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView, RedirectView, TemplateView
 
 from ..mixins import LoginReqMixin, ProfileMixin
-from ..serializers import TokenSerializer
+from ..serializers import EmailConfirmationSerializer
 
 
 class RegistrationView(TemplateView):
@@ -38,7 +38,7 @@ class EmailConfirmationView(RedirectView):
     pattern_name = 'accounts:profile-private'
 
     def get(self, request, *args, **kwargs):
-        serializer = TokenSerializer(request.GET)
+        serializer = EmailConfirmationSerializer(data=request.GET)
         if serializer.is_valid():
             serializer.save()
             return super(EmailConfirmationView, self).get(

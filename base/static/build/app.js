@@ -4014,58 +4014,47 @@ angular.module('Sportomatics')
     PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
 }]);
 
-angular.module('Sportomatics')
-.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
-    var self = this;
-
-    self.user = {};
-    self.csrf_token = null;
-
-    $http.get('/en/accounts/api/profile/')
-        .success(function(data) {
-            self.user = data;
-        });
-
+angular.module('Sportomatics').controller('ProfileController', [
+  '$http', '$scope', function($http, $scope) {
+    $scope.user = {};
+    $scope.config = {
+      'headers': {
+        'X-CSRFToken': null
+      }
+    };
     $scope.setAvatar = function(files, csrf_token) {
-        var self = this,
-            config = {
-                'headers': {
-                    'X-CSRFToken': csrf_token,
-                    'Content-Type': undefined
-                },
-                'withCredentials': true,
-                'transformRequest': angular.identity
-            },
-            fd = new FormData();
-        fd.append('avatar', files[0]);
-        $http.patch('/en/accounts/api/profile/', fd, config)
-            .success(function(data) {
-                $('#id_avatar').attr('src', data.avatar);
-                $('.user-avatar-hex2').css(
-                    'background-image', 'url(' + data.avatar + ')');
-            })
-            .error(function(data) {
-                // TODO: handle image upload errors
-            });
+      var config, fd;
+      fd = new FormData();
+      fd.append('avatar', files[0]);
+      config = {
+        'headers': {
+          'X-CSRFToken': csrf_token,
+          'Content-Type': void 0
+        },
+        'withCredentials': true,
+        'transformRequest': angular.identity
+      };
+      $http.patch(this.profileURL, fd, config).success(function(data) {
+        $('#id_avatar').attr('src', data.avatar);
+        $('.user-avatar-hex2').css('background-image', 'url(' + data.avatar + ')');
+      }).error(function(data) {});
     };
+    $scope.save = function() {
+      var data;
+      data = {
+        'fio': $scope.user.fio,
+        'email': $scope.user.email
+      };
+      $http.patch($scope.profileURL, data, $scope.config).success(function(data) {
+        $scope.user = data;
+      });
+    };
+    $scope.confirmEmail = function() {
+      $http.post($scope.emailConfirmationURL, {}, $scope.config).success(function(data) {});
+    };
+  }
+]);
 
-    this.save = function() {
-        var self = this,
-            config = {
-                'headers': {
-                    'X-CSRFToken': this.csrf_token
-                }
-            };
-        // TODO: replace url
-        $http.patch('/en/accounts/api/profile/', {
-            'fio': self.user.fio,
-            'email': self.user.email
-        }, config)
-            .success(function(data) {
-                self.user = data;
-            });
-    };
-}])
 angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
@@ -4137,9 +4126,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
             return false;
         };
         $scope.saveStep = function(){
-            var signupURL = $('#SignupApiLink').attr('href'),
-            profileURL = $('#ProfileApiLink').attr('href'),
-            config = {
+            var config = {
                 'headers': {
                     'X-CSRFToken': $cookies.csrftoken
                 },
@@ -4166,7 +4153,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         };
                         localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
                         if ($scope.userCreated) {
-                            $http.patch(profileURL, data, config).success(function(data) {
+                            $http.patch($scope.profileURL, data, config).success(function(data) {
                                 $scope.errors = {};
                                 $scope.currentStep += 1;
                                 $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -4174,7 +4161,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                                 $scope.errors = data;
                             });
                         } else {
-                            $http.post(signupURL, data, config).success(function(data) {
+                            $http.post($scope.registrationURL, data, config).success(function(data) {
                                 $scope.userCreated = true;
                                 $scope.errors = {};
                                 $scope.currentStep += 1;
@@ -4192,7 +4179,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                             name_visible: !$scope.personal.hideName,
                             website: $scope.personal.website
                         };
-                        $http.patch(profileURL, data, config).success(function(data) {
+                        $http.patch($scope.profileURL, data, config).success(function(data) {
                             $scope.errors = {};
                             $scope.currentStep += 1;
                             $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -4216,7 +4203,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         $.each($scope.tags, function() {
                             data.clubs.push(+this.pk);
                         });
-                        $http.patch(profileURL, data, config).success(function(data) {
+                        $http.patch($scope.profileURL, data, config).success(function(data) {
                             document.location = '/';
                             // $scope.currentStep += 1;
                             // $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -4243,11 +4230,10 @@ angular.module('Sportomatics').controller('RegistrationController', [
             };
         };
         $scope.remindPassword = function() {
-            var resetURL = $('#PasswordResetApiLink').attr('href'),
-            data = {
+            var data = {
                 email: $scope.rememberPasswordData.email
             };
-            $http.post(resetURL, data, $scope.getAjaxConfig()).success(function(data) {
+            $http.post($scope.passwordResetURL, data, $scope.getAjaxConfig()).success(function(data) {
                 $scope.rememberPasswordData.isSent = true;
                 $scope.rememberPasswordData.errors = null;
             }).error(function(data) {
@@ -4255,15 +4241,14 @@ angular.module('Sportomatics').controller('RegistrationController', [
             });
         };
         $scope.setPassword = function() {
-            var confirmURL = $('#PasswordResetConfirmApiLink').attr('href'),
-            data = {
+            var data = {
                 uidb64: $location.search().uidb64,
                 token: $location.search().token,
                 password: $scope.rememberPasswordData.password
             };
             if ($scope.rememberPasswordData.password && $scope.rememberPasswordData.password2 &&
                    $scope.rememberPasswordData.password === $scope.rememberPasswordData.password2) {
-                $http.post(confirmURL, data, $scope.getAjaxConfig()).success(function(data) {
+                $http.post($scope.passwordResetConfirmURL, data, $scope.getAjaxConfig()).success(function(data) {
                     $scope.rememberPasswordData.isComplete = true;
                     $scope.rememberPasswordData.errors = null;
                 }).error(function(data) {
