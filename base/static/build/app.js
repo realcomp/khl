@@ -780,7 +780,7 @@ function createBalloon(valueField, text){
     return "<div style='text-align: left; min-width: 60%; max-width: 80%; display: inline-block'><span style='font-size:14px; color:#000000;'>" + text + ": </span></div><div class='vertical-middle inline-block' style='width: 20%;'><div class='float-right'>[[" + valueField + "]]</div></div> ";
 }
 angular.module('Sportomatics').service('ClubsMapService', function(){
-    
+
 })
 angular.module('Sportomatics').service('ClubsMapService', function(){
         var self = this;
@@ -800,7 +800,7 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
             var ggl = new L.Google('ROADMAP');
             self.map.addLayer(ggl);
             self.map.addControl(new L.Control.Layers( {'Google':ggl, 'OpenStreetMap': osm}, {}));
-            var markers = new L.MarkerClusterGroup({ spiderfyOnMaxZoom: false, showCoverageOnHover: false });
+            var markers = new L.MarkerClusterGroup({ showCoverageOnHover: false });
 
             _.each(clubs, function(club, index){
                 if(club.arena)
@@ -810,13 +810,10 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
                     var coordinate2 = coords.split(',')[1];
                 }
                 var clubIcon = L.icon({
-                    iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo :  '/static/leaflet-0.7.3/images/marker-icon-2x.png',
-                    iconSize: [24, 24],
-                    iconAnchor: [22, 94],
-                    popupAnchor: [-4, -76],
+                    iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo : '/static/abc.jpg',
+                    iconSize: [20, 20],
                     shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
-                    shadowSize: [34, 48],
-                    shadowAnchor: [27, 94]
+                    shadowSize: [34, 48]
                 });
                 if(coordinate1 && coordinate2){
                     markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {icon: clubIcon}).bindPopup(club.title + '<br>'));
