@@ -77,7 +77,7 @@ class EmailConfirmationView(APIView):
         template_name = 'accounts/email/email_confirmation.html'
         context = {
             'url': request.build_absolute_uri(
-                reverse('accounts:email_confirmation')),
+                reverse('accounts:email-confirmation')),
             'uidb64': urlsafe_base64_encode(force_bytes(request.user.pk)),
             'token': default_token_generator.make_token(request.user),
         }

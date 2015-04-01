@@ -8,7 +8,8 @@
     {% include "registration/form/step3.html" %}
     {% include "registration/form/password.html" %}
     <!-- page code -->
-    <div class="page-inner-container" ng-controller="RegistrationController">
+    <div class="page-inner-container" ng-controller="RegistrationController"
+         ng-init="email_confirmation_url = '{% url 'accounts:email-confirmation-api' %}'">
         <div class="user-page">
             <div class="ui tabular menu content-tabs">
                 <span class="heading">{% trans "New User's Registration" %}</span>
