@@ -38,9 +38,11 @@
                                 <label>получать рассылку новостей с сайта</label>
                             </div>
                         </div>
-                        <div class="inline field">
-                            <button class="small ui green button" ng-click="confirmEmail()">Подтвердить E-mail</button>
-                        </div>
+                        {% if not email_validated %}
+                            <div class="inline field">
+                                <button class="small ui green button" ng-click="confirmEmail()">Подтвердить E-mail</button>
+                            </div>
+                        {% endif %}
                         <div class="inline field">
                             <label>Имя Фамилия:</label>
                             <input type="text" name="fio" value="{{ fio }}"

@@ -63,7 +63,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta(object):
         fields = (
             'pk', 'username', 'email', 'fio', 'date_joined', 'avatar',
-            'name_visible', 'website', 'countries', 'clubs')
+            'name_visible', 'website', 'countries', 'clubs', 'email_validated')
         read_only_fields = 'username', 'date_joined'
         model = get_user_model()
 
