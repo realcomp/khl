@@ -1,5 +1,5 @@
     angular.module('Sportomatics')
-        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarService) {
+        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory) {
             //http://www.amcharts.com/lib/images/
             var self = this;
             var url = $('#IndicatorsLink').attr('href');
@@ -42,14 +42,14 @@
                                 }, 100)
                             })
                     }
-                    $scope.createRadar($scope.radarPlayers, $scope.lastSeason).then(function(){});
+                    $scope.createRadar($scope.radarPlayers, $scope.lastSeason);//.then(function(){});
                 }
             };
 
             $scope.addRadarGraph = function(id){
                 if(_.contains($scope.radarPlayers, id)) return;
                 $scope.radarPlayers.push(id);
-                $scope.createRadar($scope.radarPlayers, $scope.lastSeason).then(function(){});
+                $scope.createRadar($scope.radarPlayers, $scope.lastSeason);//.then(function(){});
             };
 
             this.setField = function(field) {
@@ -321,6 +321,7 @@
             }, {
                 field: "plus_minus"
             }];
+
             $scope.availableFields = _.toArray(LocaleFactory.locale_ru.fieldNames); // generate available fields
             _.each($scope.availableFields, function(object){
                 object.ticked = !!(object.field === 'points' || object.field === 'goals' || object.field === 'assists' || object.field === 'plus_minus');
@@ -328,11 +329,18 @@
 
             $scope.$watch('selectedRadarFields', function(newval){
                 if(newval && $scope.lastSeason){
-                    $scope.createRadar($scope.radarPlayers, $scope.lastSeason)
+                    $scope.createRadar($scope.radarPlayers, $scope.lastSeason, null, $scope.selectedRadarFields)
                 }
             }, true);
 
-            $scope.createRadar = function(players, season, sum){ // function to create radar chart for one or multiple players
+            $scope.createRadar = function(players, season, sum, selectedRadarFields){ // function to create radar chart for one or multiple players
+                $scope.RadarChart = new RadarChartFactory.PlayerRadarChart();
+                $scope.RadarChart.setSelectedRadarFields(selectedRadarFields);
+                $scope.RadarChart.create(players, $scope.dataBySeason, season, sum).then(function(){
+                    $scope.playerSeasons = $scope.RadarChart.seasons;
+                    $scope.RadarChart.draw();
+                });
+                /*
                 $scope.playersInRadarChart = [];
                 $scope.playersRadarChartData = [];
                 _.each($scope.selectedRadarFields, function(field){
@@ -500,15 +508,11 @@
                     }
                 }
                 return deferred.promise;
-            };
+                */
 
+            };
 
             $scope.getPlayerData();
-            $scope.sumRadars = function(){
-                //$scope.createRadar(['1373', '1634'], '2013', true).then(function(){
-                //$scope.createRadar(['1634']);
-                //})
-            };
         })
     .factory('AmChartsFactory', function ($q, $rootScope, $document) {
         var deferred = $q.defer();

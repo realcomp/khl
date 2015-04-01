@@ -15,7 +15,9 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout){
         // Methods:
 
         this.createClubsMap = function(data, dataLabel){ // creates clubs map inside maps-div marked as mapsDivName
-            self.map = L.map(self.mapsDivName).setView([startCoordinate1, startCoordinate2], 4);
+            self.map = L.map(self.mapsDivName, {
+                scrollWheelZoom: false
+            }).setView([startCoordinate1, startCoordinate2], 4);
             var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
             var ggl = new L.Google('ROADMAP');
             self.map.addLayer(ggl);
