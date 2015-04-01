@@ -16,7 +16,7 @@
                         <span class="heading">{% trans 'Personal data' %}</span>
                     </div>
                     <form name="profile-edit-form" method="POST" class="ui form contact-form"
-                          ng-init="csrf_token = '{{ csrf_token }}'"
+                          ng-init="config.headers['X-CSRFToken'] = '{{ csrf_token }}'"
                           ng-submit="save()">
                         <div class="inline field">
                             <label>Ваш логин:</label>

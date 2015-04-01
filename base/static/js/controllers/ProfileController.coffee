@@ -3,7 +3,11 @@ angular.module('Sportomatics').controller('ProfileController', [
     ($http, $scope) ->
 
         $scope.user = {}
-        $scope.csrf_token = null
+        $scope.config = {
+            'headers': {
+                'X-CSRFToken': null,
+            },
+        }
 
         $scope.setAvatar = (files, csrf_token) ->
             fd = new FormData()
@@ -33,12 +37,7 @@ angular.module('Sportomatics').controller('ProfileController', [
                 'fio': $scope.user.fio,
                 'email': $scope.user.email
             }
-            config = {
-                'headers': {
-                    'X-CSRFToken': $scope.csrf_token,
-                }
-            }
-            $http.patch($scope.profileURL, data, config
+            $http.patch($scope.profileURL, data, $scope.config
             ).success((data) ->
                 $scope.user = data
                 return
@@ -46,12 +45,7 @@ angular.module('Sportomatics').controller('ProfileController', [
             return
 
         $scope.confirmEmail = () ->
-            config = {
-                'headers': {
-                    'X-CSRFToken': $scope.csrf_token,
-                }
-            }
-            $http.post($scope.emailConfirmationURL, {}, config
+            $http.post($scope.emailConfirmationURL, {}, $scope.config
             ).success((data) ->
                 # TODO: notify
                 return

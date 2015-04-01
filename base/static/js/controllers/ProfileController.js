@@ -1,7 +1,11 @@
 angular.module('Sportomatics').controller('ProfileController', [
   '$http', '$scope', function($http, $scope) {
     $scope.user = {};
-    $scope.csrf_token = null;
+    $scope.config = {
+      'headers': {
+        'X-CSRFToken': null
+      }
+    };
     $scope.setAvatar = function(files, csrf_token) {
       var config, fd;
       fd = new FormData();
@@ -20,28 +24,17 @@ angular.module('Sportomatics').controller('ProfileController', [
       }).error(function(data) {});
     };
     $scope.save = function() {
-      var config, data;
+      var data;
       data = {
         'fio': $scope.user.fio,
         'email': $scope.user.email
       };
-      config = {
-        'headers': {
-          'X-CSRFToken': $scope.csrf_token
-        }
-      };
-      $http.patch($scope.profileURL, data, config).success(function(data) {
+      $http.patch($scope.profileURL, data, $scope.config).success(function(data) {
         $scope.user = data;
       });
     };
     $scope.confirmEmail = function() {
-      var config;
-      config = {
-        'headers': {
-          'X-CSRFToken': $scope.csrf_token
-        }
-      };
-      $http.post($scope.emailConfirmationURL, {}, config).success(function(data) {});
+      $http.post($scope.emailConfirmationURL, {}, $scope.config).success(function(data) {});
     };
   }
 ]);

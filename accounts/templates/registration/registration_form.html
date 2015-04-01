@@ -57,13 +57,8 @@
                     <div ng-if="selectedType === 'social'">
                         <div class="row registration-content-row">
                             <div class="inline-block">
-                                <input  class="m-r-8" type="radio" ng-model="selectedRegistrationType" ng-value="'social'">
                                 {% trans 'Select any social account with which you want to sign in:' %}
                             </div>
-                            {% comment %}
-                            <script src="//ulogin.ru/js/ulogin.js"></script>
-                            <div class="uLogin-registration" id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=facebook,vkontakte,odnoklassniki,twitter,google,yandex,mailru;hidden=other;redirect_uri=http%3A%2F%2Fdev.sportomatics.ru"></div>
-                            {% endcomment %}
                         </div>
                         <div class="row registration-content-row">
                             <div class="inline-block">
@@ -72,16 +67,10 @@
                         </div>
                         <div class="row registration-content-row">
                             <div class="inline-block">
-                                <input  class="m-r-8" type="radio" ng-model="selectedRegistrationType" ng-value="'regular'">
-                                    {% trans "I don't have any of these accounts or I don't want to sign in with it" %}
+                                <a href="" ng-click="selectType('regular')">
+                                    {% trans "Sign in without using a social account" %}
+                                </a>
                             </div>
-                        </div>
-                        <div class="row">
-                            <button type="button" class="small ui green button registration-next"
-                                    ng-disabled="selectedRegistrationType !== 'regular'"
-                                    ng-click="selectType('regular') "
-                                    ng-class="{'opacity-30': selectedRegistrationType !== 'regular'}">
-                            {% trans 'Next' %}</button>
                         </div>
                     </div>
                     <div ng-if="selectedType === 'remember'">
