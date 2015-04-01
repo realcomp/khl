@@ -66,7 +66,7 @@ class PlayerMinimalSerialiser(AbstractManSerializer):
 class ArenaClubListSerializer(TitleBaseSerializer):
     url = drf.serializers.ReadOnlyField(source='get_absolute_url')
     class Meta(object):
-        fields = 'pk', 'title', 'url', 'coords'
+        fields = 'pk', 'title', 'url', 'coords', 'contacts'
         model = Arena
 
 

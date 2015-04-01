@@ -6,16 +6,16 @@ angular.module('Sportomatics', [
     'ngResource',
     'ngCookies',
     'isteven-multi-select'])
-.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
+.config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {
             url: '/ru/hockey/players',
             templateUrl: ' ',
-            controller: ["$state", function($state){
+            controller: function($state){
                 alert($state)
-            }]
+            }
         })
-}]);
+});
 
 /* better fps test */
 var body = document.body, timer;
@@ -302,7 +302,7 @@ angular.module('Sportomatics')
     startDate: 'a',
     endDate: 'a'
 })
-.factory('ChartFactory', ["$q", "$rootScope", "AmChartsFactory", "zoomData", "LocaleFactory", function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
+.factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
         generateSerialChart: function(field, chartData, localeObject, graphs){
@@ -733,7 +733,7 @@ angular.module('Sportomatics')
 
         }
     }
-}]);
+});
 var colors = ["#26A65B", "#CF000F", "#663399", "#F9690E"];
 
 // this method is called when chart is first inited as we listen for "dataUpdated" event
@@ -782,63 +782,8 @@ function createBalloon(valueField, text){
 angular.module('Sportomatics').service('ClubsMapService', function(){
 
 })
-angular.module('Sportomatics').service('ClubsMapService', function(){
-        var self = this;
-        var startCoordinate1 = 55.749792; // Moscow latitude
-        var startCoordinate2 = 37.632495; // Moscow longitude
-
-        // Variables:
-        self.mapsDivName = 'clubs-map';
-        this.clubs_map = document.getElementById(self.mapsDivName);
-        this.rendered = false;
-        self.map = null;
-
-        // Methods:
-        this.createClubsMap = function(clubs){ // creates clubs map inside maps-div marked as mapsDivName
-            self.map = L.map(self.mapsDivName).setView([startCoordinate1, startCoordinate2], 4);
-            var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-            var ggl = new L.Google('ROADMAP');
-            self.map.addLayer(ggl);
-            self.map.addControl(new L.Control.Layers( {'Google':ggl, 'OpenStreetMap': osm}, {}));
-            var markers = new L.MarkerClusterGroup({ showCoverageOnHover: false });
-
-            _.each(clubs, function(club, index){
-                if(club.arena)
-                var coords = club.arena.coords;
-                if(coords != null){
-                    var coordinate1 = coords.split(',')[0];
-                    var coordinate2 = coords.split(',')[1];
-                }
-                var clubIcon = L.icon({
-                    iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo : '/static/abc.jpg',
-                    iconSize: [20, 20],
-                    shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
-                    shadowSize: [34, 48]
-                });
-                if(coordinate1 && coordinate2){
-                    markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {icon: clubIcon}).bindPopup(club.title + '<br>'));
-                }
-            });
-            self.map.addLayer(markers);
-            this.rendered = true;
-        };
-
-        this.isRendered = function(){ // return map rendered state
-            return this.rendered;
-        };
-
-        this.setRendered = function(value){ // set boolean state for map rendered variable
-            if(value !== true && value !== false) return;
-            this.rendered = value;
-        };
-
-        this.remove = function(){
-            $('#'+self.mapsDivName).remove();
-            $('#'+self.mapsDivName + '-container').append('<div id="' + self.mapsDivName + '"></div>');
-        };
-});
 angular.module('Sportomatics')
-    .factory('LocaleFactory', ["$rootScope", function($rootScope){
+    .factory('LocaleFactory', function($rootScope){
         var chosen = 'ru';
         return {
             getFieldName: function(field, locale){
@@ -1325,10 +1270,123 @@ angular.module('Sportomatics')
             }
         }
 
-    }])
+    })
 
+angular.module('Sportomatics').service('MapService', function($q, $timeout){
+        var self = this;
+        var startCoordinate1 = 55.749792; // Moscow latitude
+        var startCoordinate2 = 37.632495; // Moscow longitude
+
+        // Variables:
+
+        self.mapsDivName = 'clubs-map';
+        this.clubs_map = document.getElementById(self.mapsDivName);
+        this.rendered = false;
+        this.map = null;
+        this.geocoder = new google.maps.Geocoder();
+        this.addedMarkers = [];
+
+        // Methods:
+
+        this.createClubsMap = function(data, dataLabel){ // creates clubs map inside maps-div marked as mapsDivName
+            self.map = L.map(self.mapsDivName).setView([startCoordinate1, startCoordinate2], 4);
+            var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            var ggl = new L.Google('ROADMAP');
+            self.map.addLayer(ggl);
+            self.map.addControl(new L.Control.Layers( {'Google':ggl, 'OpenStreetMap': osm}, {}));
+            self.markers = new L.MarkerClusterGroup({ showCoverageOnHover: false });
+            dataLabel === 'clubs' ? self.markersFunctionClubs(data) : self.markersFunctionPlayers(data);
+            self.map.addLayer(self.markers);
+            this.rendered = true;
+        };
+
+        this.markersFunctionClubs = function(clubs){
+            var countOfGeocoded = 0;
+            _.each(clubs, function(club, index){
+                var clubIcon = L.icon({
+                    iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo : '/static/abc.jpg',
+                    iconSize: [20, 20],
+                    shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
+                    shadowSize: [34, 48]
+                });
+                if(!club.arena) return;
+                var coords = club.arena.coords;
+                if(coords != null){
+                    var coordinate1 = coords.split(',')[0];
+                    var coordinate2 = coords.split(',')[1];
+                }
+                if(!club.arena.coords){
+                    self.googleGeocode(club.arena.contacts, countOfGeocoded).then(function(result){
+                       self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {icon: clubIcon}).bindPopup(club.title + '<br>'));
+                    });
+                    countOfGeocoded++;
+                }
+                if(coordinate1 && coordinate2){
+                    self.markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {icon: clubIcon}).bindPopup(club.title + '<br>'));
+                }
+            });
+        };
+
+        this.markersFunctionClubGames = function(){
+
+        };
+
+        this.markersFunctionPlayers = function(players){
+            _.each(players, function(player, index){
+                var playerIcon = L.icon({
+                    iconUrl: player.photo.file ? 'http://dev.sportomatics.ru' + player.photo.file : '/static/abc.jpg',
+                    iconSize: [20, 20],
+                    shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
+                    shadowSize: [34, 48]
+                });
+                if(!player.birth_place) return;
+                var coords = player.birth_place.coords;
+                if(coords != null){
+                    var coordinate1 = coords.split(',')[0];
+                    var coordinate2 = coords.split(',')[1];
+                }
+                if(coordinate1 && coordinate2){
+                    self.markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {icon: playerIcon}).bindPopup(player.fio + '<br>'));
+                }
+            });
+        };
+
+        this.isRendered = function(){ // return map rendered state
+            return this.rendered;
+        };
+
+        this.setRendered = function(value){ // set boolean state for map rendered variable
+            if(value !== true && value !== false) return;
+            this.rendered = value;
+        };
+
+        this.remove = function(){
+            $('#'+self.mapsDivName).remove();
+            $('#'+self.mapsDivName + '-container').append('<div id="' + self.mapsDivName + '"></div>');
+        };
+
+        this.googleGeocode = function(address, delay){
+            var deferred = $q.defer();
+            address = address.substr(address.indexOf(" ") + 1).replace('ул.', "").replace('д.', '').replace('Московская обл.,', '')
+            if(address.indexOf('Телефон') > -1) address = address.substring(0, address.indexOf('Телефон'));
+            $timeout(function(){
+                self.geocoder.geocode({'address': address}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var coordinate1 = results[0].geometry.location.B;
+                        var coordinate2 = results[0].geometry.location.k;
+                        deferred.resolve([coordinate2, coordinate1]);
+                    } else {
+                        deferred.reject();
+                        console.log(address, 'Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            }, 400 * delay);
+
+            return deferred.promise;
+        }
+});
 angular.module('Sportomatics')
-.service('PlayersSearchService', ["$http", function($http) {
+.service('PlayersSearchService', function($http) {
     this.loadCountries = function($scope, $location, callback) {
         var url = $('#LeagueListLink').attr('href'),
         country;
@@ -1578,10 +1636,10 @@ angular.module('Sportomatics')
             $scope.loader = false;
         });
     };
-}]);
+});
 
 angular.module('Sportomatics').service('ProfileService',
-    ["$http", "$cookies", function($http, $cookies) {
+    function($http, $cookies) {
         this.setAvatar = function(files) {
             var url = '/en/accounts/api/profile/',
             fd = new FormData(),
@@ -1601,10 +1659,10 @@ angular.module('Sportomatics').service('ProfileService',
                 // TODO: handle image upload errors
             });
         };
-    }]
+    }
 );
 
-angular.module('Sportomatics').service('RadarService', ["ChartFactory", "LocaleFactory", function(ChartFactory, LocaleFactory){
+angular.module('Sportomatics').service('RadarService', function(ChartFactory, LocaleFactory){
     // TODO: make not singleton
     var self = this;
 
@@ -1804,8 +1862,8 @@ angular.module('Sportomatics').service('RadarService', ["ChartFactory", "LocaleF
     }; // this.createRadar
 
     // End of service declaration
-}]);
-angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $filter) {
+});
+angular.module('Sportomatics').service('tags', function($q, $filter) {
     var clubs = [
         { "pk": 1, "title": "Динамо Мск" },
         { "pk": 2, "title": "СКА СПБ" },
@@ -1834,7 +1892,7 @@ angular.module('Sportomatics').service('tags', ["$q", "$filter", function($q, $f
         deferred.resolve($filter('filter')(clubs, { title: query}));
         return deferred.promise;
     };
-}]);
+});
 
 angular.module('Sportomatics').controller('ClubCalendarController', [
   '$scope', '$http', '$location', '$parse', function($scope, $http, $location, $parse) {
@@ -2021,7 +2079,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 ]);
 
 angular.module('Sportomatics')
-    .controller('ClubHomeMapController', ["$scope", "$rootScope", function($scope, $rootScope){
+    .controller('ClubHomeMapController', function($scope, $rootScope){
         /*var coordinates = $('#coordinates').val();
         var coordinate1 = coordinates.split(',')[0];
         var coordinate2 = coordinates.split(',')[1];
@@ -2041,11 +2099,11 @@ angular.module('Sportomatics')
         L.marker([coordinate1, coordinate2]).addTo(map)
             .bindPopup(title + '<br>')
             .openPopup();*/
-    }])
+    })
 angular.module('Sportomatics')
 .controller('ClubListController', [
-    '$http', '$scope', '$location', 'PlayersSearchService', 'ClubsMapService',
-    function($http, $scope, $location, PlayersSearchService, ClubsMapService) {
+    '$http', '$scope', '$location', 'PlayersSearchService', 'MapService',
+    function($http, $scope, $location, PlayersSearchService, MapService) {
     var url = $('#ClubListForm').attr('action');
     this.map = true;
 
@@ -2137,8 +2195,8 @@ angular.module('Sportomatics')
                 $scope.clubs = data.results;
                 $scope.loaded = true;
             }).then(function(){
-                if(ClubsMapService.isRendered()) ClubsMapService.remove();
-                ClubsMapService.createClubsMap($scope.clubs);
+                if(MapService.isRendered()) MapService.remove();
+                MapService.createClubsMap($scope.clubs, 'clubs');
             });
     };
 
@@ -2158,16 +2216,16 @@ angular.module('Sportomatics')
             }
             $scope.loaded = true;
         }).then(function(){
-            if(ClubsMapService.isRendered()) ClubsMapService.remove();
-            ClubsMapService.createClubsMap($scope.clubs);
+            if(MapService.isRendered()) MapService.remove();
+            MapService.createClubsMap($scope.clubs, 'clubs');
         });
     };
 
-    PlayersSearchService.loadCountries($scope, $location, $scope.list);
+    PlayersSearchService.loadCountries($scope, $location, function(){});
 }]);
 
 angular.module('Sportomatics')
-    .controller('ClubNewsController', ["$scope", "$http", "ChartFactory", "LocaleFactory", "$timeout", function($scope, $http, ChartFactory, LocaleFactory, $timeout){
+    .controller('ClubNewsController', function($scope, $http, ChartFactory, LocaleFactory, $timeout){
         $scope.club = $("#team-name-hidden").length ? $("#team-name-hidden").val() : 'Club';
         $scope.data = [
             {
@@ -2356,7 +2414,7 @@ angular.module('Sportomatics')
             chart.write("chartdiv");
 
         })
-    }])
+    })
 angular.module('Sportomatics').controller('ClubStatsController', [
   '$http', '$scope', '$location', 'PlayersSearchService', function($http, $scope, $location, PlayersSearchService) {
     $scope.PlayersSearchService = PlayersSearchService;
@@ -2874,37 +2932,37 @@ angular.module('Sportomatics')
         // Don't strip trailing slashes from calculated URLs
         $resourceProvider.defaults.stripTrailingSlashes = false;
     }])
-.factory('ClubInstaPhoto', ["$resource", function($resource){
+.factory('ClubInstaPhoto', function($resource){
     return $resource("/ru/api/hockey/clubinstaphoto/"+":id/", {}, {
         query: {method:'GET', params:{processed: 1, id: null}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
         delete: { method: 'DELETE'}
     });
-}])
-.factory('PlayerInstaPhoto', ["$resource", function($resource){
+})
+.factory('PlayerInstaPhoto', function($resource){
     return $resource("/ru/api/hockey/playerinstaphoto/", {}, {
         query: {method:'GET', params:{processed: 1}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
         delete: { method: 'DELETE'}
     });
-}])
-.factory('ArenaInstaPhoto', ["$resource", function($resource){
+})
+.factory('ArenaInstaPhoto', function($resource){
     return $resource("/ru/api/hockey/processedarenainstaphoto/", {}, {
         query: {method:'GET', params:{processed: 1}},
         get: { method: 'GET'},
         update: { method: 'PATCH'},
         delete: { method: 'DELETE'}
     });
-}])
-.factory('InstagramUser', ["$resource", function($resource){
+})
+.factory('InstagramUser', function($resource){
     return $resource("/ru/api/base/instagram_user/"+":id/", {}, {
         query: {method:'GET', params:{id:null}, isArray:true},
         get: { method: 'GET'}
     });
-}])
-.controller('PhotosController', ["$scope", "ClubInstaPhoto", "InstagramUser", "PlayerInstaPhoto", "ArenaInstaPhoto", "$resource", "$timeout", "$location", function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto,ArenaInstaPhoto, $resource, $timeout, $location){
+})
+.controller('PhotosController', function($scope, ClubInstaPhoto, InstagramUser,PlayerInstaPhoto,ArenaInstaPhoto, $resource, $timeout, $location){
 
         var playerClubsMasonry = $('.masonry-clubs-photos');
         var closePopupBtn = $('#close-popup-btn');
@@ -3082,9 +3140,9 @@ angular.module('Sportomatics')
             var monthsRu = ["января", "февраля", "марта", "апреля", "мая","июня","июля", "августа", "сентября", "октября", "ноября", "декабря"];
             return this.getDate() + ' ' + monthsRu[this.getMonth()] + ' ' + this.getFullYear();
         }
-}])
+})
     angular.module('Sportomatics')
-        .controller('PlayerCardIndicatorsController', ["$http", "$scope", "$timeout", "AmChartsFactory", "ChartFactory", "zoomData", "LocaleFactory", "$state", "$location", "$q", "RadarService", function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarService) {
+        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarService) {
             //http://www.amcharts.com/lib/images/
             var self = this;
             var url = $('#IndicatorsLink').attr('href');
@@ -3594,8 +3652,8 @@ angular.module('Sportomatics')
                 //$scope.createRadar(['1634']);
                 //})
             };
-        }])
-    .factory('AmChartsFactory', ["$q", "$rootScope", "$document", function ($q, $rootScope, $document) {
+        })
+    .factory('AmChartsFactory', function ($q, $rootScope, $document) {
         var deferred = $q.defer();
 
         AmCharts.ready(function(){
@@ -3607,8 +3665,8 @@ angular.module('Sportomatics')
                 return deferred.promise;
             }
         };
-    }])
-    .run(["AmChartsFactory", function (AmChartsFactory) {}]);
+    })
+    .run(function (AmChartsFactory) {});
 
     Array.prototype.contains = function(obj) {
         var i = this.length;
@@ -3762,7 +3820,7 @@ angular.module('Sportomatics')
         return color;
     }
 angular.module('Sportomatics')
-    .controller('PlayerPartnersController', ["$scope", "$rootScope", "$timeout", "$http", "$location", function($scope, $rootScope, $timeout, $http, $location){
+    .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
         $scope.rate_by_param = parseInt($location.search()['rate_by']);
         $scope.is_playing_param = parseInt($location.search()['is_playing']);
@@ -3833,7 +3891,7 @@ angular.module('Sportomatics')
         };
         $scope.getPartners();
 
-    }]);
+    });
 angular.module('Sportomatics')
 .controller('PlayersSearchController', [
     '$http', '$scope', 'PlayersSearchService', '$location',

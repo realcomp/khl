@@ -18,7 +18,7 @@ gulp.task('coffee', function() {
 
 gulp.task('scripts', function () {
     gulp.src(paths.scripts)
-        .pipe(ngAnnotate())
+        //.pipe(ngAnnotate())
         //.pipe(uglify())
         // .pipe(closure())
         .pipe(concat('app.js'))

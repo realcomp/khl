@@ -1,7 +1,7 @@
 angular.module('Sportomatics')
 .controller('ClubListController', [
-    '$http', '$scope', '$location', 'PlayersSearchService', 'ClubsMapService',
-    function($http, $scope, $location, PlayersSearchService, ClubsMapService) {
+    '$http', '$scope', '$location', 'PlayersSearchService', 'MapService',
+    function($http, $scope, $location, PlayersSearchService, MapService) {
     var url = $('#ClubListForm').attr('action');
     this.map = true;
 
@@ -93,8 +93,8 @@ angular.module('Sportomatics')
                 $scope.clubs = data.results;
                 $scope.loaded = true;
             }).then(function(){
-                if(ClubsMapService.isRendered()) ClubsMapService.remove();
-                ClubsMapService.createClubsMap($scope.clubs);
+                if(MapService.isRendered()) MapService.remove();
+                MapService.createClubsMap($scope.clubs, 'clubs');
             });
     };
 
@@ -114,10 +114,10 @@ angular.module('Sportomatics')
             }
             $scope.loaded = true;
         }).then(function(){
-            if(ClubsMapService.isRendered()) ClubsMapService.remove();
-            ClubsMapService.createClubsMap($scope.clubs);
+            if(MapService.isRendered()) MapService.remove();
+            MapService.createClubsMap($scope.clubs, 'clubs');
         });
     };
 
-    PlayersSearchService.loadCountries($scope, $location, $scope.list);
+    PlayersSearchService.loadCountries($scope, $location, function(){});
 }]);
