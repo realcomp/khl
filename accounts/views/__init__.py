@@ -1,17 +1,20 @@
 # coding: utf-8
-from django.views.generic import DetailView
-# from registration.backends.default.views import RegistrationView
+from django.core.urlresolvers import reverse
+from django.http import Http404
+from django.shortcuts import redirect
+from django.views.generic import DetailView, RedirectView, TemplateView
 
-# from ..forms import RegForm
 from ..mixins import LoginReqMixin, ProfileMixin
+from ..serializers import TokenSerializer
 
 
-# class Signup(RegistrationView):
-#     form_class = RegForm
+class RegistrationView(TemplateView):
+    template_name = 'registration/registration_form.html'
 
-#     def register(self, request, **cleaned_data):
-#         cleaned_data['email'] = cleaned_data['username']
-#         return super(Signup, self).register(request, **cleaned_data)
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return redirect(reverse('accounts:profile-private'))
+        return super(RegistrationView, self).get(request, *args, **kwargs)
 
 
 class ProfileOptionsView(LoginReqMixin, ProfileMixin, DetailView):
@@ -28,3 +31,17 @@ class ProfileHistoryView(LoginReqMixin, ProfileMixin, DetailView):
 
 class ProfilePrivateView(LoginReqMixin, ProfileMixin, DetailView):
     template_name = 'accounts/profile/user-card4.html'
+
+
+class EmailConfirmationView(RedirectView):
+    permanent = False
+    pattern_name = 'accounts:profile-private'
+
+    def get(self, request, *args, **kwargs):
+        serializer = TokenSerializer(request.GET)
+        if serializer.is_valid():
+            serializer.save()
+            return super(EmailConfirmationView, self).get(
+                request, *args, **kwargs)
+        else:
+            raise Http404

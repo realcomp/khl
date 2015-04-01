@@ -68,10 +68,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = get_user_model()
 
 
-class PasswordResetConfirmSerializer(serializers.Serializer):
+class TokenSerializer(serializers.Serializer):
     uidb64 = serializers.CharField(max_length=255)
     token = serializers.CharField(max_length=255)
-    password = serializers.CharField(max_length=255)
 
     def validate_uidb64(self, value):
         try:
@@ -97,7 +96,18 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
             return value
         raise serializers.ValidationError(_('Password reset unsuccessful'))
 
+
+class PasswordResetConfirmSerializer(TokenSerializer):
+    password = serializers.CharField(max_length=255)
+
     def save(self):
         user = self._get_user()
         user.set_password(self.data['password'])
+        user.save()
+
+
+class EmailConfirmationSerializer(TokenSerializer):
+    def save(self):
+        user = self._get_user()
+        user.email_validated = True
         user.save()

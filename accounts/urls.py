@@ -11,6 +11,8 @@ urlpatterns = [
     # REST API
     url(r'^api/signup/$', api.RegistrationView.as_view(),
         name='registration-api'),
+    url(r'^api/email_confirmation/$', api.EmailConfirmationView.as_view(),
+        name='email-confirmation-api'),
     url(r'^api/password_reset/$', api.PasswordResetView.as_view(),
         name='password-reset-api'),
     url(r'^api/password_reset_confirm/$',
@@ -21,10 +23,9 @@ urlpatterns = [
     url(r'^api/profile/$', api.ProfileView.as_view(),
         name='profile-api'),
     # Django CBV's'
-    url(r'^signup/',
-        TemplateView.as_view(
-            template_name='registration/registration_form.html'),
-        name='signup'),
+    url(r'^signup/$', views.RegistrationView.as_view(), name='signup'),
+    url(r'^email_confirmation/$', views.EmailConfirmationView.as_view(),
+        name='email-confirmation'),
     url(r'^profile/$', views.ProfilePrivateView.as_view(),
         name='profile-private'),
     url(r'^profile/offers/$', views.ProfileOffersView.as_view(),
