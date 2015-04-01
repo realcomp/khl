@@ -2,6 +2,9 @@
 from __future__ import unicode_literals
 import datetime
 import json
+import os
+
+import filer
 
 from django.conf import settings
 from django.db.models.loading import get_model
@@ -492,3 +495,22 @@ def create_superhigh_schedule():
                     print('munch munch... strange food-->>', match.pk, schedule.pk)
                 else:
                     SM.objects.get_or_create(**data)
+
+
+
+
+def get_filepaths(directory):
+    file_paths = []
+    # Walk the tree.
+    for root, directories, files in os.walk(directory):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            file_paths.append(filepath)  # Add it to the list.
+    return file_paths
+
+
+def clear_media(media_path):
+    db_recs = {obj.file.path for obj in filer.models.File.objects.all()}
+    media_links = set(get_filepaths(media_path))
+    for_del = media_links - db_recs
+    for file_path in for_del: os.remove(file_path)
