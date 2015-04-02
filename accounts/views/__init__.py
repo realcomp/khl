@@ -3,6 +3,8 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 from django.shortcuts import redirect
 from django.views.generic import DetailView, RedirectView, TemplateView
+from django.utils.translation import ugettext_lazy as _
+from django.template import loader
 
 from ..mixins import LoginReqMixin, ProfileMixin
 from ..serializers import EmailConfirmationSerializer
@@ -41,6 +43,17 @@ class EmailConfirmationView(RedirectView):
         serializer = EmailConfirmationSerializer(data=request.GET)
         if serializer.is_valid():
             serializer.save()
+            user = serializer._get_user()
+            template_name = 'accounts/email/email_confirmed.html'
+            mail_kwargs = {
+                'subject': _('Sportomatics.ru E-Mail confirmation'),
+                'message': 'HTML',
+                'from_email': 'no-reply@sportomatics.ru',
+                'recipient_list': [user.username],
+                'html_message': loader.render_to_string(template_name, {}),
+            }
+            from django.core.mail import send_mail
+            send_mail(**mail_kwargs)
             return super(EmailConfirmationView, self).get(
                 request, *args, **kwargs)
         else:
