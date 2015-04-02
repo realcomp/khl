@@ -1,6 +1,6 @@
 angular.module('Sportomatics').controller('ClubTeamController', [
-    '$http', '$scope', '$timeout',
-    function($http, $scope, $timeout) {
+    '$http', '$scope', '$timeout', 'MapService',
+    function($http, $scope, $timeout, MapService) {
         var self = this,
         url = $('#ClubTeamForm').attr('action'),
         popup = null;
@@ -57,6 +57,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
 
         $scope.workWithData = function(data){
             console.log(data);
+            if(MapService.isRendered()) MapService.remove();
+            MapService.createClubsMap(data.all_players, 'players');
             var goalkeeper_players = data.goalkeeper_players;
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
@@ -182,7 +184,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
-                console.log(data)
                 if (data.leagues.length) {
                     var clubRows = [];
                     var clubsInRow = [];
@@ -199,7 +200,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                             clubsInRow = [];
                         }
                     });
-                    console.log(clubRows)
                     var clubsObject = {
                         'data': data,
                         'table': {

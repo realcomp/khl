@@ -255,6 +255,7 @@
                                            ng-click="ClubTeamCtrl.compare()"
                                            ng-show="ClubTeamCtrl.clubs.getLastClub().data.prev_season">Показать еще сезон</a>
                                     </div>
+
                                 </div>
 
                                 <div class="row" id="team-tables"  ng-show="type === 'table'">
@@ -298,6 +299,17 @@
                             </div>
                         </div>
                     </form>
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu">
+                                <span class="heading">География клуба</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="clubs-map-container">
+                        <div id="clubs-map">
+                        </div>
+                    </div>
 
                     <!--<div class="align-center"
                          ng-show="ClubTeamCtrl.players.data.prev_season">
