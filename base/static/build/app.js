@@ -2498,10 +2498,12 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.cache_players = null;
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
+
         $scope.setType = function(type){
             $scope.type = type;
             $scope.unMakeTransferArrows()
         };
+
         $scope.go = function(path){
             window.location.href = path;
         };
@@ -2510,6 +2512,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             data: null,
             isClubsVisible: true
         };
+
         $scope.PlayerPartnersPopupShow = function(e, event) {
             var popup = $('.player-partners-popup:hidden'),
             url = $('#PlayerCardLink').attr('href'),
@@ -2528,86 +2531,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             }
         };
 
-        self.PLAYERS_TABLE = [ // table indexes, null is an empty filler
-            // row 1
-            [['defender', 0], ['defender', null], ['defender', 1], ['defender', null],
-             ['defender', 2], ['defender', null], ['defender', 3],
-             ['forward', null], ['forward', 0], ['forward', null],
-             ['goalkeeper', 0]],
-            // row 2
-            [['defender', null], ['defender', 4], ['defender', null],
-             ['forward', 1], ['forward', null], ['forward', 2], ['forward', null],
-             ['forward', 3], ['forward', null], ['forward', 4],
-             ['goalkeeper', null]],
-            // row 3
-            [['defender', 5], ['defender', null], ['defender', 6],
-             ['forward', null], ['forward', 5], ['forward', null], ['forward', 6],
-             ['forward', null], ['forward', 7], ['forward', null],
-             ['goalkeeper', 1]],
-            // row 4
-            [['defender', null], ['defender', 7], ['defender', null],
-             ['forward', 8], ['forward', null], ['forward', 9], ['forward', null],
-             ['forward', 10], ['forward', null], ['forward', 11],
-             ['goalkeeper', null]],
-            // row 5
-            [['defender', 8], ['defender', null], ['defender', 9],
-             ['forward', null], ['forward', 12], ['forward', null], ['forward', 13],
-             ['forward', null], ['forward', 14], ['forward', null],
-             ['goalkeeper', 2]],
-            // row 6
-            [['defender', null], ['defender', 10], ['defender', null],
-             ['forward', 15], ['forward', null], ['forward', 16], ['forward', null],
-             ['forward', 17], ['forward', null], ['forward', 18],
-             ['goalkeeper', null]],
-            // row 7
-            [['defender', 11], ['defender', null], ['defender', 12],
-             ['forward', null], ['forward', 19], ['forward', null], ['forward', 20],
-             ['forward', null], ['forward', 21], ['forward', null],
-             ['goalkeeper', 3]],
-            // row 8
-            [['defender', null], ['defender', 13], ['defender', null],
-             ['forward', 22], ['forward', null], ['forward', 23], ['forward', null],
-             ['forward', 24], ['forward', null], ['forward', 25],
-             ['goalkeeper', null]],
-            // row 9
-            [['defender', 13], ['defender', null], ['defender', 14],
-             ['trainer', null], ['trainer', 0], ['trainer', null], ['trainer', 1],
-             ['trainer', null], ['trainer', 2], ['trainer', null],
-             ['goalkeeper', 4]],
-            // row 10
-            [['defender', null], ['defender', 15], ['defender', null],
-             ['trainer', 3], ['trainer', null], ['trainer', 4], ['trainer', null],
-             ['trainer', 5], ['trainer', null], ['trainer', 6],
-             ['goalkeeper', null]],
-        ];
-
-        self.CLUBS_TABLE = [ // table indexes, null is an empty filler
-            // row 1
-            [['club', 0], ['club', null], ['club', 1], ['club', null],
-             ['club', 2], ['club', null], ['club', 3], ['club', null],
-             ['club', 4], ['club', null], ['club', 5]],
-            // row 1
-            [['club', null], ['club', 6], ['club', null], ['club', 7],
-             ['club', null], ['club', 8], ['club', null], ['club', 9],
-             ['club', null], ['club', 10],  ['club', null]],
-            // row 3
-            [['club', 11], ['club', null], ['club', 12], ['club', null],
-             ['club', 13], ['club', null], ['club', 14], ['club', null],
-             ['club', 15], ['club', null], ['club', 16]],
-            // row 4
-            [['club', null], ['club', 17], ['club', null], ['club', 18],
-             ['club', null], ['club', 19], ['club', null], ['club', 20],
-             ['club', null], ['club', 21],  ['club', null]],
-            // row 5
-            [['club', 22], ['club', null], ['club', 23], ['club', null],
-             ['club', 24], ['club', null], ['club', 25], ['club', null],
-             ['club', 26], ['club', null], ['club', 27]],
-            // row 6
-            [['club', null], ['club', 28], ['club', null], ['club', 29],
-             ['club', null], ['club', 30], ['club', null], ['club', 31],
-             ['club', null], ['club', 32],  ['club', null]]
-        ];
-
         self.players = {};
         self.clubs = {
             'getLastClub': function() {
@@ -2623,7 +2546,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         $scope.workWithData = function(data){
-            console.log(data)
+            console.log(data);
             var goalkeeper_players = data.goalkeeper_players;
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
@@ -2699,6 +2622,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 return false;
             }
         };
+
         self.isPersonInCell = function(table, cell_id) {
             var cell;
             cell = this.getCell(table, cell_id);
@@ -2748,14 +2672,33 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
+                console.log(data)
                 if (data.leagues.length) {
-                    self.clubs.clubs.push({
+                    var clubRows = [];
+                    var clubsInRow = [];
+                    var clubs = [];
+                    _.each(data.leagues, function(league, index){
+                        clubs = clubs.concat(league.clubs);
+                    });
+                    _.each(clubs, function(club, index){
+                        if(clubsInRow.length < 7){
+                            clubsInRow.push(club)
+                        }
+                        if(index === clubs.length -1 || (index + 1) % 7 === 0){
+                            clubRows.push(clubsInRow);
+                            clubsInRow = [];
+                        }
+                    });
+                    console.log(clubRows)
+                    var clubsObject = {
                         'data': data,
                         'table': {
                             'club': data.leagues[0].clubs
                         },
-                        'league': data.leagues[0]
-                    });
+                        'league': data.leagues[0],
+                        'clubRows': clubRows
+                    };
+                    self.clubs.clubs.push(clubsObject);
                 }
                 self.clubs.loader = false;
                 if(arg !== false){
@@ -2786,7 +2729,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 $( this ).removeClass("opacity-30");
             });
         };
-        this.list(this.compare, false);
+
+        //this.list(this.compare, false);
 
         $scope.notPlayingNow = function(callback, callbackArg) {
             $scope.unMakeTransferArrows();
@@ -2815,16 +2759,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             }
         };
 
-        function canvas_arrow(context, fromx, fromy, tox, toy){
-            var headlen = 10;   // length of head in pixels
-            var angle = Math.atan2(toy-fromy,tox-fromx);
-            context.moveTo(fromx, fromy);
-            context.lineTo(tox, toy);
-            //context.moveTo(tox, toy);
-            context.lineTo(tox-headlen*Math.cos(angle-Math.PI/6),toy-headlen*Math.sin(angle-Math.PI/6));
-            context.moveTo(tox, toy);
-            context.lineTo(tox-headlen*Math.cos(angle+Math.PI/6),toy-headlen*Math.sin(angle+Math.PI/6));
-        }
         function drawArr(c, fromx, fromy, tox, toy){
             //variables to be used when creating the arrow
             var ctx = c;
@@ -2871,7 +2805,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             //ctx.stroke();
         }
 
-
         function createTransferArrow(from, to, id){
                 var $from = $(from);
                 var $to = $(to);
@@ -2908,18 +2841,10 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                 var y1 = ofrom.y - p.y - 30;
                 var x2 = oto.x - p.x; //+20
                 var y2 = oto.y - p.y + 40;
-                c.strokeStyle = '#000';
-                //c.lineWidth = 20;
-                c.beginPath();
-                 /*c.moveTo(x1,y1 );
-                 c.lineTo(x2,y2 );
-                c.moveTo(x2, y2);
-                c.rotate(Math.PI /2)
-                c.lineTo(x2+20, y2);*/
+
                 drawArr(c, x1,y1,x2,y2,1,2);
-                //canvas_arrow(c,x1,y1,x2,y2)
-                c.stroke();
         }
+
     }
 ]);
 angular.module('Sportomatics')

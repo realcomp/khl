@@ -137,11 +137,11 @@
                                 </div>
                             </div>
                             <div class="row clubs-team-inner-tabs" id="team-all" data-tab="team-all">
+
                                 <div class="row " id="team-photos" ng-show="type === 'photos'">
                                     {% verbatim %}
 
                                     <div class="clubs-team-wrap">
-
 
                                         <div class="player-block-wrap">
                                             <ul class="players-list">
@@ -205,11 +205,10 @@
                                     <a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
 
                                     <div class="season-tabs season-last-tabs" ng-repeat="clubs in ClubTeamCtrl.clubs.clubs">
+
                                         <div class="ui tabular menu content-tabs">
-                                            {% verbatim %}
-                                            <span class="heading">{{ clubs.data.season.label }}</span>
-                                            {% endverbatim %}
-                                            <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                            <span class="heading" ng-bind="clubs.data.season.label"></span>
+                                            <!--<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                                 <li class="ui-state-default ui-corner-top"
                                                     ng-class="{ 'ui-tabs-active ui-state-active':clubs.league === league }"
                                                     ng-repeat="league in clubs.data.leagues">
@@ -221,21 +220,20 @@
                                                         {% trans 'players' %}
                                                     </a>
                                                 </li>
-                                            </ul>
+                                            </ul>-->
                                         </div>
-                                        <table class="clubs-team-logos-table" id="leagues-all" data-tab="leagues-all">
+
+                                        <table class="clubs-team-logos-table" id="leagues-all">
                                             <tbody>
                                             {% verbatim %}
-                                            <tr ng-repeat="row in ClubTeamCtrl.CLUBS_TABLE track by $index">
-                                                <td ng-repeat="cell_id in row"
-                                                    class="cell-{{ cell_id[0] }}" id="club_{{$index}}">
+                                            <tr ng-repeat="clubRow in clubs.clubRows">
+                                                <td ng-repeat="club in clubRow" id="club_{{$index}}">
                                                     <a class="team-player-photo-link"
-                                                       href="{{ ClubTeamCtrl.getCell(clubs, cell_id).url }}"
-                                                       ng-show="ClubTeamCtrl.getCell(clubs, cell_id)">
+                                                       href="{{ club.url }}">
                                                         <img alt="" class="clubs-team-logo"
-                                                             ng-src="{{ ClubTeamCtrl.getCell(clubs, cell_id).logo || '/static/images/avatar-sample.png' }}">
+                                                             ng-src="{{ club.logo || '/static/images/avatar-sample.png' }}">
                                                                 <span class="team-player-name">
-                                                                    {{ ClubTeamCtrl.getCell(clubs, cell_id).title_verbose }}
+                                                                    {{ club.title_verbose }}
                                                                 </span>
                                                         <span class="team-player-name"></span>
                                                     </a>
@@ -244,6 +242,7 @@
                                             {% endverbatim %}
                                             </tbody>
                                         </table>
+
                                     </div>
 
                                     <div style="text-align: center">
@@ -257,6 +256,7 @@
                                            ng-show="ClubTeamCtrl.clubs.getLastClub().data.prev_season">Показать еще сезон</a>
                                     </div>
                                 </div>
+
                                 <div class="row" id="team-tables"  ng-show="type === 'table'">
                                     <input type="hidden" value="">
                                     <div class="heading">Сезон 2013-2014</div>
@@ -294,6 +294,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+
                             </div>
                         </div>
                     </form>
