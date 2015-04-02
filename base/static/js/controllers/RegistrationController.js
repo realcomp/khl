@@ -73,7 +73,8 @@ angular.module('Sportomatics').controller('RegistrationController', [
                 'headers': {
                     'X-CSRFToken': $cookies.csrftoken
                 },
-            };
+            },
+            data;
 
             switch($scope.currentStep){
                 case 0:
@@ -89,7 +90,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     break;
                 case 1:
                     if($scope.personalInfo){
-                        var data = {
+                        data = {
                             username: $scope.user.email,
                             password: $scope.user.password,
                             email_notification: $scope.subscribe
@@ -117,7 +118,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     break;
                 case 2:
                     if($scope.personalInfo){
-                        var data = {
+                        data = {
                             fio: $scope.personal.name,
                             name_visible: !$scope.personal.hideName,
                             website: $scope.personal.website
@@ -133,7 +134,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     break;
                 case 3:
                     if($scope.personalInfo){
-                        var data = {
+                        data = {
                             sport_hockey: $scope.preferencesSports.hockey,
                             sport_football: $scope.preferencesSports.football,
                             sport_basketball: $scope.preferencesSports.basketball,
@@ -147,19 +148,27 @@ angular.module('Sportomatics').controller('RegistrationController', [
                             data.clubs.push(+this.pk);
                         });
                         $http.patch($scope.profileURL, data, config).success(function(data) {
-                            document.location = '/';
-                            // $scope.currentStep += 1;
-                            // $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                            document.location = $scope.redirectURL;
                         });
                     }
                     break;
             }
         };
-        $scope.nextStep = function(){
-            if($scope.checkStep()) {
-                $scope.saveStep();
+        $scope.nextStep = function(skip){
+            if (skip) {
+                if ($scope.currentStep !== 3) {
+                    $scope.currentStep += 1;
+                    $scope.currentStepTemplate = 'step' + $scope.currentStep;
+                } else {
+                    document.location = $scope.redirectURL;
+                }
+            } else {
+                if($scope.checkStep()) {
+                    $scope.saveStep();
+                } else {
+                    alert('Введите все данные');
+                }
             }
-            else alert('Введите все данные');
         };
         $scope.prevStep = function(){
             $scope.currentStep -= 1;

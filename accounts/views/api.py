@@ -81,7 +81,7 @@ class EmailConfirmationView(APIView):
             'uidb64': urlsafe_base64_encode(force_bytes(request.user.pk)),
             'token': default_token_generator.make_token(request.user),
         }
-        kwargs = {
+        mail_kwargs = {
             'subject': _('Sportomatics.ru E-Mail confirmation'),
             'message': 'HTML',
             'from_email': 'no-reply@sportomatics.ru',
@@ -89,5 +89,5 @@ class EmailConfirmationView(APIView):
             'html_message': loader.render_to_string(template_name, context),
         }
         from django.core.mail import send_mail
-        send_mail(**kwargs)
+        send_mail(**mail_kwargs)
         return response.Response({}, status=200)

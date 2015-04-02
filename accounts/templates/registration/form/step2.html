@@ -11,7 +11,6 @@
     <div class="row registration-content-row">
         <div class="row registration-content-row">
             <div class="inline-block">
-                <input type="radio" ng-model="personalInfo" ng-value="true">
                 {% trans 'Tell us about yourself' %}
             </div>
         </div>
@@ -62,15 +61,10 @@
                 </div>
             </div>
         </div>
-        <div class="row registration-content-row">
-            <div class="inline-block">
-                <input type="radio" ng-model="personalInfo" ng-value="false">
-                {% trans "I don't want to give any information about me" %}
-            </div>
-        </div>
         <div class="row">
             <button type="button" class="small ui green button registration-next" ng-click="prevStep()">{% trans 'PREV' %}</button>
-            <button type="button" class="small ui green button registration-next" ng-click="nextStep()">{% trans 'Next' %}</button>
+            <button type="button" class="small ui green button registration-next" ng-click="nextStep()">{% trans 'NEXT' %}</button>
+            <button type="button" class="small ui button registration-next" ng-click="nextStep(true)">{% trans 'SKIP' %}</button>
         </div>
     </div>
 </script>

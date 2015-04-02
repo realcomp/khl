@@ -65,14 +65,14 @@ arena_detail = ArenaDetail.as_view()
 
 
 class ClubList(drf.generics.ListAPIView):
-    queryset = Club.objects.all()
+    queryset = Club.objects.active()
     serializer_class = serializers.ClubMinimalSerialiser
     permission_classes = (SportoAdminPermission,)
 club_list = ClubList.as_view()
 
 
 class ClubDetail(drf.generics.RetrieveAPIView):
-    queryset = Club.objects.all()
+    queryset = Club.objects.active()
     serializer_class = serializers.ClubMinimalSerialiser
     permission_classes = (SportoAdminPermission,)
 club_detail = ClubDetail.as_view()
