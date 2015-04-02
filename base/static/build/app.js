@@ -2545,8 +2545,10 @@ angular.module('Sportomatics').controller('ClubTeamController', [
 
         $scope.workWithData = function(data){
             console.log(data);
+
             if(MapService.isRendered()) MapService.remove();
             MapService.createClubsMap(data.all_players, 'players');
+
             var goalkeeper_players = data.goalkeeper_players;
             var defender_players = data.defender_players;
             var offender_players = data.offender_players;
@@ -2677,8 +2679,10 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     var clubRows = [];
                     var clubsInRow = [];
                     var clubs = [];
+                    $scope.clubplayers = [];
                     _.each(data.leagues, function(league, index){
                         clubs = clubs.concat(league.clubs);
+                        $scope.clubplayers = $scope.clubplayers.concat(league.clubplayers);
                     });
                     _.each(clubs, function(club, index){
                         if(clubsInRow.length < 7){
@@ -2714,11 +2718,25 @@ angular.module('Sportomatics').controller('ClubTeamController', [
 
         $scope.makeTransferArrows = function(){
             $scope.getFromCache();
-            createTransferArrow('#club_2', '#playerd_3', 1);
-            createTransferArrow('#club_4', '#playerd_2', 2);
+            _.each($scope.clubplayers, function(clubplayer){
+                createTransferArrow('#club_'+clubplayer.club, '#player_'+clubplayer.player, clubplayer.pk);
+            });
             $( ".player-item" ).each(function() {
-                if($(this).attr('id') !== 'playerd_3' && $(this).attr('id') !== 'playerd_2')
-                $( this ).addClass("opacity-30");
+                if(!_.findWhere($scope.clubplayers, {player: parseInt($(this).attr('id').split('_')[1]) })){
+                    $( this ).addClass("opacity-30");
+                } else {
+                    var id = $(this).attr('id');
+                    $(this).hover(function(){
+                        $("canvas").each(function(){
+                            if ($(this).attr('player') !== id)
+                                $(this).addClass("opacity-10");
+                        })
+                    }, function(){
+                        $("canvas").each(function(){
+                            $(this).removeClass("opacity-10");
+                        })
+                    })
+                }
             });
         };
         $scope.unMakeTransferArrows = function(){
@@ -2761,7 +2779,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         function drawArr(c, fromx, fromy, tox, toy){
             //variables to be used when creating the arrow
             var ctx = c;
-            var headlen = 10;
+            var headlen = 5;
             var angle = Math.atan2(toy-fromy,tox-fromx);
             //starting path of the arrow from the start square to the end square and drawing the stroke
             ctx.beginPath();
@@ -2770,7 +2788,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             (function myLoop (amount) {
                setTimeout(function () {
                    amount += 0.05; // change to alter duration
-                    ctx.lineWidth = 10;
+                    ctx.lineWidth = 5;
                     ctx.lineTo(fromx + (tox - fromx) * amount,
                              fromy + (toy - fromy) * amount);
                     ctx.stroke();
@@ -2792,7 +2810,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
 
                         //draws the paths created above
                         //ctx.strokeStyle = "#cc0000";
-                        ctx.lineWidth = 10;
+                        ctx.lineWidth = 5;
                         ctx.stroke();
                         ctx.fill();
                     }
@@ -2825,7 +2843,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     y1: ofrom.y > oto.y ? ofrom.y : oto.y
                 };
                 // create canvas between those potonts
-                var c = $('<canvas id="'+id+'" />').attr({
+                var c = $('<canvas id="'+id+'" player="'+ to.replace('#', '') + '" />').attr({
                     'width': p.x1 - p.x + 20 ,
                     'height': p.y1 - p.y + 20
                 }).css({

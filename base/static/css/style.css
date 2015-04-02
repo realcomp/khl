@@ -5099,6 +5099,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border: 1px solid #ffffff;
     border-radius: 6px;
 }
+.opacity-10{
+    opacity: 0.1 !important;
+}
 .opacity-30{
     opacity: 0.3 !important;
 }
@@ -5806,7 +5809,7 @@ hr.style-one {
 }
 
 .disable-hover,
-.disable-hover * {
+.disable-hover *, canvas {
   pointer-events: none !important;
 }
 .player-item{
