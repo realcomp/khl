@@ -435,6 +435,13 @@ class Club(AdminLinkMixin, TitleBaseModel):
             pks = clubplayers.values_list('player_id', flat=True)
             return Player.objects.filter(pk__in=pks)
 
+    def get_not_playing_players(self):
+        current_season = Season.objects.get_current_season()
+        ids =  Player.objects.exclude(clubplayer__season=current_season
+                            ).filter(clubplayer__club=self
+                            ).values_list('pk', flat=True)
+        return Player.objects.filter(pk__in=ids)
+
     @property
     def all_players(self):
         return self.players.order_by('line', 'number')

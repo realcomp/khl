@@ -104,18 +104,27 @@
                                             </div>
                                         </div>
                                         <ul>
-                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Ростер</a></li>
-                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Все</a></li>
+                                            <li>
+                                                <a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="unMakeTransferArrows()">
+                                                    {% trans 'Roster' %}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="unMakeTransferArrows()">
+                                                    {% trans 'All' %}
+                                                </a>
+                                            </li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="makeTransferArrows()">Пришли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="unMakeTransferArrows()">Ушли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
                                                    ng-click="unMakeTransferArrows()">Воспитанники</a></li>
-                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Воспитанники</a></li>
+                                            <li>
+                                                <a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="notPlayingNow()">
+                                                    {% trans 'Not playing now' %}
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>

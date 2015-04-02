@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import datetime
-
 import itertools
 
 from django.db.models import Avg, Q, Sum
