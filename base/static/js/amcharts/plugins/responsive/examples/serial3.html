@@ -20,7 +20,7 @@
     var chartData = [];
     generateChartData();
 
-    var chart = AmCharts.makeChart("chartdiv", {
+    var chart = AmCharts.createMultiplePlayersChart("chartdiv", {
       "type": "serial",
       "pathToImages": "http://cdn.amcharts.com/lib/3/images/",
       "dataProvider": chartData,

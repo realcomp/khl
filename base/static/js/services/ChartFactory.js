@@ -42,7 +42,7 @@ angular.module('Sportomatics')
                 // category
                 var categoryAxis = chart.categoryAxis;
                 categoryAxis.parseDates = true; // as our data is date-based, we set parseDates to true
-                categoryAxis.minPeriod = "MM"; // our data is daily, so we set minPeriod to DD
+                categoryAxis.minPeriod = (chartData.groupBy === 'month') ? 'MM' : 'YYYY';
                 //categoryAxis.minorGridEnabled = true;
                 //categoryAxis.autoGridCount =  true;
                 //categoryAxis.grudCount = 12;

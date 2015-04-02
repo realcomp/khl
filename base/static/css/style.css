@@ -5821,3 +5821,7 @@ hr.style-one {
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.graph-span {
+    text-align: left;
+    float: left;
+}

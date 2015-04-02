@@ -24,4 +24,5 @@ node_modules/
 /logs
 .idea/
 .idea
+fragments/
 dump.rdb
