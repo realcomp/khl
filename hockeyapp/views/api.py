@@ -150,14 +150,14 @@ class ClubTeam(generics.RetrieveAPIView):
     serializer_class = ClubTeamSerializer
 
     def get_queryset(self):
-        return Club.objects.all()
+        return Club.objects.active()
 
 
 class ClubTeamCompare(generics.RetrieveAPIView):
     serializer_class = ClubTeamCompareSerializer
 
     def get_queryset(self):
-        return Club.objects.all()
+        return Club.objects.active()
 
 
 class ClubCalendar(generics.ListAPIView):
@@ -190,7 +190,7 @@ class MetricsPlayers(generics.ListAPIView):
 
 
 class ClubTitlesSearch(generics.ListAPIView):
-    queryset = Club.objects.all()
+    queryset = Club.objects.active()
     serializer_class = ClubTitlesSerializer
 
     def filter_queryset(self, qs):

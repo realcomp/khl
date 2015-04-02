@@ -21,7 +21,7 @@ class ClubleaguesAddForm(forms.ModelForm):
                 widget=forms.CheckboxSelectMultiple,
     )
     clubs = forms.ModelMultipleChoiceField(
-                queryset=Club.objects.all().order_by('ru_title'),
+                queryset=Club.objects.active().order_by('ru_title'),
                 widget=FilteredSelectMultiple(
                                 verbose_name=Club._meta.verbose_name_plural,
                                 is_stacked=False,

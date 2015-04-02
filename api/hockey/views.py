@@ -53,7 +53,7 @@ class ClubList(PaginationMixin, drf.generics.ListAPIView):
     serializer_class = ClubListSerializer
 
     def get_queryset(self):
-        return Club.objects.all()
+        return Club.objects.active()
 
     def filter_queryset(self, qs):
         qs = super(ClubList, self).filter_queryset(qs)

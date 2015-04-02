@@ -205,7 +205,7 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
 
     def get_queryset(self, request):
         qs = super(ClubAdmin, self).get_queryset(request)
-        return qs.exclude(league__en_title="Not clubs")
+        return qs.active()
 
     def make_notclubs_league(self, request, queryset):
         l = League.objects.filter(en_title="Not clubs").last()
@@ -397,7 +397,7 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     def get_form(self, request, obj=None, **kwargs):
         self.form.base_fields['club_set'] = forms.ModelMultipleChoiceField(
                     label=_('Clubs'),
-                    queryset=Club.objects.all().order_by('ru_title'),
+                    queryset=Club.objects.active().order_by('ru_title'),
                     initial=obj and obj.club_set.all(),
                     widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
         )

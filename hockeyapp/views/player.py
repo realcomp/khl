@@ -52,11 +52,10 @@ class PlayerCardClubs(PlayerCard):
 
     def get_context_data(self, **kwargs):
         context = super(PlayerCardClubs, self).get_context_data(**kwargs)
-        clubs = (
-            Club.objects
-            .filter(clubplayer__player=self.get_object())
-            .locale_order_by(self.request, '%s_title')
-            .distinct())
+        clubs = Club.objects.active(
+                            ).filter(clubplayer__player=self.get_object()
+                            ).locale_order_by(self.request, '%s_title'
+                            ).distinct()
         context['clubs'] = PlayerCardClubsSerializer(
             clubs, many=True, context=context).data
         return context

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import itertools
-from operator import attrgetter
 
 from django.db.models import Avg, Sum
 
