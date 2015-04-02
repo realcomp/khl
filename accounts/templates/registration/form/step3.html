@@ -9,7 +9,6 @@
     <div class="row registration-content-row">
         <div class="row registration-content-row">
             <div class="inline-block">
-                <input type="radio" ng-model="preferencesInfo" ng-value="true">
                 {% trans 'Set up your preferences' %}
             </div>
         </div>
@@ -61,15 +60,10 @@
                 </div>
             </div>
         </div>
-        <div class="row registration-content-row">
-            <div class="inline-block">
-                <input type="radio" ng-model="preferencesInfo" ng-value="false">
-                {% trans "I don't have any preferences" %}
-            </div>
-        </div>
         <div class="row">
             <button type="button" class="small ui green button registration-next" ng-click="prevStep()">{% trans 'PREV' %}</button>
             <button type="button" class="small ui green button registration-next" ng-click="nextStep()">{% trans 'END' %}</button>
+            <button type="button" class="small ui button registration-next" ng-click="nextStep(true)">{% trans 'SKIP' %}</button>
         </div>
     </div>
 </script>
