@@ -1895,35 +1895,13 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
     // End of factory declaration
     
 });
-angular.module('Sportomatics').service('tags', function($q, $filter) {
-    var clubs = [
-        { "pk": 1, "title": "Динамо Мск" },
-        { "pk": 2, "title": "СКА СПБ" },
-        { "pk": 3, "title": "Трактор (Челябинск)" },
-        { "pk": 4, "title": "Рубин (Краснодар)" },
-        { "pk": 5, "title": "Спартак Мск" },
-        { "pk": 6, "title": "Терек" },
-        { "pk": 7, "title": "Цверна Звезда" }
-    ];
-    var countries = [
-        { "pk": 1, "title" : "Россия" },
-        { "pk": 2, "title" : "США" },
-        { "pk": 3, "title" : "Канада" },
-        { "pk": 4, "title" : "Германия" }
-    ];
-    this.getClubs = function (sport) {
-        //TODO: get clubs by selected sport in selected countries
-    };
-    this.loadCountries = function(query) {
-        var deferred = $q.defer();
-        deferred.resolve($filter('filter')(countries, { title: query}));
-        return deferred.promise;
-    };
-    this.loadClubs = function(query) {
-        var deferred = $q.defer();
-        deferred.resolve($filter('filter')(clubs, { title: query}));
-        return deferred.promise;
-    };
+angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
+  this.loadCountries = function(url, query) {
+    return $http.get(url);
+  };
+  this.loadClubs = function(url, query) {
+    return $http.get(url + '?s=' + query);
+  };
 });
 
 angular.module('Sportomatics').controller('ClubCalendarController', [
@@ -3770,12 +3748,19 @@ angular.module('Sportomatics')
 }]);
 
 angular.module('Sportomatics').controller('ProfileController', [
-  '$http', '$scope', function($http, $scope) {
+  '$http', '$scope', 'tags', function($http, $scope, tags) {
+    $scope.tags = tags;
     $scope.user = {};
     $scope.config = {
       'headers': {
         'X-CSRFToken': null
       }
+    };
+    $scope.loadCountries = function(query) {
+      return $scope.tags.loadCountries($scope.countriesURL, query);
+    };
+    $scope.loadClubs = function(query) {
+      return $scope.tags.loadClubs($scope.clubsURL, query);
     };
     $scope.setAvatar = function(files, csrf_token) {
       var config, fd;
@@ -3795,12 +3780,28 @@ angular.module('Sportomatics').controller('ProfileController', [
       }).error(function(data) {});
     };
     $scope.save = function() {
-      var data;
-      data = {
-        'fio': $scope.user.fio,
-        'email': $scope.user.email
-      };
-      $http.patch($scope.profileURL, data, $scope.config).success(function(data) {
+      var club, country;
+      $scope.user.clubs = (function() {
+        var i, len, ref, results;
+        ref = $scope.clubs;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          club = ref[i];
+          results.push(club.pk);
+        }
+        return results;
+      })();
+      $scope.user.countries = (function() {
+        var i, len, ref, results;
+        ref = $scope.countries;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          country = ref[i];
+          results.push(country.pk);
+        }
+        return results;
+      })();
+      $http.patch($scope.profileURL, $scope.user, $scope.config).success(function(data) {
         $scope.user = data;
       });
     };
@@ -3814,11 +3815,15 @@ angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
         $scope.$location = $location;
+        $scope.tags = tags;
+
         if (($location.search().uidb64 && $location.search().token) || $location.search().remember) {
             $scope.selectedType = 'remember';
         } else {
             $scope.selectedType = 'social';
         }
+
+        $scope.urls = {};
         $scope.user = {};
         $scope.avatar = null;
         $scope.userCreated = false;
@@ -3838,15 +3843,20 @@ angular.module('Sportomatics').controller('RegistrationController', [
             'football': false,
             'basketball': false
         };
-        $scope.tags = [];
         $scope.countries = [];
+        $scope.clubs = [];
+
         $scope.setAvatar = ProfileService.setAvatar;
-        $scope.loadTagsCountries = function (query) {
-            return tags.loadCountries(query);
+
+        $scope.loadCountries = function(query) {
+            console.log($scope);
+            return $scope.tags.loadCountries($scope.urls.countries, query);
         };
-        $scope.loadTags = function(query) {
-            return tags.loadClubs(query);
+
+        $scope.loadClubs = function(query) {
+            return $scope.tags.loadClubs($scope.urls.clubs, query);
         };
+
         $scope.$watch('countries', function(newval, oldval){
             console.log(newval);
         }, true);
@@ -3909,7 +3919,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         };
                         localStorage.setItem('sportomatics_registrationPersonalInfo', JSON.stringify($scope.personal));
                         if ($scope.userCreated) {
-                            $http.patch($scope.profileURL, data, config).success(function(data) {
+                            $http.patch($scope.urls.profile, data, config).success(function(data) {
                                 $scope.errors = {};
                                 $scope.currentStep += 1;
                                 $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -3917,7 +3927,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                                 $scope.errors = data;
                             });
                         } else {
-                            $http.post($scope.registrationURL, data, config).success(function(data) {
+                            $http.post($scope.urls.registration, data, config).success(function(data) {
                                 $scope.userCreated = true;
                                 $scope.errors = {};
                                 $scope.currentStep += 1;
@@ -3935,7 +3945,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                             name_visible: !$scope.personal.hideName,
                             website: $scope.personal.website
                         };
-                        $http.patch($scope.profileURL, data, config).success(function(data) {
+                        $http.patch($scope.urls.profile, data, config).success(function(data) {
                             $scope.errors = {};
                             $scope.currentStep += 1;
                             $scope.currentStepTemplate = 'step' + $scope.currentStep;
@@ -3956,11 +3966,11 @@ angular.module('Sportomatics').controller('RegistrationController', [
                         $.each($scope.countries, function() {
                             data.countries.push(+this.pk);
                         });
-                        $.each($scope.tags, function() {
+                        $.each($scope.clubs, function() {
                             data.clubs.push(+this.pk);
                         });
-                        $http.patch($scope.profileURL, data, config).success(function(data) {
-                            document.location = $scope.redirectURL;
+                        $http.patch($scope.urls.profile, data, config).success(function(data) {
+                            document.location = $scope.urls.redirect;
                         });
                     }
                     break;
@@ -3972,7 +3982,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
                     $scope.currentStep += 1;
                     $scope.currentStepTemplate = 'step' + $scope.currentStep;
                 } else {
-                    document.location = $scope.redirectURL;
+                    document.location = $scope.urls.redirect;
                 }
             } else {
                 if($scope.checkStep()) {
@@ -3997,7 +4007,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
             var data = {
                 email: $scope.rememberPasswordData.email
             };
-            $http.post($scope.passwordResetURL, data, $scope.getAjaxConfig()).success(function(data) {
+            $http.post($scope.urls.passwordReset, data, $scope.getAjaxConfig()).success(function(data) {
                 $scope.rememberPasswordData.isSent = true;
                 $scope.rememberPasswordData.errors = null;
             }).error(function(data) {
@@ -4012,7 +4022,7 @@ angular.module('Sportomatics').controller('RegistrationController', [
             };
             if ($scope.rememberPasswordData.password && $scope.rememberPasswordData.password2 &&
                    $scope.rememberPasswordData.password === $scope.rememberPasswordData.password2) {
-                $http.post($scope.passwordResetConfirmURL, data, $scope.getAjaxConfig()).success(function(data) {
+                $http.post($scope.urls.passwordResetConfirm, data, $scope.getAjaxConfig()).success(function(data) {
                     $scope.rememberPasswordData.isComplete = true;
                     $scope.rememberPasswordData.errors = null;
                 }).error(function(data) {
