@@ -105,7 +105,7 @@ class PlayerList(drf.generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(PlayerList, self).filter_queryset(qs)
-        club = self.request.GET.get('club')
+        club = self.request.GET.getlist('club')
         q = Q()
         if club:
             q&= Q(club__in=set(club))
