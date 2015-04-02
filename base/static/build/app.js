@@ -1877,7 +1877,9 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
                     })
                 }
             }
+
             return deferred.promise;
+
         }; // createRadar
 
         this.draw = function(){
