@@ -184,6 +184,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
+                    console.log(data)
                 if (data.leagues.length) {
                     var clubRows = [];
                     var clubsInRow = [];

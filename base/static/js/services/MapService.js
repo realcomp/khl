@@ -62,23 +62,19 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout){
         };
 
         this.markersFunctionPlayers = function(players){
-            console.log(players);
-            console.log(_.filter(players, function(e){ return e.birth_place !== ''; }));
             var countOfGeocoded = 0;
             _.each(players, function(player, index){
+                if(!player.birth_place) return;
                 var playerIcon = L.icon({
                     iconUrl: player.photo ? player.photo : '/static/abc.jpg',
                     iconSize: [20, 20],
                     shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
                     shadowSize: [34, 48]
                 });
-                if(!player.birth_place) return;
-                else {
-                    self.googleGeocode(player.birth_place, countOfGeocoded).then(function(result){
-                        self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {icon: playerIcon}).bindPopup(player.fio + '<br> Место рождения: ' + player.birth_place));
-                    });
-                    countOfGeocoded++;
-                }
+                self.googleGeocode(player.birth_place, countOfGeocoded).then(function(result){
+                    self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {icon: playerIcon}).bindPopup(player.fio + '<br> Место рождения: ' + player.birth_place));
+                });
+                countOfGeocoded++;
             });
         };
 

@@ -11,7 +11,7 @@ from base.models import Season
 from . import (
     SeasonSerializer,
     BasePlayerCardSerializer,
-    BaseClubSerializer, ClubLightListSerializer,
+    BaseClubSerializer, ClubLightListSerializer, BaseClubPlayerSerializer,
     CoachSerializer,
     LeagueSerializer,
     CountrySerializer)
@@ -160,12 +160,20 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
         model = Club
 
 
+class ClubPlayerSerializer(BaseClubPlayerSerializer):
+
+    class Meta(object):
+        fields = ('pk', 'player', 'club', )
+        model = ClubPlayer
+
+
 class LeagueClubsListSerializer(LeagueSerializer):
     clubs = ClubLightListSerializer(many=True)
     players_count = serializers.IntegerField()
+    clubplayers = ClubPlayerSerializer(many=True)
 
     class Meta(object):
-        fields = 'pk', 'title', 'clubs', 'players_count'
+        fields = 'pk', 'title', 'clubs', 'players_count', 'clubplayers'
         model = League
 
 
@@ -235,10 +243,16 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
                     league.clubs = []
                 if not hasattr(league, 'players'):
                     league.players = []
+                if not hasattr(league, 'clubplayers'):
+                    league.clubplayers = []
+                if not hasattr(league, 'clubplayers_count'):
+                    league.clubplayers_count = 0
                 if not hasattr(league, 'players_count'):
                     league.players_count = 0
                 if clubplayer.club not in league.clubs:
                     league.clubs.append(clubplayer.club)
+                if clubplayer.player not in league.players:
+                    league.clubplayers.append(clubplayer)
                 if clubplayer.player not in league.players:
                     league.players.append(clubplayer.player)
                     league.players_count += 1

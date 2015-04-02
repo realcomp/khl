@@ -96,6 +96,13 @@ class SeasonSerializer(TitleBaseSerializer):
         model = Season
 
 
+class BaseClubPlayerSerializer(serializers.ModelSerializer):
+
+    class Meta(object):
+        fields = 'pk'
+        model = ClubPlayer
+
+
 class BaseClubSerializer(TitleBaseSerializer):
     logo = serializers.ReadOnlyField(source='logo.url')
     url = serializers.ReadOnlyField(source='get_absolute_url')

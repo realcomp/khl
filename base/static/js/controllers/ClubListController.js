@@ -88,7 +88,6 @@ angular.module('Sportomatics')
         $scope.loaded = false;
         $http.get(url + '?' + params)
             .success(function(data) {
-                console.log(data)
                 $scope.data = data;
                 $scope.clubs = data.results;
                 $scope.loaded = true;
