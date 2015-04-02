@@ -9,7 +9,14 @@
     {% include "registration/form/password.html" %}
     <!-- page code -->
     <div class="page-inner-container" ng-controller="RegistrationController"
-         ng-init="registrationURL = '{% url 'accounts:registration-api' %}'; profileURL = '{% url 'accounts:profile-api' %}'; passwordResetURL = '{% url 'accounts:password-reset-api' %}'; passwordResetConfirmURL = '{% url 'accounts:password-reset-confirm-api' %}'; redirectURL = '{% url 'accounts:profile-private' %}'">
+         ng-init="
+urls.registration         = '{% url 'accounts:registration-api' %}';
+urls.profile              = '{% url 'accounts:profile-api' %}';
+urls.passwordReset        = '{% url 'accounts:password-reset-api' %}';
+urls.passwordResetConfirm = '{% url 'accounts:password-reset-confirm-api' %}';
+urls.redirect             = '{% url 'accounts:profile-private' %}';
+urls.countries            = '{% url 'hockeyapp:league-list-api' %}';
+urls.clubs                = '{% url 'hockeyapp:club-titles-search-api' %}';">
         <div class="user-page">
             <div class="ui tabular menu content-tabs">
                 <span class="heading">{% trans "New User's Registration" %}</span>

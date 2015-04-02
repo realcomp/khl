@@ -11,23 +11,9 @@ from rest_framework import serializers
 
 from addresses.models import Address, Country, City
 from base.models import Season
+from base.serializers import LangDepSerializer, TitleBaseSerializer
 
 from ..models import Coach, Arena, Club, Player, League, ClubPlayer
-
-
-class LangDepSerializer(serializers.ModelSerializer):
-    '''
-    Language-Dependent Serializer
-    '''
-    def _get_field(self, obj, field_name):
-        # request = self.context.get('request')
-        # get_field_name = lambda lang: '%s_%s' % (lang or 'en', field_name)
-        # lang = request and request.LANGUAGE_CODE
-        # if hasattr(obj, get_field_name(lang)):
-        #     return getattr(obj, get_field_name(lang))
-        # return getattr(obj, get_field_name(None))
-        return obj.get_locale_attr(
-            field_name, request=self.context.get('request'))
 
 
 class AbstractManSerializer(LangDepSerializer):
@@ -38,10 +24,6 @@ class AbstractManSerializer(LangDepSerializer):
     get_name = lambda self, obj: self._get_field(obj, 'name')
     get_lastname = lambda self, obj: self._get_field(obj, 'lastname')
 
-
-class TitleBaseSerializer(LangDepSerializer):
-    title = serializers.SerializerMethodField()
-    get_title = lambda self, obj: self._get_field(obj, 'title')
 
 class CountrySerializer(TitleBaseSerializer):
     class Meta(object):

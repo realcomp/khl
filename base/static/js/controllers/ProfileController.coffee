@@ -1,6 +1,7 @@
 angular.module('Sportomatics').controller('ProfileController', [
-    '$http', '$scope',
-    ($http, $scope) ->
+    '$http', '$scope', 'tags',
+    ($http, $scope, tags) ->
+        $scope.tags = tags
 
         $scope.user = {}
         $scope.config = {
@@ -8,6 +9,12 @@ angular.module('Sportomatics').controller('ProfileController', [
                 'X-CSRFToken': null,
             },
         }
+
+        $scope.loadCountries = (query) ->
+            return $scope.tags.loadCountries($scope.countriesURL, query)
+
+        $scope.loadClubs = (query) ->
+            return $scope.tags.loadClubs($scope.clubsURL, query)
 
         $scope.setAvatar = (files, csrf_token) ->
             fd = new FormData()
@@ -33,11 +40,9 @@ angular.module('Sportomatics').controller('ProfileController', [
             return
 
         $scope.save = () ->
-            data = {
-                'fio': $scope.user.fio,
-                'email': $scope.user.email
-            }
-            $http.patch($scope.profileURL, data, $scope.config
+            $scope.user.clubs = (club.pk for club in $scope.clubs)
+            $scope.user.countries = (country.pk for country in $scope.countries)
+            $http.patch($scope.profileURL, $scope.user, $scope.config
             ).success((data) ->
                 $scope.user = data
                 return

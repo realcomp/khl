@@ -1,10 +1,17 @@
 angular.module('Sportomatics').controller('ProfileController', [
-  '$http', '$scope', function($http, $scope) {
+  '$http', '$scope', 'tags', function($http, $scope, tags) {
+    $scope.tags = tags;
     $scope.user = {};
     $scope.config = {
       'headers': {
         'X-CSRFToken': null
       }
+    };
+    $scope.loadCountries = function(query) {
+      return $scope.tags.loadCountries($scope.countriesURL, query);
+    };
+    $scope.loadClubs = function(query) {
+      return $scope.tags.loadClubs($scope.clubsURL, query);
     };
     $scope.setAvatar = function(files, csrf_token) {
       var config, fd;
@@ -24,12 +31,28 @@ angular.module('Sportomatics').controller('ProfileController', [
       }).error(function(data) {});
     };
     $scope.save = function() {
-      var data;
-      data = {
-        'fio': $scope.user.fio,
-        'email': $scope.user.email
-      };
-      $http.patch($scope.profileURL, data, $scope.config).success(function(data) {
+      var club, country;
+      $scope.user.clubs = (function() {
+        var i, len, ref, results;
+        ref = $scope.clubs;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          club = ref[i];
+          results.push(club.pk);
+        }
+        return results;
+      })();
+      $scope.user.countries = (function() {
+        var i, len, ref, results;
+        ref = $scope.countries;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          country = ref[i];
+          results.push(country.pk);
+        }
+        return results;
+      })();
+      $http.patch($scope.profileURL, $scope.user, $scope.config).success(function(data) {
         $scope.user = data;
       });
     };

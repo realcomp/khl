@@ -10,10 +10,16 @@ var paths = {
     libs: ['base/static/js/libs/*.js']
 };
 
-gulp.task('coffee', function() {
+gulp.task('coffee-controllers', function() {
   gulp.src('base/static/js/controllers/*.coffee')
       .pipe(coffee({bare: true}))
       .pipe(gulp.dest('base/static/js/controllers'))
+});
+
+gulp.task('coffee-services', function() {
+  gulp.src('base/static/js/services/*.coffee')
+      .pipe(coffee({bare: true}))
+      .pipe(gulp.dest('base/static/js/services'))
 });
 
 gulp.task('scripts', function () {
@@ -41,9 +47,10 @@ gulp.task('minify-css', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['base/static/js/controllers/*.coffee'], ['coffee']);
+    gulp.watch(['base/static/js/controllers/*.coffee'], ['coffee-controllers']);
+    gulp.watch(['base/static/js/services/*.coffee'], ['coffee-services']);
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.libs, ['libs']);
 });
 
-gulp.task('default', ['watch', 'coffee', 'scripts', 'libs']);
+gulp.task('default', ['watch', 'coffee-controllers', 'coffee-services', 'scripts', 'libs']);

@@ -5,7 +5,7 @@
 <section class="content">
     <div class="container"
          ng-controller="ProfileController as ProfileCtrl"
-         ng-init="user.fio = '{{ request.user.fio }}'; profileURL = '{% url 'accounts:profile-api' %}'; emailConfirmationURL = '{% url 'accounts:email-confirmation-api' %}';">
+         ng-init="profileURL = '{% url 'accounts:profile-api' %}'; emailConfirmationURL = '{% url 'accounts:email-confirmation-api' %}';">
         {% include "accounts/profile/user-info.html" %}
 
         <div class="page-content page-container">
@@ -20,8 +20,8 @@
                           ng-submit="save()">
                         <div class="inline field">
                             <label>Ваш логин:</label>
-                            <a class="ui teal label">{{ username }}</a>
-                            <span class="profile-register-date">Дата регистрации: {{ date_joined }}</span>
+                            <a class="ui teal label">{{ user.username }}</a>
+                            <span class="profile-register-date">Дата регистрации: {{ user.date_joined }}</span>
                         </div>
                         <div class="inline field">
                             <label>Пароль:</label>
@@ -30,11 +30,12 @@
                         </div>
                         <div class="inline field">
                             <label>E-mail:</label>
-                            <input type="text" name="email" value="{{ email }}"
-                                   ng-init="user.email = '{{ email }}'"
+                            <input type="text" name="email" value="{{ user.email }}"
+                                   ng-init="user.email = '{{ user.email }}'"
                                    ng-model="user.email">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="news">
+                            <div class="registration-preferences-sport">
+                                <input type="checkbox" ng-model="user.email_notification"
+                                       ng-init="user.email_notification = {{ user.email_notification|lower }}">
                                 <label>получать рассылку новостей с сайта</label>
                             </div>
                         </div>
@@ -45,20 +46,85 @@
                         {% endif %}
                         <div class="inline field">
                             <label>Имя Фамилия:</label>
-                            <input type="text" name="fio" value="{{ fio }}"
-                                   ng-model="user.fio">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="hide_name">
+                            <input type="text" name="fio" value="{{ user.fio }}"
+                                   ng-model="user.fio" ng-init="user.fio = '{{ user.fio }}'">
+                            <div class="registration-preferences-sport">
+                                <input type="checkbox" ng-model="user.name_visible"
+                                       ng-init="user.name_visible = {{ user.name_visible|lower }}">
                                 <label>скрывать имя в "Любительской версии"</label>
                             </div>
                         </div>
+
+                        <div class="inline field">
+                            <div class="inline-block registration-preferences-sports vertical-top">
+                                <div class="registration-preferences-sport bold">
+                                    {% trans "I'm interested in:" %}
+                                </div>
+                                <div class="registration-preferences-sport">
+                                    <input class="vertical-middle" type="checkbox"
+                                           ng-model="user.sport_hockey"
+                                           ng-init="user.sport_hockey = {{ user.sport_hockey|lower }}">
+                                    <div class="vertical-middle inline-block">{% trans 'Hockey' %}</div>
+                                </div>
+                                <div class="registration-preferences-sport">
+                                    <input class="vertical-middle" type="checkbox"
+                                           ng-model="user.sport_football"
+                                           ng-init="user.sport_football = {{ user.sport_football|lower }}">
+                                    <div class="vertical-middle inline-block">{% trans 'Football' %}</div>
+                                </div>
+                                <div class="registration-preferences-sport">
+                                    <input class="vertical-middle" type="checkbox"
+                                           ng-model="user.sport_basketball"
+                                           ng-init="user.sport_basketball = {{ user.sport_basketball|lower }}">
+                                    <div class="vertical-middle inline-block">{% trans 'Basketball' %}</div>
+                                </div>
+                            </div>
+                            <div class="inline-block registration-preferences-countires vertical-top">
+                                <div class="registration-preferences-sport bold">
+                                    {% trans 'In countries:' %}
+                                </div>
+                                <div class="inline-block">
+                                    <tags-input style="max-width:200px !important;"
+                                                ng-model="countries" ng-init="countries = {{ countries }}; countriesURL = '{% url 'hockeyapp:league-list-api' %}'"
+                                                display-property="title"
+                                                placeholder="{% trans 'start typing' %}"
+                                                add-on-comma="{false}" add-from-autocomplete-only="true">
+                                        <auto-complete load-on-focus="true" load-on-empty="true"
+                                                       min-length="1" source="loadCountries($query)">
+                                        </auto-complete>
+                                    </tags-input>
+                                </div>
+                            </div>
+                            <div class="inline-block m-l-50">
+                                <div class="registration-preferences-sport bold">
+                                    {% trans 'My favourite clubs:' %}
+                                </div>
+                                <div class="">
+                                    <div class="inline-block bold vertical-top">
+                                        {% trans 'Hockey' %}
+                                    </div>
+                                    <div class="inline-block m-l-20">
+                                        <tags-input style="max-width:450px !important;"
+                                                    ng-model="clubs" ng-init="clubs = {{ clubs }}; clubsURL = '{% url 'hockeyapp:club-titles-search-api' %}'"
+                                                    display-property="title"
+                                                    placeholder="{% trans 'start typing' %}"
+                                                    add-on-comma="{false}" add-from-autocomplete-only="true">
+                                            <auto-complete load-on-focus="true" load-on-empty="true"
+                                                           min-length="1" source="loadClubs($query)">
+                                            </auto-complete>
+                                        </tags-input>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <hr class="hr">
                         <div class="field">
                             <label>Изменить фотографию</label>
                         </div>
                         <div class="avatar-upload-block">
                             <img alt="avatar" class="avatar-image" id="id_avatar"
-                                 src="{{ avatar }}"
+                                 src="{{ user.avatar|default:'/static/images/avatar-sample.png' }}"
                                  {% verbatim %}
                                  ng-src="{{ user.avatar }}">
                                  {% endverbatim%}

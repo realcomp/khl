@@ -423,7 +423,7 @@ msgstr "В странах:"
 #: accounts/templates/registration/form/step3.html:42
 #: accounts/templates/registration/form/step3.html:56
 msgid "start typing"
-msgstr ""
+msgstr "начните ввод"
 
 #: accounts/templates/registration/form/step3.html:49
 msgid "My favourite clubs:"

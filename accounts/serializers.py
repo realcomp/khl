@@ -51,7 +51,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             return image
 
     date_joined = serializers.SerializerMethodField()
-    avatar = AvatarField(required=False)
+    avatar = AvatarField(required=False, allow_null=True)
 
     def get_date_joined(self, obj):
         return obj.date_joined and obj.date_joined.strftime('%d %B %Y')
@@ -63,8 +63,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta(object):
         fields = (
             'pk', 'username', 'email', 'fio', 'date_joined', 'avatar',
-            'name_visible', 'website', 'countries', 'clubs', 'email_validated')
-        read_only_fields = 'username', 'date_joined'
+            'name_visible', 'website', 'countries', 'clubs', 'email_validated',
+            'sport_hockey', 'sport_football', 'sport_basketball',
+            'email_notification')
+        read_only_fields = 'username', 'date_joined', 'email_validated'
         model = get_user_model()
 
 

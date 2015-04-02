@@ -39,9 +39,13 @@
                     <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
                 </div>-->
                 <div class="inline-block">
-                    <tags-input display-property="title" ng-model="countries" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:200px !important;">
-                        <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTagsCountries($query)"></auto-complete>
-                    </tags-input>
+                    <tags-input style="max-width:200px !important;"
+                                ng-model="countries" display-property="title"
+                                placeholder="{% trans 'start typing' %}"
+                                add-on-comma="{false}" add-from-autocomplete-only="true">
+                        <auto-complete load-on-focus="true" load-on-empty="true"
+                                       min-length="1" source="loadCountries($query)">
+                        </auto-complete>
                 </div>
             </div>
             <div class="inline-block m-l-50">
@@ -53,8 +57,13 @@
                         {% trans 'Hockey' %}
                     </div>
                     <div class="inline-block m-l-20">
-                        <tags-input display-property="title" ng-model="tags" placeholder="{% trans 'start typing' %}" add-on-comma="{false}" add-from-autocomplete-only="true" style="max-width:450px !important;">
-                            <auto-complete load-on-focus="true" load-on-empty="true" min-length="1" source="loadTags($query)"></auto-complete>
+                        <tags-input style="max-width:450px !important;"
+                                    ng-model="clubs" display-property="title"
+                                    placeholder="{% trans 'start typing' %}"
+                                    add-on-comma="{false}" add-from-autocomplete-only="true">
+                            <auto-complete load-on-focus="true" load-on-empty="true"
+                                           min-length="1" source="loadClubs($query)">
+                            </auto-complete>
                         </tags-input>
                     </div>
                 </div>
