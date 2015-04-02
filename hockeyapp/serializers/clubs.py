@@ -83,12 +83,17 @@ class ClubTeamSerializer(BaseClubTeamSerializer):
         return self._seasons_selected
 
     def _get_players(self, obj):
+        request = self.context.get('request')
         if self._players is not None:
             return self._players
-        players = map(obj.get_players, self._get_seasons(obj))
-        joined = set(players[1]) - set(players[0])  # joined club in current season
-        left = set(players[1]) - set(players[2])  # left club in next season
-        self._players = players[1]  # middle one is the current season
+        if request and request.GET.get('notplaying'):
+            self._players = obj.get_not_playing_players()
+            joined = left = frozenset()
+        else:
+            players = map(obj.get_players, self._get_seasons(obj))
+            joined = set(players[1]) - set(players[0])  # joined club in current season
+            left = set(players[1]) - set(players[2])  # left club in next season
+            self._players = players[1]  # middle one is the current season
         for player in self._players:
             player.is_joined = player in joined
             player.is_left = player in left

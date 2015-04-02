@@ -2495,6 +2495,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         url = $('#ClubTeamForm').attr('action'),
         popup = null;
         $scope.type = 'photos';
+        $scope.cache_players = null;
+        $scope.cache_clubs = null;
+        $scope.notplaying_players = null;
         $scope.setType = function(type){
             $scope.type = type;
             $scope.unMakeTransferArrows()
@@ -2760,7 +2763,15 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             });
         };
 
+        $scope.getFromCache = function() {
+            if ($scope.cache_players) {
+                $scope.players = $scope.cache_players;
+                $scope.clubs = $scope.cache_clubs;
+            }
+        };
+
         $scope.makeTransferArrows = function(){
+            $scope.getFromCache();
             createTransferArrow('#club_2', '#playerd_3', 1);
             createTransferArrow('#club_4', '#playerd_2', 2);
             $( ".player-item" ).each(function() {
@@ -2769,12 +2780,40 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             });
         };
         $scope.unMakeTransferArrows = function(){
+            $scope.getFromCache();
             $('canvas').remove();
             $( ".player-item" ).each(function() {
                 $( this ).removeClass("opacity-30");
             });
         };
         this.list(this.compare, false);
+
+        $scope.notPlayingNow = function(callback, callbackArg) {
+            $scope.unMakeTransferArrows();
+            $scope.players.loader = true;
+            if ($scope.notplaying_players) {
+                $scope.players = $scope.notplaying_players;
+            } else {
+                $http.get(url+'?notplaying=1').success(function(data) {
+                    $scope.cache_players = $scope.players;
+                    $scope.cache_clubs = $scope.clubs;
+                    $scope.players = data;
+                    $scope.players.data = data;
+                    $scope.players.table = {
+                        'goalkeeper': data.goalkeeper_players,
+                        'defender': data.defender_players,
+                        'forward': data.offender_players,
+                        'trainer': data.coaches
+                    };
+                    $scope.notplaying_players = $scope.players;
+                });
+            }
+            $scope.workWithData($scope.players);
+            $scope.players.loader = false;
+            if (typeof callback === 'function') {
+                callback(callbackArg);
+            }
+        };
 
         function canvas_arrow(context, fromx, fromy, tox, toy){
             var headlen = 10;   // length of head in pixels
@@ -2883,7 +2922,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         }
     }
 ]);
-
 angular.module('Sportomatics')
 .controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
     this.graph_type = 'linear';
