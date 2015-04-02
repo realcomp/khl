@@ -504,8 +504,11 @@ class RhockeyPlayerInfoParser(GrabParser):
             if fio:
                 plrs = model.objects.filter(fio=fio,
                                             birth_date__isnull=True)
-                if not plrs.exists():
-                    plrs = model.objects.filter(fio=fio)
+                if not plrs.exists() and data.get('name') and data.get('lastname'):
+                    lastname = data.pop('lastname', None)
+                    name = data.pop('name', None)
+                    plrs = model.objects.filter(ru_lastname=lastname,
+                                                ru_name=name)
                     data.pop('birth_date', None)
                 if plrs.exists():
                     plrs.update(**data)
@@ -523,11 +526,24 @@ class RhockeyPlayerInfoParser(GrabParser):
         if self.page_tree is not None:
             _res = {
                     'fio': self.get_fio(),
+                    'lastname': self.get_lastname(),
+                    'name': self.get_name(),
                     'birth_date': self.get_birth_date(),
                     'birth_place': self.get_birth_place(),
                     'first_school': self.get_first_school(),
             }
             return _res
+
+    def get_lastname(self):
+        b''' возьмем фамилию игрока '''
+        if self.get_fio():
+            return self.get_fio().split()[0]
+
+    def get_name(self):
+        b''' возьмем имя игрока '''
+        if self.get_fio():
+            fio = self.get_fio().split()
+            return len(fio) > 1 and fio[1]
 
     def get_fio(self):
         b''' возьмем ФИО игрока '''
