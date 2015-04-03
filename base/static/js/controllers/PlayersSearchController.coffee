@@ -1,7 +1,7 @@
 angular.module('Sportomatics').controller('PlayersSearchController', [
     '$http', '$scope', '$location', 'PlayersSearchService',
     ($http, $scope, $location, PlayersSearchService) ->
-        @getUnchecker = (isDefault, defaultValue) ->
+        $scope.getUnchecker = (isDefault, defaultValue) ->
             return () ->
                 if ((isDefault and $(this).attr('value') != defaultValue) or
                         (!isDefault and $(this).attr('value') == defaultValue))
@@ -39,7 +39,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             defaultValue = ''
             isDefault = $(e).attr('value') == defaultValue
             if ($(e).is(':checked'))
-                $('input[name="line"]').each(@getUnchecker(isDefault, defaultValue))
+                $('input[name="line"]').each($scope.getUnchecker(isDefault, defaultValue))
             return
 
         $scope.setCitizenship = (event) ->
@@ -57,7 +57,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.contractCheck = (e) ->
             isDefault = $(e).attr('value') == ''
             if ($(e).is(':checked'))
-                $('input[name="contract"]').each(@getUnchecker(isDefault, ''))
+                $('input[name="contract"]').each($scope.getUnchecker(isDefault, ''))
             return
 
         $scope.setPlayersFilter = (obj) ->

@@ -1,6 +1,6 @@
 angular.module('Sportomatics').controller('PlayersSearchController', [
   '$http', '$scope', '$location', 'PlayersSearchService', function($http, $scope, $location, PlayersSearchService) {
-    this.getUnchecker = function(isDefault, defaultValue) {
+    $scope.getUnchecker = function(isDefault, defaultValue) {
       return function() {
         if ((isDefault && $(this).attr('value') !== defaultValue) || (!isDefault && $(this).attr('value') === defaultValue)) {
           return $(this).attr('checked', false);
@@ -37,7 +37,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       defaultValue = '';
       isDefault = $(e).attr('value') === defaultValue;
       if ($(e).is(':checked')) {
-        $('input[name="line"]').each(this.getUnchecker(isDefault, defaultValue));
+        $('input[name="line"]').each($scope.getUnchecker(isDefault, defaultValue));
       }
     };
     $scope.setCitizenship = function(event) {
@@ -58,7 +58,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       var isDefault;
       isDefault = $(e).attr('value') === '';
       if ($(e).is(':checked')) {
-        $('input[name="contract"]').each(this.getUnchecker(isDefault, ''));
+        $('input[name="contract"]').each($scope.getUnchecker(isDefault, ''));
       }
     };
     $scope.setPlayersFilter = function(obj) {
