@@ -335,8 +335,10 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         }
 
         function createTransferArrow(from, to, id){
+
                 var $from = $(from);
                 var $to = $(to);
+                if($to.length === 0 || $from.length === 0) return;
                 // find offset positions for the word (t = this) and image (i)
                 var ofrom = {
                     x: $from.offset().left + $from.width() / 2,
