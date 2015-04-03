@@ -134,103 +134,100 @@ angular.module('Sportomatics')
     };
 
     this.search = function($scope) {
-        var f = function() {
-            var url = $('#PlayersSearchLink').attr('href'),
-            line = [], params = '', i;
+        var url = $('#PlayersSearchLink').attr('href'),
+        line = [], params = '', i;
 
-            if ($('#isCitizenshipRussia').is(':checked')) {
-                $scope.$location.search('citizenship1', $('#citizenshipRussia').val());
-            } else {
-                $scope.$location.search('citizenship1', null);
+        if ($('#isCitizenshipRussia').is(':checked')) {
+            $scope.$location.search('citizenship1', $('#citizenshipRussia').val());
+        } else {
+            $scope.$location.search('citizenship1', null);
+        }
+        if ($('#isCitizenshipOther').is(':checked')) {
+            $scope.$location.search('citizenship_other', 'true');
+            if ($scope.$location.search().citizenship2) {
+                $('#citizenshipOther').val($scope.$location.search().citizenship2);
             }
-            if ($('#isCitizenshipOther').is(':checked')) {
-                $scope.$location.search('citizenship_other', 'true');
-                if ($scope.$location.search().citizenship2) {
-                    $('#citizenshipOther').val($scope.$location.search().citizenship2);
-                }
-                if ($('#citizenshipOther').val()) {
-                    $scope.$location.search('citizenship2', $('#citizenshipOther').val());
-                }
-            } else {
-                $scope.$location.search('citizenship_other', null);
+            if ($('#citizenshipOther').val()) {
+                $scope.$location.search('citizenship2', $('#citizenshipOther').val());
             }
+        } else {
+            $scope.$location.search('citizenship_other', null);
+        }
 
-            $.each($('[name="line"]:checked'), function() {
-                var value = $(this).val();
-                if (value) {
-                    line.push(value);
-                }
-            });
-            $scope.$location.search('line', line);
+        $.each($('[name="line"]:checked'), function() {
+            var value = $(this).val();
+            if (value) {
+                line.push(value);
+            }
+        });
+        $scope.$location.search('line', line);
 
-            if (!$scope.leaguesLoaded) {
-                $scope.leaguesLoaded = true;
-                if ($scope.params.league) {
-                    if (Array.isArray($scope.params.league)) {
-                        $scope.leaguesSelected = $scope.params.league;
-                    } else {
-                        $scope.leaguesSelected = [$scope.params.league];
-                    }
-                }
-            }
-            $scope.$location.search('league', $scope.leaguesSelected);
-
-            $scope.params = $scope.$location.search();
-
-            params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
-            if ($scope.params.reversed) {
-                params += '&reversed=true';
-            }
-            if ($scope.params.line.length) {
-                $.each($scope.params.line, function() {
-                    params += '&line=' + this;
-                });
-            }
-            if ($scope.params.citizenship1) {
-                params += '&citizenship=' + $scope.params.citizenship1;
-            }
-            if ($scope.params.citizenship2) {
-                params += '&citizenship=' + $scope.params.citizenship2;
-            }
-            if ($scope.params.citizenship_other === 'true') {
-                params += '&citizenship_other=true';
-            }
-            if ($scope.params.rated_by) {
-                params += '&rated_by=' + $scope.params.rated_by;
-            }
-            if ($scope.params.is_playing !== 'false') {
-                params += '&is_playing=true';
-            }
-            if ($scope.params.alphabet) {
-                params += '&%s_lastname__startswith=' + $scope.params.alphabet;
-            }
-            if ($scope.params.club) {
-                params += '&club=' + $scope.params.club;
-            }
-            if ($scope.params.player) {
-                params += '&player=' + $scope.params.player;
-            }
-            if ($scope.params.season) {
-                params += '&season=' + $scope.params.season;
-            }
+        if (!$scope.leaguesLoaded) {
+            $scope.leaguesLoaded = true;
             if ($scope.params.league) {
-                $.each($scope.params.league, function() {
-                    params += '&league=' + this;
-                });
+                if (Array.isArray($scope.params.league)) {
+                    $scope.leaguesSelected = $scope.params.league;
+                } else {
+                    $scope.leaguesSelected = [$scope.params.league];
+                }
             }
-            $scope.data = {};
-            $scope.loader = true;
-            $http.get(url + '?' + params).success(function(data) {
-                $scope.data = data;
-                $scope.loader = false;
-            });
-        };
+        }
+        $scope.$location.search('league', $scope.leaguesSelected);
 
-        // if (!$scope.countries) {
-        //      this.loadCountries($scope, $scope.$location, f);
-        // } else {
-            f($scope);
-        // }
+        $scope.$location.search('number', $scope.number);
+
+        $scope.params = $scope.$location.search();
+
+        params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
+        if ($scope.params.reversed) {
+            params += '&reversed=true';
+        }
+        if ($scope.params.line.length) {
+            $.each($scope.params.line, function() {
+                params += '&line=' + this;
+            });
+        }
+        if ($scope.params.citizenship1) {
+            params += '&citizenship=' + $scope.params.citizenship1;
+        }
+        if ($scope.params.citizenship2) {
+            params += '&citizenship=' + $scope.params.citizenship2;
+        }
+        if ($scope.params.citizenship_other === 'true') {
+            params += '&citizenship_other=true';
+        }
+        if ($scope.params.rated_by) {
+            params += '&rated_by=' + $scope.params.rated_by;
+        }
+        if ($scope.params.is_playing !== 'false') {
+            params += '&is_playing=true';
+        }
+        if ($scope.params.alphabet) {
+            params += '&%s_lastname__startswith=' + $scope.params.alphabet;
+        }
+        if ($scope.params.club) {
+            params += '&club=' + $scope.params.club;
+        }
+        if ($scope.params.player) {
+            params += '&player=' + $scope.params.player;
+        }
+        if ($scope.params.season) {
+            params += '&season=' + $scope.params.season;
+        }
+        if ($scope.params.league) {
+            $.each($scope.params.league, function() {
+                params += '&league=' + this;
+            });
+        }
+        if ($scope.params.number) {
+            params += '&number=' + $scope.params.number;
+        }
+        $scope.data = {};
+        $scope.loader = true;
+        $http.get(url + '?' + params).success(function(data) {
+            $scope.data = data;
+            $scope.loader = false;
+        });
     };
 
     this.next = function($scope, isAll) {

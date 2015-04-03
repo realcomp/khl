@@ -229,6 +229,32 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="three wide column">
+                            <div class="column-title">Номер игрока:</div>
+                            <div class="ui form">
+                                <div class="inline">
+                                    <input type="text" ng-model="number">
+                                </div>
+                                <div class="inline">
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season" value=""
+                                               ng-model="season"
+                                               onchange="angular.element(this).scope().setSeason(this)">
+                                        <div class="default text">Выберите сезон</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            {% for season in seasons %}
+                                            <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="column">
                             <div class="align-center">

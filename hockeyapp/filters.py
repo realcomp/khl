@@ -71,11 +71,15 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _season = request.GET.get('season')
         _club = request.GET.get('club')
         _is_playing = request.GET.get('is_playing')
+        _number = request.GET.get('number')
 
         if _season:
             q &= Q(clubplayer__season=_season)
         elif _is_playing:
             q &= Q(clubplayer__season=Season.objects.latest('start_date'))
+
+        if _number:
+            q &= Q(clubplayer__number=_number)
 
         _leagues = request.GET.getlist('league')
         if _leagues:

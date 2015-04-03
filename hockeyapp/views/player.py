@@ -6,8 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from addresses.models import Country
 
-from ..models import Club, Coach, Player
-from ..serializers import CountrySerializer, PlayerCardDetailSerializer
+from ..models import Club, Coach, Player, Season
+from ..serializers import (
+    CountrySerializer, PlayerCardDetailSerializer, SeasonSerializer)
 from ..serializers.players import (
     PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
 
@@ -28,6 +29,9 @@ class PlayersSearch(TemplateView):
             Country.objects.filter(ru_title=b'Россия').last(),
             context=context).data
         context['alphabet'] = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        seasons = Season.objects.order_by('-start_date')
+        context['seasons'] = SeasonSerializer(
+            seasons, context=context, many=True).data
         return context
 
 
