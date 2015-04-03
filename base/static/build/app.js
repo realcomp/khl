@@ -3209,7 +3209,7 @@ angular.module('Sportomatics')
             $scope.removeGraph = function(player){
                 if(contains($scope.playersToCompare, 'id', (parseInt(player.id)).toString())){
                     $scope.playersToCompare = _.without($scope.playersToCompare, _.findWhere($scope.playersToCompare, {id: (parseInt(player.id)).toString()}));
-                    $scope.createMultiplePlayersChart($scope.activeSeason > -1);
+                    $scope.makeChart($scope.activeSeason > -1);
                 }
             };
 
@@ -3238,7 +3238,7 @@ angular.module('Sportomatics')
                         $scope.playerToCompare.club = data.club;
                         /*if(contains($scope.playersToCompare, 'id', (parseInt(id)).toString())){
                          $scope.playersToCompare = _.without($scope.playersToCompare, _.findWhere($scope.playersToCompare, {id: (parseInt(id)).toString()}));
-                         return $scope.createMultiplePlayersChart($scope.activeSeason > -1);
+                         return $scope.makeChart($scope.activeSeason > -1);
                          }*/
                         var playerObject = {
                             title: $scope.playerToCompare.name || id,
@@ -3260,13 +3260,13 @@ angular.module('Sportomatics')
                                         self.loader = false;
                                     }).then(function(){
                                         $scope.playersToCompare.push(playerObject);
-                                        $scope.createMultiplePlayersChart($scope.activeSeason > -1);
+                                        $scope.makeChart($scope.activeSeason > -1);
                                     })
                             })
                     })
             };
 
-            $scope.createMultiplePlayersChart = function(switched){ // make column chart with multiple players
+            $scope.makeChart = function(switched){ // make column chart with multiple players
                 var initialData = (self.groupBy === 'month') ?  $scope.dataByMonth : $scope.dataBySeason; // initial player data
                 var initialGraph = makeGraph('', $scope.currentPlayerObject.title, $scope.currentPlayerObject.color, self.field, null, $scope.localeObject); // initial player graph
                 var initialChartData = generateChartData(initialData.results, self.field, self.groupBy); // chart data generated with initial player
@@ -3356,7 +3356,7 @@ angular.module('Sportomatics')
                         });
                     }
 
-                    if ($scope.playersToCompare.length > 0) return $scope.createMultiplePlayersChart(switched); //player comparison
+                    if ($scope.playersToCompare.length > 0) return $scope.makeChart(switched); //player comparison
                     if ($scope.limited) { //not registered users
                         $scope.chart.chartCursor = null;
                         $scope.chart.chartScrollbar = null;
