@@ -346,7 +346,7 @@ KHL_PLAYERS_XPATH = '//table[@class="typical"]/tbody/tr/td/div/a/@href'
 
 # VHL CLUB INFO ################################################################
 VHL_CLUB_URL = VHL_SITE_URL+'/teams/'
-VHL_CLUB_LIST_XPATH = '//table[@class="one_club"]/tr/td/a/@href'
+VHL_CLUB_LIST_XPATH = '//table[@class="teams_list"]/tr/td/a/@href'
 VHL_CLUB_INFO_XPATH = VHL_MATCH_PROTOCOL_XPATH + '/div[@class="wrap_teamslist"]'
 VHL_CLUB_XPATH_DICT = {
     'logo_url': '/div[@class="team-element"]/img[@class="team_logo"]/@src',
