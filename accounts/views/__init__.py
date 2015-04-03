@@ -46,7 +46,7 @@ class EmailConfirmationView(RedirectView):
             user = serializer._get_user()
             template_name = 'accounts/email/email_confirmed.html'
             mail_kwargs = {
-                'subject': _('Sportomatics.ru E-Mail confirmation'),
+                'subject': _('Sportomatics: E-Mail confirmation'),
                 'message': 'HTML',
                 'from_email': 'no-reply@sportomatics.ru',
                 'recipient_list': [user.username],

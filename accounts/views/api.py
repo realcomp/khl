@@ -82,7 +82,7 @@ class EmailConfirmationView(APIView):
             'token': default_token_generator.make_token(request.user),
         }
         mail_kwargs = {
-            'subject': _('Sportomatics.ru E-Mail confirmation'),
+            'subject': _('Sportomatics: E-Mail confirmation'),
             'message': 'HTML',
             'from_email': 'no-reply@sportomatics.ru',
             'recipient_list': [request.user.username],
