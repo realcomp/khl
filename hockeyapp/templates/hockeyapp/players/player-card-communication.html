@@ -12,13 +12,6 @@
         <div class="twelve wide column">
             <div class="breadcrumbs">
             <div class="ui small breadcrumb">
-<<<<<<< HEAD
-                 <a class="section" href="/">ХОККЕЙ</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
-                <i class="right chevron icon divider"></i>
-                <a class="active section">Общение</a>
-=======
                 <a class="section" href="/">{% trans 'Hockey' %}</a>
                 <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
@@ -30,7 +23,6 @@
                 <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
                 <i class="right chevron icon divider"></i>
                 <a class="active section">{% trans 'Communication' %}</a>
->>>>>>> 25aa4de3fa1c3cd01915c370d16bd4237f3390aa
             </div>
             </div>
         </div>
