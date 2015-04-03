@@ -1286,7 +1286,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   self = this;
   startCoordinate1 = 55.749792;
   startCoordinate2 = 37.632495;
-  self.mapsDivName = 'clubs-map';
+  this.mapsDivName = 'clubs-map';
   this.clubs_map = document.getElementById(self.mapsDivName);
   this.rendered = false;
   this.map = null;
@@ -1335,7 +1335,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         return;
       }
       coords = club.arena.coords;
-      if (coords != null) {
+      if (coords !== null) {
         coordinate1 = coords.split(',')[0];
         coordinate2 = coords.split(',')[1];
       }
@@ -1362,10 +1362,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
       var club, clubDates, clubDatesString, clubIcon, coordinate1, coordinate2, coords, popup;
       if (game.is_guest) {
         club = game.home_team;
-        if (!club.arena) {
-          return;
-        }
-        if (_.findWhere(clubs, {
+        if (!club.arena || _.findWhere(clubs, {
           'title': club.title
         })) {
           return;
@@ -1378,13 +1375,13 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
           shadowSize: [34, 48]
         });
         coords = club.arena.coords;
-        if (coords != null) {
+        if (coords !== null) {
           coordinate1 = coords.split(',')[0];
           coordinate2 = coords.split(',')[1];
         }
         clubDates = [];
         _.each(games, function(game) {
-          if (game.home_team.title == club.title) {
+          if (game.home_team.title === club.title) {
             clubDates.push(new Date(game.date).yyyymmddFormatted());
           }
         });
@@ -1434,7 +1431,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
     return this.rendered;
   };
   this.setRendered = function(value) {
-    if (value != true && value != false) {
+    if (value !== true && value !== false) {
       return;
     }
     this.rendered = value;
@@ -1455,7 +1452,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         'address': address
       }, function(results, status) {
         var coordinate1, coordinate2;
-        if (status == google.maps.GeocoderStatus.OK) {
+        if (status === google.maps.GeocoderStatus.OK) {
           coordinate1 = results[0].geometry.location.B;
           coordinate2 = results[0].geometry.location.k;
           deferred.resolve([coordinate2, coordinate1]);
@@ -2604,37 +2601,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             if(MapService.isRendered()) MapService.remove();
             MapService.createClubsMap(data.all_players, 'players');
 
-            var goalkeeper_players = data.goalkeeper_players;
-            var defender_players = data.defender_players;
-            var offender_players = data.offender_players;
+            var all_players = data.all_players;
             var players = [];
-            _.each(offender_players, function(player){
-                players.push(player.pk);
-                if(player.citizenship){
-                    if(!player.citizenship.code){
-                        _.each($scope.countryCodes, function(country){
-                            if(player.citizenship.title)
-                            if(country.name === player.citizenship.title){
-                                player.citizenship.code = country.code;
-                            }
-                        })
-                    }
-                }
-            });
-            _.each(defender_players, function(player){
-                players.push(player.pk);
-                if(player.citizenship){
-                    if(!player.citizenship.code){
-                        _.each($scope.countryCodes, function(country){
-                            if(player.citizenship.title)
-                            if(country.name === player.citizenship.title){
-                                player.citizenship.code = country.code;
-                            }
-                        })
-                    }
-                }
-            });
-            _.each(goalkeeper_players, function(player){
+            _.each(all_players, function(player){
                 players.push(player.pk);
                 if(player.citizenship){
                     if(!player.citizenship.code){

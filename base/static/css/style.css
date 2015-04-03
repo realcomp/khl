@@ -5799,10 +5799,10 @@ hr.style-one {
     pointer-events: none !important;
 }
 #map {
-    height: 300px;
+    height: 400px;
 }
 #clubs-map {
-    height: 300px;
+    height: 400px;
 }
 .player-partners-item i.flag:not(.icon):before{
     height: 14px;

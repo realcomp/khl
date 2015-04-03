@@ -61,37 +61,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             if(MapService.isRendered()) MapService.remove();
             MapService.createClubsMap(data.all_players, 'players');
 
-            var goalkeeper_players = data.goalkeeper_players;
-            var defender_players = data.defender_players;
-            var offender_players = data.offender_players;
+            var all_players = data.all_players;
             var players = [];
-            _.each(offender_players, function(player){
-                players.push(player.pk);
-                if(player.citizenship){
-                    if(!player.citizenship.code){
-                        _.each($scope.countryCodes, function(country){
-                            if(player.citizenship.title)
-                            if(country.name === player.citizenship.title){
-                                player.citizenship.code = country.code;
-                            }
-                        })
-                    }
-                }
-            });
-            _.each(defender_players, function(player){
-                players.push(player.pk);
-                if(player.citizenship){
-                    if(!player.citizenship.code){
-                        _.each($scope.countryCodes, function(country){
-                            if(player.citizenship.title)
-                            if(country.name === player.citizenship.title){
-                                player.citizenship.code = country.code;
-                            }
-                        })
-                    }
-                }
-            });
-            _.each(goalkeeper_players, function(player){
+            _.each(all_players, function(player){
                 players.push(player.pk);
                 if(player.citizenship){
                     if(!player.citizenship.code){
