@@ -67,7 +67,7 @@ class SeasonQuerySet(models.QuerySet):
         return self.filter(start_date__lte=datetime.datetime.now().date())
 
     def get_current_season(self):
-        return self.active().filter(end_date__gte=datetime.datetime.now().date())
+        return self.active().filter(end_date__gte=datetime.datetime.now().date()).last()
 
     def get_season_by_date(self, date):
         return self.filter(start_date__lte=date, end_date__gte=date).last()

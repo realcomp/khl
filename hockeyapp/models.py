@@ -428,7 +428,7 @@ class Club(AdminLinkMixin, TitleBaseModel):
         return title
 
     def get_players(self, season):
-        if season.is_last:
+        if season.is_current:
             return self.players.all()
         else:
             clubplayers = self.clubplayer_set.by_season(season)
@@ -437,10 +437,12 @@ class Club(AdminLinkMixin, TitleBaseModel):
 
     def get_not_playing_players(self):
         current_season = Season.objects.get_current_season()
-        ids =  Player.objects.exclude(clubplayer__season=current_season
-                            ).filter(clubplayer__club=self
-                            ).values_list('pk', flat=True)
-        return Player.objects.filter(pk__in=ids)
+        if current_season:
+            ids =  Player.objects.exclude(clubplayer__season=current_season
+                                ).filter(clubplayer__club=self
+                                ).values_list('pk', flat=True)
+            return Player.objects.filter(pk__in=ids)
+        return Player.objects.none()
 
     @property
     def all_players(self):
