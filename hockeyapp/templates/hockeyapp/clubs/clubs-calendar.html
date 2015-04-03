@@ -131,6 +131,23 @@
 
                 <hr class="hr">
 
+                <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="!loaded">
+                    <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                </div>
+                <div class="row" ng-show="loaded">
+                    <div class="column">
+                        <div class="ui tabular menu">
+                            <span class="heading">Карта выездных матчей</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="clubs-map-container">
+                    <div id="clubs-map">
+                    </div>
+                </div>
+
+                <hr class="hr">
+
                 <div class="team-track">
                     <div class="heading">МАРШРУТ ВЫЕЗДА 25,26, 27 СЕНТЯБРЯ</div>
                     <div class="team-track-map">

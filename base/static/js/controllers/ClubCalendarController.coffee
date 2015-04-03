@@ -1,6 +1,6 @@
 angular.module('Sportomatics').controller('ClubCalendarController', [
-    '$scope', '$http', '$location', '$parse',
-    ($scope, $http, $location, $parse) ->
+    '$scope', '$http', '$location', '$parse', 'MapService',
+    ($scope, $http, $location, $parse, MapService) ->
         $scope.MONTHS = [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
             'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
@@ -135,6 +135,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 
             $http.get($scope.url + '?' + params
             ).success((data) ->
+                console.log data
+                if MapService.isRendered()
+                    MapService.remove()
+                MapService.createClubsMap(data.results, 'trips')
                 $scope.data = data
                 $scope.schedules = $scope.parseSchedules(data)
                 date = $scope.getMinEndDate(data)

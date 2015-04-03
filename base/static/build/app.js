@@ -101,6 +101,15 @@ Date.prototype.yyyymmdd = function(delimiter){
     var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
     var dd  = this.getDate().toString();
     return yyyy + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + (dd[1]?dd:"0"+dd[0]);
+};
+Date.prototype.yyyymmddFormatted = function(){
+    var monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+        'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return dd + ' ' + monthNames[mm] + ' ' + yyyy;
 }
 Date.prototype.getWeekNumber = function(){
     var d = new Date(+this);
@@ -1297,7 +1306,17 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout){
             self.map.addLayer(ggl);
             self.map.addControl(new L.Control.Layers( {'Google':ggl, 'OpenStreetMap': osm}, {}));
             self.markers = new L.MarkerClusterGroup({ showCoverageOnHover: false });
-            dataLabel === 'clubs' ? self.markersFunctionClubs(data) : self.markersFunctionPlayers(data);
+            switch (dataLabel){
+                case 'clubs':
+                    self.markersFunctionClubs(data);
+                    break;
+                case 'players':
+                    self.markersFunctionPlayers(data);
+                    break;
+                case 'trips':
+                    self.markersFunctionClubGames(data);
+                    break;
+            }
             self.map.addLayer(self.markers);
             this.rendered = true;
         };
@@ -1329,9 +1348,45 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout){
             });
         };
 
-        this.markersFunctionClubGames = function(players){
-            _.each(players, function(player){
-                console.log(player.birth_place);
+        this.markersFunctionClubGames = function(games){
+            var countOfGeocoded = 0;
+            var clubs = [];
+            _.each(games, function(game, index){
+                if(game.is_guest){
+                    var club = game.home_team;
+                    if(!club.arena) return;
+                    if(_.findWhere(clubs, {'title': club.title})) return; // prevent duplicate clubs
+
+                    clubs.push(club);
+                    var clubIcon = L.icon({
+                        iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo : '/static/abc.jpg',
+                        iconSize: [20, 20],
+                        shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
+                        shadowSize: [34, 48]
+                    });
+                    var coords = club.arena.coords;
+                    if(coords != null){
+                        var coordinate1 = coords.split(',')[0];
+                        var coordinate2 = coords.split(',')[1];
+                    }
+                    var clubDates = [];
+                    _.each(games, function(game){
+                        if(game.home_team.title === club.title) clubDates.push(new Date(game.date).yyyymmddFormatted());
+                    });
+                    var clubDatesString = clubDates.join(" <br> ");
+                    var popup = L.popup({
+                        className: 'map-popup'
+                    }).setContent('<div class="bold">' + club.title + '</div><br> Матчи:<br>'+ clubDatesString);
+                    if(!club.arena.coords){
+                        self.googleGeocode(club.arena.contacts, countOfGeocoded).then(function(result){
+                            self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {icon: clubIcon}).bindPopup(popup));
+                        });
+                        countOfGeocoded++;
+                    }
+                    if(coordinate1 && coordinate2){
+                        self.markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {icon: clubIcon}).bindPopup(popup));
+                    }
+                }
             });
         };
 
@@ -1384,7 +1439,9 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout){
             }, 400 * delay);
 
             return deferred.promise;
-        }
+        };
+
+
 });
 angular.module('Sportomatics')
 .service('PlayersSearchService', function($http) {
@@ -1902,7 +1959,7 @@ angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
 });
 
 angular.module('Sportomatics').controller('ClubCalendarController', [
-  '$scope', '$http', '$location', '$parse', function($scope, $http, $location, $parse) {
+  '$scope', '$http', '$location', '$parse', 'MapService', function($scope, $http, $location, $parse, MapService) {
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.data = {};
     $scope.params = $location.search();
@@ -2042,6 +2099,11 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       $scope.loaded = false;
       $http.get($scope.url + '?' + params).success(function(data) {
         var date, deltaM;
+        console.log(data);
+        if (MapService.isRendered()) {
+          MapService.remove();
+        }
+        MapService.createClubsMap(data.results, 'trips');
         $scope.data = data;
         $scope.schedules = $scope.parseSchedules(data);
         date = $scope.getMinEndDate(data);

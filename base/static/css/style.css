@@ -5828,3 +5828,9 @@ hr.style-one {
     text-align: left;
     float: left;
 }
+.map-popup {
+    width: 200px;
+}
+.map-popup .leaflet-poup-content{
+    text-align: center;
+}

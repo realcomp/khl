@@ -14,7 +14,8 @@ from . import (
     BaseClubSerializer, ClubLightListSerializer, BaseClubPlayerSerializer,
     CoachSerializer,
     LeagueSerializer,
-    CountrySerializer)
+    CountrySerializer,
+    ClubListSerializer)
 from ..models import Club, ClubPlayer, Coach, Player, League, Schedule
 
 
@@ -289,8 +290,8 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
 
 
 class ClubCalendarSerializer(serializers.ModelSerializer):
-    home_team = BaseClubSerializer()
-    guest_team = BaseClubSerializer()
+    home_team = ClubListSerializer()
+    guest_team = ClubListSerializer()#BaseClubSerializer()
     is_home = serializers.SerializerMethodField()
     is_guest = serializers.SerializerMethodField()
 
