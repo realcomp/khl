@@ -10,6 +10,7 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
         this.playerId = document.getElementById('player-id').value;
         this.playerName = document.getElementById('player-name').value;
         this.apiPlayersUrl = document.getElementById('api-players-url').value;
+        this.mainPlayerColor = document.getElementById('player-color').value || "#408e3a";
         this.selectedRadarFields = [{ // default radar fields we use
             field: "goals"
         }, {
@@ -20,15 +21,15 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
             field: "plus_minus"
         }];
 
-        this.availableFields = _.toArray(LocaleFactory.locale_ru.fieldNames); // generate available fields
-        _.each(this.availableFields, function(object){
-            object.ticked = !!(object.field === 'points' || object.field === 'goals' || object.field === 'assists' || object.field === 'plus_minus');
-        });
-
         // Methods:
 
         this.setApiPlayersUrl = function(value){
             this.apiPlayersUrl = value;
+        };
+
+        this.setMainPlayerColor = function(color){
+            if(color != null)
+            this.mainPlayerColor = color;
         };
 
         this.setSelectedRadarFields = function(selectedRadarFields){
@@ -125,7 +126,7 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
                                 var playerDataInSeason = _.filter(playerSeasonsDataResults, function (e) {
                                     return e.season.end_date.indexOf(season) > -1;
                                 })[0];
-                                self.seasons = self.seasons.concat(playerSeasons).unique().sort();
+                                self.seasons = _.uniq(self.seasons.concat(playerSeasons)).sort();
                                 _.each(self.playersRadarChartData, function (radarChartDataCategory, index) {
                                     if (playerDataInSeason && playerDataInSeason['count']) {
                                         radarChartDataCategory['value' + player] = playerDataInSeason[radarChartDataCategory.field] / playerDataInSeason['count'];
@@ -149,6 +150,9 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
                                             if(a.category === 'shots' || a.category === 'shots__avg') value *= 10;
                                             return title + ', ' + self.localeObject.fieldNames[a.category].fullName + ': ' + value.toFixed(3);
                                         };
+                                        if(playerInfo.pk === parseInt(self.playerId)){
+                                            graph.lineColor = self.mainPlayerColor;
+                                        }
                                         self.playersInRadarChart.push({
                                             player: player,
                                             playerData: playerDataInSeason
@@ -157,6 +161,7 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
                                     }).then(function () {
                                         ChartFactory.generateRadarChart(self.playersRadarChartData, self.playersRadarChartGraphs).then(function (chart) {
                                             self.chartRadar = chart;
+                                            self.chartRadar.write('chartdiv2');
                                             deferred.resolve(true);
                                         })
                                     });
@@ -190,6 +195,7 @@ angular.module('Sportomatics').factory('RadarChartFactory', function(ChartFactor
                     graph.bullet = "round";
                     graph.balloonText = this.playerName + " [[value]]";
                     graph.title = this.playerName;
+                    graph.lineColor = this.mainPlayerColor;
                     graph.balloonFunction = function(a,b){
                         var value = a.values.value;
                         var title = b.title;

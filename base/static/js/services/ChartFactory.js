@@ -6,7 +6,7 @@ angular.module('Sportomatics')
 .factory('ChartFactory', function($q, $rootScope, AmChartsFactory, zoomData, LocaleFactory){
 
     return {
-        generateSerialChart: function(field, chartData, localeObject, graphs){
+        generateSerialChart: function(field, chartData, localeObject, graphs, player){
             // Method accepts
             var deferred = $q.defer();
             var chart;
@@ -45,7 +45,7 @@ angular.module('Sportomatics')
                 categoryAxis.minPeriod = (chartData.groupBy === 'month') ? 'MM' : 'YYYY';
                 //categoryAxis.minorGridEnabled = true;
                 //categoryAxis.autoGridCount =  true;
-                //categoryAxis.grudCount = 12;
+                //categoryAxis.gridCount = 12;
                 categoryAxis.equalSpacing = true;
                 categoryAxis.minHorizontalGap = 40;
                 categoryAxis.gridAlpha = 0; //categoryAxis.gridAlpha = 0.1;
@@ -135,7 +135,6 @@ angular.module('Sportomatics')
                         balloons+= createBalloon(graph.valueField, graph.title);
                         graph.valueAxis = valueAxis1;
                         graph.balloonText = (index < graphs.length -1 ) ? '' : balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
-                       //chart.addGraph(graph);
                     });
                     _.each(graphs, function(graph, index){
                         graph.balloonText = balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
@@ -153,8 +152,8 @@ angular.module('Sportomatics')
                     graph1.bullet = "none";
                     graph1.hideBulletsCount = 30;
                     graph1.bulletBorderThickness = 1;
-                    graph1.lineColor = "#408e3a";
-                    graph1.fillColors = "#408e3a";
+                    graph1.lineColor = player.color;
+                    graph1.fillColors = player.color;
                     graph1.fillAlphas = 1;
                     graph1.lineThickness = 0;
                     graph1.lineColorField = 'lineColor';
@@ -431,7 +430,6 @@ angular.module('Sportomatics')
                 deferred.resolve(chart);
             });
             return deferred.promise;
-
         }
     }
 });

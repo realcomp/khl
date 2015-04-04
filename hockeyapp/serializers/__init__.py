@@ -129,7 +129,7 @@ class ClubListSerializer(ClubLightListSerializer):
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
-            'coach', 'site', 'email', 'phone', 'league')
+            'coach', 'site', 'email', 'phone', 'league', 'main_color')
         model = Club
 
 

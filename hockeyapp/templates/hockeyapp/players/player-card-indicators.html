@@ -125,11 +125,6 @@
                                            ng-click="setDataType('graph-radar')">Перейти к круговой диаграмме</a>
                                     </li>
                                 </ul>
-                                <!--<select ng-model="PlayerCardIndicatorsCtrl.group_by"
-                                        ng-change="PlayerCardIndicatorsCtrl.list()">
-                                    <option value="month">{% trans 'by month' %}</option>
-                                    <option value="season">{% trans 'by season' %}</option>
-                                </select>-->
                             </div>
                             <div class="graph-controls-block" ng-show="dataType === 'graph-radar'">
                                 <ul class="graph-controls-list">
@@ -161,16 +156,11 @@
 
                             {% verbatim %}
                             <div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
-                                <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
-                                <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
-                                <!--<a class="ui green button chart-button" ng-click="addGraph('/static/json/gorohov', 1    )">Сравнить с игроком 2186</a>
-                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/soin', 2)">Сравнить с игроком 401</a>-->
                                 <div class="m-t-20">
                                     <input class="input-new" type="text" ng-model="playerToCompare.id">
                                     <a class="ui green button chart-button" ng-click="addGraph(playerToCompare.id)">Сравнить с игроком {{playerToCompare.id}} {{playerToCompare.name}}</a>
                                     <a></a>
                                 </div>
-                                <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
                             </div>
                             <div  ng-show="playersStats.length && dataType === 'graph-serial' && !limited">
                                 <span class="season-buttons-label"> Игроки для сравнения:</span>
@@ -184,9 +174,6 @@
                                             <div class="player-comparison-label inline-block">
                                                 {{player.title}}
                                             </div>
-                                            <!--<div class="inline-block pointer" ng-click="disableGraph(player)">
-                                                <i class="fa fa-minus-square-o"></i> выключить
-                                            </div>-->
                                             <div class="inline-block pointer" ng-click="removeGraph(player)">
                                                 <i class="fa fa-minus-square-o"></i> удалить
                                             </div>

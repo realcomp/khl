@@ -14,6 +14,7 @@
             this.playerUrl = '';
             this.playerId = document.getElementById('player-id').value;
             this.playerName = document.getElementById('player-name').value;
+            this.playerColor = document.getElementById('player-color').value;
             $scope.apiPlayersUrl = document.getElementById('api-players-url').value;
             $scope.limited = false; // user is not limited by default
             $scope.activeSeason = -1; // all seasons selected by default
@@ -25,7 +26,7 @@
             $scope.currentPlayerObject = { // object of current player
                 id: self.playerId,
                 title: self.playerName,
-                color: "#408e3a"
+                color: self.playerColor ? self.playerColor : "#408e3a"
             };
             $scope.dataType = 'graph-serial'; // we'll be on serial chart tab by default
 
@@ -194,12 +195,12 @@
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
                 $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
-                ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject).then(function(chart){
+                ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject, null, $scope.currentPlayerObject).then(function(chart){
                     $scope.chart = chart;
 
                     if(self.coach){
                         _.each($scope.chart.dataProvider, function(data){
-                            if($scope.activeSeason !== -1) data.lineColor = "#408e3a";
+                            if($scope.activeSeason !== -1) data.lineColor = self.playerColor ? self.playerColor : "#408e3a";
                             else
                             _.each($scope.coachData.results, function(coachData){
                                 if(new Date(data.date).getFullYear() === new Date(coachData.end_date).getFullYear()){
@@ -210,7 +211,7 @@
                     }
                     if(self.club){
                         _.each($scope.chart.dataProvider, function(data){
-                            if($scope.activeSeason !== -1) data.lineColor = "#408e3a";
+                            if($scope.activeSeason !== -1) data.lineColor = self.playerColor ? self.playerColor : "#408e3a";
                             else
                             _.each($scope.clubData.results, function(clubData){
                                 if(new Date(data.date).getFullYear() === new Date(clubData.end_date).getFullYear()){
@@ -230,10 +231,9 @@
                             $scope.chart.graphs[i].visibleInLegend = false;
                         }
                         delete $scope.chart.exportConfig
-
                     }
                     $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));})).toString();
-                    $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); })
+                    $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
                     $scope.chart.write("chartdiv");
                     if(switched) $scope.chart.zoomToDates(zoomStart, zoomEnd);
                     //if(self.compare_to)  $scope.addGraph(self.compare_to);
@@ -283,7 +283,7 @@
                         })
                 }
                 return deferred.promise;
-            }
+            };
 
             $scope.getCoachData = function(){
                 if(self.coach == null) return;
@@ -309,15 +309,10 @@
                     })
             };
 
-            $scope.selectedRadarFields = [{ // default radar fields we use
-                field: "goals"
-            }, {
-                field: "points"
-            }, {
-                field: "assists"
-            }, {
-                field: "plus_minus"
-            }];
+            $scope.availableFields = _.toArray(LocaleFactory.locale_ru.fieldNames); // generate available fields
+            _.each($scope.availableFields, function(object){
+                object.ticked = !!(object.field === 'points' || object.field === 'goals' || object.field === 'assists' || object.field === 'plus_minus');
+            });
 
             $scope.$watch('selectedRadarFields', function(newval){
                 if(newval && $scope.lastSeason){
@@ -326,6 +321,7 @@
             }, true);
 
             $scope.createRadar = function(players, season, sum, selectedRadarFields){ // function to create radar chart for one or multiple players
+                console.log("players", players);
                 $scope.RadarChart = new RadarChartFactory.PlayerRadarChart();
                 $scope.RadarChart.setSelectedRadarFields(selectedRadarFields);
                 $scope.RadarChart.create(players, $scope.dataBySeason, season, sum).then(function(){
