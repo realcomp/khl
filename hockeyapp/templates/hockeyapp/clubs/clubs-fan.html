@@ -39,7 +39,7 @@
 
         {% include "hockeyapp/clubs/team-info.html" %}
 
-        <div class="page-content page-container">
+        <div class="page-content page-container" ng-controller="ClubFanController">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-fanzone" %}
             <div class="page-inner-container">
                 <div class="ui grid">
@@ -50,7 +50,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+
+
+                    <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="!loaded">
+                        <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                    </div>
+                    <div class="row" ng-show="loaded">
+                        <div class="column">
+                            <div class="ui tabular menu">
+                                <span class="heading">Карта болельщиков</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="clubs-map-container">
+                        <div id="clubs-map">
+                        </div>
+                    </div>
+
+                    <hr class="hr">
+
+                    <!--<div class="row">
                         <div class="column">
                             <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d17049530.119718827!2d68.2935659097025!3d58.55779998400435!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sua!4v1419190365425" width="932" height="586" frameborder="0" style="border:0"></iframe>
                             <hr class="hr">
@@ -68,7 +87,7 @@
                             </ul>
                             <a href="#" class="add-fan-link-btn">+ добавить еще одну ссылку</a>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
                 
             </div>

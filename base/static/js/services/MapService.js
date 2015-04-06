@@ -1,3 +1,5 @@
+var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
 angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   var self, startCoordinate1, startCoordinate2;
   self = this;
@@ -33,6 +35,9 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         break;
       case 'trips':
         self.markersFunctionClubGames(data);
+        break;
+      case 'fans':
+        self.markersFunctionFans(data);
     }
     self.map.addLayer(self.markers);
     this.rendered = true;
@@ -142,6 +147,85 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         }).bindPopup(player.fio + '<br> Место рождения: ' + player.birth_place));
       });
       countOfGeocoded++;
+    });
+  };
+  this.markersFunctionFans = function(fans) {
+    var countOfGeocoded, locations;
+    fans = [
+      {
+        location: 'Москва'
+      }, {
+        location: 'Санкт-Петербург'
+      }, {
+        location: 'Санкт-Петербург'
+      }
+    ];
+    countOfGeocoded = 0;
+    locations = [];
+    self.markers = new L.MarkerClusterGroup({
+      showCoverageOnHover: false,
+      iconCreateFunction: function(cluster) {
+        var c, markers, sum;
+        sum = 0;
+        c = ' marker-cluster-';
+        markers = cluster.getAllChildMarkers();
+        _.each(markers, function(marker) {
+          if (marker.options.title.length !== 0) {
+            sum += Number(marker.options.title);
+          }
+          c = ' marker-cluster-';
+          if ((-1 < sum && sum < 10)) {
+            c += 'small';
+          } else {
+            c += 'large';
+          }
+        });
+        return new L.DivIcon({
+          html: '<div><span>' + sum + '</span></div>',
+          className: 'marker-cluster' + c,
+          iconSize: new L.Point(40, 40)
+        });
+      }
+    });
+    _.each(fans, function(fan, index) {
+      var ref;
+      if ((ref = fan.location, indexOf.call(locations.map(function(l) {
+        return l.name;
+      }), ref) < 0)) {
+        locations.push({
+          name: fan.location,
+          count: 1
+        });
+      } else {
+        locations.map(function(location) {
+          if (location.name === fan.location) {
+            location.count = location.count + 1;
+          }
+          return location;
+        });
+      }
+    });
+    console.log(locations);
+    _.each(locations, function(location, index) {
+      self.googleGeocode(location.name, countOfGeocoded).then(function(result) {
+        var c, playerIcon, ref;
+        c = ' marker-cluster-';
+        if ((0 < (ref = location.count) && ref < 10)) {
+          c += 'small';
+        } else {
+          c += 'large';
+        }
+        playerIcon = new L.DivIcon({
+          html: '<div><span>' + location.count + '</span></div>',
+          className: 'marker-cluster' + c,
+          iconSize: new L.Point(40, 40)
+        });
+        self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {
+          icon: playerIcon,
+          title: String(location.count)
+        }).bindPopup(location.name + '<br>' + location.count));
+      });
+      return countOfGeocoded++;
     });
   };
   this.isRendered = function() {

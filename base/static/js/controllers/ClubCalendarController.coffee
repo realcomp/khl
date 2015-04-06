@@ -136,8 +136,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             $http.get($scope.url + '?' + params
             ).success((data) ->
                 console.log data
-                if MapService.isRendered()
-                    MapService.remove()
+                MapService.remove() if MapService.isRendered()
                 MapService.createClubsMap(data.results, 'trips')
                 $scope.data = data
                 $scope.schedules = $scope.parseSchedules(data)

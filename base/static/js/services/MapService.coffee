@@ -36,6 +36,8 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
                 self.markersFunctionPlayers data
             when 'trips'
                 self.markersFunctionClubGames data
+            when 'fans'
+                self.markersFunctionFans data
         self.map.addLayer self.markers
         @rendered = true
         return
@@ -103,8 +105,7 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
     @markersFunctionPlayers = (players) ->
         countOfGeocoded = 0
         _.each players, (player, index) ->
-            if !player.birth_place
-                return
+            return if !player.birth_place
             playerIcon = L.icon(
                 iconUrl: if player.photo then player.photo else '/static/abc.jpg'
                 iconSize: [ 20, 20 ]
@@ -116,6 +117,48 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
                 return
             countOfGeocoded++
             return
+        return
+
+    @markersFunctionFans = (fans) ->
+        fans = [{
+            location: 'Москва'
+        }, {
+            location: 'Санкт-Петербург'
+        },
+        {
+            location: 'Санкт-Петербург'
+        }]
+        countOfGeocoded = 0;
+        locations = [];
+        self.markers = new (L.MarkerClusterGroup)(
+            showCoverageOnHover: false
+            iconCreateFunction: (cluster) ->
+                sum = 0
+                c = ' marker-cluster-';
+                markers = cluster.getAllChildMarkers();
+                _.each markers, (marker) ->
+                    sum += Number(marker.options.title) if marker.options.title.length isnt 0
+                    c = ' marker-cluster-';
+                    if -1 < sum < 10 then c+='small' else c+='large'
+                    return
+                return new L.DivIcon({ html: '<div><span>' + sum + '</span></div>', className: 'marker-cluster' + c, iconSize: new L.Point(40, 40) });
+        )
+        _.each fans, (fan, index) ->
+            if(fan.location not in locations.map (l) -> l.name)
+            then locations.push (name: fan.location, count: 1)
+            else locations.map (location) ->
+                if location.name is fan.location then location.count = location.count+1
+                return location
+            return
+        console.log locations
+        _.each locations, (location, index) ->
+            self.googleGeocode(location.name, countOfGeocoded).then (result) ->
+                c = ' marker-cluster-';
+                if 0 < location.count < 10 then c+='small' else c+='large'
+                playerIcon = new L.DivIcon({ html: '<div><span>' + location.count + '</span></div>', className: 'marker-cluster' + c, iconSize: new L.Point(40, 40) });
+                self.markers.addLayer new (L.marker)(new (L.LatLng)(result[0], result[1]), icon: playerIcon, title: String(location.count) ).bindPopup(location.name + '<br>' + location.count)#.bindLabel(String(location.count), {noHide: true})
+                return
+            countOfGeocoded++
         return
 
     @isRendered = ->
