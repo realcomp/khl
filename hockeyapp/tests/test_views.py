@@ -11,7 +11,7 @@ from django.utils import timezone
 
 from base.models import Season
 
-from ..models import Arena, Club, Player
+from ..models import Arena, Club, Player, League
 
 
 class ViewsTestCase(TestCase):
@@ -38,15 +38,22 @@ class ViewsTestCase(TestCase):
     }
 
     def setUp(self):
+        League.objects.create(en_title='KHL')
+
         Season.objects.create(
             start_date=datetime.date(year=2000, month=12, day=31),
             end_date=datetime.date(year=2001, month=12, day=31))
 
         self.player = Player.objects.create(**self.PLAYER_DATA)
+
         self.club = Club.objects.create(**self.CLUB_DATA)
         self.club.arena = Arena.objects.create(
             contacts='+7 999-999-99-99')
         self.club.save()
+
+        self.player.last_club = self.club
+        self.player.save()
+
         self.client = Client()
 
     def assertEqualPlayer(self, context, obj):

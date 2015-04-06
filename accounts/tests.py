@@ -4,9 +4,13 @@ from django.core.urlresolvers import reverse
 
 import base.tests
 
+from hockeyapp.models import League
+
 
 class AccountsTest(base.tests.BaseTest):
     def setUp(self):
+        League.objects.create(en_title='KHL')
+
         User = get_user_model()
         self.user = User.objects.create_user(username='lost@password.com')
 

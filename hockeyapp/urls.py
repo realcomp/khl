@@ -3,11 +3,10 @@ from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
-from .views import club, player
+from .views import admin, club, player
 
 
-urlpatterns = patterns(
-    'hockeyapp.views',
+urlpatterns = [
     # TODO: move to separate namespace
     # REST API
     url(r'^api/leagues/$', api.LeagueList.as_view(),
@@ -103,6 +102,6 @@ urlpatterns = patterns(
 
     #admin
     url(r'^sporto-admin/club-insta-photo/$',
-        'admin.cpat',
+        admin.cpat,
         name='club-insta-photo'),
-)
+]
