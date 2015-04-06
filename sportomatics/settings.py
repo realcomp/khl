@@ -232,6 +232,7 @@ SUIT_CONFIG = {
             'url': '/admin/hockeyapp/leagueclub_multi_add/'
         },
         {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
+        {'label': 'fix257', 'icon':'icon-edit', 'url': '/admin/hockeyapp/fix257/'},
     ),
     'MENU_EXCLUDE': ('sites', 'auth'),
     'LIST_PER_PAGE': 50,

@@ -72,6 +72,10 @@ class SeasonQuerySet(models.QuerySet):
     def get_season_by_date(self, date):
         return self.filter(start_date__lte=date, end_date__gte=date).last()
 
+    def get_next_season(self, season):
+        date = season.start_date+datetime.timedelta(days=500)
+        return self.filter(start_date__lte=date, end_date__gte=date).last()
+
 
 class IIFQuerySet(GetFilerImage, models.QuerySet):
     b''' Менеджер инстаграм изображений '''

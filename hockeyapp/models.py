@@ -579,11 +579,10 @@ class ClubPlayer(models.Model):
 
     def _get_club_league(self):
         if self.club:
-            if self.club.league:
-                return self.club.league
-            qs = self.club.leagueclub_set.all()
-            if qs.last():
-                return qs.last().league
+            if self.season:
+                qs = self.club.leagueclub_set.filter(season=self.season)
+                return qs.last() and qs.last().league
+            return self.club.league
 
     @property
     def player_url(self):

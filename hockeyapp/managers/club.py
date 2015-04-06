@@ -26,11 +26,11 @@ class ClubQuerySet(LocaleOrderMixin, DataCleanMixin, models.QuerySet):
             # берем данные о клубе со стороннего ресурса
             data = self._get_data(url)
         title = data.get('title', None)
+        # TODO: refact
         if data.get('league') and data.get('league').en_title == 'VHL':
             if title == 'Динамо': title+= ' Бшх'
         if title:
             _club = self.by_title_alias(title).last()
-            print(_club)
             if not _club or update:
                 if data:
                     data = self.clean_data(data)
