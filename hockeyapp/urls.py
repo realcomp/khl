@@ -64,6 +64,8 @@ urlpatterns = patterns(
     # players
     url(r'^players/$', player.PlayersSearch.as_view(),
         name='players-search'),
+    url(r'^players2/$', player.PlayersSearch2.as_view(),
+        name='players-search2'),
     url(r'^players/(?P<pk>\d+)/$', player.PlayerCard.as_view(),
         name='player-card'),
     url(r'^players/(?P<pk>\d+)/indicators/$',

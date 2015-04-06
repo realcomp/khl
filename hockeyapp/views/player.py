@@ -35,6 +35,10 @@ class PlayersSearch(TemplateView):
         return context
 
 
+class PlayersSearch2(PlayersSearch):
+    template_name = 'hockeyapp/players/players-search2.html'
+
+
 class PlayerCard(DetailView):
     model = Player
     template_name = 'hockeyapp/players/player-card-short.html'
