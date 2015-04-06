@@ -1,4 +1,8 @@
-/*HEADER*/
+body{
+    background: url(../images/bgContent.jpg) no-repeat center;
+    background-size: cover;
+    background-attachment: fixed;
+}/*HEADER*/
 /*menu buttons*/
 .user-card-menu .ui.inverted.button {box-shadow: 0px 1px 1px #f1f2e9 !important}
 .breadcrumbs .search-block{margin-right: 10px}
@@ -17,8 +21,10 @@
 /*CONTENT*/
 .content{
 	padding-bottom: 20px;
-	background: url(../images/bgTwoContent.jpg) no-repeat center; 
-	background-size: cover; 
+    /*
+    background: url(../images/bgContent.jpg) no-repeat center;
+	background-size: cover;
+	background-attachment: fixed;*/
 	/*-webkit-background-position: cover; 
 	-moz-background-position: cover; 
 	-o-background-position: cover; */

@@ -5850,3 +5850,7 @@ hr.style-one {
 .custom-divider:after{
     top: 20% !important;
 }
+.fan-item{
+    height: 95px !important;
+    width: 145px !important;
+}
