@@ -8,7 +8,8 @@ from addresses.models import Country
 
 from ..models import Club, Coach, Player, Season
 from ..serializers import (
-    CountrySerializer, PlayerCardDetailSerializer, SeasonSerializer)
+    CountrySerializer, PlayerCardDetailSerializer, SeasonSerializer,
+    CountryLeaguesSerializer)
 from ..serializers.players import (
     PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
 
@@ -37,6 +38,12 @@ class PlayersSearch(TemplateView):
 
 class PlayersSearch2(PlayersSearch):
     template_name = 'hockeyapp/players/players-search2.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PlayersSearch2, self).get_context_data(**kwargs)
+        context['countries'] = CountryLeaguesSerializer(
+            Country.objects.all(), context=context, many=True).data
+        return context
 
 
 class PlayerCard(DetailView):

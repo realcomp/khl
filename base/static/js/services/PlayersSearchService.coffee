@@ -8,12 +8,12 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
                 if $scope.countries.length
                     country = $scope.countries[0]
                     if !$location.search().country
-                        $location.search('country', String(country.pk))
+                        # $location.search('country', String(country.pk))
                         $scope.params = $location.search()
                     if (country.league_set.length and
                             !$location.search().league and
                             $location.search().league != '')
-                        $location.search('league', String(country.league_set[0].pk))
+                        # $location.search('league', String(country.league_set[0].pk))
                         $scope.params = $location.search()
                 if callback and typeof callback == 'function'
                     callback($scope)
@@ -23,11 +23,12 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         return
 
     @getLeagues = (countries, selected) ->
-        if selected
+        if countries and selected
             if not Array.isArray(selected)
                 selected = [selected]
-            legue_sets = (country.league_set for country in countries if country.pk in selected)
-            return (league for league in league_sets)
+            selected = (+x for x in selected)
+            league_sets = (country.league_set for country in countries when country.pk in selected)
+            return [].concat.apply([], league_sets)  # flatten array of arrays
         return []
 
     @isMatchesTotalVisible = ($scope) ->
@@ -118,20 +119,25 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         line = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
         $scope.$location.search('line', line or [])
 
-        if !$scope.leaguesLoaded
-            $scope.leaguesLoaded = true
-            if $scope.params.league
-                if Array.isArray($scope.params.league)
-                    $scope.leaguesSelected = $scope.params.league
-                else
-                    $scope.leaguesSelected = [$scope.params.league]
-        $scope.$location.search('league', $scope.leaguesSelected)
+        # if !$scope.leaguesLoaded
+        #     $scope.leaguesLoaded = true
+        #     if $scope.params.league
+        #         if Array.isArray($scope.params.league)
+        #             $scope.leaguesSelected = $scope.params.league
+        #         else
+        #             $scope.leaguesSelected = [$scope.params.league]
+        # $scope.$location.search('league', $scope.leaguesSelected)
 
-        $scope.$location.search('number', $scope.number)
+        if $scope.number
+            $scope.$location.search('number', $scope.number)
+        # if $scope.height
+        #     $scope.$location.search('height', $scope.height)
+        # if $scope.weight
+        #     $scope.$location.search('weight', $scope.weight)
 
         $scope.params = $scope.$location.search()
 
-        params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name')
+        params += 'order_by=' + ($scope.params.order_by or '%s_lastname,%s_name')
         if $scope.params.reversed
             params += '&reversed=true'
         if $scope.params.line.length
@@ -155,9 +161,20 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         if $scope.params.season
             params += '&season=' + $scope.params.season
         if $scope.params.league
-            params += '&league=' + $scope.params.league.join('&league=')
+            params += (('&league=' + league) for league in $scope.params.league).join('')
         if $scope.params.number
             params += '&number=' + $scope.params.number
+        if $scope.params.contract_type
+            params += '&contract_type=' + $scope.params.contract_type
+        if $scope.params.contract_to
+            d = $scope.params.contract_to.split('/')
+            params += '&contract_to=' + d[2] + '-' + d[0] + '-' + d[1]
+        if $scope.params.height
+            params += '&height=' + $scope.params.height
+        if $scope.params.weight
+            params += '&weight=' + $scope.params.weight
+        if $scope.params.grip
+            params += '&grip=' + $scope.params.grip
         $scope.data = {}
         $scope.loader = true
         $http.get(url + '?' + params

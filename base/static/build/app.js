@@ -1558,11 +1558,9 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
         if ($scope.countries.length) {
           country = $scope.countries[0];
           if (!$location.search().country) {
-            $location.search('country', String(country.pk));
             $scope.params = $location.search();
           }
           if (country.league_set.length && !$location.search().league && $location.search().league !== '') {
-            $location.search('league', String(country.league_set[0].pk));
             $scope.params = $location.search();
           }
         }
@@ -1575,31 +1573,32 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
   };
   this.getLeagues = function(countries, selected) {
-    var country, league, legue_sets;
-    if (selected) {
+    var country, league_sets, x;
+    if (countries && selected) {
       if (!Array.isArray(selected)) {
         selected = [selected];
       }
-      legue_sets = ((function() {
-        var i, len, ref, results;
-        if (ref = country.pk, indexOf.call(selected, ref) >= 0) {
-          results = [];
-          for (i = 0, len = countries.length; i < len; i++) {
-            country = countries[i];
-            results.push(country.league_set);
-          }
-          return results;
-        }
-      })());
-      return (function() {
+      selected = (function() {
         var i, len, results;
         results = [];
-        for (i = 0, len = league_sets.length; i < len; i++) {
-          league = league_sets[i];
-          results.push(league);
+        for (i = 0, len = selected.length; i < len; i++) {
+          x = selected[i];
+          results.push(+x);
         }
         return results;
       })();
+      league_sets = (function() {
+        var i, len, ref, results;
+        results = [];
+        for (i = 0, len = countries.length; i < len; i++) {
+          country = countries[i];
+          if (ref = country.pk, indexOf.call(selected, ref) >= 0) {
+            results.push(country.league_set);
+          }
+        }
+        return results;
+      })();
+      return [].concat.apply([], league_sets);
     }
     return [];
   };
@@ -1676,7 +1675,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
   };
   this.search = function($scope) {
-    var e, line, params, url;
+    var d, e, league, line, params, url;
     url = $('#PlayersSearchLink').attr('href');
     params = '';
     if ($('#isCitizenshipRussia').is(':checked')) {
@@ -1708,18 +1707,9 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       return results;
     })();
     $scope.$location.search('line', line || []);
-    if (!$scope.leaguesLoaded) {
-      $scope.leaguesLoaded = true;
-      if ($scope.params.league) {
-        if (Array.isArray($scope.params.league)) {
-          $scope.leaguesSelected = $scope.params.league;
-        } else {
-          $scope.leaguesSelected = [$scope.params.league];
-        }
-      }
+    if ($scope.number) {
+      $scope.$location.search('number', $scope.number);
     }
-    $scope.$location.search('league', $scope.leaguesSelected);
-    $scope.$location.search('number', $scope.number);
     $scope.params = $scope.$location.search();
     params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
     if ($scope.params.reversed) {
@@ -1756,10 +1746,35 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       params += '&season=' + $scope.params.season;
     }
     if ($scope.params.league) {
-      params += '&league=' + $scope.params.league.join('&league=');
+      params += ((function() {
+        var i, len, ref, results;
+        ref = $scope.params.league;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          league = ref[i];
+          results.push('&league=' + league);
+        }
+        return results;
+      })()).join('');
     }
     if ($scope.params.number) {
       params += '&number=' + $scope.params.number;
+    }
+    if ($scope.params.contract_type) {
+      params += '&contract_type=' + $scope.params.contract_type;
+    }
+    if ($scope.params.contract_to) {
+      d = $scope.params.contract_to.split('/');
+      params += '&contract_to=' + d[2] + '-' + d[0] + '-' + d[1];
+    }
+    if ($scope.params.height) {
+      params += '&height=' + $scope.params.height;
+    }
+    if ($scope.params.weight) {
+      params += '&weight=' + $scope.params.weight;
+    }
+    if ($scope.params.grip) {
+      params += '&grip=' + $scope.params.grip;
     }
     $scope.data = {};
     $scope.loader = true;

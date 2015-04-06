@@ -1,6 +1,7 @@
 {% extends "hockeyapp/players/base.html" %}
 {% load i18n %}
 {% load static from base_extras %}
+{% load base_extras %}
 
 {% block title %}
 Все игроки, хоккей - Sportomatics.ru
@@ -8,17 +9,16 @@
 
 {% block extrahead %}
     {{ block.super }}
-	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700&subset=cyrillic' rel='stylesheet' type='text/css'>
-	 <link rel="stylesheet" href="{% static 'css/players-global.css' %}">
-	 <link rel="stylesheet" href="{% static 'css/players-style.css' %}">
-     <script src="{% static 'js/dropdown.js' %}"></script>
-     <script src="{% static 'js/checkbox.js' %}"></script>
-     <script src="{% static 'jquery-mousewheel/jquery.mousewheel.min.js' %}"></script>
-     <script src="{% static 'Dimox/jQueryFormStyler/jquery.formstyler.min.js' %}"></script>
-     <script src="{% static 'jScrollPane/script/jquery.jscrollpane.min.js' %}"></script>
-     <script src="{% static 'jquery-mousewheel/jquery.mousewheel.min.js' %}"></script>
-     <script src="{% static 'ionrangeslider/js/ion.rangeSlider.min.js' %}"></script>
-     <script src="{% static 'js/players-scripts.js' %}"></script>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700&subset=cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static 'css/players-global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/players-style.css' %}">
+    <script src="{% static 'js/dropdown.js' %}"></script>
+    <script src="{% static 'js/checkbox.js' %}"></script>
+    <script src="{% static 'Dimox/jQueryFormStyler/jquery.formstyler.min.js' %}"></script>
+    <script src="{% static 'jScrollPane/script/jquery.jscrollpane.min.js' %}"></script>
+    <script src="{% static 'jquery-mousewheel/jquery.mousewheel.min.js' %}"></script>
+    <script src="{% static 'ionrangeslider/js/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'js/players-scripts.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -49,23 +49,24 @@
         <div class="page-content page-container"
              ng-controller="PlayersSearchController as PlayersSearchCtrl">
             <form id="PlayersSearchForm" action="{% url 'hockeyapp:players-search-api' %}">
-            <a class="hidden" id="PlayersSearchLink"
-               href="{% url 'hockeyapp:players-search-api' %}"></a>
-            <!-- <div class="container-top-block"> -->
+            <a id="PlayersSearchLink" class="hidden" href="{% url 'hockeyapp:players-search-api' %}"></a>
+            <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
+            <div class="container-top-block">
             <!--     <div class="ui grid"> -->
+            <!--         <div class="row"> -->
 
 
-	 <!-- <div class="wrapper"> -->
-	   <!-- <div class="shadow"> -->
-	   	<div class="content-wrap">
-	 	   <div class="left-side">
-	 		   <div class="kind-sport">
-	 			  <div class="head-block"><h1>ОСНОВНЫЕ НАСТРОЙКИ</h1></div>
+     <!-- <div class="wrapper"> -->
+       <!-- <div class="shadow"> -->
+        <div class="content-wrap">
+           <div class="left-side">
+               <div class="kind-sport">
+                  <div class="head-block"><h1>ОСНОВНЫЕ НАСТРОЙКИ</h1></div>
          <div class="ui divider"></div>
 <!--  sport kind          -->
              <div class="sport-kind-block">
-	 			      <label for="search-select" class="left">ВИД СПОРТА</label>
-	 			      <select class="ui search selection dropdown" id="search-select" data-placeholder="Все">
+                      <label for="search-select" class="left">ВИД СПОРТА</label>
+                      <select class="ui search selection dropdown" id="search-select" data-placeholder="Все">
 
                     <option selected value="" >Все</option>
                     <option value="ФУ">Футбол</option>
@@ -78,91 +79,100 @@
 
               </select>
              </div>
-      	</div>
+        </div>
 <!--  sport kind  END        -->
          <div class="ui divider"></div>
           <div class="country-block">
 
-	 	     	     <label>СТРАНА</label>
-	 		         <select class="country" multiple>
-	 			       <option>Россия</option>
-	 				     <option>Германия</option>
-	 				     <option>Италия</option>
-	 				     <option>Франция</option>
-	 				     <option>Латвия</option>
-	 				     <option>Испания</option>
-	 				     <option>Нидерланды</option>
-	 				     <option>Бразилия</option>
-               <option>Литва</option>
-               <option>Россия</option>
-               <option>Германия</option>
-               <option>Италия</option>
-               <option>Франция</option>
-               <option>Латвия</option>
-               <option>Испания</option>
-               <option>Нидерланды</option>
-               <option>Бразилия</option>
-               <option>Литва</option>
-
-	 		         </select>
-	 		         <div class="ui checkbox">
+                     <label>СТРАНА</label>
+                     <select class="country" multiple ng-model="countriesSelected"
+                             ng-init="countriesSelected = params.country"
+                             ng-change="$location.search('country', countriesSelected)">
+                         {% for country in countries %}
+                             <option value="{{ country.pk }}" {% if forloop.first %}selected{% endif %}>
+                                 {{ country.title }}
+                             </option>
+                         {% endfor %}
+                     </select>
+                     <div class="ui checkbox">
                <input type="checkbox">
                <label>запомнить выбор</label>
                </div>
           </div>
           <div class="lige-block">
-              	<label>ЛИГА</label>
-	 		          <select class="lige" multiple>
-	 				      <option>НХЛ</option>
-	 				      <option>КХЛ</option>
-	 				      <option>ВХЛ</option>
-	 				      <option>МХЛ</option>
-	 				      </select>
-	 	            <div class="ui checkbox" id="checkC">
+                <label>ЛИГА</label>
+                      <select class="lige" multiple ng-model="leaguesSelected"
+                              ng-init="leaguesSelected = params.league"
+                              ng-change="$location.search('league', leaguesSelected)">
+                          {% for league in countries.0.league_set %}
+                              <option value="{{ league.pk }}" {% if forloop.first %}selected{% endif %}>
+                                  {{ league.title }}
+                              </option>
+                          {% endfor %}
+                          {% comment %}
+                          {% verbatim_off %}
+                              <option value="{{ league.pk }}"
+                                      ng-repeat="league in PlayersSearchService.getLeagues(countries, countriesSelected)"
+                                      ng-selected="$index === 0">
+                                  {{ league.title }}
+                              </option>
+                          {% endverbatim_off %}
+                          {% endcomment %}
+                      </select>
+                    <div class="ui checkbox" id="checkC">
                 <input type="checkbox">
                 <label>запомнить выбор</label>
                 </div>
-	 	        </div>
-	 	    <div class="ui divider"></div>
+                </div>
+            <div class="ui divider"></div>
       <!-- Range  -->
         <div class="range-block">
              <label for="range" class="left">ВОЗРАСТ:</label>
              <input type="text" id="range" value="" name="range" />
         </div>
         <div class="ui divider"></div>
-         	   <div class="posit">
-         		   <h3>АМПЛУА</h3>
-         		   <div class="ui radio checkbox checked">
-         			  <input type="radio" name="posit" checked="checked">
-         			  <label>нападающий</label>
-         		   </div>
-         		   <div class="ui radio checkbox" id="radio">
-         			  <input type="radio" name="posit">
-         			  <label>защитник</label>
-         		   </div>
+               <div class="posit">
+                   <h3>АМПЛУА</h3>
+                   <div class="ui radio checkbox checked">
+                      <input type="radio" name="line" value="3"
+                             ng-checked="params.line.indexOf('3') >= 0">
+                      <label>нападающий</label>
+                   </div>
+                   <div class="ui radio checkbox" id="radio">
+                      <input type="radio" name="line" value="2"
+                             ng-checked="params.line.indexOf('2') >= 0">
+                      <label>защитник</label>
+                   </div>
                <div class="ui radio checkbox">
-         			  <input type="radio" name="posit">
-         			  <label>вратарь</label>
+                      <input type="radio" name="line" value="1"
+                             ng-checked="params.line.indexOf('1') >= 0">
+                      <label>вратарь</label>
                </div>
 
-         	</div>
+            </div>
          <div class="ui divider"></div>
            <div class="calendar-block">
-           	<div class="ui dropdown">
+            <div class="ui dropdown">
               <h3>КОНТРАКТ:</h3>
-           	   <p class="cal"> ДО <input type="text" id="datepicker"></p>
+               <p class="cal"> ДО
+                   <input type="text" id="datepicker"
+                          ng-model="contractTo"
+                          ng-init="contractTo = params.contract_to"
+                          ng-change="$location.search('contract_to', contractTo || null)">
+               </p>
                <p>
-               	    <select class="kind-contract dropdown">
-	 			            <option>Двусторонний</option>
-	 				          <option>Двусторонний</option>
-	 				          <option>Двусторонний</option>
-	 				          <option>Двусторонний</option>
-	 				          <option>Двусторонний</option>
+                   <select class="kind-contract dropdown"
+                           ng-model="contractType"
+                           ng-init="contractType = params.contract_type"
+                           ng-change="$location.search('contract_type', contractType || null)">
+                       <option value="">Нет</option>
+                       <option value="Двусторонний КХЛ/МХЛ">Двусторонний КХЛ/МХЛ</option>
+                       <option value="Двусторонний КХЛ/ВХЛ">Двусторонний КХЛ/ВХЛ</option>
+                       <option value="Односторонний КХЛ">Односторонний КХЛ</option>
+                   </select>
+               </p>
 
-	 		               </select>
-	 		          </p>
-
-	 		       </div>
+                   </div>
              <div class="ui checkbox">
               <input type="checkbox">
               <label>только без контракта</label>
@@ -172,24 +182,28 @@
 
           <div class="hvat ui dropdown">
           <label class="left">ХВАТ</label>
-          <select class="hvat-type dropdown">
-	 			  <option>Не важно</option>
-	 				<option>Левый</option>
-	 				<option>Правый</option>
-	 				<option>Не важно</option>
-
-
-	 		    </select>
+          <select class="hvat-type dropdown" ng-model="grip" ng-init="grip = params.grip"
+                  ng-change="$location.search('grip', grip || null)">
+              <option value="">Не важно</option>
+              <option value="левый">Левый</option>
+              <option value="правый">Правый</option>
+          </select>
            </div>
          <div class="ui divider"></div>
            <div class="grow">
-           	<p>РОСТ (см)
-           	<input type="text"></p>
+               <p>
+                   РОСТ (см)
+                   <input type="text" ng-model="height" ng-init="height = params.height"
+                          ng-change="$location.search('height', height || null)">
+               </p>
            </div>
          <div class="ui divider"></div>
             <div class="grow">
-           	  <p>ВЕС ОТ (кг)
-           	    <input type="text"></p>
+                <p>
+                    ВЕС ОТ (кг)
+                    <input type="text" ng-model="weight" ng-init="weight = params.weight"
+                           ng-change="$location.search('weight', weight || null)">
+                </p>
            </div>
          <div class="ui divider"></div>
            <h3>ГРАЖДАНСТВО</h3>
@@ -202,65 +216,53 @@
             </div>
           <div class="ui divider"></div>
           <div class="nation-team">
-          	<h3 class="left">УЧАСТИЕ В СБОРНОЙ СТРАНЫ</h3>
+            <h3 class="left">УЧАСТИЕ В СБОРНОЙ СТРАНЫ</h3>
              <div class="ui checkbox">
 
-          		  <input type="checkbox">
+                  <input type="checkbox">
                 <label>Да</label>
               </div>
           </div>
 
 
-         	</div>
-	 	  <div class="right-side">
-	 	  	<div class="head-block">
-	 			<h1>ИНДИВИДУАЛЬНЫЕ ПОКАЗАТЕЛИ</h1>
-	 			<div class="ui divider"></div>
-	 			<h2>ВЫБОРКА ДАННЫХ ПО ИГРОКАМ</h2>
-	 			<div class="ui divider"></div>
-	 		</div>
-	 	       <div class="ui checkbox">
+            </div>
+          <div class="right-side">
+            <div class="head-block">
+                <h1>ИНДИВИДУАЛЬНЫЕ ПОКАЗАТЕЛИ</h1>
+                <div class="ui divider"></div>
+                <h2>ВЫБОРКА ДАННЫХ ПО ИГРОКАМ</h2>
+                <div class="ui divider"></div>
+            </div>
+               <div class="ui checkbox">
              <input type="checkbox">
              <label><span>ПО СЕЗОНАМ</span></label>
            </div>
              <select name=""  class="dropdown">
-             <option>2000</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
+                 {% for season in seasons %}
+                     <option>{% lcb %} "{{ season.start_date }}"|date:"yyyy" {% rcb %}</option>
+                 {% endfor %}
              </select>
 
              до
 
               <select name=""  class="dropdown">
-             	<option>2000</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
-	 				<option>1999</option>
+                 {% for season in seasons %}
+                     <option>{% lcb %} "{{ season.end_date }}"|date:"yyyy" {% rcb %}</option>
+                 {% endfor %}
              </select>
 
 
          <div class="ui divider"></div>
          <div class="dif">
          <div class="ui checkbox">
-         	<input type="checkbox">
+            <input type="checkbox">
              <label class="left"><span>ПО КОМАНДАМ </span></label>
 
          </div>
          <input type="text">
          <div class="ui divider"></div>
           <div class="ui checkbox">
-          	 <input type="checkbox">
+             <input type="checkbox">
              <label class="left"><span>ПО ЛИГАМ</span></label>
 
          </div>
@@ -279,22 +281,32 @@
           </div>
             <div class="ui divider"></div>
          <div class="grow">
-           	<p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
-           	<input type="text">
+            <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
+            <input type="text">
            </div>
          <div class="ui divider"></div>
             <div class="grow">
-           	  <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
-           	    <input type="text">
+              <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
+                <input type="text">
            </div>
          </div>
        </div>
      <!-- </div> -->
-	 <!-- </div> -->
+     <!-- </div> -->
 
-
-            <!--     </div> -->
-            <!-- </div> -->
+            </div>
+            <div class="container-top-block">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="align-center">
+                                <a class="ui small green button"
+                                   ng-click="PlayersSearchService.search(this)">показать</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="page-inner-container">
                  <div class="ui grid">
                     {% include "hockeyapp/players-search-table.html" %}

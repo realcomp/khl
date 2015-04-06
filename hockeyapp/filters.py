@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.conf import settings
 from django.db.models import Q
 
@@ -72,6 +74,11 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _club = request.GET.get('club')
         _is_playing = request.GET.get('is_playing')
         _number = request.GET.get('number')
+        _contract_type = request.GET.get('contract_type')
+        _contract_to = request.GET.get('contract_to')
+        _height = request.GET.get('height')
+        _weight = request.GET.get('weight')
+        _grip = request.GET.get('grip')
 
         if _season:
             q &= Q(clubplayer__season=_season)
@@ -109,6 +116,22 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             _qs = _qs.filter(**{
                 '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
             })
+
+        if _contract_type:
+            _qs = _qs.filter(contract_type=_contract_type)
+
+        if _contract_to:
+            _qs = _qs.filter(contract_to__lte=datetime.datetime.strptime(
+                _contract_to, '%Y-%m-%d').date())
+
+        if _height and _height.isdigit():
+            _qs = _qs.filter(height__gte=_height)
+
+        if _weight and _weight.isdigit():
+            _qs = _qs.filter(weight__gte=_weight)
+
+        if _grip:
+            _qs = _qs.filter(grip=_grip)
 
         # _pk = request.GET.get('player')
         # if _pk:
