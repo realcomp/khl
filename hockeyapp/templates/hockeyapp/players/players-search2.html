@@ -11,6 +11,8 @@
 	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700&subset=cyrillic' rel='stylesheet' type='text/css'>
 	 <link rel="stylesheet" href="{% static 'css/players-global.css' %}">
 	 <link rel="stylesheet" href="{% static 'css/players-style.css' %}">
+     <script src="{% static 'js/dropdown.js' %}"></script>
+     <script src="{% static 'js/checkbox.js' %}"></script>
      <script src="{% static 'jquery-mousewheel/jquery.mousewheel.min.js' %}"></script>
      <script src="{% static 'Dimox/jQueryFormStyler/jquery.formstyler.min.js' %}"></script>
      <script src="{% static 'jScrollPane/script/jquery.jscrollpane.min.js' %}"></script>
@@ -77,7 +79,7 @@
               </select>
              </div>
       	</div>
-<!--  sport kind  END        --> 	 		   
+<!--  sport kind  END        -->
          <div class="ui divider"></div>
           <div class="country-block">
 
@@ -101,7 +103,7 @@
                <option>Нидерланды</option>
                <option>Бразилия</option>
                <option>Литва</option>
-                            
+
 	 		         </select>
 	 		         <div class="ui checkbox">
                <input type="checkbox">
@@ -110,7 +112,7 @@
           </div>
           <div class="lige-block">
               	<label>ЛИГА</label>
-	 		          <select class="lige" multiple>		
+	 		          <select class="lige" multiple>
 	 				      <option>НХЛ</option>
 	 				      <option>КХЛ</option>
 	 				      <option>ВХЛ</option>
@@ -121,10 +123,10 @@
                 <label>запомнить выбор</label>
                 </div>
 	 	        </div>
-	 	    <div class="ui divider"></div>   
-      <!-- Range  --> 
+	 	    <div class="ui divider"></div>
+      <!-- Range  -->
         <div class="range-block">
-             <label for="range" class="left">ВОЗРАСТ:</label> 
+             <label for="range" class="left">ВОЗРАСТ:</label>
              <input type="text" id="range" value="" name="range" />
         </div>
         <div class="ui divider"></div>
@@ -133,13 +135,13 @@
          		   <div class="ui radio checkbox checked">
          			  <input type="radio" name="posit" checked="checked">
          			  <label>нападающий</label>
-         		   </div>	
+         		   </div>
          		   <div class="ui radio checkbox" id="radio">
          			  <input type="radio" name="posit">
          			  <label>защитник</label>
-         		   </div>	
+         		   </div>
                <div class="ui radio checkbox">
-         			  <input type="radio" name="posit"> 
+         			  <input type="radio" name="posit">
          			  <label>вратарь</label>
                </div>
 
@@ -149,14 +151,14 @@
            	<div class="ui dropdown">
               <h3>КОНТРАКТ:</h3>
            	   <p class="cal"> ДО <input type="text" id="datepicker"></p>
-               <p>  
+               <p>
                	    <select class="kind-contract dropdown">
 	 			            <option>Двусторонний</option>
 	 				          <option>Двусторонний</option>
 	 				          <option>Двусторонний</option>
 	 				          <option>Двусторонний</option>
 	 				          <option>Двусторонний</option>
-	 				              
+
 	 		               </select>
 	 		          </p>
 
@@ -167,7 +169,7 @@
               </div>
            </div>
          <div class="ui divider"></div>
-          
+
           <div class="hvat ui dropdown">
           <label class="left">ХВАТ</label>
           <select class="hvat-type dropdown">
@@ -175,8 +177,8 @@
 	 				<option>Левый</option>
 	 				<option>Правый</option>
 	 				<option>Не важно</option>
-	 				
-	 				              
+
+
 	 		    </select>
            </div>
          <div class="ui divider"></div>
@@ -219,7 +221,7 @@
 	 		</div>
 	 	       <div class="ui checkbox">
              <input type="checkbox">
-             <label><span>ПО СЕЗОНАМ</span></label> 
+             <label><span>ПО СЕЗОНАМ</span></label>
            </div>
              <select name=""  class="dropdown">
              <option>2000</option>
@@ -232,8 +234,8 @@
 	 				<option>1999</option>
 	 				<option>1999</option>
              </select>
-             
-             до 
+
+             до
 
               <select name=""  class="dropdown">
              	<option>2000</option>
@@ -247,32 +249,32 @@
 	 				<option>1999</option>
              </select>
 
-         
+
          <div class="ui divider"></div>
          <div class="dif">
          <div class="ui checkbox">
          	<input type="checkbox">
              <label class="left"><span>ПО КОМАНДАМ </span></label>
-             
+
          </div>
          <input type="text">
          <div class="ui divider"></div>
           <div class="ui checkbox">
           	 <input type="checkbox">
              <label class="left"><span>ПО ЛИГАМ</span></label>
-             
+
          </div>
          <input type="text">
          <div class="ui divider"></div>
           <div class="ui checkbox"><input type="checkbox">
              <label class="left"><span>ПО ПОХОЖЕСТИ</span></label>
-             
+
          </div>
           <input type="text">
-          </div>  
+          </div>
          <div class="ui divider"></div>
          <div class="rangeTwo-block">
-          <label for="range">КОЛИЧЕСТВО СОВПАДЕНИЙ (%)</label> 
+          <label for="range">КОЛИЧЕСТВО СОВПАДЕНИЙ (%)</label>
              <input type="text" id="rangeTwo" value="" name="range" />
           </div>
             <div class="ui divider"></div>
