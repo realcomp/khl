@@ -42,6 +42,13 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
         @rendered = true
         return
 
+    @cityClickFunction = (event) ->
+        self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();
+        $timeout ->
+            return
+        , 100
+        return
+
     @markersFunctionClubs = (clubs) ->
         countOfGeocoded = 0
         _.each clubs, (club, index) ->
@@ -120,14 +127,6 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
         return
 
     @markersFunctionFans = (fans) ->
-        fans = [{
-            location: 'Москва'
-        }, {
-            location: 'Санкт-Петербург'
-        },
-        {
-            location: 'Санкт-Петербург'
-        }]
         countOfGeocoded = 0;
         locations = [];
         self.markers = new (L.MarkerClusterGroup)(
@@ -137,7 +136,7 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
                 c = ' marker-cluster-';
                 markers = cluster.getAllChildMarkers();
                 _.each markers, (marker) ->
-                    sum += Number(marker.options.title) if marker.options.title.length isnt 0
+                    sum += Number(marker.options.title.split('_')[1]) if marker.options.title.length isnt 0
                     c = ' marker-cluster-';
                     if -1 < sum < 10 then c+='small' else c+='large'
                     return
@@ -150,13 +149,13 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
                 if location.name is fan.location then location.count = location.count+1
                 return location
             return
-        console.log locations
+
         _.each locations, (location, index) ->
             self.googleGeocode(location.name, countOfGeocoded).then (result) ->
                 c = ' marker-cluster-';
                 if 0 < location.count < 10 then c+='small' else c+='large'
                 playerIcon = new L.DivIcon({ html: '<div><span>' + location.count + '</span></div>', className: 'marker-cluster' + c, iconSize: new L.Point(40, 40) });
-                self.markers.addLayer new (L.marker)(new (L.LatLng)(result[0], result[1]), icon: playerIcon, title: String(location.count) ).bindPopup(location.name + '<br>' + location.count)#.bindLabel(String(location.count), {noHide: true})
+                self.markers.addLayer new (L.marker)(new (L.LatLng)(result[0], result[1]), icon: playerIcon, title: location.name+'_'+location.count ).on('click', self.cityClickFunction)#.bindLabel(String(location.count), {noHide: true}).bindPopup(location.name + '<br>' + location.count)
                 return
             countOfGeocoded++
         return
@@ -169,6 +168,10 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
         # set boolean state for map rendered variable
         return if value != true and value != false
         @rendered = value
+        return
+
+    @setContext = (context) ->
+        @context = context;
         return
 
     @remove = ->

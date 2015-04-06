@@ -42,6 +42,10 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
     self.map.addLayer(self.markers);
     this.rendered = true;
   };
+  this.cityClickFunction = function(event) {
+    self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();
+    $timeout(function() {}, 100);
+  };
   this.markersFunctionClubs = function(clubs) {
     var countOfGeocoded;
     countOfGeocoded = 0;
@@ -151,15 +155,6 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   };
   this.markersFunctionFans = function(fans) {
     var countOfGeocoded, locations;
-    fans = [
-      {
-        location: 'Москва'
-      }, {
-        location: 'Санкт-Петербург'
-      }, {
-        location: 'Санкт-Петербург'
-      }
-    ];
     countOfGeocoded = 0;
     locations = [];
     self.markers = new L.MarkerClusterGroup({
@@ -171,7 +166,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         markers = cluster.getAllChildMarkers();
         _.each(markers, function(marker) {
           if (marker.options.title.length !== 0) {
-            sum += Number(marker.options.title);
+            sum += Number(marker.options.title.split('_')[1]);
           }
           c = ' marker-cluster-';
           if ((-1 < sum && sum < 10)) {
@@ -205,7 +200,6 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         });
       }
     });
-    console.log(locations);
     _.each(locations, function(location, index) {
       self.googleGeocode(location.name, countOfGeocoded).then(function(result) {
         var c, playerIcon, ref;
@@ -222,8 +216,8 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         });
         self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {
           icon: playerIcon,
-          title: String(location.count)
-        }).bindPopup(location.name + '<br>' + location.count));
+          title: location.name + '_' + location.count
+        }).on('click', self.cityClickFunction));
       });
       return countOfGeocoded++;
     });
@@ -236,6 +230,9 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
       return;
     }
     this.rendered = value;
+  };
+  this.setContext = function(context) {
+    this.context = context;
   };
   this.remove = function() {
     $('#' + self.mapsDivName).remove();

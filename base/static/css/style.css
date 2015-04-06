@@ -5841,3 +5841,12 @@ hr.style-one {
     margin-top: -50px !important;
     margin-left: -18px !important;
 }
+.custom-divider{
+    left: 100% !important;
+}
+.custom-divider:before, .custom-divider:after{
+    height: 120% !important;
+}
+.custom-divider:after{
+    top: 20% !important;
+}
