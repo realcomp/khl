@@ -1710,7 +1710,6 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       }
       return results;
     })();
-    console.log(line);
     $scope.$location.search('line', line || []);
     if (!$scope.leaguesLoaded) {
       $scope.leaguesLoaded = true;
