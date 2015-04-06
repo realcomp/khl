@@ -40,7 +40,7 @@
                 <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
                 <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}&club={{club.pk}}">{{club.title}} ({{club.address.city.title}})</a>
+                <a class="section" href="{% url 'hockeyapp:club' club.pk%}">{{club.title}} ({{club.address.city.title}})</a>
                 <i class="right chevron icon divider"></i>
                 <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
                 <i class="right chevron icon divider"></i>
