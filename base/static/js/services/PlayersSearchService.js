@@ -148,19 +148,20 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     } else {
       $scope.$location.search('citizenship_other', null);
     }
-    line = ((function() {
+    line = (function() {
       var i, len, ref, results;
-      if ($(e).val()) {
-        ref = $.each($('[name="line"]:checked'));
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          e = ref[i];
+      ref = $('[name="line"]:checked');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
           results.push($(e).val());
         }
-        return results;
       }
-    })());
-    $scope.$location.search('line', line | []);
+      return results;
+    })();
+    console.log(line);
+    $scope.$location.search('line', line || []);
     if (!$scope.leaguesLoaded) {
       $scope.leaguesLoaded = true;
       if ($scope.params.league) {

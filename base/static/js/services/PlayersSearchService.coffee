@@ -115,8 +115,9 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         else
             $scope.$location.search('citizenship_other', null)
 
-        line = ($(e).val() for e in $.each($('[name="line"]:checked')) if $(e).val())
-        $scope.$location.search('line', line | [])
+        line = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
+        console.log(line)
+        $scope.$location.search('line', line or [])
 
         if !$scope.leaguesLoaded
             $scope.leaguesLoaded = true
