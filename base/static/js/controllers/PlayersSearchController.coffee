@@ -98,7 +98,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             return
 
         # PlayersSearchService.search($scope)
-        # PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
+        PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
 
         return
 ])
