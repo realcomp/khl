@@ -5,21 +5,28 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             $http.get(url
             ).success((data) ->
                 $scope.countries = data
-                if $scope.countries.length
-                    country = $scope.countries[0]
-                    if !$location.search().country
-                        # $location.search('country', String(country.pk))
-                        $scope.params = $location.search()
-                    if (country.league_set.length and
-                            !$location.search().league and
-                            $location.search().league != '')
-                        # $location.search('league', String(country.league_set[0].pk))
-                        $scope.params = $location.search()
+                # if $scope.countries.length
+                #     country = $scope.countries[0]
+                #     if !$location.search().country
+                #         # $location.search('country', String(country.pk))
+                #         $scope.params = $location.search()
+                #     if (country.league_set.length and
+                #             !$location.search().league and
+                #             $location.search().league != '')
+                #         # $location.search('league', String(country.league_set[0].pk))
+                #         $scope.params = $location.search()
                 if callback and typeof callback == 'function'
                     callback($scope)
             )
         else if callback and typeof callback == 'function'
             callback($scope)
+        return
+
+    @setCountries = ($scope, countries) ->
+        $scope.countriesSelected = countries
+        $scope.leaguesSelected = []
+        $scope.$location.search('country', countries or null)
+        $scope.$location.search('league', null)
         return
 
     @getLeagues = (countries, selected) ->
@@ -99,7 +106,14 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             this.search($scope)
         return
 
+
     @search = ($scope) ->
+        checkBox = ($scope, search, name) ->
+            # checks checkbox and updates location search
+            $scope.$location.search(
+                search, $('[name="' + name + '"]').is(':checked') or null)
+            return
+
         url = $('#PlayersSearchLink').attr('href')
         params = ''
 
@@ -128,25 +142,16 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         #             $scope.leaguesSelected = [$scope.params.league]
         # $scope.$location.search('league', $scope.leaguesSelected)
 
-        $scope.$location.search(
-            'contract_type__isnull',
-            $('[name="contractTypeNull"]').is(':checked') or null)
+        checkBox($scope, 'contract_type__isnull', 'contractTypeNull')
+        checkBox($scope, 'citizenship_reversed', 'citizenshipReversed')
+        checkBox($scope, 'season_enabled', 'seasonEnabled')
+        checkBox($scope, 'club_enabled', 'clubEnabled')
 
-        $scope.$location.search(
-            'citizenship_reversed',
-            $('[name="citizenshipReversed"]').is(':checked') or null)
-
-        if $scope.citizenship
-            $scope.$location.search('citizenship', (x['pk'] for x in $scope.citizenship))
-        else
-            $scope.$location.search('citizenship', null)
+        $scope.$location.search('citizenship', (x['pk'] for x in ($scope.citizenship or [])))
+        $scope.$location.search('club', (x['pk'] for x in ($scope.club or [])))
 
         if $scope.number
             $scope.$location.search('number', $scope.number)
-        # if $scope.height
-        #     $scope.$location.search('height', $scope.height)
-        # if $scope.weight
-        #     $scope.$location.search('weight', $scope.weight)
 
         if $('[name="age"]').length
             age = $('[name="age"]').val().split(';')
@@ -172,8 +177,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += '&is_playing=true'
         if $scope.params.alphabet
             params += '&%s_lastname__startswith=' + $scope.params.alphabet
-        if $scope.params.club
-            params += '&club=' + $scope.params.club
+        if ($scope.club_enabled or $scope.params.club_enabled) and $scope.params.club
+            params += (('&club=' + club) for club in $scope.params.club).join('')
         if $scope.params.player
             params += '&player=' + $scope.params.player
         if $scope.params.season
@@ -202,7 +207,12 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         if $scope.params.citizenship_reversed
             params += '&citizenship_reversed=true'
         if $scope.params.citizenship
-            params += (('&citizenship=' + x['pk']) for x in $scope.citizenship).join('')
+            params += (('&citizenship=' + x['pk']) for x in $scope.params.citizenship).join('')
+        if $scope.params.season_enabled
+            if $scope.params.season_start and $scope.params.season_end
+                params += (
+                    '&season_start=' + $scope.params.season_start +
+                    '&season_end=' + $scope.params.season_end)
 
         $scope.data = {}
         $scope.loader = true

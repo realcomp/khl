@@ -1553,17 +1553,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     url = $('#LeagueListLink').attr('href');
     if (url) {
       $http.get(url).success(function(data) {
-        var country;
         $scope.countries = data;
-        if ($scope.countries.length) {
-          country = $scope.countries[0];
-          if (!$location.search().country) {
-            $scope.params = $location.search();
-          }
-          if (country.league_set.length && !$location.search().league && $location.search().league !== '') {
-            $scope.params = $location.search();
-          }
-        }
         if (callback && typeof callback === 'function') {
           return callback($scope);
         }
@@ -1571,6 +1561,12 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     } else if (callback && typeof callback === 'function') {
       callback($scope);
     }
+  };
+  this.setCountries = function($scope, countries) {
+    $scope.countriesSelected = countries;
+    $scope.leaguesSelected = [];
+    $scope.$location.search('country', countries || null);
+    $scope.$location.search('league', null);
   };
   this.getLeagues = function(countries, selected) {
     var country, league_sets, x;
@@ -1675,7 +1671,10 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
   };
   this.search = function($scope) {
-    var age, d, e, league, line, params, url, x;
+    var age, checkBox, club, d, e, league, line, params, url, x;
+    checkBox = function($scope, search, name) {
+      $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
+    };
     url = $('#PlayersSearchLink').attr('href');
     params = '';
     if ($('#isCitizenshipRussia').is(':checked')) {
@@ -1707,22 +1706,30 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       return results;
     })();
     $scope.$location.search('line', line || []);
-    $scope.$location.search('contract_type__isnull', $('[name="contractTypeNull"]').is(':checked') || null);
-    $scope.$location.search('citizenship_reversed', $('[name="citizenshipReversed"]').is(':checked') || null);
-    if ($scope.citizenship) {
-      $scope.$location.search('citizenship', (function() {
-        var i, len, ref, results;
-        ref = $scope.citizenship;
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          x = ref[i];
-          results.push(x['pk']);
-        }
-        return results;
-      })());
-    } else {
-      $scope.$location.search('citizenship', null);
-    }
+    checkBox($scope, 'contract_type__isnull', 'contractTypeNull');
+    checkBox($scope, 'citizenship_reversed', 'citizenshipReversed');
+    checkBox($scope, 'season_enabled', 'seasonEnabled');
+    checkBox($scope, 'club_enabled', 'clubEnabled');
+    $scope.$location.search('citizenship', (function() {
+      var i, len, ref, results;
+      ref = $scope.citizenship || [];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        x = ref[i];
+        results.push(x['pk']);
+      }
+      return results;
+    })());
+    $scope.$location.search('club', (function() {
+      var i, len, ref, results;
+      ref = $scope.club || [];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        x = ref[i];
+        results.push(x['pk']);
+      }
+      return results;
+    })());
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
@@ -1757,8 +1764,17 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.params.alphabet) {
       params += '&%s_lastname__startswith=' + $scope.params.alphabet;
     }
-    if ($scope.params.club) {
-      params += '&club=' + $scope.params.club;
+    if (($scope.club_enabled || $scope.params.club_enabled) && $scope.params.club) {
+      params += ((function() {
+        var i, len, ref, results;
+        ref = $scope.params.club;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          club = ref[i];
+          results.push('&club=' + club);
+        }
+        return results;
+      })()).join('');
     }
     if ($scope.params.player) {
       params += '&player=' + $scope.params.player;
@@ -1812,7 +1828,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.params.citizenship) {
       params += ((function() {
         var i, len, ref, results;
-        ref = $scope.citizenship;
+        ref = $scope.params.citizenship;
         results = [];
         for (i = 0, len = ref.length; i < len; i++) {
           x = ref[i];
@@ -1820,6 +1836,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
         }
         return results;
       })()).join('');
+    }
+    if ($scope.params.season_enabled) {
+      if ($scope.params.season_start && $scope.params.season_end) {
+        params += '&season_start=' + $scope.params.season_start + '&season_end=' + $scope.params.season_end;
+      }
     }
     $scope.data = {};
     $scope.loader = true;
@@ -2754,7 +2775,12 @@ angular.module('Sportomatics').controller('ClubStatsController', [
     $scope.data = {};
     $scope.countries = [];
     $scope.loader = false;
-    $location.search('club', +$('[name="club"]').val());
+    $scope.club = [
+      {
+        'pk': +$('[name="club"]').val()
+      }
+    ];
+    $scope.club_enabled = true;
     $scope.params = $location.search();
     $scope.PlayerPartnersPopup = {
       'data': null,

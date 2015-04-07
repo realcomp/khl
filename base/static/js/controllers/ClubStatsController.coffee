@@ -8,7 +8,8 @@ angular.module('Sportomatics').controller('ClubStatsController', [
         $scope.countries = [];
         $scope.loader = false;
 
-        $location.search('club', +$('[name="club"]').val())
+        $scope.club = [{'pk': +$('[name="club"]').val()}]
+        $scope.club_enabled = true
 
         $scope.params = $location.search()
 

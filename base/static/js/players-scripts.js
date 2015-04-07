@@ -19,7 +19,7 @@ $(function () {
     });
 
     $(function() {
-        $('select').styler();
+        $('.styler').styler();
     });
 
     (jQuery);

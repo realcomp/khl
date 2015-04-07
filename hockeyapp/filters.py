@@ -73,7 +73,9 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
     def filter_queryset(self, request, qs, view):
         q = Q()
         _season = request.GET.get('season')
-        _club = request.GET.get('club')
+        _season_start = request.GET.get('season_start')
+        _season_end = request.GET.get('season_end')
+        _clubs = request.GET.getlist('club')
         _is_playing = request.GET.get('is_playing')
         _number = request.GET.get('number')
         _contract_type = request.GET.get('contract_type')
@@ -87,6 +89,10 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
 
         if _season:
             q &= Q(clubplayer__season=_season)
+        elif _season_start and _season_end:
+            q &= Q(
+                clubplayer__season__start_date__gte=_season_start,
+                clubplayer__season__end_date__lte=_season_end)
         elif _is_playing:
             q &= Q(clubplayer__season=Season.objects.latest('start_date'))
 
@@ -101,11 +107,11 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         if _lines:
             q &= Q(line__in=_lines)
 
-        if _club:
+        if _clubs:
             if _is_playing:
-                q &= Q(club=_club)
+                q &= Q(club__in=_clubs)
             else:
-                q &= Q(clubplayer__club=_club)
+                q &= Q(clubplayer__club__in=_clubs)
 
         if _height and _height.isdigit():
             q &= Q(height__gte=_height)
