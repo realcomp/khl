@@ -4082,6 +4082,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       }
       $scope.params = $location.search();
     };
+    PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
   }
 ]);
 
