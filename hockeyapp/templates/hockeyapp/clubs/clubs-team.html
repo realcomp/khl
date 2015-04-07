@@ -105,21 +105,23 @@
                                         </div>
                                         <ul>
                                             <li>
-                                                <a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="unMakeTransferArrows()">
+                                                <a ng-click="setState('fio')" href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="unMakeTransferArrows()">
                                                     {% trans 'Roster' %}
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="unMakeTransferArrows()">
+                                                <a ng-click="setState('fio')" href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="unMakeTransferArrows()">
                                                     {% trans 'All' %}
                                                 </a>
                                             </li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="makeTransferArrows()">Пришли</a></li>
+                                                   ng-click="setState('is_joined')">Пришли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Ушли</a></li>
+                                                   ng-click="setState('is_left')">Ушли</a></li>
                                             <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
-                                                   ng-click="unMakeTransferArrows()">Воспитанники</a></li>
+                                                   ng-click="setState('is_legionnaire')">Легионеры</a></li>
+                                            <li><a href="#team-all" class="item tab-btn" data-tab="team-all"
+                                                   ng-click="setState('is_home')">Свои</a></li>
                                             <li>
                                                 <a href="#team-all" class="item tab-btn" data-tab="team-all" ng-click="notPlayingNow()">
                                                     {% trans 'Not playing now' %}
@@ -145,7 +147,7 @@
 
                                         <div class="player-block-wrap">
                                             <ul class="players-list">
-                                                <li class="player-item" ng-repeat="player in players.all_players track by $index" id="player_{{player.pk}}" ng-click="go('/ru/hockey/players/'+player.pk)">
+                                                <li class="player-item" ng-repeat="player in players.all_players | filter : playerFilter" id="player_{{player.pk}}" ng-click="go('/ru/hockey/players/'+player.pk)">
                                                     <a class="player-link"><img src="{{ player.photo }}" alt="No photo"  onError="this.onerror=null;this.src='/static/images/no-photo.png';" class="player-photo">
                                                     </a>
                                                     <div class="player-number ui teal ribbon label">{{player.number}}</div>

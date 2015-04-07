@@ -8,10 +8,25 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.cache_players = null;
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
+        $scope.state = 'fio';
 
         $scope.setType = function(type){
             $scope.type = type;
-            $scope.unMakeTransferArrows()
+            $scope.unMakeTransferArrows();
+        };
+
+        $scope.setState = function(state){
+            $scope.state = state;
+            $scope.getFromCache();
+            //if($scope.state = 'is_joined'){
+            //    $timeout(function(){
+            //        $scope.makeTransferArrows();
+            //    }, 500)
+            //}
+        };
+
+        $scope.playerFilter = function(value){
+            return value[$scope.state] != false;
         };
 
         $scope.go = function(path){
@@ -234,6 +249,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         //this.list(this.compare, false);
 
         $scope.notPlayingNow = function(callback, callbackArg) {
+            $scope.setState('fio');
             $scope.unMakeTransferArrows();
             $scope.players.loader = true;
             if ($scope.notplaying_players) {
