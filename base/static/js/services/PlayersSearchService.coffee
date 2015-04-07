@@ -148,9 +148,10 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         # if $scope.weight
         #     $scope.$location.search('weight', $scope.weight)
 
-        age = $('[name="age"]').val().split(';')
-        $scope.$location.search('age__lte', age[0])
-        $scope.$location.search('age__gte', age[1])
+        if $('[name="age"]').length
+            age = $('[name="age"]').val().split(';')
+            $scope.$location.search('age__lte', age[0])
+            $scope.$location.search('age__gte', age[1])
 
         $scope.params = $scope.$location.search()
 

@@ -179,9 +179,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
-    age = $('[name="age"]').val().split(';');
-    $scope.$location.search('age__lte', age[0]);
-    $scope.$location.search('age__gte', age[1]);
+    if ($('[name="age"]').length) {
+      age = $('[name="age"]').val().split(';');
+      $scope.$location.search('age__lte', age[0]);
+      $scope.$location.search('age__gte', age[1]);
+    }
     $scope.params = $scope.$location.search();
     params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
     if ($scope.params.reversed) {
