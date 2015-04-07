@@ -86,7 +86,7 @@
                      <label>СТРАНА</label>
                      <select class="country" multiple ng-model="countriesSelected"
                              ng-init="countriesSelected = params.country"
-                             ng-change="$location.search('country', countriesSelected)">
+                             ng-change="$location.search('country', countriesSelected)" disabled readonly>
                          {% for country in countries %}
                              <option value="{{ country.pk }}" {% if forloop.first %}selected{% endif %}>
                                  {{ country.title }}
@@ -94,7 +94,7 @@
                          {% endfor %}
                      </select>
                      <div class="ui checkbox">
-               <input type="checkbox">
+               <input type="checkbox" disabled readonly>
                <label>запомнить выбор</label>
                </div>
           </div>
@@ -119,7 +119,7 @@
                           {% endcomment %}
                       </select>
                     <div class="ui checkbox" id="checkC">
-                <input type="checkbox">
+                <input type="checkbox" disabled readonly>
                 <label>запомнить выбор</label>
                 </div>
                 </div>
@@ -127,7 +127,7 @@
       <!-- Range  -->
         <div class="range-block">
              <label for="range" class="left">ВОЗРАСТ:</label>
-             <input type="text" id="range" value="" name="range" />
+             <input type="text" id="ageRange" value="" name="age" />
         </div>
         <div class="ui divider"></div>
                <div class="posit">
@@ -176,7 +176,9 @@
                    </div>
             <br/>
              <div class="ui checkbox">
-              <input type="checkbox">
+              <input type="checkbox" name="contractTypeNull"
+                     ng-model="contractTypeNull"
+                     ng-init="contractTypeNull = params.contract_type__isnull !== undefined">
               <label>только без контракта</label>
               </div>
            </div>
@@ -196,7 +198,7 @@
                <p>
                    РОСТ (см)
                    <input type="text" ng-model="height" ng-init="height = params.height"
-                          ng-change="$location.search('height', height || null)">
+                          ng-change="$location.search('height', height || null)" disabled readonly>
                </p>
            </div>
          <div class="ui divider"></div>
@@ -204,15 +206,28 @@
                 <p>
                     ВЕС ОТ (кг)
                     <input type="text" ng-model="weight" ng-init="weight = params.weight"
-                           ng-change="$location.search('weight', weight || null)">
+                           ng-change="$location.search('weight', weight || null)" disabled readonly>
                 </p>
            </div>
          <div class="ui divider"></div>
            <h3>ГРАЖДАНСТВО</h3>
            <div class="nation">
-             <input type="text"> <br>
+               <tags-input style="max-width:200px !important;"
+                           ng-model="citizenship"
+                           ng-init="countriesURL = '{% url 'hockeyapp:country-list-api' %}'"
+                           display-property="title"
+                           placeholder="{% trans 'start typing' %}"
+                           add-on-comma="{false}" add-from-autocomplete-only="true">
+                   <auto-complete load-on-focus="true" load-on-empty="true"
+                                  min-length="1" source="loadCountries($query)"
+                                  max-results-to-show="4">
+                   </auto-complete>
+               </tags-input>
+               <!-- <input type="text"> -->
+               <br>
             <div class="ui checkbox">
-                   <input type="checkbox">
+                   <input type="checkbox" name="citizenshipReversed" ng-model="citizenshipReversed"
+                          ng-init="citizenshipReversed = params.citizenship_reversed !== undefined">
                    <label>Все, кроме указанных</label>
             </div>
             </div>
@@ -221,7 +236,7 @@
             <h3 class="left">УЧАСТИЕ В СБОРНОЙ СТРАНЫ</h3>
              <div class="ui checkbox">
 
-                  <input type="checkbox">
+                  <input type="checkbox" disabled readonly>
                 <label>Да</label>
               </div>
           </div>
@@ -236,10 +251,10 @@
                 <div class="ui divider"></div>
             </div>
                <div class="ui checkbox">
-             <input type="checkbox">
+             <input type="checkbox" disabled readonly>
              <label><span>ПО СЕЗОНАМ</span></label>
            </div>
-             <select name=""  class="dropdown">
+             <select name=""  class="dropdown" disabled readonly>
                  {% for season in seasons %}
                      <option>{% lcb %} "{{ season.start_date }}"|date:"yyyy" {% rcb %}</option>
                  {% endfor %}
@@ -247,7 +262,7 @@
 
              до
 
-              <select name=""  class="dropdown">
+              <select name=""  class="dropdown" disabled readonly>
                  {% for season in seasons %}
                      <option>{% lcb %} "{{ season.end_date }}"|date:"yyyy" {% rcb %}</option>
                  {% endfor %}
@@ -257,39 +272,39 @@
          <div class="ui divider"></div>
          <div class="dif">
          <div class="ui checkbox">
-            <input type="checkbox">
+            <input type="checkbox" disabled readonly>
              <label class="left"><span>ПО КОМАНДАМ </span></label>
 
          </div>
-         <input type="text">
+         <input type="text" disabled readonly>
          <div class="ui divider"></div>
           <div class="ui checkbox">
-             <input type="checkbox">
+             <input type="checkbox" disabled readonly>
              <label class="left"><span>ПО ЛИГАМ</span></label>
 
          </div>
-         <input type="text">
+         <input type="text" disabled readonly>
          <div class="ui divider"></div>
-          <div class="ui checkbox"><input type="checkbox">
+          <div class="ui checkbox"><input type="checkbox" disabled readonly>
              <label class="left"><span>ПО ПОХОЖЕСТИ</span></label>
 
          </div>
-          <input type="text">
+          <input type="text" disabled readonly>
           </div>
          <div class="ui divider"></div>
          <div class="rangeTwo-block">
           <label for="range">КОЛИЧЕСТВО СОВПАДЕНИЙ (%)</label>
-             <input type="text" id="rangeTwo" value="" name="range" />
+             <!-- <input type="text" id="rangeTwo" value="" name="range" disabled readonly /> -->
           </div>
             <div class="ui divider"></div>
          <div class="grow">
             <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
-            <input type="text">
+            <input type="text" disabled readonly>
            </div>
          <div class="ui divider"></div>
             <div class="grow">
               <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
-                <input type="text">
+                <input type="text" disabled readonly>
            </div>
          </div>
        </div>

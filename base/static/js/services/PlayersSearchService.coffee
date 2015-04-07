@@ -128,12 +128,29 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         #             $scope.leaguesSelected = [$scope.params.league]
         # $scope.$location.search('league', $scope.leaguesSelected)
 
+        $scope.$location.search(
+            'contract_type__isnull',
+            $('[name="contractTypeNull"]').is(':checked') or null)
+
+        $scope.$location.search(
+            'citizenship_reversed',
+            $('[name="citizenshipReversed"]').is(':checked') or null)
+
+        if $scope.citizenship
+            $scope.$location.search('citizenship', (x['pk'] for x in $scope.citizenship))
+        else
+            $scope.$location.search('citizenship', null)
+
         if $scope.number
             $scope.$location.search('number', $scope.number)
         # if $scope.height
         #     $scope.$location.search('height', $scope.height)
         # if $scope.weight
         #     $scope.$location.search('weight', $scope.weight)
+
+        age = $('[name="age"]').val().split(';')
+        $scope.$location.search('age__lte', age[0])
+        $scope.$location.search('age__gte', age[1])
 
         $scope.params = $scope.$location.search()
 
@@ -175,6 +192,17 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += '&weight=' + $scope.params.weight
         if $scope.params.grip
             params += '&grip=' + $scope.params.grip
+        if $scope.params.contract_type__isnull
+            params += '&contract_type__isnull=true'
+        if $scope.params.age__lte
+            params += '&age__lte=' + $scope.params.age__lte
+        if $scope.params.age__gte
+            params += '&age__gte=' + $scope.params.age__gte
+        if $scope.params.citizenship_reversed
+            params += '&citizenship_reversed=true'
+        if $scope.params.citizenship
+            params += (('&citizenship=' + x['pk']) for x in $scope.citizenship).join('')
+
         $scope.data = {}
         $scope.loader = true
         $http.get(url + '?' + params

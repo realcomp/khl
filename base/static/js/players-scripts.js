@@ -6,18 +6,6 @@ $(function () {
     $('#checkC').checkbox();
     $('#datepicker').datepicker();
 
-    $("#range").ionRangeSlider({
-        hide_min_max: true,
-        keyboard: true,
-        min: 15,
-        max: 45,
-        from: 28,
-        to: 32,
-        type: 'double',
-        step: 1,
-        grid: false
-    });
-
     $("#rangeTwo").ionRangeSlider({
         hide_min_max: true,
         keyboard: true,

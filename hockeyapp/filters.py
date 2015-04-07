@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from dateutil.relativedelta import relativedelta
+
 from django.conf import settings
 from django.db.models import Q
 
@@ -79,6 +81,9 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _height = request.GET.get('height')
         _weight = request.GET.get('weight')
         _grip = request.GET.get('grip')
+        _contract_type__isnull = request.GET.get('contract_type__isnull', '').lower() == 'true'
+        _age__lte = request.GET.get('age__lte')
+        _age__gte = request.GET.get('age__gte')
 
         if _season:
             q &= Q(clubplayer__season=_season)
@@ -101,37 +106,55 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
                 q &= Q(club=_club)
             else:
                 q &= Q(clubplayer__club=_club)
-        _qs = qs.filter(q)
+
+        if _height and _height.isdigit():
+            q &= Q(height__gte=_height)
+
+        if _weight and _weight.isdigit():
+            q &= Q(weight__gte=_weight)
+
+        if _grip:
+            q &= Q(grip=_grip)
+
+        if _contract_type__isnull:
+            q &= Q(contract_type__isnull=True)
+        else:
+            if _contract_type:
+                q &= Q(contract_type=_contract_type)
+            if _contract_to:
+                date = datetime.datetime.strptime(
+                    _contract_to, '%Y-%m-%d').date()
+                q &= Q(contract_to__lte=date)
+
+        if _age__lte and _age__lte.isdigit():
+            date = datetime.datetime.now() - relativedelta(
+                years=int(_age__lte))
+            q &= Q(birth_date__lte=date)
+
+        if _age__gte and _age__gte.isdigit():
+            date = datetime.datetime.now() - relativedelta(
+                years=int(_age__gte))
+            q &= Q(birth_date__gte=date)
 
         _citizenships = request.GET.getlist('citizenship')
-        q_citizenships = Q()
+        q_citizenship = Q()
         if _citizenships:
-            q_citizenships |= Q(citizenship__in=_citizenships)
+            if 'citizenship_reversed' in request.GET:
+                q_citizenship &= ~Q(citizenship__in=_citizenships)
+            else:
+                q_citizenship &= Q(citizenship__in=_citizenships)
         if 'citizenship_other' in request.GET:
-            q_citizenships |= ~Q(citizenship__ru_title=b'Россия')
-        if q_citizenships: _qs = _qs.filter(q)
+            q_citizenship |= ~Q(citizenship__ru_title=b'Россия')
+        if q_citizenship:
+            q &= q_citizenship
+
+        _qs = qs.filter(q)
 
         _s = request.GET.get('%s_lastname__startswith')
         if _s:
             _qs = _qs.filter(**{
                 '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
             })
-
-        if _contract_type:
-            _qs = _qs.filter(contract_type=_contract_type)
-
-        if _contract_to:
-            _qs = _qs.filter(contract_to__lte=datetime.datetime.strptime(
-                _contract_to, '%Y-%m-%d').date())
-
-        if _height and _height.isdigit():
-            _qs = _qs.filter(height__gte=_height)
-
-        if _weight and _weight.isdigit():
-            _qs = _qs.filter(weight__gte=_weight)
-
-        if _grip:
-            _qs = _qs.filter(grip=_grip)
 
         # _pk = request.GET.get('player')
         # if _pk:

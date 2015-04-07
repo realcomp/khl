@@ -20,7 +20,7 @@ from ..filters import PlayersSearchFilter, PlayersSearchOrderFilter
 from ..models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
 from ..models import Timeline
 
-from ..serializers import CountryLeaguesSerializer
+from ..serializers import CountrySerializer, CountryLeaguesSerializer
 from ..serializers import MetricsPlayerSerializer
 from ..serializers.clubs import (
     ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
@@ -139,11 +139,23 @@ class PlayerTimeline(generics.RetrieveAPIView):
         return response.Response({'timeline': serializer.data})
 
 
-class LeagueList(generics.ListAPIView):
-    serializer_class = CountryLeaguesSerializer
+class CountryList(generics.ListAPIView):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
 
-    def get_queryset(self):
-        return Country.objects.exclude(league__isnull=True)
+    def filter_queryset(self, qs):
+        qs = super(CountryList, self).filter_queryset(qs)
+        s = self.request.GET.get('s')
+        if s:
+            qs = qs.filter(**{
+                '%s_title__istartswith' % self.request.LANGUAGE_CODE: s,
+            })
+        return qs.order_by('%s_title' % self.request.LANGUAGE_CODE)
+
+
+class LeagueList(generics.ListAPIView):
+    queryset = Country.objects.exclude(league__isnull=True)
+    serializer_class = CountryLeaguesSerializer
 
 
 class ClubTeam(generics.RetrieveAPIView):

@@ -128,7 +128,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
   };
   this.search = function($scope) {
-    var d, e, league, line, params, url;
+    var age, d, e, league, line, params, url, x;
     url = $('#PlayersSearchLink').attr('href');
     params = '';
     if ($('#isCitizenshipRussia').is(':checked')) {
@@ -160,9 +160,28 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       return results;
     })();
     $scope.$location.search('line', line || []);
+    $scope.$location.search('contract_type__isnull', $('[name="contractTypeNull"]').is(':checked') || null);
+    $scope.$location.search('citizenship_reversed', $('[name="citizenshipReversed"]').is(':checked') || null);
+    if ($scope.citizenship) {
+      $scope.$location.search('citizenship', (function() {
+        var i, len, ref, results;
+        ref = $scope.citizenship;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
+          results.push(x['pk']);
+        }
+        return results;
+      })());
+    } else {
+      $scope.$location.search('citizenship', null);
+    }
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
+    age = $('[name="age"]').val().split(';');
+    $scope.$location.search('age__lte', age[0]);
+    $scope.$location.search('age__gte', age[1]);
     $scope.params = $scope.$location.search();
     params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
     if ($scope.params.reversed) {
@@ -228,6 +247,30 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
     if ($scope.params.grip) {
       params += '&grip=' + $scope.params.grip;
+    }
+    if ($scope.params.contract_type__isnull) {
+      params += '&contract_type__isnull=true';
+    }
+    if ($scope.params.age__lte) {
+      params += '&age__lte=' + $scope.params.age__lte;
+    }
+    if ($scope.params.age__gte) {
+      params += '&age__gte=' + $scope.params.age__gte;
+    }
+    if ($scope.params.citizenship_reversed) {
+      params += '&citizenship_reversed=true';
+    }
+    if ($scope.params.citizenship) {
+      params += ((function() {
+        var i, len, ref, results;
+        ref = $scope.citizenship;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
+          results.push('&citizenship=' + x['pk']);
+        }
+        return results;
+      })()).join('');
     }
     $scope.data = {};
     $scope.loader = true;
