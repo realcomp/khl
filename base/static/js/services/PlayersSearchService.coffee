@@ -113,6 +113,14 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
                 search, $('[name="' + name + '"]').is(':checked') or null)
             return
 
+        multiSelect = ($scope, search, value) ->
+            # checks select and updates location search with serialized data
+            if value and value.length
+                $scope.$location.search(search, JSON.stringify(value))
+            else
+                $scope.$location.search(search, null)
+            return
+
         url = $('#PlayersSearchLink').attr('href')
         params = ''
 
@@ -145,16 +153,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         checkBox($scope, 'citizenship_reversed', 'citizenshipReversed')
         checkBox($scope, 'season_enabled', 'seasonEnabled')
         checkBox($scope, 'club_enabled', 'clubEnabled')
+        checkBox($scope, 'league_enabled', 'league2Enabled')
 
-        if $scope.citizenship and $scope.citizenship.length
-            $scope.$location.search('citizenship', JSON.stringify($scope.citizenship))
-        else
-            $scope.$location.search('citizenship', null)
-
-        if $scope.club and $scope.club.length
-            $scope.$location.search('club', JSON.stringify($scope.club))
-        else
-            $scope.$location.search('club', null)
+        multiSelect($scope, 'citizenship', $scope.citizenship)
+        multiSelect($scope, 'club', $scope.club)
+        multiSelect($scope, 'league2', $scope.league2)
 
         if $scope.number
             $scope.$location.search('number', $scope.number)
@@ -214,6 +217,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += '&citizenship_reversed=true'
         if $scope.params.citizenship
             params += (('&citizenship=' + x['pk']) for x in JSON.parse($scope.params.citizenship)).join('')
+        if $scope.params.league_enabled and $scope.params.league2
+            params += (('&league=' + x['pk']) for x in JSON.parse($scope.params.league2)).join('')
         if $scope.params.season_enabled
             if $scope.params.season_start and $scope.params.season_end
                 params += (

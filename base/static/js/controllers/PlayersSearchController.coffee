@@ -9,6 +9,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.loadClubs = (query) ->
             return $scope.tags.loadClubs($scope.clubsURL, query)
 
+        $scope.loadLeagues = (query) ->
+            return $http.get($scope.leaguesURL)
+
         $scope.getUnchecker = (isDefault, defaultValue) ->
             return () ->
                 if ((isDefault and $(this).attr('value') != defaultValue) or
@@ -28,6 +31,8 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             $scope.citizenship = JSON.parse($scope.params.citizenship)
         if $scope.params.club
             $scope.club = JSON.parse($scope.params.club)
+        if $scope.params.league2
+            $scope.league2 = JSON.parse($scope.params.league2)
 
         if $("#ageRange").length
             $("#ageRange").ionRangeSlider({

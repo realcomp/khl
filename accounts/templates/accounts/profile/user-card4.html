@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="inline-block">
                                     <tags-input style="max-width:200px !important;"
-                                                ng-model="countries" ng-init="countries = {{ countries }}; countriesURL = '{% url 'hockeyapp:league-list-api' %}'"
+                                                ng-model="countries" ng-init="countries = {{ countries }}; countriesURL = '{% url 'hockeyapp:country-league-list-api' %}'"
                                                 display-property="title"
                                                 placeholder="{% trans 'start typing' %}"
                                                 add-on-comma="{false}" add-from-autocomplete-only="true">
