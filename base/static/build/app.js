@@ -1661,17 +1661,17 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
   this.setClubsFilter = function($scope, obj) {
     var value;
     if (obj) {
-      value = String(obj.originalObject.pk);
+      value = [obj.originalObject];
     } else {
       value = null;
     }
-    if (!$scope.loader && $scope.params.club !== value) {
-      $scope.$location.search('club', value);
+    if (!$scope.loader && $scope.club !== value) {
+      $scope.club = value;
       this.search($scope);
     }
   };
   this.search = function($scope) {
-    var age, checkBox, club, d, e, league, line, params, url, x;
+    var age, checkBox, d, e, league, line, params, url, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
     };
@@ -1710,26 +1710,16 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     checkBox($scope, 'citizenship_reversed', 'citizenshipReversed');
     checkBox($scope, 'season_enabled', 'seasonEnabled');
     checkBox($scope, 'club_enabled', 'clubEnabled');
-    $scope.$location.search('citizenship', (function() {
-      var i, len, ref, results;
-      ref = $scope.citizenship || [];
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        x = ref[i];
-        results.push(x['pk']);
-      }
-      return results;
-    })());
-    $scope.$location.search('club', (function() {
-      var i, len, ref, results;
-      ref = $scope.club || [];
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        x = ref[i];
-        results.push(x['pk']);
-      }
-      return results;
-    })());
+    if ($scope.citizenship && $scope.citizenship.length) {
+      $scope.$location.search('citizenship', JSON.stringify($scope.citizenship));
+    } else {
+      $scope.$location.search('citizenship', null);
+    }
+    if ($scope.club && $scope.club.length) {
+      $scope.$location.search('club', JSON.stringify($scope.club));
+    } else {
+      $scope.$location.search('club', null);
+    }
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
@@ -1767,11 +1757,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if (($scope.club_enabled || $scope.params.club_enabled) && $scope.params.club) {
       params += ((function() {
         var i, len, ref, results;
-        ref = $scope.params.club;
+        ref = JSON.parse($scope.params.club);
         results = [];
         for (i = 0, len = ref.length; i < len; i++) {
-          club = ref[i];
-          results.push('&club=' + club);
+          x = ref[i];
+          results.push('&club=' + x['pk']);
         }
         return results;
       })()).join('');
@@ -1828,7 +1818,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.params.citizenship) {
       params += ((function() {
         var i, len, ref, results;
-        ref = $scope.params.citizenship;
+        ref = JSON.parse($scope.params.citizenship);
         results = [];
         for (i = 0, len = ref.length; i < len; i++) {
           x = ref[i];
@@ -4035,6 +4025,12 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     $scope.countries = [];
     $scope.loader = false;
     $scope.params = $location.search();
+    if ($scope.params.citizenship) {
+      $scope.citizenship = JSON.parse($scope.params.citizenship);
+    }
+    if ($scope.params.club) {
+      $scope.club = JSON.parse($scope.params.club);
+    }
     if ($("#ageRange").length) {
       $("#ageRange").ionRangeSlider({
         'hide_min_max': true,

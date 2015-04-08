@@ -20,6 +20,12 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     $scope.countries = [];
     $scope.loader = false;
     $scope.params = $location.search();
+    if ($scope.params.citizenship) {
+      $scope.citizenship = JSON.parse($scope.params.citizenship);
+    }
+    if ($scope.params.club) {
+      $scope.club = JSON.parse($scope.params.club);
+    }
     if ($("#ageRange").length) {
       $("#ageRange").ionRangeSlider({
         'hide_min_max': true,
