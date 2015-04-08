@@ -9,6 +9,8 @@ import requests
 
 from django.db.models.loading import get_model
 
+from base.utils import str2int_safe
+
 from . import GrabParser
 from . import xpathes
 
@@ -111,8 +113,8 @@ class KHLPlayerInfo(GrabParser):
                     'contract_to': self.get_contract_to(),
                     'number': self.get_number(),
                     'line': self.get_line(),
-                    'height': self.get_height(),
-                    'weight': self.get_weight(),
+                    'height': str2int_safe(self.get_height()),
+                    'weight': str2int_safe(self.get_weight()),
                     'grip': self.get_grip(),
                     'birth_date': self.get_birth_date(),
                     'death_date': self.get_death_date(),
