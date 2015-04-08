@@ -94,8 +94,10 @@ class Player(AbstractMan):
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
     pos = models.CharField(_('Offender position'), blank=True, max_length=255)
-    weight = models.CharField(_('Weight'), max_length=32, blank=True)
-    height = models.CharField(_('Height'), max_length=32, blank=True)
+    weight_str = models.CharField(_('Weight'), max_length=32, blank=True)
+    height_str = models.CharField(_('Height'), max_length=32, blank=True)
+    weight = models.PositiveSmallIntegerField(_('Weight'), null=True)
+    height = models.PositiveSmallIntegerField(_('Height'), null=True)
     grip = models.CharField(_('Grip'), max_length=32, blank=True)
     citizenship = models.ForeignKey(Country, verbose_name=_('Citizenship'),
                                             on_delete=models.SET_NULL,
