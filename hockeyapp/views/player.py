@@ -58,6 +58,12 @@ class PlayerCard(DetailView):
     def get_context_data(self, **kwargs):
         context = super(PlayerCard, self).get_context_data(**kwargs)
         context['request'] = self.request
+        clubs = Club.objects.active(
+                            ).filter(clubplayer__player=self.get_object()
+                            ).locale_order_by(self.request, '%s_title'
+                            ).distinct()
+        context['clubs'] = PlayerCardClubsSerializer(
+            clubs, many=True, context=context).data
         context.update(PlayerCardDetailSerializer(
             self.get_object(), context=context).data)
         return context

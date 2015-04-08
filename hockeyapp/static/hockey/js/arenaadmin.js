@@ -8,6 +8,5 @@ $(document).ready(function(){
                 $('#id_coords').val(res);
             }
         }, 100);
-
     });
 });

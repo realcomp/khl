@@ -3,22 +3,22 @@
 {% load static from base_extras %}
 
 {% block extrahead %}
-    {{ block.super }}
-    <link href="{% static 'timelinejs/compiled/css/timeline.css' %}" rel="stylesheet" type="text/css">
-    <script src="{% static 'timelinejs/compiled/js/timeline.js' %}" type="text/javascript"></script>
-    {# <script src="{% static 'timelinejs/compiled/js/timeline-min.js' %}" type="text/javascript"></script> #}
-    <script src="{% static 'timelinejs/compiled/js/storyjs-embed.js' %}" type="text/javascript"></script>
-    <script>
-        $(document).ready(function() {
-            createStoryJS({
-                type: 'timeline',
-                width: '900',
-                height: '600',
-                source: '{% url 'hockeyapp:player-timeline-api' pk %}',
-                embed_id: 'player-timeline'
-            });
+{{ block.super }}
+<link href="{% static 'timelinejs/compiled/css/timeline.css' %}" rel="stylesheet" type="text/css">
+<script src="{% static 'timelinejs/compiled/js/timeline.js' %}" type="text/javascript"></script>
+{# <script src="{% static 'timelinejs/compiled/js/timeline-min.js' %}" type="text/javascript"></script> #}
+<script src="{% static 'timelinejs/compiled/js/storyjs-embed.js' %}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        createStoryJS({
+            type: 'timeline',
+            width: '900',
+            height: '600',
+            source: '{% url 'hockeyapp:player-timeline-api' pk %}',
+            embed_id: 'player-timeline'
         });
-    </script>
+    });
+</script>
 {% endblock %}
 
 {% block title %}
@@ -80,40 +80,40 @@
                             </div>
                             <table class="ui celled table segment design-table">
                                 <thead>
-                                    <tr>
-                                        <th>Характеристики</th>
-                                        <th align="center">Показатели</th>
-                                        <th align="center">Место</th>
-                                    </tr>
+                                <tr>
+                                    <th>Характеристики</th>
+                                    <th align="center">Показатели</th>
+                                    <th align="center">Место</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    {% include "hockeyapp/players/indicators-row.html" with label="Seasons" key="seasons_total" value=seasons_total rating=seasons_total_index pk=pk %}
-                                    {% include "hockeyapp/players/indicators-row.html" with label="Matches" key="matches_total" value=matches_total rating=matches_total_index pk=pk %}
-                                    {% if line == 1 %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Matches Win" key="matches_win_total" value=matches_win_total rating=matches_win_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Matches Lose" key="matches_lose_total" value=matches_lose_total rating=matches_lose_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Matches with series of bullet goals" key="bullet_matches_total" value=bullet_matches_total rating=bullet_matches_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Shots" key="shots_received_total" value=shots_received_total rating=shots_received_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots" key="saves_total" value=saves_total rating=saves_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots, %" key="saves_p_average" value=saves_p_average rating=saves_p_average_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Safety factor" key="sf_average" value=sf_average rating=sf_average_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Missed goals" key="loose_goals_total" value=loose_goals_total rating=loose_goals_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Goal transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="0 goals matches" key="zero_goals_matches_total" value=zero_goals_matches_total rating=zero_goals_matches_total_index pk=pk %}
-                                    {% else %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Goals" key="goals_total" value=goals_total rating=goals_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Points" key="points_total" value=points_total rating=points_total_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Average goals count per game" key="goals_average" value=goals_average rating=goals_average_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Average transfers count per game" key="assists_average" value=assists_average rating=assists_average_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Average score count per game" key="points_average" value=points_average rating=points_average_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label="Average penalty time" key="penalty_time_average" value=penalty_time_average rating=penalty_time_average_index pk=pk %}
-                                        {% include "hockeyapp/players/indicators-row.html" with label='Average "plus/minus" per game' key="plus_minus_average" value=plus_minus_average rating=plus_minus_average_index pk=pk %}
-                                    {% endif %}
-                                    {% include "hockeyapp/players/indicators-row.html" with label="Penalty time, min" key="penalty_time_total" value=penalty_time_total rating=penalty_time_total_index pk=pk %}
-                                    {% include "hockeyapp/players/indicators-row.html" with label="Gaming time" key="gamingtime_total" value=gamingtime_total rating=gamingtime_total_index pk=pk %}
-                                    {% include "hockeyapp/players/indicators-row.html" with label="SM-индекс" key="sm_index" value=12 rating=23 pk=pk %}
-                                    {% include "hockeyapp/players/indicators-row.html" with label="CORSI-индекс" key="corsi_index" value=12 rating=23 pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Seasons" key="seasons_total" value=seasons_total rating=seasons_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Matches" key="matches_total" value=matches_total rating=matches_total_index pk=pk %}
+                                {% if line == 1 %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Matches Win" key="matches_win_total" value=matches_win_total rating=matches_win_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Matches Lose" key="matches_lose_total" value=matches_lose_total rating=matches_lose_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Matches with series of bullet goals" key="bullet_matches_total" value=bullet_matches_total rating=bullet_matches_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Shots" key="shots_received_total" value=shots_received_total rating=shots_received_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots" key="saves_total" value=saves_total rating=saves_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots, %" key="saves_p_average" value=saves_p_average rating=saves_p_average_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Safety factor" key="sf_average" value=sf_average rating=sf_average_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Missed goals" key="loose_goals_total" value=loose_goals_total rating=loose_goals_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Goal transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="0 goals matches" key="zero_goals_matches_total" value=zero_goals_matches_total rating=zero_goals_matches_total_index pk=pk %}
+                                {% else %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Goals" key="goals_total" value=goals_total rating=goals_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Points" key="points_total" value=points_total rating=points_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Average goals count per game" key="goals_average" value=goals_average rating=goals_average_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Average transfers count per game" key="assists_average" value=assists_average rating=assists_average_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Average score count per game" key="points_average" value=points_average rating=points_average_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Average penalty time" key="penalty_time_average" value=penalty_time_average rating=penalty_time_average_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label='Average "plus/minus" per game' key="plus_minus_average" value=plus_minus_average rating=plus_minus_average_index pk=pk %}
+                                {% endif %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Penalty time, min" key="penalty_time_total" value=penalty_time_total rating=penalty_time_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="Gaming time" key="gamingtime_total" value=gamingtime_total rating=gamingtime_total_index pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="SM-индекс" key="sm_index" value=12 rating=23 pk=pk %}
+                                {% include "hockeyapp/players/indicators-row.html" with label="CORSI-индекс" key="corsi_index" value=12 rating=23 pk=pk %}
                                 </tbody>
                             </table>
                         </div>
@@ -134,59 +134,80 @@
                                     <div class="eight wide column">
                                         <ul class="player-links-list">
                                             {% if khl_url %}
-                                                <li class="player-links-item">
-                                                    <a href="{{ khl_url }}" class="player-links-link">
-                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/khl-logo.png" alt="" class="player-links-logo"></span>
-                                                        <span class="player-links-title">Профиль на сайте КХЛ</span>
-                                                    </a>
-                                                </li>
+                                            <li class="player-links-item">
+                                                <a href="{{ khl_url }}" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/khl-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Профиль на сайте КХЛ</span>
+                                                </a>
+                                            </li>
                                             {% endif %}
                                             {% comment %}
-                                                <li class="player-links-item">
-                                                    <a href="#" class="player-links-link">
-                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="player-links-logo"></span>
-                                                        <span class="player-links-title">Профиль на сайте НХЛ</span>
-                                                    </a>
-                                                </li>
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Профиль на сайте НХЛ</span>
+                                                </a>
+                                            </li>
                                             {% endcomment %}
                                             {% if wiki_page %}
-                                                <li class="player-links-item">
-                                                    <a href="{{ wiki_page }}" class="player-links-link">
-                                                        <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/wiki-logo.png" alt="" class="player-links-logo"></span>
-                                                        <span class="player-links-title">Статья в Википедии</span>
-                                                    </a>
-                                                </li>
+                                            <li class="player-links-item">
+                                                <a href="{{ wiki_page }}" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/wiki-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Статья в Википедии</span>
+                                                </a>
+                                            </li>
                                             {% endif %}
                                         </ul>
                                     </div>
                                     <div class="eight wide column">
                                         {% if fb or vk %}
-                                            <ul class="player-links-list">
-                                                {% if fb %}
-                                                    <li class="player-links-item">
-                                                        <a href="{{ fb }}" class="player-links-link">
-                                                            <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/fb-logo.png" alt="" class="player-links-logo"></span>
-                                                            <span class="player-links-title">Страница на Facebook</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                                {% if vk %}
-                                                    <li class="player-links-item">
-                                                        <a href="{{ vk }}" class="player-links-link">
-                                                            <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/vk-logo.png" alt="" class="player-links-logo"></span>
-                                                            <span class="player-links-title">Страница ВКонтакте</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                                {% comment %}
-                                                    <li class="player-links-item">
-                                                        <a href="#" class="player-links-link player-links-link_internet">
-                                                            +ЕЩЕ В ИНТЕРНЕТ
-                                                        </a>
-                                                    </li>
-                                                {% endcomment %}
-                                            </ul>
+                                        <ul class="player-links-list">
+                                            {% if fb %}
+                                            <li class="player-links-item">
+                                                <a href="{{ fb }}" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/fb-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Страница на Facebook</span>
+                                                </a>
+                                            </li>
+                                            {% endif %}
+                                            {% if vk %}
+                                            <li class="player-links-item">
+                                                <a href="{{ vk }}" class="player-links-link">
+                                                    <span class="player-links-logo-container"><img src="{{ STATIC_URL }}images/vk-logo.png" alt="" class="player-links-logo"></span>
+                                                    <span class="player-links-title">Страница ВКонтакте</span>
+                                                </a>
+                                            </li>
+                                            {% endif %}
+                                            {% comment %}
+                                            <li class="player-links-item">
+                                                <a href="#" class="player-links-link player-links-link_internet">
+                                                    +ЕЩЕ В ИНТЕРНЕТ
+                                                </a>
+                                            </li>
+                                            {% endcomment %}
+                                        </ul>
                                         {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Клубная карьера</span>
+                            </div>
+
+                            <a id="IndicatorsLink" class="hidden" href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
+                            <input type="hidden" id="isPlayerShort">
+                            {% for club in clubs %}
+                            <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}">
+                            {% endfor %}
+
+                            <div class="ui grid" ng-controller="PlayerCardIndicatorsController as PlayerCardIndicatorsCtrl">
+
+                                <div class="row">
+                                    <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="PlayerCardIndicatorsCtrl.loader">
+                                        <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                                    </div>
+                                    <div class="sixteen wide column">
+                                        <div id="chartdiv"  style="height: 200px"></div>
                                     </div>
                                 </div>
                             </div>
@@ -201,45 +222,45 @@
                         <div class="column">
                             <div class="photo-title heading">Фотографии</div>
                             <a href="#" class="view-all-photos-btn">посмотреть все фото</a>
-                                <div class="clubs-photos-slider">
-                                    {% verbatim %}
-                                    <div class="slides_container" >
-                                        <div>
-                                            <ul class="photos-list">
-                                                <li class="photo-item">
-                                                    <a href="#" class="club-photo player-photo_add"><span class="add-photo-icon"><i class="add sign icon"></i></span>добавить свое фото</a>
-                                                </li>
-                                                <li ng-repeat="item in photos track by $index | limitTo: 4 " class="photo-item">
-                                                    <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index, $event)">
-                                                        <img ng-src="{{item.photo.img.file}}" alt="">
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div ng-show="photosSlider[1].length">
-                                            <ul class="photos-list">
-                                                <li ng-repeat="item in photosSlider[1]" class="photo-item">
-                                                    <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index+5, $event)">
-                                                        <img ng-src="{{item.photo.img.file}}"  alt="">
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div ng-show="photosSlider[2].length">
-                                            <ul class="photos-list">
-                                                <li ng-repeat="item in photosSlider[2] | limitTo: 4 " class="photo-item">
-                                                    <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index+10, $event)">
-                                                        <img ng-src="{{item.photo.img.file}}"  alt="">
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                            <div class="clubs-photos-slider">
+                                {% verbatim %}
+                                <div class="slides_container" >
+                                    <div>
+                                        <ul class="photos-list">
+                                            <li class="photo-item">
+                                                <a href="#" class="club-photo player-photo_add"><span class="add-photo-icon"><i class="add sign icon"></i></span>добавить свое фото</a>
+                                            </li>
+                                            <li ng-repeat="item in photos track by $index | limitTo: 4 " class="photo-item">
+                                                <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index, $event)">
+                                                    <img ng-src="{{item.photo.img.file}}" alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <a class="prev" ng-show="photosSlider[1].length"><i class="chevron circle left icon" ></i></a>
-                                    <a class="next" ng-show="photosSlider[1].length"><i class="chevron circle right icon" ></i></a>
-
-                                    {% endverbatim %}
+                                    <div ng-show="photosSlider[1].length">
+                                        <ul class="photos-list">
+                                            <li ng-repeat="item in photosSlider[1]" class="photo-item">
+                                                <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index+5, $event)">
+                                                    <img ng-src="{{item.photo.img.file}}"  alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div ng-show="photosSlider[2].length">
+                                        <ul class="photos-list">
+                                            <li ng-repeat="item in photosSlider[2] | limitTo: 4 " class="photo-item">
+                                                <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index+10, $event)">
+                                                    <img ng-src="{{item.photo.img.file}}"  alt="">
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <a class="prev" ng-show="photosSlider[1].length"><i class="chevron circle left icon" ></i></a>
+                                <a class="next" ng-show="photosSlider[1].length"><i class="chevron circle right icon" ></i></a>
+
+                                {% endverbatim %}
+                            </div>
                         </div>
                     </div>
                     <div class="row">
