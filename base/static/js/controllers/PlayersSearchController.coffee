@@ -39,7 +39,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                 'hide_min_max': true,
                 'keyboard': true,
                 'min': 15,
-                'max': 45,
+                'max': 65,
                 'from': $scope.params.age__lte or 18,
                 'to': $scope.params.age__gte or 25,
                 'type': 'double',

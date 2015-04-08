@@ -86,6 +86,8 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _contract_type__isnull = request.GET.get('contract_type__isnull', '').lower() == 'true'
         _age__lte = request.GET.get('age__lte')
         _age__gte = request.GET.get('age__gte')
+        _match_count = request.GET.get('match_count')
+        _gamingtime = request.GET.get('gamingtime')
 
         if _season:
             q &= Q(clubplayer__season=_season)
@@ -141,6 +143,12 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             date = datetime.datetime.now() - relativedelta(
                 years=int(_age__gte))
             q &= Q(birth_date__gte=date)
+
+        if _match_count and _match_count.isdigit():
+            q &= Q(matches_total__gte=_match_count)
+
+        if _gamingtime and _gamingtime.isdigit():
+            q &= Q(gamingtime_total__gte=_gamingtime)
 
         _citizenships = request.GET.getlist('citizenship')
         q_citizenship = Q()

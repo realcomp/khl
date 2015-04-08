@@ -330,16 +330,18 @@
           <label for="range">КОЛИЧЕСТВО СОВПАДЕНИЙ (%)</label>
              <!-- <input type="text" id="rangeTwo" value="" name="range" disabled readonly /> -->
           </div>
-            <div class="ui divider"></div>
-         <div class="grow">
-            <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
-            <input type="text" disabled readonly>
-           </div>
          <div class="ui divider"></div>
-            <div class="grow">
-              <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
-                <input type="text" disabled readonly>
-           </div>
+         <div class="grow">
+             <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
+             <input type="text" ng-model="matchCount" ng-init="matchCount = params.match_count"
+                    ng-change="$location.search('match_count', matchCount || null)">
+         </div>
+         <div class="ui divider"></div>
+         <div class="grow">
+             <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
+             <input type="text" ng-model="gamingtime" ng-init="gamingtime = params.gamingtime"
+                    ng-change="$location.search('gamingtime', gamingtime || null)">
+         </div>
          </div>
        </div>
      <!-- </div> -->
