@@ -49,7 +49,7 @@
             <div class="page-content page-container"
                  ng-controller="PlayersSearchController as PlayersSearchCtrl">
                 <a id="PlayersSearchLink" class="hidden" href="{% url 'hockeyapp:players-search-api' %}"></a>
-                <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
+                <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:country-league-list-api' %}"></a>
                 <div class="container-top-block">
                     <div class="ui grid">
                         <div class="row">
@@ -199,7 +199,7 @@
                <p>
                    РОСТ (см)
                    <input type="text" ng-model="height" ng-init="height = params.height"
-                          ng-change="$location.search('height', height || null)" disabled readonly>
+                          ng-change="$location.search('height', height || null)">
                </p>
            </div>
          <div class="ui divider"></div>
@@ -207,7 +207,7 @@
                 <p>
                     ВЕС ОТ (кг)
                     <input type="text" ng-model="weight" ng-init="weight = params.weight"
-                           ng-change="$location.search('weight', weight || null)" disabled readonly>
+                           ng-change="$location.search('weight', weight || null)">
                 </p>
            </div>
          <div class="ui divider"></div>
@@ -301,11 +301,23 @@
          <!-- <input type="text" disabled readonly> -->
          <div class="ui divider"></div>
           <div class="ui checkbox">
-             <input type="checkbox" disabled readonly>
+             <input type="checkbox" name="league2Enabled" ng-model="league2Enabled"
+                    ng-init="league2Enabled = params.league_enabled !== undefined">
              <label class="left"><span>ПО ЛИГАМ</span></label>
 
          </div>
-         <input type="text" disabled readonly>
+         <tags-input style="max-width:448px !important;"
+                     ng-model="league2"
+                     ng-init="leaguesURL = '{% url 'hockeyapp:league-list-api' %}'"
+                     display-property="title"
+                     placeholder="{% trans 'start typing' %}"
+                     add-on-comma="{false}" add-from-autocomplete-only="true">
+             <auto-complete load-on-focus="true" load-on-empty="true"
+                            min-length="1" source="loadLeagues($query)"
+                            max-results-to-show="20">
+             </auto-complete>
+         </tags-input>
+         <!-- <input type="text" disabled readonly> -->
          <div class="ui divider"></div>
           <div class="ui checkbox"><input type="checkbox" disabled readonly>
              <label class="left"><span>ПО ПОХОЖЕСТИ</span></label>
@@ -318,16 +330,18 @@
           <label for="range">КОЛИЧЕСТВО СОВПАДЕНИЙ (%)</label>
              <!-- <input type="text" id="rangeTwo" value="" name="range" disabled readonly /> -->
           </div>
-            <div class="ui divider"></div>
-         <div class="grow">
-            <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
-            <input type="text" disabled readonly>
-           </div>
          <div class="ui divider"></div>
-            <div class="grow">
-              <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
-                <input type="text" disabled readonly>
-           </div>
+         <div class="grow">
+             <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
+             <input type="text" ng-model="matchCount" ng-init="matchCount = params.match_count"
+                    ng-change="$location.search('match_count', matchCount || null)">
+         </div>
+         <div class="ui divider"></div>
+         <div class="grow">
+             <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
+             <input type="text" ng-model="gamingtime" ng-init="gamingtime = params.gamingtime"
+                    ng-change="$location.search('gamingtime', gamingtime || null)">
+         </div>
          </div>
        </div>
      <!-- </div> -->
