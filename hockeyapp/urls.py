@@ -9,6 +9,8 @@ from .views import admin, club, player
 urlpatterns = [
     # TODO: move to separate namespace
     # REST API
+    url(r'^api/countries/$', api.CountryList.as_view(),
+        name='country-list-api'),
     url(r'^api/leagues/$', api.LeagueList.as_view(),
         name='league-list-api'),
     url(r'^api/players/$',

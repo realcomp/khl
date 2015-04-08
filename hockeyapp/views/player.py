@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.views.generic import DetailView, TemplateView
 from django.utils.translation import ugettext_lazy as _
 
+from rest_framework.renderers import JSONRenderer
+
 from addresses.models import Country
 
 from ..models import Club, Coach, Player, Season
@@ -41,6 +43,9 @@ class PlayersSearch2(PlayersSearch):
 
     def get_context_data(self, **kwargs):
         context = super(PlayersSearch2, self).get_context_data(**kwargs)
+        # countries = CountryLeaguesSerializer(
+        #     Country.objects.all(), context=context, many=True).data
+        # context['countries'] = JSONRenderer().render(countries)
         context['countries'] = CountryLeaguesSerializer(
             Country.objects.all(), context=context, many=True).data
         return context

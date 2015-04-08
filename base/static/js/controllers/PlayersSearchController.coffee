@@ -1,6 +1,14 @@
 angular.module('Sportomatics').controller('PlayersSearchController', [
-    '$http', '$scope', '$location', 'PlayersSearchService',
-    ($http, $scope, $location, PlayersSearchService) ->
+    '$http', '$scope', '$location', 'PlayersSearchService', 'tags',
+    ($http, $scope, $location, PlayersSearchService, tags) ->
+        $scope.tags = tags
+
+        $scope.loadCountries = (query) ->
+            return $scope.tags.loadCountries($scope.countriesURL, query)
+
+        $scope.loadClubs = (query) ->
+            return $scope.tags.loadClubs($scope.clubsURL, query)
+
         $scope.getUnchecker = (isDefault, defaultValue) ->
             return () ->
                 if ((isDefault and $(this).attr('value') != defaultValue) or
@@ -15,6 +23,24 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.loader = false
 
         $scope.params = $location.search()
+
+        if $scope.params.citizenship
+            $scope.citizenship = JSON.parse($scope.params.citizenship)
+        if $scope.params.club
+            $scope.club = JSON.parse($scope.params.club)
+
+        if $("#ageRange").length
+            $("#ageRange").ionRangeSlider({
+                'hide_min_max': true,
+                'keyboard': true,
+                'min': 15,
+                'max': 45,
+                'from': $scope.params.age__lte or 18,
+                'to': $scope.params.age__gte or 25,
+                'type': 'double',
+                'step': 1,
+                'grid': false
+            })
 
         $scope.PlayerPartnersPopup = {
             'data': null,

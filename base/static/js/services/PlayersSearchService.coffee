@@ -5,21 +5,28 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             $http.get(url
             ).success((data) ->
                 $scope.countries = data
-                if $scope.countries.length
-                    country = $scope.countries[0]
-                    if !$location.search().country
-                        # $location.search('country', String(country.pk))
-                        $scope.params = $location.search()
-                    if (country.league_set.length and
-                            !$location.search().league and
-                            $location.search().league != '')
-                        # $location.search('league', String(country.league_set[0].pk))
-                        $scope.params = $location.search()
+                # if $scope.countries.length
+                #     country = $scope.countries[0]
+                #     if !$location.search().country
+                #         # $location.search('country', String(country.pk))
+                #         $scope.params = $location.search()
+                #     if (country.league_set.length and
+                #             !$location.search().league and
+                #             $location.search().league != '')
+                #         # $location.search('league', String(country.league_set[0].pk))
+                #         $scope.params = $location.search()
                 if callback and typeof callback == 'function'
                     callback($scope)
             )
         else if callback and typeof callback == 'function'
             callback($scope)
+        return
+
+    @setCountries = ($scope, countries) ->
+        $scope.countriesSelected = countries
+        $scope.leaguesSelected = []
+        $scope.$location.search('country', countries or null)
+        $scope.$location.search('league', null)
         return
 
     @getLeagues = (countries, selected) ->
@@ -68,15 +75,15 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             if rated_by # by rating -> set ordering
                 $scope.$location.search('order_by', 'rating')
                 $scope.$location.search('reversed', 'true')
-                this.search($scope)
+                @search($scope)
             else # by alphabet -> reset ordering
-                this.setOrderBy($scope, '')
+                @setOrderBy($scope, '')
         return
 
     @setAlphabetFilter = ($scope, alphabet) ->
         if !$scope.loader && $scope.params.alphabet != alphabet
             $scope.$location.search('alphabet', alphabet)
-            this.search($scope)
+            @search($scope)
         return
 
     @setPlayersFilter = ($scope, obj) ->
@@ -86,20 +93,26 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             value = null
         if !$scope.loader and $scope.params.player != value
             $scope.$location.search('player', value)
-            this.search($scope)
+            @search($scope)
         return
 
     @setClubsFilter = ($scope, obj) ->
         if obj
-            value = String(obj.originalObject.pk)
+            value = [obj.originalObject]
         else
             value = null
-        if !$scope.loader and $scope.params.club != value
-            $scope.$location.search('club', value)
-            this.search($scope)
+        if !$scope.loader and $scope.club != value
+            $scope.club = value
+            @search($scope)
         return
 
     @search = ($scope) ->
+        checkBox = ($scope, search, name) ->
+            # checks checkbox and updates location search
+            $scope.$location.search(
+                search, $('[name="' + name + '"]').is(':checked') or null)
+            return
+
         url = $('#PlayersSearchLink').attr('href')
         params = ''
 
@@ -128,12 +141,28 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         #             $scope.leaguesSelected = [$scope.params.league]
         # $scope.$location.search('league', $scope.leaguesSelected)
 
+        checkBox($scope, 'contract_type__isnull', 'contractTypeNull')
+        checkBox($scope, 'citizenship_reversed', 'citizenshipReversed')
+        checkBox($scope, 'season_enabled', 'seasonEnabled')
+        checkBox($scope, 'club_enabled', 'clubEnabled')
+
+        if $scope.citizenship and $scope.citizenship.length
+            $scope.$location.search('citizenship', JSON.stringify($scope.citizenship))
+        else
+            $scope.$location.search('citizenship', null)
+
+        if $scope.club and $scope.club.length
+            $scope.$location.search('club', JSON.stringify($scope.club))
+        else
+            $scope.$location.search('club', null)
+
         if $scope.number
             $scope.$location.search('number', $scope.number)
-        # if $scope.height
-        #     $scope.$location.search('height', $scope.height)
-        # if $scope.weight
-        #     $scope.$location.search('weight', $scope.weight)
+
+        if $('[name="age"]').length
+            age = $('[name="age"]').val().split(';')
+            $scope.$location.search('age__lte', age[0])
+            $scope.$location.search('age__gte', age[1])
 
         $scope.params = $scope.$location.search()
 
@@ -154,8 +183,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += '&is_playing=true'
         if $scope.params.alphabet
             params += '&%s_lastname__startswith=' + $scope.params.alphabet
-        if $scope.params.club
-            params += '&club=' + $scope.params.club
+        if ($scope.club_enabled or $scope.params.club_enabled) and $scope.params.club
+            params += (('&club=' + x['pk']) for x in JSON.parse($scope.params.club)).join('')
         if $scope.params.player
             params += '&player=' + $scope.params.player
         if $scope.params.season
@@ -175,6 +204,22 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += '&weight=' + $scope.params.weight
         if $scope.params.grip
             params += '&grip=' + $scope.params.grip
+        if $scope.params.contract_type__isnull
+            params += '&contract_type__isnull=true'
+        if $scope.params.age__lte
+            params += '&age__lte=' + $scope.params.age__lte
+        if $scope.params.age__gte
+            params += '&age__gte=' + $scope.params.age__gte
+        if $scope.params.citizenship_reversed
+            params += '&citizenship_reversed=true'
+        if $scope.params.citizenship
+            params += (('&citizenship=' + x['pk']) for x in JSON.parse($scope.params.citizenship)).join('')
+        if $scope.params.season_enabled
+            if $scope.params.season_start and $scope.params.season_end
+                params += (
+                    '&season_start=' + $scope.params.season_start +
+                    '&season_end=' + $scope.params.season_end)
+
         $scope.data = {}
         $scope.loader = true
         $http.get(url + '?' + params
