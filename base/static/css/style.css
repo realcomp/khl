@@ -5854,3 +5854,6 @@ hr.style-one {
     height: 95px !important;
     width: 145px !important;
 }
+.player-clubs-list .option-link{
+    border-right: none !important;
+}

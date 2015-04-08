@@ -15,7 +15,22 @@ angular.module('Sportomatics', [
                 alert($state)
             }
         })
-});
+})
+
+.factory('AmChartsFactory', function ($q, $rootScope, $document) {
+    var deferred = $q.defer();
+
+    AmCharts.ready(function(){
+        $rootScope.$apply(deferred.resolve);
+    });
+
+    return {
+        ready: function () {
+            return deferred.promise;
+        }
+    };
+})
+.run(function (AmChartsFactory) {});
 
 /* better fps test
 var body = document.body, timer;
@@ -29,6 +44,7 @@ window.addEventListener('scroll', function() {
   }, 500);
 }, false);
  better fps test */
+var ALL_FIELDS = ["count", "goals", "assists", "points", "plus_minus", "penalty_time", "es_goals", "pp_goals", "ev_goals", "overtime_goals", "win_goals", "bullet_goals", "shots", "pis__avg", "shots__avg", "faceoff", "winfaceoff", "winfaceoff_p_avg", "gamingtime__avg", "change_count__avg", "shots_received", "loose_goals", "saves", "saves_p__avg", "sf__avg", "matches_win", "matches_lose", "zero_goals_matches", "bullet_matches", "position"];
 
 var next = function($http) {
     return function(isAll) {
