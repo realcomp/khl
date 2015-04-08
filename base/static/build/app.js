@@ -1747,6 +1747,48 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   };
 });
 
+angular.module('Sportomatics').factory('PieChartFactory', function($q, $timeout, AmChartsFactory, zoomData) {
+  var PlayerClubsChart;
+  PlayerClubsChart = (function() {
+    function PlayerClubsChart(data, graphs) {
+      this.data = data;
+      this.graphs = graphs;
+    }
+
+    PlayerClubsChart.prototype.init = function() {};
+
+    PlayerClubsChart.prototype.setData = function(data) {
+      this.data = data;
+    };
+
+    PlayerClubsChart.prototype.create = function(chartData) {
+      var deferred;
+      deferred = $q.defer();
+      AmChartsFactory.ready().then(function() {
+        var balloonText, chart;
+        chart = new AmCharts.AmPieChart();
+        chart.dataProvider = chartData;
+        chart.titleField = "clubTitle";
+        chart.valueField = "value";
+        chart.outlineColor = "#FFFFFF";
+        chart.outlineAlpha = 0.8;
+        chart.outlineThickness = 2;
+        chart.urlField = "clubUrl";
+        chart.startDuration = 0.3;
+        balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
+        deferred.resolve(chart);
+      });
+      return deferred.promise;
+    };
+
+    return PlayerClubsChart;
+
+  })();
+  return {
+    PlayerClubsChart: PlayerClubsChart
+  };
+});
+
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 angular.module('Sportomatics').service('PlayersSearchService', function($http) {
@@ -3664,7 +3706,7 @@ angular.module('Sportomatics')
         }
 })
     angular.module('Sportomatics')
-        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory, ClubChartsFactory) {
+        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory, ClubChartsFactory, PieChartFactory) {
             //http://www.amcharts.com/lib/images/
             var self = this;
             var url = $('#IndicatorsLink').attr('href');
@@ -3681,6 +3723,7 @@ angular.module('Sportomatics')
             this.playerName = document.getElementById('player-name').value;
             this.playerColor = document.getElementById('player-color').value;
             this.playerClubs = document.getElementById('player-clubs');
+            this.urlClub = document.getElementById('url-club').value.replace('0/', '');
             $scope.apiPlayersUrl = document.getElementById('api-players-url').value;
             $scope.limited = false; // user is not limited by default
             $scope.activeSeason = -1; // all seasons selected by default
@@ -3923,6 +3966,7 @@ angular.module('Sportomatics')
                     });
                     queries.push($http.get(url + params))
                 });
+                self.loader = true;
                 $q.all(queries).then(function(results, a){
                     _.each(results, function(result){
                         _.each(clubs, function(club){
@@ -3974,11 +4018,12 @@ angular.module('Sportomatics')
                         data: clubsData.results
                     };
 
-                    var playerClubsChart = new ClubChartsFactory.PlayerClubsChart();
-                    playerClubsChart.create(self.field, chartData, $scope.localeObject, graphs).then(function(chart){
+                    if(document.getElementById('isPlayerShort') == null){
+                        var playerClubsChart = new ClubChartsFactory.PlayerClubsChart();
+                        playerClubsChart.create(self.field, chartData, $scope.localeObject, graphs).then(function(chart){
 
-                        if(self.club){
-                            _.each(chart.graphs, function(data){
+                            if(self.club){
+                                _.each(chart.graphs, function(data){
                                     console.log(data.valueField.split('_')[1]);
                                     if(data.valueField.split('_')[1] === self.club.toString()){
                                         data.lineColor = "#699c97";
@@ -3989,11 +4034,47 @@ angular.module('Sportomatics')
                                         data.lineColor = self.playerColor ? self.playerColor : "#408e3a";
                                         data.fillColor = self.playerColor ? self.playerColor : "#408e3a";
                                     }
-                            });
-                        }
+                                });
+                            }
 
-                        chart.write('chartdiv')
-                    });
+                            self.loader = false;
+
+                            chart.write('chartdiv')
+                        });
+                    } else {
+                        var ar = chartData.data.map(function(e){
+                            for(var key in e){
+                                if(e.hasOwnProperty(key)){
+                                    if(key.indexOf('count') > -1){
+                                       return {
+                                           field: key,
+                                           value: e[key]
+                                       };
+                                    }
+                                }
+                            }
+                        })
+                        ar = _.chain(ar).groupBy('field').map(function(value, key) {
+                            return {
+                                club: key,
+                                value: _.pluck(value, 'value').reduce(function(pv, cv) { return pv + cv; }, 0)
+                            }
+                        }).value();
+                        var sum = _.reduce(ar, function(pv, cv){ return pv + cv.value }, 0);
+                        ar = ar.map(function(object){
+                            var club = _.findWhere(clubs, {pk: object.club.split('_')[1]});
+                            object.clubTitle = club.title;
+                            object.clubUrl = self.urlClub + object.club.split('_')[1] + '?season=' + toSeason(club.seasons[0]);
+                            return object
+                        })
+                        var playerClubsChart = new PieChartFactory.PlayerClubsChart();
+                        playerClubsChart.create(ar).then(function(chart){
+
+                            self.loader = false;
+
+                            chart.write('chartdiv')
+                        });
+                    }
 
                 })
             }; //List clubs
@@ -4126,6 +4207,32 @@ angular.module('Sportomatics')
         return chartData;
     }
 
+    function toSeason(value){
+        //TODO заменить
+        var seasons = {
+            s2002: 1,
+            s2003: 2,
+            s2001: 3,
+            s2004: 4,
+            s2000: 5,
+            s1999: 6,
+            s1998: 7,
+            s2005: 8,
+            s2006: 9,
+            s1997: 10,
+            s2007: 11,
+            s2008: 12,
+            s2009: 13,
+            s2010: 14,
+            s2011: 15,
+            s2012: 16,
+            s2013: 17,
+            s2014: 18,
+            s2015: 19
+        }
+        return seasons['s'+value];
+    }
+
     function populateChartData(initialData, data, field, localeObject, playerObject){
         var chartData = initialData;
         var dates = data.map(function(e){
@@ -4227,6 +4334,8 @@ angular.module('Sportomatics')
         }
         return color;
     }
+angular.module('Sportomatics').controller('PlayerCardShortController', function($scope, PieChartFactory, $q, $http) {});
+
 angular.module('Sportomatics')
     .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
