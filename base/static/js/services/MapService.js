@@ -24,7 +24,10 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
       'OpenStreetMap': osm
     }, {}));
     self.markers = new L.MarkerClusterGroup({
-      showCoverageOnHover: false
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false,
+      animateAddingMarkers: true,
+      maxClusterRadius: 120
     });
     switch (dataLabel) {
       case 'clubs':
@@ -45,6 +48,25 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   this.cityClickFunction = function(event) {
     self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();
     $timeout(function() {}, 100);
+  };
+  this.clusterClickClubs = function(a) {
+    var cluster;
+    self.a = a;
+    cluster = a.layer.getAllChildMarkers();
+    if (self.map.getZoom() === self.map.getMaxZoom()) {
+      return;
+    }
+    self.popup = L.popup().setLatLng(a.layer._latlng).setContent('<div class="text-center">' + cluster[0].options.title + ' и еще ' + (cluster.length - 1) + ' клубов <br> <a class="link pointer" id="show-all">показать все</a></div>').openOn(self.map);
+    document.getElementById('show-all').onclick = function() {
+      return self.moveToClusterBounds(self.a);
+    };
+  };
+  this.moveToClusterBounds = function(cluster) {
+    cluster.layer.zoomToBounds();
+    self.map.closePopup(self.popup);
+    if (self.map.getZoom() === self.map.getMaxZoom()) {
+      self.map.zoomOut(2);
+    }
   };
   this.markersFunctionClubs = function(clubs) {
     var countOfGeocoded;
@@ -68,20 +90,26 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
       if (!club.arena.coords) {
         self.googleGeocode(club.arena.contacts, countOfGeocoded).then(function(result) {
           self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {
-            icon: clubIcon
+            icon: clubIcon,
+            title: club.title
           }).bindPopup(club.title + '<br>'));
         });
         countOfGeocoded++;
       }
       if (coordinate1 && coordinate2) {
         self.markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {
-          icon: clubIcon
+          icon: clubIcon,
+          title: club.title
         }).bindPopup(club.title + '<br>'));
       }
     });
+    self.markers.on('clusterclick', this.clusterClickClubs);
   };
   this.markersFunctionClubGames = function(games) {
     var clubs, countOfGeocoded;
+    self.markers = new L.MarkerClusterGroup({
+      showCoverageOnHover: false
+    });
     countOfGeocoded = 0;
     clubs = [];
     _.each(games, function(game, index) {
@@ -133,6 +161,9 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   };
   this.markersFunctionPlayers = function(players) {
     var countOfGeocoded;
+    self.markers = new L.MarkerClusterGroup({
+      showCoverageOnHover: false
+    });
     countOfGeocoded = 0;
     _.each(players, function(player, index) {
       var playerIcon;
