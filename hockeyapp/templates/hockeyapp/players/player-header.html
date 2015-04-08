@@ -1,4 +1,37 @@
 {% load i18n %}
+
+<div class="ui grid breadcrumb-search">
+    <div class="twelve wide column">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section" href="{% url 'i18n_index' %}">{% trans 'Hockey' %}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
+                <i class="right chevron icon divider"></i>
+                {% if club.league %}
+                    <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{ club.league.pk }}">{{ club.league.title }}</a>
+                    <i class="right chevron icon divider"></i>
+                {% endif %}
+                <a class="section" href="{% url 'hockeyapp:club' club.pk%}">{{ club.title_verbose }}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{ name }} {{ lastname }}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="active section">{% trans player_section %}</a>
+            </div>
+        </div>
+    </div>
+    <div class="four wide column">
+        <div class="search-block">
+            <div class="item">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="ui grid">
     <div class="row">
         <div class="twelve wide column">
