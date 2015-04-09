@@ -195,13 +195,13 @@
                             </div>
 
                             <a id="IndicatorsLink" class="hidden" href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
-                            <input type="hidden" id="isPlayerShort">
+
                             {% for club in clubs %}
-                            <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}">
+                            <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}_{{club.main_color}}">
                             {% endfor %}
 
                             <div class="ui grid" ng-controller="PlayerCardIndicatorsController as PlayerCardIndicatorsCtrl">
-
+                                <input type="hidden" id="isPlayerShort">
                                 <div class="row">
                                     <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="PlayerCardIndicatorsCtrl.loader">
                                         <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">

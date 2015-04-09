@@ -1,5 +1,5 @@
     angular.module('Sportomatics')
-        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory, ClubChartsFactory, PieChartFactory) {
+        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory, ClubChartsFactory, PieChartFactory, HighchartsFactory) {
             //http://www.amcharts.com/lib/images/
             var self = this;
             var url = $('#IndicatorsLink').attr('href');
@@ -250,12 +250,14 @@
                 var queries = [];
                 var clubs = [];
                 var graphs = [];
+                //TODO заменить на обращение к апи
                 $('.club-id').each(function(index, value){
                     var club = $(value).attr('id').split('_');
                     var params = '?group_by=season&club=' + club[1];
                     clubs.push({
                         title: club[0],
-                        pk: club[1]
+                        pk: club[1],
+                        main_color: club[2]
                     });
                     queries.push($http.get(url + params))
                 });
@@ -272,101 +274,44 @@
                             }
                         })
                     });
+
+                    var newData = [];
                     _.each(clubs, function(club){
-                        var graph = new AmCharts.AmGraph();
-                        graph.fillAlphas = 1;
-                        graph.labelText =  "[[value]]";
-                        graph.lineAlpha = 0.3;
-                        graph.title = club.title;
-                        graph.type = "column";
-                        graph.valueField = self.field + '_' + club.pk;
-                        graphs.push(graph);
-                    });
-                    var clubsData = {
-                        results: []
-                    };
-                    _.each($scope.dataBySeason.results, function(result){
-                        var season = new Date(result.season.end_date).getFullYear();
-                        var complexResult = {};
-                        for(var key in result){
-                            if(result.hasOwnProperty(key))
-                            if(_.contains(ALL_FIELDS, key)){
-                                _.each(clubs, function(club){
-                                    if(_.contains(club.seasons, season)){
-                                        _.each(club.results, function(clubResult){
-                                            if(new Date(clubResult.season.end_date).getFullYear() === season)
-                                            complexResult[key+'_'+club.pk] = clubResult[key];
-                                        })
-                                    }
-                                })
-                            }
+                        var object = {
+                            name: club.title,
+                            stack: 'season',
+                            data: club.results.map(function(clubResult){
+                                return [new Date(clubResult.season.end_date.split('-')).getTime(), parseInt(clubResult[self.field])]
+                            }),
+                            club: club,
+                            color: (self.club != null) ? ((club.pk.toString() === self.club.toString()) ? "#699c97" : "#408e3a" ) : (club.main_color.length === 0) ? null : club.main_color,
+                            showInLegend: (self.club != null) ? ((club.pk.toString() === self.club.toString()) ? true : false ) : null,
                         }
-                        complexResult.season = result.season;
-                        complexResult.end_date = result.season.end_date;
-                        clubsData.results.push(complexResult);
-                    });
+                        newData.push(object)
+                    })
 
-                    var chartData = {
-                        groupBy: self.groupBy,
-                        data: clubsData.results
-                    };
+                    if(document.getElementById('isPlayerShort') == null){ //player-clubs page
 
-                    if(document.getElementById('isPlayerShort') == null){
-                        var playerClubsChart = new ClubChartsFactory.PlayerClubsChart();
-                        playerClubsChart.create(self.field, chartData, $scope.localeObject, graphs).then(function(chart){
+                        self.loader = false;
+                        var playerClubsChart = new HighchartsFactory.PlayerClubsChart('chartdiv', newData, self.field);
+                        playerClubsChart.setLocaleObject($scope.localeObject)
+                        playerClubsChart.draw();
+                        document.getElementById('chartdiv').style.marginLeft = '-15px'
 
-                            if(self.club){
-                                _.each(chart.graphs, function(data){
-                                    console.log(data.valueField.split('_')[1]);
-                                    if(data.valueField.split('_')[1] === self.club.toString()){
-                                        data.lineColor = "#699c97";
-                                        data.fillColor = "#699c97";
-                                    } else {
-                                        data.visibleInLegend = false;
-                                        data.labelText = '';
-                                        data.lineColor = self.playerColor ? self.playerColor : "#408e3a";
-                                        data.fillColor = self.playerColor ? self.playerColor : "#408e3a";
-                                    }
-                                });
-                            }
-
-                            self.loader = false;
-
-                            chart.write('chartdiv')
-                        });
                     } else {
-                        var ar = chartData.data.map(function(e){
-                            for(var key in e){
-                                if(e.hasOwnProperty(key)){
-                                    if(key.indexOf('count') > -1){
-                                       return {
-                                           field: key,
-                                           value: e[key]
-                                       };
-                                    }
-                                }
-                            }
-                        })
-                        ar = _.chain(ar).groupBy('field').map(function(value, key) {
+                        console.log(newData)
+                        var newDataPie = newData.map(function(el){
                             return {
-                                club: key,
-                                value: _.pluck(value, 'value').reduce(function(pv, cv) { return pv + cv; }, 0)
-                            }
-                        }).value();
-                        var sum = _.reduce(ar, function(pv, cv){ return pv + cv.value }, 0);
-                        ar = ar.map(function(object){
-                            var club = _.findWhere(clubs, {pk: object.club.split('_')[1]});
-                            object.clubTitle = club.title;
-                            object.clubUrl = self.urlClub + object.club.split('_')[1] + '?season=' + toSeason(club.seasons[0]);
-                            return object
+                                name: el.name,
+                                y: _.reduce(el.data, function(pv, cv){ return pv + cv[1] }, 0),
+                                pk: el.club.pk,
+                                url: self.urlClub + el.club.pk + '?season=' + toSeason(el.club.seasons[0])
+                            };
                         })
-                        var playerClubsChart = new PieChartFactory.PlayerClubsChart();
-                        playerClubsChart.create(ar).then(function(chart){
-
-                            self.loader = false;
-
-                            chart.write('chartdiv')
-                        });
+                        console.log(newDataPie)
+                        self.loader = false;
+                        var playerClubsChart = new HighchartsFactory.PlayerClubsPieChart('chartdiv', newDataPie, self.field);
+                        playerClubsChart.draw();
                     }
 
                 })
