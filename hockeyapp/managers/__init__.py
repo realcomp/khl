@@ -45,7 +45,9 @@ class ScheduleManager(models.Manager):
                 m['match'] = self._get_match(m)
                 if m['match']: m['processed'] = True
             m.update(qs)
+            print qs
             _match = self.filter(**qs).last()
+            print _match
             if _match:
                 self.filter(pk=_match.pk).update(**m)
             else:
@@ -65,7 +67,7 @@ class ScheduleManager(models.Manager):
         club_model = get_model(CURRENT_APP, 'club')
         _club = club_model.objects.by_title_alias(title).first()
         if not _club:
-            _club = club_model.objects.get_or_create(title=title)
+            _club, _crt = club_model.objects.get_or_create(title=title)
         return _club
 
     def _get_match(self, m=None):
