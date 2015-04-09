@@ -7,37 +7,9 @@
 {% block body %}
 <section class="content">
     <div class="container player-card-short-page">
-      <div class="ui grid breadcrumb-search">
-        <div class="twelve wide column">
-            <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">{% trans 'Hockey' %}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">{% trans 'Players' %}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}#?country=1&league={{club.league.pk}}">{{club.league.title}}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:club' club.pk%}">{{club.title}} ({{club.address.city.title}})</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:player-card' pk %}">{{name}} {{lastname}}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="active section">{% trans 'Team partners' %}</a>
-            </div>
-            </div>
-        </div>
-        <div class="four wide column">
-              <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- {% trans "Partners" %} -->
+        {% include "hockeyapp/players/player-header.html" with player_section="Partners" %}
 
-        {% include "hockeyapp/players/card.html" %}
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container" ng-controller="PlayerPartnersController">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-partners" %}

@@ -54,7 +54,7 @@ if settings.DEBUG:
     ) + urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns('',
-    url(r'^$', 'hockeyapp.views.index', name='index'),
+    url(r'^$', 'hockeyapp.views.index', name='i18n_index'),
     url(r'^accounts/', include('registration.urls')),
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^accounts/signup/#\?uidb64=(?P<uidb64>[0-9A-Za-z_\-]+)&token=(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',

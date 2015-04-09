@@ -102,8 +102,8 @@ class KHLScheduleParser(GrabParser):
         match = {
             'title': mdiv.xpath(self.mxd['ru_title'])[0],
             'date': self.python_date(_time),
-            'home_team': mdiv.xpath(self.mxd['home_team'])[0],
-            'guest_team': mdiv.xpath(self.mxd['guest_team'])[0],
+            'home_team': mdiv.xpath(self.mxd['home_team'])[0].strip(),
+            'guest_team': mdiv.xpath(self.mxd['guest_team'])[0].strip(),
             'khl_id': str2int_safe(khl_id),
         }
         return match

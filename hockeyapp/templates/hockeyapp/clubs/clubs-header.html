@@ -1,0 +1,56 @@
+{% load i18n %}
+<div class="ui grid breadcrumb-search">
+    <div class="twelve wide column">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section" href="{% url 'i18n_index' %}">{% trans 'Hockey' %}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:club-list' %}">{% trans 'Clubs' %}</a>
+                <i class="right chevron icon divider"></i>
+                {% if league %}
+                    <a class="section" href="{% url 'hockeyapp:club-list' %}#?country=1&league={{ league.pk }}">{{ league.title }}</a>
+                    <i class="right chevron icon divider"></i>
+                {% endif %}
+                <a class="section" href="{% url 'hockeyapp:club' pk %}">{{ title_verbose }}</a>
+                <i class="right chevron icon divider"></i>
+                <a class="active section">{% trans club_section %}</a>
+            </div>
+        </div>
+    </div>
+    <div class="four wide column">
+        <div class="search-block">
+            <div class="item">
+                <div class="ui icon input">
+                    <input type="text" placeholder="Search...">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="team-info">
+    <div id="team-heading" class="team-heading">
+        <a class="ui red button my-team-btn">+ Я БОЛЕЮ ЗА ЭТУ КОМАНДУ</a>
+        <div id="team-logo" class="team-logo"><img src="{{ logo|default:"" }}" alt="Sportomatics" class="team-logo-image"></div>
+        <a id="team-name"  href="{% url 'hockeyapp:club' pk %}" class="team-name">{{ title }}
+            {% if address.title %}
+                <span>({{ address.title }})</span>
+            {% endif %}
+        </a>
+        <input id="team-name-hidden" type="hidden" value="{{title}}">
+        <input id="team-id" type="hidden" value="{{pk}}">
+        <input id="team-arena-id" type="hidden" value="{{arena.pk}}">
+    </div>
+    <ul class="info-list">
+        {% if site %}
+            <li class="info-item"><i class="browser icon"></i> {% trans "Site" %}: <a href="{{ site }}">{{ site }}</a></li>
+        {% endif %}
+        {% if email %}
+            <li class="info-item"><i class="mail icon"></i> E-mail: {{ email }}</li>
+        {% endif %}
+        {% if phone %}
+            <li class="info-item"><i class="phone icon"></i> {% trans "Tel." %}: {{ phone }}</li>
+        {% endif %}
+    </ul>
+</div>
