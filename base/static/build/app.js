@@ -320,304 +320,6 @@ $.fn.textWidth = function(){
     return width;
 };
 
-angular.module('Sportomatics').factory('SomeFactory', function($q, $timeout, AmChartsFactory, zoomData) {
-  var PlayerClubsChart;
-  PlayerClubsChart = (function() {
-    function PlayerClubsChart(data1, graphs1) {
-      this.data = data1;
-      this.graphs = graphs1;
-    }
-
-    PlayerClubsChart.prototype.init = function() {};
-
-    PlayerClubsChart.prototype.setData = function(data1) {
-      this.data = data1;
-    };
-
-    PlayerClubsChart.prototype.create = function(field, chartData, localeObject, graphs, player) {
-      var chart, deferred;
-      deferred = $q.defer();
-      chart = void 0;
-      AmChartsFactory.ready().then(function() {
-        var balloons, categoryAxis, chartCursor, chartScrollbar, currMax, currMin, data, legend, oneBalloon, valueAxis1;
-        data = chartData.data;
-        chart = new AmCharts.AmSerialChart;
-        chart.pathToImages = 'http://www.amcharts.com/lib/images/';
-        chart.dataProvider = data;
-        chart.categoryField = 'end_date';
-        chart.cursorColor = '#DADADA';
-        chart.startDuration = 0.5;
-        chart.startEffect = 'easeOutSine';
-        chart.addClassNames = true;
-        chart.depth3D = 60;
-        chart.angle = 30;
-        chart.exportConfig = {
-          'menuTop': '45px',
-          'menuRight': '5px',
-          'menuItems': [
-            {
-              'icon': 'http://www.amcharts.com/lib/3/images/export.png',
-              'format': 'png'
-            }
-          ]
-        };
-        chart.addListener('dataUpdated', zoomChart);
-        chart.addListener('zoomed', function(chart) {
-          zoomData.startDate = chart.startDate;
-          zoomData.endDate = chart.endDate;
-        });
-        categoryAxis = chart.categoryAxis;
-        categoryAxis.parseDates = true;
-        categoryAxis.minPeriod = chartData.groupBy == 'month' ? 'MM' : 'YYYY';
-        categoryAxis.equalSpacing = true;
-        categoryAxis.minHorizontalGap = 40;
-        categoryAxis.gridAlpha = 0;
-        categoryAxis.boldPeriodBeginning = false;
-        categoryAxis.axisColor = '#DADADA';
-        categoryAxis.markPeriodChange = false;
-        categoryAxis.dateFormats = [
-          {
-            period: 'MM',
-            format: 'MMM'
-          }, {
-            period: 'YYYY',
-            format: 'YYYY'
-          }
-        ];
-        categoryAxis.labelFunction = function(valueText, date, categoryAxis) {
-          var endDate, startDate, value;
-          value = new Date(date);
-          if (chartData.groupBy == 'season') {
-            endDate = valueText.substr(2, 2);
-            startDate = endDate == '00' ? '99' : (parseInt(endDate) - 1).toString();
-            if (startDate.length == 1) {
-              startDate = '0' + startDate;
-            }
-            return startDate + '/' + endDate;
-          }
-          if (valueText == 'Jan') {
-            return localeObject.monthNames[value.getMonth()] + '\n' + value.getFullYear();
-          }
-          return localeObject.monthNames[value.getMonth()];
-        };
-        currMax = Math.max.apply(Math, data.map(function(e) {
-          return e['values'];
-        }));
-        currMin = Math.min.apply(Math, data.map(function(e) {
-          return e['values'];
-        }));
-        valueAxis1 = new AmCharts.ValueAxis();
-        valueAxis1.axisColor = '#408e3a';
-        valueAxis1.axisThickness = 1;
-        valueAxis1.stackType = "regular";
-        valueAxis1.axisAlpha = 0;
-        valueAxis1.gridAlpha = 0;
-        chart.addValueAxis(valueAxis1);
-        if (graphs && graphs.length) {
-          oneBalloon = '<p style=\'text-align: left;\'><span style=\'font-size:14px; color:#000000;\'>[[value]]</span></p>';
-          balloons = '<div class=\'inline-block text-left\'><p style=\'text-align: left;\'><span style=\'font-size:14px; color:#000000;\'><b>' + localeObject.fieldNames[field].fullName + '</b></span></p>';
-          _.each(graphs, function(graph, index) {
-            balloons += createBalloon(graph.valueField, graph.title);
-            graph.valueAxis = valueAxis1;
-            graph.balloonText = index < graphs.length - 1 ? '' : balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
-          });
-          _.each(graphs, function(graph, index) {
-            graph.balloonText = balloons + '</div><div class="inline-block season-balloon"><div class="balloon-div">Сезон 06/07</div></div> ';
-            graph.lineColorField = 'lineColor';
-            graph.fillColorsField = 'lineColor';
-            chart.addGraph(graph);
-          });
-        }
-        chartScrollbar = new AmCharts.ChartScrollbar;
-        chartScrollbar.autoGridCount = true;
-        chartScrollbar.color = '#000000';
-        chart.addChartScrollbar(chartScrollbar);
-        legend = new AmCharts.AmLegend;
-        legend.marginLeft = 110;
-        legend.useGraphSettings = true;
-        chart.addLegend(legend);
-        chart.allLabels = [
-          {
-            align: 'center',
-            y: 60,
-            alpha: 0.7,
-            bold: true,
-            text: localeObject.fieldNames[field].fullName.toUpperCase()
-          }
-        ];
-        chartCursor = new AmCharts.ChartCursor;
-        chartCursor.cursorAlpha = 1;
-        chartCursor.cursorColor = '#8ebd5d';
-        chartCursor.oneBalloonOnly = true;
-        chartCursor.categoryBalloonFunction = function(value) {
-          if (chartData.groupBy == 'month') {
-            return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
-          } else {
-            return localeObject.words.season + (value.getFullYear() - 1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2);
-          }
-        };
-        chart.addChartCursor(chartCursor);
-        deferred.resolve(chart);
-      });
-      return deferred.promise;
-    };
-
-    return PlayerClubsChart;
-
-  })();
-  return {
-    PlayerClubsChart: PlayerClubsChart
-  };
-});
-
-angular.module('Sportomatics').factory('ClubChartsFactory', function($q, $timeout, AmChartsFactory, zoomData) {
-  var PlayerClubsChart;
-  PlayerClubsChart = (function() {
-    function PlayerClubsChart(data1, graphs1) {
-      this.data = data1;
-      this.graphs = graphs1;
-    }
-
-    PlayerClubsChart.prototype.init = function() {};
-
-    PlayerClubsChart.prototype.setData = function(data1) {
-      this.data = data1;
-    };
-
-    PlayerClubsChart.prototype.create = function(field, chartData, localeObject, graphs, player) {
-      var chart, deferred;
-      deferred = $q.defer();
-      chart = void 0;
-      AmChartsFactory.ready().then(function() {
-        var balloons, categoryAxis, chartCursor, chartScrollbar, currMax, currMin, data, legend, oneBalloon, valueAxis1;
-        data = chartData.data;
-        chart = new AmCharts.AmSerialChart;
-        chart.pathToImages = 'http://www.amcharts.com/lib/images/';
-        chart.dataProvider = data;
-        chart.categoryField = 'end_date';
-        chart.cursorColor = '#DADADA';
-        chart.startDuration = 0.5;
-        chart.startEffect = 'easeOutSine';
-        chart.addClassNames = true;
-        chart.depth3D = 60;
-        chart.angle = 30;
-        chart.exportConfig = {
-          'menuTop': '45px',
-          'menuRight': '5px',
-          'menuItems': [
-            {
-              'icon': 'http://www.amcharts.com/lib/3/images/export.png',
-              'format': 'png'
-            }
-          ]
-        };
-        chart.addListener('dataUpdated', zoomChart);
-        chart.addListener('zoomed', function(chart) {
-          zoomData.startDate = chart.startDate;
-          zoomData.endDate = chart.endDate;
-        });
-        categoryAxis = chart.categoryAxis;
-        categoryAxis.parseDates = true;
-        categoryAxis.minPeriod = chartData.groupBy == 'month' ? 'MM' : 'YYYY';
-        categoryAxis.equalSpacing = true;
-        categoryAxis.minHorizontalGap = 40;
-        categoryAxis.gridAlpha = 0;
-        categoryAxis.boldPeriodBeginning = false;
-        categoryAxis.axisColor = '#DADADA';
-        categoryAxis.markPeriodChange = false;
-        categoryAxis.dateFormats = [
-          {
-            period: 'MM',
-            format: 'MMM'
-          }, {
-            period: 'YYYY',
-            format: 'YYYY'
-          }
-        ];
-        categoryAxis.labelFunction = function(valueText, date, categoryAxis) {
-          var endDate, startDate, value;
-          value = new Date(date);
-          if (chartData.groupBy == 'season') {
-            endDate = valueText.substr(2, 2);
-            startDate = endDate == '00' ? '99' : (parseInt(endDate) - 1).toString();
-            if (startDate.length == 1) {
-              startDate = '0' + startDate;
-            }
-            return startDate + '/' + endDate;
-          }
-          if (valueText == 'Jan') {
-            return localeObject.monthNames[value.getMonth()] + '\n' + value.getFullYear();
-          }
-          return localeObject.monthNames[value.getMonth()];
-        };
-        currMax = Math.max.apply(Math, data.map(function(e) {
-          return e['values'];
-        }));
-        currMin = Math.min.apply(Math, data.map(function(e) {
-          return e['values'];
-        }));
-        valueAxis1 = new AmCharts.ValueAxis();
-        valueAxis1.axisColor = '#408e3a';
-        valueAxis1.axisThickness = 1;
-        valueAxis1.stackType = "regular";
-        valueAxis1.axisAlpha = 0;
-        valueAxis1.gridAlpha = 0;
-        chart.addValueAxis(valueAxis1);
-        if (graphs && graphs.length) {
-          oneBalloon = '<p style=\'text-align: left;\'><span style=\'font-size:14px; color:#000000;\'>[[value]]</span></p>';
-          balloons = '<div class=\'inline-block text-left\'><p style=\'text-align: left;\'><span style=\'font-size:14px; color:#000000;\'><b>' + localeObject.fieldNames[field].fullName + '</b></span></p>';
-          _.each(graphs, function(graph, index) {
-            balloons += createBalloon(graph.valueField, graph.title);
-            graph.valueAxis = valueAxis1;
-          });
-          _.each(graphs, function(graph, index) {
-            graph.lineColorField = 'lineColor';
-            graph.fillColorsField = 'lineColor';
-            chart.addGraph(graph);
-          });
-        }
-        chartScrollbar = new AmCharts.ChartScrollbar;
-        chartScrollbar.autoGridCount = true;
-        chartScrollbar.color = '#000000';
-        chart.addChartScrollbar(chartScrollbar);
-        legend = new AmCharts.AmLegend;
-        legend.marginLeft = 110;
-        legend.useGraphSettings = true;
-        chart.addLegend(legend);
-        chart.allLabels = [
-          {
-            align: 'center',
-            y: 60,
-            alpha: 0.7,
-            bold: true,
-            text: localeObject.fieldNames[field].fullName.toUpperCase()
-          }
-        ];
-        chartCursor = new AmCharts.ChartCursor;
-        chartCursor.cursorAlpha = 1;
-        chartCursor.cursorColor = '#8ebd5d';
-        chartCursor.oneBalloonOnly = true;
-        chartCursor.categoryBalloonFunction = function(value) {
-          if (chartData.groupBy == 'month') {
-            return localeObject.monthNames[value.getMonth()] + ' ' + value.getFullYear();
-          } else {
-            return localeObject.words.season + (value.getFullYear() - 1).toString().substr(2, 2) + '/' + value.getFullYear().toString().substr(2, 2);
-          }
-        };
-        chart.addChartCursor(chartCursor);
-        deferred.resolve(chart);
-      });
-      return deferred.promise;
-    };
-
-    return PlayerClubsChart;
-
-  })();
-  return {
-    PlayerClubsChart: PlayerClubsChart
-  };
-});
-
 angular.module('Sportomatics')
 
 angular.module('Sportomatics')
@@ -1774,7 +1476,10 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
       'OpenStreetMap': osm
     }, {}));
     self.markers = new L.MarkerClusterGroup({
-      showCoverageOnHover: false
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: false,
+      animateAddingMarkers: true,
+      maxClusterRadius: 120
     });
     switch (dataLabel) {
       case 'clubs':
@@ -1795,6 +1500,25 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   this.cityClickFunction = function(event) {
     self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();
     $timeout(function() {}, 100);
+  };
+  this.clusterClickClubs = function(a) {
+    var cluster;
+    self.a = a;
+    cluster = a.layer.getAllChildMarkers();
+    if (self.map.getZoom() === self.map.getMaxZoom()) {
+      return;
+    }
+    self.popup = L.popup().setLatLng(a.layer._latlng).setContent('<div class="text-center">' + cluster[0].options.title + ' и еще ' + (cluster.length - 1) + ' клубов <br> <a class="link pointer" id="show-all">показать все</a></div>').openOn(self.map);
+    document.getElementById('show-all').onclick = function() {
+      return self.moveToClusterBounds(self.a);
+    };
+  };
+  this.moveToClusterBounds = function(cluster) {
+    cluster.layer.zoomToBounds();
+    self.map.closePopup(self.popup);
+    if (self.map.getZoom() === self.map.getMaxZoom()) {
+      self.map.zoomOut(2);
+    }
   };
   this.markersFunctionClubs = function(clubs) {
     var countOfGeocoded;
@@ -1818,20 +1542,26 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
       if (!club.arena.coords) {
         self.googleGeocode(club.arena.contacts, countOfGeocoded).then(function(result) {
           self.markers.addLayer(new L.marker(new L.LatLng(result[0], result[1]), {
-            icon: clubIcon
+            icon: clubIcon,
+            title: club.title
           }).bindPopup(club.title + '<br>'));
         });
         countOfGeocoded++;
       }
       if (coordinate1 && coordinate2) {
         self.markers.addLayer(new L.marker(new L.LatLng(coordinate1, coordinate2), {
-          icon: clubIcon
+          icon: clubIcon,
+          title: club.title
         }).bindPopup(club.title + '<br>'));
       }
     });
+    self.markers.on('clusterclick', this.clusterClickClubs);
   };
   this.markersFunctionClubGames = function(games) {
     var clubs, countOfGeocoded;
+    self.markers = new L.MarkerClusterGroup({
+      showCoverageOnHover: false
+    });
     countOfGeocoded = 0;
     clubs = [];
     _.each(games, function(game, index) {
@@ -1883,6 +1613,9 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   };
   this.markersFunctionPlayers = function(players) {
     var countOfGeocoded;
+    self.markers = new L.MarkerClusterGroup({
+      showCoverageOnHover: false
+    });
     countOfGeocoded = 0;
     _.each(players, function(player, index) {
       var playerIcon;
@@ -2014,6 +1747,48 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   };
 });
 
+angular.module('Sportomatics').factory('PieChartFactory', function($q, $timeout, AmChartsFactory, zoomData) {
+  var PlayerClubsChart;
+  PlayerClubsChart = (function() {
+    function PlayerClubsChart(data, graphs) {
+      this.data = data;
+      this.graphs = graphs;
+    }
+
+    PlayerClubsChart.prototype.init = function() {};
+
+    PlayerClubsChart.prototype.setData = function(data) {
+      this.data = data;
+    };
+
+    PlayerClubsChart.prototype.create = function(chartData) {
+      var deferred;
+      deferred = $q.defer();
+      AmChartsFactory.ready().then(function() {
+        var balloonText, chart;
+        chart = new AmCharts.AmPieChart();
+        chart.dataProvider = chartData;
+        chart.titleField = "clubTitle";
+        chart.valueField = "value";
+        chart.outlineColor = "#FFFFFF";
+        chart.outlineAlpha = 0.8;
+        chart.outlineThickness = 2;
+        chart.urlField = "clubUrl";
+        chart.startDuration = 0.3;
+        balloonText = "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
+        deferred.resolve(chart);
+      });
+      return deferred.promise;
+    };
+
+    return PlayerClubsChart;
+
+  })();
+  return {
+    PlayerClubsChart: PlayerClubsChart
+  };
+});
+
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 angular.module('Sportomatics').service('PlayersSearchService', function($http) {
@@ -2140,9 +1915,16 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
   };
   this.search = function($scope) {
-    var age, checkBox, d, e, league, line, params, url, x;
+    var age, checkBox, d, e, i, key, league, len, line, multiSelect, params, ref, url, value, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
+    };
+    multiSelect = function($scope, search, value) {
+      if (value && value.length) {
+        $scope.$location.search(search, JSON.stringify(value));
+      } else {
+        $scope.$location.search(search, null);
+      }
     };
     url = $('#PlayersSearchLink').attr('href');
     params = '';
@@ -2179,16 +1961,10 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     checkBox($scope, 'citizenship_reversed', 'citizenshipReversed');
     checkBox($scope, 'season_enabled', 'seasonEnabled');
     checkBox($scope, 'club_enabled', 'clubEnabled');
-    if ($scope.citizenship && $scope.citizenship.length) {
-      $scope.$location.search('citizenship', JSON.stringify($scope.citizenship));
-    } else {
-      $scope.$location.search('citizenship', null);
-    }
-    if ($scope.club && $scope.club.length) {
-      $scope.$location.search('club', JSON.stringify($scope.club));
-    } else {
-      $scope.$location.search('club', null);
-    }
+    checkBox($scope, 'league_enabled', 'league2Enabled');
+    multiSelect($scope, 'citizenship', $scope.citizenship);
+    multiSelect($scope, 'club', $scope.club);
+    multiSelect($scope, 'league2', $scope.league2);
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
@@ -2199,6 +1975,14 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
     $scope.params = $scope.$location.search();
     params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
+    ref = ['player', 'season', 'number', 'contract_type', 'height', 'weight', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime'];
+    for (i = 0, len = ref.length; i < len; i++) {
+      key = ref[i];
+      value = $scope.params[key];
+      if (value) {
+        params += '&' + key + '=' + value;
+      }
+    }
     if ($scope.params.reversed) {
       params += '&reversed=true';
     }
@@ -2214,9 +1998,6 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.params.citizenship_other === 'true') {
       params += '&citizenship_other=true';
     }
-    if ($scope.params.rated_by) {
-      params += '&rated_by=' + $scope.params.rated_by;
-    }
     if ($scope.params.is_playing !== 'false') {
       params += '&is_playing=true';
     }
@@ -2225,73 +2006,58 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
     if (($scope.club_enabled || $scope.params.club_enabled) && $scope.params.club) {
       params += ((function() {
-        var i, len, ref, results;
-        ref = JSON.parse($scope.params.club);
+        var j, len1, ref1, results;
+        ref1 = JSON.parse($scope.params.club);
         results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          x = ref[i];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          x = ref1[j];
           results.push('&club=' + x['pk']);
         }
         return results;
       })()).join('');
     }
-    if ($scope.params.player) {
-      params += '&player=' + $scope.params.player;
-    }
-    if ($scope.params.season) {
-      params += '&season=' + $scope.params.season;
-    }
     if ($scope.params.league) {
       params += ((function() {
-        var i, len, ref, results;
-        ref = $scope.params.league;
+        var j, len1, ref1, results;
+        ref1 = $scope.params.league;
         results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          league = ref[i];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          league = ref1[j];
           results.push('&league=' + league);
         }
         return results;
       })()).join('');
     }
-    if ($scope.params.number) {
-      params += '&number=' + $scope.params.number;
-    }
-    if ($scope.params.contract_type) {
-      params += '&contract_type=' + $scope.params.contract_type;
-    }
     if ($scope.params.contract_to) {
       d = $scope.params.contract_to.split('/');
       params += '&contract_to=' + d[2] + '-' + d[0] + '-' + d[1];
     }
-    if ($scope.params.height) {
-      params += '&height=' + $scope.params.height;
-    }
-    if ($scope.params.weight) {
-      params += '&weight=' + $scope.params.weight;
-    }
-    if ($scope.params.grip) {
-      params += '&grip=' + $scope.params.grip;
-    }
     if ($scope.params.contract_type__isnull) {
       params += '&contract_type__isnull=true';
-    }
-    if ($scope.params.age__lte) {
-      params += '&age__lte=' + $scope.params.age__lte;
-    }
-    if ($scope.params.age__gte) {
-      params += '&age__gte=' + $scope.params.age__gte;
     }
     if ($scope.params.citizenship_reversed) {
       params += '&citizenship_reversed=true';
     }
     if ($scope.params.citizenship) {
       params += ((function() {
-        var i, len, ref, results;
-        ref = JSON.parse($scope.params.citizenship);
+        var j, len1, ref1, results;
+        ref1 = JSON.parse($scope.params.citizenship);
         results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          x = ref[i];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          x = ref1[j];
           results.push('&citizenship=' + x['pk']);
+        }
+        return results;
+      })()).join('');
+    }
+    if ($scope.params.league_enabled && $scope.params.league2) {
+      params += ((function() {
+        var j, len1, ref1, results;
+        ref1 = JSON.parse($scope.params.league2);
+        results = [];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          x = ref1[j];
+          results.push('&league=' + x['pk']);
         }
         return results;
       })()).join('');
@@ -3931,7 +3697,7 @@ angular.module('Sportomatics')
         }
 })
     angular.module('Sportomatics')
-        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory, ClubChartsFactory) {
+        .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, AmChartsFactory, ChartFactory, zoomData, LocaleFactory, $state, $location, $q, RadarChartFactory, ClubChartsFactory, PieChartFactory) {
             //http://www.amcharts.com/lib/images/
             var self = this;
             var url = $('#IndicatorsLink').attr('href');
@@ -3948,6 +3714,7 @@ angular.module('Sportomatics')
             this.playerName = document.getElementById('player-name').value;
             this.playerColor = document.getElementById('player-color').value;
             this.playerClubs = document.getElementById('player-clubs');
+            this.urlClub = document.getElementById('url-club').value.replace('0/', '');
             $scope.apiPlayersUrl = document.getElementById('api-players-url').value;
             $scope.limited = false; // user is not limited by default
             $scope.activeSeason = -1; // all seasons selected by default
@@ -4190,6 +3957,7 @@ angular.module('Sportomatics')
                     });
                     queries.push($http.get(url + params))
                 });
+                self.loader = true;
                 $q.all(queries).then(function(results, a){
                     _.each(results, function(result){
                         _.each(clubs, function(club){
@@ -4241,11 +4009,12 @@ angular.module('Sportomatics')
                         data: clubsData.results
                     };
 
-                    var playerClubsChart = new ClubChartsFactory.PlayerClubsChart();
-                    playerClubsChart.create(self.field, chartData, $scope.localeObject, graphs).then(function(chart){
+                    if(document.getElementById('isPlayerShort') == null){
+                        var playerClubsChart = new ClubChartsFactory.PlayerClubsChart();
+                        playerClubsChart.create(self.field, chartData, $scope.localeObject, graphs).then(function(chart){
 
-                        if(self.club){
-                            _.each(chart.graphs, function(data){
+                            if(self.club){
+                                _.each(chart.graphs, function(data){
                                     console.log(data.valueField.split('_')[1]);
                                     if(data.valueField.split('_')[1] === self.club.toString()){
                                         data.lineColor = "#699c97";
@@ -4256,11 +4025,47 @@ angular.module('Sportomatics')
                                         data.lineColor = self.playerColor ? self.playerColor : "#408e3a";
                                         data.fillColor = self.playerColor ? self.playerColor : "#408e3a";
                                     }
-                            });
-                        }
+                                });
+                            }
 
-                        chart.write('chartdiv')
-                    });
+                            self.loader = false;
+
+                            chart.write('chartdiv')
+                        });
+                    } else {
+                        var ar = chartData.data.map(function(e){
+                            for(var key in e){
+                                if(e.hasOwnProperty(key)){
+                                    if(key.indexOf('count') > -1){
+                                       return {
+                                           field: key,
+                                           value: e[key]
+                                       };
+                                    }
+                                }
+                            }
+                        })
+                        ar = _.chain(ar).groupBy('field').map(function(value, key) {
+                            return {
+                                club: key,
+                                value: _.pluck(value, 'value').reduce(function(pv, cv) { return pv + cv; }, 0)
+                            }
+                        }).value();
+                        var sum = _.reduce(ar, function(pv, cv){ return pv + cv.value }, 0);
+                        ar = ar.map(function(object){
+                            var club = _.findWhere(clubs, {pk: object.club.split('_')[1]});
+                            object.clubTitle = club.title;
+                            object.clubUrl = self.urlClub + object.club.split('_')[1] + '?season=' + toSeason(club.seasons[0]);
+                            return object
+                        })
+                        var playerClubsChart = new PieChartFactory.PlayerClubsChart();
+                        playerClubsChart.create(ar).then(function(chart){
+
+                            self.loader = false;
+
+                            chart.write('chartdiv')
+                        });
+                    }
 
                 })
             }; //List clubs
@@ -4393,6 +4198,32 @@ angular.module('Sportomatics')
         return chartData;
     }
 
+    function toSeason(value){
+        //TODO заменить
+        var seasons = {
+            s2002: 1,
+            s2003: 2,
+            s2001: 3,
+            s2004: 4,
+            s2000: 5,
+            s1999: 6,
+            s1998: 7,
+            s2005: 8,
+            s2006: 9,
+            s1997: 10,
+            s2007: 11,
+            s2008: 12,
+            s2009: 13,
+            s2010: 14,
+            s2011: 15,
+            s2012: 16,
+            s2013: 17,
+            s2014: 18,
+            s2015: 19
+        }
+        return seasons['s'+value];
+    }
+
     function populateChartData(initialData, data, field, localeObject, playerObject){
         var chartData = initialData;
         var dates = data.map(function(e){
@@ -4494,6 +4325,8 @@ angular.module('Sportomatics')
         }
         return color;
     }
+angular.module('Sportomatics').controller('PlayerCardShortController', function($scope, PieChartFactory, $q, $http) {});
+
 angular.module('Sportomatics')
     .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
@@ -4576,6 +4409,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     $scope.loadClubs = function(query) {
       return $scope.tags.loadClubs($scope.clubsURL, query);
     };
+    $scope.loadLeagues = function(query) {
+      return $http.get($scope.leaguesURL);
+    };
     $scope.getUnchecker = function(isDefault, defaultValue) {
       return function() {
         if ((isDefault && $(this).attr('value') !== defaultValue) || (!isDefault && $(this).attr('value') === defaultValue)) {
@@ -4595,12 +4431,15 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     if ($scope.params.club) {
       $scope.club = JSON.parse($scope.params.club);
     }
+    if ($scope.params.league2) {
+      $scope.league2 = JSON.parse($scope.params.league2);
+    }
     if ($("#ageRange").length) {
       $("#ageRange").ionRangeSlider({
         'hide_min_max': true,
         'keyboard': true,
         'min': 15,
-        'max': 45,
+        'max': 65,
         'from': $scope.params.age__lte || 18,
         'to': $scope.params.age__gte || 25,
         'type': 'double',

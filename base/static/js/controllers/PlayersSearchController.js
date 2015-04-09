@@ -7,6 +7,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     $scope.loadClubs = function(query) {
       return $scope.tags.loadClubs($scope.clubsURL, query);
     };
+    $scope.loadLeagues = function(query) {
+      return $http.get($scope.leaguesURL);
+    };
     $scope.getUnchecker = function(isDefault, defaultValue) {
       return function() {
         if ((isDefault && $(this).attr('value') !== defaultValue) || (!isDefault && $(this).attr('value') === defaultValue)) {
@@ -26,12 +29,15 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     if ($scope.params.club) {
       $scope.club = JSON.parse($scope.params.club);
     }
+    if ($scope.params.league2) {
+      $scope.league2 = JSON.parse($scope.params.league2);
+    }
     if ($("#ageRange").length) {
       $("#ageRange").ionRangeSlider({
         'hide_min_max': true,
         'keyboard': true,
         'min': 15,
-        'max': 45,
+        'max': 65,
         'from': $scope.params.age__lte || 18,
         'to': $scope.params.age__gte || 25,
         'type': 'double',
