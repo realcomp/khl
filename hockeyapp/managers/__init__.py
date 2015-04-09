@@ -45,9 +45,7 @@ class ScheduleManager(models.Manager):
                 m['match'] = self._get_match(m)
                 if m['match']: m['processed'] = True
             m.update(qs)
-            print qs
             _match = self.filter(**qs).last()
-            print _match
             if _match:
                 self.filter(pk=_match.pk).update(**m)
             else:
