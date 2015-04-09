@@ -177,6 +177,7 @@ class PlayerQuerySet(models.QuerySet):
             setattr(player, field, value)
             player.save(update_fields=[field])
 
+    def recalc_counters_index(self, field):
         rating_index = 0
         rating_value = None
 

@@ -62,6 +62,7 @@
     </head>
     <body ng-app="{% block ngapp %}Sportomatics{% endblock %}">
     <div ui-view></div>
+        <div class="wrapper">
         {% block header %}
             {% include "partial/header.html" %}
         {% endblock %}
@@ -71,7 +72,7 @@
 
         </section>
         {% endblock %}
-
+        </div> 
         {% include "partial/footer.html" %}
 
         <script src="{% static 'build/app.js' %}"></script>

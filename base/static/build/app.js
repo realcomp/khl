@@ -2160,7 +2160,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
   };
   this.search = function($scope) {
-    var age, checkBox, d, e, i, key, league, len, line, multiSelect, params, ref, url, value, x;
+    var age, checkBox, contract_types, d, e, i, key, league, len, line, multiSelect, params, ref, url, value, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
     };
@@ -2202,6 +2202,19 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       return results;
     })();
     $scope.$location.search('line', line || []);
+    contract_types = (function() {
+      var i, len, ref, results;
+      ref = $('[name="contract_types"]:checked');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
+          results.push($(e).val());
+        }
+      }
+      return results;
+    })();
+    $scope.$location.search('contract_types', contract_types || []);
     checkBox($scope, 'contract_type__isnull', 'contractTypeNull');
     checkBox($scope, 'citizenship_reversed', 'citizenshipReversed');
     checkBox($scope, 'season_enabled', 'seasonEnabled');
@@ -2232,7 +2245,28 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
       params += '&reversed=true';
     }
     if ($scope.params.line.length) {
-      params += '&line=' + $scope.params.line.join('&line=');
+      params += ((function() {
+        var j, len1, ref1, results;
+        ref1 = $scope.params.line;
+        results = [];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          x = ref1[j];
+          results.push('&line=' + x);
+        }
+        return results;
+      })()).join('');
+    }
+    if ($scope.params.contract_types) {
+      params += ((function() {
+        var j, len1, ref1, results;
+        ref1 = $scope.params.contract_types;
+        results = [];
+        for (j = 0, len1 = ref1.length; j < len1; j++) {
+          x = ref1[j];
+          results.push('&contract_types=' + x);
+        }
+        return results;
+      })()).join('');
     }
     if ($scope.params.citizenship1) {
       params += '&citizenship=' + $scope.params.citizenship1;
@@ -4748,7 +4782,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       var isDefault;
       isDefault = $(e).attr('value') === '';
       if ($(e).is(':checked')) {
-        $('input[name="contract"]').each($scope.getUnchecker(isDefault, ''));
+        $('input[name="contract_types"]').each($scope.getUnchecker(isDefault, ''));
       }
     };
     $scope.setPlayersFilter = function(obj) {

@@ -195,35 +195,42 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="" checked="checked"
+                                        <input type="checkbox" name="contract_types" value=""
+                                               ng-checked="!params.contract_types.length"
                                                onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="limited"
+                                        <input type="checkbox" name="contract_types" value="Двусторонний КХЛ/МХЛ"
+                                               ng-checked="params.contract_types.indexOf('Двусторонний КХЛ/МХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>ограниченно свободный агент</label>
+                                        <label>Двусторонний КХЛ/МХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="unlimited"
+                                        <input type="checkbox" name="contract_types" value="Двусторонний КХЛ/ВХЛ"
+                                               ng-checked="params.contract_types.indexOf('Двусторонний КХЛ/ВХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>неограниченно свободный агент</label>
+                                        <label>Двусторонний КХЛ/ВХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="junior"
+                                        <input type="checkbox" name="contract_types" value="Односторонний КХЛ"
+                                               ng-checked="params.contract_types.indexOf('Односторонний КХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>юниор</label>
+                                        <label>Односторонний КХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <span>на дату</span>
-                                    <input type="text" class="datepicker">
+                                    <input type="text" class="datepicker"
+                                           ng-model="contractTo"
+                                           ng-init="contractTo = params.contract_to"
+                                           ng-change="$location.search('contract_to', contractTo || null)">
                                     <i class="calendar icon"></i>
                                 </div>
                             </div>
