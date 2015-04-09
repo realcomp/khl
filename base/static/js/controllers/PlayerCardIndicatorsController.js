@@ -171,20 +171,28 @@
                 $scope.onSeason = false;
                 self.list();
                 $scope.activeSeason = -1;
-                $timeout(function(){}, 500);
+
             };
 
             $scope.moveToSeason = function(season, index){
                 if((self.field === 'shots' || self.field === 'pis__avg' || self.field === 'shots__avg' || self.field === 'faceoff' || self.field === 'winfaceoff' || self.field === 'winfaceoff_p__avg' || self.field === 'gamingtime__avg' || self.field === 'change_count__avg') && (parseInt(season.end_date.split('-')[0]) < 2009 )) return;
-                $scope.getPlayerDataByMonth().then(function(){
+                /*$scope.getPlayerDataByMonth().then(function(){
                     zoomData.startDate = season.start_date;
                     zoomData.endDate = season.end_date;
                     $scope.onSeason = true;
                     self.groupBy = 'month';
                     self.data = $scope.dataByMonth;
                     self.list(true);
-                    $scope.activeSeason = index;
-                })
+
+                })*/
+                var chart = $('#chartdiv').highcharts();
+                if(chart.drilldownLevels)
+                if (chart.drilldownLevels.length > 0) {
+                    chart.drillUp();
+                    if(index === -1 || $scope.activeSeason === index) return;
+                }
+                $scope.activeSeason = index;
+                chart.series[0].points[index].firePointEvent('click',  {ctrlKey: true});
             };
 
             this.list = function(switched) {
@@ -199,7 +207,61 @@
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
-                $scope.chartData = generateChartData(data.results, self.field, self.groupBy);
+
+
+                var drilldownSeries = [];
+
+
+
+                console.log(newPlayerIndicatorsData)
+                var versions = _.groupBy($scope.dataByMonth.results, function(result){
+                    if(result.season)
+                    return result.season.end_date;
+                })
+                console.log('versions', versions);
+                for(var key in versions){
+                    if(versions.hasOwnProperty(key)){
+                        drilldownSeries.push({
+                            name: $scope.localeObject.fieldNames[self.field].fullName,
+                            id: key,
+                            data: versions[key].map(function(el){
+                                return {
+                                    x: new Date(el.date).getTime(),
+                                    y: parseFloat(el[self.field])
+                                }
+                            })
+                        })
+                    }
+                }
+                console.log(drilldownSeries)
+                var newPlayerIndicatorsData = [{
+                    name: $scope.localeObject.fieldNames[self.field].fullName,
+                    data: data.results.map(function(el){
+                        return {
+                            x: new Date(el.season.end_date.split('-')).getTime(),
+                            y: parseFloat(el[self.field]),
+                            drilldown: el.season.end_date
+                        }
+                    }),
+                    color: $scope.currentPlayerObject.color
+                }]
+                console.log(newPlayerIndicatorsData)
+                self.loader = false;
+                var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field, drilldownSeries);
+                playerIndicatorsChart.setLocaleObject($scope.localeObject)
+                playerIndicatorsChart.draw();
+                /*$('.season-button').click(function () {
+                    var chart = $('#chartdiv').highcharts();
+                    console.log(chart)
+                    chart.series[0].points[0].firePointEvent('click', {ctrlKey: true});
+                });*/
+                //document.getElementById('chartdiv').style.marginLeft = '-15px'
+
+                $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));})).toString();
+                $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
+
+
+                /*$scope.chartData = generateChartData(data.results, self.field, self.groupBy);
                 ChartFactory.generateSerialChart(self.field, $scope.chartData, $scope.localeObject, null, $scope.currentPlayerObject).then(function(chart){
                     $scope.chart = chart;
 
@@ -243,7 +305,9 @@
                     $scope.chart.write("chartdiv");
                     if(switched) $scope.chart.zoomToDates(zoomStart, zoomEnd);
                     //if(self.compare_to)  $scope.addGraph(self.compare_to);
-                });
+                });*/
+
+
             };
 
             this.listClubs = function(switched){
@@ -281,7 +345,7 @@
                             name: club.title,
                             stack: 'season',
                             data: club.results.map(function(clubResult){
-                                return [new Date(clubResult.season.end_date.split('-')).getTime(), parseInt(clubResult[self.field])]
+                                return [new Date(clubResult.season.end_date.split('-')).getTime(), parseFloat(clubResult[self.field])]
                             }),
                             club: club,
                             color: (self.club != null) ? ((club.pk.toString() === self.club.toString()) ? "#699c97" : "#408e3a" ) : (club.main_color.length === 0) ? null : club.main_color,
@@ -342,7 +406,9 @@
                             $scope.getClubData();
                         }
                         else {
-                            self.list();
+                            $scope.getPlayerDataByMonth().then(function(){
+                                self.list();
+                            })
                         }
                     })
             };
