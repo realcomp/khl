@@ -3,13 +3,18 @@ from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
+from .views.api import generic
 from .views import admin, club, player
 
 
 urlpatterns = [
     # TODO: move to separate namespace
     # REST API
-    url(r'^api/leagues/$', api.LeagueList.as_view(),
+    url(r'^api/countries/$', generic.CountryList.as_view(),
+        name='country-list-api'),
+    url(r'^api/countries/leagues/$', generic.CountryLeagueList.as_view(),
+        name='country-league-list-api'),
+    url(r'^api/leagues/$', generic.LeagueList.as_view(),
         name='league-list-api'),
     url(r'^api/players/$',
         api.PlayersSearch.as_view({'get': 'list'}),

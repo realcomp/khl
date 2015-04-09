@@ -33,9 +33,10 @@
         <!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+        <!--<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>-->
+        <script src="{% static 'js/google_maps_v3.2.js' %}"></script>
         <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
-        <script src="{% static 'jquery-ui/jquery-ui.min.js' %}"></script>
+        <!-- <script src="{% static 'jquery-ui/jquery-ui.min.js' %}"></script> -->
         <!--<script src="{% static 'js/semantic.min.js' %}"></script>-->
         <script src="{% static 'angular/angular.min.js' %}"></script>
         <script src="{% static 'autofill-event/src/autofill-event.js' %}"></script>
@@ -71,6 +72,7 @@
         <script src="{% static 'js/amcharts/amcharts.js' %}"></script>
         <script src="{% static 'js/amcharts/serial.js' %}"></script>
         <script src="{% static 'js/amcharts/radar.js' %}"></script>
+        <script src="{% static 'js/amcharts/pie.js' %}"></script>
         <script src="{% static 'js/club-team.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/amcharts/exporting/amexport.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/amcharts/exporting/canvg.js' %}"></script>

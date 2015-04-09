@@ -65,7 +65,7 @@ class ScheduleManager(models.Manager):
         club_model = get_model(CURRENT_APP, 'club')
         _club = club_model.objects.by_title_alias(title).first()
         if not _club:
-            _club = club_model.objects.get_or_create(title=title)
+            _club, _crt = club_model.objects.get_or_create(title=title)
         return _club
 
     def _get_match(self, m=None):

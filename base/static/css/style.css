@@ -3994,7 +3994,7 @@ i.icon {
 /* line 2500, ../sass/_base.sass */
 .clubs-page .ui.tabular.menu .item {
   color: #30792a;
-  font-size: 13px;
+  font-size: 12px;
 }
 .user-page .ui.tabular.menu .item {
     color: #30792a;
@@ -5853,4 +5853,7 @@ hr.style-one {
 .fan-item{
     height: 95px !important;
     width: 145px !important;
+}
+.player-clubs-list .option-link{
+    border-right: none !important;
 }

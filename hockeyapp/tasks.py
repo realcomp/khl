@@ -17,6 +17,7 @@ from sportomatics.celery import app
 from instagram.client import InstagramAPI
 
 from base.models import InstagramImageFile
+from base.utils import str2int_safe
 
 from . import parsers
 from . import models
@@ -66,7 +67,9 @@ def periodic_get_matches():
                                                 processed=False,
                                                 challenge__isnull=False,
                                                 match__isnull=True)
+        print(matches)
         for m in matches:
+            print(m)
             async_hockey_match_parser.delay(m.khl_id, challenge=m.challenge)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
@@ -147,6 +150,20 @@ def async_hockey_player_update(id, parser_id):
                                                         update=True,
                                                         data=data
             )
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_db_players_update():
+    b'''
+        Обновление инфо о игроке
+    '''
+    try:
+        for player in models.Player.objects.all():
+            player.weight = str2int_safe(player.weight_str)
+            player.height = str2int_safe(player.height_str)
+            player.save(update_fields=['height', 'weight'])
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 

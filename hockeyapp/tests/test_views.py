@@ -25,8 +25,8 @@ class ViewsTestCase(TestCase):
         'khl_id': 666,
         'line': 1,
         'birth_date': datetime.date(year=2000, month=12, day=31),
-        'weight': '80',
-        'height': '180',
+        'weight': 80,
+        'height': 180,
         'grip': 'left',
         'number': '666',
     }

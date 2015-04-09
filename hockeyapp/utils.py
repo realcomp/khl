@@ -122,6 +122,7 @@ def delete_club_duplicates_with_relation(delete_dup=False):
                 313: (243,),
                 321: (144,),
                 322: (198,),
+                98: (23,),
     }
     club_rel_models = (
         get_model(CURRENT_APP, 'AddressClub'),

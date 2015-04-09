@@ -13,24 +13,24 @@ from addresses.models import Country
 
 from base.models import Season
 
-from .events import EventFactory
-from .mixins import PaginationMixin
+from ..events import EventFactory
+from ..mixins import PaginationMixin
 
-from ..filters import PlayersSearchFilter, PlayersSearchOrderFilter
-from ..models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
-from ..models import Timeline
+from ...filters import PlayersSearchFilter, PlayersSearchOrderFilter
+from ...models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
+from ...models import Timeline
 
-from ..serializers import CountryLeaguesSerializer
-from ..serializers import MetricsPlayerSerializer
-from ..serializers.clubs import (
+from ...serializers import CountrySerializer, CountryLeaguesSerializer
+from ...serializers import MetricsPlayerSerializer
+from ...serializers.clubs import (
     ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
     ClubCalendarPaginationSerializer)
-from ..serializers.events import EventSerializer
-from ..serializers.players import (
+from ...serializers.events import EventSerializer
+from ...serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
     ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer)
-from ..serializers.schedule import ScheduleSerializer
-from ..serializers.timeline import PlayerTimelineSerializer
+from ...serializers.schedule import ScheduleSerializer
+from ...serializers.timeline import PlayerTimelineSerializer
 
 
 class PlayersSearch(
@@ -137,13 +137,6 @@ class PlayerTimeline(generics.RetrieveAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return response.Response({'timeline': serializer.data})
-
-
-class LeagueList(generics.ListAPIView):
-    serializer_class = CountryLeaguesSerializer
-
-    def get_queryset(self):
-        return Country.objects.exclude(league__isnull=True)
 
 
 class ClubTeam(generics.RetrieveAPIView):

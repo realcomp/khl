@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{title}}: фан-клуб, хоккей  - Sportomatics.ru
@@ -7,37 +8,8 @@
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-fan-page">
-    <div class="ui grid breadcrumb-search">
-        <div class="twelve wide column">
-                    <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">Хоккей</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="/ru/hockey/clubs/#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="/ru/hockey/clubs/#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" href="">{{title}}</a>
-                <i class="right chevron icon divider"></i>
-                <a class="active section">Фан-клуб</a>
-            </div>
-            </div>
-        </div>
-        <div class="four wide column">
-              <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-        {% include "hockeyapp/clubs/team-info.html" %}
+        <!-- {% trans "Fan-club" %} -->
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Fan-club" %}
 
         <div class="page-content page-container" ng-controller="ClubFanController">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-fanzone" %}
