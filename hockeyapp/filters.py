@@ -79,6 +79,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _is_playing = request.GET.get('is_playing')
         _number = request.GET.get('number')
         _contract_type = request.GET.get('contract_type')
+        _contract_types = request.GET.getlist('contract_types')
         _contract_to = request.GET.get('contract_to')
         _height = request.GET.get('height')
         _weight = request.GET.get('weight')
@@ -129,6 +130,8 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         else:
             if _contract_type:
                 q &= Q(contract_type=_contract_type)
+            if _contract_types:
+                q &= Q(contract_type__in=_contract_types)
             if _contract_to:
                 date = datetime.datetime.strptime(
                     _contract_to, '%Y-%m-%d').date()

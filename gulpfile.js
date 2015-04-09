@@ -8,7 +8,7 @@ var coffee = require('gulp-coffee');
 var less = require('gulp-less');
 var paths = {
     scripts: ['base/static/js/sportomatics.js', 'base/static/js/classes/*.js',  'base/static/js/router.js', 'base/static/js/services/*.js', 'base/static/js/controllers/*.js'],
-    libs: ['base/static/js/libs/*.js']
+    libs: ['base/static/js/libs/*.js'],
     less: ['base/static/less/*.less']
 };
 

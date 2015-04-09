@@ -88,7 +88,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.contractCheck = (e) ->
             isDefault = $(e).attr('value') == ''
             if ($(e).is(':checked'))
-                $('input[name="contract"]').each($scope.getUnchecker(isDefault, ''))
+                $('input[name="contract_types"]').each($scope.getUnchecker(isDefault, ''))
             return
 
         $scope.setPlayersFilter = (obj) ->
