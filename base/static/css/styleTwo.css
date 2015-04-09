@@ -1,6 +1,9 @@
 body{
     background: url(../images/bgContent.jpg) no-repeat center;
     background-size: cover;
+    -webkit-background-position: cover; 
+    -moz-background-position: cover; 
+    -o-background-position: cover;
     background-attachment: fixed;
 }/*HEADER*/
 /*menu buttons*/
@@ -19,15 +22,21 @@ body{
 
 /*HEADER END*/
 /*CONTENT*/
+.wrapper{
+  height: auto;
+  min-height: 100%;
+  margin-bottom: 20px;
+}
 .content{
-	padding-bottom: 20px;
-    /*
-    background: url(../images/bgContent.jpg) no-repeat center;
-	background-size: cover;
-	background-attachment: fixed;*/
-	/*-webkit-background-position: cover; 
-	-moz-background-position: cover; 
-	-o-background-position: cover; */
+	padding-bottom: 130px;
+}
+.clearfix:after {content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;}
+.clearfix {
+  display: inline-block;
 }
 .ui.menu{margin-top: 0px}
 .player-card-short-page{background: #fff}
@@ -125,6 +134,11 @@ font-weight: bold;}
 
 
 /*Footer*/
+footer{
+  height: 130px;
+  clear: both;
+  margin-top: -130px;
+}
 .footer .socials .button{margin-bottom: 20px;margin-top: 0px}
 .footer{
 	background: #F1F2E9;
