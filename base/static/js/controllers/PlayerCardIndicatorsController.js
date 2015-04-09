@@ -189,9 +189,11 @@
                 if(chart.drilldownLevels)
                 if (chart.drilldownLevels.length > 0) {
                     chart.drillUp();
-                    if(index === -1 || $scope.activeSeason === index) return;
+                    if(index === -1 || $scope.activeSeason === index) return $scope.activeSeason = -1;
                 }
+                if(index === -1 || $scope.activeSeason === index) return $scope.activeSeason = -1;
                 $scope.activeSeason = index;
+                chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                 chart.series[0].points[index].firePointEvent('click',  {ctrlKey: true});
             };
 
@@ -207,13 +209,8 @@
                     var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
                     var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
                 }
-
-
                 var drilldownSeries = [];
 
-
-
-                console.log(newPlayerIndicatorsData)
                 var versions = _.groupBy($scope.dataByMonth.results, function(result){
                     if(result.season)
                     return result.season.end_date;
@@ -250,6 +247,8 @@
                 var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field, drilldownSeries);
                 playerIndicatorsChart.setLocaleObject($scope.localeObject)
                 playerIndicatorsChart.draw();
+                var chart = $('#chartdiv').highcharts();
+                chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                 /*$('.season-button').click(function () {
                     var chart = $('#chartdiv').highcharts();
                     console.log(chart)
@@ -406,6 +405,7 @@
                             $scope.getClubData();
                         }
                         else {
+                            if(window.location.href.indexOf('clubs') > -1) return self.list()
                             $scope.getPlayerDataByMonth().then(function(){
                                 self.list();
                             })

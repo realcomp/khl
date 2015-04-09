@@ -45,8 +45,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           gridLineColor: '#FFFFFF',
           labels: {
             enabled: false
-          },
-          maxPadding: 0.02
+          }
         },
         legend: {
           margin: 30
@@ -69,10 +68,12 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         plotOptions: {
           column: {
             stacking: 'normal',
-            depth: 20,
-            pointWidth: 20,
-            pointPadding: 2,
-            groupPadding: 20,
+
+            /*depth: 20
+            						pointWidth: 20
+            						pointPadding: 2
+            						groupPadding: 20
+             */
             pointRange: 24 * 3600 * 1000 * 365
           }
         },
@@ -143,11 +144,16 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
       this.data = data;
       this.field = field;
       this.drilldownSeries = drilldownSeries;
+      this.period = 365;
     }
 
     HighchartsPlayerIndicatorsChart.prototype.setLocaleObject = function(localeObject) {
       this.localeObject = localeObject;
       return self.localeObject = this.localeObject;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setPeriod = function(period) {
+      this.period = period;
     };
 
     HighchartsPlayerIndicatorsChart.prototype.draw = function() {
@@ -178,7 +184,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               }
             }
           },
-          tickInterval: 24 * 3600 * 1000 * 369
+          tickInterval: 24 * 3600 * 1000 * this.period
         },
         yAxis: {
           allowDecimals: false,
@@ -213,11 +219,13 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         },
         plotOptions: {
           column: {
-            depth: 20,
-            pointWidth: 30,
-            pointPadding: 0.1,
-            groupPadding: 10,
-            pointRange: 24 * 3600 * 1000 * 365
+
+            /*depth: 20
+            						pointWidth: 30
+            						pointPadding: 0.1
+            						groupPadding: 10
+             */
+            pointRange: 24 * 3600 * 1000 * this.period
           }
         },
         series: this.data,
