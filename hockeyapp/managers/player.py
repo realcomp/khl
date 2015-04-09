@@ -172,7 +172,7 @@ class PlayerQuerySet(models.QuerySet):
                     clubplayers
                     .filter(clubplayermatch__loose_goals=0).count())
             elif field == 'shots_received_total':
-                value = player.saves_total + player.loose_goals_total
+                value = (player.saves_total or 0) + (player.loose_goals_total or 0)
 
             setattr(player, field, value)
             player.save(update_fields=[field])
