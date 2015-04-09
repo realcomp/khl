@@ -216,7 +216,7 @@ class ClubPlayerMatchPaginationSerilizer(pagination.PaginationSerializer):
 
 class PlayerCardClubsSerializer(BaseClubSerializer):
     class Meta(object):
-        fields = 'pk', 'title', 'logo', 'url'
+        fields = 'pk', 'title', 'logo', 'url', 'main_color'
         model = Club
 
 

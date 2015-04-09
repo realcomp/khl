@@ -64,7 +64,7 @@
                                     </a>
                                 </li>
                                 {% for club in clubs %}
-                                <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}">
+                                <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}_{{club.main_color}}">
                                     <li class="option-item">
                                         <a href="" class="option-link"
                                            ng-class="{ 'option-link_active':PlayerCardIndicatorsCtrl.club === {{ club.pk }} }"
