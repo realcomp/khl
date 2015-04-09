@@ -191,17 +191,36 @@ def player_recalc_counters(field):
 
 
 @app.task(ignore_result=True, track_started=True)
+def player_recalc_counters_index(field):
+    b'''
+        Пересчет позиции игрока в сортировке
+    '''
+    try:
+        models.Player.objects.recalc_counters_index(field)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+COUNTERS_FIELDS = (
+    'seasons_total', 'matches_total', 'bullet_matches_total',
+    'shots_received_total', 'saves_total', 'loose_goals_total',
+    'saves_p_average', 'sf_average', 'zero_goals_matches_total',
+    'matches_win_total', 'matches_lose_total', 'gamingtime_total',
+) + tuple(itertools.chain(*map(
+    lambda x: ('%s_total' % x, '%s_average' % x),
+    ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
+
+
+@app.task(ignore_result=True, track_started=True)
 def periodic_player_recalc_counters():
-    fields = (
-        'seasons_total', 'matches_total', 'bullet_matches_total',
-        'shots_received_total', 'saves_total', 'loose_goals_total',
-        'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-        'matches_win_total', 'matches_lose_total', 'gamingtime_total',
-    ) + tuple(itertools.chain(*map(
-        lambda x: ('%s_total' % x, '%s_average' % x),
-        ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-    for field in fields:
+    for field in COUNTERS_FIELDS:
         player_recalc_counters.delay(field)
+
+
+@app.task(ignore_result=True, track_started=True)
+def periodic_player_recalc_counters_index():
+    for field in COUNTERS_FIELDS:
+        player_recalc_counters_index.delay(field)
 
 
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
