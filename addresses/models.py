@@ -7,6 +7,37 @@ from base.models import TitleBaseModel
 
 
 class Country(TitleBaseModel):
+    @property
+    def code(self):
+        return {
+            'Австрия': 'at',
+            'Беларусь': 'by',
+            'Великобритания': 'gb',
+            'Венгрия': 'hu',
+            'Германия': 'de',
+            'Дания': 'dk',
+            'Италия': 'it',
+            'Казахстан': 'kz',
+            'Канада': 'ca',
+            'Латвия': 'lv',
+            'Литва': 'lt',
+            'Норвегия': 'no',
+            'Польша': 'pl',
+            'Россия': 'ru',
+            'Словакия': 'sk',
+            'Словения': 'si',
+            'США': 'us',
+            'Украина': 'ua',
+            'Финляндия': 'fi',
+            'Франция': 'fr',
+            'Хорватия': 'hr',
+            'Чехия': 'cz',
+            'Швейцария': 'ch',
+            'Швеция': 'se',
+            'Эстония': 'ee',
+            'Япония': 'jp',
+        }.get(self.ru_title, '')
+
     class Meta:
         verbose_name=_('Country')
         verbose_name_plural=_('Countries')
