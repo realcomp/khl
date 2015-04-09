@@ -1,0 +1,10 @@
+.wrap-block {
+  color: green;
+}
+.wrap-bg {
+  color: blue;
+}
+body {
+  color: red;
+  background: blue;
+}
