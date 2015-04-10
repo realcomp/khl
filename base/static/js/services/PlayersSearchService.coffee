@@ -140,6 +140,9 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         line = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
         $scope.$location.search('line', line or [])
 
+        contract_types = ($(e).val() for e in $('[name="contract_types"]:checked') when $(e).val())
+        $scope.$location.search('contract_types', contract_types or [])
+
         # if !$scope.leaguesLoaded
         #     $scope.leaguesLoaded = true
         #     if $scope.params.league
@@ -182,7 +185,9 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
         if $scope.params.reversed
             params += '&reversed=true'
         if $scope.params.line.length
-            params += '&line=' + $scope.params.line.join('&line=')
+            params += (('&line=' + x) for x in $scope.params.line).join('')
+        if $scope.params.contract_types
+            params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1
             params += '&citizenship=' + $scope.params.citizenship1
         if $scope.params.citizenship2

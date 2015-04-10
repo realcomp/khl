@@ -48,30 +48,20 @@
                     </div>
                     <div class="row">
                         <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:country-league-list-api' %}"></a>
-                        {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
                               <div class="ui fluid search selection dropdown">
-                                <input type="hidden" name="country" class="search" >
+                                <input type="hidden" name="country" class="search"
+                                       onchange="angular.element(this).scope().setCountry(this)">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Выберите страну</div>
                                 <div class="menu">
-                                  <div class="item" data-value="ad"><i class="ad flag"></i>Andorra</div>
-                                  <div class="item" data-value="ae"><i class="ae flag"></i>United Arab Emirates</div>
-                                  <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
-                                  <div class="item" data-value="ag"><i class="ag flag"></i>Antigua</div>
-                                  <div class="item" data-value="ai"><i class="ai flag"></i>Anguilla</div>
-                                  <div class="item" data-value="al"><i class="al flag"></i>Albania</div>
-                                  <div class="item" data-value="am"><i class="am flag"></i>Armenia</div>
-                                  <div class="item" data-value="an"><i class="an flag"></i>Netherlands Antilles</div>
-                                  <div class="item" data-value="ad"><i class="ad flag"></i>Andorra</div>
-                                  <div class="item" data-value="ae"><i class="ae flag"></i>United Arab Emirates</div>
-                                  <div class="item" data-value="af"><i class="af flag"></i>Afghanistan</div>
-                                  <div class="item" data-value="ag"><i class="ag flag"></i>Antigua</div>
-                                  <div class="item" data-value="ai"><i class="ai flag"></i>Anguilla</div>
-                                  <div class="item" data-value="al"><i class="al flag"></i>Albania</div>
-                                  <div class="item" data-value="am"><i class="am flag"></i>Armenia</div>
-                                  <div class="item" data-value="an"><i class="an flag"></i>Netherlands Antilles</div>
+                                    {% for country in countries %}
+                                        <div class="item" data-value="{{ country.pk }}">
+                                            <i class="{{ country.code }} flag"></i>
+                                            {{ country.title }}
+                                        </div>
+                                    {% endfor %}
                                   </div>
                               </div>
 
@@ -85,6 +75,7 @@
                                 </option>
                             </select> -->
                         </div>
+                        {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Лига:</div>
                          <!--    <select id="players-search-league"
@@ -97,17 +88,14 @@
                                 </option>
                             </select> -->
                             <div class="ui fluid search selection dropdown">
-                              <input type="hidden" name="lige" class="search" >
-                              <i class="dropdown icon"></i>
-                              <div class="default text">Выберите лигу</div>
-                              <div class="menu">
-                                <div class="item" data-value="кхл">КХЛ</div>
-                                <div class="item" data-value="вхл">ВХЛ</div>
-                                <div class="item" data-value="мхл">МХЛ</div>
-                                <div class="item" data-value="мхл-2">МХЛ-2</div>
-                                <div class="item" data-value="вхл">ВХЛ</div>
-                                <div class="item" data-value="суперлига">Суперлига</div>
-
+                                <input type="hidden" name="lige" class="search" >
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Выберите лигу</div>
+                                <div class="menu">
+                                    <div class="item" data-value="{{ league.pk }}"
+                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)">
+                                        {{ league.title }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -195,35 +183,42 @@
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="" checked="checked"
+                                        <input type="checkbox" name="contract_types" value=""
+                                               ng-checked="!params.contract_types.length"
                                                onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="limited"
+                                        <input type="checkbox" name="contract_types" value="Двусторонний КХЛ/МХЛ"
+                                               ng-checked="params.contract_types.indexOf('Двусторонний КХЛ/МХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>ограниченно свободный агент</label>
+                                        <label>Двусторонний КХЛ/МХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="unlimited"
+                                        <input type="checkbox" name="contract_types" value="Двусторонний КХЛ/ВХЛ"
+                                               ng-checked="params.contract_types.indexOf('Двусторонний КХЛ/ВХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>неограниченно свободный агент</label>
+                                        <label>Двусторонний КХЛ/ВХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="junior"
+                                        <input type="checkbox" name="contract_types" value="Односторонний КХЛ"
+                                               ng-checked="params.contract_types.indexOf('Односторонний КХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>юниор</label>
+                                        <label>Односторонний КХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <span>на дату</span>
-                                    <input type="text" class="datepicker">
+                                    <input type="text" class="datepicker"
+                                           ng-model="contractTo"
+                                           ng-init="contractTo = params.contract_to"
+                                           ng-change="$location.search('contract_to', contractTo || null)">
                                     <i class="calendar icon"></i>
                                 </div>
                             </div>

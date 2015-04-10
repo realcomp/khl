@@ -55,7 +55,7 @@ class CountryLeaguesSerializer(CountrySerializer):
     league_set = LeagueSerializer(many=True)
 
     class Meta(CountrySerializer.Meta):
-        fields = 'pk', 'title', 'league_set'
+        fields = 'pk', 'title', 'code', 'league_set'
 
 
 class CoachSerializer(AbstractManSerializer):

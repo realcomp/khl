@@ -153,6 +153,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CELERY_ACCEPT_CONTENT = ('pickle', 'json', 'msgpack', 'yaml')
 BROKER_URL = 'redis://localhost:6379/0'
+BROKER_POOL_LIMIT = 2
+CELERY_ACKS_LATE = True
+CELERYD_PREFETCH_MULTIPLIER = 1
 CELERYBEAT_SCHEDULE = {
     'hockeyapp-periodic-update-clubs-every-monday-midnight': {
         'task': 'hockeyapp.tasks.periodic_update_clubs',
@@ -177,6 +180,10 @@ CELERYBEAT_SCHEDULE = {
     'hockeyapp-periodic-player-recalc-counters': {
         'task': 'hockeyapp.tasks.periodic_player_recalc_counters',
         'schedule': local_celery_crontab(hour=5, minute=0),
+    },
+    'hockeyapp-periodic-player-recalc-counters_index': {
+        'task': 'hockeyapp.tasks.periodic_player_recalc_counters_index',
+        'schedule': local_celery_crontab(hour=7, minute=0),
     },
 }
 CELERY_IGNORE_RESULT = True

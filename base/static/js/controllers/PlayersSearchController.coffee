@@ -88,7 +88,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.contractCheck = (e) ->
             isDefault = $(e).attr('value') == ''
             if ($(e).is(':checked'))
-                $('input[name="contract"]').each($scope.getUnchecker(isDefault, ''))
+                $('input[name="contract_types"]').each($scope.getUnchecker(isDefault, ''))
             return
 
         $scope.setPlayersFilter = (obj) ->
@@ -105,6 +105,17 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             else
                 $location.search('season', null)
             $scope.params = $location.search()
+            return
+
+        $scope.setCountry = (e) ->
+            if $(e).val()
+                $location.search('country', $(e).val())
+            else
+                $location.search('country', null)
+            $scope.params = $location.search()
+            # $scope.leagues = PlayersSearchService.getLeagues($scope.countries, $(e).val())
+            # console.log($scope.countries)
+            # console.log($scope.leagues)
             return
 
         # PlayersSearchService.search($scope)

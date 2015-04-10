@@ -90,7 +90,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       var isDefault;
       isDefault = $(e).attr('value') === '';
       if ($(e).is(':checked')) {
-        $('input[name="contract"]').each($scope.getUnchecker(isDefault, ''));
+        $('input[name="contract_types"]').each($scope.getUnchecker(isDefault, ''));
       }
     };
     $scope.setPlayersFilter = function(obj) {
@@ -104,6 +104,14 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $location.search('season', $(e).val());
       } else {
         $location.search('season', null);
+      }
+      $scope.params = $location.search();
+    };
+    $scope.setCountry = function(e) {
+      if ($(e).val()) {
+        $location.search('country', $(e).val());
+      } else {
+        $location.search('country', null);
       }
       $scope.params = $location.search();
     };

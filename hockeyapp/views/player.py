@@ -24,10 +24,10 @@ class PlayersSearch(TemplateView):
         context['request'] = self.request
         countries = (
             Country.objects
-            .exclude(ru_title=b'Россия')
+            # .exclude(ru_title=b'Россия')
             .order_by('%s_title' % self.request.LANGUAGE_CODE))
-        context['countries'] = CountrySerializer(
-            countries, many=True, context=context).data
+        context['countries'] = CountryLeaguesSerializer(
+            countries, context=context, many=True).data
         context['russia'] = CountrySerializer(
             Country.objects.filter(ru_title=b'Россия').last(),
             context=context).data
@@ -40,15 +40,6 @@ class PlayersSearch(TemplateView):
 
 class PlayersSearch2(PlayersSearch):
     template_name = 'hockeyapp/players/players-search2.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(PlayersSearch2, self).get_context_data(**kwargs)
-        # countries = CountryLeaguesSerializer(
-        #     Country.objects.all(), context=context, many=True).data
-        # context['countries'] = JSONRenderer().render(countries)
-        context['countries'] = CountryLeaguesSerializer(
-            Country.objects.all(), context=context, many=True).data
-        return context
 
 
 class PlayerCard(DetailView):
