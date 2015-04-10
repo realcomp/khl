@@ -4808,6 +4808,14 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       }
       $scope.params = $location.search();
     };
+    $scope.setCountry = function(e) {
+      if ($(e).val()) {
+        $location.search('country', $(e).val());
+      } else {
+        $location.search('country', null);
+      }
+      $scope.params = $location.search();
+    };
     PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
   }
 ]);

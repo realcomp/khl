@@ -51,7 +51,8 @@
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
                               <div class="ui fluid search selection dropdown">
-                                <input type="hidden" name="country" class="search" >
+                                <input type="hidden" name="country" class="search"
+                                       onchange="angular.element(this).scope().setCountry(this)">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Выберите страну</div>
                                 <div class="menu">
@@ -87,17 +88,14 @@
                                 </option>
                             </select> -->
                             <div class="ui fluid search selection dropdown">
-                              <input type="hidden" name="lige" class="search" >
-                              <i class="dropdown icon"></i>
-                              <div class="default text">Выберите лигу</div>
-                              <div class="menu">
-                                <div class="item" data-value="кхл">КХЛ</div>
-                                <div class="item" data-value="вхл">ВХЛ</div>
-                                <div class="item" data-value="мхл">МХЛ</div>
-                                <div class="item" data-value="мхл-2">МХЛ-2</div>
-                                <div class="item" data-value="вхл">ВХЛ</div>
-                                <div class="item" data-value="суперлига">Суперлига</div>
-
+                                <input type="hidden" name="lige" class="search" >
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Выберите лигу</div>
+                                <div class="menu">
+                                    <div class="item" data-value="{{ league.pk }}"
+                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)">
+                                        {{ league.title }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
