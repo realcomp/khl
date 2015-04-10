@@ -107,6 +107,17 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             $scope.params = $location.search()
             return
 
+        $scope.setCountry = (e) ->
+            if $(e).val()
+                $location.search('country', $(e).val())
+            else
+                $location.search('country', null)
+            $scope.params = $location.search()
+            # $scope.leagues = PlayersSearchService.getLeagues($scope.countries, $(e).val())
+            # console.log($scope.countries)
+            # console.log($scope.leagues)
+            return
+
         # PlayersSearchService.search($scope)
         PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
 
