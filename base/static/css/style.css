@@ -141,7 +141,7 @@ svg {
 /* line 30, ../sass/_base.sass */
 .top-line .ui.text.menu > .item.header {
   font-weight: normal;
-  font-size: 10px;
+  
 }
 /* line 33, ../sass/_base.sass */
 .top-line .ui.text.menu > .item.header:hover {

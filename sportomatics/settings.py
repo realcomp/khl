@@ -153,6 +153,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CELERY_ACCEPT_CONTENT = ('pickle', 'json', 'msgpack', 'yaml')
 BROKER_URL = 'redis://localhost:6379/0'
+BROKER_POOL_LIMIT = 2
+CELERY_ACKS_LATE = True
+CELERYD_PREFETCH_MULTIPLIER = 1
 CELERYBEAT_SCHEDULE = {
     'hockeyapp-periodic-update-clubs-every-monday-midnight': {
         'task': 'hockeyapp.tasks.periodic_update_clubs',
