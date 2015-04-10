@@ -67,9 +67,7 @@ def periodic_get_matches():
                                                 processed=False,
                                                 challenge__isnull=False,
                                                 match__isnull=True)
-        print(matches)
         for m in matches:
-            print(m)
             async_hockey_match_parser.delay(m.khl_id, challenge=m.challenge)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
