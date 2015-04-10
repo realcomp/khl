@@ -5860,3 +5860,9 @@ hr.style-one {
 .player-clubs-list .option-link{
     border-right: none !important;
 }
+.highcharts-axis-labels span {
+    text-decoration: none !important;
+}
+.highcharts-drilldown-axis-label{
+    text-decoration: none !important;
+}

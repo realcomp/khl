@@ -29,6 +29,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         xAxis: {
           "type": "datetime",
           labels: {
+            align: 'center',
             formatter: function() {
               return (new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
             }
@@ -70,9 +71,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             stacking: 'normal',
 
             /*depth: 20
-            						pointWidth: 20
-            						pointPadding: 2
-            						groupPadding: 20
+            pointWidth: 20
+            pointPadding: 2
+            groupPadding: 20
              */
             pointRange: 24 * 3600 * 1000 * 365
           }
@@ -139,12 +140,13 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   HighchartsPlayerIndicatorsChart = (function() {
-    function HighchartsPlayerIndicatorsChart(divId, data, field, drilldownSeries) {
+    function HighchartsPlayerIndicatorsChart(divId, data, field, drilldownSeries1) {
       this.divId = divId;
       this.data = data;
       this.field = field;
-      this.drilldownSeries = drilldownSeries;
+      this.drilldownSeries = drilldownSeries1;
       this.period = 365;
+      self.field = this.field;
     }
 
     HighchartsPlayerIndicatorsChart.prototype.setLocaleObject = function(localeObject) {
@@ -154,6 +156,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
     HighchartsPlayerIndicatorsChart.prototype.setPeriod = function(period) {
       this.period = period;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setContext = function(context) {
+      this.context = context;
+      return self.context = this.context;
     };
 
     HighchartsPlayerIndicatorsChart.prototype.draw = function() {
@@ -167,7 +174,49 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             viewDistance: 25,
             depth: 60
           },
-          marginLeft: 0
+          marginLeft: 0,
+          events: {
+            drilldown: function(e) {
+              var chart;
+              if (!e.seriesOptions) {
+                chart = this;
+                chart.showLoading('Загрузка данных по месяцам ...');
+                if (self.versions == null) {
+                  return self.context.getPlayerDataByMonth().then(function(dataByMonth) {
+                    var key;
+                    self.drilldownSeries = [];
+                    self.versions = _.groupBy(dataByMonth.results, function(result) {
+                      if (result.season != null) {
+                        return result.season.end_date;
+                      }
+                    });
+                    for (key in versions) {
+                      drilldownSeries.push({
+                        name: self.context.localeObject.fieldNames[self.field].fullName,
+                        id: key,
+                        data: versions[key].map(function(el) {
+                          return {
+                            x: new Date(el.date).getTime(),
+                            y: parseFloat(el[self.field])
+                          };
+                        })
+                      });
+                    }
+                    self.dataByMonth = dataByMonth;
+                    chart.hideLoading();
+                    return chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, {
+                      id: e.point.drilldown
+                    }));
+                  });
+                } else {
+                  chart.hideLoading();
+                  return chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, {
+                    id: e.point.drilldown
+                  }));
+                }
+              }
+            }
+          }
         },
         title: {
           text: this.localeObject.fieldNames[this.field].fullName.toUpperCase()
@@ -175,16 +224,16 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         xAxis: {
           "type": "datetime",
           labels: {
+            align: 'center',
             formatter: function() {
-              if (this.isFirst) {
-                console.log((new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2));
+              if (this.dateTimeLabelFormat === '%Y') {
                 return (new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               } else {
-                return (new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
+                return self.localeObject.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               }
             }
           },
-          tickInterval: 24 * 3600 * 1000 * this.period
+          tickInterval: 24 * 3600 * 1000 * 30
         },
         yAxis: {
           allowDecimals: false,
@@ -221,9 +270,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           column: {
 
             /*depth: 20
-            						pointWidth: 30
-            						pointPadding: 0.1
-            						groupPadding: 10
+            pointWidth: 30
+            pointPadding: 0.1
+            groupPadding: 10
              */
             pointRange: 24 * 3600 * 1000 * this.period
           }

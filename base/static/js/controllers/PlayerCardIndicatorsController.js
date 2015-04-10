@@ -205,17 +205,12 @@
                 var datesArray = (self.groupBy === 'month') ? data.results.map(function(e){ return new Date(e['date']) }) : data.results.map(function(e){ return new Date(e['season']['end_date']) });
                 var min = Math.min.apply(null, datesArray);
                 var max = Math.max.apply(null, datesArray);
-                if(switched){
-                    var zoomStart = (new Date(zoomData.startDate).getTime() >= min) ? new Date(zoomData.startDate) : new Date(min);
-                    var zoomEnd = (new Date(zoomData.endDate).getTime() <= max) ? new Date(zoomData.endDate) : new Date(max);
-                }
-                var drilldownSeries = [];
 
-                var versions = _.groupBy($scope.dataByMonth.results, function(result){
+                var drilldownSeries = [];
+                /*var versions = _.groupBy($scope.dataByMonth.results, function(result){
                     if(result.season)
                     return result.season.end_date;
                 })
-                console.log('versions', versions);
                 for(var key in versions){
                     if(versions.hasOwnProperty(key)){
                         drilldownSeries.push({
@@ -229,23 +224,23 @@
                             })
                         })
                     }
-                }
+                }*/
                 console.log(drilldownSeries)
                 var newPlayerIndicatorsData = [{
                     name: $scope.localeObject.fieldNames[self.field].fullName,
                     data: data.results.map(function(el){
                         return {
-                            x: new Date(el.season.end_date.split('-')).getTime(),
+                            x: new Date(el.season.end_date.split('-')[0]).getTime(),
                             y: parseFloat(el[self.field]),
                             drilldown: el.season.end_date
                         }
                     }),
                     color: $scope.currentPlayerObject.color
                 }]
-                console.log(newPlayerIndicatorsData)
                 self.loader = false;
                 var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field, drilldownSeries);
                 playerIndicatorsChart.setLocaleObject($scope.localeObject)
+                playerIndicatorsChart.setContext($scope);
                 playerIndicatorsChart.draw();
                 var chart = $('#chartdiv').highcharts();
                 chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
@@ -405,15 +400,17 @@
                             $scope.getClubData();
                         }
                         else {
-                            if(window.location.href.indexOf('clubs') > -1) return self.list()
-                            $scope.getPlayerDataByMonth().then(function(){
-                                self.list();
-                            })
+                            self.list();
+                            //if(window.location.href.indexOf('clubs') > -1) return self.list()
+                            //$scope.getPlayerDataByMonth().then(function(){
+                              //  self.list();
+                            //})
                         }
                     })
             };
 
-            $scope.getPlayerDataByMonth = function(){
+            $scope.getPlayerDataByMonth = function(callback){
+                console.log('abc');
                 var deferred = $q.defer();
                 if($scope.dataByMonth != null) deferred.resolve(true)
                 else{
@@ -423,7 +420,7 @@
                             self.loader = false;
                             $scope.dataByMonth = data;
                             $scope.currentPlayerObject.dataByMonth = data;
-                            deferred.resolve(true);
+                            deferred.resolve(data);
                         })
                 }
                 return deferred.promise;
