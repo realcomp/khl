@@ -117,7 +117,10 @@ def get_recalc_counters_actions():
     for field in fields:
         def action(modeladmin, request, queryset):
             from .tasks import player_recalc_counters
-            player_recalc_counters.delay(field)
+            from .tasks import player_recalc_counters_index
+            pks = queryset.objects.values_list('pk', flat=True)
+            player_recalc_counters.delay(pks, [field])
+            player_recalc_counters_index.delay(field)
         # make function unique for django
         action.__name__ = str('action_%s' % field)
         action.short_description = _('Recalculate counters for "%s"') % field
@@ -125,7 +128,9 @@ def get_recalc_counters_actions():
 
     def action_all(modeladmin, request, queryset):
         from .tasks import periodic_player_recalc_counters
+        from .tasks import periodic_player_recalc_counters_index
         periodic_player_recalc_counters.delay()
+        periodic_player_recalc_counters_index.delay()
     action_all.short_description = _('Recalculate all counters')
     yield action_all
 

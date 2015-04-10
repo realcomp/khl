@@ -197,6 +197,9 @@ class Player(AbstractMan):
     matches_lose_total_index = models.IntegerField(
         _('Matches Lose Total Index'), null=True)
 
+    last_match_date = models.DateTimeField(
+        _('Last match history parsed'), null=True)
+
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
     def save(self, **kwargs):
@@ -755,6 +758,8 @@ class ClubPlayerMatch(models.Model):
     saves_p = models.FloatField(_('Saves Goals , %'), null=True)
     sf = models.FloatField(_('Safety Factor'), null=True)
     gamingtime = models.PositiveIntegerField(_('Gaming time'), null=True)
+
+    created = models.DateTimeField(_('Created date'), auto_now_add=True)
 
     __unicode__ = lambda self: '{}'.format(self.match or self.pk,)
 

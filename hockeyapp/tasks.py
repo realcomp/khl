@@ -167,7 +167,7 @@ def async_db_players_update():
 
 
 @app.task(ignore_result=True, track_started=True)
-def player_recalc_counters(field):
+def player_recalc_counters(pks, fields, update_last_match_date=False):
     b'''
         Пересчет полей игрока на основе данных по матчам
         seasons_total
@@ -183,7 +183,8 @@ def player_recalc_counters(field):
         ...
     '''
     try:
-        models.Player.objects.recalc_counters(field)
+        models.Player.objects.filter(pk__in=pks).recalc_counters(
+            fields, update_last_match_date=update_last_match_date)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
@@ -211,12 +212,24 @@ COUNTERS_FIELDS = (
 
 @app.task(ignore_result=True, track_started=True)
 def periodic_player_recalc_counters():
-    for field in COUNTERS_FIELDS:
-        player_recalc_counters.delay(field)
+    '''
+    Update all fields for each group of players,
+    update last_match_date
+    '''
+    qs = models.Player.objects.all()
+    count = qs.count()
+    limit = 100
+    for i in range(0, count, limit):
+        pks = qs[i:i + limit].values_list('pk', flat=True)
+        player_recalc_counters.delay(
+            pks, COUNTERS_FIELDS, update_last_match_date=True)
 
 
 @app.task(ignore_result=True, track_started=True)
 def periodic_player_recalc_counters_index():
+    '''
+    Update index for each field
+    '''
     for field in COUNTERS_FIELDS:
         player_recalc_counters_index.delay(field)
 

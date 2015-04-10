@@ -104,7 +104,7 @@ class PlayerQuerySet(models.QuerySet):
             start += (count - 1) - (i + range_)
         return self[start:end + 1]
 
-    def recalc_counters(self, field):
+    def recalc_counters(self, fields, update_last_match_date=False):
         q_rated_matches = (
             Q(clubplayermatch__match__challenge_type__isnull=False) &
             Q(clubplayermatch__match__challenge_type__gt=0))
@@ -129,53 +129,70 @@ class PlayerQuerySet(models.QuerySet):
 
         for player in self:
             clubplayers = player.clubplayer_set.filter(q_rated_matches)
-            value = None
-            if field in (
-                    'goals_total', 'assists_total', 'points_total',
-                    'plus_minus_total', 'penalty_time_total',
-                    'saves_total', 'loose_goals_total', 'gamingtime_total'):
-                value = clubplayers.aggregate(**{
-                    field: Sum('clubplayermatch__%s' % field.replace('_total', ''))
-                }).get(field, 0)
-            elif field in (
-                    'goals_average', 'assists_average', 'points_average',
-                    'plus_minus_average', 'penalty_time_average',
-                    'saves_p_average', 'sf_average'):
-                if clubplayers.count() >= 10:
-                    value = clubplayers.aggregate(**{
-                        field: Avg('clubplayermatch__%s' % field.replace('_average', ''))
-                    }).get(field, 0)
-                else:
-                    value = 0
-            elif field == 'seasons_total':
-                value = len(set(clubplayers.values_list('season')))
-            elif field == 'matches_total':
-                value = clubplayers.count()
-            elif field == 'matches_win_total':
-                value = (
-                    clubplayers.filter(q_home_matches)
-                    .extra(**x_home_win).count() +
-                    clubplayers.filter(q_guest_matches)
-                    .extra(**x_guest_win).count())
-            elif field == 'matches_lose_total':
-                value = (
-                    clubplayers.filter(q_home_matches)
-                    .extra(**x_guest_win).count() +
-                    clubplayers.filter(q_guest_matches)
-                    .extra(**x_home_win).count())
-            elif field == 'bullet_matches_total':
-                value = (
-                    clubplayers
-                    .filter(clubplayermatch__bullet_goals__gt=0).count())
-            elif field == 'zero_goals_matches_total':
-                value = (
-                    clubplayers
-                    .filter(clubplayermatch__loose_goals=0).count())
-            elif field == 'shots_received_total':
-                value = (player.saves_total or 0) + (player.loose_goals_total or 0)
 
-            setattr(player, field, value)
-            player.save(update_fields=[field])
+            q_not_parsed_yet = Q(
+                clubplayermatch__created__gt=player.last_match_date)
+
+            if (not player.last_match_date or
+                    clubplayers.filter(q_not_parsed_yet).exists() or
+                    not clubplayers.exists()):
+                for field in fields:
+                    value = None
+                    if field in (
+                            'goals_total', 'assists_total', 'points_total',
+                            'plus_minus_total', 'penalty_time_total',
+                            'saves_total', 'loose_goals_total', 'gamingtime_total'):
+                        value = clubplayers.aggregate(**{
+                            field: Sum('clubplayermatch__%s' % field.replace('_total', ''))
+                        }).get(field, 0) or 0
+                    elif field in (
+                            'goals_average', 'assists_average', 'points_average',
+                            'plus_minus_average', 'penalty_time_average',
+                            'saves_p_average', 'sf_average'):
+                        if clubplayers.count() >= 10:
+                            value = clubplayers.aggregate(**{
+                                field: Avg('clubplayermatch__%s' % field.replace('_average', ''))
+                            }).get(field, 0) or 0
+                        else:
+                            value = 0
+                    elif field == 'seasons_total':
+                        value = len(set(clubplayers.values_list('season')))
+                    elif field == 'matches_total':
+                        value = clubplayers.count()
+                    elif field == 'matches_win_total':
+                        value = (
+                            clubplayers.filter(q_home_matches)
+                            .extra(**x_home_win).count() +
+                            clubplayers.filter(q_guest_matches)
+                            .extra(**x_guest_win).count())
+                    elif field == 'matches_lose_total':
+                        value = (
+                            clubplayers.filter(q_home_matches)
+                            .extra(**x_guest_win).count() +
+                            clubplayers.filter(q_guest_matches)
+                            .extra(**x_home_win).count())
+                    elif field == 'bullet_matches_total':
+                        value = (
+                            clubplayers
+                            .filter(clubplayermatch__bullet_goals__gt=0).count())
+                    elif field == 'zero_goals_matches_total':
+                        value = (
+                            clubplayers
+                            .filter(clubplayermatch__loose_goals=0).count())
+                    elif field == 'shots_received_total':
+                        value = (player.saves_total or 0) + (player.loose_goals_total or 0)
+
+                    setattr(player, field, value)
+
+                if update_last_match_date:
+                    last_cp = clubplayers.order_by('clubplayermatch__created').last()
+                    if last_cp:
+                        last_cpm = last_cp.clubplayermatch_set.order_by('created').last()
+                        if last_cpm:
+                            player.last_match_date = last_cpm.created
+                            fields = list(fields) + ['last_match_date']
+
+                player.save(update_fields=list(fields) + ['last_match_date'])
 
     def recalc_counters_index(self, field):
         rating_index = 0
