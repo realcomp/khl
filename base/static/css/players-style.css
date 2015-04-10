@@ -5,12 +5,12 @@
      font-size: small;
      font-weight: bold;
  }
-.wrapper{
-	 width: 1000px;
-	 height: 510px;
-	 margin: 0 auto;
-	 padding: 5px;
-}
+/* .wrapper{ */
+/* 	 width: 1000px; */
+/* 	 height: 510px; */
+/* 	 margin: 0 auto; */
+/* 	 padding: 5px; */
+/* } */
 .content-wrap{
 	width: 992px;
 	margin: 0 auto;
