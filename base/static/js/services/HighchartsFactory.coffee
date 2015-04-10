@@ -22,6 +22,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                     "type": "datetime"
                     labels:
                         align: 'center'
+                        autoRotation: false
                         formatter: () ->
                             (new Date(this.value).getFullYear()-1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
                     tickInterval: 24 * 3600 * 1000 * 365
@@ -34,7 +35,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                     gridLineColor: '#FFFFFF'
                     labels:
                         enabled: false
-                    #maxPadding: 0.02
                 legend:
                     margin: 30
                 tooltip:
@@ -96,7 +96,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
 
     class HighchartsPlayerIndicatorsChart
 
-        constructor: (@divId, @data, @field, @drilldownSeries) ->
+        constructor: (@divId, @data, @field) ->
             @period = 365;
             self.field = @field;
 
@@ -123,6 +123,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                         drilldown: (e) ->
                             if not e.seriesOptions
                                 chart = @
+                                points = this.options.series[0].data.map (el) ->
+                                    return el.drilldown
+                                return if not _.contains points, e.point.drilldown
                                 chart.showLoading 'Загрузка данных по месяцам ...'
                                 if not self.versions?
                                     self.context.getPlayerDataByMonth().then (dataByMonth) ->
@@ -130,21 +133,24 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                                         self.versions = _.groupBy dataByMonth.results, (result) ->
                                             if result.season?
                                                 return result.season.end_date
+                                        console.log self.versions
                                         for key of versions
-                                            drilldownSeries.push
-                                                name: self.context.localeObject.fieldNames[self.field].fullName
+                                            self.drilldownSeries.push
+                                                name: self.context.currentPlayerObject.title
                                                 id: key
                                                 data: versions[key].map (el) ->
                                                     return (
                                                         x: new Date(el.date).getTime()
                                                         y: parseFloat(el[self.field])
                                                     )
+                                                color: self.context.currentPlayerObject.color
                                         self.dataByMonth = dataByMonth
                                         chart.hideLoading()
+                                        chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30
                                         chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, id: e.point.drilldown))
-                                        #chart.addSeriesAsDrilldown(e.point, series);
                                 else
                                     chart.hideLoading()
+                                    chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                                     chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, id: e.point.drilldown))
                 title:
                     text: @localeObject.fieldNames[@field].fullName.toUpperCase()
@@ -152,7 +158,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                     "type": "datetime"
                     labels:
                         align: 'center'
-                        #autoRotation: 'false'
                         formatter: () ->
                             if this.dateTimeLabelFormat is '%Y'
                                 return (new Date(this.value).getFullYear()-1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
@@ -183,10 +188,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                     shared: true
                 plotOptions:
                     column:
-                        ###depth: 20
-                        pointWidth: 30
-                        pointPadding: 0.1
-                        groupPadding: 10###
+                        stacking: 'normal'
                         pointRange: 24 * 3600 * 1000 * @period
                 series: @data
                 drilldown:

@@ -126,13 +126,13 @@
 
 
                             {% verbatim %}
-                            <!--<div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
+                            <div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
                                 <div class="m-t-20">
                                     <input class="input-new" type="text" ng-model="playerToCompare.id">
                                     <a class="ui green button chart-button" ng-click="addGraph(playerToCompare.id)">Сравнить с игроком {{playerToCompare.id}} {{playerToCompare.name}}</a>
                                     <a></a>
                                 </div>
-                            </div>-->
+                            </div>
                             <div  ng-show="playersStats.length && dataType === 'graph-serial' && !limited">
                                 <span class="season-buttons-label"> Игроки для сравнения:</span>
                                 <div class="player-comparison-container">

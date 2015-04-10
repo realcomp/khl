@@ -30,6 +30,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           "type": "datetime",
           labels: {
             align: 'center',
+            autoRotation: false,
             formatter: function() {
               return (new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
             }
@@ -140,11 +141,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   HighchartsPlayerIndicatorsChart = (function() {
-    function HighchartsPlayerIndicatorsChart(divId, data, field, drilldownSeries1) {
+    function HighchartsPlayerIndicatorsChart(divId, data, field) {
       this.divId = divId;
       this.data = data;
       this.field = field;
-      this.drilldownSeries = drilldownSeries1;
       this.period = 365;
       self.field = this.field;
     }
@@ -177,9 +177,15 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           marginLeft: 0,
           events: {
             drilldown: function(e) {
-              var chart;
+              var chart, points;
               if (!e.seriesOptions) {
                 chart = this;
+                points = this.options.series[0].data.map(function(el) {
+                  return el.drilldown;
+                });
+                if (!_.contains(points, e.point.drilldown)) {
+                  return;
+                }
                 chart.showLoading('Загрузка данных по месяцам ...');
                 if (self.versions == null) {
                   return self.context.getPlayerDataByMonth().then(function(dataByMonth) {
@@ -190,26 +196,30 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
                         return result.season.end_date;
                       }
                     });
+                    console.log(self.versions);
                     for (key in versions) {
-                      drilldownSeries.push({
-                        name: self.context.localeObject.fieldNames[self.field].fullName,
+                      self.drilldownSeries.push({
+                        name: self.context.currentPlayerObject.title,
                         id: key,
                         data: versions[key].map(function(el) {
                           return {
                             x: new Date(el.date).getTime(),
                             y: parseFloat(el[self.field])
                           };
-                        })
+                        }),
+                        color: self.context.currentPlayerObject.color
                       });
                     }
                     self.dataByMonth = dataByMonth;
                     chart.hideLoading();
+                    chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                     return chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, {
                       id: e.point.drilldown
                     }));
                   });
                 } else {
                   chart.hideLoading();
+                  chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                   return chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, {
                     id: e.point.drilldown
                   }));
@@ -268,12 +278,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         },
         plotOptions: {
           column: {
-
-            /*depth: 20
-            pointWidth: 30
-            pointPadding: 0.1
-            groupPadding: 10
-             */
+            stacking: 'normal',
             pointRange: 24 * 3600 * 1000 * this.period
           }
         },
