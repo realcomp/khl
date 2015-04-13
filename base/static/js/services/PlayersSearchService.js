@@ -1,12 +1,15 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-angular.module('Sportomatics').service('PlayersSearchService', function($http) {
+angular.module('Sportomatics').service('PlayersSearchService', function($http, $timeout) {
   this.loadCountries = function($scope, $location, callback) {
     var url;
     url = $('#LeagueListLink').attr('href');
     if (url) {
       $http.get(url).success(function(data) {
         $scope.countries = data;
+        $timeout(function() {
+          return $('.ui.dropdown.leagues').dropdown();
+        }, 0);
         if (callback && typeof callback === 'function') {
           return callback($scope);
         }

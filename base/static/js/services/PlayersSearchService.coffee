@@ -1,10 +1,13 @@
-angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
+angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout) ->
     @loadCountries = ($scope, $location, callback) ->
         url = $('#LeagueListLink').attr('href')
         if url
             $http.get(url
             ).success((data) ->
                 $scope.countries = data
+                $timeout(() ->
+                    $('.ui.dropdown.leagues').dropdown()
+                , 0)
                 # if $scope.countries.length
                 #     country = $scope.countries[0]
                 #     if !$location.search().country

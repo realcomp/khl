@@ -129,6 +129,19 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       }
       $scope.params = $location.search();
     };
+    $scope.setCountry = function(country) {
+      $scope.setLeague('');
+      $location.search('country', country || null);
+      $timeout(function() {
+        return $('.ui.dropdown.leagues').dropdown();
+      }, 0);
+    };
+    $scope.setLeague = function(league) {
+      if (!league) {
+        $('.ui.dropdown.leagues .text').text('');
+      }
+      $location.search('league', league || null);
+    };
     PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
   }
 ]);
