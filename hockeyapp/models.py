@@ -84,7 +84,7 @@ class AbstractMan(LocaleAttrMixin, models.Model):
         abstract=True
 
 
-class Player(AbstractMan):
+class Player(AdminLinkMixin, AbstractMan):
     objects = managers.player.PlayerQuerySet.as_manager()
     contract_type = models.CharField(_('Contract type'),
                                         choices=CONTRACT_TYPE,

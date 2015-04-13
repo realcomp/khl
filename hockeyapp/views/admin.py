@@ -159,6 +159,11 @@ class ClubPlayerMatchTemplate(TemplateView):
 
     def  get_average(self, lst=None):
         lst = lst or []
+        if len(lst) > 2:
+            _min = numpy.min(lst)
+            _max = numpy.max(lst)
+            lst.remove(_min)
+            lst.remove(_max)
         _avg = numpy.average(lst)
         _median = numpy.median(lst)
         _mean = numpy.mean(lst)
