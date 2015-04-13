@@ -1,5 +1,57 @@
 angular.module('Sportomatics').factory 'HighchartsFactory', () ->
 
+    class HighchartsClubGamesChart
+
+        constructor: (@divId, @data) ->
+
+        setLocaleObject: (@localeObject) ->
+
+        draw: () ->
+            console.log(@data)
+            $('#'+@divId).highcharts
+                chart:
+                    type: 'column'
+                title:
+                    'Счет в матчах'
+                xAxis: [{
+                    labels:
+                        enabled: false
+                        align: 'center'
+                        autoRotation: false
+                    reversed: false
+                    lineColor: '#FFFFFF'
+                    },{
+                    opposite: true,
+                    reversed: false,
+                    linkedTo: 0,
+                    labels:
+                        enabled: false
+                    lineColor: '#FFFFFF'
+                }]
+                yAxis:
+                    title: 'Счет'
+                    allowDecimals: false
+                    labels:
+                        formatter: () ->
+                            return Math.abs this.value
+                    stackLabels:
+                        formatter: () ->
+                            console.log this
+                            return this
+                legend:
+                    margin: 30
+                tooltip:
+                    #shared: true
+                    useHTML: true
+                    formatter: () ->
+                        return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score
+                plotOptions:
+                    column:
+                        stacking: 'normal'
+                        #pointRange: 24 * 3600 * 1000
+                series: @data
+
+
     class HighchartsPlayerClubsChart
 
         constructor: (@divId, @data, @field) ->
@@ -184,6 +236,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
 
 
     return (
+        ClubGamesChart: HighchartsClubGamesChart
         PlayerClubsChart: HighchartsPlayerClubsChart
         PlayerClubsPieChart: HighchartsPlayerClubsPieChart
         PlayerIndicatorsChart: HighchartsPlayerIndicatorsChart

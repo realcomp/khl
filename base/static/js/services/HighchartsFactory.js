@@ -1,5 +1,77 @@
 angular.module('Sportomatics').factory('HighchartsFactory', function() {
-  var HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart;
+  var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart;
+  HighchartsClubGamesChart = (function() {
+    function HighchartsClubGamesChart(divId, data) {
+      this.divId = divId;
+      this.data = data;
+    }
+
+    HighchartsClubGamesChart.prototype.setLocaleObject = function(localeObject) {
+      this.localeObject = localeObject;
+    };
+
+    HighchartsClubGamesChart.prototype.draw = function() {
+      console.log(this.data);
+      return $('#' + this.divId).highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: 'Счет в матчах',
+        xAxis: [
+          {
+            labels: {
+              enabled: false,
+              align: 'center',
+              autoRotation: false
+            },
+            reversed: false,
+            lineColor: '#FFFFFF'
+          }, {
+            opposite: true,
+            reversed: false,
+            linkedTo: 0,
+            labels: {
+              enabled: false
+            },
+            lineColor: '#FFFFFF'
+          }
+        ],
+        yAxis: {
+          title: 'Счет',
+          allowDecimals: false,
+          labels: {
+            formatter: function() {
+              return Math.abs(this.value);
+            }
+          },
+          stackLabels: {
+            formatter: function() {
+              console.log(this);
+              return this;
+            }
+          }
+        },
+        legend: {
+          margin: 30
+        },
+        tooltip: {
+          useHTML: true,
+          formatter: function() {
+            return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score;
+          }
+        },
+        plotOptions: {
+          column: {
+            stacking: 'normal'
+          }
+        },
+        series: this.data
+      });
+    };
+
+    return HighchartsClubGamesChart;
+
+  })();
   HighchartsPlayerClubsChart = (function() {
     function HighchartsPlayerClubsChart(divId, data, field) {
       this.divId = divId;
@@ -271,6 +343,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   return {
+    ClubGamesChart: HighchartsClubGamesChart,
     PlayerClubsChart: HighchartsPlayerClubsChart,
     PlayerClubsPieChart: HighchartsPlayerClubsPieChart,
     PlayerIndicatorsChart: HighchartsPlayerIndicatorsChart

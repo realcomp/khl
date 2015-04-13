@@ -1,11 +1,54 @@
 angular.module('Sportomatics').controller('ClubCalendarController', [
-    '$scope', '$http', '$location', '$parse', 'MapService',
-    ($scope, $http, $location, $parse, MapService) ->
+    '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory',
+    ($scope, $http, $location, $parse, MapService, HighchartsFactory) ->
         $scope.MONTHS = [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
             'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
         $scope.data = {}
         $scope.params = $location.search()
+
+        $scope.club = 'wdq'
+        $scope.games = [{
+                is_home: false
+                date: '2010-07-01'
+                opponent:
+                    pk: 1
+                    title: 'Металлург'
+                    logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif'
+                    score: -4
+                score: 5
+            },
+            {
+                is_home: false
+                date: '2010-07-02'
+                opponent:
+                    pk:1
+                    title: 'СКА'
+                    logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif'
+                    score: -3
+                score: 2
+            },
+            {
+                is_home: false
+                date: '2010-07-03'
+                opponent:
+                    pk:1
+                    title: 'Авангард',
+                    logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif'
+                    score: -3
+                score: 7
+            },
+            {
+                is_home: false
+                date: '2010-07-07'
+                opponent:
+                    pk:1
+                    title: 'ХК Сочи'
+                    logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif'
+                    score: -4
+                score: 2
+            }
+        ]
 
         $scope.CalendarEventPopup = {}
         $scope.CalendarEventPopupShow = (e, event) ->
@@ -148,7 +191,47 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 } for deltaM in [-1, 0, 1])]
                 $scope.loaded = true
             )
-            return
+            return $scope.createGamesChart()
+
+        $scope.createGamesChart = () ->
+            seriesClub = {}
+            seriesOpponent = {}
+            opponentObject = (
+                name: 'opponents'
+                data: $scope.games.map (game, index) ->
+                    return (
+                        x: index
+                        y: game.opponent.score,
+                        date: game.date
+                        name: game.opponent.title + ' - Club'
+                        score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score)
+                        color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#FF0000' else 'green',
+                        dataLabels:
+                            enabled: true
+                            align: 'left'
+                            crop: false
+                            verticalAlign: 'bottom'
+                            y: 20
+                            formatter: () ->
+                                console.log this
+                                return this.key.split('-')[0]
+                            inside: false
+                    )#[new Date(game.date.split('-')).getTime(), game.opponent.score]
+            )
+            clubObject = (
+                name: 'club'
+                data: $scope.games.map (game, index) ->
+                    return (
+                        x: index
+                        y: game.score
+                        date: game.date
+                        name: 'Club - ' + game.opponent.title
+                        score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score)
+                        color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#FF0000' else 'green'
+                    )#[new Date(game.date.split('-')).getTime(), game.score]
+            )
+            clubGamesChart = new HighchartsFactory.ClubGamesChart 'chartdiv', [clubObject, opponentObject]
+            clubGamesChart.draw()
 
         $scope.previous = () ->
             date = $scope.calendars[$scope.calendars.length - 1][0].date

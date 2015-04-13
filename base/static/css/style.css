@@ -141,7 +141,7 @@ svg {
 /* line 30, ../sass/_base.sass */
 .top-line .ui.text.menu > .item.header {
   font-weight: normal;
-  
+
 }
 /* line 33, ../sass/_base.sass */
 .top-line .ui.text.menu > .item.header:hover {
@@ -5865,4 +5865,7 @@ hr.style-one {
 }
 .highcharts-drilldown-axis-label{
     text-decoration: none !important;
+}
+text tspan, text {
+    text-align: center !important;
 }

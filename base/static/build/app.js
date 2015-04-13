@@ -961,7 +961,79 @@ angular.module('Sportomatics').service('ClubsMapService', function(){
 
 })
 angular.module('Sportomatics').factory('HighchartsFactory', function() {
-  var HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart;
+  var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart;
+  HighchartsClubGamesChart = (function() {
+    function HighchartsClubGamesChart(divId, data) {
+      this.divId = divId;
+      this.data = data;
+    }
+
+    HighchartsClubGamesChart.prototype.setLocaleObject = function(localeObject) {
+      this.localeObject = localeObject;
+    };
+
+    HighchartsClubGamesChart.prototype.draw = function() {
+      console.log(this.data);
+      return $('#' + this.divId).highcharts({
+        chart: {
+          type: 'column'
+        },
+        title: 'Счет в матчах',
+        xAxis: [
+          {
+            labels: {
+              enabled: false,
+              align: 'center',
+              autoRotation: false
+            },
+            reversed: false,
+            lineColor: '#FFFFFF'
+          }, {
+            opposite: true,
+            reversed: false,
+            linkedTo: 0,
+            labels: {
+              enabled: false
+            },
+            lineColor: '#FFFFFF'
+          }
+        ],
+        yAxis: {
+          title: 'Счет',
+          allowDecimals: false,
+          labels: {
+            formatter: function() {
+              return Math.abs(this.value);
+            }
+          },
+          stackLabels: {
+            formatter: function() {
+              console.log(this);
+              return this;
+            }
+          }
+        },
+        legend: {
+          margin: 30
+        },
+        tooltip: {
+          useHTML: true,
+          formatter: function() {
+            return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score;
+          }
+        },
+        plotOptions: {
+          column: {
+            stacking: 'normal'
+          }
+        },
+        series: this.data
+      });
+    };
+
+    return HighchartsClubGamesChart;
+
+  })();
   HighchartsPlayerClubsChart = (function() {
     function HighchartsPlayerClubsChart(divId, data, field) {
       this.divId = divId;
@@ -1233,6 +1305,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   return {
+    ClubGamesChart: HighchartsClubGamesChart,
     PlayerClubsChart: HighchartsPlayerClubsChart,
     PlayerClubsPieChart: HighchartsPlayerClubsPieChart,
     PlayerIndicatorsChart: HighchartsPlayerIndicatorsChart
@@ -2683,10 +2756,54 @@ angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
 });
 
 angular.module('Sportomatics').controller('ClubCalendarController', [
-  '$scope', '$http', '$location', '$parse', 'MapService', function($scope, $http, $location, $parse, MapService) {
+  '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', function($scope, $http, $location, $parse, MapService, HighchartsFactory) {
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.data = {};
     $scope.params = $location.search();
+    $scope.club = 'wdq';
+    $scope.games = [
+      {
+        is_home: false,
+        date: '2010-07-01',
+        opponent: {
+          pk: 1,
+          title: 'Металлург',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 5
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }
+    ];
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
       var params;
@@ -2849,6 +2966,52 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         ];
         return $scope.loaded = true;
       });
+      return $scope.createGamesChart();
+    };
+    $scope.createGamesChart = function() {
+      var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
+      seriesClub = {};
+      seriesOpponent = {};
+      opponentObject = {
+        name: 'opponents',
+        data: $scope.games.map(function(game, index) {
+          return {
+            x: index,
+            y: game.opponent.score,
+            date: game.date,
+            name: game.opponent.title + ' - Club',
+            score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score),
+            color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#FF0000' : 'green',
+            dataLabels: {
+              enabled: true,
+              align: 'left',
+              crop: false,
+              verticalAlign: 'bottom',
+              y: 20,
+              formatter: function() {
+                console.log(this);
+                return this.key.split('-')[0];
+              },
+              inside: false
+            }
+          };
+        })
+      };
+      clubObject = {
+        name: 'club',
+        data: $scope.games.map(function(game, index) {
+          return {
+            x: index,
+            y: game.score,
+            date: game.date,
+            name: 'Club - ' + game.opponent.title,
+            score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score),
+            color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#FF0000' : 'green'
+          };
+        })
+      };
+      clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
+      return clubGamesChart.draw();
     };
     $scope.previous = function() {
       var date, deltaM;
