@@ -66,7 +66,7 @@
                                         {% verbatim %}
                                             <li class="ui-state-default ui-corner-top"
                                                 ng-class="{ 'ui-tabs-active ui-state-active':params.league == league.pk }"
-                                                ng-repeat="league in PlayersSearchService.getLeagues(countries, [params.country])">
+                                                ng-repeat="league in data.leagues">
                                                 <a class="item tab-btn ui-tabs-anchor" href=""
                                                    ng-click="setLeague(league.pk)">
                                                     {{ league.title }}
@@ -83,7 +83,7 @@
                                     <ul class="options-list clubs-countries-menu-list">
                                         <li class="option-item" ng-repeat="country in countries">
                                             <a class="option-link"
-                                               ng-class="{ 'option-link_active':params.country == country.pk }"
+                                               ng-class="{ 'option-link_active':isCountryActive(country.pk) }"
                                                ng-click="setCountry(country.pk)">
                                                 {{ country.title }}
                                             </a>

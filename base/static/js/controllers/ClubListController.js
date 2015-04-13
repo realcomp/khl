@@ -42,7 +42,7 @@ angular.module('Sportomatics')
     };
 
     $scope.setCountry = function(country) {
-        if ($scope.params.country != country) {
+        if (!$scope.isCountryActive(country)) {
             $location.search('country', country);
             $scope.params = $location.search();
             $scope.list();
@@ -57,8 +57,16 @@ angular.module('Sportomatics')
         }
     };
 
+    $scope.isCountryActive = function(country) {
+        if ($scope.params.country) {
+            return $scope.params.country == country;
+        } else {
+            return country == 1;
+        }
+    };
+
     $scope.list = function(all) {
-        var params = $('#ClubListForm').serialize();
+        var params = ''; //$('#ClubListForm').serialize();
 
         params += '&order_by=' + ($scope.params.order_by || '%s_title');
         if ($scope.params.reversed) {
@@ -76,12 +84,13 @@ angular.module('Sportomatics')
         //     $location.search('country', null);
         // }
 
+        if ($scope.params.season) {
+            params += '&season=' + $scope.params.season;
+        }
         if ($scope.params.league) {
             params += '&league=' + $scope.params.league;
         }
-        if ($scope.params.country) {
-            params += '&country=' + $scope.params.country;
-        }
+        params += '&country=' + ($scope.params.country || 1);
 
         $scope.params = $location.search();
         $scope.data = {};

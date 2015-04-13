@@ -3,14 +3,15 @@ from __future__ import unicode_literals
 
 import rest_framework as drf
 
-from rest_framework import serializers
+from rest_framework import pagination, serializers
 from api.addresses.serializers import AddressMinimalSerializer, CountrySerializer
 from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
 from api.base.serializers import SeasonSerializer
 
-from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
-from hockeyapp.serializers import CoachSerializer
+from hockeyapp.models import (
+    ArenaInstaPhoto, Club, Match, Player, Arena, League, LeagueClub)
+from hockeyapp.serializers import CoachSerializer, LeagueSerializer
 
 
 class AbstractManSerializer(LangDepSerializer):
@@ -85,6 +86,24 @@ class ClubListSerializer(TitleBaseSerializer):
             'pk', 'title', 'title_verbose', 'logo', 'url',
             'address', 'arena', 'coach',)
         model = Club
+
+
+class ClubListPaginationSerializer(pagination.PaginationSerializer):
+    leagues = serializers.SerializerMethodField()
+
+    def get_leagues(self, page):
+        clubs = page.paginator.object_list
+        request = self.context.get('request')
+        if request and 'season' in request.GET:
+            leagueclubs = (
+                LeagueClub.objects
+                .filter(season=request.GET['season'], club__in=clubs))
+            leagues = (
+                League.objects
+                .filter(pk__in=leagueclubs.values_list('league')))
+            return LeagueSerializer(
+                leagues, context=self.context, many=True).data
+        return []
 
 
 class PartnerPlayerSerializer(PlayerMinimalSerialiser):
