@@ -42,7 +42,7 @@
           <tbody>
             {% for data in players.values %}
             <tr class="{% cycle 'row1' 'row2' %}">
-              <td>{{data.player}}</td>
+              <td><a href="{{data.player.admin_change_link}}">{{data.player}}</a></td>
               <td>{{data.player.get_line_display}}</td>
               <td>{{data.down_league.points__avg|floatformat:2}}</td>
               <td>{{data.up_league.points__avg|floatformat:2}}</td>
