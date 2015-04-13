@@ -523,7 +523,6 @@ def get_judge_players():
     for j in JM.objects.all():
         qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
         if qs.exists():
-            player_links = [obj.admin_change_link() for obj in qs]
-            print 'Судья: {}'.format(j.admin_change_link())
+            player_links = ['www.sportomatics.ru'+obj.admin_change_link() for obj in qs]
+            print 'Судья: www.sportomatics.ru{}'.format(j.admin_change_link())
             print 'Игроки: {}'.format(player_links)
-            print('\n')
