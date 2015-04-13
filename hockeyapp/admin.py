@@ -134,6 +134,11 @@ def get_recalc_counters_actions():
     action_all.short_description = _('Recalculate all counters')
     yield action_all
 
+    def reset_last_match_date(modeladmin, request, queryset):
+        queryset.update(last_match_date=None)
+    reset_last_match_date.short_description = _('Reset "last_match_date"')
+    yield reset_last_match_date
+
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     actions = list(get_recalc_counters_actions())
