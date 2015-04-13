@@ -45,9 +45,9 @@ class HockeyAppParserTest(base.tests.BaseTest):
                                             ).get_page(self.mhl_player_id)
         self.assertIsNotNone(self.mhl_player_data)
         # test mhl2 player parser
-        self.mhl2_player_data = parsers.player.MHL2PlayerInfo(
-                                            ).get_page(self.mhl2_player_id)
-        self.assertIsNotNone(self.mhl2_player_data)
+        #self.mhl2_player_data = parsers.player.MHL2PlayerInfo(
+                                            #).get_page(self.mhl2_player_id)
+        #self.assertIsNotNone(self.mhl2_player_data)
         # test vhl player parser
         self.vhl_player_data = parsers.player.VHLPlayerInfo(
                                             ).get_page(self.vhl_player_id)
@@ -130,6 +130,7 @@ class HockeyAppParserTest(base.tests.BaseTest):
             for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
                 'height', 'weight', 'citizenship', 'fio',
             ):
+                print(player, field)
                 self.assertNotEqual(getattr(player, field), self.blank)
             for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
                 self.assertIsNotNone(getattr(player, field))
