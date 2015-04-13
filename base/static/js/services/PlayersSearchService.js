@@ -1,12 +1,15 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-angular.module('Sportomatics').service('PlayersSearchService', function($http) {
+angular.module('Sportomatics').service('PlayersSearchService', function($http, $timeout) {
   this.loadCountries = function($scope, $location, callback) {
     var url;
     url = $('#LeagueListLink').attr('href');
     if (url) {
       $http.get(url).success(function(data) {
         $scope.countries = data;
+        $timeout(function() {
+          return $('.ui.dropdown.leagues').dropdown();
+        }, 0);
         if (callback && typeof callback === 'function') {
           return callback($scope);
         }
@@ -144,12 +147,6 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     }
     if ($('#isCitizenshipOther').is(':checked')) {
       $scope.$location.search('citizenship_other', 'true');
-      if ($scope.$location.search().citizenship2) {
-        $('#citizenshipOther').val($scope.$location.search().citizenship2);
-      }
-      if ($('#citizenshipOther').val()) {
-        $scope.$location.search('citizenship2', $('#citizenshipOther').val());
-      }
     } else {
       $scope.$location.search('citizenship_other', null);
     }
@@ -235,11 +232,12 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.params.citizenship1) {
       params += '&citizenship=' + $scope.params.citizenship1;
     }
-    if ($scope.params.citizenship2) {
-      params += '&citizenship=' + $scope.params.citizenship2;
-    }
     if ($scope.params.citizenship_other === 'true') {
-      params += '&citizenship_other=true';
+      if ($scope.params.citizenship2) {
+        params += '&citizenship=' + $scope.params.citizenship2;
+      } else {
+        params += '&citizenship_other=true';
+      }
     }
     if ($scope.params.league) {
       params += '&league=' + $scope.params.league;

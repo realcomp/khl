@@ -1,10 +1,13 @@
-angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
+angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout) ->
     @loadCountries = ($scope, $location, callback) ->
         url = $('#LeagueListLink').attr('href')
         if url
             $http.get(url
             ).success((data) ->
                 $scope.countries = data
+                $timeout(() ->
+                    $('.ui.dropdown.leagues').dropdown()
+                , 0)
                 # if $scope.countries.length
                 #     country = $scope.countries[0]
                 #     if !$location.search().country
@@ -128,12 +131,13 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             $scope.$location.search('citizenship1', $('#citizenshipRussia').val())
         else
             $scope.$location.search('citizenship1', null)
+
         if $('#isCitizenshipOther').is(':checked')
             $scope.$location.search('citizenship_other', 'true')
-            if $scope.$location.search().citizenship2
-                $('#citizenshipOther').val($scope.$location.search().citizenship2)
-            if $('#citizenshipOther').val()
-                $scope.$location.search('citizenship2', $('#citizenshipOther').val())
+            # if $scope.$location.search().citizenship2
+            #     $('#citizenshipOther').val($scope.$location.search().citizenship2)
+            # if $('#citizenshipOther').val()
+            #     $scope.$location.search('citizenship2', $('#citizenshipOther').val())
         else
             $scope.$location.search('citizenship_other', null)
 
@@ -190,10 +194,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1
             params += '&citizenship=' + $scope.params.citizenship1
-        if $scope.params.citizenship2
-            params += '&citizenship=' + $scope.params.citizenship2
         if $scope.params.citizenship_other == 'true'
-            params += '&citizenship_other=true'
+            if $scope.params.citizenship2
+                params += '&citizenship=' + $scope.params.citizenship2
+            else
+                params += '&citizenship_other=true'
         if $scope.params.league
             params += '&league=' + $scope.params.league
         if $scope.params.is_playing != 'false'
