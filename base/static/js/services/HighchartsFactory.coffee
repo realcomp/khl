@@ -97,13 +97,14 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
     class HighchartsPlayerIndicatorsChart
 
         constructor: (@divId, @data, @field) ->
-            @period = 365;
-            self.field = @field;
+            @period = self.period = 365
+            self.field = @field
 
         setLocaleObject: (@localeObject) ->
             self.localeObject = @localeObject
 
         setPeriod: (@period) ->
+            self.period = @period
 
         setContext: (@context) ->
             self.context = @context
@@ -123,35 +124,19 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                         drilldown: (e) ->
                             if not e.seriesOptions
                                 chart = @
-                                points = this.options.series[0].data.map (el) ->
+                                ###points = this.options.series[0].data.map (el) ->
                                     return el.drilldown
-                                return if not _.contains points, e.point.drilldown
+                                return if not _.contains points, e.point.drilldown###
                                 chart.showLoading 'Загрузка данных по месяцам ...'
-                                if not self.versions?
+                                if not self.context.dataByMonth?
                                     self.context.getPlayerDataByMonth().then (dataByMonth) ->
-                                        self.drilldownSeries = [];
-                                        self.versions = _.groupBy dataByMonth.results, (result) ->
-                                            if result.season?
-                                                return result.season.end_date
-                                        console.log self.versions
-                                        for key of versions
-                                            self.drilldownSeries.push
-                                                name: self.context.currentPlayerObject.title
-                                                id: key
-                                                data: versions[key].map (el) ->
-                                                    return (
-                                                        x: new Date(el.date).getTime()
-                                                        y: parseFloat(el[self.field])
-                                                    )
-                                                color: self.context.currentPlayerObject.color
-                                        self.dataByMonth = dataByMonth
                                         chart.hideLoading()
                                         chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30
-                                        chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, id: e.point.drilldown))
+                                        self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
                                 else
                                     chart.hideLoading()
                                     chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
-                                    chart.addSeriesAsDrilldown(e.point, _.findWhere(self.drilldownSeries, id: e.point.drilldown))
+                                    self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
                 title:
                     text: @localeObject.fieldNames[@field].fullName.toUpperCase()
                 xAxis:
@@ -189,7 +174,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                 plotOptions:
                     column:
                         stacking: 'normal'
-                        pointRange: 24 * 3600 * 1000 * @period
+                        pointRange: 24 * 3600 * 1000 * self.period
                 series: @data
                 drilldown:
                     series: @drilldownSeries
