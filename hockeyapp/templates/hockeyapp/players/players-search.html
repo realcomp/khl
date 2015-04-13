@@ -172,7 +172,10 @@
                                         <label>иное</label>
                                     </div><br>
                                     <div class="ui selection dropdown dropdown-small-inline">
-                                        <input type="hidden" id="citizenshipOther" value="">
+                                        <input type="hidden" id="citizenshipOther" value=""
+                                               ng-model="citizenship2" ng-update-hidden
+                                               ng-init="citizenship2 = $location.search().citizenship2"
+                                               ng-change="$location.search('citizenship2', citizenship2 || null)">
                                         <div class="default text">любое</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
