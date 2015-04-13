@@ -21,9 +21,13 @@ angular.module('Sportomatics').directive('ngUpdateHidden', () ->
 )
 
 angular.module('Sportomatics').controller('PlayersSearchController', [
-    '$http', '$scope', '$location', 'PlayersSearchService', 'tags',
-    ($http, $scope, $location, PlayersSearchService, tags) ->
+    '$http', '$scope', '$location', 'PlayersSearchService', 'tags','$timeout',
+    ($http, $scope, $location, PlayersSearchService, tags, $timeout) ->
         $scope.tags = tags
+
+        $timeout(() ->
+             $('.ui.dropdown').dropdown();
+        ,0)
 
         $scope.loadCountries = (query) ->
             return $scope.tags.loadCountries($scope.countriesURL, query)

@@ -4648,8 +4648,11 @@ angular.module('Sportomatics').directive('ngUpdateHidden', function() {
 });
 
 angular.module('Sportomatics').controller('PlayersSearchController', [
-  '$http', '$scope', '$location', 'PlayersSearchService', 'tags', function($http, $scope, $location, PlayersSearchService, tags) {
+  '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', function($http, $scope, $location, PlayersSearchService, tags, $timeout) {
     $scope.tags = tags;
+    $timeout(function() {
+      return $('.ui.dropdown').dropdown();
+    }, 0);
     $scope.loadCountries = function(query) {
       return $scope.tags.loadCountries($scope.countriesURL, query);
     };
