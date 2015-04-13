@@ -5873,4 +5873,5 @@ text tspan, text {
     text-shadow: none !important;
     color: black !important;
     fill: black;
+    font-size: 7px !important;
 }

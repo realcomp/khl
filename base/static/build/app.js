@@ -987,7 +987,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               autoRotation: false
             },
             reversed: false,
-            lineColor: '#FFFFFF'
+            lineColor: '#FFFFFF',
+            max: 3
           }, {
             opposite: true,
             reversed: false,
@@ -995,7 +996,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             labels: {
               enabled: false
             },
-            lineColor: '#FFFFFF'
+            lineColor: '#FFFFFF',
+            max: 3
           }
         ],
         yAxis: {
@@ -1012,6 +1014,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               return this;
             }
           }
+        },
+        scrollbar: {
+          enabled: true
         },
         legend: {
           margin: 30
@@ -2800,6 +2805,336 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
           score: -4
         },
         score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-03',
+        opponent: {
+          pk: 1,
+          title: 'Авангард',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 7
+      }, {
+        is_home: false,
+        date: '2010-07-07',
+        opponent: {
+          pk: 1,
+          title: 'ХК Сочи',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -4
+        },
+        score: 2
+      }, {
+        is_home: false,
+        date: '2010-07-02',
+        opponent: {
+          pk: 1,
+          title: 'СКА',
+          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
+          score: -3
+        },
+        score: 2
       }
     ];
     $scope.CalendarEventPopup = {};
@@ -2985,7 +3320,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               align: 'center',
               crop: false,
               verticalAlign: 'bottom',
-              y: 25,
+              y: 10,
               formatter: function() {
                 console.log(this);
                 return this.key.split('-')[0];

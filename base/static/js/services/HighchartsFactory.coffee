@@ -19,7 +19,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                         align: 'center'
                         autoRotation: false
                     reversed: false
-                    lineColor: '#FFFFFF'
+                    lineColor: '#FFFFFF',
+                    max: 3
                     },{
                     opposite: true,
                     reversed: false,
@@ -27,6 +28,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                     labels:
                         enabled: false
                     lineColor: '#FFFFFF'
+                    max: 3
                 }]
                 yAxis:
                     title: 'Счет'
@@ -38,6 +40,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                         formatter: () ->
                             console.log this
                             return this
+                scrollbar:
+                    enabled: true
                 legend:
                     margin: 30
                 tooltip:

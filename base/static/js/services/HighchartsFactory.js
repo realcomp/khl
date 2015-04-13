@@ -25,7 +25,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               autoRotation: false
             },
             reversed: false,
-            lineColor: '#FFFFFF'
+            lineColor: '#FFFFFF',
+            max: 3
           }, {
             opposite: true,
             reversed: false,
@@ -33,7 +34,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             labels: {
               enabled: false
             },
-            lineColor: '#FFFFFF'
+            lineColor: '#FFFFFF',
+            max: 3
           }
         ],
         yAxis: {
@@ -50,6 +52,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               return this;
             }
           }
+        },
+        scrollbar: {
+          enabled: true
         },
         legend: {
           margin: 30
