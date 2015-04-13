@@ -194,6 +194,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http) ->
             params += '&citizenship=' + $scope.params.citizenship2
         if $scope.params.citizenship_other == 'true'
             params += '&citizenship_other=true'
+        if $scope.params.league
+            params += '&league=' + $scope.params.league
         if $scope.params.is_playing != 'false'
             params += '&is_playing=true'
         if $scope.params.alphabet

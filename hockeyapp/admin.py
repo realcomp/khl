@@ -118,7 +118,7 @@ def get_recalc_counters_actions():
         def action(modeladmin, request, queryset):
             from .tasks import player_recalc_counters
             from .tasks import player_recalc_counters_index
-            pks = queryset.objects.values_list('pk', flat=True)
+            pks = queryset.values_list('pk', flat=True)
             player_recalc_counters.delay(pks, [field])
             player_recalc_counters_index.delay(field)
         # make function unique for django
@@ -133,6 +133,11 @@ def get_recalc_counters_actions():
         periodic_player_recalc_counters_index.delay()
     action_all.short_description = _('Recalculate all counters')
     yield action_all
+
+    def reset_last_match_date(modeladmin, request, queryset):
+        queryset.update(last_match_date=None)
+    reset_last_match_date.short_description = _('Reset "last_match_date"')
+    yield reset_last_match_date
 
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):

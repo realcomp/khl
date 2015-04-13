@@ -50,9 +50,11 @@
                         <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:country-league-list-api' %}"></a>
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
-                              <div class="ui fluid search selection dropdown">
+                            <div class="ui fluid search selection dropdown">
                                 <input type="hidden" name="country" class="search"
-                                       onchange="angular.element(this).scope().setCountry(this)">
+                                       ng-model="country" ng-update-hidden
+                                       ng-init="country = $location.search().country || 1"
+                                       ng-change="$location.search('country', country)">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Выберите страну</div>
                                 <div class="menu">
@@ -88,12 +90,15 @@
                                 </option>
                             </select> -->
                             <div class="ui fluid search selection dropdown">
-                                <input type="hidden" name="lige" class="search" >
+                                <input type="hidden" name="lige" class="search"
+                                       ng-model="league" ng-update-hidden
+                                       ng-init="league = $location.search().league"
+                                       ng-change="$location.search('league', league)">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Выберите лигу</div>
                                 <div class="menu">
                                     <div class="item" data-value="{{ league.pk }}"
-                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)">
+                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, country)">
                                         {{ league.title }}
                                     </div>
                                 </div>

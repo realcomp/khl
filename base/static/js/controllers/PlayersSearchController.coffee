@@ -1,3 +1,25 @@
+angular.module('Sportomatics').directive('ngUpdateHidden', () ->
+    return {
+        'restrict': 'AE',
+        'scope': {},
+        'replace': true,
+        'require': 'ngModel',
+        'link': ($scope, elem, attr, ngModel) ->
+            $scope.$watch(ngModel, (nv) ->
+                elem.val(nv)
+                return
+            )
+            elem.change(() ->
+                $scope.$apply(() ->
+                    ngModel.$setViewValue(elem.val())
+                    return
+                )
+                return
+            )
+            return
+    }
+)
+
 angular.module('Sportomatics').controller('PlayersSearchController', [
     '$http', '$scope', '$location', 'PlayersSearchService', 'tags',
     ($http, $scope, $location, PlayersSearchService, tags) ->
@@ -105,17 +127,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             else
                 $location.search('season', null)
             $scope.params = $location.search()
-            return
-
-        $scope.setCountry = (e) ->
-            if $(e).val()
-                $location.search('country', $(e).val())
-            else
-                $location.search('country', null)
-            $scope.params = $location.search()
-            # $scope.leagues = PlayersSearchService.getLeagues($scope.countries, $(e).val())
-            # console.log($scope.countries)
-            # console.log($scope.leagues)
             return
 
         # PlayersSearchService.search($scope)

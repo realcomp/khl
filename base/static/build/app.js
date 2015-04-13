@@ -2313,6 +2313,9 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http) {
     if ($scope.params.citizenship_other === 'true') {
       params += '&citizenship_other=true';
     }
+    if ($scope.params.league) {
+      params += '&league=' + $scope.params.league;
+    }
     if ($scope.params.is_playing !== 'false') {
       params += '&is_playing=true';
     }
@@ -4625,6 +4628,25 @@ angular.module('Sportomatics')
         $scope.getPartners();
 
     });
+angular.module('Sportomatics').directive('ngUpdateHidden', function() {
+  return {
+    'restrict': 'AE',
+    'scope': {},
+    'replace': true,
+    'require': 'ngModel',
+    'link': function($scope, elem, attr, ngModel) {
+      $scope.$watch(ngModel, function(nv) {
+        elem.val(nv);
+      });
+      elem.change(function() {
+        $scope.$apply(function() {
+          ngModel.$setViewValue(elem.val());
+        });
+      });
+    }
+  };
+});
+
 angular.module('Sportomatics').controller('PlayersSearchController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'tags', function($http, $scope, $location, PlayersSearchService, tags) {
     $scope.tags = tags;
@@ -4731,14 +4753,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $location.search('season', $(e).val());
       } else {
         $location.search('season', null);
-      }
-      $scope.params = $location.search();
-    };
-    $scope.setCountry = function(e) {
-      if ($(e).val()) {
-        $location.search('country', $(e).val());
-      } else {
-        $location.search('country', null);
       }
       $scope.params = $location.search();
     };

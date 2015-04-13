@@ -756,7 +756,7 @@ class ClubPlayerMatch(models.Model):
     loose_goals = models.PositiveSmallIntegerField(_('Loose Goals'), null=True)
     saves = models.PositiveSmallIntegerField(_('Saves Goals'), null=True)
     saves_p = models.FloatField(_('Saves Goals , %'), null=True)
-    sf = models.FloatField(_('Safety Factor'), null=True)
+    sf = models.FloatField(_('Safety Factor'), null=True) # KH
     gamingtime = models.PositiveIntegerField(_('Gaming time'), null=True)
 
     created = models.DateTimeField(_('Created date'), auto_now_add=True)

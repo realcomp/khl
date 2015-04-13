@@ -35,18 +35,14 @@
               <th scope="col">{% trans 'Goals' %}(B)</th>
               <th scope="col">{% trans 'Assists' %}(H)</th>
               <th scope="col">{% trans 'Assists' %}(B)</th>
-              <th scope="col">+/-(H)</th>
-              <th scope="col">+/-(B)</th>
-              <th scope="col">{% trans 'Saves' %}(H)</th>
-              <th scope="col">{% trans 'Saves' %}(B)</th>
-              <th scope="col">{% trans 'Loose goals' %}(H)</th>
-              <th scope="col">{% trans 'Loose goals' %}(B)</th>
+              <th scope="col">{% trans 'KH' %}(H)</th>
+              <th scope="col">{% trans 'KH' %}(B)</th>
             </tr>
           </thead>
           <tbody>
             {% for data in players.values %}
             <tr class="{% cycle 'row1' 'row2' %}">
-              <td>{{data.player}}</td>
+              <td><a href="{{data.player.admin_change_link}}">{{data.player}}</a></td>
               <td>{{data.player.get_line_display}}</td>
               <td>{{data.down_league.points__avg|floatformat:2}}</td>
               <td>{{data.up_league.points__avg|floatformat:2}}</td>
@@ -54,15 +50,49 @@
               <td>{{data.up_league.goals__avg|floatformat:2}}</td>
               <td>{{data.down_league.assists__avg|floatformat:2}}</td>
               <td>{{data.up_league.assists__avg|floatformat:2}}</td>
-              <td>{{data.down_league.plus_minus__avg|floatformat:2}}</td>
-              <td>{{data.up_league.plus_minus__avg|floatformat:2}}</td>
-              <td>{{data.down_league.saves__avg|floatformat:2}}</td>
-              <td>{{data.up_league.saves__avg|floatformat:2}}</td>
-              <td>{{data.down_league.loose_goals__avg|floatformat:2}}</td>
-              <td>{{data.up_league.loose_goals__avg|floatformat:2}}</td>
+              <td>{{data.down_league.sf__avg|floatformat:2}}</td>
+              <td>{{data.up_league.sf__avg|floatformat:2}}</td>
             </tr>
             {% endfor %}
           </tbody>
+          <tfoot>
+            <tr>
+              <td>{% trans 'Quality' %}: {{players.keeper_sf.q|floatformat:2}}</td>
+              <td>{% trans 'Goalkeepers' %}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>{{players.keeper_sf.down|floatformat:2}}</td>
+              <td>{{players.keeper_sf.up|floatformat:2}}</td>
+            </tr>
+            <tr>
+              <td>{% trans 'Quality' %}: {{players.def_p.q|floatformat:2}}</td>
+              <td>{% trans 'Defenders' %}</td>
+              <td>{{players.def_p.down|floatformat:2}}</td>
+              <td>{{players.def_p.up|floatformat:2}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td>{% trans 'Quality' %}: {{players.off_p.q|floatformat:2}}</td>
+              <td>{% trans 'Offenders' %}</td>
+              <td>{{players.off_p.down|floatformat:2}}</td>
+              <td>{{players.off_p.up|floatformat:2}}</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </tfoot>
         </table>
         {% endfor %}
       </div>
