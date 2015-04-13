@@ -5869,3 +5869,8 @@ hr.style-one {
 text tspan, text {
     text-align: center !important;
 }
+.highcharts-data-labels text tspan{
+    text-shadow: none !important;
+    color: black !important;
+    fill: black;
+}

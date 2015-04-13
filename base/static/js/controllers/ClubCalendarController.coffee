@@ -208,10 +208,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                         color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#FF0000' else 'green',
                         dataLabels:
                             enabled: true
-                            align: 'left'
+                            align: 'center'
                             crop: false
                             verticalAlign: 'bottom'
-                            y: 20
+                            y: 25
                             formatter: () ->
                                 console.log this
                                 return this.key.split('-')[0]

@@ -227,10 +227,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#FF0000' : 'green',
             dataLabels: {
               enabled: true,
-              align: 'left',
+              align: 'center',
               crop: false,
               verticalAlign: 'bottom',
-              y: 20,
+              y: 25,
               formatter: function() {
                 console.log(this);
                 return this.key.split('-')[0];
