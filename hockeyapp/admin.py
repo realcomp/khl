@@ -118,7 +118,7 @@ def get_recalc_counters_actions():
         def action(modeladmin, request, queryset):
             from .tasks import player_recalc_counters
             from .tasks import player_recalc_counters_index
-            pks = queryset.objects.values_list('pk', flat=True)
+            pks = queryset.values_list('pk', flat=True)
             player_recalc_counters.delay(pks, [field])
             player_recalc_counters_index.delay(field)
         # make function unique for django
