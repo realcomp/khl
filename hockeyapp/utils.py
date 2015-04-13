@@ -515,3 +515,15 @@ def clear_media(media_path):
     media_links = set(get_filepaths(media_path))
     for_del = media_links - db_recs
     for file_path in for_del: os.remove(file_path)
+
+
+def get_judge_players():
+    JM = get_model(CURRENT_APP, 'Judge')
+    PM = get_model(CURRENT_APP, 'Player')
+    for j in JM.objects.all():
+        qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
+        if qs.exists():
+            player_links = [obj.admin_change_link() for obj in qs]
+            print 'Судья: {}'.format(j.admin_change_link())
+            print 'Игроки: {}'.format(player_links)
+            print('\n')
