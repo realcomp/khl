@@ -531,7 +531,7 @@ def get_judge_players():
 def get_coach_players():
     CM = get_model(CURRENT_APP, 'Coach')
     PM = get_model(CURRENT_APP, 'Player')
-    for j in CM.objects.all():
+    for j in CM.objects.exclude(ru_name='', ru_lastname=''):
         qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
         if qs.exists():
             player_links = ['[ www.sportomatics.ru{} {} ]'.format(
