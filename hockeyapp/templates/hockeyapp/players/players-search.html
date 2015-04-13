@@ -50,6 +50,7 @@
                         <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:country-league-list-api' %}"></a>
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
+
                             <div class="ui fluid search selection dropdown">
                                 <input type="hidden" name="country" class="search"
                                        ng-model="country" ng-update-hidden
@@ -65,7 +66,7 @@
                                         </div>
                                     {% endfor %}
                                   </div>
-                              </div>
+                            </div>
 
                            <!--  <select id="players-search-country"
                                     class="select players-search-select" multiple="multiple" size="8"
@@ -80,17 +81,9 @@
                         {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Лига:</div>
-                         <!--    <select id="players-search-league"
-                                    class="select players-search-select" multiple="multiple" size="8"
-                                    ng-model="leaguesSelected">
-                                <option value="{{ league.pk }}"
-                                        ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)"
-                                        ng-selected="$index === 0">
-                                    {{ league.title }}
-                                </option>
-                            </select> -->
-                            <div class="ui fluid search selection dropdown">
-                                <input type="hidden" name="lige" class="search"
+
+                            <div class="ui fluid search selection dropdown leagues">
+                                <input type="hidden" name="league" class="search"
                                        ng-model="league" ng-update-hidden
                                        ng-init="league = $location.search().league"
                                        ng-change="$location.search('league', league)">
@@ -103,6 +96,15 @@
                                     </div>
                                 </div>
                             </div>
+                             <!--<select id="players-search-league"
+                                        class="select players-search-select" multiple="multiple" size="8"
+                                        ng-model="leaguesSelected">
+                                    <option value="{{ league.pk }}"
+                                            ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)"
+                                            ng-selected="$index === 0">
+                                        {{ league.title }}
+                                    </option>
+                            </select> -->
                         </div>
                         {% endverbatim %}
                         <div class="two wide column">
