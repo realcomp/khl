@@ -531,14 +531,19 @@ def get_judge_players():
 def get_coach_players():
     CM = get_model(CURRENT_APP, 'Coach')
     PM = get_model(CURRENT_APP, 'Player')
-    for j in CM.objects.exclude(ru_name='', ru_lastname=''):
+    count = 0
+    for j in CM.objects.exclude(ru_name='', ru_lastname=''
+                      ).filter(ru_name__isnull=False, ru_lastname__isnull=False
+    ):
         qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
         if qs.exists():
-            player_links = ['[ www.sportomatics.ru{} {} ]'.format(
+            player_links = ['<a href="http://www.sportomatics.ru{}">{}<a/>'.format(
                                 obj.admin_change_link(), obj.ru_fio
                             ) for obj in qs]
-            print 'Судья: [ www.sportomatics.ru{} {} ]'.format(
+            count+=1
+            res = '<tr><td>{}</td><td>Тренер:</td>'.format(count)
+            res+= '<td><a href="http://www.sportomatics.ru{}">{}</a></td>'.format(
                         j.admin_change_link(), j.ru_fio
             )
-            print 'Игроки: {}'.format('  '.join(player_links))
-            print '\n'
+            res+='<td>Игроки:</td><td>{}</td></tr>'.format('  '.join(player_links))
+            print res
