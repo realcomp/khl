@@ -1,6 +1,7 @@
 #coding: utf-8
 from __future__ import unicode_literals
 import itertools
+import numpy
 
 from django.db.models import Avg
 from django.http import Http404
@@ -73,14 +74,15 @@ class ClubPlayerMatchTemplate(TemplateView):
             raise Http404()
         return super(ClubPlayerMatchTemplate, self).dispatch(request, *args, **kwargs)
 
-    def get_cps(self, players, league):
+    def get_cps(self, players, league, up_league=None):
+        _ul = up_league or self.khl
         for plr in players:
             cps = plr.clubplayer_set.filter(league=league)
             last_cp = cps.order_by('season__end_date').last()
             season = last_cp and last_cp.season
             if last_cp.clubplayermatch_set.count() > 29 and season:
                 next_season = Season.objects.get_next_season(season)
-                up_cps = plr.clubplayer_set.filter(league=self.khl, season=next_season)
+                up_cps = plr.clubplayer_set.filter(league=_ul, season=next_season)
                 if cps.exists() and up_cps.exists():
                     yield last_cp, up_cps
 
@@ -95,8 +97,7 @@ class ClubPlayerMatchTemplate(TemplateView):
             return up_cps.last().clubplayermatch_set.all()
 
     def aggregate_values(self, qs):
-        aggr = itertools.chain(map(Avg,('goals', 'assists', 'points',
-                                        'plus_minus', 'saves','loose_goals')))
+        aggr = itertools.chain(map(Avg,('goals', 'assists', 'points', 'sf',)))
         return qs.aggregate(*aggr)
 
     def get_context_data(self, **kwargs):
@@ -112,25 +113,55 @@ class ClubPlayerMatchTemplate(TemplateView):
         khl_plr_ids = set(cp.filter(league=self.khl).values_list('player', flat=True))
         vhl_plrs = Player.objects.filter(id__in=vhl_plr_ids & khl_plr_ids)
         mhl_plrs = Player.objects.filter(id__in=mhl_plr_ids & khl_plr_ids)
-        #m2vhl_plrs = models.Player.objects.filter(id__in=mhl_plr_ids & vhl_plr_ids)
-        for k,qs,league in (
-                            ('vhl2khl', vhl_plrs, vhl),
-                            ('mhl2khl', mhl_plrs, mhl),
-                            #('mhl2vhl', m2vhl_plrs, vhl),
+        m2vhl_plrs = Player.objects.filter(id__in=mhl_plr_ids & vhl_plr_ids)
+        for k,qs,league,ul in (
+                            ('vhl2khl', vhl_plrs, vhl, self.khl),
+                            ('mhl2khl', mhl_plrs, mhl, self.khl),
+                            ('mhl2vhl', m2vhl_plrs, vhl, mhl),
         ):
-            kwargs['leagues'][k]=self.get_players_data(qs, league)
+            kwargs['leagues'][k] = self.get_players_data(qs, league, ul)
         return kwargs
 
-    def get_players_data(self, qs, league):
-        res=dict()
-        for cps, up_cps in self.get_cps(qs, league):
+    def get_players_data(self, qs, league, up_league=None):
+        res=dict(   def_p=dict(up=list(), down=list()),
+                    off_p=dict(up=list(), down=list()),
+                    keeper_sf=dict(up=list(), down=list())
+        )
+        for cps, up_cps in self.get_cps(qs, league, up_league):
             player = cps.player
-            _up_cpms = self.get_up_league_qs(up_cps)
-            _down_cpms = cps.clubplayermatch_set.all()
+            _ul_val = self.aggregate_values(self.get_up_league_qs(up_cps))
+            _dl_val = self.aggregate_values(cps.clubplayermatch_set.all())
             res[player.id] = dict(
                 player=player,
-                down_league=self.aggregate_values(_down_cpms),
-                up_league=self.aggregate_values(_up_cpms),
+                down_league=_dl_val,
+                up_league=_ul_val,
             )
-        return res    
+            if player.line == 1: #keeper
+                if _dl_val['sf__avg']:
+                    res['keeper_sf']['down'].append(_dl_val['sf__avg'])
+                if _ul_val['sf__avg']:
+                    res['keeper_sf']['up'].append(_ul_val['sf__avg'])
+            if player.line == 2: #defender
+                if _dl_val['points__avg']:
+                    res['def_p']['down'].append(_dl_val['points__avg'])
+                if _ul_val['points__avg']:
+                    res['def_p']['up'].append(_ul_val['points__avg'])
+            if player.line == 3: #offender
+                if _dl_val['points__avg']:
+                    res['off_p']['down'].append(_dl_val['points__avg'])
+                if _ul_val['points__avg']:
+                    res['off_p']['up'].append(_ul_val['points__avg'])
+        for root_key in ('keeper_sf', 'def_p', 'off_p'):
+            for key in ('up', 'down'):
+                res[root_key][key] = self.get_average(res[root_key][key])
+            res[root_key]['q'] = res[root_key]['up']/res[root_key]['down']
+        return res
+
+    def  get_average(self, lst=None):
+        lst = lst or []
+        _avg = numpy.average(lst)
+        _median = numpy.median(lst)
+        _mean = numpy.mean(lst)
+        lst=(_avg+_median+_mean)/3.0
+        return lst
 cpmat = ClubPlayerMatchTemplate.as_view()
