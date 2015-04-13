@@ -11,10 +11,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
     };
 
     HighchartsClubGamesChart.prototype.draw = function() {
-      console.log(this.data);
       return $('#' + this.divId).highcharts({
         chart: {
-          type: 'column'
+          type: 'column',
+          alignTicks: false
         },
         title: 'Счет в матчах',
         xAxis: [
@@ -22,20 +22,25 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             labels: {
               enabled: false,
               align: 'center',
-              autoRotation: false
+              autoRotation: false,
+              step: 1
             },
             reversed: false,
             lineColor: '#FFFFFF',
-            max: 3
+            tickInterval: 1,
+            min: -0.5,
+            max: 54.5
           }, {
             opposite: true,
             reversed: false,
             linkedTo: 0,
             labels: {
-              enabled: false
+              enabled: false,
+              step: 1
             },
             lineColor: '#FFFFFF',
-            max: 3
+            min: -0.5,
+            max: 54.5
           }
         ],
         yAxis: {
@@ -48,13 +53,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           },
           stackLabels: {
             formatter: function() {
-              console.log(this);
               return this;
             }
           }
-        },
-        scrollbar: {
-          enabled: true
         },
         legend: {
           margin: 30
@@ -66,7 +67,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           }
         },
         plotOptions: {
-          column: {
+          series: {
             stacking: 'normal'
           }
         },

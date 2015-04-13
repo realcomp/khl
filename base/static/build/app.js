@@ -973,10 +973,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
     };
 
     HighchartsClubGamesChart.prototype.draw = function() {
-      console.log(this.data);
       return $('#' + this.divId).highcharts({
         chart: {
-          type: 'column'
+          type: 'column',
+          alignTicks: false
         },
         title: 'Счет в матчах',
         xAxis: [
@@ -984,20 +984,25 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             labels: {
               enabled: false,
               align: 'center',
-              autoRotation: false
+              autoRotation: false,
+              step: 1
             },
             reversed: false,
             lineColor: '#FFFFFF',
-            max: 3
+            tickInterval: 1,
+            min: -0.5,
+            max: 54.5
           }, {
             opposite: true,
             reversed: false,
             linkedTo: 0,
             labels: {
-              enabled: false
+              enabled: false,
+              step: 1
             },
             lineColor: '#FFFFFF',
-            max: 3
+            min: -0.5,
+            max: 54.5
           }
         ],
         yAxis: {
@@ -1010,13 +1015,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           },
           stackLabels: {
             formatter: function() {
-              console.log(this);
               return this;
             }
           }
-        },
-        scrollbar: {
-          enabled: true
         },
         legend: {
           margin: 30
@@ -1028,7 +1029,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
           }
         },
         plotOptions: {
-          column: {
+          series: {
             stacking: 'normal'
           }
         },
@@ -2764,379 +2765,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.data = {};
     $scope.params = $location.search();
     $scope.club = 'wdq';
-    $scope.games = [
-      {
-        is_home: false,
-        date: '2010-07-01',
-        opponent: {
-          pk: 1,
-          title: 'Металлург',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 5
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-03',
-        opponent: {
-          pk: 1,
-          title: 'Авангард',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 7
-      }, {
-        is_home: false,
-        date: '2010-07-07',
-        opponent: {
-          pk: 1,
-          title: 'ХК Сочи',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -4
-        },
-        score: 2
-      }, {
-        is_home: false,
-        date: '2010-07-02',
-        opponent: {
-          pk: 1,
-          title: 'СКА',
-          logo: 'dev.sportomatics.ru/media/filer_public/5b/a4/5ba48a7f-2335-40a8-90cb-4d7f7b8e7bf8/logo_metallurg_magnitogorsk.gif',
-          score: -3
-        },
-        score: 2
-      }
-    ];
+    $scope.games = [];
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
       var params;
@@ -3302,49 +2931,53 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       return $scope.createGamesChart();
     };
     $scope.createGamesChart = function() {
-      var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
-      seriesClub = {};
-      seriesOpponent = {};
-      opponentObject = {
-        name: 'opponents',
-        data: $scope.games.map(function(game, index) {
-          return {
-            x: index,
-            y: game.opponent.score,
-            date: game.date,
-            name: game.opponent.title + ' - Club',
-            score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score),
-            color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#FF0000' : 'green',
-            dataLabels: {
-              enabled: true,
-              align: 'center',
-              crop: false,
-              verticalAlign: 'bottom',
-              y: 10,
-              formatter: function() {
-                console.log(this);
-                return this.key.split('-')[0];
-              },
-              inside: false
-            }
-          };
-        })
-      };
-      clubObject = {
-        name: 'club',
-        data: $scope.games.map(function(game, index) {
-          return {
-            x: index,
-            y: game.score,
-            date: game.date,
-            name: 'Club - ' + game.opponent.title,
-            score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score),
-            color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#FF0000' : 'green'
-          };
-        })
-      };
-      clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
-      return clubGamesChart.draw();
+      return $http.get('/static/json/club_games_example.json').success(function(data) {
+        var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
+        $scope.games = data;
+        console.log(data.length);
+        seriesClub = {};
+        seriesOpponent = {};
+        opponentObject = {
+          name: 'opponents',
+          data: $scope.games.map(function(game, index) {
+            return {
+              x: index,
+              y: game.opponent.score,
+              date: game.date,
+              name: game.opponent.title + ' - Club',
+              score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score),
+              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              dataLabels: {
+                enabled: true,
+                align: 'center',
+                verticalAlign: 'bottom',
+                rotation: 270,
+                inside: true,
+                x: -2,
+                y: 70,
+                formatter: function() {
+                  return this.key.split('-')[0];
+                }
+              }
+            };
+          })
+        };
+        clubObject = {
+          name: 'club',
+          data: $scope.games.map(function(game, index) {
+            return {
+              x: index,
+              y: game.score,
+              date: game.date,
+              name: 'Club - ' + game.opponent.title,
+              score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score),
+              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
+            };
+          })
+        };
+        clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
+        return clubGamesChart.draw();
+      });
     };
     $scope.previous = function() {
       var date, deltaM;

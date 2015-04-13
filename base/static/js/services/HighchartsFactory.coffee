@@ -7,29 +7,37 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
         setLocaleObject: (@localeObject) ->
 
         draw: () ->
-            console.log(@data)
             $('#'+@divId).highcharts
                 chart:
                     type: 'column'
+                    alignTicks: false
                 title:
                     'Счет в матчах'
-                xAxis: [{
-                    labels:
-                        enabled: false
-                        align: 'center'
-                        autoRotation: false
-                    reversed: false
-                    lineColor: '#FFFFFF',
-                    max: 3
-                    },{
-                    opposite: true,
-                    reversed: false,
-                    linkedTo: 0,
-                    labels:
-                        enabled: false
-                    lineColor: '#FFFFFF'
-                    max: 3
-                }]
+                xAxis: [
+                    {
+                        labels:
+                            enabled: false
+                            align: 'center'
+                            autoRotation: false
+                            step: 1
+                        reversed: false
+                        lineColor: '#FFFFFF'
+                        tickInterval: 1
+                        min: -0.5
+                        max: 54.5
+                    },
+                    {
+                        opposite: true,
+                        reversed: false,
+                        linkedTo: 0,
+                        labels:
+                            enabled: false
+                            step: 1
+                        lineColor: '#FFFFFF'
+                        min: -0.5
+                        max: 54.5
+                    }
+                ]
                 yAxis:
                     title: 'Счет'
                     allowDecimals: false
@@ -38,10 +46,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                             return Math.abs this.value
                     stackLabels:
                         formatter: () ->
-                            console.log this
                             return this
-                scrollbar:
-                    enabled: true
+                #scrollbar:
+                    #enabled: true
                 legend:
                     margin: 30
                 tooltip:
@@ -50,9 +57,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                     formatter: () ->
                         return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score
                 plotOptions:
-                    column:
+                    series:
                         stacking: 'normal'
-                        #pointRange: 24 * 3600 * 1000
                 series: @data
 
 
