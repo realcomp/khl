@@ -55,7 +55,7 @@
                                 <input type="hidden" name="country" class="search"
                                        ng-model="country" ng-update-hidden
                                        ng-init="country = $location.search().country || 1"
-                                       ng-change="$location.search('country', country)">
+                                       ng-change="setCountry(country)">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Выберите страну</div>
                                 <div class="menu">
@@ -86,7 +86,7 @@
                                 <input type="hidden" name="league" class="search"
                                        ng-model="league" ng-update-hidden
                                        ng-init="league = $location.search().league"
-                                       ng-change="$location.search('league', league)">
+                                       ng-change="setLeague(league)">
                                 <i class="dropdown icon"></i>
                                 <div class="default text">Выберите лигу</div>
                                 <div class="menu">
@@ -172,7 +172,10 @@
                                         <label>иное</label>
                                     </div><br>
                                     <div class="ui selection dropdown dropdown-small-inline">
-                                        <input type="hidden" id="citizenshipOther" value="">
+                                        <input type="hidden" id="citizenshipOther" value=""
+                                               ng-model="citizenship2" ng-update-hidden
+                                               ng-init="citizenship2 = $location.search().citizenship2"
+                                               ng-change="$location.search('citizenship2', citizenship2 || null)">
                                         <div class="default text">любое</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">

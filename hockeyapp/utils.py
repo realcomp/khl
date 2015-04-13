@@ -515,3 +515,35 @@ def clear_media(media_path):
     media_links = set(get_filepaths(media_path))
     for_del = media_links - db_recs
     for file_path in for_del: os.remove(file_path)
+
+
+def get_judge_players():
+    JM = get_model(CURRENT_APP, 'Judge')
+    PM = get_model(CURRENT_APP, 'Player')
+    for j in JM.objects.all():
+        qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
+        if qs.exists():
+            player_links = '  '.join(['www.sportomatics.ru'+obj.admin_change_link() for obj in qs])
+            print 'Судья: www.sportomatics.ru{}'.format(j.admin_change_link())
+            print 'Игроки: {}'.format(player_links)
+
+
+def get_coach_players():
+    CM = get_model(CURRENT_APP, 'Coach')
+    PM = get_model(CURRENT_APP, 'Player')
+    count = 0
+    for j in CM.objects.exclude(ru_name='', ru_lastname=''
+                      ).filter(ru_name__isnull=False, ru_lastname__isnull=False
+    ):
+        qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
+        if qs.exists():
+            player_links = ['<a href="http://www.sportomatics.ru{}">{}<a/>'.format(
+                                obj.admin_change_link(), obj.ru_fio
+                            ) for obj in qs]
+            count+=1
+            res = '<tr><td>{}</td><td>Тренер:</td>'.format(count)
+            res+= '<td><a href="http://www.sportomatics.ru{}">{}</a></td>'.format(
+                        j.admin_change_link(), j.ru_fio
+            )
+            res+='<td>Игроки:</td><td>{}</td></tr>'.format('  '.join(player_links))
+            print res

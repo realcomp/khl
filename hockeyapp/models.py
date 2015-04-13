@@ -34,7 +34,7 @@ def hex_validator(value):
         raise ValidationError('Incorrect format. Expected hex.')
 
 
-class AbstractMan(LocaleAttrMixin, models.Model):
+class AbstractMan(AdminLinkMixin, LocaleAttrMixin, models.Model):
     objects = managers.AbstractManQuerySet.as_manager()
 
     ru_fio = models.CharField(_('Full name (rus)'), max_length=4096, blank=True)
@@ -84,7 +84,7 @@ class AbstractMan(LocaleAttrMixin, models.Model):
         abstract=True
 
 
-class Player(AdminLinkMixin, AbstractMan):
+class Player(AbstractMan):
     objects = managers.player.PlayerQuerySet.as_manager()
     contract_type = models.CharField(_('Contract type'),
                                         choices=CONTRACT_TYPE,

@@ -49,9 +49,9 @@ class HockeyAppParserTest(base.tests.BaseTest):
                                             #).get_page(self.mhl2_player_id)
         #self.assertIsNotNone(self.mhl2_player_data)
         # test vhl player parser
-        self.vhl_player_data = parsers.player.VHLPlayerInfo(
-                                            ).get_page(self.vhl_player_id)
-        self.assertIsNotNone(self.vhl_player_data)
+        #self.vhl_player_data = parsers.player.VHLPlayerInfo(
+                                            #).get_page(self.vhl_player_id)
+        #self.assertIsNotNone(self.vhl_player_data)
         # test mhl match parser
         self.mhl_match_data = parsers.match.HockeyMHLMatchParser(html=True,
                     absolute_url='http://mhl.khl.ru/report/272/?idgame=44367'
@@ -122,15 +122,14 @@ class HockeyAppParserTest(base.tests.BaseTest):
 
         for id, data in (
             (self.mhl_player_id, self.mhl_player_data),
-            (self.mhl2_player_id, self.mhl2_player_data),
-            (self.vhl_player_id, self.vhl_player_data),
+            #(self.mhl2_player_id, self.mhl2_player_data),
+            #(self.vhl_player_id, self.vhl_player_data),
         ):
             player = Player.objects.get_or_create_player(khl_id=id,data=data)
             #check fields
             for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
                 'height', 'weight', 'citizenship', 'fio',
             ):
-                print(player, field)
                 self.assertNotEqual(getattr(player, field), self.blank)
             for field in ('proccesed_time', 'photo_id', 'citizenship_id',):
                 self.assertIsNotNone(getattr(player, field))
