@@ -984,25 +984,19 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             labels: {
               enabled: false,
               align: 'center',
-              autoRotation: false,
-              step: 1
+              autoRotation: false
             },
             reversed: false,
-            lineColor: '#FFFFFF',
-            tickInterval: 1,
-            min: -0.5,
-            max: 54.5
+            lineColor: '#FFFFFF'
           }, {
             opposite: true,
             reversed: false,
             linkedTo: 0,
             labels: {
-              enabled: false,
-              step: 1
+              enabled: false
             },
             lineColor: '#FFFFFF',
-            min: -0.5,
-            max: 54.5
+            min: -0.5
           }
         ],
         yAxis: {
@@ -1030,7 +1024,16 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         },
         plotOptions: {
           series: {
-            stacking: 'normal'
+            stacking: 'normal',
+            borderWidth: 0,
+            pointWidth: 5,
+            pointPlacement: "on"
+          },
+          column: {
+            pointPadding: 0,
+            groupPadding: 0,
+            borderWidth: 1,
+            pointWidth: 4
           }
         },
         series: this.data
@@ -2946,19 +2949,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               date: game.date,
               name: game.opponent.title + ' - Club',
               score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score),
-              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
-              dataLabels: {
-                enabled: true,
-                align: 'center',
-                verticalAlign: 'bottom',
-                rotation: 270,
-                inside: true,
-                x: -2,
-                y: 70,
-                formatter: function() {
-                  return this.key.split('-')[0];
-                }
-              }
+              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
             };
           })
         };

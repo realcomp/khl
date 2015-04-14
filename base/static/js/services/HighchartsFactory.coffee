@@ -19,12 +19,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                             enabled: false
                             align: 'center'
                             autoRotation: false
-                            step: 1
                         reversed: false
                         lineColor: '#FFFFFF'
-                        tickInterval: 1
-                        min: -0.5
-                        max: 54.5
                     },
                     {
                         opposite: true,
@@ -32,10 +28,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                         linkedTo: 0,
                         labels:
                             enabled: false
-                            step: 1
                         lineColor: '#FFFFFF'
                         min: -0.5
-                        max: 54.5
                     }
                 ]
                 yAxis:
@@ -59,6 +53,14 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                 plotOptions:
                     series:
                         stacking: 'normal'
+                        borderWidth: 0
+                        pointWidth: 5
+                        pointPlacement: "on"
+                    column:
+                        pointPadding: 0,
+                        groupPadding: 0,
+                        borderWidth: 1
+                        pointWidth: 4
                 series: @data
 
 
