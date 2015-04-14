@@ -92,8 +92,7 @@ class ClubListPaginationSerializer(pagination.PaginationSerializer):
     leagues = serializers.SerializerMethodField()
 
     def get_leagues(self, page):
-        clubs = Club.objects.all()
-        leagueclubs = LeagueClub.objects.filter(club__in=clubs)
+        leagueclubs = LeagueClub.objects.all()
         request = self.context.get('request')
         if request and 'season' in request.GET:
             leagueclubs = leagueclubs.filter(season=request.GET['season'])
