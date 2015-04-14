@@ -136,6 +136,7 @@ class PlayerQuerySet(models.QuerySet):
             if (not player.last_match_date or
                     clubplayers.filter(q_not_parsed_yet).exists() or
                     not clubplayers.exists()):
+
                 for field in fields:
                     value = None
                     if field in (
@@ -184,15 +185,16 @@ class PlayerQuerySet(models.QuerySet):
 
                     setattr(player, field, value)
 
+                update_fields = list(fields)
                 if update_last_match_date:
                     last_cp = clubplayers.order_by('clubplayermatch__created').last()
                     if last_cp:
                         last_cpm = last_cp.clubplayermatch_set.order_by('created').last()
                         if last_cpm:
                             player.last_match_date = last_cpm.created
-                            fields = list(fields) + ['last_match_date']
+                            update_fields = update_fields + ['last_match_date']
 
-                player.save(update_fields=list(fields) + ['last_match_date'])
+                player.save(update_fields=update_fields)
 
     def recalc_counters_index(self, field):
         rating_index = 0
