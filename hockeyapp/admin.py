@@ -114,7 +114,7 @@ def get_recalc_counters_actions():
         lambda x: ('%s_total' % x, '%s_average' % x),
         ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
 
-    for field in fields:
+    def get_action(field):
         def action(modeladmin, request, queryset):
             from .tasks import player_recalc_counters
             from .tasks import player_recalc_counters_index
@@ -124,7 +124,10 @@ def get_recalc_counters_actions():
         # make function unique for django
         action.__name__ = str('action_%s' % field)
         action.short_description = _('Recalculate counters for "%s"') % field
-        yield action
+        return action
+
+    for field in fields:
+        yield get_action(field)
 
     def action_all(modeladmin, request, queryset):
         from .tasks import periodic_player_recalc_counters
