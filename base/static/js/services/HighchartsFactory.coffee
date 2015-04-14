@@ -1,5 +1,49 @@
 angular.module('Sportomatics').factory 'HighchartsFactory', () ->
 
+    class HighchartsSpiderChart
+
+        constructor: (@divId, @data, @categories, @season) ->
+            self.season = @season
+
+        setLocaleObject: (@localeObject) ->
+            self.localeObject = @localeObject
+
+        setContext: (@context) ->
+            self.context = @context
+
+        setFormattedData: (data) ->
+            console.log data
+            @data = data
+
+        draw: () ->
+            $('#'+@divId).highcharts
+                chart:
+                    polar: true
+                    type: 'line'
+                title:
+                    text: ''
+                xAxis:
+                    categories: @categories
+                    tickmarkPlacement: 'on'
+                    lineWidth: 0
+                    labels:
+                        formatter: () ->
+                            if not self.localeObject?
+                                return this.value
+                            if not $.isNumeric this.value
+                                return self.localeObject.fieldNames[this.value].fullName
+                tooltip:
+                    shared: true
+                    formatter: () ->
+                        s = '<span style="color:black">'+self.localeObject.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
+                        field = this.x
+                        _.each this.points, (point, index) ->
+                            value = if field is 'shots' then point.point.y*10 else point.point.y
+                            s += '<span style="color:'+point.series.color+'">'+point.series.name+': <b>'+ parseFloat(value).toFixed(3)+'</b><br/>'
+                        return s
+                series: @data
+
+
     class HighchartsClubGamesChart
 
         constructor: (@divId, @data) ->
@@ -19,12 +63,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                             enabled: false
                             align: 'center'
                             autoRotation: false
-                            step: 1
                         reversed: false
                         lineColor: '#FFFFFF'
-                        tickInterval: 1
-                        min: -0.5
-                        max: 54.5
                     },
                     {
                         opposite: true,
@@ -32,10 +72,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                         linkedTo: 0,
                         labels:
                             enabled: false
-                            step: 1
                         lineColor: '#FFFFFF'
                         min: -0.5
-                        max: 54.5
                     }
                 ]
                 yAxis:
@@ -59,6 +97,14 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                 plotOptions:
                     series:
                         stacking: 'normal'
+                        borderWidth: 0
+                        pointWidth: 5
+                        pointPlacement: "on"
+                    column:
+                        pointPadding: 0,
+                        groupPadding: 0,
+                        borderWidth: 1
+                        pointWidth: 4
                 series: @data
 
 
@@ -246,6 +292,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
 
 
     return (
+        PlayerStatsSpiderChart: HighchartsSpiderChart
         ClubGamesChart: HighchartsClubGamesChart
         PlayerClubsChart: HighchartsPlayerClubsChart
         PlayerClubsPieChart: HighchartsPlayerClubsPieChart

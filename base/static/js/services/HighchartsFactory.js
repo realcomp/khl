@@ -1,9 +1,78 @@
 angular.module('Sportomatics').factory('HighchartsFactory', function() {
-  var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart;
-  HighchartsClubGamesChart = (function() {
-    function HighchartsClubGamesChart(divId, data) {
+  var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
+  HighchartsSpiderChart = (function() {
+    function HighchartsSpiderChart(divId, data1, categories, season) {
       this.divId = divId;
-      this.data = data;
+      this.data = data1;
+      this.categories = categories;
+      this.season = season;
+      self.season = this.season;
+    }
+
+    HighchartsSpiderChart.prototype.setLocaleObject = function(localeObject) {
+      this.localeObject = localeObject;
+      return self.localeObject = this.localeObject;
+    };
+
+    HighchartsSpiderChart.prototype.setContext = function(context) {
+      this.context = context;
+      return self.context = this.context;
+    };
+
+    HighchartsSpiderChart.prototype.setFormattedData = function(data) {
+      console.log(data);
+      return this.data = data;
+    };
+
+    HighchartsSpiderChart.prototype.draw = function() {
+      return $('#' + this.divId).highcharts({
+        chart: {
+          polar: true,
+          type: 'line'
+        },
+        title: {
+          text: ''
+        },
+        xAxis: {
+          categories: this.categories,
+          tickmarkPlacement: 'on',
+          lineWidth: 0,
+          labels: {
+            formatter: function() {
+              if (self.localeObject == null) {
+                return this.value;
+              }
+              if (!$.isNumeric(this.value)) {
+                return self.localeObject.fieldNames[this.value].fullName;
+              }
+            }
+          }
+        },
+        tooltip: {
+          shared: true,
+          formatter: function() {
+            var field, s;
+            s = '<span style="color:black">' + self.localeObject.fieldNames[this.x].fullName + ', Сезон ' + (parseInt(self.season) - 1) + '/' + parseInt(self.season) + '</span><br/>';
+            field = this.x;
+            _.each(this.points, function(point, index) {
+              var value;
+              value = field === 'shots' ? point.point.y * 10 : point.point.y;
+              return s += '<span style="color:' + point.series.color + '">' + point.series.name + ': <b>' + parseFloat(value).toFixed(3) + '</b><br/>';
+            });
+            return s;
+          }
+        },
+        series: this.data
+      });
+    };
+
+    return HighchartsSpiderChart;
+
+  })();
+  HighchartsClubGamesChart = (function() {
+    function HighchartsClubGamesChart(divId, data1) {
+      this.divId = divId;
+      this.data = data1;
     }
 
     HighchartsClubGamesChart.prototype.setLocaleObject = function(localeObject) {
@@ -22,25 +91,19 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             labels: {
               enabled: false,
               align: 'center',
-              autoRotation: false,
-              step: 1
+              autoRotation: false
             },
             reversed: false,
-            lineColor: '#FFFFFF',
-            tickInterval: 1,
-            min: -0.5,
-            max: 54.5
+            lineColor: '#FFFFFF'
           }, {
             opposite: true,
             reversed: false,
             linkedTo: 0,
             labels: {
-              enabled: false,
-              step: 1
+              enabled: false
             },
             lineColor: '#FFFFFF',
-            min: -0.5,
-            max: 54.5
+            min: -0.5
           }
         ],
         yAxis: {
@@ -68,7 +131,16 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         },
         plotOptions: {
           series: {
-            stacking: 'normal'
+            stacking: 'normal',
+            borderWidth: 0,
+            pointWidth: 5,
+            pointPlacement: "on"
+          },
+          column: {
+            pointPadding: 0,
+            groupPadding: 0,
+            borderWidth: 1,
+            pointWidth: 4
           }
         },
         series: this.data
@@ -79,10 +151,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   HighchartsPlayerClubsChart = (function() {
-    function HighchartsPlayerClubsChart(divId, data, field) {
+    function HighchartsPlayerClubsChart(divId, data1, field1) {
       this.divId = divId;
-      this.data = data;
-      this.field = field;
+      this.data = data1;
+      this.field = field1;
     }
 
     HighchartsPlayerClubsChart.prototype.setLocaleObject = function(localeObject) {
@@ -165,9 +237,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   HighchartsPlayerClubsPieChart = (function() {
-    function HighchartsPlayerClubsPieChart(divId, data) {
+    function HighchartsPlayerClubsPieChart(divId, data1) {
       this.divId = divId;
-      this.data = data;
+      this.data = data1;
     }
 
     HighchartsPlayerClubsPieChart.prototype.draw = function() {
@@ -219,10 +291,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   HighchartsPlayerIndicatorsChart = (function() {
-    function HighchartsPlayerIndicatorsChart(divId, data, field) {
+    function HighchartsPlayerIndicatorsChart(divId, data1, field1) {
       this.divId = divId;
-      this.data = data;
-      this.field = field;
+      this.data = data1;
+      this.field = field1;
       this.period = self.period = 365;
       self.field = this.field;
     }
@@ -349,6 +421,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
 
   })();
   return {
+    PlayerStatsSpiderChart: HighchartsSpiderChart,
     ClubGamesChart: HighchartsClubGamesChart,
     PlayerClubsChart: HighchartsPlayerClubsChart,
     PlayerClubsPieChart: HighchartsPlayerClubsPieChart,

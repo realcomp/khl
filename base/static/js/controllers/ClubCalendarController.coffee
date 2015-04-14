@@ -170,16 +170,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 name: game.opponent.title + ' - Club'
                                 score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score)
                                 color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71',
-                                dataLabels:
-                                    enabled: true
-                                    align: 'center'
-                                    verticalAlign: 'bottom'
-                                    rotation: 270
-                                    inside: true
-                                    x: -2
-                                    y: 70
-                                    formatter: () ->
-                                        return this.key.split('-')[0]
+                                #dataLabels:
+                                    #enabled: true
+                                    #align: 'center'
+                                    #verticalAlign: 'bottom'
+                                    #rotation: 270
+                                    #inside: true
+                                    #x: -2
+                                    #y: 70
+                                    #formatter: () ->
+                                    #    return this.key.split('-')[0]
                             )#[new Date(game.date.split('-')).getTime(), game.opponent.score]
                     )
                     clubObject = (

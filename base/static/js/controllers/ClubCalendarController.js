@@ -185,19 +185,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               date: game.date,
               name: game.opponent.title + ' - Club',
               score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score),
-              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
-              dataLabels: {
-                enabled: true,
-                align: 'center',
-                verticalAlign: 'bottom',
-                rotation: 270,
-                inside: true,
-                x: -2,
-                y: 70,
-                formatter: function() {
-                  return this.key.split('-')[0];
-                }
-              }
+              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
             };
           })
         };
