@@ -17,21 +17,6 @@ angular.module('Sportomatics', [
         })
 })
 
-.factory('AmChartsFactory', function ($q, $rootScope, $document) {
-    var deferred = $q.defer();
-
-    AmCharts.ready(function(){
-        $rootScope.$apply(deferred.resolve);
-    });
-
-    return {
-        ready: function () {
-            return deferred.promise;
-        }
-    };
-})
-.run(function (AmChartsFactory) {});
-
 /* better fps test
 var body = document.body, timer;
 window.addEventListener('scroll', function() {
