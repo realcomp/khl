@@ -44,7 +44,9 @@
                                     <h4 class="ui header heading">Все клубы</h4>
                                     <div class="ui selection dropdown">
                                         <input type="hidden" name="season" value="{{ current_season.pk|default:seasons.0.pk }}"
-                                               onchange="angular.element(this).scope().setSeason(this)">
+                                               ng-model="season" ng-update-hidden
+                                               ng-init="season = $location.search().season || {{ current_season.pk|default:seasons.0.pk }}"
+                                               ng-change="setSeason(season)">
                                         <div class="default text">{{ current_season.label|default:seasons.0.label }}</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
@@ -57,15 +59,15 @@
                                     </div>
                                     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                         <li class="ui-state-default ui-corner-top"
-                                            ng-class="{ 'ui-tabs-active ui-state-active':!params.league }">
+                                            ng-class="{ 'ui-tabs-active ui-state-active':isLeagueActive(null) }">
                                             <a class="item tab-btn ui-tabs-anchor" href=""
-                                               ng-click="setLeague('')">
+                                               ng-click="setLeague(null)">
                                                 {% trans 'ALL' %}
                                             </a>
                                         </li>
                                         {% verbatim %}
                                             <li class="ui-state-default ui-corner-top"
-                                                ng-class="{ 'ui-tabs-active ui-state-active':params.league == league.pk }"
+                                                ng-class="{ 'ui-tabs-active ui-state-active':isLeagueActive(league.pk) }"
                                                 ng-repeat="league in leagues">
                                                 <a class="item tab-btn ui-tabs-anchor" href=""
                                                    ng-click="setLeague(league.pk)">

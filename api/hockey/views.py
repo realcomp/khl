@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 
 import collections
 import rest_framework as drf
@@ -9,7 +9,7 @@ from django.db.models import Q
 from base.models import Season
 from hockeyapp.filters import OrderFilter
 from hockeyapp.views.mixins import PaginationMixin
-from hockeyapp.models import Club, Country, Player
+from hockeyapp.models import Club, Country, Player, League, LeagueClub
 
 from .admin import ArenaInstaPhotoList
 from .serializers import ClubListSerializer, PlayerPartnersBySeasonCount
@@ -53,6 +53,29 @@ class ClubList(PaginationMixin, drf.generics.ListAPIView):
     serializer_class = ClubListSerializer
     pagination_serializer_class = ClubListPaginationSerializer
 
+    def _get_season(self):
+        default = Season.objects.latest('start_date')
+        return self.request.GET.get('season', default)
+
+    def _get_leagues(self):
+        leagueclubs = LeagueClub.objects.filter(season=self._get_season())
+        return League.objects.filter(pk__in=leagueclubs.values_list('league'))
+
+    def _get_league(self):
+        if 'league' in self.request.GET:
+            league = self.request.GET['league']
+            if league:  # selected
+                return League.objects.get(pk=league)
+            else:  # default
+                leagues = self._get_leagues()
+                khl = leagues.filter(ru_title='КХЛ')
+                if khl.exists():
+                    return khl.last()
+                superleague = leagues.filter(ru_title='Суперлига')
+                if superleague.exists():
+                    return superleague.last()
+                return leagues.last()
+
     def get_queryset(self):
         return Club.objects.active()
 
@@ -66,10 +89,20 @@ class ClubList(PaginationMixin, drf.generics.ListAPIView):
             country = Country.objects.filter(ru_title=b'Россия'
                                     ).last()
         if country:
-            q&= Q(leagueclub__league__country_id=country)
-        if self.request.GET.get('league'):
-            league = self.request.GET['league']
-            q&= Q(leagueclub__league_id=league)
+            q &= Q(leagueclub__league__country_id=country)
+
+        leagueclubs = (
+            LeagueClub.objects
+            .filter(club__in=qs, season=self._get_season()))
+        leagues = (
+            League.objects
+            .filter(pk__in=leagueclubs.values_list('league')))
+
+        if 'league' in self.request.GET:
+            q &= Q(leagueclub__league=self._get_league())
+
+        q &= Q(leagueclub__season=self._get_season())
+
         ids = set(qs.filter(q).values_list('pk', flat=True))
         qs = qs.filter(pk__in=ids)
         return qs

@@ -1,22 +1,3 @@
-angular.module('Sportomatics').directive('ngUpdateHidden', function() {
-  return {
-    'restrict': 'AE',
-    'scope': {},
-    'replace': true,
-    'require': 'ngModel',
-    'link': function($scope, elem, attr, ngModel) {
-      $scope.$watch(ngModel, function(nv) {
-        elem.val(nv);
-      });
-      elem.change(function() {
-        $scope.$apply(function() {
-          ngModel.$setViewValue(elem.val());
-        });
-      });
-    }
-  };
-});
-
 angular.module('Sportomatics').controller('PlayersSearchController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', function($http, $scope, $location, PlayersSearchService, tags, $timeout) {
     $scope.tags = tags;
