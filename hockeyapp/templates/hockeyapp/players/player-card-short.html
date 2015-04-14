@@ -15,7 +15,8 @@
             width: '900',
             height: '600',
             source: '{% url 'hockeyapp:player-timeline-api' pk %}',
-            embed_id: 'player-timeline'
+            embed_id: 'player-timeline',
+            start_at_end: true
         });
     });
 </script>
