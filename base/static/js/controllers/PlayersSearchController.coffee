@@ -1,25 +1,3 @@
-angular.module('Sportomatics').directive('ngUpdateHidden', () ->
-    return {
-        'restrict': 'AE',
-        'scope': {},
-        'replace': true,
-        'require': 'ngModel',
-        'link': ($scope, elem, attr, ngModel) ->
-            $scope.$watch(ngModel, (nv) ->
-                elem.val(nv)
-                return
-            )
-            elem.change(() ->
-                $scope.$apply(() ->
-                    ngModel.$setViewValue(elem.val())
-                    return
-                )
-                return
-            )
-            return
-    }
-)
-
 angular.module('Sportomatics').controller('PlayersSearchController', [
     '$http', '$scope', '$location', 'PlayersSearchService', 'tags','$timeout',
     ($http, $scope, $location, PlayersSearchService, tags, $timeout) ->

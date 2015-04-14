@@ -22,6 +22,9 @@ urlpatterns = [
     url(r'^api/players/best/$',
         api.BestPlayer.as_view({'get': 'retrieve'}),
         name='best-player-api'),
+    url(r'^api/players/numbers/$',
+        api.PlayerNumbers.as_view(),
+        name='player-numbers-api'),
     url(r'^api/players_by_name/$',
         api.PlayerNamesSearch.as_view(),
         name='player-names-search-api'),
@@ -104,6 +107,8 @@ urlpatterns = [
         name='club-fanzone'),
     url(r'^clubs/(?P<pk>\d+)/news/$', club.ClubNewsView.as_view(),
         name='club-news'),
+    url(r'^clubs/(?P<pk>\d+)/numbers/$', club.ClubNumbersView.as_view(),
+        name='club-numbers'),
 
     #admin
     url(r'^sporto-admin/club-insta-photo/$',

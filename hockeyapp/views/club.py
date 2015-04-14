@@ -62,3 +62,7 @@ class ClubStatsView(ClubView):
 
 class ClubNewsView(ClubView):
     template_name = 'hockeyapp/clubs/clubs-news.html'
+
+
+class ClubNumbersView(ClubView):
+    template_name = 'hockeyapp/clubs/clubs-numbers.html'

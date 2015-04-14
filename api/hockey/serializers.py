@@ -9,6 +9,7 @@ from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
 from api.base.serializers import SeasonSerializer
 
+from base.models import Season
 from hockeyapp.models import (
     ArenaInstaPhoto, Club, Match, Player, Arena, League, LeagueClub)
 from hockeyapp.serializers import CoachSerializer, LeagueSerializer
@@ -90,17 +91,17 @@ class ClubListSerializer(TitleBaseSerializer):
 
 class ClubListPaginationSerializer(pagination.PaginationSerializer):
     leagues = serializers.SerializerMethodField()
+    league = serializers.SerializerMethodField()
 
     def get_leagues(self, page):
-        leagueclubs = LeagueClub.objects.all()
-        request = self.context.get('request')
-        if request and 'season' in request.GET:
-            leagueclubs = leagueclubs.filter(season=request.GET['season'])
-        leagues = (
-            League.objects
-            .filter(pk__in=leagueclubs.values_list('league')))
+        view = self.context.get('view')
         return LeagueSerializer(
-            leagues, context=self.context, many=True).data
+            view._get_leagues(), context=self.context, many=True).data
+
+    def get_league(self, page):
+        view = self.context.get('view')
+        return LeagueSerializer(
+            view._get_league(), context=self.context).data
 
 
 class PartnerPlayerSerializer(PlayerMinimalSerialiser):
