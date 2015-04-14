@@ -9,7 +9,7 @@ angular.module('Sportomatics')
     $scope.PlayersSearchService = PlayersSearchService;
 
     $scope.countries = {};
-    $scope.sparams = {}
+    $scope.sparams = {};
 
     $scope.params = $location.search()
 
@@ -96,15 +96,16 @@ angular.module('Sportomatics')
         $scope.params = $location.search();
         $scope.data = {};
         $scope.loaded = false;
-        $http.get(url + '?' + params)
-            .success(function(data) {
-                $scope.data = data;
-                $scope.clubs = data.results;
-                $scope.loaded = true;
-            }).then(function(){
-                if(MapService.isRendered()) MapService.remove();
-                MapService.createClubsMap($scope.clubs, 'clubs');
-            });
+        $http.get(url + '?' + params
+        ).success(function(data) {
+            $scope.leagues = data.leagues;
+            $scope.data = data;
+            $scope.clubs = data.results;
+            $scope.loaded = true;
+        }).then(function(){
+            if(MapService.isRendered()) MapService.remove();
+            MapService.createClubsMap($scope.clubs, 'clubs');
+        });
     };
 
     $scope.next = function(isAll) {
