@@ -215,3 +215,15 @@ class NewsList(generics.ListAPIView):
 class ScheduleView(generics.RetrieveAPIView):
     queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
+
+
+class PlayerNumbers(generics.ListAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayersSearchSerializer
+
+    def filter_queryset(self, qs):
+        qs = super(PlayerNumbers, self).filter_queryset(qs)
+        _club = self.request.GET.get('club')
+        if _club:
+            qs = qs.filter(clubplayer__club=club)
+        return qs
