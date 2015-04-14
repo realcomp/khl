@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="ui green menu ">
     <a class="{% if clubs_menu_active == 'club-news' %}active {% endif %}item"
        href="{% url 'hockeyapp:club-news' pk %}">Главное</a>
@@ -14,6 +16,8 @@
        href="{% url 'hockeyapp:club-photos' pk %}">Фотографии</a>
     <a class="{% if clubs_menu_active == 'club-fanzone' %}active {% endif %}item"
        href="{% url 'hockeyapp:club-fanzone' pk %}">Фан-клуб</a>
+    <a class="{% if clubs_menu_active == 'club-numbers' %}active {% endif %}item"
+       href="{% url 'hockeyapp:club-numbers' pk %}">{% trans "Player's numbers" %}</a>
     <!-- <a class="{% if clubs_menu_active == 'club-forum' %}active {% endif %}item" -->
     <!--    href="#">Форум</a> -->
     <!-- <a class="{% if clubs_menu_active == 'club-shop' %}active {% endif %}item" -->
