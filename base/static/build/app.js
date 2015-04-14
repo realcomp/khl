@@ -3149,7 +3149,8 @@ angular.module('Sportomatics')
         // $(e).attr('value', $(e).val());
         $location.search('season', $(e).val());
         $scope.params = $location.search();
-        $scope.list();
+        // $scope.list();
+        $scope.setLeague('');
     };
 
     $scope.setOrderBy = function(order_by) {
@@ -3179,7 +3180,7 @@ angular.module('Sportomatics')
 
     $scope.setLeague = function(league) {
         if ($scope.params.league != league) {
-            $location.search('league', league);
+            $location.search('league', league || null);
             $scope.params = $location.search();
             $scope.list();
         }
