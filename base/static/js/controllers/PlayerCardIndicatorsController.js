@@ -19,7 +19,7 @@ angular.module('Sportomatics')
         $scope.limited = false; // user is not limited by default
         $scope.activeSeason = -1; // all seasons selected by default
         $scope.playersToCompare = [];
-        $scope.radarPlayers = [self.playerId]; // array of players to compare in radar chart
+        $scope.radarPlayers = []; // array of players to compare in radar chart
         $scope.playerToCompare = { // last found player to compare with
             id: this.compare_to
         };
@@ -43,14 +43,29 @@ angular.module('Sportomatics')
                             }, 100)
                         })
                 }
-                $scope.createRadar($scope.radarPlayers, $scope.lastSeason);//.then(function(){});
+                $timeout(function(){
+                    $scope.createRadar();
+                }, 100)
             }
         };
 
         $scope.addRadarGraph = function(id){
-            if(_.contains($scope.radarPlayers, id)) return;
-            $scope.radarPlayers.push(id);
-            $scope.createRadar($scope.radarPlayers, $scope.lastSeason);//.then(function(){});
+            if(_.findWhere($scope.radarPlayers, {id: id})) return;
+            console.log('asds')
+            $http.get($scope.apiPlayersUrl + id)
+                .success(function(player){
+                    $http.get($scope.apiPlayersUrl + id + '/indicators/?group_by=season')
+                        .success(function(data){
+                            $scope.radarPlayers.push({
+                                id: id,
+                                color: player.club.main_color || null,
+                                fio: player.fio,
+                                dataBySeason: data
+                            })
+                            $scope.createRadar();//.then(function(){});
+                        })
+                })
+            //$scope.radarPlayers.push(id);
         };
 
         this.setField = function(field) {
@@ -365,8 +380,9 @@ angular.module('Sportomatics')
         }; //List clubs
 
         $scope.$watch('lastSeason', function(newval){
-            if(newval)
-                $scope.createRadar($scope.radarPlayers, newval)
+            if(newval && $scope.dataType === 'graph-radar'){
+                $scope.createRadar()
+            }
         });
 
         $scope.getPlayerData = function(){
@@ -442,19 +458,67 @@ angular.module('Sportomatics')
             object.ticked = !!(object.field === 'points' || object.field === 'goals' || object.field === 'assists' || object.field === 'plus_minus');
         });
 
+        $scope.selectedRadarFields = [{ // default radar fields we use
+            field: "goals"
+        }, {
+            field: "points"
+        }, {
+            field: "assists"
+        }, {
+            field: "plus_minus"
+        }];
+
         $scope.$watch('selectedRadarFields', function(newval){
             if(newval && $scope.lastSeason){
-                $scope.createRadar($scope.radarPlayers, $scope.lastSeason, null, $scope.selectedRadarFields)
+                console.log('creating radar from watcher')
+                $scope.createRadar()
             }
         }, true);
 
-        $scope.createRadar = function(players, season, sum, selectedRadarFields){ // function to create radar chart for one or multiple players
+        $scope.createRadar = function(){ // function to create radar chart for one or multiple players
+            var categories = $scope.selectedRadarFields.map(function(el){ return el['field']; });
+            var data = $scope.initialDataBySeason.results.map(function(el){
+                if(el.season.end_date.indexOf($scope.lastSeason) > -1){
+                    return {
+                        name: self.playerName,
+                        data: categories.map(function(category){
+                            if(category === 'shots') return (parseInt(el[category])/10) / parseInt(el['count']);
+                            return parseInt(el[category]) / parseInt(el['count']);
+                        }),
+                        pointPlacement: 'on',
+                        color: $scope.currentPlayerObject.color
+                    }
+                }
+            }).filter(function(toFilter){ return toFilter != undefined; });
+            $scope.playerStatsSpiderChart = new HighchartsFactory.PlayerStatsSpiderChart('chartdiv2', data, categories, $scope.lastSeason);
+            $scope.playerStatsSpiderChart.setLocaleObject($scope.localeObject);
+            $scope.playerStatsSpiderChart.draw();
+            self.spiderChart = $("#chartdiv2").highcharts();
+
+            if($scope.radarPlayers.length > 0){
+                _.each($scope.radarPlayers, function(playerObject){
+                    var data = playerObject.dataBySeason.results.map(function(el){
+                        if(el.season.end_date.indexOf($scope.lastSeason) > -1){
+                            return {
+                                name: playerObject.fio,
+                                data: categories.map(function(category){
+                                    if(category === 'shots') return (parseInt(el[category])/10) / parseInt(el['count']);
+                                    return parseInt(el[category]) / parseInt(el['count']);
+                                }),
+                                pointPlacement: 'on'
+                            }
+                        }
+                    }).filter(function(toFilter){ return toFilter != undefined; });
+                    self.spiderChart.addSeries(data[0]);
+                })
+            }
+            /*
             $scope.RadarChart = new RadarChartFactory.PlayerRadarChart();
             $scope.RadarChart.setSelectedRadarFields(selectedRadarFields);
             $scope.RadarChart.create(players, $scope.dataBySeason, season, sum).then(function(){
                 $scope.playerSeasons = $scope.RadarChart.seasons;
                 $scope.RadarChart.draw();
-            });
+            });*/
         };
 
         $scope.getPlayerData();
