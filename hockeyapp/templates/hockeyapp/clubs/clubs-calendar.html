@@ -10,6 +10,7 @@
     <div class="container clubs-page clubs-calendar-page">
         <!-- {% trans "Calendar" %} -->
         {% include "hockeyapp/clubs/clubs-header.html" with club_section="Calendar" %}
+        <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
 
         <div class="page-content page-container"
              ng-controller="ClubCalendarController as ClubCalendarCtrl"
@@ -110,12 +111,20 @@
                     </div>
                 </div>
                 <div>
-                    <div id="chartdiv" style="width: 100%; height:300px; "></div>
+                    <div class="m-t-10" id="chartdiv" style="width: 100%; height:300px; "></div>
+                </div>
+                <div class="margin-auto text-center m-t-10">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="line" value=""
+                               ng-checked="homeOnly"
+                               onchange="angular.element(this).scope().homeOnly = !angular.element(this).scope().homeOnly; angular.element(this).scope().createGamesChart();">
+                        <label>только домашние матчи</label>
+                    </div>
                 </div>
                 <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="!loaded">
                     <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                 </div>
-                <div class="row" ng-show="loaded">
+                <div class="row m-t-20" ng-show="loaded">
                     <div class="column">
                         <div class="ui tabular menu">
                             <span class="heading">Карта выездных матчей</span>

@@ -9,8 +9,12 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 
         $scope.clubName = document.getElementById('team-name-hidden').value
         $scope.clubAddress = if document.getElementById('club-address')? then document.getElementById('club-address').innerHTML else ''
+        $scope.clubMatchApi = document.getElementById('club-match-api').value;
+        $scope.clubPk = document.getElementById('team-id').value;
         $scope.games = []
 
+
+        $scope.homeOnly = false
         $scope.CalendarEventPopup = {}
         $scope.CalendarEventPopupShow = (e, event) ->
             if $('.calendar-event-popup:hidden').length and @cell.schedule
@@ -155,22 +159,29 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return $scope.createGamesChart()
 
         $scope.createGamesChart = () ->
-            $http.get('/static/json/club_games_example.json')
+            params = ''
+            params += '?club='+$scope.clubPk
+            if $scope.params.season
+                params += '&season=' + $scope.params.season
+            $http.get($scope.clubMatchApi + params)
                 .success (data) ->
-                    $scope.games = data
-                    console.log data.length
+                    $scope.games = _.sortBy(data, (el) ->
+                        return new Date(el).getTime()
+                    ).reverse()
                     seriesClub = {}
                     seriesOpponent = {}
                     opponentObject = (
                         name: 'opponents'
-                        data: $scope.games.map (game, index) ->
+                        data: $scope.games.map((game, index) ->
+                            if $scope.homeOnly and game.is_home is false
+                                return
                             return (
                                 x: index
-                                y: game.opponent.score,
+                                y: -Math.abs(game.opponent_score)
                                 date: game.date
-                                name: game.opponent.title + ' - Club'
-                                score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score)
-                                color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71',
+                                name: game.opponent.title_verbose + ' - ' + $scope.clubName + ' ' + $scope.clubAddress
+                                score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score)
+                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71',
                                 #dataLabels:
                                     #enabled: true
                                     #align: 'center'
@@ -182,18 +193,25 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                     #formatter: () ->
                                     #    return this.key.split('-')[0]
                             )
+                        ).filter (toFilter) ->
+                            return toFilter?
                     )
                     clubObject = (
                         name: 'club'
-                        data: $scope.games.map (game, index) ->
+                        data: $scope.games.map((game, index) ->
+                            if $scope.homeOnly and game.is_home is false
+                                return
+                            opponentAddress = if game.opponent.address and game.opponent.address.title then game.opponent.address.title else ''
                             return (
                                 x: index
                                 y: game.score
                                 date: game.date
-                                name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title
-                                score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score)
-                                color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
+                                name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title_verbose
+                                score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score)
+                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
                             )
+                        ).filter (toFilter) ->
+                            return toFilter?
                     )
                     clubGamesChart = new HighchartsFactory.ClubGamesChart 'chartdiv', [clubObject, opponentObject]
                     clubGamesChart.draw()

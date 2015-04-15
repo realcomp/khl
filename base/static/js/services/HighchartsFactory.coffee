@@ -94,10 +94,17 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                         labels:
                             enabled: false
                         lineColor: '#FFFFFF'
+                        gridZIndex: 4
                         min: -0.5
                     }
                 ]
                 yAxis:
+                    gridLineWidth: 0
+                    plotLines: [
+                        color: '#141414'
+                        width: 1
+                        value: 0
+                    ]
                     title: 'Счет'
                     allowDecimals: false
                     labels:
@@ -109,16 +116,18 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                 #scrollbar:
                     #enabled: true
                 legend:
+                    enabled: false
                     margin: 30
                 tooltip:
-                    #shared: true
+                    shared: true
                     useHTML: true
+                    crosshairs: true
                     style:
                         padding: 0
-                    formatter: () ->
-                        return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date.split('-')).yyyymmddFormatted()) + '</a>'
                     #formatter: () ->
-                    #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date.split('-')).yyyymmddFormatted()) + '</a>'
+                    #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date).yyyymmddHHMMFormatted()) + '</a>'
+                    formatter: () ->
+                        return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>'
                 plotOptions:
                     series:
                         stacking: 'normal'

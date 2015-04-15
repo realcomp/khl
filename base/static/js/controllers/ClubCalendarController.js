@@ -5,7 +5,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.params = $location.search();
     $scope.clubName = document.getElementById('team-name-hidden').value;
     $scope.clubAddress = document.getElementById('club-address') != null ? document.getElementById('club-address').innerHTML : '';
+    $scope.clubMatchApi = document.getElementById('club-match-api').value;
+    $scope.clubPk = document.getElementById('team-id').value;
     $scope.games = [];
+    $scope.homeOnly = false;
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
       var params;
@@ -171,36 +174,55 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       return $scope.createGamesChart();
     };
     $scope.createGamesChart = function() {
-      return $http.get('/static/json/club_games_example.json').success(function(data) {
+      var params;
+      params = '';
+      params += '?club=' + $scope.clubPk;
+      if ($scope.params.season) {
+        params += '&season=' + $scope.params.season;
+      }
+      return $http.get($scope.clubMatchApi + params).success(function(data) {
         var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
-        $scope.games = data;
-        console.log(data.length);
+        $scope.games = _.sortBy(data, function(el) {
+          return new Date(el).getTime();
+        }).reverse();
         seriesClub = {};
         seriesOpponent = {};
         opponentObject = {
           name: 'opponents',
           data: $scope.games.map(function(game, index) {
+            if ($scope.homeOnly && game.is_home === false) {
+              return;
+            }
             return {
               x: index,
-              y: game.opponent.score,
+              y: -Math.abs(game.opponent_score),
               date: game.date,
-              name: game.opponent.title + ' - Club',
-              score: Math.abs(game.opponent.score) + ' : ' + Math.abs(game.score),
-              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
+              name: game.opponent.title_verbose + ' - ' + $scope.clubName + ' ' + $scope.clubAddress,
+              score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score),
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
             };
+          }).filter(function(toFilter) {
+            return toFilter != null;
           })
         };
         clubObject = {
           name: 'club',
           data: $scope.games.map(function(game, index) {
+            var opponentAddress;
+            if ($scope.homeOnly && game.is_home === false) {
+              return;
+            }
+            opponentAddress = game.opponent.address && game.opponent.address.title ? game.opponent.address.title : '';
             return {
               x: index,
               y: game.score,
               date: game.date,
-              name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title,
-              score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score),
-              color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
+              name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title_verbose,
+              score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
             };
+          }).filter(function(toFilter) {
+            return toFilter != null;
           })
         };
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
