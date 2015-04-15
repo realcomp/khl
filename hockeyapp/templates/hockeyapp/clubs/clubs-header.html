@@ -35,7 +35,7 @@
         <div id="team-logo" class="team-logo"><img src="{{ logo|default:"" }}" alt="Sportomatics" class="team-logo-image"></div>
         <a id="team-name"  href="{% url 'hockeyapp:club' pk %}" class="team-name">{{ title }}
             {% if address.title %}
-                <span>({{ address.title }})</span>
+                <span id="club-address">({{ address.title }})</span>
             {% endif %}
         </a>
         <input id="team-name-hidden" type="hidden" value="{{title}}">

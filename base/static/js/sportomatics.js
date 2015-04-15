@@ -115,6 +115,13 @@ var getLeagues = function(countries, countries_selected) {
     });
     return result;
 }
+Array.prototype.getIndexBy = function (name, value) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i][name] == value) {
+            return i;
+        }
+    }
+}
 Date.prototype.yyyymmdd = function(delimiter){
     if(delimiter == null) delimiter = '';
     var yyyy = this.getFullYear().toString();

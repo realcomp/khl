@@ -69,8 +69,12 @@ angular.module('Sportomatics')
         this.setField = function(field) {
             $location.search('field', field);
             this.field = field;
-            this.list(true);
+            this.list();
         };
+
+        $scope.setField = function(field){
+            self.setField(field);
+        }
 
         this.setClub = function(club) {
             this.club = club;
@@ -236,7 +240,7 @@ angular.module('Sportomatics')
             }
         };
 
-        this.list = function(switched) {
+        this.list = function() {
 
             if($scope.activeSeason !== -1) return $scope.makeChart();
 
@@ -480,6 +484,7 @@ angular.module('Sportomatics')
             }).filter(function(toFilter){ return toFilter != undefined; });
             $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
             $scope.playerStatsSpiderChart = new HighchartsFactory.PlayerStatsSpiderChart('chartdiv2', data, categories, $scope.lastSeason);
+            $scope.playerStatsSpiderChart.setContext($scope);
             $scope.playerStatsSpiderChart.setLocaleObject($scope.localeObject);
             $scope.playerStatsSpiderChart.draw();
             self.spiderChart = $("#chartdiv2").highcharts();

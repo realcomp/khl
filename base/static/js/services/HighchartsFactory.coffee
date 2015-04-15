@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory 'HighchartsFactory', () ->
+angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
 
     class HighchartsSpiderChart
 
@@ -41,6 +41,23 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                             value = if field is 'shots' then point.point.y*10 else point.point.y
                             s += '<span style="color:'+point.series.color+'">'+point.series.name+': <b>'+ parseFloat(value).toFixed(3)+'</b><br/>'
                         return s
+                plotOptions:
+                    series:
+                        cursor: 'pointer'
+                        point:
+                            events:
+                                click: () ->
+                                    console.log this.category
+                                    $('#return-control').click()
+                                    self.context.setField this.category
+                                    seasonIndex = 0
+                                    _.map self.context.dataBySeason.results, (element, index) ->
+                                        if element.season.end_date.indexOf(self.context.lastSeason) > -1
+                                            seasonIndex = index
+                                        return element
+                                    self.context.moveToSeason null, seasonIndex
+                                    return ''
+
                 series: @data
 
 
@@ -65,6 +82,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                             autoRotation: false
                         reversed: false
                         lineColor: '#FFFFFF'
+                        max: 100
                     },
                     {
                         opposite: true,
@@ -92,8 +110,12 @@ angular.module('Sportomatics').factory 'HighchartsFactory', () ->
                 tooltip:
                     #shared: true
                     useHTML: true
+                    style:
+                        padding: 0
                     formatter: () ->
-                        return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score
+                        return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date.split('-')).yyyymmddFormatted()) + '</a>'
+                    #formatter: () ->
+                    #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date.split('-')).yyyymmddFormatted()) + '</a>'
                 plotOptions:
                     series:
                         stacking: 'normal'

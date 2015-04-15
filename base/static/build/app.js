@@ -115,6 +115,13 @@ var getLeagues = function(countries, countries_selected) {
     });
     return result;
 }
+Array.prototype.getIndexBy = function (name, value) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i][name] == value) {
+            return i;
+        }
+    }
+}
 Date.prototype.yyyymmdd = function(delimiter){
     if(delimiter == null) delimiter = '';
     var yyyy = this.getFullYear().toString();
@@ -326,7 +333,7 @@ $.fn.textWidth = function(){
 
 angular.module('Sportomatics')
 
-angular.module('Sportomatics').factory('HighchartsFactory', function() {
+angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
   var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
@@ -390,6 +397,30 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             return s;
           }
         },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function() {
+                  var seasonIndex;
+                  console.log(this.category);
+                  $('#return-control').click();
+                  self.context.setField(this.category);
+                  seasonIndex = 0;
+                  _.map(self.context.dataBySeason.results, function(element, index) {
+                    if (element.season.end_date.indexOf(self.context.lastSeason) > -1) {
+                      seasonIndex = index;
+                    }
+                    return element;
+                  });
+                  self.context.moveToSeason(null, seasonIndex);
+                  return '';
+                }
+              }
+            }
+          }
+        },
         series: this.data
       });
     };
@@ -422,7 +453,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               autoRotation: false
             },
             reversed: false,
-            lineColor: '#FFFFFF'
+            lineColor: '#FFFFFF',
+            max: 100
           }, {
             opposite: true,
             reversed: false,
@@ -453,8 +485,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         },
         tooltip: {
           useHTML: true,
+          style: {
+            padding: 0
+          },
           formatter: function() {
-            return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score;
+            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date.split('-')).yyyymmddFormatted()) + '</a>';
           }
         },
         plotOptions: {
@@ -1923,7 +1958,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.data = {};
     $scope.params = $location.search();
-    $scope.club = 'wdq';
+    $scope.clubName = document.getElementById('team-name-hidden').value;
+    $scope.clubAddress = document.getElementById('club-address') != null ? document.getElementById('club-address').innerHTML : '';
     $scope.games = [];
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
@@ -2116,7 +2152,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               x: index,
               y: game.score,
               date: game.date,
-              name: 'Club - ' + game.opponent.title,
+              name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title,
               score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score),
               color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
             };
@@ -3352,8 +3388,12 @@ angular.module('Sportomatics')
         this.setField = function(field) {
             $location.search('field', field);
             this.field = field;
-            this.list(true);
+            this.list();
         };
+
+        $scope.setField = function(field){
+            self.setField(field);
+        }
 
         this.setClub = function(club) {
             this.club = club;
@@ -3519,7 +3559,7 @@ angular.module('Sportomatics')
             }
         };
 
-        this.list = function(switched) {
+        this.list = function() {
 
             if($scope.activeSeason !== -1) return $scope.makeChart();
 
@@ -3763,6 +3803,7 @@ angular.module('Sportomatics')
             }).filter(function(toFilter){ return toFilter != undefined; });
             $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
             $scope.playerStatsSpiderChart = new HighchartsFactory.PlayerStatsSpiderChart('chartdiv2', data, categories, $scope.lastSeason);
+            $scope.playerStatsSpiderChart.setContext($scope);
             $scope.playerStatsSpiderChart.setLocaleObject($scope.localeObject);
             $scope.playerStatsSpiderChart.draw();
             self.spiderChart = $("#chartdiv2").highcharts();

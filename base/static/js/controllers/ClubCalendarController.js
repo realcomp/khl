@@ -3,7 +3,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.data = {};
     $scope.params = $location.search();
-    $scope.club = 'wdq';
+    $scope.clubName = document.getElementById('team-name-hidden').value;
+    $scope.clubAddress = document.getElementById('club-address') != null ? document.getElementById('club-address').innerHTML : '';
     $scope.games = [];
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
@@ -196,7 +197,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               x: index,
               y: game.score,
               date: game.date,
-              name: 'Club - ' + game.opponent.title,
+              name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title,
               score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score),
               color: Math.abs(game.opponent.score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
             };
