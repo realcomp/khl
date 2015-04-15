@@ -9,11 +9,12 @@ from django.db.models import Q
 from base.models import Season
 from hockeyapp.filters import OrderFilter
 from hockeyapp.views.mixins import PaginationMixin
-from hockeyapp.models import Club, Country, Player, League, LeagueClub
+from hockeyapp.models import Club, Country, Player, League, LeagueClub, Match
 
 from .admin import ArenaInstaPhotoList
 from .serializers import ClubListSerializer, PlayerPartnersBySeasonCount
 from .serializers import PlayerPartnersBySeason, ClubListPaginationSerializer
+from .serializers import MatchListSerializer
 
 
 class ClubInstaPhotoList(ArenaInstaPhotoList):
@@ -90,13 +91,6 @@ class ClubList(PaginationMixin, drf.generics.ListAPIView):
                                     ).last()
         if country:
             q &= Q(leagueclub__league__country_id=country)
-
-        leagueclubs = (
-            LeagueClub.objects
-            .filter(club__in=qs, season=self._get_season()))
-        leagues = (
-            League.objects
-            .filter(pk__in=leagueclubs.values_list('league')))
 
         if 'league' in self.request.GET:
             q &= Q(leagueclub__league=self._get_league())
@@ -210,3 +204,25 @@ class PlayerPartners(drf.generics.ListAPIView):
             serializer = self.get_serializer(instance, many=True)
         return drf.response.Response(serializer.data)
 player_partners = PlayerPartners.as_view()
+
+
+class MatchList(drf.generics.ListAPIView):
+    serializer_class = MatchListSerializer
+
+    def get_queryset(self):
+        return Match.objects.active().order_by('-date')
+
+    def filter_queryset(self, qs):
+        qs = super(MatchList, self).filter_queryset(qs)
+        club_id = self.request.GET.get('club')
+        if club_id:
+            q = Q(home_team_id=club_id) | Q(guest_team_id=club_id)
+            season_id = self.request.GET.get('season')
+            if season_id:
+                season = Season.objects.filter(id=season_id).last()
+                q&= Q(date__gte=season.start_date, date__lte=season.end_date)
+            ids = set(qs.filter(q).values_list('pk', flat=True))
+            qs = qs.filter(pk__in=ids)
+            return qs
+        return qs.none()
+matches = MatchList.as_view()

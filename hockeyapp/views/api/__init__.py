@@ -9,8 +9,6 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, response, viewsets
 
-from addresses.models import Country
-
 from base.models import Season
 
 from ..events import EventFactory
@@ -20,7 +18,6 @@ from ...filters import PlayersSearchFilter, PlayersSearchOrderFilter
 from ...models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
 from ...models import Timeline
 
-from ...serializers import CountrySerializer, CountryLeaguesSerializer
 from ...serializers import MetricsPlayerSerializer
 from ...serializers.clubs import (
     ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
@@ -28,13 +25,13 @@ from ...serializers.clubs import (
 from ...serializers.events import EventSerializer
 from ...serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer)
+    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer,
+    PlayerNumbersSerializer)
 from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
 
-class PlayersSearch(
-        PaginationMixin, viewsets.ReadOnlyModelViewSet):
+class PlayersSearch(PaginationMixin, viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
     queryset = Player.objects.all()
     serializer_class = PlayersSearchSerializer
@@ -219,11 +216,27 @@ class ScheduleView(generics.RetrieveAPIView):
 
 class PlayerNumbers(generics.ListAPIView):
     queryset = Player.objects.all()
-    serializer_class = PlayersSearchSerializer
+    serializer_class = PlayerNumbersSerializer
 
     def filter_queryset(self, qs):
         qs = super(PlayerNumbers, self).filter_queryset(qs)
+
+        clubplayers = ClubPlayer.objects.filter(player__in=qs)
+
         _club = self.request.GET.get('club')
         if _club:
-            qs = qs.filter(clubplayer__club=club)
-        return qs
+            clubplayers = clubplayers.filter(club=_club)
+
+        players_by_number = {}
+        for clubplayer in clubplayers.order_by('season__start_date'):
+            player = clubplayer.player
+            number = clubplayer.number
+            if number not in players_by_number:
+                players_by_number[number] = {
+                    'players': [],
+                    'number': int(number or 0),
+                }
+            if player not in players_by_number[number]['players']:
+                players_by_number[number]['players'].append(player)
+
+        return sorted(players_by_number.values(), key=lambda x: x['number'])

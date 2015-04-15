@@ -7,9 +7,9 @@
 
 {% block body %}
 <section class="content">
-    <div class="container clubs-page clubs-home-page">
+    <div class="container player-card-short-page">
         <!-- {% trans "Player's numbers" %} -->
-        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Player's Numbers" %}
+        {% include "hockeyapp/players/player-header.html" with player_section="Player's Numbers" %}
 
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container">

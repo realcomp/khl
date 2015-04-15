@@ -838,6 +838,10 @@ class Match(AdminLinkMixin, TitleBaseModel):
     count = models.CharField(_('Match count'), max_length=1024, blank=True)
     detail_count = models.CharField(_('Match detail count'), 
                                     max_length=1024, blank=True)
+    home_score = models.PositiveSmallIntegerField(_('Home score'), null=True)
+    guest_score = models.PositiveSmallIntegerField(_('Guest score'), null=True)
+    overtime_win = models.BooleanField(_('Overtime'), default=False)
+    bullet_win = models.BooleanField(_('Bullets'), default=False)
     judges = models.ManyToManyField(Judge, null=True, blank=True,
                             related_name='matchjudges',
                             verbose_name=Judge._meta.verbose_name_plural)
