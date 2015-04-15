@@ -224,18 +224,23 @@ class PlayerNumbers(generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(PlayerNumbers, self).filter_queryset(qs)
+
+        clubplayers = ClubPlayer.objects.filter(player__in=qs)
+
         _club = self.request.GET.get('club')
         if _club:
-            qs = qs.filter(clubplayer__club=_club)
+            clubplayers = clubplayers.filter(club=_club)
 
         players_by_number = {}
-        for player in qs.order_by('clubplayer__season__start_date'):
-            if player.number not in players_by_number:
-                players_by_number[player.number] = {
+        for clubplayer in clubplayers.order_by('season__start_date'):
+            player = clubplayer.player
+            number = clubplayer.number
+            if number not in players_by_number:
+                players_by_number[number] = {
                     'players': [],
-                    'number': int(player.number or 0),
+                    'number': int(number or 0),
                 }
-            if player not in players_by_number[player.number]['players']:
-                players_by_number[player.number]['players'].append(player)
+            if player not in players_by_number[number]['players']:
+                players_by_number[number]['players'].append(player)
 
         return sorted(players_by_number.values(), key=lambda x: x['number'])
