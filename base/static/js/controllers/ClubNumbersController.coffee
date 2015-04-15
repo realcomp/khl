@@ -5,6 +5,7 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
 
         url = $('#PlayerNumbersApi').attr('href')
         club = $('[name="club"]').val()
+        player = $('[name="player"]').val()
 
         $scope.limit = {}
         $scope.data = {}
@@ -42,8 +43,14 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
             return
 
         $scope.list = () ->
+            params = ''
+            if club
+                params += '&club=' + club
+            if player
+                params += '&player=' + player
+
             $scope.loaded = false
-            $http.get(url + '?club=' + club
+            $http.get(url + '?' + params
             ).success((data) ->
                 $scope.data = data
                 $scope.loaded = true

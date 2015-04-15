@@ -110,3 +110,7 @@ class PlayerCardCommunication(PlayerCard):
 
 class PlayerCardNews(PlayerCard):
     template_name = 'hockeyapp/players/player-card-news.html'
+
+
+class PlayerCardNumbers(PlayerCard):
+    template_name = 'hockeyapp/players/player-card-numbers.html'

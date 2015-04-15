@@ -15,4 +15,6 @@
        href="{% url 'hockeyapp:player-card-communication' pk %}">Общение</a>
     <a class="{% if players_menu_active == 'player-card-news' %}active {% endif %}item"
        href="{% url 'hockeyapp:player-card-news' pk %}">Новости</a>
+    <a class="{% if players_menu_active == 'player-card-numbers' %}active {% endif %}item"
+       href="{% url 'hockeyapp:player-card-numbers' pk %}">Любимые номера</a>
 </div>

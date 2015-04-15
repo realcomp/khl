@@ -2649,10 +2649,11 @@ angular.module('Sportomatics')
 
 angular.module('Sportomatics').controller('ClubNumbersController', [
   '$http', '$scope', '$location', function($http, $scope, $location) {
-    var club, url;
+    var club, player, url;
     $scope.$location = $location;
     url = $('#PlayerNumbersApi').attr('href');
     club = $('[name="club"]').val();
+    player = $('[name="player"]').val();
     $scope.limit = {};
     $scope.data = {};
     $scope.params = $location.search();
@@ -2685,8 +2686,16 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
       $scope.limit[number] += 4;
     };
     $scope.list = function() {
+      var params;
+      params = '';
+      if (club) {
+        params += '&club=' + club;
+      }
+      if (player) {
+        params += '&player=' + player;
+      }
       $scope.loaded = false;
-      $http.get(url + '?club=' + club).success(function(data) {
+      $http.get(url + '?' + params).success(function(data) {
         $scope.data = data;
         $scope.loaded = true;
       });

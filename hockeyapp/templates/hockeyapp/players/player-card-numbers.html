@@ -2,28 +2,28 @@
 {% load i18n %}
 
 {% block title %}
-{{title}}: номера игроков, хоккей  - Sportomatics.ru
+{{fio}}: номера игроков, хоккей  - Sportomatics.ru
 {% endblock %}
 
 {% block body %}
 <section class="content">
     <div class="container player-card-short-page">
         <!-- {% trans "Player's numbers" %} -->
-        {% include "hockeyapp/players/player-header.html" with player_section="Player's Numbers" %}
+        {% include "hockeyapp/players/player-header.html" with player_section="Favourite numbers" %}
 
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container">
-            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-numbers" %}
+            {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-numbers" %}
             <div class="page-inner-container" ng-controller="ClubNumbersController as ClubNumbersCtrl"
-                 ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'; club = {{ pk }}">
+                 ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'; player = {{ pk }}">
                 <a class="hidden" id="PlayerNumbersApi"
                    href="{% url 'hockeyapp:player-numbers-api' %}"></a>
-                <input name="club" type="hidden" value="{{ pk }}">
+                <input name="player" type="hidden" value="{{ pk }}">
                 <div class="ui grid">
                     <div class="row">
                         <div class="column">
                             <div class="ui tabular menu content-tabs">
-                                <span class="heading">{% trans "Player's numbers" %}</span>
+                                <span class="heading">{% trans "Favourite numbers" %}</span>
                             </div>
                         </div>
                     </div>
