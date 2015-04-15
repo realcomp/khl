@@ -30,7 +30,7 @@ angular.module('Sportomatics')
         };
         $scope.dataType = 'graph-serial'; // we'll be on serial chart tab by default
 
-        $scope.setDataType = function(type, preventCreation){
+        $scope.setDataType = function(type, event){
             $scope.dataType = type;
             if(type === 'graph-radar'){
                 if($scope.playerToCompare.id){
@@ -47,10 +47,12 @@ angular.module('Sportomatics')
                     $scope.createRadar();
                 }, 100)
             } else {
-                if(preventCreation == null)
-                $timeout(function(){
-                    $scope.makeChart();
-                }, 100)
+                if(event.originalEvent != null){
+                    console.log( event)
+                    $timeout(function(){
+                        $scope.makeChart();
+                    }, 100)
+                }
             }
         };
 
@@ -230,23 +232,23 @@ angular.module('Sportomatics')
             $scope.activeSeason = -1;
         };
 
-        $scope.moveToSeason = function(season, index, date){
+        $scope.moveToSeason = function(season, index, date, fromAnotherChart){
             if(index !== -1)
             if(_.contains(KHL_NEWEST_FIELDS, self.field) && (parseInt(season.end_date.split('-')[0]) < 2009 )) return;
             var chart = $('#chartdiv').highcharts();
-            if(index === -1 || $scope.activeSeason === index) {
+            if(index === -1 || $scope.activeSeason === index && !fromAnotherChart) {
                 $scope.activeSeason = -1;
                 self.list();
                 return;
             }
             $scope.activeSeason = index;
             self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
-            if($scope.currentPlayerObject.dataByMonth){
-                $scope.drilldown = (date != null) ? date : $scope.currentPlayerObject.dataBySeason.results[index].season.end_date; //self.chart.series[0].points[index].drilldown;
+            if ($scope.currentPlayerObject.dataByMonth != null){
+                $scope.drilldown = (date != null) ? date : $scope.dataBySeason.results[index].season.end_date; //self.chart.series[0].points[index].drilldown;
                 $scope.makeChart()
             } else {
                 $scope.getPlayerDataByMonth().then(function(){
-                    $scope.drilldown = (date != null) ? date : $scope.currentPlayerObject.dataBySeason.results[index].season.end_date; //self.chart.series[0].points[index].drilldown;
+                    $scope.drilldown = (date != null) ? date : $scope.dataBySeason.results[index].season.end_date; //self.chart.series[0].points[index].drilldown;
                     $scope.makeChart()
                 })
             }

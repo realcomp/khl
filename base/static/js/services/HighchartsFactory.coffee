@@ -48,7 +48,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                         point:
                             events:
                                 click: () ->
-                                    #$('#'+self.divId).highcharts().showLoading 'Загрузка данных по месяцам ...'
                                     $('#return-control').click()
                                     $timeout () =>
                                         self.context.setField this.category, true
@@ -57,7 +56,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                                             if element.season.end_date.indexOf(self.context.lastSeason) > -1
                                                 seasonIndex = index
                                             return element
-                                        self.context.moveToSeason null, seasonIndex
+                                        self.context.moveToSeason null, seasonIndex, null, true
+                                        return ''
                                     , 200
                                     return ''
 

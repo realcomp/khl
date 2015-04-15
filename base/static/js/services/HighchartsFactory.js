@@ -81,7 +81,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
                         }
                         return element;
                       });
-                      return self.context.moveToSeason(null, seasonIndex);
+                      self.context.moveToSeason(null, seasonIndex, null, true);
+                      return '';
                     };
                   })(this), 200);
                   return '';
