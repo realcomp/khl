@@ -5875,3 +5875,29 @@ text tspan, text {
     fill: black;
     font-size: 7px !important;
 }
+.score{
+    font-size: 22px;
+    font-weight: bold;
+}
+.match-date{
+    font-weight: 300;
+}
+
+.highcharts-tooltip path{
+    stroke: #c0c0c0 !important;
+}
+.tooltip-header{
+    background: #141414 !important;
+    color: #ecf0f1 !important;
+    font-size: 14px;
+    border-bottom: 2px solid #c0c0c0;
+    padding: 8px;
+}
+.highcharts-tooltip > span {
+    min-width: 160px;
+    background: rgba(255,255,255,1);
+    border: 2px solid #141414;
+    box-shadow: 1px 1px 4px #888;
+    border-radius: 4px;
+    padding-bottom: 5px;
+}

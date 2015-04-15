@@ -7,8 +7,9 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.data = {}
         $scope.params = $location.search()
 
-        $scope.club = 'wdq'
-        $scope.games = [];
+        $scope.clubName = document.getElementById('team-name-hidden').value
+        $scope.clubAddress = if document.getElementById('club-address')? then document.getElementById('club-address').innerHTML else ''
+        $scope.games = []
 
         $scope.CalendarEventPopup = {}
         $scope.CalendarEventPopupShow = (e, event) ->
@@ -180,7 +181,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                     #y: 70
                                     #formatter: () ->
                                     #    return this.key.split('-')[0]
-                            )#[new Date(game.date.split('-')).getTime(), game.opponent.score]
+                            )
                     )
                     clubObject = (
                         name: 'club'
@@ -189,10 +190,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 x: index
                                 y: game.score
                                 date: game.date
-                                name: 'Club - ' + game.opponent.title
+                                name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title
                                 score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent.score)
                                 color: if (Math.abs(game.opponent.score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
-                            )#[new Date(game.date.split('-')).getTime(), game.score]
+                            )
                     )
                     clubGamesChart = new HighchartsFactory.ClubGamesChart 'chartdiv', [clubObject, opponentObject]
                     clubGamesChart.draw()

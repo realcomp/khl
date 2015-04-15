@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory('HighchartsFactory', function() {
+angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
   var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
@@ -62,6 +62,30 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
             return s;
           }
         },
+        plotOptions: {
+          series: {
+            cursor: 'pointer',
+            point: {
+              events: {
+                click: function() {
+                  var seasonIndex;
+                  console.log(this.category);
+                  $('#return-control').click();
+                  self.context.setField(this.category);
+                  seasonIndex = 0;
+                  _.map(self.context.dataBySeason.results, function(element, index) {
+                    if (element.season.end_date.indexOf(self.context.lastSeason) > -1) {
+                      seasonIndex = index;
+                    }
+                    return element;
+                  });
+                  self.context.moveToSeason(null, seasonIndex);
+                  return '';
+                }
+              }
+            }
+          }
+        },
         series: this.data
       });
     };
@@ -94,7 +118,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
               autoRotation: false
             },
             reversed: false,
-            lineColor: '#FFFFFF'
+            lineColor: '#FFFFFF',
+            max: 100
           }, {
             opposite: true,
             reversed: false,
@@ -125,8 +150,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function() {
         },
         tooltip: {
           useHTML: true,
+          style: {
+            padding: 0
+          },
           formatter: function() {
-            return '<div class="text-center"> <b>Матч <br>' + this.point.name + '<b> <br><br>' + this.point.date + '<br> Счет <br>' + this.point.score;
+            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date.split('-')).yyyymmddFormatted()) + '</a>';
           }
         },
         plotOptions: {
