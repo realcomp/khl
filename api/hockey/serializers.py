@@ -9,8 +9,8 @@ from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
 from api.base.serializers import SeasonSerializer
 
-from hockeyapp.models import (
-    ArenaInstaPhoto, Club, Match, Player, Arena, League, LeagueClub)
+from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
+from hockeyapp.models import League, LeagueClub
 from hockeyapp.serializers import CoachSerializer, LeagueSerializer
 
 
@@ -141,3 +141,62 @@ class PlayerPartnersBySeason(drf.serializers.Serializer):
 
     class Meta(object):
         fields = 'season', 'players',
+
+
+class I18NClubMinimalSerialiser(TitleBaseSerializer):
+    title_verbose = drf.serializers.SerializerMethodField()
+    def get_title_verbose(self, obj):
+        return obj.get_title_verbose(request=self.context.get('request'))
+    logo = drf.serializers.ReadOnlyField(source='logo.url')
+    url = drf.serializers.ReadOnlyField(source='get_absolute_url')
+    address = AddressMinimalSerializer()
+    class Meta:
+        model = Club
+        fields = 'id', 'title_verbose', 'url', 'logo', 'address', 'title'
+
+
+class MatchListSerializer(drf.serializers.ModelSerializer):
+    opponent = drf.serializers.SerializerMethodField()
+    score = drf.serializers.SerializerMethodField()
+    opponent_score = drf.serializers.SerializerMethodField()
+    is_home = drf.serializers.SerializerMethodField()
+
+    def _get_club_id(self):
+        _request = self.context.get('request')
+        if _request and _request.GET.get('club'):
+            return int(_request.GET.get('club'))
+
+    def get_opponent(self, obj):
+        club_id = self._get_club_id()
+        if club_id:
+            if obj.guest_team.pk == club_id:
+                team = obj.home_team
+            else:
+                team = obj.guest_team
+            return I18NClubMinimalSerialiser(team,context=self.context).data
+
+    def get_opponent_score(self, obj):
+        club_id = self._get_club_id()
+        if club_id:
+            if obj.guest_team.pk == club_id:
+                return obj.home_score
+            else:
+                return obj.guest_score
+
+    def get_score(self, obj):
+        club_id = self._get_club_id()
+        if club_id:
+            if obj.guest_team.pk == club_id:
+                return obj.guest_score
+            else:
+                return obj.home_score
+
+    def get_is_home(self, obj):
+        club_id = self._get_club_id()
+        if club_id:
+            return obj.home_team.pk == club_id
+
+    class Meta:
+        model = Match
+        fields = (  'id', 'date', 'overtime_win', 'bullet_win', 'opponent',
+                    'score', 'opponent_score', 'is_home')

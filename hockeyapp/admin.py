@@ -17,7 +17,6 @@ from relatives.utils import object_link
 from base.admin import AutocompleteFieldFilter, SimpleRangeFilter, BaseForm
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin, BaseListAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
-from base.admin import YesNoListFilter
 
 from .forms import TimelineForm
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
@@ -56,6 +55,7 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
+                        'home_score', 'guest_score', 'overtime_win', 'bullet_win',
                         'spectators', 'judges', 'line_judges', 'challenge_type',
                         'title',
                     )

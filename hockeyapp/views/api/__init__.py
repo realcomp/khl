@@ -9,8 +9,6 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, response, viewsets
 
-from addresses.models import Country
-
 from base.models import Season
 
 from ..events import EventFactory
@@ -20,7 +18,6 @@ from ...filters import PlayersSearchFilter, PlayersSearchOrderFilter
 from ...models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
 from ...models import Timeline
 
-from ...serializers import CountrySerializer, CountryLeaguesSerializer
 from ...serializers import MetricsPlayerSerializer
 from ...serializers.clubs import (
     ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
@@ -33,8 +30,7 @@ from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
 
-class PlayersSearch(
-        PaginationMixin, viewsets.ReadOnlyModelViewSet):
+class PlayersSearch(PaginationMixin, viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
     queryset = Player.objects.all()
     serializer_class = PlayersSearchSerializer

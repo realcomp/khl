@@ -208,6 +208,7 @@ class HockeyMHLMatchParser(GrabParser):
             _home_players = self.get_home_players()
             _guest_players = self.get_guest_players()
             _date = self.get_match_date()
+            _count = self.get_match_count()
             res = {
                     'khl_id': matchid,
                     'html_body': self.get_html_body(html_body),
@@ -215,8 +216,12 @@ class HockeyMHLMatchParser(GrabParser):
                     'title': self.get_match_num(),
                     'spectators': self.get_spectators(),
                     'date': self.python_date(_date),
-                    'count': self.get_match_count(),
+                    'count': _count,
                     'detail_count': self.get_match_detail_count(),
+                    'home_score': self.get_home_score(_count),
+                    'guest_score': self.get_guest_score(_count),
+                    'overtime_win': self.get_overtime_win(_count),
+                    'bullet_win': self.get_bullet_win(_count),
                     'judges': self.get_match_judges(),
                     'line_judges': self.get_match_line_judges(),
                     'home_team': {
@@ -478,12 +483,33 @@ class HockeyMHLMatchParser(GrabParser):
     def get_match_count(self):
         b''' получаем счет матча '''
         _res = self._get_value('match_count')
-        return _res[0].strip() if _res else ''
+        if _res:
+            return _res[0].strip().replace(' ',''
+                        ).replace('-:+','').replace('(',''
+                        ).replace(')','')
+        return ''
 
     def get_match_detail_count(self):
         b''' получаем детальный счет матча '''
         _res = self._get_value('match_detail_count')
         return _res[0].strip() if _res else ''
+
+    def get_home_score(self, count):
+        b''' Счет домашней команды '''
+        return count.split(':')[0]
+
+    def get_guest_score(self, count):
+        b''' Счет гостевой команды '''
+        return count.split(':')[1].replace('Б',''
+                                 ).replace('OT','').replace('ОТ', '')
+
+    def get_overtime_win(self, count):
+        b''' Был ли матч завершен в овертайме '''
+        return (b'ОТ' in count.encode('utf-8')) or ('OT' in count)
+
+    def get_bullet_win(self, count):
+        b''' Был ли матч выигран по буллитам '''
+        return b'Б' in count.encode('utf-8')
 
     def get_match_judges(self):
         b''' получаем судей матча '''
