@@ -169,24 +169,35 @@ def async_db_players_update():
 @app.task(ignore_result=True, track_started=True)
 def async_db_matches_update():
     b'''
-        Обновление инфо о игроке
+        Обновление инфо о матчах
     '''
     try:
         for match in models.Match.objects.all():
-            match.count=match.count.strip(
-                                ).replace(' ',''
-                                ).replace('-:+',''
-                                ).replace('(',''
-                                ).replace(')','')
-            match.home_score = str2int_safe(match.count.split(':')[0])
-            match.guest_score = str2int_safe(match.count.split(':'
-                                                    )[1].replace('Б',''
-                                                       ).replace('OT',''
-                                                       ).replace('ОТ', ''))
-            match.bullet_win = 'Б' in match.count
-            match.overtime_win = ('ОТ' in match.count) or ('OT' in match.count)
-            match.save(update_fields=['count', 'home_score', 'guest_score',
-                                      'overtime_win', 'bullet_win'])
+            async_db_match_update.delay(match)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_db_match_update(match):
+    b'''
+        Обновление инфо о матче
+    '''
+    try:
+        match.count=match.count.strip(
+                            ).replace(' ',''
+                            ).replace('-:+',''
+                            ).replace('(',''
+                            ).replace(')','')
+        match.home_score = str2int_safe(match.count.split(':')[0])
+        match.guest_score = str2int_safe(match.count.split(':'
+                                                )[1].replace('Б',''
+                                                   ).replace('OT',''
+                                                   ).replace('ОТ', ''))
+        match.bullet_win = 'Б' in match.count
+        match.overtime_win = ('ОТ' in match.count) or ('OT' in match.count)
+        match.save(update_fields=['count', 'home_score', 'guest_score',
+                                  'overtime_win', 'bullet_win'])
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
