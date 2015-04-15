@@ -3,6 +3,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
     class HighchartsSpiderChart
 
         constructor: (@divId, @data, @categories, @season) ->
+            self.divId = @divId
             self.season = @season
 
         setLocaleObject: (@localeObject) ->
@@ -47,15 +48,17 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                         point:
                             events:
                                 click: () ->
-                                    console.log this.category
+                                    #$('#'+self.divId).highcharts().showLoading 'Загрузка данных по месяцам ...'
                                     $('#return-control').click()
-                                    self.context.setField this.category
-                                    seasonIndex = 0
-                                    _.map self.context.dataBySeason.results, (element, index) ->
-                                        if element.season.end_date.indexOf(self.context.lastSeason) > -1
-                                            seasonIndex = index
-                                        return element
-                                    self.context.moveToSeason null, seasonIndex
+                                    $timeout () =>
+                                        self.context.setField this.category, true
+                                        seasonIndex = 0
+                                        _.map self.context.dataBySeason.results, (element, index) ->
+                                            if element.season.end_date.indexOf(self.context.lastSeason) > -1
+                                                seasonIndex = index
+                                            return element
+                                        self.context.moveToSeason null, seasonIndex
+                                    , 200
                                     return ''
 
                 series: @data

@@ -341,6 +341,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
       this.data = data1;
       this.categories = categories;
       this.season = season;
+      self.divId = this.divId;
       self.season = this.season;
     }
 
@@ -403,18 +404,21 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
             point: {
               events: {
                 click: function() {
-                  var seasonIndex;
-                  console.log(this.category);
                   $('#return-control').click();
-                  self.context.setField(this.category);
-                  seasonIndex = 0;
-                  _.map(self.context.dataBySeason.results, function(element, index) {
-                    if (element.season.end_date.indexOf(self.context.lastSeason) > -1) {
-                      seasonIndex = index;
-                    }
-                    return element;
-                  });
-                  self.context.moveToSeason(null, seasonIndex);
+                  $timeout((function(_this) {
+                    return function() {
+                      var seasonIndex;
+                      self.context.setField(_this.category, true);
+                      seasonIndex = 0;
+                      _.map(self.context.dataBySeason.results, function(element, index) {
+                        if (element.season.end_date.indexOf(self.context.lastSeason) > -1) {
+                          seasonIndex = index;
+                        }
+                        return element;
+                      });
+                      return self.context.moveToSeason(null, seasonIndex);
+                    };
+                  })(this), 200);
                   return '';
                 }
               }
@@ -3382,7 +3386,7 @@ angular.module('Sportomatics')
         };
         $scope.dataType = 'graph-serial'; // we'll be on serial chart tab by default
 
-        $scope.setDataType = function(type){
+        $scope.setDataType = function(type, preventCreation){
             $scope.dataType = type;
             if(type === 'graph-radar'){
                 if($scope.playerToCompare.id){
@@ -3398,10 +3402,15 @@ angular.module('Sportomatics')
                 $timeout(function(){
                     $scope.createRadar();
                 }, 100)
+            } else {
+                if(preventCreation == null)
+                $timeout(function(){
+                    $scope.makeChart();
+                }, 100)
             }
         };
 
-        $scope.addRadarGraph = function(id){
+        $scope.addRadarGraph = function(id, preventCreation){
             if(_.findWhere($scope.radarPlayers, {id: id})) return;
             $http.get($scope.apiPlayersUrl + id)
                 .success(function(player){
@@ -3413,19 +3422,22 @@ angular.module('Sportomatics')
                                 fio: player.fio,
                                 dataBySeason: data
                             })
+                            if(preventCreation == null)
                             $scope.createRadar();
+                            $scope.addGraph(id, true);
                         })
                 })
         };
 
-        this.setField = function(field) {
+        this.setField = function(field, preventList) {
             $location.search('field', field);
             this.field = field;
+            if(preventList == null)
             this.list();
         };
 
-        $scope.setField = function(field){
-            self.setField(field);
+        $scope.setField = function(field, preventList){
+            self.setField(field, preventList);
         }
 
         this.setClub = function(club) {
@@ -3454,7 +3466,7 @@ angular.module('Sportomatics')
             }
         });
 
-        $scope.addGraph = function(id){
+        $scope.addGraph = function(id, preventCreation){
             if(!id || _.findWhere($scope.playersToCompare, {id: id})) return;
             $location.search('compare_to', id);
             $http.get($scope.apiPlayersUrl+id)
@@ -3487,6 +3499,8 @@ angular.module('Sportomatics')
                                     self.loader = false;
                                 }).then(function(){
                                     $scope.playersToCompare.push(playerObject);
+                                    $scope.addRadarGraph(id, true);
+                                    if(preventCreation == null)
                                     $scope.makeChart();
                                 })
                         })
@@ -3494,12 +3508,11 @@ angular.module('Sportomatics')
         };
 
         $scope.makeChart = function(){ // make column chart with multiple players
-
+            console.log('making chart')
             self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 365;
 
             var results = [];
             if($scope.activeSeason === -1){ //make chart grouped by seasons
-
                 _.each($scope.playersToCompare, function(playerObject, index){
                     if(index === 0) return;
                     var newPlayerIndicatorsData = {
@@ -3519,6 +3532,8 @@ angular.module('Sportomatics')
                         console.log(self.chart);
                         self.chart.drillUp();
                     }
+
+                    if(!_.findWhere(self.chart.series, {name: newPlayerIndicatorsData.name}))
                     self.chart.addSeries(newPlayerIndicatorsData);
                 })
                 /*var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', results, self.field);
@@ -3530,6 +3545,7 @@ angular.module('Sportomatics')
             } else { // make chart on some season
                 var results = [];
                 _.each($scope.playersToCompare, function(playerObject, index){
+                    if(playerObject.dataByMonth == null) return;
                     var versions = _.groupBy(playerObject.dataByMonth.results, function(result){
                         if (result.season != null)
                             if(result.season.end_date === $scope.drilldown)
@@ -3596,12 +3612,6 @@ angular.module('Sportomatics')
 
             if($scope.activeSeason !== -1) return $scope.makeChart();
 
-            Highcharts.setOptions({
-                lang: {
-                    drillUpText: '◁ Вернуться'
-                }
-            });
-
             if($('.club-id').length !== 0) {
                 return this.listClubs(switched);
             }
@@ -3628,9 +3638,6 @@ angular.module('Sportomatics')
             if ($scope.playersToCompare.length > 1) {
                 if($scope.activeSeason === -1){
                     $scope.makeChart(); //player comparison
-                } else {
-                    console.log('asds')
-                    $scope.drawChart($scope.drilldown);
                 }
             }
             self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;

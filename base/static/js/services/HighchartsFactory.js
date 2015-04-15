@@ -6,6 +6,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
       this.data = data1;
       this.categories = categories;
       this.season = season;
+      self.divId = this.divId;
       self.season = this.season;
     }
 
@@ -68,18 +69,21 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
             point: {
               events: {
                 click: function() {
-                  var seasonIndex;
-                  console.log(this.category);
                   $('#return-control').click();
-                  self.context.setField(this.category);
-                  seasonIndex = 0;
-                  _.map(self.context.dataBySeason.results, function(element, index) {
-                    if (element.season.end_date.indexOf(self.context.lastSeason) > -1) {
-                      seasonIndex = index;
-                    }
-                    return element;
-                  });
-                  self.context.moveToSeason(null, seasonIndex);
+                  $timeout((function(_this) {
+                    return function() {
+                      var seasonIndex;
+                      self.context.setField(_this.category, true);
+                      seasonIndex = 0;
+                      _.map(self.context.dataBySeason.results, function(element, index) {
+                        if (element.season.end_date.indexOf(self.context.lastSeason) > -1) {
+                          seasonIndex = index;
+                        }
+                        return element;
+                      });
+                      return self.context.moveToSeason(null, seasonIndex);
+                    };
+                  })(this), 200);
                   return '';
                 }
               }
