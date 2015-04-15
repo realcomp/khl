@@ -172,7 +172,8 @@ def async_db_matches_update():
         Обновление инфо о матчах
     '''
     try:
-        for match_id in models.Match.objects.values_list('id', flat=True):
+        for match_id in models.Match.objects.filter(home_score__isnull=True
+                                            ).values_list('id', flat=True):
             async_db_match_update.delay(match_id)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
