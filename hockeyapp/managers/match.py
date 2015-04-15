@@ -125,6 +125,11 @@ class MatchPenaltyHistoryManager(ManagerMixin, models.Manager):
 
 class MatchManager(ManagerMixin, models.Manager):
     b''' Мененжер матчей по-умолчанию '''
+    def active(self):
+        b'''Запись, которую необходимо учитывать при подсчете статистики'''
+        return self.filter( challenge_type__isnull=False,
+                            challenge_type__gt=0)
+
     def get_or_create_match(self, **kwargs):
         b''' метод взять или создать запись о матче '''
         self._season = kwargs.pop('season', {})
