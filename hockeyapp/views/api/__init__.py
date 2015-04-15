@@ -28,7 +28,8 @@ from ...serializers.clubs import (
 from ...serializers.events import EventSerializer
 from ...serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer)
+    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer,
+    PlayerNumbersSerializer)
 from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
@@ -219,11 +220,22 @@ class ScheduleView(generics.RetrieveAPIView):
 
 class PlayerNumbers(generics.ListAPIView):
     queryset = Player.objects.all()
-    serializer_class = PlayersSearchSerializer
+    serializer_class = PlayerNumbersSerializer
 
     def filter_queryset(self, qs):
         qs = super(PlayerNumbers, self).filter_queryset(qs)
         _club = self.request.GET.get('club')
         if _club:
-            qs = qs.filter(clubplayer__club=club)
-        return qs
+            qs = qs.filter(clubplayer__club=_club)
+
+        players_by_number = {}
+        for player in qs.order_by('clubplayer__season__start_date'):
+            if player.number not in players_by_number:
+                players_by_number[player.number] = {
+                    'players': [],
+                    'number': int(player.number or 0),
+                }
+            if player not in players_by_number[player.number]['players']:
+                players_by_number[player.number]['players'].append(player)
+
+        return sorted(players_by_number.values(), key=lambda x: x['number'])

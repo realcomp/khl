@@ -44,11 +44,11 @@
 
 
                         <div class="twelve wide column">
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="loader">
+                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-hide="loaded">
                                 <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
                             {% verbatim %}
-                            <div class="partners-block-container" ng-show="!loader">
+                            <div class="partners-block-container" ng-show="loaded">
                                 <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index" ng-show="!playersBySeasonTime.length">
                                     <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">

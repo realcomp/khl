@@ -15,7 +15,10 @@
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-numbers" %}
             <div class="page-inner-container" ng-controller="ClubNumbersController as ClubNumbersCtrl"
-                 ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'">
+                 ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'; club = {{ pk }}">
+                <a class="hidden" id="PlayerNumbersApi"
+                   href="{% url 'hockeyapp:player-numbers-api' %}"></a>
+                <input name="club" type="hidden" value="{{ pk }}">
                 <div class="ui grid">
                     <div class="row">
                         <div class="column">
@@ -26,45 +29,31 @@
                     </div>
                     <div class="row">
                         <div class="twelve wide column">
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="loader">
+                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-hide="loaded">
                                 <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
                             {% verbatim %}
-                            <div class="partners-block-container" ng-show="!loader">
-                                <div class="partners-block" ng-repeat="players in playersBySeasonCount track by $index" ng-show="!playersBySeasonTime.length">
-                                    <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
+                            <div class="partners-block-container" ng-show="loaded">
+                                <div class="partners-block" ng-repeat="group in data">
+                                    <div class="partners-heading">{{ group.number || '-' }}</div>
                                     <ul class="player-partners-list">
-                                        <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
-                                            <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
+                                        <li class="player-partners-item pointer"
+                                            ng-click="PlayerPartnersPopupShow(player, $event)"
+                                            ng-repeat="player in group.players track by $index"
+                                            ng-if="$index < getLimit(group.number)">
+                                            <a class="player-partners-link">
+                                                <img ng-src="{{ player.photo }}" alt="" class="player-partners-photo">
+                                            </a>
                                             <div class="player-partners-info">
-                                                <div class="player-partners-name">{{player.lastname}}</div>
-                                                <div class="player-partners-name">{{player.name}}</div>
-                                                <div class="player-partners-country">{{player.line_display}}</div>
+                                                <div class="player-partners-name">{{ player.lastname }}</div>
+                                                <div class="player-partners-name">{{ player.name }}</div>
+                                                <div class="player-partners-country">{{ player.line_display }}</div>
                                                 <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i>
-                                                <!--<div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>-->
                                             </div>
                                         </li>
-                                        <li class="player-partners-add-label pointer" ng-click="increaseLimit($index)" ng-if="limit[$index] < players.players.length">
-                                            <div class="player-partners-info">
-                                                <div>Показать еще</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <div class="partners-block" ng-show="playersBySeasonTime" ng-repeat="data in playersBySeasonTime track by $index">
-                                    <div class="partners-heading">{{data.season.title}}</div>
-                                    <ul class="player-partners-list">
-                                        <li class="player-partners-item pointer" ng-repeat="player in data.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
-                                            <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
-                                            <div class="player-partners-info">
-                                                <div class="player-partners-name">{{player.lastname}}</div>
-                                                <div class="player-partners-name">{{player.name}}</div>
-                                                <div class="player-partners-country">{{player.citizenship.title}}</div>
-                                                <div class="player-partners-country" ng-if="!player.citizenship.title">Не указано</div>
-                                            </div>
-                                        </li>
-                                        <li class="player-partners-add-label pointer" ng-click="increaseLimit($index)" ng-if="limit[$index] < data.players.length">
+                                        <li class="player-partners-add-label pointer"
+                                            ng-click="increaseLimit(group.number)"
+                                            ng-if="getLimit(group.number) < group.players.length">
                                             <div class="player-partners-info">
                                                 <div>Показать еще</div>
                                             </div>
@@ -74,7 +63,6 @@
                             </div>
                             {% endverbatim %}
                         </div>
-
                     </div>
                 </div>
                 <ul class="team-controls player-controls-block">
@@ -82,6 +70,7 @@
                     <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
                     <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
                 </ul>
+                {% include "hockeyapp/player-partners-popup.html" %}
             </div>
         </div>
     </div>

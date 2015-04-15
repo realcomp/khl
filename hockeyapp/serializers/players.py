@@ -236,3 +236,12 @@ class ClubTitlesSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
         model = Club
+
+
+class PlayerNumbersSerializer(serializers.ModelSerializer):
+    players = PlayersSearchSerializer(many=True)
+    number = serializers.ReadOnlyField()
+
+    class Meta(object):
+        fields = 'players', 'number'
+        model = Player
