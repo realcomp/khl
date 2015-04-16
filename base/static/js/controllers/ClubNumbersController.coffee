@@ -44,8 +44,12 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
 
         $scope.getSeasonsCount = (group) ->
             i = 0
+            seasons = []
             for club in group.clubs
-                i += club.seasons.length
+                for season in club.seasons
+                    if season.pk not in seasons
+                        seasons.push(season.pk)
+                        i += 1
             return i
 
         $scope.list = () ->

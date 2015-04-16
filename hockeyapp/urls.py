@@ -3,7 +3,10 @@ from django.conf.urls import url, patterns
 
 from . import views
 from .views import api
-from .views.api import generic
+from .views.api import (
+    generic,
+    club as api_club,
+    player as api_player)
 from .views import admin, club, player
 
 
@@ -22,8 +25,7 @@ urlpatterns = [
     url(r'^api/players/best/$',
         api.BestPlayer.as_view({'get': 'retrieve'}),
         name='best-player-api'),
-    url(r'^api/players/numbers/$',
-        api.PlayerNumbers.as_view(),
+    url(r'^api/players/numbers/$', api_player.PlayerNumbers.as_view(),
         name='player-numbers-api'),
     url(r'^api/players_by_name/$',
         api.PlayerNamesSearch.as_view(),
@@ -40,8 +42,7 @@ urlpatterns = [
     url(r'^api/players/(?P<pk>\d+)/timeline/$',
         api.PlayerTimeline.as_view(),
         name='player-timeline-api'),
-    url(r'^api/clubs/numbers/$',
-        api.ClubPlayerNumbers.as_view(),
+    url(r'^api/clubs/numbers/$', api_club.PlayerNumbers.as_view(),
         name='club-player-numbers-api'),
     url(r'^api/clubs/(?P<pk>\d+)/$', api.ClubTeam.as_view(),
         name='club-team-api'),
