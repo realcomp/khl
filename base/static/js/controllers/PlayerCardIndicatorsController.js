@@ -4,6 +4,7 @@ angular.module('Sportomatics')
         var self = this;
         var url = $('#IndicatorsLink').attr('href');
         this.field = $location.search()['field'] || 'count';
+        $scope.field = this.field;
         this.club = parseInt($location.search()['club']) || null;
         this.coach = parseInt($location.search()['coach']) || null;
         this.compare_to = parseInt($location.search()['compare_to']) || null;
@@ -77,6 +78,7 @@ angular.module('Sportomatics')
 
         this.setField = function(field, preventList) {
             $location.search('field', field);
+            $scope.field = field;
             this.field = field;
             if(preventList == null)
             this.list();

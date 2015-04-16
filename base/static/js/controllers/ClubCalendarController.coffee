@@ -181,7 +181,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 date: game.date
                                 name: game.opponent.title_verbose + ' - ' + $scope.clubName + ' ' + $scope.clubAddress
                                 score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score)
-                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71',
+                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
                                 #dataLabels:
                                     #enabled: true
                                     #align: 'center'

@@ -458,7 +458,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           type: 'column',
           alignTicks: false
         },
-        title: 'Счет в матчах',
+        title: {
+          text: 'Счет в матчах'
+        },
         xAxis: [
           {
             labels: {
@@ -712,7 +714,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
             alpha: 0,
             beta: 15,
             viewDistance: 25,
-            depth: 60
+            depth: 100
           },
           marginLeft: 0,
           events: {
@@ -742,7 +744,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           }
         },
         title: {
-          text: this.localeObject.fieldNames[this.field].fullName.toUpperCase()
+          text: ''
         },
         xAxis: {
           "type": "datetime",
@@ -769,22 +771,27 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           margin: 30
         },
         tooltip: {
-          headerFormat: '<b>{point.key}</b><br>',
-          pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}',
+          followPointer: true,
+          crosshairs: true,
           formatter: function() {
-            var s;
+            var header, s;
+            header = '<b>' + self.localeObject.fieldNames[self.field].fullName.toUpperCase() + '</b>';
             if (this.points[0].point.drilldown != null) {
-              s = '<b>Сезон ' + (new Date(this.x).getFullYear() - 1) + '/' + new Date(this.x).getFullYear() + '</b>';
+              s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear() - 1) + '/' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
-                return s += '<br/>' + this.series.name + ': ' + this.y;
+                return s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
               });
-              return s;
+              $('#chart-tooltip-header').html(header);
+              $('#chart-tooltip-content').html(s);
+              return false;
             } else {
-              s = '<b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' ' + new Date(this.x).getFullYear() + '</b>';
+              s = '<div class="inline-block tooltip-block"><b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' <br>' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
                 return s += '<br/>' + this.series.name + ': ' + this.y;
               });
-              return s;
+              $('#chart-tooltip-header').html(header);
+              $('#chart-tooltip-content').html(s);
+              return false;
             }
           },
           shared: true
@@ -792,7 +799,12 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
         plotOptions: {
           column: {
             stacking: 'normal',
-            pointRange: 24 * 3600 * 1000 * self.period
+            pointRange: 24 * 3600 * 1000 * self.period,
+            states: {
+              hover: {
+                brightness: -0.2
+              }
+            }
           }
         },
         series: this.data,
@@ -3423,6 +3435,7 @@ angular.module('Sportomatics')
         var self = this;
         var url = $('#IndicatorsLink').attr('href');
         this.field = $location.search()['field'] || 'count';
+        $scope.field = this.field;
         this.club = parseInt($location.search()['club']) || null;
         this.coach = parseInt($location.search()['coach']) || null;
         this.compare_to = parseInt($location.search()['compare_to']) || null;
@@ -3496,6 +3509,7 @@ angular.module('Sportomatics')
 
         this.setField = function(field, preventList) {
             $location.search('field', field);
+            $scope.field = field;
             this.field = field;
             if(preventList == null)
             this.list();

@@ -76,7 +76,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                     type: 'column'
                     alignTicks: false
                 title:
-                    'Счет в матчах'
+                    text: 'Счет в матчах'
                 xAxis: [
                     {
                         labels:
@@ -260,7 +260,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                         alpha: 0
                         beta: 15
                         viewDistance: 25
-                        depth: 60
+                        depth: 100
                     marginLeft: 0
                     events:
                         drilldown: (e) ->
@@ -280,7 +280,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                                     chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                                     self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
                 title:
-                    text: @localeObject.fieldNames[@field].fullName.toUpperCase()
+                    text: ''#@localeObject.fieldNames[@field].fullName.toUpperCase()
                 xAxis:
                     "type": "datetime"
                     labels:
@@ -299,24 +299,32 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                 legend:
                     margin: 30
                 tooltip:
-                    headerFormat: '<b>{point.key}</b><br>'
-                    pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                    followPointer: true
+                    crosshairs: true
                     formatter: () ->
+                        header = '<b>' + self.localeObject.fieldNames[self.field].fullName.toUpperCase() + '</b>'
                         if this.points[0].point.drilldown?
-                            s = '<b>Сезон ' + (new Date(this.x).getFullYear()-1) + '/'+ new Date(this.x).getFullYear() + '</b>';
+                            s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear()-1) + '/'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
-                                s += '<br/>' + this.series.name + ': ' + this.y ;
-                            return s
+                                s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y  + '</span></div>'
+                            $('#chart-tooltip-header').html(header)
+                            $('#chart-tooltip-content').html(s)
+                            return false
                         else
-                            s = '<b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' '+ new Date(this.x).getFullYear() + '</b>';
+                            s = '<div class="inline-block tooltip-block"><b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' <br>'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
-                                s += '<br/>' + this.series.name + ': ' + this.y ;
-                            return s
+                                s += '<br/>' + this.series.name + ': ' + this.y;
+                            $('#chart-tooltip-header').html(header)
+                            $('#chart-tooltip-content').html(s)
+                            return false;
                     shared: true
                 plotOptions:
                     column:
                         stacking: 'normal'
                         pointRange: 24 * 3600 * 1000 * self.period
+                        states:
+                            hover:
+                                brightness: -0.2
                 series: @data
                 drilldown:
                     series: @drilldownSeries
