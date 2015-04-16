@@ -13,7 +13,8 @@ from addresses.models import Address, Country, City
 from base.models import Season
 from base.serializers import LangDepSerializer, TitleBaseSerializer
 
-from ..models import Coach, Arena, Club, Player, League, ClubPlayer
+from ..models import (
+    Coach, Arena, Club, Player, League, ClubPlayer, ClubPlayerMatch)
 
 
 class AbstractManSerializer(LangDepSerializer):
@@ -187,8 +188,21 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
         model = Player
 
 
+class LastClubPlayerMatchSerializer(serializers.ModelSerializer):
+    date = serializers.DateTimeField(source='match.date')
+    gamingtime_m = serializers.SerializerMethodField()
+
+    def get_gamingtime_m(self, obj):
+        return (obj.gamingtime or 0) / 60
+
+    class Meta(object):
+        fields = 'pk', 'date', 'gamingtime_m'
+        model = ClubPlayerMatch
+
+
 class PlayerCardDetailSerializer(PlayerCardSerializer):
     club = ClubListSerializer()
+    last_match = LastClubPlayerMatchSerializer()
 
     class Meta(object):
         fields = (
@@ -215,7 +229,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'saves_p_average_index', 'sf_average_index',
             'loose_goals_total_index', 'matches_win_total_index',
             'matches_lose_total_index', 'gamingtime_total_index',
-            'fb', 'vk',
+            'fb', 'vk', 'last_match',
             )
         model = Player
 
