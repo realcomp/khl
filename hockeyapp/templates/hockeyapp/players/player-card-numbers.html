@@ -39,10 +39,10 @@
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer"
                                             ng-click="PlayerPartnersPopupShow(player, $event)"
-                                            ng-repeat="player in group.players track by $index"
+                                            ng-repeat="club in group.clubs track by $index"
                                             ng-if="$index < getLimit(group.number)">
                                             <a class="player-partners-link">
-                                                <img ng-src="{{ player.photo }}" alt="" class="player-partners-photo">
+                                                <img ng-src="{{ club.logo }}" alt="" class="player-partners-photo">
                                             </a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{ player.lastname }}</div>

@@ -255,12 +255,15 @@ def periodic_player_recalc_counters():
     update last_match_date
     '''
     qs = models.Player.objects.all()
-    count = qs.count()
-    limit = 100
-    for i in range(0, count, limit):
-        pks = qs[i:i + limit].values_list('pk', flat=True)
+    # count = qs.count()
+    # limit = 100
+    # for i in range(0, count, limit):
+    #     pks = qs[i:i + limit].values_list('pk', flat=True)
+    #     player_recalc_counters.delay(
+    #         pks, COUNTERS_FIELDS, update_last_match_date=True)
+    for player in qs:
         player_recalc_counters.delay(
-            pks, COUNTERS_FIELDS, update_last_match_date=True)
+            [player.pk], COUNTERS_FIELDS, update_last_match_date=True)
 
 
 @app.task(ignore_result=True, track_started=True)
