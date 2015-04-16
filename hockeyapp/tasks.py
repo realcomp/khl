@@ -187,7 +187,7 @@ def async_db_match_update(match_id):
     try:
         match = models.Match.objects.get(id=match_id)
         match.count=match.count.strip(
-                            ).replace(' ',''
+                            ).replace(' ', ''
                             ).replace('-:+',''
                             ).replace('(',''
                             ).replace(')','')
