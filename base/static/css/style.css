@@ -5929,8 +5929,7 @@ text tspan, text {
     padding-left: 6px;
     min-width: 120px;
 }
-
-
-
-
-
+.loader-large {
+    background: #ffffff url('/static/images/loader-large.gif') center no-repeat;
+    height: 100px;
+}

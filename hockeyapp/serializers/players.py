@@ -239,23 +239,11 @@ class ClubTitlesSerializer(TitleBaseSerializer):
         model = Club
 
 
-class ClubPlayerNumbersSerializer(serializers.ModelSerializer):
-    players = PlayersSearchSerializer(many=True)
-    number = serializers.ReadOnlyField()
-
-    class Meta(object):
-        fields = 'players', 'number'
-        model = Player
-
-
 class PlayerNumbersClubSerializer(ClubListSerializer):
     seasons = SeasonSerializer(many=True)
 
-    class Meta(object):
-        fields = (
-            'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
-            'coach', 'site', 'email', 'phone', 'league', 'main_color',
-            'seasons')
+    class Meta(ClubListSerializer.Meta):
+        fields = ClubListSerializer.Meta.fields + ('seasons',)
         model = Club
 
 

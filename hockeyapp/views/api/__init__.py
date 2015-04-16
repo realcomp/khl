@@ -25,8 +25,7 @@ from ...serializers.clubs import (
 from ...serializers.events import EventSerializer
 from ...serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer,
-    ClubPlayerNumbersSerializer, PlayerNumbersSerializer)
+    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer)
 from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 

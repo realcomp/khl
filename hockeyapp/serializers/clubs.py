@@ -10,7 +10,7 @@ from base.models import Season
 
 from . import (
     SeasonSerializer,
-    BasePlayerCardSerializer,
+    BasePlayerCardSerializer, PlayerCardSerializer,
     BaseClubSerializer, ClubLightListSerializer, BaseClubPlayerSerializer,
     CoachSerializer,
     LeagueSerializer,
@@ -315,3 +315,19 @@ class ClubCalendarPaginationSerializer(pagination.PaginationSerializer):
     def get_season(self, obj):
         view = self.context['view']
         return SeasonSerializer(view.season, context=self.context).data
+
+
+class PlayerNumbersPlayerSerializer(PlayerCardSerializer):
+    seasons = SeasonSerializer(many=True)
+
+    class Meta(PlayerCardSerializer.Meta):
+        fields = PlayerCardSerializer.Meta.fields + ('seasons',)
+
+
+class PlayerNumbersSerializer(serializers.ModelSerializer):
+    players = PlayerNumbersPlayerSerializer(many=True)
+    number = serializers.ReadOnlyField()
+
+    class Meta(object):
+        fields = 'players', 'number'
+        model = Player

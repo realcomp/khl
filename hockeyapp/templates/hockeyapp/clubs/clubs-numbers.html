@@ -24,14 +24,25 @@
                         <div class="column">
                             <div class="ui tabular menu content-tabs">
                                 <span class="heading">{% trans "Player's numbers" %}</span>
+                                <div class="ui selection dropdown">
+                                    <input type="hidden" name="season" value="{{ default_season.pk }}"
+                                           ng-model="season" ng-update-hidden
+                                           ng-change="setSeason(season)">
+                                    <div class="default text">{{ default_season.label }}</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        {% for season in seasons %}
+                                        <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="twelve wide column">
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-hide="loaded">
-                                <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
-                            </div>
+                            <div class="loader-large" ng-hide="loaded"></div>
                             {% verbatim %}
                             <div class="partners-block-container" ng-show="loaded">
                                 <div class="partners-block" ng-repeat="group in data">
@@ -42,12 +53,17 @@
                                             ng-repeat="player in group.players track by $index"
                                             ng-if="$index < getLimit(group.number)">
                                             <a class="player-partners-link">
-                                                <img ng-src="{{ player.photo }}" alt="" class="player-partners-photo">
+                                                <img ng-src="{{ player.photo || '/static/images/no-photo.png' }}" alt="" class="player-partners-photo">
                                             </a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{ player.lastname }}</div>
                                                 <div class="player-partners-name">{{ player.name }}</div>
                                                 <div class="player-partners-country">{{ player.line_display }}</div>
+                                                <div class="player-partners-country">
+                                                    <span ng-repeat="season in player.seasons">
+                                                        {{ season.short_title }},
+                                                    </span>
+                                                </div>
                                                 <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i>
                                             </div>
                                         </li>

@@ -2671,6 +2671,7 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
     $scope.limit = {};
     $scope.data = {};
     $scope.params = $location.search();
+    $scope.params.season = $('[name="season"]').val();
     $scope.PlayerPartnersPopup = {
       'data': null,
       'isClubsVisible': false
@@ -2717,6 +2718,10 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
       }
       return i;
     };
+    $scope.setSeason = function(season) {
+      $location.search('season', season);
+      return $scope.params = $location.search();
+    };
     $scope.list = function() {
       var params;
       params = '';
@@ -2725,6 +2730,9 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
       }
       if (player) {
         params += '&player=' + player;
+      }
+      if ($scope.params.season) {
+        params += '&season=' + $scope.params.season;
       }
       $scope.loaded = false;
       $http.get(url + '?' + params).success(function(data) {
