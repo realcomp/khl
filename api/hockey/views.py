@@ -4,7 +4,7 @@ from __future__ import unicode_literals, print_function
 import collections
 import rest_framework as drf
 
-from django.db.models import Q
+from django.db.models import Q, Avg
 
 from base.models import Season
 from hockeyapp.filters import OrderFilter
@@ -209,6 +209,7 @@ player_partners = PlayerPartners.as_view()
 class MatchList(drf.generics.ListAPIView):
     serializer_class = MatchListSerializer
     club_arena_capacity = None
+    cap_rate = None
 
     def get_queryset(self):
         return Match.objects.active().order_by('-date')
@@ -225,6 +226,7 @@ class MatchList(drf.generics.ListAPIView):
             ids = set(qs.filter(q).values_list('pk', flat=True))
             qs = qs.filter(pk__in=ids)
             self.club_arena_capacity = self._get_club_arena_capacity(club_id)
+            self.cap_rate = self._get_cap_rate(qs)
             return qs
         return qs.none()
 
@@ -232,4 +234,10 @@ class MatchList(drf.generics.ListAPIView):
         club = Club.objects.filter(pk=club_id).last()
         if club and club.arena:
             return club.arena.capacity
+
+    def _get_cap_rate(self, qs):
+        _capacity_avg = qs.aggregate(Avg('spectators')
+                                 ).get('spectators__avg')
+        if self.club_arena_capacity:
+            return float(_capacity_avg) / float(self.club_arena_capacity)
 matches = MatchList.as_view()

@@ -157,6 +157,8 @@ class I18NClubMinimalSerialiser(TitleBaseSerializer):
 
 class MatchListSerializer(drf.serializers.ModelSerializer):
     arena_capacity = drf.serializers.SerializerMethodField()
+    arena_capacity_rate = drf.serializers.SerializerMethodField()
+    capacity_rate_average = drf.serializers.SerializerMethodField()
     opponent = drf.serializers.SerializerMethodField()
     score = drf.serializers.SerializerMethodField()
     opponent_score = drf.serializers.SerializerMethodField()
@@ -171,6 +173,16 @@ class MatchListSerializer(drf.serializers.ModelSerializer):
         view = self.context.get('view')
         if view and view.club_arena_capacity:
             return view.club_arena_capacity
+
+    def get_arena_capacity_rate(self, obj):
+        cap = self.get_arena_capacity(obj)
+        if cap and obj.spectators:
+            return float(obj.spectators) / float(cap)
+
+    def get_capacity_rate_average(self, obj):
+        view = self.context.get('view')
+        if view and view.cap_rate:
+            return view.cap_rate
 
     def get_opponent(self, obj):
         club_id = self._get_club_id()
@@ -206,4 +218,5 @@ class MatchListSerializer(drf.serializers.ModelSerializer):
         model = Match
         fields = (  'id', 'date', 'overtime_win', 'bullet_win', 'opponent',
                     'score', 'opponent_score', 'is_home', 'spectators',
-                    'arena_capacity')
+                    'arena_capacity', 'arena_capacity_rate',
+                    'capacity_rate_average')
