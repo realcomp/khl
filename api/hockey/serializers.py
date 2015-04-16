@@ -156,6 +156,7 @@ class I18NClubMinimalSerialiser(TitleBaseSerializer):
 
 
 class MatchListSerializer(drf.serializers.ModelSerializer):
+    arena_capacity = drf.serializers.SerializerMethodField()
     opponent = drf.serializers.SerializerMethodField()
     score = drf.serializers.SerializerMethodField()
     opponent_score = drf.serializers.SerializerMethodField()
@@ -165,6 +166,11 @@ class MatchListSerializer(drf.serializers.ModelSerializer):
         _request = self.context.get('request')
         if _request and _request.GET.get('club'):
             return int(_request.GET.get('club'))
+
+    def get_arena_capacity(self, obj):
+        view = self.context.get('view')
+        if view and view.club_arena_capacity:
+            return view.club_arena_capacity
 
     def get_opponent(self, obj):
         club_id = self._get_club_id()
@@ -199,4 +205,5 @@ class MatchListSerializer(drf.serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = (  'id', 'date', 'overtime_win', 'bullet_win', 'opponent',
-                    'score', 'opponent_score', 'is_home')
+                    'score', 'opponent_score', 'is_home', 'spectators',
+                    'arena_capacity')

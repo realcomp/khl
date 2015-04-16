@@ -208,6 +208,7 @@ player_partners = PlayerPartners.as_view()
 
 class MatchList(drf.generics.ListAPIView):
     serializer_class = MatchListSerializer
+    club_arena_capacity = None
 
     def get_queryset(self):
         return Match.objects.active().order_by('-date')
@@ -223,6 +224,12 @@ class MatchList(drf.generics.ListAPIView):
                 q&= Q(date__gte=season.start_date, date__lte=season.end_date)
             ids = set(qs.filter(q).values_list('pk', flat=True))
             qs = qs.filter(pk__in=ids)
+            self.club_arena_capacity = self._get_club_arena_capacity(club_id)
             return qs
         return qs.none()
+
+    def _get_club_arena_capacity(self, club_id):
+        club = Club.objects.filter(pk=club_id).last()
+        if club and club.arena:
+            return club.arena.capacity
 matches = MatchList.as_view()
