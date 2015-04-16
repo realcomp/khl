@@ -193,8 +193,8 @@ def async_db_match_update(match_id):
                             ).replace(')','')
         match.home_score = str2int_safe(match.count.split(':')[0])
         match.guest_score = str2int_safe(match.count.split(':'
-                                                )[1].replace(b'Б',''
-                                                   ).replace(b'OT',''
+                                                )[1].replace('Б',''
+                                                   ).replace('OT',''
                                                    ).replace('ОТ', ''))
         match.bullet_win = 'Б' in match.count
         match.overtime_win = ('ОТ' in match.count) or ('OT' in match.count)
