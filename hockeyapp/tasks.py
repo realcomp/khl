@@ -188,9 +188,11 @@ def async_db_match_update(match_id):
         match = models.Match.objects.get(id=match_id)
         match.count=match.count.strip(
                             ).replace(' ',''
+                            ).replace('+:-', ''
                             ).replace('-:+',''
                             ).replace('(',''
                             ).replace(')','')
+        print(match.count, type(match.count))
         match.home_score = str2int_safe(match.count.split(':')[0])
         match.guest_score = str2int_safe(match.count.split(':'
                                                 )[1].replace('Б',''
@@ -201,6 +203,7 @@ def async_db_match_update(match_id):
         match.save(update_fields=['count', 'home_score', 'guest_score',
                                   'overtime_win', 'bullet_win'])
     except Exception, exc:
+        print(exc, sys.axc_info())
         logger.error(exc, exc_info=sys.exc_info())
 
 
