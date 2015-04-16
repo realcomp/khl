@@ -187,14 +187,14 @@ def async_db_match_update(match_id):
     try:
         match = models.Match.objects.get(id=match_id)
         match.count=match.count.strip(
-                            ).replace(' ', ''
+                            ).replace(' ',''
                             ).replace('-:+',''
                             ).replace('(',''
                             ).replace(')','')
         match.home_score = str2int_safe(match.count.split(':')[0])
         match.guest_score = str2int_safe(match.count.split(':'
-                                                )[1].replace('Б',''
-                                                   ).replace('OT',''
+                                                )[1].replace(b'Б',''
+                                                   ).replace(b'OT',''
                                                    ).replace('ОТ', ''))
         match.bullet_win = 'Б' in match.count
         match.overtime_win = ('ОТ' in match.count) or ('OT' in match.count)
@@ -255,15 +255,12 @@ def periodic_player_recalc_counters():
     update last_match_date
     '''
     qs = models.Player.objects.all()
-    # count = qs.count()
-    # limit = 100
-    # for i in range(0, count, limit):
-    #     pks = qs[i:i + limit].values_list('pk', flat=True)
-    #     player_recalc_counters.delay(
-    #         pks, COUNTERS_FIELDS, update_last_match_date=True)
-    for player in qs:
+    count = qs.count()
+    limit = 100
+    for i in range(0, count, limit):
+        pks = qs[i:i + limit].values_list('pk', flat=True)
         player_recalc_counters.delay(
-            [player.pk], COUNTERS_FIELDS, update_last_match_date=True)
+            pks, COUNTERS_FIELDS, update_last_match_date=True)
 
 
 @app.task(ignore_result=True, track_started=True)
