@@ -15,9 +15,9 @@
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-numbers" %}
             <div class="page-inner-container" ng-controller="ClubNumbersController as ClubNumbersCtrl"
-                 ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'; club = {{ pk }}">
+                 ng-init="url = '{% url 'hockeyapp:club-player-numbers-api' %}'; club = {{ pk }}">
                 <a class="hidden" id="PlayerNumbersApi"
-                   href="{% url 'hockeyapp:player-numbers-api' %}"></a>
+                   href="{% url 'hockeyapp:club-player-numbers-api' %}"></a>
                 <input name="club" type="hidden" value="{{ pk }}">
                 <div class="ui grid">
                     <div class="row">

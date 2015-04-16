@@ -49,4 +49,4 @@ dev_deploy:
 	python manage.py collectstatic --no-post-process --noinput
 	sudo service nginx reload
 	sudo supervisorctl restart sporto-dev
-	celery multi restart sportodev_worker -B -A sportomatics --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log" -l info
+	celery multi restart sportodev_worker -B -A sportomatics --pidfile="/home/deploy/celery/%n.pid" --logfile="/home/deploy/celery/%n.log"

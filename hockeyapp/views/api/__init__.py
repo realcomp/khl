@@ -26,7 +26,7 @@ from ...serializers.events import EventSerializer
 from ...serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
     ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer,
-    PlayerNumbersSerializer)
+    ClubPlayerNumbersSerializer, PlayerNumbersSerializer)
 from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
@@ -214,21 +214,22 @@ class ScheduleView(generics.RetrieveAPIView):
     serializer_class = ScheduleSerializer
 
 
-class PlayerNumbers(generics.ListAPIView):
-    queryset = Player.objects.all()
-    serializer_class = PlayerNumbersSerializer
+class NumbersList(generics.ListAPIView):
+    queryset = ClubPlayer.objects.all()
+
+
+class ClubPlayerNumbers(NumbersList):
+    serializer_class = ClubPlayerNumbersSerializer
 
     def filter_queryset(self, qs):
-        qs = super(PlayerNumbers, self).filter_queryset(qs)
-
-        clubplayers = ClubPlayer.objects.filter(player__in=qs)
+        qs = super(ClubPlayerNumbers, self).filter_queryset(qs)
 
         _club = self.request.GET.get('club')
         if _club:
-            clubplayers = clubplayers.filter(club=_club)
+            qs = qs.filter(club=_club)
 
         players_by_number = {}
-        for clubplayer in clubplayers.order_by('season__start_date'):
+        for clubplayer in qs.order_by('season__start_date'):
             player = clubplayer.player
             number = clubplayer.number
             if number not in players_by_number:
@@ -240,3 +241,36 @@ class PlayerNumbers(generics.ListAPIView):
                 players_by_number[number]['players'].append(player)
 
         return sorted(players_by_number.values(), key=lambda x: x['number'])
+
+
+class PlayerNumbers(NumbersList):
+    serializer_class = PlayerNumbersSerializer
+
+    def filter_queryset(self, qs):
+        qs = super(PlayerNumbers, self).filter_queryset(qs)
+
+        _player = self.request.GET.get('player')
+        if _player:
+            qs = qs.filter(player=_player)
+
+        clubs_by_number = {}
+        for clubplayer in qs.order_by('season__start_date'):
+            club = clubplayer.club
+            number = clubplayer.number
+            season = clubplayer.season
+            if number not in clubs_by_number:
+                clubs_by_number[number] = {
+                    'clubs': [],
+                    'number': int(number or 0),
+                }
+            if club in clubs_by_number[number]['clubs']:
+                i = clubs_by_number[number]['clubs'].index(club)
+                c = clubs_by_number[number]['clubs'][i]
+                if not hasattr(c, 'seasons'):
+                    c.seasons = []
+                if season not in c.seasons:
+                    c.seasons.append(season)
+            else:
+                clubs_by_number[number]['clubs'].append(club)
+
+        return sorted(clubs_by_number.values(), key=lambda x: x['number'])

@@ -40,6 +40,9 @@ urlpatterns = [
     url(r'^api/players/(?P<pk>\d+)/timeline/$',
         api.PlayerTimeline.as_view(),
         name='player-timeline-api'),
+    url(r'^api/clubs/numbers/$',
+        api.ClubPlayerNumbers.as_view(),
+        name='club-player-numbers-api'),
     url(r'^api/clubs/(?P<pk>\d+)/$', api.ClubTeam.as_view(),
         name='club-team-api'),
     url(r'^api/clubs/(?P<pk>\d+)/compare/$', api.ClubTeamCompare.as_view(),
@@ -92,6 +95,8 @@ urlpatterns = [
         name='player-card-communication'),
     url(r'^players/(?P<pk>\d+)/news/$', player.PlayerCardNews.as_view(),
         name='player-card-news'),
+    url(r'^players/(?P<pk>\d+)/numbers/$', player.PlayerCardNumbers.as_view(),
+        name='player-card-numbers'),
     # clubs
     url(r'^clubs/$', club.ClubListView.as_view(), name='club-list'),
     url(r'^clubs/(?P<pk>\d+)/$', club.ClubView.as_view(), name='club'),
