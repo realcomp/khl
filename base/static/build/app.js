@@ -2685,6 +2685,16 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
     $scope.increaseLimit = function(number) {
       $scope.limit[number] += 4;
     };
+    $scope.getSeasonsCount = function(group) {
+      var i, j, len, ref;
+      i = 0;
+      ref = group.clubs;
+      for (j = 0, len = ref.length; j < len; j++) {
+        club = ref[j];
+        i += club.seasons.length;
+      }
+      return i;
+    };
     $scope.list = function() {
       var params;
       params = '';

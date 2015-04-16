@@ -35,20 +35,25 @@
                             {% verbatim %}
                             <div class="partners-block-container" ng-show="loaded">
                                 <div class="partners-block" ng-repeat="group in data">
-                                    <div class="partners-heading">{{ group.number || '-' }}</div>
+                                    <div class="partners-heading">
+                                        {{ group.number || '-' }}
+                                        ( {{ getSeasonsCount(group) }} сезонов)
+                                    </div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer"
-                                            ng-click="PlayerPartnersPopupShow(player, $event)"
                                             ng-repeat="club in group.clubs track by $index"
                                             ng-if="$index < getLimit(group.number)">
                                             <a class="player-partners-link">
                                                 <img ng-src="{{ club.logo }}" alt="" class="player-partners-photo">
                                             </a>
                                             <div class="player-partners-info">
-                                                <div class="player-partners-name">{{ player.lastname }}</div>
-                                                <div class="player-partners-name">{{ player.name }}</div>
-                                                <div class="player-partners-country">{{ player.line_display }}</div>
-                                                <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i>
+                                                <div class="player-partners-name">{{ club.title_verbose }}</div>
+                                                <div class="player-partners-country">
+                                                    <span ng-repeat="season in club.seasons">
+                                                        {{ season.short_title }},
+                                                    </span>
+                                                </div>
+                                                <!-- <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i> -->
                                             </div>
                                         </li>
                                         <li class="player-partners-add-label pointer"
@@ -70,7 +75,6 @@
                     <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
                     <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
                 </ul>
-                {% include "hockeyapp/player-partners-popup.html" %}
             </div>
         </div>
     </div>

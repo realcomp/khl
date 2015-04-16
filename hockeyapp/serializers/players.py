@@ -8,7 +8,8 @@ from rest_framework import pagination, serializers
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
     SeasonSerializer, BaseClubSerializer,
-    CoachSerializer, CountrySerializer, ClubLightListSerializer)#ClubPlayerSerializer)
+    CoachSerializer, CountrySerializer, ClubLightListSerializer,
+    ClubListSerializer)
 from ..models import (
     AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
 
@@ -247,8 +248,19 @@ class ClubPlayerNumbersSerializer(serializers.ModelSerializer):
         model = Player
 
 
+class PlayerNumbersClubSerializer(ClubListSerializer):
+    seasons = SeasonSerializer(many=True)
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
+            'coach', 'site', 'email', 'phone', 'league', 'main_color',
+            'seasons')
+        model = Club
+
+
 class PlayerNumbersSerializer(serializers.ModelSerializer):
-    clubs = BaseClubSerializer(many=True)
+    clubs = PlayerNumbersClubSerializer(many=True)
     number = serializers.ReadOnlyField()
 
     class Meta(object):
