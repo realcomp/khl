@@ -29,9 +29,7 @@
                     </div>
                     <div class="row">
                         <div class="twelve wide column">
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-hide="loaded">
-                                <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
-                            </div>
+                            <div class="loader-large" ng-hide="loaded"></div>
                             {% verbatim %}
                             <div class="partners-block-container" ng-show="loaded">
                                 <div class="partners-block" ng-repeat="group in data">
