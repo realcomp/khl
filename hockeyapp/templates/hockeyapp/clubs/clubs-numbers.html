@@ -50,10 +50,10 @@
                                     <div class="partners-heading">{{ group.number || '-' }}</div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer"
-                                            ng-click="PlayerPartnersPopupShow(player, $event)"
                                             ng-repeat="player in group.players track by $index"
                                             ng-if="$index < getLimit(group.number)">
-                                            <a class="player-partners-link">
+                                            <a class="player-partners-link"
+                                               ng-click="PlayerPartnersPopupShow(player, $event)">
                                                 <img ng-src="{{ player.photo || '/static/images/no-photo.png' }}" alt="" class="player-partners-photo">
                                             </a>
                                             <div class="player-partners-info">
@@ -61,9 +61,14 @@
                                                 <div class="player-partners-name">{{ player.name }}</div>
                                                 <div class="player-partners-country">{{ player.line_display }}</div>
                                                 <div class="player-partners-country">
-                                                    <span ng-repeat="season in player.seasons">
-                                                        {{ season.short_title }},
+                                                    <span ng-repeat="season in player.seasons track by $index"
+                                                          ng-if="$index < (player.seasons_limit || 1)">
+                                                        {{ season.short_title }}<span ng-show="$index < player.seasons.length - 1">,</span>
                                                     </span>
+                                                    <a href="" ng-click="player.seasons_limit = 999"
+                                                       ng-show="(player.seasons_limit || 1) < player.seasons.length">
+                                                        и еще {{ player.seasons.length - 1 }}
+                                                    </a>
                                                 </div>
                                                 <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i>
                                             </div>
