@@ -317,15 +317,23 @@ class ClubCalendarPaginationSerializer(pagination.PaginationSerializer):
         return SeasonSerializer(view.season, context=self.context).data
 
 
-class PlayerNumbersPlayerSerializer(PlayerCardSerializer):
-    seasons = SeasonSerializer(many=True)
+class NumbersClubPlayerSerializer(serializers.ModelSerializer):
+    season = SeasonSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'season', 'club_url'
+        model = ClubPlayer
+
+
+class NumbersPlayerSerializer(PlayerCardSerializer):
+    clubplayers = NumbersClubPlayerSerializer(many=True)
 
     class Meta(PlayerCardSerializer.Meta):
-        fields = PlayerCardSerializer.Meta.fields + ('seasons',)
+        fields = PlayerCardSerializer.Meta.fields + ('clubplayers',)
 
 
-class PlayerNumbersSerializer(serializers.ModelSerializer):
-    players = PlayerNumbersPlayerSerializer(many=True)
+class NumbersSerializer(serializers.ModelSerializer):
+    players = NumbersPlayerSerializer(many=True)
     number = serializers.ReadOnlyField()
 
     class Meta(object):
