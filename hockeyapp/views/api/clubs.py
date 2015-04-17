@@ -17,7 +17,7 @@ class PlayerNumbers(NumbersList):
             qs = qs.filter(season=_season)
 
         players_by_number = {}
-        for clubplayer in qs.order_by('season__start_date'):
+        for clubplayer in qs.order_by('-season__start_date'):
             player = clubplayer.player
             number = clubplayer.number
             if number not in players_by_number:
