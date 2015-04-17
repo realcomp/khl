@@ -25,14 +25,15 @@
                             <div class="ui tabular menu content-tabs">
                                 <span class="heading">{% trans "Player's numbers" %}</span>
                                 <div class="ui selection dropdown">
-                                    <input type="hidden" name="season" value="{{ default_season.pk }}"
+                                    <input type="hidden" name="season"
                                            ng-model="season" ng-update-hidden
                                            ng-change="setSeason(season)">
-                                    <div class="default text">{{ default_season.label }}</div>
+                                    <div class="default text">{% trans "All seasons" %}</div>
                                     <i class="dropdown icon"></i>
                                     <div class="menu">
+                                        <div class="item" data-value="">{% trans "All seasons" %}</div>
                                         {% for season in seasons %}
-                                        <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                            <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
                                         {% endfor %}
                                     </div>
                                 </div>

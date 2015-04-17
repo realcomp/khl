@@ -10,7 +10,6 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
         $scope.limit = {}
         $scope.data = {}
         $scope.params = $location.search()
-        $scope.params.season = $('[name="season"]').val()
 
         $scope.PlayerPartnersPopup = {
             'data': null,
@@ -54,8 +53,9 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
             return i
 
         $scope.setSeason = (season) ->
-            $location.search('season', season)
+            $location.search('season', season or null)
             $scope.params = $location.search()
+            $scope.list()
 
         $scope.list = () ->
             params = ''

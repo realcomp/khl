@@ -12,6 +12,10 @@ class PlayerNumbers(NumbersList):
         if _player:
             qs = qs.filter(player=_player)
 
+        _season = self.request.GET.get('season')
+        if _season:
+            qs = qs.filter(season=_season)
+
         clubs_by_number = {}
         for clubplayer in qs.order_by('season__start_date'):
             club = clubplayer.club
