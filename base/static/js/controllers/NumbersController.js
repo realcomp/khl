@@ -1,6 +1,6 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-angular.module('Sportomatics').controller('ClubNumbersController', [
+angular.module('Sportomatics').controller('NumbersController', [
   '$http', '$scope', '$location', function($http, $scope, $location) {
     var club, player, url;
     $scope.$location = $location;
@@ -39,17 +39,17 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
       $scope.limit[number] += 4;
     };
     $scope.getSeasonsCount = function(group) {
-      var i, j, k, len, len1, ref, ref1, ref2, season, seasons;
+      var clubplayer, clubplayers, i, j, k, len, len1, ref, ref1, ref2;
       i = 0;
-      seasons = [];
+      clubplayers = [];
       ref = group.clubs;
       for (j = 0, len = ref.length; j < len; j++) {
         club = ref[j];
-        ref1 = club.seasons;
+        ref1 = club.clubplayers;
         for (k = 0, len1 = ref1.length; k < len1; k++) {
-          season = ref1[k];
-          if (ref2 = season.pk, indexOf.call(seasons, ref2) < 0) {
-            seasons.push(season.pk);
+          clubplayer = ref1[k];
+          if (ref2 = clubplayer.pk, indexOf.call(clubplayers, ref2) < 0) {
+            clubplayers.push(clubplayer.pk);
             i += 1;
           }
         }

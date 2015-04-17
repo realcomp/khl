@@ -14,7 +14,7 @@
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-numbers" %}
-            <div class="page-inner-container" ng-controller="ClubNumbersController as ClubNumbersCtrl"
+            <div class="page-inner-container" ng-controller="NumbersController as NumbersCtrl"
                  ng-init="url = '{% url 'hockeyapp:club-player-numbers-api' %}'; club = {{ pk }}">
                 <a class="hidden" id="PlayerNumbersApi"
                    href="{% url 'hockeyapp:club-player-numbers-api' %}"></a>
@@ -70,7 +70,7 @@
                                                         и еще {{ player.clubplayers.length - 1 }}
                                                     </a>
                                                 </div>
-                                                <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i>
+                                                <!-- <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i> -->
                                             </div>
                                         </li>
                                         <li class="player-partners-add-label pointer"

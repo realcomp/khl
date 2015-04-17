@@ -1,9 +1,9 @@
 from . import NumbersList
-from ...serializers.players import PlayerNumbersSerializer
+from ...serializers.players import NumbersSerializer
 
 
 class PlayerNumbers(NumbersList):
-    serializer_class = PlayerNumbersSerializer
+    serializer_class = NumbersSerializer
 
     def filter_queryset(self, qs):
         qs = super(PlayerNumbers, self).filter_queryset(qs)
@@ -17,10 +17,9 @@ class PlayerNumbers(NumbersList):
             qs = qs.filter(season=_season)
 
         clubs_by_number = {}
-        for clubplayer in qs.order_by('season__start_date'):
+        for clubplayer in qs.order_by('-season__start_date'):
             club = clubplayer.club
             number = clubplayer.number
-            season = clubplayer.season
             if number not in clubs_by_number:
                 clubs_by_number[number] = {
                     'clubs': [],
@@ -29,11 +28,11 @@ class PlayerNumbers(NumbersList):
             if club in clubs_by_number[number]['clubs']:
                 i = clubs_by_number[number]['clubs'].index(club)
                 c = clubs_by_number[number]['clubs'][i]
-                if not hasattr(c, 'seasons'):
-                    c.seasons = []
-                if season not in c.seasons:
-                    c.seasons.append(season)
+                if clubplayer not in c.clubplayers:
+                    c.clubplayers.append(clubplayer)
             else:
+                club.clubplayers = []
+                club.clubplayers.append(clubplayer)
                 clubs_by_number[number]['clubs'].append(club)
 
         return sorted(clubs_by_number.values(), key=lambda x: x['number'])

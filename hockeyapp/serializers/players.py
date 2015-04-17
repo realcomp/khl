@@ -11,7 +11,7 @@ from . import (
     CoachSerializer, CountrySerializer, ClubLightListSerializer,
     ClubListSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, ClubPlayer)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -239,16 +239,24 @@ class ClubTitlesSerializer(TitleBaseSerializer):
         model = Club
 
 
-class PlayerNumbersClubSerializer(ClubListSerializer):
-    seasons = SeasonSerializer(many=True)
+class NumbersClubPlayerSerializer(serializers.ModelSerializer):
+    season = SeasonSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'season', 'club_url'
+        model = ClubPlayer
+
+
+class NumbersClubSerializer(ClubListSerializer):
+    clubplayers = NumbersClubPlayerSerializer(many=True)
 
     class Meta(ClubListSerializer.Meta):
-        fields = ClubListSerializer.Meta.fields + ('seasons',)
+        fields = ClubListSerializer.Meta.fields + ('clubplayers',)
         model = Club
 
 
-class PlayerNumbersSerializer(serializers.ModelSerializer):
-    clubs = PlayerNumbersClubSerializer(many=True)
+class NumbersSerializer(serializers.ModelSerializer):
+    clubs = NumbersClubSerializer(many=True)
     number = serializers.ReadOnlyField()
 
     class Meta(object):
