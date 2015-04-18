@@ -49,6 +49,8 @@ window.addEventListener('scroll', function() {
 }, false);
  better fps test */
 var ALL_FIELDS = ["count", "goals", "assists", "points", "plus_minus", "penalty_time", "es_goals", "pp_goals", "ev_goals", "overtime_goals", "win_goals", "bullet_goals", "shots", "pis__avg", "shots__avg", "faceoff", "winfaceoff", "winfaceoff_p_avg", "gamingtime__avg", "change_count__avg", "shots_received", "loose_goals", "saves", "saves_p__avg", "sf__avg", "matches_win", "matches_lose", "zero_goals_matches", "bullet_matches", "position"];
+var KHL_NEWEST_FIELDS = ['shots', 'pis__avg', 'shots__avg', 'faceoff', 'winfaceoff', 'winfaceoff_p__avg', 'gamingtime__avg', 'change_count__avg'];
+var AVERAGE_AVAILABLE_FIELDS = ['goals', 'assists', 'points', 'plus_minus', 'penalty_time'];
 
 var next = function($http) {
     return function(isAll) {
@@ -157,6 +159,28 @@ function getDateOfWeek(w, y) {
     var d = (1 + (w - 1) * 7); // 1st of January + 7 days for each week
 
     return new Date(y, 0, d);
+}
+function contains(array, field, value){
+        for(var i = 0; i < array.length; i++) {
+            if (array[i][field] === value) {
+                return true;
+            }
+        }
+        return false;
+    }
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+function getParameterByName(string, name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(string);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 //TODO: make expressions to check if already scrolled (for performance)
 /*

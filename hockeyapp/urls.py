@@ -114,6 +114,8 @@ urlpatterns = [
         name='club-news'),
     url(r'^clubs/(?P<pk>\d+)/numbers/$', club.ClubNumbersView.as_view(),
         name='club-numbers'),
+    #testing purposes
+    url(r'^clubs/indicators/$', club.ClubView2.as_view(), name='club2'),
 
     #admin
     url(r'^sporto-admin/club-insta-photo/$',

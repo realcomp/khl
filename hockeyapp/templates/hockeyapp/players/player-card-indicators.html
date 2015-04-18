@@ -116,7 +116,7 @@
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('table')">Таблица</a>
                                 </li>
                             </ul>-->
-                            <a id="IndicatorsLink" class="hidden" href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
+                            <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
                             <div style="position:relative;text-align: center; top: 100px; right: 34px; background: #ffffff" ng-show="PlayerCardIndicatorsCtrl.loader">
                                 <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>

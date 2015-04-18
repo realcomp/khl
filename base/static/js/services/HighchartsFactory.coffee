@@ -307,14 +307,12 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                             s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear()-1) + '/'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
                                 s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y  + '</span></div>'
-                            $('#chart-tooltip-header').html(header)
                             $('#chart-tooltip-content').html(s)
                             return false
                         else
                             s = '<div class="inline-block tooltip-block"><b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' <br>'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
-                                s += '<br/>' + this.series.name + ': ' + this.y;
-                            $('#chart-tooltip-header').html(header)
+                                s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
                             $('#chart-tooltip-content').html(s)
                             return false;
                     shared: true
