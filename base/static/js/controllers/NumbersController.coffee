@@ -1,4 +1,4 @@
-angular.module('Sportomatics').controller('ClubNumbersController', [
+angular.module('Sportomatics').controller('NumbersController', [
     '$http', '$scope', '$location',
     ($http, $scope, $location) ->
         $scope.$location = $location
@@ -44,9 +44,18 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
 
         $scope.getSeasonsCount = (group) ->
             i = 0
+            clubplayers = []
             for club in group.clubs
-                i += club.seasons.length
+                for clubplayer in club.clubplayers
+                    if clubplayer.pk not in clubplayers
+                        clubplayers.push(clubplayer.pk)
+                        i += 1
             return i
+
+        $scope.setSeason = (season) ->
+            $location.search('season', season or null)
+            $scope.params = $location.search()
+            $scope.list()
 
         $scope.list = () ->
             params = ''
@@ -54,6 +63,8 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
                 params += '&club=' + club
             if player
                 params += '&player=' + player
+            if $scope.params.season
+                params += '&season=' + $scope.params.season
 
             $scope.loaded = false
             $http.get(url + '?' + params

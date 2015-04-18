@@ -221,6 +221,12 @@ class Player(AbstractMan):
     def is_legionnaire(self):
         return self.citizenship and (self.citizenship.en_title != 'Russia')
 
+    @property
+    def last_match(self):
+        return (
+            ClubPlayerMatch.objects
+            .filter(clubplayer__player=self).order_by('match__date').last())
+
     def get_absolute_url(self):
         if self.pk:
             return reverse('hockeyapp:player-card', kwargs={'pk': self.pk})

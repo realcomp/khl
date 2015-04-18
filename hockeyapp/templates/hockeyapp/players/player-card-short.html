@@ -1,6 +1,7 @@
 {% extends "hockeyapp/players/base.html" %}
 {% load i18n %}
 {% load static from base_extras %}
+{% load base_extras %}
 
 {% block extrahead %}
 {{ block.super }}
@@ -127,6 +128,23 @@
                                 <li class="player-news-item">Прошли соревнования в универсальный культурно-спортивный комплекс российского города Ярославля. Открыт в 2001 году.</li>
                                 <li class="player-news-item">Расположен в Красноперекопском районе города в жилом районе Нефтестрой, на пересечении улиц Гагарина и Институтской. Проводятся домашние матчи.</li>
                             </ul>
+
+                            {% if last_match %}
+                                <div class="ui tabular menu content-tabs">
+                                    <span class="heading">Последняя игра</span>
+                                </div>
+                                <div class="ui grid">
+                                    <div class="row">
+                                        <div class="eight wide column">
+                                            <ul>
+                                                <li>Дата: {% lcb %} "{{ last_match.date }}" |date:"d MMMM yyyy" {% rcb %}</li>
+                                                <li>Время на площадке: {{ last_match.gamingtime_m }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             <div class="ui tabular menu content-tabs">
                                 <span class="heading">Внешние ссылки</span>
                             </div>

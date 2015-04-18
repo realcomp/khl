@@ -1,4 +1,6 @@
-angular.module('Sportomatics').controller('ClubNumbersController', [
+var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+angular.module('Sportomatics').controller('NumbersController', [
   '$http', '$scope', '$location', function($http, $scope, $location) {
     var club, player, url;
     $scope.$location = $location;
@@ -37,14 +39,27 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
       $scope.limit[number] += 4;
     };
     $scope.getSeasonsCount = function(group) {
-      var i, j, len, ref;
+      var clubplayer, clubplayers, i, j, k, len, len1, ref, ref1, ref2;
       i = 0;
+      clubplayers = [];
       ref = group.clubs;
       for (j = 0, len = ref.length; j < len; j++) {
         club = ref[j];
-        i += club.seasons.length;
+        ref1 = club.clubplayers;
+        for (k = 0, len1 = ref1.length; k < len1; k++) {
+          clubplayer = ref1[k];
+          if (ref2 = clubplayer.pk, indexOf.call(clubplayers, ref2) < 0) {
+            clubplayers.push(clubplayer.pk);
+            i += 1;
+          }
+        }
       }
       return i;
+    };
+    $scope.setSeason = function(season) {
+      $location.search('season', season || null);
+      $scope.params = $location.search();
+      return $scope.list();
     };
     $scope.list = function() {
       var params;
@@ -54,6 +69,9 @@ angular.module('Sportomatics').controller('ClubNumbersController', [
       }
       if (player) {
         params += '&player=' + player;
+      }
+      if ($scope.params.season) {
+        params += '&season=' + $scope.params.season;
       }
       $scope.loaded = false;
       $http.get(url + '?' + params).success(function(data) {
