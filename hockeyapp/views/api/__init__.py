@@ -21,11 +21,11 @@ from ...models import Timeline
 from ...serializers import MetricsPlayerSerializer
 from ...serializers.clubs import (
     ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
-    ClubCalendarPaginationSerializer)
+    ClubCalendarPagination)
 from ...serializers.events import EventSerializer
 from ...serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
-    ClubTitlesSerializer, ClubPlayerMatchPaginationSerilizer)
+    ClubTitlesSerializer, ClubPlayerMatchPagination)
 from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
@@ -73,7 +73,7 @@ class BestPlayer(PlayersSearch):
 class PlayerCardIndicators(generics.ListAPIView):
     queryset = ClubPlayerMatch.objects.all()
     paginate_by = 99999
-    pagination_serializer_class = ClubPlayerMatchPaginationSerilizer
+    pagination_class = ClubPlayerMatchPagination
     serializer_class = ClubPlayerMatchSerilizer
 
     def _get_aggregate(self, qs):
@@ -151,9 +151,9 @@ class ClubTeamCompare(generics.RetrieveAPIView):
 
 class ClubCalendar(generics.ListAPIView):
     queryset = Schedule.objects.all()
-    serializer_class = ClubCalendarSerializer
     paginate_by = 99999
-    pagination_serializer_class = ClubCalendarPaginationSerializer
+    pagination_class = ClubCalendarPagination
+    serializer_class = ClubCalendarSerializer
 
     def filter_queryset(self, qs):
         qs = super(ClubCalendar, self).filter_queryset(qs)

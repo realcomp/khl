@@ -13,7 +13,7 @@ from hockeyapp.models import Club, Country, Player, League, LeagueClub, Match
 
 from .admin import ArenaInstaPhotoList
 from .serializers import ClubListSerializer, PlayerPartnersBySeasonCount
-from .serializers import PlayerPartnersBySeason, ClubListPaginationSerializer
+from .serializers import PlayerPartnersBySeason, ClubListPagination
 from .serializers import MatchListSerializer
 
 
@@ -51,8 +51,8 @@ paip_list = ProcessedArenaInstaPhotoList.as_view()
 
 class ClubList(PaginationMixin, drf.generics.ListAPIView):
     filter_backends = OrderFilter,
+    pagination_class = ClubListPagination
     serializer_class = ClubListSerializer
-    pagination_serializer_class = ClubListPaginationSerializer
 
     def _get_season(self):
         default = Season.objects.latest('start_date')

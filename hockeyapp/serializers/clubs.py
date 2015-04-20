@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import pagination, serializers
+from rest_framework import pagination, response, serializers
 
 from api.addresses.serializers import AddressSerializer
 from base.models import Season
@@ -309,12 +309,14 @@ class ClubCalendarSerializer(serializers.ModelSerializer):
         model = Schedule
 
 
-class ClubCalendarPaginationSerializer(pagination.PaginationSerializer):
-    season = serializers.SerializerMethodField()
-
-    def get_season(self, obj):
+class ClubCalendarPagination(pagination.BasePagination):
+    def get_paginated_response(self, data):
         view = self.context['view']
-        return SeasonSerializer(view.season, context=self.context).data
+        season = SeasonSerializer(view.season, context=self.context).data
+        return response.Response({
+            'results': data,
+            'season': season,
+        })
 
 
 class NumbersClubPlayerSerializer(serializers.ModelSerializer):

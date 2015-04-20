@@ -25,7 +25,7 @@ Django==1.7.4
 #django-atomic-signals==1.1.0
 django-autocomplete-light==2.0.5
 django-daterange-filter==1.0.0
-djangorestframework==3.0.2
+djangorestframework==3.1.1
 django-filer==0.9.9
 django-suit==0.2.12
 django-select2==4.2.2

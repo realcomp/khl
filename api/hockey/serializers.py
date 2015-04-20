@@ -88,19 +88,18 @@ class ClubListSerializer(TitleBaseSerializer):
         model = Club
 
 
-class ClubListPaginationSerializer(pagination.PaginationSerializer):
-    leagues = serializers.SerializerMethodField()
-    league = serializers.SerializerMethodField()
-
-    def get_leagues(self, page):
-        view = self.context.get('view')
-        return LeagueSerializer(
-            view._get_leagues(), context=self.context, many=True).data
-
-    def get_league(self, page):
-        view = self.context.get('view')
-        return LeagueSerializer(
+class ClubListPagination(pagination.BasePagination):
+    def get_paginated_response(self, data):
+        view = self.context['view']
+        league = LeagueSerializer(
             view._get_league(), context=self.context).data
+        leagues = LeagueSerializer(
+            view._get_leagues(), context=self.context, many=True).data
+        return response.Response({
+            'results': data,
+            'league': league,
+            'leagues': leagues,
+        })
 
 
 class PartnerPlayerSerializer(PlayerMinimalSerialiser):
