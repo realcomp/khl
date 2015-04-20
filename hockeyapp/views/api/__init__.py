@@ -12,7 +12,6 @@ from rest_framework import generics, response, viewsets
 from base.models import Season
 
 from ..events import EventFactory
-from ..mixins import PaginationMixin
 
 from ...filters import PlayersSearchFilter, PlayersSearchOrderFilter
 from ...models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
@@ -30,9 +29,10 @@ from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
 
-class PlayersSearch(PaginationMixin, viewsets.ReadOnlyModelViewSet):
+class PlayersSearch(viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
     queryset = Player.objects.all()
+    paginate_by = 50
     serializer_class = PlayersSearchSerializer
 
     def list(self, request, *args, **kwargs):
@@ -45,12 +45,14 @@ class PlayersSearch(PaginationMixin, viewsets.ReadOnlyModelViewSet):
             # qs is turned into list
             qs = qs.ranged_filter(lambda player: player.pk == _pk, 5)
 
-        instance = qs
-        page = self.paginate_queryset(instance)
+        queryset = qs
+
+        page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_pagination_serializer(page)
-        else:
-            serializer = self.get_serializer(instance, many=True)
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return response.Response(serializer.data)
 
     def _get_rating(self, request, qs):
@@ -165,8 +167,8 @@ class ClubCalendar(generics.ListAPIView):
         return qs
 
     def list(self, request, *args, **kwargs):
-        self.season = get_object_or_404(
-            Season, pk=self.request.GET.get('season', 0))
+        # self.season = get_object_or_404(
+        #     Season, pk=self.request.GET.get('season', 0))
         return super(ClubCalendar, self).list(request, *args, **kwargs)
 
 

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import rest_framework as drf
 
-from rest_framework import pagination, serializers
+from rest_framework import pagination, response, serializers
 from api.addresses.serializers import AddressMinimalSerializer, CountrySerializer
 from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
@@ -12,6 +12,8 @@ from api.base.serializers import SeasonSerializer
 from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
 
 from hockeyapp.serializers import CoachSerializer, LeagueSerializer
+
+from .mixins import ClubListMixin
 
 
 class AbstractManSerializer(LangDepSerializer):
@@ -88,13 +90,12 @@ class ClubListSerializer(TitleBaseSerializer):
         model = Club
 
 
-class ClubListPagination(pagination.BasePagination):
+class ClubListPagination(ClubListMixin, pagination.PageNumberPagination):
     def get_paginated_response(self, data):
-        view = self.context['view']
         league = LeagueSerializer(
-            view._get_league(), context=self.context).data
+            self._get_league()).data
         leagues = LeagueSerializer(
-            view._get_leagues(), context=self.context, many=True).data
+            self._get_leagues(), many=True).data
         return response.Response({
             'results': data,
             'league': league,

@@ -1,20 +1,20 @@
 <div class="ui green menu player-menu">
     <a class="{% if players_menu_active == 'player-card' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card' pk %}">Главное</a>
+       href="{% url 'hockeyapp:players:card' pk %}">Главное</a>
     <a class="{% if players_menu_active == 'player-card-indicators' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-indicators' pk %}">Статистика</a>
+       href="{% url 'hockeyapp:players:indicators' pk %}">Статистика</a>
     <a class="{% if players_menu_active == 'player-card-clubs' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-clubs' pk %}">Клубы</a>
+       href="{% url 'hockeyapp:players:clubs' pk %}">Клубы</a>
     <a class="{% if players_menu_active == 'player-card-coaches' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-coaches' pk %}">Тренеры</a>
+       href="{% url 'hockeyapp:players:coaches' pk %}">Тренеры</a>
     <a class="{% if players_menu_active == 'player-card-partners' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-partners' pk %}">Партнеры по команде</a>
+       href="{% url 'hockeyapp:players:partners' pk %}">Партнеры по команде</a>
     <a class="{% if players_menu_active == 'player-card-photos' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-photos' pk %}">Фотографии</a>
+       href="{% url 'hockeyapp:players:photos' pk %}">Фотографии</a>
     <a class="{% if players_menu_active == 'player-card-communication' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-communication' pk %}">Общение</a>
+       href="{% url 'hockeyapp:players:communication' pk %}">Общение</a>
     <a class="{% if players_menu_active == 'player-card-news' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-news' pk %}">Новости</a>
+       href="{% url 'hockeyapp:players:news' pk %}">Новости</a>
     <a class="{% if players_menu_active == 'player-card-numbers' %}active {% endif %}item"
-       href="{% url 'hockeyapp:player-card-numbers' pk %}">Любимые номера</a>
+       href="{% url 'hockeyapp:players:numbers' pk %}">Любимые номера</a>
 </div>

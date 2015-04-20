@@ -8,10 +8,10 @@ from django.db.models import Q, Avg
 
 from base.models import Season
 from hockeyapp.filters import OrderFilter
-from hockeyapp.views.mixins import PaginationMixin
 from hockeyapp.models import Club, Country, Player, League, LeagueClub, Match
 
 from .admin import ArenaInstaPhotoList
+from .mixins import ClubListMixin
 from .serializers import ClubListSerializer, PlayerPartnersBySeasonCount
 from .serializers import PlayerPartnersBySeason, ClubListPagination
 from .serializers import MatchListSerializer
@@ -49,33 +49,11 @@ class ProcessedArenaInstaPhotoList(ClubInstaPhotoList):
 paip_list = ProcessedArenaInstaPhotoList.as_view()
 
 
-class ClubList(PaginationMixin, drf.generics.ListAPIView):
+class ClubList(ClubListMixin, drf.generics.ListAPIView):
     filter_backends = OrderFilter,
+    paginate_by = 50
     pagination_class = ClubListPagination
     serializer_class = ClubListSerializer
-
-    def _get_season(self):
-        default = Season.objects.latest('start_date')
-        return self.request.GET.get('season', default)
-
-    def _get_leagues(self):
-        leagueclubs = LeagueClub.objects.filter(season=self._get_season())
-        return League.objects.filter(pk__in=leagueclubs.values_list('league'))
-
-    def _get_league(self):
-        if 'league' in self.request.GET:
-            league = self.request.GET['league']
-            if league:  # selected
-                return League.objects.get(pk=league)
-            else:  # default
-                leagues = self._get_leagues()
-                khl = leagues.filter(ru_title='КХЛ')
-                if khl.exists():
-                    return khl.last()
-                superleague = leagues.filter(ru_title='Суперлига')
-                if superleague.exists():
-                    return superleague.last()
-                return leagues.last()
 
     def get_queryset(self):
         return Club.objects.active()

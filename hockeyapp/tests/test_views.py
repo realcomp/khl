@@ -80,7 +80,7 @@ class ViewsTestCase(TestCase):
 
     def test_players_search(self):
         response = self.client.get(
-            reverse('hockeyapp:players-search'))
+            reverse('hockeyapp:players:search'))
         self.assertEqual(response.status_code, 200)
 
     def test_players_search_api(self):
@@ -107,7 +107,7 @@ class ViewsTestCase(TestCase):
 
     def test_player_card(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card', kwargs={'pk': self.player.pk}))
+            reverse('hockeyapp:players:card', kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
@@ -126,77 +126,77 @@ class ViewsTestCase(TestCase):
 
     def test_player_card_coaches(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card-coaches',
+            reverse('hockeyapp:players:coaches',
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
     def test_player_card_partners(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card-partners',
+            reverse('hockeyapp:players:partners',
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
     def test_player_card_photos(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card-photos',
+            reverse('hockeyapp:players:photos',
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
     def test_player_card_communication(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card-communication',
+            reverse('hockeyapp:players:communication',
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
     def test_player_card_news(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card-news',
+            reverse('hockeyapp:players:news',
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
     def test_club_list(self):
         response = self.client.get(
-            reverse('hockeyapp:club-list'))
+            reverse('hockeyapp:clubs:list'))
         self.assertEqual(response.status_code, 200)
 
     def test_club(self):
         response = self.client.get(
-            reverse('hockeyapp:club', kwargs={'pk': self.club.pk}))
+            reverse('hockeyapp:clubs:details', kwargs={'pk': self.club.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualClub(response.context_data, self.club)
 
     def test_club_calendar(self):
         response = self.client.get(
-            reverse('hockeyapp:club-calendar', kwargs={'pk': self.club.pk}))
+            reverse('hockeyapp:clubs:calendar', kwargs={'pk': self.club.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualClub(response.context_data, self.club)
 
     def test_club_stats(self):
         response = self.client.get(
-            reverse('hockeyapp:club-stats', kwargs={'pk': self.club.pk}))
+            reverse('hockeyapp:clubs:stats', kwargs={'pk': self.club.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualClub(response.context_data, self.club)
 
     def test_club_home(self):
         response = self.client.get(
-            reverse('hockeyapp:club-home', kwargs={'pk': self.club.pk}))
+            reverse('hockeyapp:clubs:home', kwargs={'pk': self.club.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualClub(response.context_data, self.club)
 
     def test_club_photos(self):
         response = self.client.get(
-            reverse('hockeyapp:club-photos', kwargs={'pk': self.club.pk}))
+            reverse('hockeyapp:clubs:photos', kwargs={'pk': self.club.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualClub(response.context_data, self.club)
 
     def test_club_fanzone(self):
         response = self.client.get(
-            reverse('hockeyapp:club-fanzone', kwargs={'pk': self.club.pk}))
+            reverse('hockeyapp:clubs:fanzone', kwargs={'pk': self.club.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualClub(response.context_data, self.club)
 

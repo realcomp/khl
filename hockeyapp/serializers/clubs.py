@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import pagination, response, serializers
@@ -309,13 +310,13 @@ class ClubCalendarSerializer(serializers.ModelSerializer):
         model = Schedule
 
 
-class ClubCalendarPagination(pagination.BasePagination):
+class ClubCalendarPagination(pagination.PageNumberPagination):
     def get_paginated_response(self, data):
-        view = self.context['view']
-        season = SeasonSerializer(view.season, context=self.context).data
+        season = get_object_or_404(
+            Season, pk=self.request.GET.get('season', 0))
         return response.Response({
             'results': data,
-            'season': season,
+            'season': SeasonSerializer(season).data,
         })
 
 
