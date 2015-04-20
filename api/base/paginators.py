@@ -17,6 +17,6 @@ class PreviousPageField(serializers.Field):
             return value.previous_page_number()
 
 
-class AltPaginationSerializer(pagination.PaginationSerializer):
-    next_page = NextPageField(source='*')
-    previous_page = PreviousPageField(source='*')
+# class AltPaginationSerializer(pagination.PaginationSerializer):
+#     next_page = NextPageField(source='*')
+#     previous_page = PreviousPageField(source='*')

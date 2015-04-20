@@ -15,7 +15,7 @@ from ..models import Arena, Club, Player, League
 
 
 class ViewsTestCase(TestCase):
-    fixtures = ['countries']
+    fixtures = 'countries',
 
     PLAYER_DATA = {
         'ru_fio': 'Иванов Иван',
@@ -200,5 +200,7 @@ class ViewsTestCase(TestCase):
 
     def test_country_list_api(self):
         response = self.client.get(
-            reverse('hockeyapp:country-list-api') + '?s=Rus')
+            reverse('hockeyapp:country-list-api') + '?s=Россия')
+        self.assertEqual(response.data[0]['pk'], 1)
+        self.assertEqual(response.data[0]['title'], 'Россия')
         self.assertEqual(response.status_code, 200)

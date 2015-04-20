@@ -7,8 +7,10 @@ from django.db.models import Q
 
 import rest_framework as drf
 
+from rest_framework import pagination
+
 from api.base.permissions import SportoAdminPermission
-from api.base.paginators import AltPaginationSerializer
+# from api.base.paginators import AltPaginationSerializer
 from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
 
 from . import serializers
@@ -18,7 +20,7 @@ class CPAPIBase(object):
     queryset = ArenaInstaPhoto.objects.all()
     serializer_class = serializers.ArenaInstaPhotoSerializer
     permission_classes = (SportoAdminPermission,)
-    pagination_serializer_class = AltPaginationSerializer
+    pagination_class = pagination.PageNumberPagination
     paginate_by = 40
 
 
