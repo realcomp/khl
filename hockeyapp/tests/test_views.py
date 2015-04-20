@@ -119,7 +119,7 @@ class ViewsTestCase(TestCase):
 
     def test_player_card_indicators(self):
         response = self.client.get(
-            reverse('hockeyapp:player-card-indicators',
+            reverse('hockeyapp:players:indicators',
                     kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
