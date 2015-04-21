@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
+angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory) {
   var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
@@ -44,7 +44,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
                 return this.value;
               }
               if (!$.isNumeric(this.value)) {
-                return self.localeObject.fieldNames[this.value].fullName;
+                return LocaleFactory.selectedLocale.fieldNames[this.value].fullName;
               }
             }
           }
@@ -53,7 +53,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           shared: true,
           formatter: function() {
             var field, s;
-            s = '<span style="color:black">' + self.localeObject.fieldNames[this.x].fullName + ', Сезон ' + (parseInt(self.season) - 1) + '/' + parseInt(self.season) + '</span><br/>';
+            s = '<span style="color:black">' + LocaleFactory.selectedLocale.fieldNames[this.x].fullName + ', Сезон ' + (parseInt(self.season) - 1) + '/' + parseInt(self.season) + '</span><br/>';
             field = this.x;
             _.each(this.points, function(point, index) {
               var value;
@@ -221,7 +221,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           }
         },
         title: {
-          text: this.localeObject.fieldNames[this.field].fullName.toUpperCase()
+          text: LocaleFactory.selectedLocale.fieldNames[this.field].fullName.toUpperCase()
         },
         xAxis: {
           "type": "datetime",
@@ -338,13 +338,17 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
 
   })();
   HighchartsPlayerIndicatorsChart = (function() {
-    function HighchartsPlayerIndicatorsChart(divId, data1, field1) {
-      this.divId = divId;
-      this.data = data1;
-      this.field = field1;
+    function HighchartsPlayerIndicatorsChart() {
       this.period = self.period = 365;
+      this.field = 'count';
+      this.dataType = 'graph-serial';
       self.field = this.field;
     }
+
+    HighchartsPlayerIndicatorsChart.prototype.init = function(divId, data1) {
+      this.divId = divId;
+      this.data = data1;
+    };
 
     HighchartsPlayerIndicatorsChart.prototype.setLocaleObject = function(localeObject) {
       this.localeObject = localeObject;
@@ -359,6 +363,23 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
     HighchartsPlayerIndicatorsChart.prototype.setContext = function(context) {
       this.context = context;
       return self.context = this.context;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setField = function(field1) {
+      this.field = field1;
+      return self.field = this.field;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.getField = function() {
+      return this.field;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setDataType = function(dataType) {
+      this.dataType = dataType;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.getDataType = function() {
+      return this.dataType;
     };
 
     HighchartsPlayerIndicatorsChart.prototype.draw = function() {
@@ -410,7 +431,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
               if (this.dateTimeLabelFormat === '%Y') {
                 return (new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               } else {
-                return self.localeObject.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
+                return LocaleFactory.selectedLocale.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               }
             }
           },
@@ -431,7 +452,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           crosshairs: true,
           formatter: function() {
             var header, s;
-            header = '<b>' + self.localeObject.fieldNames[self.field].fullName.toUpperCase() + '</b>';
+            header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>';
             if (this.points[0].point.drilldown != null) {
               s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear() - 1) + '/' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
@@ -440,7 +461,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
               $('#chart-tooltip-content').html(s);
               return false;
             } else {
-              s = '<div class="inline-block tooltip-block"><b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' <br>' + new Date(this.x).getFullYear() + '</b></div>';
+              s = '<div class="inline-block tooltip-block"><b>' + LocaleFactory.selectedLocale.monthNamesFull[new Date(this.x).getMonth()] + ' <br>' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
                 return s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
               });

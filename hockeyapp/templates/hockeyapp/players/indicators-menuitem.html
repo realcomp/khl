@@ -1,5 +1,11 @@
 <li class="graph-control-item">
+    {% if controller %}
     <a href="" class="graph-control-link"
-       ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === '{{ field }}'}"
-       ng-click="PlayerCardIndicatorsCtrl.setField('{{ field }}')">{{ label }}</a>
+        ng-class="{ 'graph-control-link_active':{{controller}}.field === '{{ field }}'}"
+        ng-click="{{controller}}.setField('{{ field }}')">{{ label }}</a>
+    {% else %}
+    <a href="" class="graph-control-link"
+        ng-class="{ 'graph-control-link_active': field === '{{ field }}'}"
+        ng-click="setField('{{ field }}')">{{ label }}</a>
+    {% endif %}
 </li>

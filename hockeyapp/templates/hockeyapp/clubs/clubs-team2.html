@@ -8,14 +8,14 @@
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-team-page">
-            <div class="page-content page-container" ng-controller="PlayerCardIndicatorsController as PlayerCardIndicatorsCtrl" >
+            <div class="page-content page-container" ng-controller="ClubTeamCompareController" >
                 <div class="page-inner-container">
                     <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' 0 %}">
                     <input id="clubs-compare" type="hidden">
                     <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' 0 %}"></a>
                     <div class="clubs-team-tabs" style="padding-top: 20px;">
                         <input type="hidden" id="scope">
-                        <div class="graph-controls-block" >
+                        <div class="graph-controls-block">
                                     {% include "hockeyapp/players/indicators-menuitem.html" with label="И" field="count" %}
                                     {% include "hockeyapp/players/indicators-menuitem.html" with label="Ш" field="goals" %}
                                     {% include "hockeyapp/players/indicators-menuitem.html" with label="О" field="points" %}
@@ -43,14 +43,14 @@
                             <div class="graph-controls-block" ng-show="dataType === 'graph-radar'">
                                     <li class="graph-control-item" style="">
                                         <a id="return-control" href="" class="graph-control-link"
-                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === '{{ field }}'}"
+                                           ng-class="{ 'graph-control-link_active':field === '{{ field }}'}"
                                            ng-click="setDataType('graph-serial', $event)">Вернуться</a>
                                     </li>
                             </div>
                     </div>
 
 
-                    <div style="position:relative;text-align: center; top: 100px; right: 34px; background: #ffffff" ng-hide="PlayerCardIndicatorsCtrl.loader">
+                    <div style="position:relative;text-align: center; top: 100px; right: 34px; background: #ffffff" ng-hide="loader">
                         <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                     </div>
                     {% verbatim %}

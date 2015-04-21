@@ -366,7 +366,7 @@ $.fn.textWidth = function(){
 
 angular.module('Sportomatics')
 
-angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
+angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory) {
   var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
@@ -412,7 +412,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
                 return this.value;
               }
               if (!$.isNumeric(this.value)) {
-                return self.localeObject.fieldNames[this.value].fullName;
+                return LocaleFactory.selectedLocale.fieldNames[this.value].fullName;
               }
             }
           }
@@ -421,7 +421,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           shared: true,
           formatter: function() {
             var field, s;
-            s = '<span style="color:black">' + self.localeObject.fieldNames[this.x].fullName + ', Сезон ' + (parseInt(self.season) - 1) + '/' + parseInt(self.season) + '</span><br/>';
+            s = '<span style="color:black">' + LocaleFactory.selectedLocale.fieldNames[this.x].fullName + ', Сезон ' + (parseInt(self.season) - 1) + '/' + parseInt(self.season) + '</span><br/>';
             field = this.x;
             _.each(this.points, function(point, index) {
               var value;
@@ -589,7 +589,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           }
         },
         title: {
-          text: this.localeObject.fieldNames[this.field].fullName.toUpperCase()
+          text: LocaleFactory.selectedLocale.fieldNames[this.field].fullName.toUpperCase()
         },
         xAxis: {
           "type": "datetime",
@@ -706,13 +706,17 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
 
   })();
   HighchartsPlayerIndicatorsChart = (function() {
-    function HighchartsPlayerIndicatorsChart(divId, data1, field1) {
-      this.divId = divId;
-      this.data = data1;
-      this.field = field1;
+    function HighchartsPlayerIndicatorsChart() {
       this.period = self.period = 365;
+      this.field = 'count';
+      this.dataType = 'graph-serial';
       self.field = this.field;
     }
+
+    HighchartsPlayerIndicatorsChart.prototype.init = function(divId, data1) {
+      this.divId = divId;
+      this.data = data1;
+    };
 
     HighchartsPlayerIndicatorsChart.prototype.setLocaleObject = function(localeObject) {
       this.localeObject = localeObject;
@@ -727,6 +731,23 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
     HighchartsPlayerIndicatorsChart.prototype.setContext = function(context) {
       this.context = context;
       return self.context = this.context;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setField = function(field1) {
+      this.field = field1;
+      return self.field = this.field;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.getField = function() {
+      return this.field;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setDataType = function(dataType) {
+      this.dataType = dataType;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.getDataType = function() {
+      return this.dataType;
     };
 
     HighchartsPlayerIndicatorsChart.prototype.draw = function() {
@@ -778,7 +799,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
               if (this.dateTimeLabelFormat === '%Y') {
                 return (new Date(this.value).getFullYear() - 1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               } else {
-                return self.localeObject.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
+                return LocaleFactory.selectedLocale.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               }
             }
           },
@@ -799,7 +820,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
           crosshairs: true,
           formatter: function() {
             var header, s;
-            header = '<b>' + self.localeObject.fieldNames[self.field].fullName.toUpperCase() + '</b>';
+            header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>';
             if (this.points[0].point.drilldown != null) {
               s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear() - 1) + '/' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
@@ -808,7 +829,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
               $('#chart-tooltip-content').html(s);
               return false;
             } else {
-              s = '<div class="inline-block tooltip-block"><b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' <br>' + new Date(this.x).getFullYear() + '</b></div>';
+              s = '<div class="inline-block tooltip-block"><b>' + LocaleFactory.selectedLocale.monthNamesFull[new Date(this.x).getMonth()] + ' <br>' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
                 return s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
               });
@@ -852,10 +873,46 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout) {
   };
 });
 
+angular.module('Sportomatics').factory('IndicatorsFactory', function() {
+  var PlayerIndicatorsChart;
+  PlayerIndicatorsChart = (function() {
+    function PlayerIndicatorsChart() {
+      this.field = 'count';
+      this.dataType = 'graph-serial';
+    }
+
+    PlayerIndicatorsChart.prototype.setField = function(field) {
+      this.field = field;
+    };
+
+    PlayerIndicatorsChart.prototype.getField = function() {
+      return this.field;
+    };
+
+    PlayerIndicatorsChart.prototype.setDataType = function(dataType) {
+      this.dataType = dataType;
+    };
+
+    PlayerIndicatorsChart.prototype.getDataType = function() {
+      return this.dataType;
+    };
+
+    return PlayerIndicatorsChart;
+
+  })();
+  return {
+    PlayerIndicatorsChart: PlayerIndicatorsChart
+  };
+});
+
 angular.module('Sportomatics')
     .factory('LocaleFactory', function($rootScope){
         var chosen = 'ru';
-        return {
+        var self = this;
+        var factory = {
+            setLocale: function(contentLanguage){
+                factory.selectedLocale = factory['locale_'+contentLanguage]
+            },
             getFieldName: function(field, locale){
                 var fieldNames = {
                     count: {
@@ -1341,6 +1398,9 @@ angular.module('Sportomatics')
                 }
             }
         }
+        factory.selectedLocale = factory.locale_ru;
+
+        return factory;
 
     })
 
@@ -2726,15 +2786,114 @@ angular.module('Sportomatics').controller('ClubStatsController', [
   }
 ]);
 
-angular.module('Sportomatics').controller('ClubTeamCompareController', function($scope) {
-  $scope.$watch('selectedClub', function(newval) {
-    return console.log(newval);
-  });
-  $scope.$on('$viewContentLoaded', function() {
-    var PlayerIndicatorsController;
-    PlayerIndicatorsController = angular.element(document.getElementById('scope')).scope();
-    return console.log(PlayerIndicatorsController);
-  });
+angular.module('Sportomatics').controller('ClubTeamCompareController', function($scope, $http, $q, IndicatorsFactory, HighchartsFactory, LocaleFactory) {
+  var averageClubPlayerIndicatorsChart, self;
+  self = this;
+  this.url = document.getElementById('api-player-indicators').value;
+  averageClubPlayerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart();
+  $scope.localeObject = LocaleFactory.selectedLocale;
+  $scope.setField = averageClubPlayerIndicatorsChart.setField;
+  $scope.field = averageClubPlayerIndicatorsChart.getField();
+  $scope.dataType = averageClubPlayerIndicatorsChart.getDataType();
+  $scope.loader = true;
+  $scope.clubs = [];
+  $scope.addAverageClubPlayerData = function() {
+    var pk, url;
+    if ($scope.selectedClub == null) {
+      return;
+    }
+    pk = $scope.selectedClub.originalObject.pk;
+    if (pk == null) {
+      return;
+    }
+    url = $('#club-team-api').val().replace('0/', '') + pk;
+    $http.get(url).success(function(data, status, headers) {
+      var players, queries;
+      LocaleFactory.setLocale(headers()['content-language']);
+      console.log(LocaleFactory.selectedLocale);
+      players = data.all_players = _.filter(data.all_players, function(player) {
+        return player.line_display.indexOf('Goalkeeper') === -1;
+      });
+      data.offender_players.map(function(el) {
+        el.selected = true;
+        return el;
+      });
+      data.defender_players.map(function(el) {
+        el.selected = true;
+        return el;
+      });
+      queries = [];
+      _.each(players, function(player) {
+        player.selected = true;
+        queries.push($http.get(self.url.replace('/0/', '/' + player.pk + '/') + '?group_by=season'));
+      });
+      $q.all(queries).then(function(results) {
+        var averageData, clubObject, key, lastSeasonResult;
+        lastSeasonResult = _.last(results[0].data.results);
+        clubObject = {
+          players: data.all_players,
+          offender_players: data.offender_players,
+          defender_players: data.defender_players,
+          title: $scope.selectedClub.originalObject.title,
+          color: $scope.selectedClub.originalObject.main_color || getRandomColor(),
+          id: $scope.selectedClub.originalObject.pk,
+          dataBySeason: {
+            results: [
+              {
+                season: lastSeasonResult['season']
+              }
+            ]
+          }
+        };
+        console.log(results[0].config.url.match("players\/(.*)\/indicators")[1]);
+        for (key in lastSeasonResult) {
+          if (_.contains(ALL_FIELDS, key)) {
+            averageData = 0;
+            _.each(results, function(result) {
+              averageData += parseFloat(result.data.results[result.data.results.length - 1][key]);
+            });
+            averageData = parseFloat(averageData / results.length).toFixed(3);
+            clubObject.dataBySeason.results[0][key] = averageData;
+          }
+        }
+        $scope.clubs.push(clubObject);
+        self.listAvergePlayer();
+      });
+    });
+  };
+  $scope.calculateTeamData = function() {
+    return _.each($scope.clubs, function(club) {
+      var players;
+      return players = _.filter(club.all_players, function(player) {
+        return player.line_display.indexOf('Goalkeeper') === -1 && player.selected === true;
+      });
+    });
+  };
+  this.listAvergePlayer = function() {
+    var newPlayerIndicatorsData;
+    newPlayerIndicatorsData = [];
+    _.each($scope.clubs, function(club) {
+      var clubObject;
+      clubObject = {
+        name: club.title,
+        data: club.dataBySeason.results.map(function(el) {
+          return {
+            x: new Date(el.season.end_date.split('-')[0]).getTime(),
+            y: parseFloat(el[$scope.field]),
+            drilldown: el.season.end_date
+          };
+        }),
+        color: club.color,
+        stack: club.id
+      };
+      return newPlayerIndicatorsData.push(clubObject);
+    });
+    averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData);
+    averageClubPlayerIndicatorsChart.setContext($scope);
+    averageClubPlayerIndicatorsChart.setPeriod(30);
+    averageClubPlayerIndicatorsChart.draw();
+    return self.chart = $('#chartdiv').highcharts();
+  };
 });
 
 angular.module('Sportomatics').controller('ClubTeamController', [
@@ -3486,8 +3645,10 @@ angular.module('Sportomatics')
         var self = this;
         var url = document.getElementById('api-player-indicators').value;
         this.url = url;
-        this.field = $location.search()['field'] || 'count';
-        $scope.field = this.field;
+        var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart();
+        this.field = playerIndicatorsChart.getField();
+        if ($location.search()['field']) playerIndicatorsChart.setField($location.search()['field']);
+        $scope.localeObject = LocaleFactory.selectedLocale;
         this.club = parseInt($location.search()['club']) || null;
         this.coach = parseInt($location.search()['coach']) || null;
         this.compare_to = parseInt($location.search()['compare_to']) || null;
@@ -3684,8 +3845,7 @@ angular.module('Sportomatics')
                     })
                 })
 
-                var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', results, self.field);
-                playerIndicatorsChart.setLocaleObject($scope.localeObject)
+                playerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData, self.field)
                 playerIndicatorsChart.setContext($scope);
                 playerIndicatorsChart.setPeriod(30);
                 playerIndicatorsChart.draw();
@@ -3749,8 +3909,8 @@ angular.module('Sportomatics')
             }]
 
             self.loader = false;
-            var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field);
-            playerIndicatorsChart.setLocaleObject($scope.localeObject)
+
+            playerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData, self.field)
             playerIndicatorsChart.setContext($scope);
             playerIndicatorsChart.draw();
             self.chart = $('#chartdiv').highcharts();
@@ -3759,7 +3919,7 @@ angular.module('Sportomatics')
                     $scope.makeChart(); //player comparison
                 }
             }
-            self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
+            //self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
 
             $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));})).toString();
             $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
@@ -3848,35 +4008,6 @@ angular.module('Sportomatics')
 
         }; //List clubs
 
-        this.listAvergePlayer = function(){
-
-            var newPlayerIndicatorsData = [{
-                name: $scope.initialPlayerObject.title,
-                data: $scope.initialPlayerObject.dataBySeason.results.map(function(el){
-                    return {
-                        x: new Date(el.season.end_date.split('-')[0]).getTime(),
-                        y: parseFloat(el[self.field]),
-                        drilldown: el.season.end_date
-                    }
-                }),
-                color: $scope.initialPlayerObject.color,
-                stack: $scope.initialPlayerObject.id
-            }]
-
-            var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field);
-            playerIndicatorsChart.setLocaleObject($scope.localeObject)
-            playerIndicatorsChart.setContext($scope);
-            playerIndicatorsChart.setPeriod(30);
-            playerIndicatorsChart.draw();
-            self.chart = $('#chartdiv').highcharts();
-
-            if ($scope.playersToCompare.length > 1) {
-                if($scope.activeSeason === -1){
-                    $scope.makeChart(); //player comparison
-                }
-            }
-        }
-
         $scope.togglePlayerSelection = function(club, field, index){
 
         }
@@ -3884,7 +4015,6 @@ angular.module('Sportomatics')
         $scope.initialPlayerObject = {}
         $scope.clubs = [];
         $scope.calculateAverageClubPlayer = function(){
-
         }
         $scope.addAverageClubPlayerData = function(){
             if($scope.selectedClub == null) return;

@@ -1,7 +1,11 @@
 angular.module('Sportomatics')
     .factory('LocaleFactory', function($rootScope){
         var chosen = 'ru';
-        return {
+        var self = this;
+        var factory = {
+            setLocale: function(contentLanguage){
+                factory.selectedLocale = factory['locale_'+contentLanguage]
+            },
             getFieldName: function(field, locale){
                 var fieldNames = {
                     count: {
@@ -487,5 +491,8 @@ angular.module('Sportomatics')
                 }
             }
         }
+        factory.selectedLocale = factory.locale_ru;
+
+        return factory;
 
     })

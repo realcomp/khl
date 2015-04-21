@@ -4,8 +4,10 @@ angular.module('Sportomatics')
         var self = this;
         var url = document.getElementById('api-player-indicators').value;
         this.url = url;
-        this.field = $location.search()['field'] || 'count';
-        $scope.field = this.field;
+        var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart();
+        this.field = playerIndicatorsChart.getField();
+        if ($location.search()['field']) playerIndicatorsChart.setField($location.search()['field']);
+        $scope.localeObject = LocaleFactory.selectedLocale;
         this.club = parseInt($location.search()['club']) || null;
         this.coach = parseInt($location.search()['coach']) || null;
         this.compare_to = parseInt($location.search()['compare_to']) || null;
@@ -202,8 +204,7 @@ angular.module('Sportomatics')
                     })
                 })
 
-                var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', results, self.field);
-                playerIndicatorsChart.setLocaleObject($scope.localeObject)
+                playerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData, self.field)
                 playerIndicatorsChart.setContext($scope);
                 playerIndicatorsChart.setPeriod(30);
                 playerIndicatorsChart.draw();
@@ -267,8 +268,8 @@ angular.module('Sportomatics')
             }]
 
             self.loader = false;
-            var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field);
-            playerIndicatorsChart.setLocaleObject($scope.localeObject)
+
+            playerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData, self.field)
             playerIndicatorsChart.setContext($scope);
             playerIndicatorsChart.draw();
             self.chart = $('#chartdiv').highcharts();
@@ -277,7 +278,7 @@ angular.module('Sportomatics')
                     $scope.makeChart(); //player comparison
                 }
             }
-            self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
+            //self.chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
 
             $scope.lastSeason = Math.max.apply(Math,$scope.dataBySeason.results.map(function(o){return parseInt(o.season.end_date.substr(0, 4));})).toString();
             $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
@@ -366,35 +367,6 @@ angular.module('Sportomatics')
 
         }; //List clubs
 
-        this.listAvergePlayer = function(){
-
-            var newPlayerIndicatorsData = [{
-                name: $scope.initialPlayerObject.title,
-                data: $scope.initialPlayerObject.dataBySeason.results.map(function(el){
-                    return {
-                        x: new Date(el.season.end_date.split('-')[0]).getTime(),
-                        y: parseFloat(el[self.field]),
-                        drilldown: el.season.end_date
-                    }
-                }),
-                color: $scope.initialPlayerObject.color,
-                stack: $scope.initialPlayerObject.id
-            }]
-
-            var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart('chartdiv', newPlayerIndicatorsData, self.field);
-            playerIndicatorsChart.setLocaleObject($scope.localeObject)
-            playerIndicatorsChart.setContext($scope);
-            playerIndicatorsChart.setPeriod(30);
-            playerIndicatorsChart.draw();
-            self.chart = $('#chartdiv').highcharts();
-
-            if ($scope.playersToCompare.length > 1) {
-                if($scope.activeSeason === -1){
-                    $scope.makeChart(); //player comparison
-                }
-            }
-        }
-
         $scope.togglePlayerSelection = function(club, field, index){
 
         }
@@ -402,7 +374,6 @@ angular.module('Sportomatics')
         $scope.initialPlayerObject = {}
         $scope.clubs = [];
         $scope.calculateAverageClubPlayer = function(){
-
         }
         $scope.addAverageClubPlayerData = function(){
             if($scope.selectedClub == null) return;

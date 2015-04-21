@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
+angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFactory) ->
 
     class HighchartsSpiderChart
 
@@ -32,11 +32,11 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                             if not self.localeObject?
                                 return this.value
                             if not $.isNumeric this.value
-                                return self.localeObject.fieldNames[this.value].fullName
+                                return LocaleFactory.selectedLocale.fieldNames[this.value].fullName
                 tooltip:
                     shared: true
                     formatter: () ->
-                        s = '<span style="color:black">'+self.localeObject.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
+                        s = '<span style="color:black">'+LocaleFactory.selectedLocale.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
                         field = this.x
                         _.each this.points, (point, index) ->
                             value = if field is 'shots' then point.point.y*10 else point.point.y
@@ -159,7 +159,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                         viewDistance: 25
                         depth: 40
                 title:
-                    text: @localeObject.fieldNames[@field].fullName.toUpperCase()
+                    text: LocaleFactory.selectedLocale.fieldNames[@field].fullName.toUpperCase()
                 xAxis:
                     "type": "datetime"
                     labels:
@@ -238,9 +238,13 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
 
     class HighchartsPlayerIndicatorsChart
 
-        constructor: (@divId, @data, @field) ->
+        constructor: () ->
             @period = self.period = 365
+            @field = 'count'
+            @dataType = 'graph-serial'
             self.field = @field
+
+        init: (@divId, @data) ->
 
         setLocaleObject: (@localeObject) ->
             self.localeObject = @localeObject
@@ -250,6 +254,17 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
 
         setContext: (@context) ->
             self.context = @context
+
+        setField: (@field) ->
+            self.field = @field
+
+        getField: () ->
+            @field
+
+        setDataType: (@dataType) ->
+
+        getDataType: () ->
+            @dataType
 
         draw: () ->
             $('#'+@divId).highcharts
@@ -289,7 +304,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                             if this.dateTimeLabelFormat is '%Y'
                                 return (new Date(this.value).getFullYear()-1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
                             else
-                                return self.localeObject.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
+                                return LocaleFactory.selectedLocale.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
                     tickInterval: 24 * 3600 * 1000 * 30
                 yAxis:
                     allowDecimals: false
@@ -302,7 +317,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                     followPointer: true
                     crosshairs: true
                     formatter: () ->
-                        header = '<b>' + self.localeObject.fieldNames[self.field].fullName.toUpperCase() + '</b>'
+                        header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>'
                         if this.points[0].point.drilldown?
                             s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear()-1) + '/'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
@@ -310,7 +325,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout) ->
                             $('#chart-tooltip-content').html(s)
                             return false
                         else
-                            s = '<div class="inline-block tooltip-block"><b>' + self.localeObject.monthNamesFull[new Date(this.x).getMonth()] + ' <br>'+ new Date(this.x).getFullYear() + '</b></div>';
+                            s = '<div class="inline-block tooltip-block"><b>' + LocaleFactory.selectedLocale.monthNamesFull[new Date(this.x).getMonth()] + ' <br>'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
                                 s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
                             $('#chart-tooltip-content').html(s)
