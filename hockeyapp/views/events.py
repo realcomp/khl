@@ -85,7 +85,7 @@ class HomeMatchEvent(MatchEvent):
     @property
     def logos_urls(self):
         return map(lambda pk: reverse(
-            'hockeyapp:club-news', kwargs={'pk': pk}),
+            'hockeyapp:clubs:news', kwargs={'pk': pk}),
             (self.obj.home_team_id, self.obj.guest_team_id))
 
     @property

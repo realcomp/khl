@@ -207,8 +207,7 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
 
 class ClubPlayerMatchPagination(pagination.PageNumberPagination):
     def _is_limited(self):
-        request = self.context.get('request')
-        if request and request.user.is_authenticated():
+        if self.request.user.is_authenticated():
             return False
         return True
 
