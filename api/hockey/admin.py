@@ -4,14 +4,55 @@ from __future__ import unicode_literals
 import datetime
 
 from django.db.models import Q
+from django.db.models.loading import get_model
 
 import rest_framework as drf
+import filer
 
 from api.base.permissions import SportoAdminPermission
 from api.base.paginators import AltPaginationSerializer
 from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
 
 from . import serializers
+
+
+class FilerImageUpload(drf.views.APIView):
+    permission_classes = (SportoAdminPermission,)
+
+    def post(self, request, format=None):
+        if request.data:
+            fl = request.data.get('file')
+            model = get_model('hockeyapp', request.data.get('model_name'))
+            instance_id = request.data.get('id')
+            filer_file = self.create_filer_image(fl, model)
+            model = get_model('hockeyapp', model)
+            if self.set_relation(filer_file, model, instance_id):
+                return drf.response.Response(status=201)
+        return drf.response.Response(status=404)
+
+    def create_filer_image(self, image, folder_name):
+        _folder_objects = filer.models.Folder.objects
+        folder = _folder_objects.filter(name=folder_name).last()
+        if not folder:
+            folder = _folder_objects.create(name=folder_name)
+        _file_objects = filer.models.Image.objects
+        data = dict(folder=folder,
+                    name=image.name,
+                    is_public=True
+        )
+        _file = _file_objects.filter(**data).last()
+        if not _file:
+            _file = _file_objects.create(**data)
+            _file.file.save(image.name, image)
+            _file.save()
+        return _file
+
+    def set_relation(self, filer_image, model, instance_id):
+        instance = model.objects.filter(pk=instance_id).last()
+        if instance:
+            instance.photo = filer_image
+            instance.save(update_fields=['photo'])
+            return 1
 
 
 class CPAPIBase(object):
