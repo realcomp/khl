@@ -9,7 +9,7 @@
         {% endif %}
     </td>
     <td align="center">
-        <a href="{% url 'hockeyapp:players-search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by={{ key }}" class="player-place-link">
+        <a href="{% url 'hockeyapp:players:search' %}#?player={{ pk }}&order_by=rating&reversed&rated_by={{ key }}" class="player-place-link">
             {{ rating }}
         </a>
     </td>

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import pagination, serializers
+from rest_framework import pagination, response, serializers
 
 from api.addresses.serializers import AddressSerializer
 from base.models import Season
@@ -309,23 +310,33 @@ class ClubCalendarSerializer(serializers.ModelSerializer):
         model = Schedule
 
 
-class ClubCalendarPaginationSerializer(pagination.PaginationSerializer):
-    season = serializers.SerializerMethodField()
+class ClubCalendarPagination(pagination.PageNumberPagination):
+    def get_paginated_response(self, data):
+        season = get_object_or_404(
+            Season, pk=self.request.GET.get('season', 0))
+        return response.Response({
+            'results': data,
+            'season': SeasonSerializer(season).data,
+        })
 
-    def get_season(self, obj):
-        view = self.context['view']
-        return SeasonSerializer(view.season, context=self.context).data
+
+class NumbersClubPlayerSerializer(serializers.ModelSerializer):
+    season = SeasonSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'season', 'club_url'
+        model = ClubPlayer
 
 
-class PlayerNumbersPlayerSerializer(PlayerCardSerializer):
-    seasons = SeasonSerializer(many=True)
+class NumbersPlayerSerializer(PlayerCardSerializer):
+    clubplayers = NumbersClubPlayerSerializer(many=True)
 
     class Meta(PlayerCardSerializer.Meta):
-        fields = PlayerCardSerializer.Meta.fields + ('seasons',)
+        fields = PlayerCardSerializer.Meta.fields + ('clubplayers',)
 
 
-class PlayerNumbersSerializer(serializers.ModelSerializer):
-    players = PlayerNumbersPlayerSerializer(many=True)
+class NumbersSerializer(serializers.ModelSerializer):
+    players = NumbersPlayerSerializer(many=True)
     number = serializers.ReadOnlyField()
 
     class Meta(object):

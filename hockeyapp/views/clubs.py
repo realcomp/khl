@@ -35,6 +35,10 @@ class ClubView(SeasonsMixin, DetailView):
         return context
 
 
+class ClubView2(TemplateView):
+    template_name = 'hockeyapp/clubs/clubs-team2.html'
+
+
 class ClubCalendarView(ClubView):
     template_name = 'hockeyapp/clubs/clubs-calendar.html'
 

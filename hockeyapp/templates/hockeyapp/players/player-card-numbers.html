@@ -14,7 +14,7 @@
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-numbers" %}
-            <div class="page-inner-container" ng-controller="ClubNumbersController as ClubNumbersCtrl"
+            <div class="page-inner-container" ng-controller="NumbersController as NumbersCtrl"
                  ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'; player = {{ pk }}">
                 <a class="hidden" id="PlayerNumbersApi"
                    href="{% url 'hockeyapp:player-numbers-api' %}"></a>
@@ -29,15 +29,13 @@
                     </div>
                     <div class="row">
                         <div class="twelve wide column">
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-hide="loaded">
-                                <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
-                            </div>
+                            <div class="loader-large" ng-hide="loaded"></div>
                             {% verbatim %}
                             <div class="partners-block-container" ng-show="loaded">
                                 <div class="partners-block" ng-repeat="group in data">
                                     <div class="partners-heading">
                                         {{ group.number || '-' }}
-                                        ( {{ getSeasonsCount(group) }} сезонов)
+                                        ({{ getSeasonsCount(group) }} сезонов)
                                     </div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer"
@@ -49,9 +47,14 @@
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{ club.title_verbose }}</div>
                                                 <div class="player-partners-country">
-                                                    <span ng-repeat="season in club.seasons">
-                                                        {{ season.short_title }},
+                                                    <span ng-repeat="clubplayer in club.clubplayers track by $index"
+                                                          ng-if="$index < (club.clubplayers_limit || 1)">
+                                                        <a href="{{ clubplayer.club_url }}">{{ clubplayer.season.short_title }}</a><span ng-show="$index < club.clubplayers.length - 1">,</span>
                                                     </span>
+                                                    <a href="" ng-click="club.clubplayers_limit = 999"
+                                                       ng-show="(club.clubplayers_limit || 1) < club.clubplayers.length">
+                                                        и еще {{ club.clubplayers.length - 1 }}
+                                                    </a>
                                                 </div>
                                                 <!-- <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i> -->
                                             </div>

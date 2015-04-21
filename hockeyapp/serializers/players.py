@@ -3,7 +3,7 @@ import itertools
 
 from django.db.models import Avg, Sum
 
-from rest_framework import pagination, serializers
+from rest_framework import pagination, response, serializers
 
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
@@ -11,7 +11,7 @@ from . import (
     CoachSerializer, CountrySerializer, ClubLightListSerializer,
     ClubListSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, ClubPlayer)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -205,14 +205,18 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         model = ClubPlayerMatch
 
 
-class ClubPlayerMatchPaginationSerilizer(pagination.PaginationSerializer):
-    is_limited = serializers.SerializerMethodField()
-
-    def get_is_limited(self, obj):
+class ClubPlayerMatchPagination(pagination.PageNumberPagination):
+    def _is_limited(self):
         request = self.context.get('request')
         if request and request.user.is_authenticated():
             return False
         return True
+
+    def get_paginated_response(self, data):
+        return response.Response({
+            'results': data,
+            'is_limited': self._is_limited(),
+        })
 
 
 class PlayerCardClubsSerializer(BaseClubSerializer):
@@ -239,16 +243,24 @@ class ClubTitlesSerializer(TitleBaseSerializer):
         model = Club
 
 
-class PlayerNumbersClubSerializer(ClubListSerializer):
-    seasons = SeasonSerializer(many=True)
+class NumbersClubPlayerSerializer(serializers.ModelSerializer):
+    season = SeasonSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'season', 'club_url'
+        model = ClubPlayer
+
+
+class NumbersClubSerializer(ClubListSerializer):
+    clubplayers = NumbersClubPlayerSerializer(many=True)
 
     class Meta(ClubListSerializer.Meta):
-        fields = ClubListSerializer.Meta.fields + ('seasons',)
+        fields = ClubListSerializer.Meta.fields + ('clubplayers',)
         model = Club
 
 
-class PlayerNumbersSerializer(serializers.ModelSerializer):
-    clubs = PlayerNumbersClubSerializer(many=True)
+class NumbersSerializer(serializers.ModelSerializer):
+    clubs = NumbersClubSerializer(many=True)
     number = serializers.ReadOnlyField()
 
     class Meta(object):

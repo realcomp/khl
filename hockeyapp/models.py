@@ -229,7 +229,7 @@ class Player(AbstractMan):
 
     def get_absolute_url(self):
         if self.pk:
-            return reverse('hockeyapp:player-card', kwargs={'pk': self.pk})
+            return reverse('hockeyapp:players:card', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name=_('Player')
@@ -330,7 +330,7 @@ class Arena(AdminLinkMixin, TitleBaseModel):
     def get_absolute_url(self):
         if self.pk:
             club = self.club_set.latest('pk')
-            return reverse('hockeyapp:club-home', kwargs={'pk': club.pk})
+            return reverse('hockeyapp:clubs:home', kwargs={'pk': club.pk})
 
     class Meta:
         verbose_name=_('Arena')
@@ -473,7 +473,7 @@ class Club(AdminLinkMixin, TitleBaseModel):
 
     def get_absolute_url(self):
         if self.pk:
-            return reverse('hockeyapp:club', kwargs={'pk': self.pk})
+            return reverse('hockeyapp:clubs:details', kwargs={'pk': self.pk})
 
     @property
     def seasons(self):
@@ -599,13 +599,13 @@ class ClubPlayer(models.Model):
     def player_url(self):
         if self.pk and self.player:
             url = reverse(
-                'hockeyapp:player-card', kwargs={'pk': self.player.pk})
+                'hockeyapp:players:card', kwargs={'pk': self.player.pk})
             return '%s' % url
 
     @property
     def club_url(self):
         if self.pk and self.club:
-            url = reverse('hockeyapp:club', kwargs={'pk': self.club.pk})
+            url = reverse('hockeyapp:clubs:details', kwargs={'pk': self.club.pk})
             if self.season:
                 url += '?%s' % urllib.urlencode({
                     'season': self.season.pk,

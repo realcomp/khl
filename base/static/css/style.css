@@ -5929,6 +5929,19 @@ text tspan, text {
     padding-left: 6px;
     min-width: 120px;
 }
+.club-indicators-list-block{
+    margin-left: 20px;
+    border-left: 2px solid #c0c0c0;
+    padding: 8px;
+}
+.club-indicators-list-head{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+
 .loader-large {
     background: #ffffff url('/static/images/loader-large.gif') center no-repeat;
     height: 100px;
