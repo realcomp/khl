@@ -29,49 +29,6 @@ from ...serializers.schedule import ScheduleSerializer
 from ...serializers.timeline import PlayerTimelineSerializer
 
 
-class PlayersSearch(viewsets.ReadOnlyModelViewSet):
-    filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
-    queryset = Player.objects.all()
-    paginate_by = 50
-    serializer_class = PlayersSearchSerializer
-
-    def list(self, request, *args, **kwargs):
-        qs = self.filter_queryset(self.get_queryset())
-        self.rating = self._get_rating(request, qs)
-
-        _pk = request.GET.get('player')
-        if _pk:
-            _pk = int(_pk)
-            # qs is turned into list
-            qs = qs.ranged_filter(lambda player: player.pk == _pk, 5)
-
-        queryset = qs
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return response.Response(serializer.data)
-
-    def _get_rating(self, request, qs):
-        result = {}
-        rating_index = 0
-        if not request.GET.get('rated_by', ''):
-            for player in qs:
-                rating_index += 1
-                result[player.pk] = rating_index
-        return result
-
-
-class BestPlayer(PlayersSearch):
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.filter_queryset(self.get_queryset()).first()
-        serializer = self.get_serializer(instance)
-        return response.Response(serializer.data)
-
-
 class PlayerCardIndicators(generics.ListAPIView):
     queryset = ClubPlayerMatch.objects.all()
     paginate_by = 99999
