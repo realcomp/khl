@@ -8,7 +8,8 @@ from django.db.models import Q, Avg
 
 from base.models import Season
 from hockeyapp.filters import OrderFilter
-from hockeyapp.models import Club, Country, Player, League, LeagueClub, Match
+from hockeyapp.models import (
+    Club, Country, Player, League, LeagueClub, Match, ClubPlayer)
 
 from .admin import ArenaInstaPhotoList
 from .mixins import ClubListMixin
@@ -100,9 +101,7 @@ class PlayerPartners(drf.generics.ListAPIView):
     def filter_queryset(self, qs):
         _player_id = self.kwargs.get('player_id')
         qs = super(PlayerPartners, self).filter_queryset(qs)
-        _is_playing = self.request.GET.get('is_playing')
-        if _is_playing:
-            qs = qs.filter(clubplayer__season=Season.objects.latest('start_date'))
+
         if not self._plrs_seasons:
             cp = qs.filter(pk=_player_id)
             _club_season = cp.filter(clubplayer__season__isnull=False
@@ -110,7 +109,16 @@ class PlayerPartners(drf.generics.ListAPIView):
                                             'clubplayer__season_id',)
             self._plrs_seasons = self._get_players_by_season(qs,_club_season)
             _plrs_ids = frozenset().union(*self._plrs_seasons.values())
-        qs = qs.filter(pk__in = _plrs_ids).exclude(pk=_player_id)
+
+        _is_playing = self.request.GET.get('is_playing')
+        if _is_playing:
+            player = Player.objects.get(pk=_player_id)
+            season = Season.objects.latest('start_date')
+            now_playing = qs.filter(
+                clubplayer__season=season, clubplayer__club=player.club)
+            qs = qs.filter(pk__in=now_playing.values_list('pk', flat=True))
+
+        qs = qs.filter(pk__in=_plrs_ids).exclude(pk=_player_id)
         return qs
 
     def _get_players_by_season(self, qs, club_season):
