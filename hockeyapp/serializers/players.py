@@ -3,7 +3,7 @@ import itertools
 
 from django.db.models import Avg, Sum
 
-from rest_framework import pagination, serializers
+from rest_framework import pagination, response, serializers
 
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
@@ -205,14 +205,17 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         model = ClubPlayerMatch
 
 
-class ClubPlayerMatchPaginationSerilizer(pagination.PaginationSerializer):
-    is_limited = serializers.SerializerMethodField()
-
-    def get_is_limited(self, obj):
-        request = self.context.get('request')
-        if request and request.user.is_authenticated():
+class ClubPlayerMatchPagination(pagination.PageNumberPagination):
+    def _is_limited(self):
+        if self.request.user.is_authenticated():
             return False
         return True
+
+    def get_paginated_response(self, data):
+        return response.Response({
+            'results': data,
+            'is_limited': self._is_limited(),
+        })
 
 
 class PlayerCardClubsSerializer(BaseClubSerializer):

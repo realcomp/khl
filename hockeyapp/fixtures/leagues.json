@@ -1,0 +1,72 @@
+[
+{
+    "fields": {
+        "country": 1,
+        "ru_title": "\u041a\u0425\u041b",
+        "en_title": "KHL",
+        "title": "\u041a\u0425\u041b"
+    },
+    "model": "hockeyapp.league",
+    "pk": 1
+},
+{
+    "fields": {
+        "country": 1,
+        "ru_title": "\u0412\u0425\u041b",
+        "en_title": "VHL",
+        "title": "\u0412\u0425\u041b"
+    },
+    "model": "hockeyapp.league",
+    "pk": 2
+},
+{
+    "fields": {
+        "country": 1,
+        "ru_title": "\u041c\u0425\u041b",
+        "en_title": "MHL",
+        "title": "\u041c\u0425\u041b"
+    },
+    "model": "hockeyapp.league",
+    "pk": 3
+},
+{
+    "fields": {
+        "country": 1,
+        "ru_title": "\u041c\u0425\u041b-2",
+        "en_title": "MHL-2",
+        "title": "\u041c\u0425\u041b-2"
+    },
+    "model": "hockeyapp.league",
+    "pk": 4
+},
+{
+    "fields": {
+        "country": 1,
+        "ru_title": "\u0412\u0425\u041b-2",
+        "en_title": "",
+        "title": "\u0412\u0425\u041b-2"
+    },
+    "model": "hockeyapp.league",
+    "pk": 6
+},
+{
+    "fields": {
+        "country": 1,
+        "ru_title": "\u0421\u0443\u043f\u0435\u0440\u043b\u0438\u0433\u0430",
+        "en_title": "Superliga",
+        "title": ""
+    },
+    "model": "hockeyapp.league",
+    "pk": 7
+},
+{
+    "fields": {
+        "country": null,
+        "ru_title": "\u041d\u0415 \u041b\u0418\u0413\u0418",
+        "en_title": "NOT Leagues",
+        "title": ""
+    },
+    "model": "hockeyapp.league",
+    "pk": 8
+}
+]

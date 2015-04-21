@@ -40,8 +40,8 @@ class RegistrationView(generics.CreateAPIView):
     def perform_create(self, serializer):
         super(RegistrationView, self).perform_create(serializer)
         user = authenticate(
-            username=self.request.DATA['username'],
-            password=self.request.DATA['password'])
+            username=self.request.data['username'],
+            password=self.request.data['password'])
         login(self.request, user)
 
 
@@ -51,7 +51,7 @@ class PasswordResetView(APIView):
     email - user's email
     """
     def post(self, request, *args, **kwargs):
-        form = PasswordResetForm(request.DATA)
+        form = PasswordResetForm(request.data)
         if form.is_valid():
             opts = {
                 'use_https': request.is_secure(),

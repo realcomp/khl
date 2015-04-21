@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-from django.conf.urls import url, patterns
+from django.conf.urls import include, url
 
-from . import views
-from .views import api
-from .views.api import (
+from .. import views
+from ..views import api
+from ..views.api import (
     generic,
     clubs as api_clubs,
     players as api_players)
-from .views import admin, club, player
+from ..views import admin, players as views_players
 
 
 urlpatterns = [
@@ -20,10 +20,10 @@ urlpatterns = [
     url(r'^api/leagues/$', generic.LeagueList.as_view(),
         name='league-list-api'),
     url(r'^api/players/$',
-        api.PlayersSearch.as_view({'get': 'list'}),
+        api_players.PlayersSearch.as_view({'get': 'list'}),
         name='players-search-api'),
     url(r'^api/players/best/$',
-        api.BestPlayer.as_view({'get': 'retrieve'}),
+        api_players.BestPlayer.as_view({'get': 'retrieve'}),
         name='best-player-api'),
     url(r'^api/players/numbers/$', api_players.PlayerNumbers.as_view(),
         name='player-numbers-api'),
@@ -34,7 +34,7 @@ urlpatterns = [
         api.ClubTitlesSearch.as_view(),
         name='club-titles-search-api'),
     url(r'^api/players/(?P<pk>\d+)/$',
-        api.PlayersSearch.as_view({'get': 'retrieve'}),
+        api_players.PlayersSearch.as_view({'get': 'retrieve'}),
         name='player-card-api'),
     url(r'^api/players/(?P<player_id>\d+)/indicators/$',
         api.PlayerCardIndicators.as_view(),
@@ -73,52 +73,13 @@ urlpatterns = [
         views.MetricsPlayersCompareGraph.as_view(),
         name='metrics-compare-graph'),
     # players
-    url(r'^players/$', player.PlayersSearch.as_view(),
-        name='players-search'),
-    url(r'^players2/$', player.PlayersSearch2.as_view(),
+    url(r'^players/', include('hockeyapp.urls.players', namespace='players')),
+    url(r'^players2/$', views_players.PlayersSearch2.as_view(),
         name='players-search2'),
-    url(r'^players/(?P<pk>\d+)/$', player.PlayerCard.as_view(),
-        name='player-card'),
-    url(r'^players/(?P<pk>\d+)/indicators/$',
-        player.PlayerCardIndicators.as_view(),
-        name='player-card-indicators'),
-    url(r'^players/(?P<pk>\d+)/clubs/$', player.PlayerCardClubs.as_view(),
-        name='player-card-clubs'),
-    url(r'^players/(?P<pk>\d+)/coaches/$', player.PlayerCardCoaches.as_view(),
-        name='player-card-coaches'),
-    url(r'^players/(?P<pk>\d+)/partners/$',
-        player.PlayerCardPartners.as_view(),
-        name='player-card-partners'),
-    url(r'^players/(?P<pk>\d+)/photos/$', player.PlayerCardPhotos.as_view(),
-        name='player-card-photos'),
-    url(r'^players/(?P<pk>\d+)/communication/$',
-        player.PlayerCardCommunication.as_view(),
-        name='player-card-communication'),
-    url(r'^players/(?P<pk>\d+)/news/$', player.PlayerCardNews.as_view(),
-        name='player-card-news'),
-    url(r'^players/(?P<pk>\d+)/numbers/$', player.PlayerCardNumbers.as_view(),
-        name='player-card-numbers'),
     # clubs
-    url(r'^clubs/$', club.ClubListView.as_view(), name='club-list'),
-    url(r'^clubs/(?P<pk>\d+)/$', club.ClubView.as_view(), name='club'),
-    url(r'^clubs/(?P<pk>\d+)/calendar/$', club.ClubCalendarView.as_view(),
-        name='club-calendar'),
-    url(r'^clubs/(?P<pk>\d+)/stats/$', club.ClubStatsView.as_view(),
-        name='club-stats'),
-    url(r'^clubs/(?P<pk>\d+)/home/$', club.ClubHomeView.as_view(),
-        name='club-home'),
-    url(r'^clubs/(?P<pk>\d+)/photos/$', club.ClubPhotosView.as_view(),
-        name='club-photos'),
-    url(r'^clubs/(?P<pk>\d+)/fanzone/$', club.ClubFanZoneView.as_view(),
-        name='club-fanzone'),
-    url(r'^clubs/(?P<pk>\d+)/news/$', club.ClubNewsView.as_view(),
-        name='club-news'),
-    url(r'^clubs/(?P<pk>\d+)/numbers/$', club.ClubNumbersView.as_view(),
-        name='club-numbers'),
-    #testing purposes
-    url(r'^clubs/indicators/$', club.ClubView2.as_view(), name='club2'),
+    url(r'^clubs/', include('hockeyapp.urls.clubs', namespace='clubs')),
 
-    #admin
+    # admin
     url(r'^sporto-admin/club-insta-photo/$',
         admin.cpat,
         name='club-insta-photo'),

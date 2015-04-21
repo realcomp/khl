@@ -67,7 +67,13 @@ cpat = ClubPhotoAngularTemplate.as_view()
 class ClubPlayerMatchTemplate(TemplateView):
     b''' fix 257 '''
     template_name = 'admin/fix257.html'
-    khl = League.objects.get(en_title='KHL')
+
+    @property
+    def khl(self):
+        ''' workaround for tests '''
+        if not getattr(self, '_khl'):
+            self._khl = League.objects.get(en_title='KHL')
+        return self._khl
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_staff:

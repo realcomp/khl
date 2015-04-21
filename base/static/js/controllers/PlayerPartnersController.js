@@ -40,7 +40,7 @@ angular.module('Sportomatics')
                     if(($scope.params && $scope.params.is_playing) || ($scope.params && $scope.params.rate_by)){
                         $scope.url += '?'+ $.param($scope.params)
                     }
-                    $scope.loader = true;
+                    $scope.loaded = false;
                     $http.get($scope.url)
                         .success(function(data){
                             _.each(data, function(object){
@@ -58,7 +58,7 @@ angular.module('Sportomatics')
                                 })
                             });
                             $scope.limit = [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
-                            $scope.loader = false;
+                            $scope.loaded = true;
                             if($scope.params.rate_by){
                                 $scope.playersBySeasonTime = data;
                             } else {

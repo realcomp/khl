@@ -8,13 +8,6 @@ from base.models import Season
 from ..serializers import SeasonSerializer
 
 
-class PaginationMixin(object):
-    def get_paginate_by(self):
-        if 'paginate_by' in self.request.GET:
-            return int(self.request.GET['paginate_by'])
-        return 50
-
-
 class SeasonsMixin(object):
     def get_context_data(self, **kwargs):
         context = super(SeasonsMixin, self).get_context_data(**kwargs)
