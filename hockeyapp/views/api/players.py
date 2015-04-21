@@ -51,6 +51,8 @@ class PlayersSearch(viewsets.ReadOnlyModelViewSet):
     serializer_class = PlayersSearchSerializer
 
     def _is_default(self, request):
+        if not request.GET.items():
+            return False
         if set(zip(*request.GET.items())[0]) != {'order_by', 'is_playing'}:
             return False
         if request.GET.get('order_by', '') != '%s_lastname,%s_name':
