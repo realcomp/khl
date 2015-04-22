@@ -18,17 +18,23 @@ from . import serializers
 
 class FilerImageUpload(drf.views.APIView):
     permission_classes = (SportoAdminPermission,)
+    allowed_methods = ('POST', 'PUT')
 
     def post(self, request, format=None):
+        print request
+        print request.data
         if request.data:
             fl = request.data.get('file')
-            model = get_model('hockeyapp', request.data.get('model_name'))
+            model_name = request.data.get('model_name','').capitalize()
+            model = get_model('hockeyapp', model_name)
             instance_id = request.data.get('id')
-            filer_file = self.create_filer_image(fl, model)
-            model = get_model('hockeyapp', model)
+            filer_file = self.create_filer_image(fl, model_name)
             if self.set_relation(filer_file, model, instance_id):
                 return drf.response.Response(status=201)
         return drf.response.Response(status=404)
+
+    def put(self, request, format=None):
+        return self.post(request, format)
 
     def create_filer_image(self, image, folder_name):
         _folder_objects = filer.models.Folder.objects
@@ -53,7 +59,7 @@ class FilerImageUpload(drf.views.APIView):
             instance.photo = filer_image
             instance.save(update_fields=['photo'])
             return 1
-
+fiu_admin = FilerImageUpload.as_view()
 
 class CPAPIBase(object):
     queryset = ArenaInstaPhoto.objects.all()
