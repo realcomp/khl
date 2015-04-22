@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import bisect
+from dateutil import relativedelta
+
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -155,6 +160,30 @@ class Player(AbstractMan):
             ClubPlayerMatch.objects
             .filter(clubplayer__player=self).order_by('match__date').last())
 
+    def get_related_players(self):
+        '''
+        age-related players
+        returns players from the same age group
+        '''
+        now = timezone.now().date()
+        rd = lambda x: relativedelta.relativedelta(years=x)
+        age_groups = (
+            # до 19 лет (юноши и дети)
+            (19, Q(birth_date__gt=now - rd(20))),
+            # 20-23 (молодежь)
+            (23, Q(birth_date__gt=now - rd(24), birth_date__lte=now - rd(20))),
+            # 24-30 (зрелые игроки)
+            (30, Q(birth_date__gt=now - rd(31), birth_date__lte=now - rd(24))),
+            # 31-35 (опытные игроки)
+            (35, Q(birth_date__gt=now - rd(36), birth_date__lte=now - rd(31))),
+            # 36+ (ветераны)
+            (999, Q(birth_date__lte=now - rd(36))),
+        )
+
+        group = bisect.bisect_left(zip(*age_groups)[0], self.age[0])
+        q = age_groups[group][1]
+        return Player.objects.filter(q)
+
     def get_absolute_url(self):
         if self.pk:
             return reverse('hockeyapp:players:card', kwargs={'pk': self.pk})
@@ -162,3 +191,18 @@ class Player(AbstractMan):
     class Meta(object):
         verbose_name = _('Player')
         verbose_name_plural = _('Players')
+
+
+class RelatedPlayer(models.Model):
+    player1 = models.ForeignKey(
+        Player, verbose_name=_('Player 1'), related_name='relatedplayers1',
+        on_delete=models.SET_NULL, null=True, blank=True)
+    player2 = models.ForeignKey(
+        Player, verbose_name=_('Player 2'), related_name='relatedplayers2',
+        on_delete=models.SET_NULL, null=True, blank=True)
+    value = models.FloatField('Similarity value')
+    modified = models.DateTimeField(auto_now=True)
+
+    class Meta(object):
+        verbose_name = _('Related Player')
+        verbose_name_plural = _('Related Players')
