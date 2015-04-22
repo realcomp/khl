@@ -22,16 +22,7 @@ from base.models import TitleAlias, SocialAbstract, InstagramImageFile
 from .. import managers, parsers
 from ..choices import (
     PLAYER_ROLE, PARITY_VALUES, CONTRACT_TYPE, FIVER_VALUES, CHALLENGE_TYPE, PARSERS)
-
-
-def rgb_validator(value):
-    if not re.match(r"(\d+),\s*(\d+),\s*(\d+)", value):
-        raise ValidationError('Incorrect format. Expected `#,#,#`.')
-
-
-def hex_validator(value):
-    if not re.match(r'#[0-9a-fA-F]{6}', value):
-        raise ValidationError('Incorrect format. Expected hex.')
+from ..validators import hex_validator, rgb_validator
 
 
 class AbstractMan(AdminLinkMixin, LocaleAttrMixin, models.Model):
@@ -84,7 +75,7 @@ class AbstractMan(AdminLinkMixin, LocaleAttrMixin, models.Model):
         abstract=True
 
 
-from .players import Player
+from .players import Player, RelatedPlayer
 
 
 class PlayerCitizenship(models.Model):
@@ -224,138 +215,9 @@ class League(TitleBaseModel):
         verbose_name_plural=_('Leagues')
 
 
-class Club(AdminLinkMixin, TitleBaseModel):
-    objects = managers.club.ClubQuerySet.as_manager()
-    opening_dt = models.DateField(_('Founding date'), null=True, blank=True)
-    closing_dt = models.DateField(_('Closing date'), null=True, blank=True)
-    logo = FilerImageField(verbose_name=_('Logo'), null=True, blank=True,
-                           on_delete=models.SET_NULL)
-    site = models.URLField(_('Site'), blank=True)
-    email = models.CharField(_('E-mail'), max_length=255, blank=True, null=True)
-    phone = models.CharField(_('Phone'), max_length=255, blank=True, null=True)
-    contacts = models.TextField(_('Contacts'), blank=True)
-    style = models.TextField(_('Styles (CSS)'), blank=True, null=True)
-    rgb = models.CharField(_('RGB'), blank=True, null=True, max_length=255,
-                            help_text=_('Color hex. Example: #00ffaa'),
-                            validators=[hex_validator])
-    main_color = models.TextField(_('Main color'), blank=True,
-                            help_text=_('Color hex. Example: #00ffaa'),
-                            validators=[hex_validator])
-    secondary_color = models.TextField(_('2th color'), blank=True,
-                            help_text=_('Color hex. Example: #00ffaa'),
-                            validators=[hex_validator])
-    third_color = models.TextField(_('Third color'), blank=True,
-                            help_text=_('Color hex. Example: #00ffaa'),
-                            validators=[hex_validator])
-    #socials
-    vk = models.URLField('VK account URL', blank=True, max_length=1024)
-    ok = models.URLField('OK account URL', blank=True, max_length=1024)
-    fb = models.URLField('Facebook account URL', blank=True, max_length=1024)
-    gl = models.URLField('Google+ account URL', blank=True, max_length=1024)
-    tw = models.URLField('Twitter account URL', blank=True, max_length=1024)
-    im = models.URLField('Instagram account URL', blank=True, max_length=1024)
-    pp = models.URLField('Personal page URL', blank=True, max_length=1024)
-    ut = models.URLField('Youtube account URL', blank=True, max_length=1024)
-    #relation
-    address = models.ForeignKey(Address, null=True, blank=True,
-                                    on_delete=models.SET_NULL)
-    coach = models.ForeignKey(Coach, null=True, blank=True,
-                    related_name='headcoachclubs', verbose_name=_('Head Coach'),
-                                    on_delete=models.SET_NULL)
-    coaches = models.ManyToManyField(Coach, null=True, blank=True,
-                    related_name='helpcoachclubs', verbose_name=_('Help coaches')
-    )
-    arena = models.ForeignKey(Arena, null=True, blank=True,
-                                    on_delete=models.SET_NULL)
-    players = models.ManyToManyField(Player, null=True, blank=True)
-    league = models.ForeignKey(League, null=True, blank=True)
-    farm_club = models.OneToOneField('self', null=True, blank=True,
-                                    on_delete=models.SET_NULL,
-                                    related_name='farmclubparent')
-    junior_club = models.OneToOneField('self', null=True, blank=True,
-                                    on_delete=models.SET_NULL,
-                                    related_name='juniorclubparent')
-    #serviceinfo
-    proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
-    url = models.URLField('URL', blank=True)
-    html_body = models.TextField('Parse HTML', blank=True)
-
-    __unicode__ = lambda self: '{} ({})'.format(self.ru_title, self.address)
-
-    def get_title_verbose(self, request=None):
-        title = self.get_locale_attr('title', request=request)
-        if self.address:
-            title += ' (%s)' % self.address.get_locale_attr(
-                'title', request=request)
-        return title
-
-    def get_players(self, season):
-        if season.is_current:
-            return self.players.all()
-        else:
-            clubplayers = self.clubplayer_set.by_season(season)
-            pks = clubplayers.values_list('player_id', flat=True)
-            return Player.objects.filter(pk__in=pks)
-
-    def get_not_playing_players(self):
-        current_season = Season.objects.get_current_season()
-        if current_season:
-            ids =  Player.objects.exclude(clubplayer__season=current_season
-                                ).filter(clubplayer__club=self
-                                ).values_list('pk', flat=True)
-            return Player.objects.filter(pk__in=ids)
-        return Player.objects.none()
-
-    @property
-    def all_players(self):
-        return self.players.order_by('line', 'number')
-
-    @property
-    def current_offender_players(self):
-        return self.players.filter(line=3).order_by('number')
-
-    @property
-    def current_defender_players(self):
-        return self.players.filter(line=2).order_by('number')
-
-    @property
-    def current_goalkeeper_players(self):
-        return self.players.filter(line=1).order_by('number')
-
-    def get_absolute_url(self):
-        if self.pk:
-            return reverse('hockeyapp:clubs:details', kwargs={'pk': self.pk})
-
-    @property
-    def seasons(self):
-        return (
-            Season.objects
-            .filter(pk__in=self.clubplayer_set.values_list('season_id'))
-            .order_by('-start_date'))
-
-    def get_prev_season(self, season):
-        seasons = list(reversed(self.seasons))
-        i = seasons.index(season)
-        if i > 0:
-            return seasons[i - 1]
-
-    def get_next_season(self, season):
-        seasons = list(reversed(self.seasons))
-        i = seasons.index(season)
-        if i < len(seasons) - 1:
-            return seasons[i + 1]
-
-    def get_instagam_photo(self):
-        return self.pk and self.arenainstaphoto_set.club_photo(self)
-
-    class Meta:
-        verbose_name = _('Club')
-        verbose_name_plural = _('Clubs')
-
-
 class ClubTitleAlias(models.Model):
     b''' Имя(алиас) клуба '''
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     alias = models.OneToOneField(TitleAlias)
 
     class Meta:
@@ -366,7 +228,7 @@ class ClubTitleAlias(models.Model):
 class AddressClub(models.Model):
     b''' связка адрес - клуб в сезоне '''
     address = models.ForeignKey(Address)
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
     season = models.ForeignKey( Season, null=True, blank=True,
@@ -403,7 +265,7 @@ class AddressClubPhotos(models.Model):
 class LeagueClub(AdminLinkMixin, models.Model):
     b''' связка лига - клуб в сезоне '''
     league = models.ForeignKey(League)
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     start_date = models.DateField(_('Start date'), null=True, blank=True)
     end_date = models.DateField(_('End date'), null=True, blank=True)
     season = models.ForeignKey( Season, null=True, blank=True,
@@ -420,7 +282,7 @@ class ClubPlayer(models.Model):
     b''' связка игрок - клуб в сезоне '''
     objects = managers.player.ClubPlayerQuerySet.as_manager()
     player = models.ForeignKey(Player)
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     number = models.PositiveIntegerField(_('Number'), default=0)
     line = models.PositiveSmallIntegerField(_('Line'), default=0,
                                             choices=PLAYER_ROLE)
@@ -471,7 +333,7 @@ class ClubPlayer(models.Model):
 class CoachClub(models.Model):
     b''' связка тренер клуб в сезоне '''
     coach = models.ForeignKey(Coach)
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     head = models.BooleanField(_('Head coach'), default=True)
     start_date = models.DateField(_('Start date'), null=True)
     end_date = models.DateField(_('End date'), null=True)
@@ -487,7 +349,7 @@ class CoachClub(models.Model):
 
 class LogoClubHistory(models.Model):
     b''' связка лого клуб в сезоне '''
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     logo = FilerImageField(verbose_name=_('Logo'))
     start_date = models.DateField(_('Start date'), null=True)
     end_date = models.DateField(_('End date'), null=True)
@@ -499,7 +361,7 @@ class LogoClubHistory(models.Model):
 
 
 class ClubSocial(SocialAbstract):
-    club = models.ForeignKey(Club)
+    club = models.ForeignKey('hockeyapp.Club')
     class Meta:
         verbose_name=_('Club social account')
         verbose_name_plural=_('Clubs social accounts')
@@ -705,7 +567,7 @@ class Match(AdminLinkMixin, TitleBaseModel):
     line_judges = models.ManyToManyField(Judge, null=True, blank=True,
                             related_name='matchlinejudges',
                             verbose_name=_('Line judges'))
-    home_team = models.ForeignKey(Club, null=True, blank=True,
+    home_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
                                 on_delete=models.SET_NULL,
                                 related_name='homematches',
                                 verbose_name=_('Home team'))
@@ -714,7 +576,7 @@ class Match(AdminLinkMixin, TitleBaseModel):
                                     related_name='homematches')
     home_players = models.ManyToManyField(ClubPlayer, null=True, blank=True,
                                     related_name='homematches')
-    guest_team = models.ForeignKey(Club, null=True, blank=True,
+    guest_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
                                 on_delete=models.SET_NULL,
                                 related_name='guestmatches',
                                 verbose_name=_('Guest team'))
@@ -791,11 +653,11 @@ class Schedule(TitleBaseModel):
     league = models.ForeignKey(League, null=True, blank=True)
     match = models.OneToOneField(Match, null=True, blank=True,
                                 on_delete=models.SET_NULL,)
-    home_team = models.ForeignKey(Club, null=True, blank=True,
+    home_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
                                 on_delete=models.SET_NULL,
                                 related_name='schedule_homematches',
                                 verbose_name=_('Home team'))
-    guest_team = models.ForeignKey(Club, null=True, blank=True,
+    guest_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
                                 on_delete=models.SET_NULL,
                                 related_name='schedule_guestmatches',
                                 verbose_name=_('Guest team'))
@@ -851,38 +713,5 @@ class Name(models.Model):
         verbose_name_plural = _('Names')
 
 
-class Timeline(LocaleAttrMixin, models.Model):
-    start_date = models.DateTimeField(_('Start date'), blank=True, null=True)
-    end_date = models.DateTimeField(_('End date'), blank=True, null=True)
-    ru_headline = models.CharField(
-        _('Headline (RU)'), max_length=255, blank=True, null=True)
-    en_headline = models.CharField(
-        _('Headline (EN)'), max_length=255, blank=True, null=True)
-    ru_text = models.TextField(_('Text (RU)'), blank=True, null=True)
-    en_text = models.TextField(_('Text (EN)'), blank=True, null=True)
-    media = FilerImageField(verbose_name=_('Media'), null=True, blank=True)
-    ru_media_credit = models.CharField(
-        _('Media credit (RU)'), max_length=255, blank=True, null=True)
-    en_media_credit = models.CharField(
-        _('Media credit (EN)'), max_length=255, blank=True, null=True)
-    ru_media_caption = models.CharField(
-        _('Media caption (RU)'), max_length=255, blank=True, null=True)
-    en_media_caption = models.CharField(
-        _('Media caption (EN)'), max_length=255, blank=True, null=True)
-    type = models.CharField(
-        _('Type'), max_length=255, blank=True, null=True)
-    tag = models.CharField(
-        _('Tag'), max_length=255, blank=True, null=True)
-
-    # related objects
-    player = models.ForeignKey(
-        Player, verbose_name=_('Player'), on_delete=models.SET_NULL,
-        blank=True, null=True)
-    club = models.ForeignKey(
-        Club, verbose_name=_('Club'), on_delete=models.SET_NULL,
-        blank=True, null=True)
-
-    class Meta(object):
-        ordering = 'start_date',
-        verbose_name = _('Timeline event')
-        verbose_name_plural = _('Timeline events')
+from .clubs import Club
+from .timeline import Timeline
