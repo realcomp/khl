@@ -70,6 +70,13 @@ table {
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Collegiate";
+  src: url("../fonts/collegiateHeavyOutlineMedium.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
 /* line 1, ../sass/_animations.sass */
 a {
   -moz-transition: 0.5s;

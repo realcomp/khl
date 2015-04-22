@@ -246,9 +246,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
 
         init: (@divId, @data) ->
 
-        setLocaleObject: (@localeObject) ->
-            self.localeObject = @localeObject
-
         setPeriod: (@period) ->
             self.period = @period
 
@@ -281,9 +278,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                         drilldown: (e) ->
                             if not e.seriesOptions
                                 chart = @
-                                ###points = this.options.series[0].data.map (el) ->
-                                    return el.drilldown
-                                return if not _.contains points, e.point.drilldown###
                                 chart.showLoading 'Загрузка данных по месяцам ...'
                                 if not self.context.dataByMonth?
                                     self.context.getPlayerDataByMonth().then (dataByMonth) ->

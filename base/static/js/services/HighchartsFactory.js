@@ -350,11 +350,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       this.data = data1;
     };
 
-    HighchartsPlayerIndicatorsChart.prototype.setLocaleObject = function(localeObject) {
-      this.localeObject = localeObject;
-      return self.localeObject = this.localeObject;
-    };
-
     HighchartsPlayerIndicatorsChart.prototype.setPeriod = function(period) {
       this.period = period;
       return self.period = this.period;
@@ -399,11 +394,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               var chart;
               if (!e.seriesOptions) {
                 chart = this;
-
-                /*points = this.options.series[0].data.map (el) ->
-                    return el.drilldown
-                return if not _.contains points, e.point.drilldown
-                 */
                 chart.showLoading('Загрузка данных по месяцам ...');
                 if (self.context.dataByMonth == null) {
                   return self.context.getPlayerDataByMonth().then(function(dataByMonth) {

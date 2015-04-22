@@ -67,6 +67,20 @@
                     <div ng-if="dataType === 'graph-serial' && clubs.length > 0">
                         <div id="chartdiv" style="width: 100%; height:400px; "></div>
                     </div>
+                    <div class="text-center" ng-show="dataType === 'graph-serial' && clubs.length > 0">
+                        <div class="ui checkbox m-r-10">
+                            <input type="checkbox" name="line" value=""
+                                   ng-checked="defenders"
+                                   onchange="angular.element(this).scope().defenders = !angular.element(this).scope().defenders; angular.element(this).scope().listAveragePlayer();">
+                            <label>защитники</label>
+                        </div>
+                        <div class="ui checkbox inline-block">
+                            <input type="checkbox" name="line" value=""
+                                   ng-checked="offenders"
+                                   onchange="angular.element(this).scope().offenders = !angular.element(this).scope().offenders; angular.element(this).scope().listAveragePlayer();">
+                            <label>нападающие</label>
+                        </div>
+                    </div>
 
                     <div class="inline-block vertical-top">
                         Команда для сравнения

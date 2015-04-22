@@ -718,11 +718,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       this.data = data1;
     };
 
-    HighchartsPlayerIndicatorsChart.prototype.setLocaleObject = function(localeObject) {
-      this.localeObject = localeObject;
-      return self.localeObject = this.localeObject;
-    };
-
     HighchartsPlayerIndicatorsChart.prototype.setPeriod = function(period) {
       this.period = period;
       return self.period = this.period;
@@ -767,11 +762,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               var chart;
               if (!e.seriesOptions) {
                 chart = this;
-
-                /*points = this.options.series[0].data.map (el) ->
-                    return el.drilldown
-                return if not _.contains points, e.point.drilldown
-                 */
                 chart.showLoading('Загрузка данных по месяцам ...');
                 if (self.context.dataByMonth == null) {
                   return self.context.getPlayerDataByMonth().then(function(dataByMonth) {
@@ -2796,9 +2786,11 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.field = averageClubPlayerIndicatorsChart.getField();
   $scope.dataType = averageClubPlayerIndicatorsChart.getDataType();
   $scope.clubs = [];
+  $scope.offenders = true;
+  $scope.defenders = true;
   $scope.$watch('field', function() {
     if ($scope.clubs.length > 0) {
-      return self.listAvergePlayer();
+      return $scope.listAveragePlayer();
     }
   });
   $scope.setSelectedPlayer = function(obj) {
@@ -2821,14 +2813,6 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       LocaleFactory.setLocale(headers()['content-language']);
       players = data.all_players = _.filter(data.all_players, function(player) {
         return player.line_display.indexOf('Goalkeeper') === -1;
-      });
-      data.offender_players.map(function(el) {
-        el.selected = true;
-        return el;
-      });
-      data.defender_players.map(function(el) {
-        el.selected = true;
-        return el;
       });
       queries = [];
       _.each(players, function(player) {
@@ -2858,7 +2842,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
         };
         $scope.clubs.push(clubObject);
         $timeout(function() {
-          return self.listAvergePlayer();
+          return $scope.listAveragePlayer();
         }, 100);
       });
     });
@@ -2872,15 +2856,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       $scope.selectedPlayer.selected = true;
       club.all_players.push($scope.selectedPlayer);
       club.results.push(results[0]);
-      return self.listAvergePlayer();
-    });
-  };
-  $scope.calculateTeamData = function() {
-    return _.each($scope.clubs, function(club) {
-      var players;
-      return players = _.filter(club.all_players, function(player) {
-        return player.line_display.indexOf('Goalkeeper') === -1 && player.selected === true;
-      });
+      return $scope.listAveragePlayer();
     });
   };
   $scope.togglePlayerSelection = function(title, index) {
@@ -2891,16 +2867,20 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     player = club.all_players[index];
     player.selected = !player.selected;
     $('#player_' + index).attr('checked', !$('#player_' + index).attr('checked'));
-    return self.listAvergePlayer();
+    return $scope.listAveragePlayer();
   };
-  this.listAvergePlayer = function() {
+  $scope.listAveragePlayer = function() {
     var newPlayerIndicatorsData;
     newPlayerIndicatorsData = [];
+    console.log($scope.defenders);
     _.each($scope.clubs, function(club) {
       var averageData, clubObject, key, selectedPlayers;
-      selectedPlayers = _.countBy(club.all_players, {
+      selectedPlayers = _.countBy(_.filter(club.all_players, function(player) {
+        return player.line_display === 'Offender' && $scope.offenders === true || player.line_display === 'Defender' && $scope.defenders === true;
+      }), {
         selected: true
       })['true'];
+      console.log(selectedPlayers);
       for (key in _.last(club.results[0].data.results)) {
         if (_.contains(ALL_FIELDS, key)) {
           averageData = 0;
@@ -2910,6 +2890,9 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
               pk: Number(result.config.url.match("players\/(.*)\/indicators")[1])
             });
             player.result = _.last(result.data.results)[$scope.field];
+            if (player.line_display === 'Offender' && !$scope.offenders || player.line_display === 'Defender' && !$scope.defenders) {
+              return;
+            }
             if (player.selected === true) {
               averageData += parseFloat(_.last(result.data.results)[key]);
             }

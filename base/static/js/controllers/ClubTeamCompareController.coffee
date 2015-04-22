@@ -1,17 +1,18 @@
 angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, $http, $q, IndicatorsFactory, HighchartsFactory, LocaleFactory, $timeout) ->
     self = this;
     this.url = document.getElementById('api-player-indicators').value
-
     averageClubPlayerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart()
     $scope.localeObject = LocaleFactory.selectedLocale;
     $scope.setField = averageClubPlayerIndicatorsChart.setField
     $scope.field = averageClubPlayerIndicatorsChart.getField()
     $scope.dataType = averageClubPlayerIndicatorsChart.getDataType()
     $scope.clubs = []
+    $scope.offenders = true
+    $scope.defenders = true
 
     $scope.$watch 'field', () ->
         if $scope.clubs.length > 0
-            self.listAvergePlayer()
+            $scope.listAveragePlayer()
 
     $scope.setSelectedPlayer = (obj) ->
         if obj? and obj.originalObject?
@@ -29,12 +30,6 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             players = data.all_players = _.filter(data.all_players, (player) ->
                 player.line_display.indexOf('Goalkeeper') is -1
             )
-            data.offender_players.map (el) ->
-                el.selected = true
-                return el
-            data.defender_players.map (el) ->
-                el.selected = true
-                return el
             queries = []
             _.each players, (player) ->
                 player.selected = true
@@ -58,7 +53,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     results: results
                 $scope.clubs.push clubObject
                 $timeout( () ->
-                    self.listAvergePlayer()
+                    $scope.listAveragePlayer()
                 , 100)
                 return
             return
@@ -70,30 +65,32 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             $scope.selectedPlayer.selected = true
             club.all_players.push $scope.selectedPlayer
             club.results.push results[0]
-            self.listAvergePlayer()
-
-    $scope.calculateTeamData = () ->
-        _.each $scope.clubs, (club) ->
-            players = _.filter club.all_players, (player) ->
-                return player.line_display.indexOf('Goalkeeper') is -1  and player.selected is true
+            $scope.listAveragePlayer()
 
     $scope.togglePlayerSelection = (title, index) ->
         club = _.findWhere($scope.clubs, title: title)
         player = club.all_players[index]
         player.selected = not player.selected
         $('#player_'+index).attr('checked', !$('#player_'+index).attr('checked'))
-        self.listAvergePlayer()
+        $scope.listAveragePlayer()
 
-    this.listAvergePlayer = () ->
+    $scope.listAveragePlayer = () ->
         newPlayerIndicatorsData = []
+        console.log $scope.defenders
         _.each $scope.clubs, (club) ->
-            selectedPlayers = _.countBy(club.all_players, selected: true)['true']
+            #if $scope.defenders is false then for player in club.all_players then if player.line_display is 'Defender' then player.selected = false
+            #if $scope.offenders is false then for player in club.all_players then if player.line_display is 'Offender' then player.selected = false
+            selectedPlayers = _.countBy(_.filter(club.all_players, (player) ->
+                return player.line_display is 'Offender' and $scope.offenders is true or player.line_display is 'Defender' and $scope.defenders is true
+            ), selected: true)['true']
+            console.log selectedPlayers
             for key of _.last club.results[0].data.results #идем по всем показателям, берем их из первого объекта
                 if _.contains(ALL_FIELDS, key) #если это поле -- показатель
                     averageData = 0
                     _.each club.results, (result) ->
                         player = _.findWhere(club.all_players, pk: Number(result.config.url.match("players\/(.*)\/indicators")[1]))
                         player.result = _.last(result.data.results)[$scope.field]
+                        return if player.line_display is 'Offender' and not $scope.offenders or player.line_display is 'Defender' and not $scope.defenders
                         if player.selected is true
                             averageData += parseFloat(_.last(result.data.results)[key])
                         return
