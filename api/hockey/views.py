@@ -105,11 +105,7 @@ class PlayerPartners(drf.generics.ListAPIView):
         _is_playing = self.request.GET.get('is_playing')
         if _is_playing:
             season = Season.objects.latest('start_date')
-            target_cp = qs.filter(
-                clubplayer__season=season, clubplayer__player=_player_id)
-            target_clubs = target_cp.values_list('clubplayer__club', flat=True)
-            now_playing = qs.filter(
-                clubplayer__season=season, clubplayer__club__in=target_clubs)
+            now_playing = qs.filter(clubplayer__season=season)
             qs = qs.filter(pk__in=now_playing.values_list('pk', flat=True))
 
         if not self._plrs_seasons:
