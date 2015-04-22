@@ -5233,6 +5233,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .m-l-8{
     margin-left: 8px !important;
 }
+.m-l-15{
+    margin-left: 15px !important;
+}
 .m-l-20{
     margin-left: 20px !important;
 }
@@ -5947,7 +5950,9 @@ text tspan, text {
     font-weight: bold;
     margin-bottom: 15px;
 }
-
+.color-teal{
+    color: #16a085;
+}
 
 .loader-large {
     background: #ffffff url('/static/images/loader-large.gif') center no-repeat;

@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory) {
+angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location) {
   var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
@@ -21,7 +21,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     };
 
     HighchartsSpiderChart.prototype.setFormattedData = function(data) {
-      console.log(data);
       return this.data = data;
     };
 
@@ -340,7 +339,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
   HighchartsPlayerIndicatorsChart = (function() {
     function HighchartsPlayerIndicatorsChart() {
       this.period = self.period = 365;
-      this.field = 'count';
+      this.field = $location.search()['field'] ? $location.search()['field'] : 'count';
       this.dataType = 'graph-serial';
       self.field = this.field;
     }

@@ -76,6 +76,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     });
     return $q.all([$http.get(self.url.replace('/0/', '/' + $scope.selectedPlayer.pk + '/') + '?group_by=season')]).then(function(results) {
       $scope.selectedPlayer.selected = true;
+      $scope.selectedPlayer.added = true;
       club.all_players.push($scope.selectedPlayer);
       club.results.push(results[0]);
       return $scope.listAveragePlayer();
@@ -94,7 +95,6 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.listAveragePlayer = function() {
     var newPlayerIndicatorsData;
     newPlayerIndicatorsData = [];
-    console.log($scope.defenders);
     _.each($scope.clubs, function(club) {
       var averageData, clubObject, key, selectedPlayers;
       selectedPlayers = _.countBy(_.filter(club.all_players, function(player) {
@@ -102,7 +102,6 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       }), {
         selected: true
       })['true'];
-      console.log(selectedPlayers);
       for (key in _.last(club.results[0].data.results)) {
         if (_.contains(ALL_FIELDS, key)) {
           averageData = 0;

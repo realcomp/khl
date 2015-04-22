@@ -101,22 +101,24 @@
                             <div class="club-indicators-list-head">
                                 {{club.title}}
                             </div>
-                            Нападающие
+                                Нападающие
                             <hr>
                             <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Offender'"
                                            ng-click="togglePlayerSelection(club.title, $index)">
                                     <input class="pointer" type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">
-                                    <label class="pointer" >{{player.fio}} - {{player.result}}</label>
+                                    <label class="pointer" ng-class="{'color-teal': player.added}">{{player.fio}} - {{player.result}}</label><br>
+                                    <div ng-if="player.added" class="color-teal m-l-15"> ({{ player.club.title }})</div>
                             </div>
                             <br>
-                            Защитники
+                                Защитники
                             <hr>
                             <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Defender'"
                                            ng-click="togglePlayerSelection(club.title, $index)">
                                     <input class="pointer" type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">
-                                    <label class="pointer">{{player.fio}} - {{player.result}}</label>
+                                    <label class="pointer" ng-class="{'color-teal': player.added}">{{player.fio}} - {{player.result}}</label><br>
+                                    <div ng-if="player.added" class="color-teal m-l-15"> ({{ player.club.title }})</div>
                             </div>
                             <br>
                             <hr>

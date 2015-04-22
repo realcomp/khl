@@ -63,6 +63,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         club = _.findWhere($scope.clubs, title: title)
         $q.all([$http.get(self.url.replace('/0/', '/' + $scope.selectedPlayer.pk + '/') + '?group_by=season')]).then (results) ->
             $scope.selectedPlayer.selected = true
+            $scope.selectedPlayer.added = true
             club.all_players.push $scope.selectedPlayer
             club.results.push results[0]
             $scope.listAveragePlayer()
@@ -76,14 +77,12 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
 
     $scope.listAveragePlayer = () ->
         newPlayerIndicatorsData = []
-        console.log $scope.defenders
         _.each $scope.clubs, (club) ->
             #if $scope.defenders is false then for player in club.all_players then if player.line_display is 'Defender' then player.selected = false
             #if $scope.offenders is false then for player in club.all_players then if player.line_display is 'Offender' then player.selected = false
             selectedPlayers = _.countBy(_.filter(club.all_players, (player) ->
                 return player.line_display is 'Offender' and $scope.offenders is true or player.line_display is 'Defender' and $scope.defenders is true
             ), selected: true)['true']
-            console.log selectedPlayers
             for key of _.last club.results[0].data.results #идем по всем показателям, берем их из первого объекта
                 if _.contains(ALL_FIELDS, key) #если это поле -- показатель
                     averageData = 0

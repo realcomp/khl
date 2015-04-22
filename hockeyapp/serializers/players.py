@@ -232,9 +232,10 @@ class PlayerCardCoachesSerializer(CoachSerializer):
 
 class PlayerNamesSerializer(AbstractManSerializer):
     line_display = serializers.ReadOnlyField(source='get_line_display')
+    club = ClubLightListSerializer()
 
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname', 'line_display'
+        fields = 'pk', 'fio', 'name', 'lastname', 'line_display', 'club'
         model = Player
 
 

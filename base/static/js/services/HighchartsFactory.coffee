@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFactory) ->
+angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFactory, $location) ->
 
     class HighchartsSpiderChart
 
@@ -13,7 +13,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
             self.context = @context
 
         setFormattedData: (data) ->
-            console.log data
             @data = data
 
         draw: () ->
@@ -240,7 +239,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
 
         constructor: () ->
             @period = self.period = 365
-            @field = 'count'
+            @field = if $location.search()['field'] then $location.search()['field'] else 'count'
             @dataType = 'graph-serial'
             self.field = @field
 
