@@ -1,4 +1,4 @@
-angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, $http, $q, IndicatorsFactory, HighchartsFactory, LocaleFactory) ->
+angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, $http, $q, IndicatorsFactory, HighchartsFactory, LocaleFactory, $timeout) ->
     self = this;
     this.url = document.getElementById('api-player-indicators').value
 
@@ -7,12 +7,15 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
     $scope.setField = averageClubPlayerIndicatorsChart.setField
     $scope.field = averageClubPlayerIndicatorsChart.getField()
     $scope.dataType = averageClubPlayerIndicatorsChart.getDataType()
-    $scope.loader = true
     $scope.clubs = []
 
     $scope.$watch 'field', () ->
         if $scope.clubs.length > 0
             self.listAvergePlayer()
+
+    $scope.setSelectedPlayer = (obj) ->
+        if obj? and obj.originalObject?
+            $scope.selectedPlayer = obj.originalObject
 
     $scope.addAverageClubPlayerData = () ->
         if not $scope.selectedClub?
@@ -23,7 +26,6 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         url = $('#club-team-api').val().replace('0/', '') + pk
         $http.get(url).success (data, status, headers) ->
             LocaleFactory.setLocale headers()['content-language']
-            console.log LocaleFactory.selectedLocale
             players = data.all_players = _.filter(data.all_players, (player) ->
                 player.line_display.indexOf('Goalkeeper') is -1
             )
@@ -38,7 +40,9 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                 player.selected = true
                 queries.push $http.get(self.url.replace('/0/', '/' + player.pk + '/') + '?group_by=season')
                 return
+            $scope.loader = true
             $q.all(queries).then (results) ->
+                $scope.loader = false
                 lastSeasonResult = _.last results[0].data.results
                 clubObject =
                     all_players: data.all_players,
@@ -53,16 +57,20 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                         }]
                     results: results
                 $scope.clubs.push clubObject
-                self.listAvergePlayer()
+                $timeout( () ->
+                    self.listAvergePlayer()
+                , 100)
                 return
             return
         return
 
-    $scope.offenderFilter = (player) ->
-        return player.line_display is 'Offender'
-
-    $scope.defenderFilter = (player) ->
-        return player.line_display is 'Defender'
+    $scope.addPlayerToClub = (title) ->
+        club = _.findWhere($scope.clubs, title: title)
+        $q.all([$http.get(self.url.replace('/0/', '/' + $scope.selectedPlayer.pk + '/') + '?group_by=season')]).then (results) ->
+            $scope.selectedPlayer.selected = true
+            club.all_players.push $scope.selectedPlayer
+            club.results.push results[0]
+            self.listAvergePlayer()
 
     $scope.calculateTeamData = () ->
         _.each $scope.clubs, (club) ->
@@ -70,11 +78,9 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                 return player.line_display.indexOf('Goalkeeper') is -1  and player.selected is true
 
     $scope.togglePlayerSelection = (title, index) ->
-        console.log(title)
         club = _.findWhere($scope.clubs, title: title)
         player = club.all_players[index]
         player.selected = not player.selected
-        console.log player.fio
         $('#player_'+index).attr('checked', !$('#player_'+index).attr('checked'))
         self.listAvergePlayer()
 
@@ -109,7 +115,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData)
         averageClubPlayerIndicatorsChart.setContext($scope);
         averageClubPlayerIndicatorsChart.setPeriod(30);
-        averageClubPlayerIndicatorsChart.draw();
+        averageClubPlayerIndicatorsChart.draw()
         self.chart = $('#chartdiv').highcharts()
 
 

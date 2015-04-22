@@ -231,8 +231,10 @@ class PlayerCardCoachesSerializer(CoachSerializer):
 
 
 class PlayerNamesSerializer(AbstractManSerializer):
+    line_display = serializers.ReadOnlyField(source='get_line_display')
+
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname'
+        fields = 'pk', 'fio', 'name', 'lastname', 'line_display'
         model = Player
 
 

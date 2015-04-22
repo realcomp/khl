@@ -50,8 +50,11 @@
                     </div>
 
 
-                    <div style="position:relative;text-align: center; top: 100px; right: 34px; background: #ffffff" ng-hide="loader">
-                        <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                    <div style="position:relative;text-align: center; right: 34px; top: 100px;" ng-show="loader">
+                        <div class="text-center" style="position: absolute;z-index: 99999; font-size: 20px; top: 30px; left: 210px; width: 600px; background: rgba(255,255,255,0.7)">
+                            <i style="z-index: 1; font-size: 50px; top: 40px;  left: 40px" class="circle notched loading icon"></i><br>
+                            Загрузка данных...
+                        </div>
                     </div>
                     {% verbatim %}
                     <div id="chart-tooltip" ng-show="dataType === 'graph-serial'">
@@ -61,7 +64,7 @@
                         <div id="chart-tooltip-content"></div>
                     </div>
                     {% endverbatim %}
-                    <div ng-show="dataType === 'graph-serial'">
+                    <div ng-if="dataType === 'graph-serial' && clubs.length > 0">
                         <div id="chartdiv" style="width: 100%; height:400px; "></div>
                     </div>
 
@@ -88,21 +91,36 @@
                             <hr>
                             <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Offender'"
                                            ng-click="togglePlayerSelection(club.title, $index)">
-                                    <input type="checkbox" id="player_{{$index}}"
+                                    <input class="pointer" type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">
-                                    <label>{{player.fio}} - {{player.result}}</label>
+                                    <label class="pointer" >{{player.fio}} - {{player.result}}</label>
                             </div>
+                            <br>
                             Защитники
                             <hr>
                             <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Defender'"
                                            ng-click="togglePlayerSelection(club.title, $index)">
-                                    <input type="checkbox" id="player_{{$index}}"
+                                    <input class="pointer" type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">
-                                    <label>{{player.fio}} - {{player.result}}</label>
+                                    <label class="pointer">{{player.fio}} - {{player.result}}</label>
                             </div>
-                        </div>
+                            <br>
+                            <hr>
+                            Добавить игрока
+                            {% endverbatim %}
+                            <div class="ui input block m-t-10">
+                            <angucomplete id="players_filter" placeholder="Введите имя..."
+                                              pause="300" minlength="2"
+                                              selectedobject="selectedPlayer"
+                                              url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                              titlefield="lastname,name"
+                                              onchangecallback="setSelectedPlayer"/>
+                            </div>
+                            {% verbatim %}
+                            <div class="ui button m-t-20 block" ng-click="addPlayerToClub(club.title)">
+                                добавить
+                            </div>
                     </div>
-
                     {% endverbatim %}
 
 
