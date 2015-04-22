@@ -86,22 +86,19 @@
                             </div>
                             Нападающие
                             <hr>
-                            <div ng-repeat="player in club.offender_players track by $index">
-                                <div class="ui checkbox">
-                                    <input type="checkbox" name="line" value="{{player.fio}}"
-                                           ng-model="player.selected"
-                                           ng-click="togglePlayerSelection(club, $index)">
-                                    <label>{{player.fio}}</label>
-                                </div>
+                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Offender'"
+                                           ng-click="togglePlayerSelection(club.title, $index)">
+                                    <input type="checkbox" id="player_{{$index}}"
+                                           ng-model="player.selected">
+                                    <label>{{player.fio}} - {{player.result}}</label>
                             </div>
                             Защитники
                             <hr>
-                            <div ng-repeat="player in club.defender_players">
-                                <div class="ui checkbox">
-                                    <input type="checkbox" name="line" value="{{player.fio}}"
+                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Defender'"
+                                           ng-click="togglePlayerSelection(club.title, $index)">
+                                    <input type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">
-                                    <label>{{player.fio}}</label>
-                                </div>
+                                    <label>{{player.fio}} - {{player.result}}</label>
                             </div>
                         </div>
                     </div>

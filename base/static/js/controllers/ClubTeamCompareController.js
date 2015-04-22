@@ -9,6 +9,11 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.dataType = averageClubPlayerIndicatorsChart.getDataType();
   $scope.loader = true;
   $scope.clubs = [];
+  $scope.$watch('field', function() {
+    if ($scope.clubs.length > 0) {
+      return self.listAvergePlayer();
+    }
+  });
   $scope.addAverageClubPlayerData = function() {
     var pk, url;
     if ($scope.selectedClub == null) {
@@ -40,10 +45,10 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
         queries.push($http.get(self.url.replace('/0/', '/' + player.pk + '/') + '?group_by=season'));
       });
       $q.all(queries).then(function(results) {
-        var averageData, clubObject, key, lastSeasonResult;
+        var clubObject, lastSeasonResult;
         lastSeasonResult = _.last(results[0].data.results);
         clubObject = {
-          players: data.all_players,
+          all_players: data.all_players,
           offender_players: data.offender_players,
           defender_players: data.defender_players,
           title: $scope.selectedClub.originalObject.title,
@@ -55,23 +60,19 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
                 season: lastSeasonResult['season']
               }
             ]
-          }
+          },
+          results: results
         };
-        console.log(results[0].config.url.match("players\/(.*)\/indicators")[1]);
-        for (key in lastSeasonResult) {
-          if (_.contains(ALL_FIELDS, key)) {
-            averageData = 0;
-            _.each(results, function(result) {
-              averageData += parseFloat(result.data.results[result.data.results.length - 1][key]);
-            });
-            averageData = parseFloat(averageData / results.length).toFixed(3);
-            clubObject.dataBySeason.results[0][key] = averageData;
-          }
-        }
         $scope.clubs.push(clubObject);
         self.listAvergePlayer();
       });
     });
+  };
+  $scope.offenderFilter = function(player) {
+    return player.line_display === 'Offender';
+  };
+  $scope.defenderFilter = function(player) {
+    return player.line_display === 'Defender';
   };
   $scope.calculateTeamData = function() {
     return _.each($scope.clubs, function(club) {
@@ -81,11 +82,43 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       });
     });
   };
+  $scope.togglePlayerSelection = function(title, index) {
+    var club, player;
+    console.log(title);
+    club = _.findWhere($scope.clubs, {
+      title: title
+    });
+    player = club.all_players[index];
+    player.selected = !player.selected;
+    console.log(player.fio);
+    $('#player_' + index).attr('checked', !$('#player_' + index).attr('checked'));
+    return self.listAvergePlayer();
+  };
   this.listAvergePlayer = function() {
     var newPlayerIndicatorsData;
     newPlayerIndicatorsData = [];
     _.each($scope.clubs, function(club) {
-      var clubObject;
+      var averageData, clubObject, key, selectedPlayers;
+      selectedPlayers = _.countBy(club.all_players, {
+        selected: true
+      })['true'];
+      for (key in _.last(club.results[0].data.results)) {
+        if (_.contains(ALL_FIELDS, key)) {
+          averageData = 0;
+          _.each(club.results, function(result) {
+            var player;
+            player = _.findWhere(club.all_players, {
+              pk: Number(result.config.url.match("players\/(.*)\/indicators")[1])
+            });
+            player.result = _.last(result.data.results)[$scope.field];
+            if (player.selected === true) {
+              averageData += parseFloat(_.last(result.data.results)[key]);
+            }
+          });
+          averageData = parseFloat(averageData / selectedPlayers).toFixed(3);
+          club.dataBySeason.results[0][key] = averageData;
+        }
+      }
       clubObject = {
         name: club.title,
         data: club.dataBySeason.results.map(function(el) {
