@@ -157,6 +157,11 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
                     ('birth_date', DateRangeFilter),
     )
     readonly_fields = ('fio',)
+
+    class Media:
+        css = {"all": ("css/dropzone.css",),}
+        js = (  "js/libs/dropzone.js",
+                "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Player, PlayerAdmin)
 
 
@@ -453,6 +458,11 @@ class JudgeSocialsInline(admin.TabularInline):
 class JudgeAdmin(BaseListAdmin):
     inlines = (JudgeMatchesInline,LineJudgeMatchesInline,)# JudgeSocialsInline)
     readonly_fields = ('fio',)
+
+    class Media:
+        css = {"all": ("css/dropzone.css",),}
+        js = (  "js/libs/dropzone.js",
+                "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Judge, JudgeAdmin)
 
 
@@ -463,6 +473,11 @@ class CoachSocialsInline(admin.TabularInline):
 class CoachAdmin(BaseListAdmin):
     inlines = (CoachClubInline,CoachSocialsInline)
     readonly_fields = ('fio',)
+
+    class Media:
+        css = {"all": ("css/dropzone.css",),}
+        js = (  "js/libs/dropzone.js",
+                "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Coach, CoachAdmin)
 
 class ClubPlayerMatchInline(TabularInlineReadOnly):
