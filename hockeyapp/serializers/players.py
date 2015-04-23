@@ -235,7 +235,7 @@ class PlayerNamesSerializer(AbstractManSerializer):
     club = ClubLightListSerializer()
 
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname', 'line_display', 'club'
+        fields = 'pk', 'fio', 'name', 'lastname', 'line', 'line_display', 'club'
         model = Player
 
 

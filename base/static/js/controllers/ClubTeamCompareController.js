@@ -34,7 +34,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       var players, queries;
       LocaleFactory.setLocale(headers()['content-language']);
       players = data.all_players = _.filter(data.all_players, function(player) {
-        return player.line_display.indexOf('Goalkeeper') === -1;
+        return player.line > 1;
       });
       queries = [];
       _.each(players, function(player) {
@@ -98,7 +98,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     _.each($scope.clubs, function(club) {
       var averageData, clubObject, key, selectedPlayers;
       selectedPlayers = _.countBy(_.filter(club.all_players, function(player) {
-        return player.line_display === 'Offender' && $scope.offenders === true || player.line_display === 'Defender' && $scope.defenders === true;
+        return player.line === 3 && $scope.offenders === true || player.line === 2 && $scope.defenders === true;
       }), {
         selected: true
       })['true'];
@@ -111,7 +111,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
               pk: Number(result.config.url.match("players\/(.*)\/indicators")[1])
             });
             player.result = _.last(result.data.results)[$scope.field];
-            if (player.line_display === 'Offender' && !$scope.offenders || player.line_display === 'Defender' && !$scope.defenders) {
+            if (player.line === 3 && !$scope.offenders || player.line === 2 && !$scope.defenders) {
               return;
             }
             if (player.selected === true) {

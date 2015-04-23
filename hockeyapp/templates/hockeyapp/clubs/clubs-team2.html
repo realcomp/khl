@@ -103,7 +103,7 @@
                             </div>
                                 Нападающие
                             <hr>
-                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Offender'"
+                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3"
                                            ng-click="togglePlayerSelection(club.title, $index)">
                                     <input class="pointer" type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">
@@ -113,7 +113,7 @@
                             <br>
                                 Защитники
                             <hr>
-                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line_display === 'Defender'"
+                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2"
                                            ng-click="togglePlayerSelection(club.title, $index)">
                                     <input class="pointer" type="checkbox" id="player_{{$index}}"
                                            ng-model="player.selected">

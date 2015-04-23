@@ -28,7 +28,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         $http.get(url).success (data, status, headers) ->
             LocaleFactory.setLocale headers()['content-language']
             players = data.all_players = _.filter(data.all_players, (player) ->
-                player.line_display.indexOf('Goalkeeper') is -1
+                player.line > 1
             )
             queries = []
             _.each players, (player) ->
@@ -81,7 +81,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             #if $scope.defenders is false then for player in club.all_players then if player.line_display is 'Defender' then player.selected = false
             #if $scope.offenders is false then for player in club.all_players then if player.line_display is 'Offender' then player.selected = false
             selectedPlayers = _.countBy(_.filter(club.all_players, (player) ->
-                return player.line_display is 'Offender' and $scope.offenders is true or player.line_display is 'Defender' and $scope.defenders is true
+                return player.line is 3 and $scope.offenders is true or player.line is 2 and $scope.defenders is true
             ), selected: true)['true']
             for key of _.last club.results[0].data.results #идем по всем показателям, берем их из первого объекта
                 if _.contains(ALL_FIELDS, key) #если это поле -- показатель
@@ -89,7 +89,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     _.each club.results, (result) ->
                         player = _.findWhere(club.all_players, pk: Number(result.config.url.match("players\/(.*)\/indicators")[1]))
                         player.result = _.last(result.data.results)[$scope.field]
-                        return if player.line_display is 'Offender' and not $scope.offenders or player.line_display is 'Defender' and not $scope.defenders
+                        return if player.line is 3 and not $scope.offenders or player.line is 2 and not $scope.defenders
                         if player.selected is true
                             averageData += parseFloat(_.last(result.data.results)[key])
                         return

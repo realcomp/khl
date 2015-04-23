@@ -35,7 +35,7 @@ class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
 
     class Meta(object):
         fields = (
-            'pk', 'url', 'number', 'line_display', 'name', 'lastname',
+            'pk', 'url', 'number', 'line', 'line_display', 'name', 'lastname',
             'birth_date_short', 'citizenship', 'contract_to', 'photo',
             'is_joined', 'is_left', 'is_legionnaire', 'fio', 'is_home', 'birth_place')
         model = Player
