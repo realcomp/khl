@@ -278,21 +278,23 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         min_max = self.aggregate(Min('match__date'), Max('match__date'))
         start_date = min_max.get('match__date__min')
         end_date = min_max.get('match__date__max')
-        if start_date and end_date:
-            self._dates = list(month_range(start_date, end_date))
-            return map(self._month_qs, range(len(self._dates) - 1))
-        return []
+        if not start_date or not end_date:
+            return []
 
-    def _month_qs(self, i):
-        month_qs = self.is_active().filter(
-            match__date__gt=self._dates[i],
-            match__date__lte=self._dates[i + 1])
-        month_qs.date = self._dates[i]
-        if month_qs.exists():
-            month_qs.season = month_qs.first().clubplayer.season
-        else:
-            month_qs.season = None
-        return month_qs
+        _dates = list(month_range(start_date, end_date))
+
+        def _month_qs(i):
+            month_qs = self.is_active().filter(
+                match__date__gt=_dates[i],
+                match__date__lte=_dates[i + 1])
+            month_qs.date = _dates[i]
+            if month_qs.exists():
+                month_qs.season = month_qs.first().clubplayer.season
+            else:
+                month_qs.season = None
+            return month_qs
+
+        return map(_month_qs, range(len(_dates) - 1))
 
     def group_by_season(self):
         """

@@ -6,7 +6,7 @@ from dateutil import relativedelta
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Q
+from django.db.models import Avg, Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -18,6 +18,7 @@ from .. import choices, managers
 
 class Player(AbstractMan):
     objects = managers.player.PlayerQuerySet.as_manager()
+
     contract_type = models.CharField(
         _('Contract type'),
         choices=choices.CONTRACT_TYPE, max_length=32, blank=True)
@@ -202,6 +203,27 @@ class RelatedPlayer(models.Model):
         on_delete=models.SET_NULL, null=True, blank=True)
     value = models.FloatField('Similarity value')
     modified = models.DateTimeField(auto_now=True)
+
+    def calc(self):
+        '''
+        calculate value
+        '''
+        from . import ClubPlayerMatch
+        if not self.player1 or not self.player2:
+            return
+
+        params = {field: (field, Avg(field)) for field in (
+            'goals',  # Среднее количество голов за игру
+            'assists',  # Среднее количество передач за игру
+            'points',  # Среднее количество очков за игру
+            'penalty_time',  # Среднее штрафное время за игру
+            'plus_minus',  # Средний показатель "плюс/минус" за игру
+        )}
+        cpm1 = (
+            ClubPlayerMatch.objects
+            .filter(clubplayer__player=self.player1)
+            .group_by_month()
+            .aggregate(**params))
 
     class Meta(object):
         verbose_name = _('Related Player')
