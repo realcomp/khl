@@ -132,13 +132,20 @@
                                 <div id="chartdiv" style="width: 100%; height:400px; "></div>
                             </div>
 
-
                             {% verbatim %}
                             <div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
                                 <div class="m-t-20">
-                                    <input class="input-new" type="text" ng-model="playerToCompare.id">
-                                    <a class="ui green button chart-button" ng-click="addGraph(playerToCompare.id)">Сравнить с игроком {{playerToCompare.id}} {{playerToCompare.name}}</a>
-                                    <a></a>
+                                    {% endverbatim %}
+                                    <div class="ui input m-t-10 inline-block">
+                                    <angucomplete id="players_filter" placeholder="Введите имя..."
+                                                      pause="300" minlength="2"
+                                                      selectedobject="selectedPlayer"
+                                                      url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                                      titlefield="lastname,name"
+                                                      onchangecallback="setSelectedPlayer"/>
+                                    </div>
+                                    {% verbatim %}
+                                    <a class="ui green button chart-button inline-block" ng-click="addGraph(playerToCompare.pk)">Сравнить с игроком</a>
                                 </div>
                             </div>
                             <div  ng-show="playersStats.length && dataType === 'graph-serial' && !limited">
@@ -200,9 +207,15 @@
                                 </div>
 
                                 <div class="m-t-20">
-                                    <input class="input-new" type="text" ng-model="playerToCompare.id">
-                                    <a class="ui green button chart-button" ng-click="addRadarGraph(playerToCompare.id)">Сравнить с игроком {{playerToCompare.id}} {{playerToCompare.name}}</a>
-                                    <a></a>
+                                    <div class="ui input m-t-10 inline-block">
+                                    <angucomplete id="players_filter" placeholder="Введите имя..."
+                                                      pause="300" minlength="2"
+                                                      selectedobject="selectedPlayer"
+                                                      url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                                      titlefield="lastname,name"
+                                                      onchangecallback="setSelectedPlayer"/>
+                                    </div>
+                                    <a class="ui green button chart-button inline-block" ng-click="addRadarGraph(playerToCompare.pk)">Сравнить с игроком</a>
                                 </div>
                                 <!--<a class="ui green button chart-button m-t-20" ng-click="sumRadars()">Суммировать</a>-->
                             </div>

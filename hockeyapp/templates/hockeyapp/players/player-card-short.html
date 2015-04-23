@@ -213,7 +213,7 @@
                                 <span class="heading">Клубная карьера</span>
                             </div>
 
-                            <a id="IndicatorsLink" class="hidden" href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
+                            <input id="api-player-indicators" class="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}">
 
                             {% for club in clubs %}
                             <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}_{{club.main_color}}">

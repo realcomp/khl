@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location) {
+angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location, $rootScope) {
   var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
@@ -359,9 +359,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return self.context = this.context;
     };
 
-    HighchartsPlayerIndicatorsChart.prototype.setField = function(field1) {
+    HighchartsPlayerIndicatorsChart.prototype.setField = function(field1, preventList) {
       this.field = field1;
-      return self.field = this.field;
+      self.field = this.field;
+      $('#chart-tooltip-content').html('');
+      return $rootScope.$broadcast('field-changed', preventList);
     };
 
     HighchartsPlayerIndicatorsChart.prototype.getField = function() {

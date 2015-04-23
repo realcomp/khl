@@ -2,10 +2,11 @@ angular.module('Sportomatics')
     .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $state, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/
         var self = this;
-        var url = document.getElementById('api-player-indicators').value;
+        var url = (document.getElementById('api-player-indicators') != null) ? document.getElementById('api-player-indicators').value : '';
         this.url = url;
         var playerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart();
         $scope.field = playerIndicatorsChart.getField();
+        $scope.setField = playerIndicatorsChart.setField;
         $scope.localeObject = LocaleFactory.selectedLocale;
         this.club = parseInt($location.search()['club']) || null;
         this.coach = parseInt($location.search()['coach']) || null;
@@ -77,13 +78,12 @@ angular.module('Sportomatics')
                 })
         };
 
-        $scope.setField = function(field, preventList) {
+        $scope.$on('field-changed', function(event, preventList){
             $location.search('field', field);
-            $scope.field = field;
-            $('#chart-tooltip-content').html('')
+            console.log(preventList)
             if(preventList == null)
             self.list();
-        };
+        })
 
         this.setClub = function(club) {
             this.club = club;
@@ -97,19 +97,14 @@ angular.module('Sportomatics')
             $scope.getCoachData(true);
         };
 
-        $scope.$watch('playerToCompare.id', function(newval){
-            if(newval){
-                $http.get($scope.apiPlayersUrl+newval)
-                    .success(function(data){
-                        $scope.playerToCompare.photo = data.photo;
-                        $scope.playerToCompare.name = data.name + ' ' + data.lastname + ' ( ' + data.club.title + ' )';
-                        $scope.playerToCompare.club = data.club;
-                    })
-            } else {
-                $scope.playerToCompare = {};
+        $scope.setSelectedPlayer = function(selectedPlayer){
+            if (selectedPlayer == null){
                 $location.search('compare_to', null);
+                $scope.playerToCompare = {}
+            } else {
+                $scope.playerToCompare = selectedPlayer.originalObject
             }
-        });
+        }
 
         $scope.addGraph = function(id, preventCreation){
             if(!id || _.findWhere($scope.playersToCompare, {id: id})) return;
@@ -195,7 +190,7 @@ angular.module('Sportomatics')
                     })
                 })
 
-                playerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData, $scope.field)
+                playerIndicatorsChart.init('chartdiv', results, $scope.field)
                 playerIndicatorsChart.setContext($scope);
                 playerIndicatorsChart.setPeriod(30);
                 playerIndicatorsChart.draw();
@@ -335,7 +330,6 @@ angular.module('Sportomatics')
 
                     self.loader = false;
                     var playerClubsChart = new HighchartsFactory.PlayerClubsChart('chartdiv', newData, $scope.field);
-                    playerClubsChart.setLocaleObject($scope.localeObject)
                     playerClubsChart.draw();
                     document.getElementById('chartdiv').style.marginLeft = '-15px'
 

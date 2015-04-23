@@ -1,4 +1,4 @@
-angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFactory, $location) ->
+angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFactory, $location, $rootScope) ->
 
     class HighchartsSpiderChart
 
@@ -251,8 +251,10 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
         setContext: (@context) ->
             self.context = @context
 
-        setField: (@field) ->
+        setField: (@field, preventList) ->
             self.field = @field
+            $('#chart-tooltip-content').html ''
+            $rootScope.$broadcast 'field-changed', preventList
 
         getField: () ->
             @field
