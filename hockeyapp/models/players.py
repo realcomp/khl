@@ -216,10 +216,13 @@ class RelatedPlayer(models.Model):
         _('Similarity by +/-'), blank=True, null=True)
     modified = models.DateTimeField(auto_now=True)
 
+    def __unicode__(self):
+        return '%d: [%s] - [%s]' % (self.pk, self.player1, self.player2)
+
     @classmethod
-    def calc(cls, players1, players2):
+    def calc(cls, players1, players2=None):
         '''
-        calculate values between each pair of players
+        calculate similarity values between each pair of players
         '''
         from . import ClubPlayerMatch
 
@@ -232,6 +235,9 @@ class RelatedPlayer(models.Model):
         )
 
         def _calc_rel(player, max_length=None):
+            '''
+            calculate relative value (value_in_array / sum_of_values)
+            '''
             params = {field: Avg(field) for field in fields}
             # list of qs
             qss = (
@@ -247,37 +253,38 @@ class RelatedPlayer(models.Model):
                 field: sum(filter(None, map(itemgetter(field), aggregated)))
                 for field in fields
             }
+
+            def _calc_fields_rel(qs, field):
+                t = float(total.get(field) or 0)
+                if t:
+                    return float(qs.get(field) or 0) / t
+                return .0
+
             for qs in aggregated:
-                yield {
-                    field: float(qs.get(field) or 0) / float(total.get(field) or 0)
-                    for field in fields
-                }
+                yield {field: _calc_fields_rel(qs, field) for field in fields}
 
-        def _calc_diff(rel1, rel2):
-            for a, b in zip(rel1, rel2):
-                yield {
-                    field: abs(a.get(field) - b.get(field))
-                    for field in fields
-                }
+        def _calc_mean_diff(rel1, rel2):
+            def _calc_fields_mean(field):
+                values = map(lambda x: abs(x[0].get(field) - x[1].get(field)), zip(rel1, rel2))
+                if values:
+                    return numpy.mean(values)
+                return 0
 
-        def _calc_mean(diff):
-            return {
-                field: numpy.mean(map(itemgetter(field), diff))
-                for field in fields
-            }
+            return {field: _calc_fields_mean(field) for field in fields}
 
         for player1 in players1:
             rel1 = list(_calc_rel(player1))
-            for player2 in players2:
-                rel2 = list(_calc_rel(player2, max_length=len(rel1)))
-                length = min(len(rel1), len(rel2))
-                diff = _calc_diff(rel1[:length], rel2[:length])
-                mean = _calc_mean(diff)
-                rel_player, created = cls.objects.get_or_create(
-                    player1=player1, player2=player2)
-                for k, v in mean.items():
-                    setattr(rel_player, '%s_value' % k, v)
-                rel_player.save()
+            if rel1:
+                for player2 in players2 or Player.objects.all():
+                    rel2 = list(_calc_rel(player2, max_length=len(rel1)))
+                    if rel2:
+                        length = min(len(rel1), len(rel2))
+                        mean = _calc_mean_diff(rel1[:length], rel2[:length])
+                        rel_player, created = cls.objects.get_or_create(
+                            player1=player1, player2=player2)
+                        for k, v in mean.items():
+                            setattr(rel_player, '%s_value' % k, v)
+                        rel_player.save()
 
     class Meta(object):
         verbose_name = _('Related Player')
