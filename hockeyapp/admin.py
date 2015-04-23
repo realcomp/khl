@@ -159,7 +159,7 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     readonly_fields = ('fio',)
 
     class Media:
-        css = {"all": ("css/dropzone.css",),}
+        css = {"all": ("css/dropzone.css", "css/dnd_filer_upload.css"),}
         js = (  "js/libs/dropzone.js",
                 "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Player, PlayerAdmin)
@@ -455,12 +455,12 @@ class JudgeSocialsInline(admin.TabularInline):
     model = JudgeSocial
     fields = ('url', 'stype')
 
-class JudgeAdmin(BaseListAdmin):
+class JudgeAdmin(NoFilterAdmin):
     inlines = (JudgeMatchesInline,LineJudgeMatchesInline,)# JudgeSocialsInline)
     readonly_fields = ('fio',)
 
     class Media:
-        css = {"all": ("css/dropzone.css",),}
+        css = {"all": ("css/dropzone.css", "css/dnd_filer_upload.css"),}
         js = (  "js/libs/dropzone.js",
                 "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Judge, JudgeAdmin)
@@ -470,12 +470,12 @@ class CoachSocialsInline(admin.TabularInline):
     model = CoachSocial
     fields = ('url', 'stype')
 
-class CoachAdmin(BaseListAdmin):
+class CoachAdmin(NoFilterAdmin):
     inlines = (CoachClubInline,CoachSocialsInline)
     readonly_fields = ('fio',)
 
     class Media:
-        css = {"all": ("css/dropzone.css",),}
+        css = {"all": ("css/dropzone.css", "css/dnd_filer_upload.css"),}
         js = (  "js/libs/dropzone.js",
                 "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Coach, CoachAdmin)
