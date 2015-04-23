@@ -200,6 +200,72 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 series: @data
 
 
+    class HighchartsArenaVisitorsChart
+
+        constructor: (@divId, @data, @max) ->
+
+        setLocaleObject: (@localeObject) ->
+
+        draw: () ->
+            $('#'+@divId).highcharts
+                chart:
+                    type: 'column'
+                    alignTicks: false
+                title:
+                    text: 'Посещаемость'
+                xAxis:
+                    labels:
+                        enabled: false
+                        align: 'center'
+                        autoRotation: false
+                    reversed: false
+                    lineColor: '#FFFFFF'
+                    max: 100
+                yAxis:
+                    gridLineWidth: 0
+                    plotLines: [
+                        color: '#141414'
+                        width: 1
+                        value: 0
+                    ]
+                    title: 'Счет'
+                    allowDecimals: false
+                    labels:
+                        formatter: () ->
+                            return Math.abs this.value
+                    stackLabels:
+                        formatter: () ->
+                            return this
+                    max: @max
+                #scrollbar:
+                    #enabled: true
+                legend:
+                    enabled: false
+                    margin: 30
+                tooltip:
+                    shared: true
+                    useHTML: true
+                    crosshairs: true
+                    style:
+                        padding: 0
+                    #formatter: () ->
+                    #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date).yyyymmddHHMMFormatted()) + '</a>'
+                    formatter: () ->
+                        return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.spectators + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>'
+                plotOptions:
+                    series:
+                        stacking: 'normal'
+                        borderWidth: 0
+                        pointWidth: 5
+                        pointPlacement: "on"
+                    column:
+                        pointPadding: 0,
+                        groupPadding: 0,
+                        borderWidth: 1
+                        pointWidth: 4
+                series: @data
+
+
     class HighchartsPlayerClubsPieChart
 
         constructor: (@divId, @data) ->
@@ -344,6 +410,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
     return (
         PlayerStatsSpiderChart: HighchartsSpiderChart
         ClubGamesChart: HighchartsClubGamesChart
+        ArenaVisitorsChart: HighchartsArenaVisitorsChart
         PlayerClubsChart: HighchartsPlayerClubsChart
         PlayerClubsPieChart: HighchartsPlayerClubsPieChart
         PlayerIndicatorsChart: HighchartsPlayerIndicatorsChart

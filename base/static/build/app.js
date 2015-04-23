@@ -367,7 +367,7 @@ $.fn.textWidth = function(){
 angular.module('Sportomatics')
 
 angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location, $rootScope) {
-  var HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
+  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
       this.divId = divId;
@@ -650,6 +650,95 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     return HighchartsPlayerClubsChart;
 
   })();
+  HighchartsArenaVisitorsChart = (function() {
+    function HighchartsArenaVisitorsChart(divId, data1, max) {
+      this.divId = divId;
+      this.data = data1;
+      this.max = max;
+    }
+
+    HighchartsArenaVisitorsChart.prototype.setLocaleObject = function(localeObject) {
+      this.localeObject = localeObject;
+    };
+
+    HighchartsArenaVisitorsChart.prototype.draw = function() {
+      return $('#' + this.divId).highcharts({
+        chart: {
+          type: 'column',
+          alignTicks: false
+        },
+        title: {
+          text: 'Посещаемость'
+        },
+        xAxis: {
+          labels: {
+            enabled: false,
+            align: 'center',
+            autoRotation: false
+          },
+          reversed: false,
+          lineColor: '#FFFFFF',
+          max: 100
+        },
+        yAxis: {
+          gridLineWidth: 0,
+          plotLines: [
+            {
+              color: '#141414',
+              width: 1,
+              value: 0
+            }
+          ],
+          title: 'Счет',
+          allowDecimals: false,
+          labels: {
+            formatter: function() {
+              return Math.abs(this.value);
+            }
+          },
+          stackLabels: {
+            formatter: function() {
+              return this;
+            }
+          },
+          max: this.max
+        },
+        legend: {
+          enabled: false,
+          margin: 30
+        },
+        tooltip: {
+          shared: true,
+          useHTML: true,
+          crosshairs: true,
+          style: {
+            padding: 0
+          },
+          formatter: function() {
+            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.spectators + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>';
+          }
+        },
+        plotOptions: {
+          series: {
+            stacking: 'normal',
+            borderWidth: 0,
+            pointWidth: 5,
+            pointPlacement: "on"
+          },
+          column: {
+            pointPadding: 0,
+            groupPadding: 0,
+            borderWidth: 1,
+            pointWidth: 4
+          }
+        },
+        series: this.data
+      });
+    };
+
+    return HighchartsArenaVisitorsChart;
+
+  })();
   HighchartsPlayerClubsPieChart = (function() {
     function HighchartsPlayerClubsPieChart(divId, data1) {
       this.divId = divId;
@@ -858,6 +947,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
   return {
     PlayerStatsSpiderChart: HighchartsSpiderChart,
     ClubGamesChart: HighchartsClubGamesChart,
+    ArenaVisitorsChart: HighchartsArenaVisitorsChart,
     PlayerClubsChart: HighchartsPlayerClubsChart,
     PlayerClubsPieChart: HighchartsPlayerClubsPieChart,
     PlayerIndicatorsChart: HighchartsPlayerIndicatorsChart
@@ -2221,6 +2311,46 @@ angular.module('Sportomatics').controller('ClubFanController', function($scope, 
     MapService.remove();
   }
   MapService.createClubsMap($scope.fans, 'fans');
+});
+
+angular.module('Sportomatics').controller('ClubHomeController', function($scope, $location, $http, HighchartsFactory) {
+  $scope.clubMatchApi = document.getElementById('club-match-api').value;
+  $scope.clubPk = document.getElementById('team-id').value;
+  $scope.params = $location.search();
+  $scope.createVisitorsChart = function() {
+    var params;
+    params = '';
+    params += '?club=' + $scope.clubPk;
+    params += '&season=19';
+    return $http.get($scope.clubMatchApi + params).success(function(data) {
+      var clubGamesChart, seriesClub, seriesOpponent, visitorsObject;
+      $scope.games = _.sortBy(data, function(el) {
+        return new Date(el).getTime();
+      }).reverse();
+      console.log($scope.games);
+      seriesClub = {};
+      seriesOpponent = {};
+      visitorsObject = {
+        name: 'club',
+        data: $scope.games.map(function(game, index) {
+          return {
+            x: index,
+            y: game.spectators,
+            date: game.date,
+            name: game.opponent.title_verbose,
+            score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
+            spectators: game.spectators + ' (' + parseFloat(game.arena_capacity_rate).toFixed(2) * 100 + '%)'
+          };
+        }).filter(function(toFilter) {
+          return toFilter != null;
+        })
+      };
+      console.log(parseFloat($scope.games[0].arena_capacity_rate).toFixed(2) * 100);
+      clubGamesChart = new HighchartsFactory.ArenaVisitorsChart('chartdiv', [visitorsObject], $scope.games[0].arena_capacity + 100);
+      return clubGamesChart.draw();
+    });
+  };
+  $scope.createVisitorsChart();
 });
 
 angular.module('Sportomatics')
