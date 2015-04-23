@@ -198,6 +198,8 @@ class Player(AbstractMan):
 
 
 class RelatedPlayer(models.Model):
+    objects = managers.player.RelatedPlayer.as_manager()
+
     player1 = models.ForeignKey(
         Player, verbose_name=_('Player 1'), related_name='relatedplayers1',
         on_delete=models.SET_NULL, null=True, blank=True)
@@ -275,17 +277,23 @@ class RelatedPlayer(models.Model):
         for player1 in players1:
             rel1 = list(_calc_rel(player1))
             if rel1:
-                for player2 in players2 or Player.objects.all():
+                for player2 in players2:
+                # for player2 in players2.exclude(pk=player1.pk):
                     rel2 = list(_calc_rel(player2, max_length=len(rel1)))
                     if rel2:
                         length = min(len(rel1), len(rel2))
                         mean = _calc_mean_diff(rel1[:length], rel2[:length])
-                        rel_player, created = cls.objects.get_or_create(
-                            player1=player1, player2=player2)
+                        rel_players = cls.objects.by_players(player1, player2)
+                        if rel_players.exists():
+                            rel_player = rel_players.last()
+                        else:
+                            rel_player = cls.objects.create(
+                                player1=player1, player2=player2)
                         for k, v in mean.items():
                             setattr(rel_player, '%s_value' % k, v)
                         rel_player.save()
 
     class Meta(object):
+        ordering = 'modified',
         verbose_name = _('Related Player')
         verbose_name_plural = _('Related Players')

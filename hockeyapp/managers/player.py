@@ -226,3 +226,10 @@ class ClubPlayerQuerySet(models.QuerySet):
 
     def by_leagues(self, leagues):
         return self.filter(league__in=leagues)
+
+
+class RelatedPlayer(models.QuerySet):
+    def by_players(self, player1, player2):
+        return self.filter(
+            Q(player1=player1, player2=player2) |
+            Q(player1=player2, player2=player1))
