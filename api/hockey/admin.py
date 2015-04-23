@@ -21,8 +21,6 @@ class FilerImageUpload(drf.views.APIView):
     allowed_methods = ('POST', 'PUT')
 
     def post(self, request, format=None):
-        print request
-        print request.data
         if request.data:
             fl = request.data.get('file')
             model_name = request.data.get('model_name','').capitalize()
@@ -30,7 +28,14 @@ class FilerImageUpload(drf.views.APIView):
             instance_id = request.data.get('id')
             filer_file = self.create_filer_image(fl, model_name)
             if self.set_relation(filer_file, model, instance_id):
-                return drf.response.Response(status=201)
+                _furl = filer_file.folder.get_admin_directory_listing_url_path()
+                res = dict( url=filer_file.url,
+                            icon =  filer_file.icons.get('48'),
+                            name = filer_file.name,
+                            folder_url = _furl,
+                            pk = filer_file.pk,
+                )
+                return drf.response.Response(data=res,status=201)
         return drf.response.Response(status=404)
 
     def put(self, request, format=None):
