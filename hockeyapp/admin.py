@@ -18,6 +18,7 @@ from base.admin import AutocompleteFieldFilter, SimpleRangeFilter, BaseForm
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin, BaseListAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
 
+from . import admin_actions
 from .forms import TimelineForm
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
@@ -26,6 +27,7 @@ from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
 from .models import PlayerCoachJudge, ClubSocial, PlayerSocial, CoachSocial
 from .models import JudgeSocial, ArenaInstaPhoto, Timeline, Challenge
+from .models import RelatedPlayer
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -104,47 +106,9 @@ class PlayerSocialsInline(admin.TabularInline):
     fields = ('url', 'stype')
 
 
-def get_recalc_counters_actions():
-    fields = (
-        'seasons_total', 'matches_total', 'bullet_matches_total',
-        'shots_received_total', 'saves_total', 'loose_goals_total',
-        'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-        'matches_win_total', 'matches_lose_total', 'gamingtime_total',
-    ) + tuple(itertools.chain(*map(
-        lambda x: ('%s_total' % x, '%s_average' % x),
-        ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-
-    def get_action(field):
-        def action(modeladmin, request, queryset):
-            from .tasks import player_recalc_counters
-            from .tasks import player_recalc_counters_index
-            pks = queryset.values_list('pk', flat=True)
-            player_recalc_counters.delay(pks, [field])
-            player_recalc_counters_index.delay(field)
-        # make function unique for django
-        action.__name__ = str('action_%s' % field)
-        action.short_description = _('Recalculate counters for "%s"') % field
-        return action
-
-    for field in fields:
-        yield get_action(field)
-
-    def action_all(modeladmin, request, queryset):
-        from .tasks import periodic_player_recalc_counters
-        from .tasks import periodic_player_recalc_counters_index
-        periodic_player_recalc_counters.delay()
-        periodic_player_recalc_counters_index.delay()
-    action_all.short_description = _('Recalculate all counters')
-    yield action_all
-
-    def reset_last_match_date(modeladmin, request, queryset):
-        queryset.update(last_match_date=None)
-    reset_last_match_date.short_description = _('Reset "last_match_date"')
-    yield reset_last_match_date
-
-
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
-    actions = list(get_recalc_counters_actions())
+    actions = tuple(admin_actions.get_recalc_counters_actions()) + (
+        admin_actions.calculate_similarity,)
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
@@ -526,72 +490,18 @@ admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 admin.site.register(AdvancedPlayerStats)
 
 
-def import_names(modeladmin, request, queryset):
-    def update_or_create_name(**kwargs):
-        name, created = Name.objects.get_or_create(
-            ru_name=kwargs['ru_name'], en_name=kwargs['en_name'])
-        if not name.type:
-            name.type = kwargs['type']
-            name.save()
-        return name
-
-    q_named = Q(ru_name__isnull=False) & Q(en_name__isnull=False)
-    players = Player.objects.filter(q_named)
-    coaches = Coach.objects.filter(q_named)
-    for type, field in (
-            (0, 'name'),
-            (1, 'lastname')):
-        for ru_name, en_name in itertools.chain(
-                players.values_list('ru_%s' % field, 'en_%s' % field),
-                coaches.values_list('ru_%s' % field, 'en_%s' % field)):
-            update_or_create_name(ru_name=ru_name, en_name=en_name, type=type)
-import_names.short_description = _('Import Names')
-
-
-def export_names(modeladmin, request, queryset):
-    def swap_names(obj):
-        ''' swaps first and last names '''
-        obj.ru_lastname, obj.ru_name = obj.ru_name, obj.ru_lastname
-        obj.en_lastname, obj.en_name = obj.en_name, obj.en_lastname
-
-    for model in (Player, Coach):
-        for type, field in (
-                (0, 'ru_lastname'),  # first names
-                (1, 'ru_name')):  # last names
-            names = queryset.filter(type=type)
-            for obj in model.objects.filter(**{
-                    '%s__in' % field: names.values_list('ru_name')}):
-                swap_names(obj)
-                obj.save()
-export_names.short_description = _('Export Names')
-
-
 class NameAdmin(admin.ModelAdmin):
-    actions = import_names, export_names
+    actions = admin_actions.import_names, admin_actions.export_names
     list_display = 'type', 'ru_name', 'en_name'
     list_filter = 'type',
     search_fields = 'ru_name', 'en_name'
 admin.site.register(Name, NameAdmin)
 
 
-def generate_timeline(modeladmin, request, queryset):
-    from . import tasks
-    pks = Player.objects.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        tasks.player_generate_timeline.delay(pks[i:i + 1000])
-    # tasks.player_generate_timeline.delay([1830, 2210])  # dev mode
-    # tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
-generate_timeline.short_description = _('Generate new timeline events')
-
-
-def regenerate_timeline(modeladmin, request, queryset):
-    Timeline.objects.all().delete()
-    # generate_timeline(modeladmin, request, queryset)
-regenerate_timeline.short_description = _('Re-generate timeline events')
-
-
 class TimelineAdmin(admin.ModelAdmin):
-    actions = generate_timeline, regenerate_timeline,
+    actions = (
+        admin_actions.generate_timeline,
+        admin_actions.regenerate_timeline)
     form = TimelineForm
     list_display = (
         'player', 'start_date', 'end_date', 'ru_headline', 'en_headline',
@@ -599,3 +509,11 @@ class TimelineAdmin(admin.ModelAdmin):
     list_filter = 'type',
     search_fields = 'ru_headline', 'en_headline', 'ru_text', 'en_text', 'tag'
 admin.site.register(Timeline, TimelineAdmin)
+
+
+class RelatedPlayerAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'player1', 'player2', 'modified', 'goals_value', 'assists_value',
+        'points_value', 'penalty_time_value', 'plus_minus_value')
+    list_filter = 'modified',
+admin.site.register(RelatedPlayer, RelatedPlayerAdmin)

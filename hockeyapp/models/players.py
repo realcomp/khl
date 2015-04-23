@@ -2,6 +2,9 @@
 from __future__ import unicode_literals
 
 import bisect
+import numpy
+
+from operator import itemgetter, methodcaller
 from dateutil import relativedelta
 
 from django.core.urlresolvers import reverse
@@ -195,36 +198,102 @@ class Player(AbstractMan):
 
 
 class RelatedPlayer(models.Model):
+    objects = managers.player.RelatedPlayer.as_manager()
+
     player1 = models.ForeignKey(
         Player, verbose_name=_('Player 1'), related_name='relatedplayers1',
         on_delete=models.SET_NULL, null=True, blank=True)
     player2 = models.ForeignKey(
         Player, verbose_name=_('Player 2'), related_name='relatedplayers2',
         on_delete=models.SET_NULL, null=True, blank=True)
-    value = models.FloatField('Similarity value')
+    goals_value = models.FloatField(
+        _('Similarity by Goals'), blank=True, null=True)
+    assists_value = models.FloatField(
+        _('Similarity by Assists'), blank=True, null=True)
+    points_value = models.FloatField(
+        _('Similarity by Points'), blank=True, null=True)
+    penalty_time_value = models.FloatField(
+        _('Similarity by Penalty time'), blank=True, null=True)
+    plus_minus_value = models.FloatField(
+        _('Similarity by +/-'), blank=True, null=True)
     modified = models.DateTimeField(auto_now=True)
 
-    def calc(self):
+    def __unicode__(self):
+        return '%d: [%s] - [%s]' % (self.pk, self.player1, self.player2)
+
+    @classmethod
+    def calc(cls, players1, players2=None):
         '''
-        calculate value
+        calculate similarity values between each pair of players
         '''
         from . import ClubPlayerMatch
-        if not self.player1 or not self.player2:
-            return
 
-        params = {field: (field, Avg(field)) for field in (
+        fields = (
             'goals',  # Среднее количество голов за игру
             'assists',  # Среднее количество передач за игру
             'points',  # Среднее количество очков за игру
             'penalty_time',  # Среднее штрафное время за игру
             'plus_minus',  # Средний показатель "плюс/минус" за игру
-        )}
-        cpm1 = (
-            ClubPlayerMatch.objects
-            .filter(clubplayer__player=self.player1)
-            .group_by_month()
-            .aggregate(**params))
+        )
+
+        def _calc_rel(player, max_length=None):
+            '''
+            calculate relative value (value_in_array / sum_of_values)
+            '''
+            params = {field: Avg(field) for field in fields}
+            # list of qs
+            qss = (
+                ClubPlayerMatch.objects
+                .filter(clubplayer__player=player)
+                .group_by_month())
+            if max_length:
+                qss = qss[:max_length]
+            aggregated = map(methodcaller('aggregate', **params), qss)
+
+            total = {
+                # sum of values excluding None
+                field: sum(filter(None, map(itemgetter(field), aggregated)))
+                for field in fields
+            }
+
+            def _calc_fields_rel(qs, field):
+                t = float(total.get(field) or 0)
+                if t:
+                    return float(qs.get(field) or 0) / t
+                return .0
+
+            for qs in aggregated:
+                yield {field: _calc_fields_rel(qs, field) for field in fields}
+
+        def _calc_mean_diff(rel1, rel2):
+            def _calc_fields_mean(field):
+                values = map(lambda x: abs(x[0].get(field) - x[1].get(field)), zip(rel1, rel2))
+                if values:
+                    return numpy.mean(values)
+                return 0
+
+            return {field: _calc_fields_mean(field) for field in fields}
+
+        for player1 in players1:
+            rel1 = list(_calc_rel(player1))
+            if rel1:
+                for player2 in players2:
+                # for player2 in players2.exclude(pk=player1.pk):
+                    rel2 = list(_calc_rel(player2, max_length=len(rel1)))
+                    if rel2:
+                        length = min(len(rel1), len(rel2))
+                        mean = _calc_mean_diff(rel1[:length], rel2[:length])
+                        rel_players = cls.objects.by_players(player1, player2)
+                        if rel_players.exists():
+                            rel_player = rel_players.last()
+                        else:
+                            rel_player = cls.objects.create(
+                                player1=player1, player2=player2)
+                        for k, v in mean.items():
+                            setattr(rel_player, '%s_value' % k, v)
+                        rel_player.save()
 
     class Meta(object):
+        ordering = 'modified',
         verbose_name = _('Related Player')
         verbose_name_plural = _('Related Players')
