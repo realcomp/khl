@@ -34,7 +34,7 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
                             return toFilter?
                     )
                     console.log parseFloat($scope.games[0].arena_capacity_rate).toFixed(2)*100
-                    clubGamesChart = new HighchartsFactory.ArenaVisitorsChart 'chartdiv', [visitorsObject], $scope.games[0].arena_capacity+100
+                    clubGamesChart = new HighchartsFactory.ArenaVisitorsChart 'chartdiv', [visitorsObject], $scope.games[0].arena_capacity
                     clubGamesChart.draw()
 
     $scope.createVisitorsChart()

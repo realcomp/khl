@@ -687,6 +687,13 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               color: '#141414',
               width: 1,
               value: 0
+            }, {
+              value: this.max,
+              width: 1,
+              color: '#141414',
+              label: {
+                text: 'Вместимость'
+              }
             }
           ],
           title: 'Счет',
@@ -2347,7 +2354,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
         })
       };
       console.log(parseFloat($scope.games[0].arena_capacity_rate).toFixed(2) * 100);
-      clubGamesChart = new HighchartsFactory.ArenaVisitorsChart('chartdiv', [visitorsObject], $scope.games[0].arena_capacity + 100);
+      clubGamesChart = new HighchartsFactory.ArenaVisitorsChart('chartdiv', [visitorsObject], $scope.games[0].arena_capacity);
       return clubGamesChart.draw();
     });
   };

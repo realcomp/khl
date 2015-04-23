@@ -319,6 +319,13 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               color: '#141414',
               width: 1,
               value: 0
+            }, {
+              value: this.max,
+              width: 1,
+              color: '#141414',
+              label: {
+                text: 'Вместимость'
+              }
             }
           ],
           title: 'Счет',

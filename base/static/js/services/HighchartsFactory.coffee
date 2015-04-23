@@ -224,9 +224,18 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 yAxis:
                     gridLineWidth: 0
                     plotLines: [
-                        color: '#141414'
-                        width: 1
-                        value: 0
+                        {
+                            color: '#141414'
+                            width: 1
+                            value: 0
+                        },
+                        {
+                            value: @max
+                            width: 1
+                            color: '#141414'
+                            label:
+                                text: 'Вместимость'
+                        }
                     ]
                     title: 'Счет'
                     allowDecimals: false
