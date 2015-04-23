@@ -62,16 +62,6 @@ $(document).ready(function(){
             $(".filerFile > a > img#id_photo_thumbnail_img").attr("src", response.icon);
             $(".filerFile > a > img#id_photo_thumbnail_img").attr("alt", response.name);
             $(".filerFile > input#id_photo").val(response.pk);
-            //$(".filerFile").empty();
-            //var filer_html = "<a target=\"_blank\" href=\""+response.url+"\">";
-            //filer_html+= "<img id=\"id_photo_thumbnail_img\" alt=\""+response.name+"\"";
-            //filer_html+= "src=\""+response.icon+"\"></a>";
-            //filer_html+= "<span id=\"id_photo_description_txt\">"+response.name+"</span>";
-            //filer_html+= "<a id=\"lookup_id_photo\" class=\"related-lookup\" onclick=\"return showRelatedObjectLookupPopup(this);\" title=\"Поиск\" href=\"";
-            //filer_html+= response.folder_url+"?_to_field=file_ptr\">";
-            //filer_html+= "<img id=\"id_photo_clear\" class=\"filerClearer\" width=\"10\" height=\"10\" title=\"Очистить\" alt=\"Очистить\" src=\"/static/admin/img/icon_deletelink.gif\"><br>";
-            //filer_html+= "<input id=\"id_photo\" class=\"vForeignKeyRawIdAdminField\" type=\"hidden\" value=\""+response.pk+"\" name=\"photo\">";
-            //$(".filerFile").append(filer_html);
         });
 
     };
