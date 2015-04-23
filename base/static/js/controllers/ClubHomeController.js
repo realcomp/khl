@@ -9,9 +9,11 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
     params += '&season=19';
     return $http.get($scope.clubMatchApi + params).success(function(data) {
       var clubGamesChart, seriesClub, seriesOpponent, visitorsObject;
-      $scope.games = _.sortBy(data, function(el) {
+      $scope.games = _.filter(_.sortBy(data, function(el) {
         return new Date(el).getTime();
-      }).reverse();
+      }).reverse(), function(game) {
+        return game.is_home === true;
+      });
       console.log($scope.games);
       seriesClub = {};
       seriesOpponent = {};
@@ -24,7 +26,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
             date: game.date,
             name: game.opponent.title_verbose,
             score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
-            spectators: game.spectators + ' (' + parseFloat(game.arena_capacity_rate).toFixed(2) * 100 + '%)'
+            spectators: game.spectators + ' (' + parseInt(parseFloat(game.arena_capacity_rate).toFixed(2) * 100) + '%)'
           };
         }).filter(function(toFilter) {
           return toFilter != null;

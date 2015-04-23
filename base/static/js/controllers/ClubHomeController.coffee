@@ -10,9 +10,11 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
             params += '&season=19'# + $scope.params.season
             $http.get($scope.clubMatchApi + params)
                 .success (data) ->
-                    $scope.games = _.sortBy(data, (el) ->
+                    $scope.games = _.filter(_.sortBy(data, (el) ->
                         return new Date(el).getTime()
-                    ).reverse()
+                    ).reverse(), (game) ->
+                        return game.is_home is true
+                    )
                     console.log $scope.games
                     seriesClub = {}
                     seriesOpponent = {}
@@ -26,7 +28,7 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
                                 date: game.date
                                 name: game.opponent.title_verbose
                                 score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score)
-                                spectators: game.spectators + ' (' + parseFloat(game.arena_capacity_rate).toFixed(2)*100 + '%)'
+                                spectators: game.spectators + ' (' + parseInt(parseFloat(game.arena_capacity_rate).toFixed(2)*100) + '%)'
                             )
                         ).filter (toFilter) ->
                             return toFilter?

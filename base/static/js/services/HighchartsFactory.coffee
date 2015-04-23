@@ -236,7 +236,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     stackLabels:
                         formatter: () ->
                             return this
-                    max: @max
+                    #max: @max
                 #scrollbar:
                     #enabled: true
                 legend:

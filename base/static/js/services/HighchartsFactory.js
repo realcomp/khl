@@ -332,8 +332,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
             formatter: function() {
               return this;
             }
-          },
-          max: this.max
+          }
         },
         legend: {
           enabled: false,
