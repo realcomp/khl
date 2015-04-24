@@ -46,7 +46,7 @@ class PlayerNumbers(NumbersList):
 
 class PlayersSearch(viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
-    queryset = Player.objects.all()
+    queryset = Player.objects.all().select_related('clubplayer')
     paginate_by = 50
     serializer_class = PlayersSearchSerializer
 
@@ -85,7 +85,7 @@ class PlayersSearch(viewsets.ReadOnlyModelViewSet):
             serializer = self.get_serializer(page, many=True)
             r = self.get_paginated_response(serializer.data)
             if is_default:
-                cache.set(request.path, r.data, 60*60*24)  # 1 day
+                cache.set(request.path, r.data, 60*60*24*7)  # 1 week
             return r
 
         serializer = self.get_serializer(queryset, many=True)
