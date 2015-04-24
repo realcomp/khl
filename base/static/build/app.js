@@ -1794,7 +1794,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     $scope.params = $scope.$location.search();
     params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
-    ref = ['player', 'season', 'number', 'contract_type', 'height', 'weight', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime'];
+    ref = ['player', 'season', 'number', 'contract_type', 'height', 'weight', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime', 'related_field', 'related_value__lte', 'related_value__gte'];
     for (i = 0, len = ref.length; i < len; i++) {
       key = ref[i];
       value = $scope.params[key];

@@ -87,6 +87,9 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _contract_type__isnull = request.query_params.get('contract_type__isnull', '').lower() == 'true'
         _age__lte = request.query_params.get('age__lte')
         _age__gte = request.query_params.get('age__gte')
+        _related_field = request.query_params.get('related_field')
+        _related_value__lte = request.query_params.get('related_value__lte')
+        _related_value__gte = request.query_params.get('related_value__gte')
         _match_count = request.query_params.get('match_count')
         _gamingtime = request.query_params.get('gamingtime')
         _player_id = request.query_params.get('player')
@@ -146,6 +149,25 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             date = datetime.datetime.now() - relativedelta(
                 years=int(_age__lte))
             q &= Q(birth_date__lte=date)
+
+        if _age__gte and _age__gte.isdigit():
+            date = datetime.datetime.now() - relativedelta(
+                years=int(_age__gte))
+            q &= Q(birth_date__gte=date)
+
+        if _related_field in (
+                'goals_value', 'assists_value', 'points_value',
+                'penalty_time_value', 'plus_minus_value'):
+            if _related_value__lte and _related_value__lte.isdigit():
+                value = int(_related_value__lte) / 100.0
+                q &= (
+                    Q(**{'relatedplayers1__%s__lte' % _related_field: value}) |
+                    Q(**{'relatedplayers2__%s__lte' % _related_field: value}))
+            if _related_value__gte and _related_value__gte.isdigit():
+                value = int(_related_value__gte) / 100.0
+                q &= (
+                    Q(**{'relatedplayers1__%s__gte' % _related_field: value}) |
+                    Q(**{'relatedplayers2__%s__gte' % _related_field: value}))
 
         if _age__gte and _age__gte.isdigit():
             date = datetime.datetime.now() - relativedelta(
