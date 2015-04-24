@@ -72,11 +72,11 @@ class PlayersSearch(viewsets.ReadOnlyModelViewSet):
         qs = self.filter_queryset(self.get_queryset())
         self.rating = self._get_rating(request, qs)
 
-        _pk = request.GET.get('player')
-        if _pk:
-            _pk = int(_pk)
-            # qs is turned into list
-            qs = qs.ranged_filter(lambda player: player.pk == _pk, 5)
+        #_pk = request.GET.get('player')
+        #if _pk:
+            #_pk = int(_pk)
+            ## qs is turned into list
+            #qs = qs.ranged_filter(lambda player: player.pk == _pk, 5)
 
         queryset = qs
 
