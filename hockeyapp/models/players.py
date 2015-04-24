@@ -5,12 +5,10 @@ import bisect
 import numpy
 
 from operator import itemgetter, methodcaller
-from dateutil import relativedelta
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.db.models import Avg, Q
-from django.utils import timezone
+from django.db.models import Avg
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -164,29 +162,27 @@ class Player(AbstractMan):
             ClubPlayerMatch.objects
             .filter(clubplayer__player=self).order_by('match__date').last())
 
-    def get_related_players(self):
+    def get_age_related_players(self):
         '''
         age-related players
         returns players from the same age group
         '''
-        now = timezone.now().date()
-        rd = lambda x: relativedelta.relativedelta(years=x)
         age_groups = (
             # до 19 лет (юноши и дети)
-            (19, Q(birth_date__gt=now - rd(20))),
+            (19, {'years__lt': 20}),
             # 20-23 (молодежь)
-            (23, Q(birth_date__gt=now - rd(24), birth_date__lte=now - rd(20))),
+            (23, {'years__lt': 24, 'years__gte': 20}),
             # 24-30 (зрелые игроки)
-            (30, Q(birth_date__gt=now - rd(31), birth_date__lte=now - rd(24))),
+            (30, {'years__lt': 31, 'years__gte': 24}),
             # 31-35 (опытные игроки)
-            (35, Q(birth_date__gt=now - rd(36), birth_date__lte=now - rd(31))),
+            (35, {'years__lt': 36, 'years__gte': 31}),
             # 36+ (ветераны)
-            (999, Q(birth_date__lte=now - rd(36))),
+            (999, {'years__gte': 36}),
         )
 
         group = bisect.bisect_left(zip(*age_groups)[0], self.age[0])
-        q = age_groups[group][1]
-        return Player.objects.filter(q)
+        age_params = age_groups[group][1]
+        return Player.objects.by_age(**age_params)
 
     def get_absolute_url(self):
         if self.pk:
@@ -222,9 +218,10 @@ class RelatedPlayer(models.Model):
         return '%d: [%s] - [%s]' % (self.pk, self.player1, self.player2)
 
     @classmethod
-    def calc(cls, players1, players2=None):
+    def calc(cls, players1, players2):
         '''
-        calculate similarity values between each pair of players
+        RelatedPlayer factory
+        Calculates similarity values between each pair of players
         '''
         from . import ClubPlayerMatch
 
@@ -238,7 +235,7 @@ class RelatedPlayer(models.Model):
 
         def _calc_rel(player, max_length=None):
             '''
-            calculate relative value (value_in_array / sum_of_values)
+            Calculate relative value (value_in_array / sum_of_values)
             '''
             params = {field: Avg(field) for field in fields}
             # list of qs
@@ -257,6 +254,9 @@ class RelatedPlayer(models.Model):
             }
 
             def _calc_fields_rel(qs, field):
+                '''
+                Calculate relative value for each field
+                '''
                 t = float(total.get(field) or 0)
                 if t:
                     return float(qs.get(field) or 0) / t
@@ -276,13 +276,18 @@ class RelatedPlayer(models.Model):
 
         for player1 in players1:
             rel1 = list(_calc_rel(player1))
-            if rel1:
-                for player2 in players2:
-                # for player2 in players2.exclude(pk=player1.pk):
+            if rel1 and player1.age:
+                # select players from the same age group
+                # and don't compare with myself
+                filtered_players2 = (
+                    players2.exclude(pk=player1.pk).by_age(player1.age[0]))
+                for player2 in filtered_players2:
                     rel2 = list(_calc_rel(player2, max_length=len(rel1)))
                     if rel2:
+                        # limit array length by minimal
                         length = min(len(rel1), len(rel2))
                         mean = _calc_mean_diff(rel1[:length], rel2[:length])
+                        # get model object to save values
                         rel_players = cls.objects.by_players(player1, player2)
                         if rel_players.exists():
                             rel_player = rel_players.last()

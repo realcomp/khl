@@ -113,4 +113,12 @@ generate_timeline.short_description = _('Generate new timeline events')
 def calculate_similarity(modeladmin, request, queryset):
     from .models import RelatedPlayer
     RelatedPlayer.calc(queryset, queryset)
-calculate_similarity.short_description = _('Calculate players similarity')
+calculate_similarity.short_description = _(
+    'Calculate similarity between selected')
+
+
+def calculate_similarity_everyone(modeladmin, request, queryset):
+    from .models import RelatedPlayer
+    RelatedPlayer.calc(queryset, queryset.model.objects.all())
+calculate_similarity.short_description = _(
+    'Calculate similarity between selected and everyone')

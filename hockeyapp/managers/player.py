@@ -5,12 +5,14 @@ __author__='smirnov.ev'
 
 import requests
 
+from dateutil import relativedelta
 from PIL import Image
 from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.db.models import F, Q, Avg, Sum
+from django.utils import timezone
 
 import filer
 
@@ -214,6 +216,25 @@ class PlayerQuerySet(models.QuerySet):
                 rating_value = getattr(player, field)
             setattr(player, '%s_index' % field, rating_index)
             player.save(update_fields=('%s_index' % field,))
+
+    def by_age(
+            self, years__lt=None, years__lte=None, years__gte=None,
+            years__gt=None):
+        now = timezone.now().date()
+        q = Q()
+        if years__lt is not None:  # younger
+            bd = now - relativedelta.relativedelta(years=years__lt)
+            q &= Q(birth_date__gt=bd)
+        if years__lte is not None:  # younger or equal
+            bd = now - relativedelta.relativedelta(years=years__lte)
+            q &= Q(birth_date__gte=bd)
+        if years__gte is not None:  # older
+            bd = now - relativedelta.relativedelta(years=years__gte)
+            q &= Q(birth_date__lte=bd)
+        if years__gt is not None:  # older or equal
+            bd = now - relativedelta.relativedelta(years=years__gt)
+            q &= Q(birth_date__lt=bd)
+        return self.filter(q)
 
 
 class ClubPlayerQuerySet(models.QuerySet):
