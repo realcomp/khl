@@ -127,7 +127,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.search = function($scope) {
-    var age, checkBox, contract_types, d, e, i, key, league, len, line, multiSelect, params, ref, url, value, x;
+    var age, checkBox, contract_types, d, e, i, key, league, len, line, multiSelect, params, ref, relatedValue, url, value, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
     };
@@ -181,9 +181,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     checkBox($scope, 'season_enabled', 'seasonEnabled');
     checkBox($scope, 'club_enabled', 'clubEnabled');
     checkBox($scope, 'league_enabled', 'league2Enabled');
+    checkBox($scope, 'related_enabled', 'relatedEnabled');
     multiSelect($scope, 'citizenship', $scope.citizenship);
     multiSelect($scope, 'club', $scope.club);
     multiSelect($scope, 'league2', $scope.league2);
+    multiSelect($scope, 'relatedPlayer', $scope.related_player);
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
@@ -191,6 +193,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
       age = $('[name="age"]').val().split(';');
       $scope.$location.search('age__lte', age[0]);
       $scope.$location.search('age__gte', age[1]);
+    }
+    if ($('[name="relatedValue"]').length) {
+      relatedValue = $('[name="relatedValue"]').val().split(';');
+      $scope.$location.search('related_value__lte', relatedValue[0]);
+      $scope.$location.search('related_value__gte', relatedValue[1]);
     }
     $scope.params = $scope.$location.search();
     params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');

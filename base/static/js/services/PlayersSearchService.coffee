@@ -161,10 +161,12 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         checkBox($scope, 'season_enabled', 'seasonEnabled')
         checkBox($scope, 'club_enabled', 'clubEnabled')
         checkBox($scope, 'league_enabled', 'league2Enabled')
+        checkBox($scope, 'related_enabled', 'relatedEnabled')
 
         multiSelect($scope, 'citizenship', $scope.citizenship)
         multiSelect($scope, 'club', $scope.club)
         multiSelect($scope, 'league2', $scope.league2)
+        multiSelect($scope, 'relatedPlayer', $scope.related_player)
 
         if $scope.number
             $scope.$location.search('number', $scope.number)
@@ -173,6 +175,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             age = $('[name="age"]').val().split(';')
             $scope.$location.search('age__lte', age[0])
             $scope.$location.search('age__gte', age[1])
+
+        if $('[name="relatedValue"]').length
+            relatedValue = $('[name="relatedValue"]').val().split(';')
+            $scope.$location.search('related_value__lte', relatedValue[0])
+            $scope.$location.search('related_value__gte', relatedValue[1])
 
         $scope.params = $scope.$location.search()
 

@@ -285,7 +285,6 @@
             <input type="checkbox" name="clubEnabled" ng-model="clubEnabled"
                     ng-init="clubEnabled = params.club_enabled !== undefined">
              <label class="left"><span>ПО КОМАНДАМ </span></label>
-
          </div>
          <tags-input style="max-width:448px !important;"
                      ng-model="club"
@@ -319,29 +318,67 @@
          </tags-input>
          <!-- <input type="text" disabled readonly> -->
          <div class="ui divider"></div>
-          <div class="ui checkbox"><input type="checkbox" disabled readonly>
+         <div class="ui checkbox">
+            <input type="checkbox" name="relatedEnabled" ng-model="relatedEnabled"
+                    ng-init="relatedEnabled = params.like_related_enabled !== undefined" disabled readonly>
              <label class="left"><span>ПО ПОХОЖЕСТИ</span></label>
-
          </div>
-          <input type="text" disabled readonly>
-          </div>
+         <tags-input style="max-width:448px !important;"
+                     ng-model="relatedPlayer"
+                     ng-init="playersURL = '{% url 'hockeyapp:player-names-search-api' %}'"
+                     display-property="fio"
+                     placeholder="{% trans 'start typing' %}"
+                     add-on-comma="{false}" add-from-autocomplete-only="true"
+                     max-tags="1">
+             <auto-complete load-on-focus="true" load-on-empty="true"
+                            min-length="1" source="loadPlayers($query)"
+                            max-results-to-show="20">
+             </auto-complete>
+         </tags-input>
+         <!-- <input type="text" disabled readonly> -->
+         </div>
          <div class="ui divider"></div>
          <div class="rangeTwo-block">
-          <label for="range">КОЛИЧЕСТВО СОВПАДЕНИЙ (%)</label>
-             <!-- <input type="text" id="rangeTwo" value="" name="range" disabled readonly /> -->
-          </div>
-         <div class="ui divider"></div>
-         <div class="grow">
-             <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p>
-             <input type="text" ng-model="matchCount" ng-init="matchCount = params.match_count"
-                    ng-change="$location.search('match_count', matchCount || null)">
+             <label for="relatedRange">КОЛИЧЕСТВО СОВПАДЕНИЙ (%):</label>
+             <input type="text" id="relatedRange" value="" name="relatedValue" />
          </div>
+
          <div class="ui divider"></div>
-         <div class="grow">
-             <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p>
-             <input type="text" ng-model="gamingtime" ng-init="gamingtime = params.gamingtime"
-                    ng-change="$location.search('gamingtime', gamingtime || null)">
+         <div class="ui dropdown">
+             <select class="styler dropdown"
+                     ng-model="relatedField"
+                     ng-init="relatedField = params.related_field"
+                     ng-change="$location.search('related_field', relatedField || null)">
+                 <option value="goals_value">
+                     {% trans "Average goals count per game" %}
+                 </option>
+                 <option value="assists_value">
+                     {% trans "Average assist count per game" %}
+                 </option>
+                 <option value="points_value">
+                     {% trans "Average points per game" %}
+                 </option>
+                 <option value="penalty_time_value">
+                     {% trans "Average penalty time" %}
+                 </option>
+                 <option value="plus_minus_value">
+                     {% trans "Average \"plus/minus\" per game" %}
+                 </option>
+             </select>
          </div>
+
+         <!-- <div class="ui divider"></div> -->
+         <!-- <div class="grow"> -->
+         <!--     <p>МАТЧЕЙ ДЛЯ ОЦЕНКИ НЕ МЕНЕЕ</p> -->
+         <!--     <input type="text" ng-model="matchCount" ng-init="matchCount = params.match_count" -->
+         <!--            ng-change="$location.search('match_count', matchCount || null)"> -->
+         <!-- </div> -->
+         <!-- <div class="ui divider"></div> -->
+         <!-- <div class="grow"> -->
+         <!--     <p>ВРЕМЯ ЗА ИГРУ НЕ МЕНЕЕ</p> -->
+         <!--     <input type="text" ng-model="gamingtime" ng-init="gamingtime = params.gamingtime" -->
+         <!--            ng-change="$location.search('gamingtime', gamingtime || null)"> -->
+         <!-- </div> -->
          </div>
        </div>
      <!-- </div> -->
