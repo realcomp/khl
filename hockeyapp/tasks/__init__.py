@@ -19,10 +19,10 @@ from instagram.client import InstagramAPI
 from base.models import InstagramImageFile
 from base.utils import str2int_safe
 
-from . import parsers
-from . import models
-from . import utils
-from . import timeline_tasks
+from .. import parsers
+from .. import models
+from .. import utils
+from .. import timeline_tasks
 
 
 @app.task(ignore_result=True, track_started=True)
