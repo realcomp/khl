@@ -110,11 +110,11 @@ def generate_timeline(modeladmin, request, queryset):
 generate_timeline.short_description = _('Generate new timeline events')
 
 
-def calculate_similarity(modeladmin, request, queryset):
-    from .models import RelatedPlayer
-    RelatedPlayer.calc(queryset, queryset)
-calculate_similarity.short_description = _(
-    'Calculate similarity between selected')
+# def calculate_similarity(modeladmin, request, queryset):
+#     from .models import RelatedPlayer
+#     RelatedPlayer.calc(queryset, queryset)
+# calculate_similarity.short_description = _(
+#     'Calculate similarity between selected')
 
 
 def calculate_similarity_everyone(modeladmin, request, queryset):
@@ -123,5 +123,5 @@ def calculate_similarity_everyone(modeladmin, request, queryset):
     from . import tasks
     for pk in queryset.values_list('pk', flat=True):
         tasks.relatedplayer_calc_player.delay(pk)
-calculate_similarity.short_description = _(
+calculate_similarity_everyone.short_description = _(
     'Calculate similarity between selected and everyone')

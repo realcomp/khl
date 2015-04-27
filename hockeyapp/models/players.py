@@ -218,7 +218,7 @@ class RelatedPlayer(models.Model):
         return '%d: [%s] - [%s]' % (self.pk, self.player1, self.player2)
 
     @classmethod
-    def calc(cls, players1, players2):
+    def calc(cls, players1, players2=None):
         '''
         RelatedPlayer factory
         Calculates similarity values between each pair of players
@@ -280,7 +280,8 @@ class RelatedPlayer(models.Model):
                 # select players from the same age group
                 # and don't compare with myself
                 filtered_players2 = (
-                    players2.exclude(pk=player1.pk).by_age(player1.age[0]))
+                    (players2 or Player.objects)
+                    .exclude(pk=player1.pk).by_age(player1.age[0]))
                 for player2 in filtered_players2:
                     rel2 = list(_calc_rel(player2, max_length=len(rel1)))
                     if rel2:

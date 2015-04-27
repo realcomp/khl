@@ -108,8 +108,8 @@ class PlayerSocialsInline(admin.TabularInline):
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     actions = tuple(admin_actions.get_recalc_counters_actions()) + (
-        admin_actions.calculate_similarity,
-        admin_actions.calculate_similarity_everyone)
+        # admin_actions.calculate_similarity,
+        admin_actions.calculate_similarity_everyone,)
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
