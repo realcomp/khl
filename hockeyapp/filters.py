@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import operator
 
 from dateutil.relativedelta import relativedelta
 
@@ -88,6 +89,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _age__lte = request.query_params.get('age__lte')
         _age__gte = request.query_params.get('age__gte')
         _related_field = request.query_params.get('related_field')
+        _related_player = request.query_params.get('related_player')
         _related_value__lte = request.query_params.get('related_value__lte')
         _related_value__gte = request.query_params.get('related_value__gte')
         _match_count = request.query_params.get('match_count')
@@ -155,19 +157,26 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
                 years=int(_age__gte))
             q &= Q(birth_date__gte=date)
 
-        if _related_field in (
+        if _related_player and _related_field in (
                 'goals_value', 'assists_value', 'points_value',
                 'penalty_time_value', 'plus_minus_value'):
+
+            def get_q(field, value, player, cmp_):
+                '''
+                player2 -> relatedplayers2 -> player1
+                player1 -> relatedplayers1 -> player2
+                '''
+                return operator.or_(*(Q(**{
+                    'relatedplayers%d__%s__%s' % (x, field, cmp_): value,
+                    'relatedplayers%d__player%d' % (x, y): player,
+                }) for x, y in ((1, 2), (2, 1))))
+
             if _related_value__lte and _related_value__lte.isdigit():
                 value = int(_related_value__lte) / 100.0
-                q &= (
-                    Q(**{'relatedplayers1__%s__lte' % _related_field: value}) |
-                    Q(**{'relatedplayers2__%s__lte' % _related_field: value}))
+                q &= get_q(_related_field, value, _related_player, 'lte')
             if _related_value__gte and _related_value__gte.isdigit():
                 value = int(_related_value__gte) / 100.0
-                q &= (
-                    Q(**{'relatedplayers1__%s__gte' % _related_field: value}) |
-                    Q(**{'relatedplayers2__%s__gte' % _related_field: value}))
+                q &= get_q(_related_field, value, _related_player, 'gte')
 
         if _age__gte and _age__gte.isdigit():
             date = datetime.datetime.now() - relativedelta(
@@ -198,6 +207,6 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             _qs = _qs.filter(**{
                 '{}_lastname__startswith'.format(request.LANGUAGE_CODE): _s,
             })
-            
+
         qs_ids = _qs.values_list('pk', flat=True)
         return qs.filter(pk__in=qs_ids)

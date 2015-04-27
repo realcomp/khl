@@ -127,7 +127,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.search = function($scope) {
-    var age, checkBox, contract_types, d, e, i, key, league, len, line, multiSelect, params, ref, relatedValue, url, value, x;
+    var age, checkBox, contract_types, d, e, k, league, line, multiSelect, params, relatedValue, url, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
     };
@@ -185,7 +185,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     multiSelect($scope, 'citizenship', $scope.citizenship);
     multiSelect($scope, 'club', $scope.club);
     multiSelect($scope, 'league2', $scope.league2);
-    multiSelect($scope, 'relatedPlayer', $scope.related_player);
+    multiSelect($scope, 'related_player', $scope.relatedPlayer);
     if ($scope.number) {
       $scope.$location.search('number', $scope.number);
     }
@@ -196,29 +196,33 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     if ($('[name="relatedValue"]').length) {
       relatedValue = $('[name="relatedValue"]').val().split(';');
-      $scope.$location.search('related_value__lte', relatedValue[0]);
-      $scope.$location.search('related_value__gte', relatedValue[1]);
+      $scope.$location.search('related_value__gte', relatedValue[0]);
+      $scope.$location.search('related_value__lte', relatedValue[1]);
     }
     $scope.params = $scope.$location.search();
-    params += 'order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
-    ref = ['player', 'season', 'number', 'contract_type', 'height', 'weight', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime', 'related_field', 'related_value__lte', 'related_value__gte'];
-    for (i = 0, len = ref.length; i < len; i++) {
-      key = ref[i];
-      value = $scope.params[key];
-      if (value) {
-        params += '&' + key + '=' + value;
+    params += ((function() {
+      var i, len, ref, results;
+      ref = ['player', 'season', 'number', 'contract_type', 'height', 'weight', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime', 'related_value__lte', 'related_value__gte'];
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        k = ref[i];
+        if ($scope.params[k]) {
+          results.push(k + '=' + $scope.params[k]);
+        }
       }
-    }
+      return results;
+    })()).join('&');
+    params += '&order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
     if ($scope.params.reversed) {
       params += '&reversed=true';
     }
     if ($scope.params.line.length) {
       params += ((function() {
-        var j, len1, ref1, results;
-        ref1 = $scope.params.line;
+        var i, len, ref, results;
+        ref = $scope.params.line;
         results = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          x = ref1[j];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
           results.push('&line=' + x);
         }
         return results;
@@ -226,11 +230,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     if ($scope.params.contract_types) {
       params += ((function() {
-        var j, len1, ref1, results;
-        ref1 = $scope.params.contract_types;
+        var i, len, ref, results;
+        ref = $scope.params.contract_types;
         results = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          x = ref1[j];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
           results.push('&contract_types=' + x);
         }
         return results;
@@ -246,9 +250,6 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
         params += '&citizenship_other=true';
       }
     }
-    if ($scope.params.league) {
-      params += '&league=' + $scope.params.league;
-    }
     if ($scope.params.is_playing !== 'false') {
       params += '&is_playing=true';
     }
@@ -257,11 +258,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     if (($scope.club_enabled || $scope.params.club_enabled) && $scope.params.club) {
       params += ((function() {
-        var j, len1, ref1, results;
-        ref1 = JSON.parse($scope.params.club);
+        var i, len, ref, results;
+        ref = JSON.parse($scope.params.club);
         results = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          x = ref1[j];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
           results.push('&club=' + x['pk']);
         }
         return results;
@@ -269,11 +270,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     if ($scope.params.league) {
       params += ((function() {
-        var j, len1, ref1, results;
-        ref1 = $scope.params.league;
+        var i, len, ref, results;
+        ref = $scope.params.league;
         results = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          league = ref1[j];
+        for (i = 0, len = ref.length; i < len; i++) {
+          league = ref[i];
           results.push('&league=' + league);
         }
         return results;
@@ -291,11 +292,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     if ($scope.params.citizenship) {
       params += ((function() {
-        var j, len1, ref1, results;
-        ref1 = JSON.parse($scope.params.citizenship);
+        var i, len, ref, results;
+        ref = JSON.parse($scope.params.citizenship);
         results = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          x = ref1[j];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
           results.push('&citizenship=' + x['pk']);
         }
         return results;
@@ -303,11 +304,11 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
     if ($scope.params.league_enabled && $scope.params.league2) {
       params += ((function() {
-        var j, len1, ref1, results;
-        ref1 = JSON.parse($scope.params.league2);
+        var i, len, ref, results;
+        ref = JSON.parse($scope.params.league2);
         results = [];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          x = ref1[j];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
           results.push('&league=' + x['pk']);
         }
         return results;
@@ -317,6 +318,19 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
       if ($scope.params.season_start && $scope.params.season_end) {
         params += '&season_start=' + $scope.params.season_start + '&season_end=' + $scope.params.season_end;
       }
+    }
+    if ($scope.params.related_enabled && $scope.params.related_player && $scope.params.related_field) {
+      params += ((function() {
+        var i, len, ref, results;
+        ref = JSON.parse($scope.params.related_player);
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          x = ref[i];
+          results.push('&related_player=' + x['pk']);
+        }
+        return results;
+      })()).join('');
+      params += '&related_field=' + $scope.params.related_field;
     }
     $scope.data = {};
     $scope.loader = true;

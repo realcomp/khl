@@ -166,7 +166,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         multiSelect($scope, 'citizenship', $scope.citizenship)
         multiSelect($scope, 'club', $scope.club)
         multiSelect($scope, 'league2', $scope.league2)
-        multiSelect($scope, 'relatedPlayer', $scope.related_player)
+        multiSelect($scope, 'related_player', $scope.relatedPlayer)
 
         if $scope.number
             $scope.$location.search('number', $scope.number)
@@ -178,8 +178,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
 
         if $('[name="relatedValue"]').length
             relatedValue = $('[name="relatedValue"]').val().split(';')
-            $scope.$location.search('related_value__lte', relatedValue[0])
-            $scope.$location.search('related_value__gte', relatedValue[1])
+            $scope.$location.search('related_value__gte', relatedValue[0])
+            $scope.$location.search('related_value__lte', relatedValue[1])
 
         $scope.params = $scope.$location.search()
 
@@ -231,7 +231,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                 params += (
                     '&season_start=' + $scope.params.season_start +
                     '&season_end=' + $scope.params.season_end)
-        if $scope.params.related_enabled and $scope.params.related_field
+        if $scope.params.related_enabled and $scope.params.related_player and $scope.params.related_field
+            params += (('&related_player=' + x['pk']) for x in JSON.parse($scope.params.related_player)).join('')
             params += '&related_field=' + $scope.params.related_field
 
         $scope.data = {}
