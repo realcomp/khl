@@ -2,7 +2,6 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
-import itertools
 import re
 import sys
 import time
@@ -239,40 +238,6 @@ def player_recalc_counters_index(field):
         logger.error(exc, exc_info=sys.exc_info())
 
 
-COUNTERS_FIELDS = (
-    'seasons_total', 'matches_total', 'bullet_matches_total',
-    'shots_received_total', 'saves_total', 'loose_goals_total',
-    'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-    'matches_win_total', 'matches_lose_total', 'gamingtime_total',
-) + tuple(itertools.chain(*map(
-    lambda x: ('%s_total' % x, '%s_average' % x),
-    ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-
-
-@app.task(ignore_result=True, track_started=True)
-def periodic_player_recalc_counters():
-    '''
-    Update all fields for each group of players,
-    update last_match_date
-    '''
-    qs = models.Player.objects.all()
-    count = qs.count()
-    limit = 100
-    for i in range(0, count, limit):
-        pks = qs[i:i + limit].values_list('pk', flat=True)
-        player_recalc_counters.delay(
-            pks, COUNTERS_FIELDS, update_last_match_date=True)
-
-
-@app.task(ignore_result=True, track_started=True)
-def periodic_player_recalc_counters_index():
-    '''
-    Update index for each field
-    '''
-    for field in COUNTERS_FIELDS:
-        player_recalc_counters_index.delay(field)
-
-
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
@@ -318,8 +283,8 @@ def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
                 get_instagram_pictures.delay(loc_id, arena, min_t, max_t)
 
 
-@app.task(ignore_result=True, track_started=True)
-def periodic_player_generate_timeline():
-    pks = models.Player.objects.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        timeline_tasks.PlayerTimelineGenerator().delay(pks[i:i + 1000])
+from .relatedplayer import relatedplayer_calc_player
+from .periodic import (
+    periodic_player_recalc_counters,
+    periodic_player_recalc_counters_index,
+    periodic_player_generate_timeline)

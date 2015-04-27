@@ -118,7 +118,10 @@ calculate_similarity.short_description = _(
 
 
 def calculate_similarity_everyone(modeladmin, request, queryset):
-    from .models import RelatedPlayer
-    RelatedPlayer.calc(queryset, queryset.model.objects.all())
+    # from .models import RelatedPlayer
+    # RelatedPlayer.calc(queryset, queryset.model.objects.all())
+    from . import tasks
+    for pk in queryset.values_list('pk', flat=True):
+        tasks.relatedplayer_calc_player.delay(pk)
 calculate_similarity.short_description = _(
     'Calculate similarity between selected and everyone')
