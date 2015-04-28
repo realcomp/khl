@@ -204,40 +204,6 @@ def async_db_match_update(match_id):
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
-def player_recalc_counters(pks, fields, update_last_match_date=False):
-    b'''
-        Пересчет полей игрока на основе данных по матчам
-        seasons_total
-        matches_total
-        goals_total
-        assists_total
-        points_total
-        plus_minus_total
-        goals_average
-        assists_average
-        points_average
-        plus_minus_average
-        ...
-    '''
-    try:
-        models.Player.objects.filter(pk__in=pks).recalc_counters(
-            fields, update_last_match_date=update_last_match_date)
-    except Exception, exc:
-        logger.error(exc, exc_info=sys.exc_info())
-
-
-@app.task(ignore_result=True, track_started=True)
-def player_recalc_counters_index(field):
-    b'''
-        Пересчет позиции игрока в сортировке
-    '''
-    try:
-        models.Player.objects.recalc_counters_index(field)
-    except Exception, exc:
-        logger.error(exc, exc_info=sys.exc_info())
-
-
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
@@ -281,10 +247,3 @@ def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
         locations = utils.get_arena_instagram_locations(arena.coords)
         for loc_id in locations:
                 get_instagram_pictures.delay(loc_id, arena, min_t, max_t)
-
-
-from .relatedplayer import relatedplayer_calc_player
-from .periodic import (
-    periodic_player_recalc_counters,
-    periodic_player_recalc_counters_index,
-    periodic_player_generate_timeline)

@@ -20,11 +20,10 @@ def get_recalc_counters_actions():
 
     def get_action(field):
         def action(modeladmin, request, queryset):
-            from .tasks import player_recalc_counters
-            from .tasks import player_recalc_counters_index
+            from .tasks import counters
             pks = queryset.values_list('pk', flat=True)
-            player_recalc_counters.delay(pks, [field])
-            player_recalc_counters_index.delay(field)
+            counters.player_recalc_counters.delay(pks, [field])
+            counters.player_recalc_counters_index.delay(field)
         # make function unique for django
         action.__name__ = str('action_%s' % field)
         action.short_description = _('Recalculate counters for "%s"') % field
@@ -34,10 +33,9 @@ def get_recalc_counters_actions():
         yield get_action(field)
 
     def action_all(modeladmin, request, queryset):
-        from .tasks import periodic_player_recalc_counters
-        from .tasks import periodic_player_recalc_counters_index
-        periodic_player_recalc_counters.delay()
-        periodic_player_recalc_counters_index.delay()
+        from .tasks import periodic
+        periodic.player_recalc_counters.delay()
+        periodic.player_recalc_counters_index.delay()
     action_all.short_description = _('Recalculate all counters')
     yield action_all
 
@@ -120,8 +118,8 @@ generate_timeline.short_description = _('Generate new timeline events')
 def calculate_similarity_everyone(modeladmin, request, queryset):
     # from .models import RelatedPlayer
     # RelatedPlayer.calc(queryset, queryset.model.objects.all())
-    from . import tasks
+    from .tasks import relatedplayer
     for pk in queryset.values_list('pk', flat=True):
-        tasks.relatedplayer_calc_player.delay(pk)
+        relatedplayer.relatedplayer_calc_player.delay(pk)
 calculate_similarity_everyone.short_description = _(
     'Calculate similarity between selected and everyone')

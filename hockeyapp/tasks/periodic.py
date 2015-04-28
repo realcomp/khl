@@ -3,8 +3,7 @@ import itertools
 
 from sportomatics.celery import app
 
-from . import player_recalc_counters, player_recalc_counters_index
-from .relatedplayer import relatedplayer_calc_player
+from . import counters, relatedplayer, timeline_tasks
 from .. import models
 from .. import timeline_tasks
 
@@ -20,7 +19,7 @@ COUNTERS_FIELDS = (
 
 
 @app.task(ignore_result=True, track_started=True)
-def periodic_player_recalc_counters():
+def player_recalc_counters():
     '''
     Update all fields for each group of players,
     update last_match_date
@@ -30,28 +29,28 @@ def periodic_player_recalc_counters():
     limit = 100
     for i in range(0, count, limit):
         pks = qs[i:i + limit].values_list('pk', flat=True)
-        player_recalc_counters.delay(
+        counters.player_recalc_counters.delay(
             pks, COUNTERS_FIELDS, update_last_match_date=True)
 
 
 @app.task(ignore_result=True, track_started=True)
-def periodic_player_recalc_counters_index():
+def player_recalc_counters_index():
     '''
     Update index for each field
     '''
     for field in COUNTERS_FIELDS:
-        player_recalc_counters_index.delay(field)
+        counters.player_recalc_counters_index.delay(field)
 
 
 
 @app.task(ignore_result=True, track_started=True)
-def periodic_player_generate_timeline():
+def player_generate_timeline():
     pks = models.Player.objects.values_list('pk', flat=True)
     for i in range(0, len(pks), 1000):  # 1000 players per task
         timeline_tasks.PlayerTimelineGenerator().delay(pks[i:i + 1000])
 
 
 @app.task(ignore_result=True, track_started=True)
-def periodic_relatedplayer_calc_player():
+def relatedplayer_calc_player():
     for pk in models.Player.objects.values_list('pk', flat=True):
-        relatedplayer_calc_player.delay(pk)
+        relatedplayer.relatedplayer_calc_player.delay(pk)
