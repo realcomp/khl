@@ -189,6 +189,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'hockeyapp.tasks.periodic.player_recalc_counters_index',
         'schedule': local_celery_crontab(hour=7, minute=0),
     },
+    'hockeyapp-periodic-relatedplayer-calc-player': {
+        'task': 'hockeyapp.tasks.periodic.relatedplayer_calc_player',
+        'schedule': local_celery_crontab(hour=9, minute=0),
+    },
 }
 CELERY_IGNORE_RESULT = True
 

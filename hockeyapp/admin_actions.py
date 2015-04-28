@@ -115,6 +115,16 @@ generate_timeline.short_description = _('Generate new timeline events')
 #     'Calculate similarity between selected')
 
 
+def calculate_similarity_expired(modeladmin, request, queryset):
+    # from .models import RelatedPlayer
+    # RelatedPlayer.calc(queryset, queryset.model.objects.all())
+    from .tasks import relatedplayer
+    for pk in queryset.relatedplayer_expired().values_list('pk', flat=True):
+        relatedplayer.relatedplayer_calc_player.delay(pk)
+calculate_similarity_expired.short_description = _(
+    'Calculate similarity between expired and everyone')
+
+
 def calculate_similarity_everyone(modeladmin, request, queryset):
     # from .models import RelatedPlayer
     # RelatedPlayer.calc(queryset, queryset.model.objects.all())

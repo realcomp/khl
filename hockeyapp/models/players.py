@@ -284,7 +284,7 @@ class RelatedPlayer(models.Model):
                     filtered_players2 = players2
                 else:
                     # select players from the same age group
-                    filtered_players2 = player1.get_age_related_players().relatedplayer_expired()
+                    filtered_players2 = player1.get_age_related_players()
                 # don't compare with myself
                 filtered_players2 = filtered_players2.exclude(pk=player1.pk)
 

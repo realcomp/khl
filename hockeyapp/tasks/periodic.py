@@ -45,6 +45,9 @@ def player_recalc_counters_index():
 
 @app.task(ignore_result=True, track_started=True)
 def player_generate_timeline():
+    '''
+    Timeline generator
+    '''
     pks = models.Player.objects.values_list('pk', flat=True)
     for i in range(0, len(pks), 1000):  # 1000 players per task
         timeline_tasks.PlayerTimelineGenerator().delay(pks[i:i + 1000])
@@ -52,5 +55,9 @@ def player_generate_timeline():
 
 @app.task(ignore_result=True, track_started=True)
 def relatedplayer_calc_player():
-    for pk in models.Player.objects.values_list('pk', flat=True):
+    '''
+    Update first 1000 expired players only
+    '''
+    qs = models.Player.objects.relatedplayer_expired()[:1000]
+    for pk in qs.values_list('pk', flat=True):
         relatedplayer.relatedplayer_calc_player.delay(pk)
