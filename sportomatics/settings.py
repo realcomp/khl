@@ -50,6 +50,9 @@ INSTALLED_APPS = (
     'base',
     'bower',
     'hockeyapp',
+    'hockeyapp.tasks.counters',
+    'hockeyapp.tasks.periodic',
+    'hockeyapp.tasks.relatedplayer',
 )
 
 MIDDLEWARE_CLASSES = (

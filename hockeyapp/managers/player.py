@@ -236,6 +236,16 @@ class PlayerQuerySet(models.QuerySet):
             q &= Q(birth_date__lt=bd)
         return self.filter(q)
 
+    def relatedplayer_expired(self):
+        '''
+        Returns players with expired RelatedPlayer records
+        '''
+        now = timezone.now().date()
+        expire = now - relativedelta.relativedelta(months=1)
+        return self.filter(
+            Q(last_relatedplayer_modified__lt=expire) |
+            Q(last_relatedplayer_modified__isnull=True))
+
 
 class ClubPlayerQuerySet(models.QuerySet):
     def by_season(self, season):

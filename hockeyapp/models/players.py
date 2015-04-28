@@ -9,6 +9,7 @@ from operator import itemgetter, methodcaller
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Avg
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -133,6 +134,8 @@ class Player(AbstractMan):
 
     last_match_date = models.DateTimeField(
         _('Last match history parsed'), null=True)
+    last_relatedplayer_modified = models.DateTimeField(
+        _('Last related player modified date'), null=True)
 
     __unicode__ = lambda self: '{0} {1}'.format(self.khl_id, self.ru_fio)
 
@@ -277,11 +280,14 @@ class RelatedPlayer(models.Model):
         for player1 in players1:
             rel1 = list(_calc_rel(player1))
             if rel1 and player1.age:
-                # select players from the same age group
-                # and don't compare with myself
-                filtered_players2 = (
-                    (players2 or Player.objects)
-                    .exclude(pk=player1.pk).by_age(player1.age[0]))
+                if players2:
+                    filtered_players2 = players2
+                else:
+                    # select players from the same age group
+                    filtered_players2 = player1.get_age_related_players().relatedplayer_expired()
+                # don't compare with myself
+                filtered_players2 = filtered_players2.exclude(pk=player1.pk)
+
                 for player2 in filtered_players2:
                     rel2 = list(_calc_rel(player2, max_length=len(rel1)))
                     if rel2:
@@ -298,6 +304,8 @@ class RelatedPlayer(models.Model):
                         for k, v in mean.items():
                             setattr(rel_player, '%s_value' % k, v)
                         rel_player.save()
+                player1.last_relatedplayer_modified = timezone.now()
+                player1.save(update_fields=('last_relatedplayer_modified',))
 
     class Meta(object):
         ordering = 'modified',
