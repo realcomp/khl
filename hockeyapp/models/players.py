@@ -187,6 +187,32 @@ class Player(AbstractMan):
         age_params = age_groups[group][1]
         return Player.objects.by_age(**age_params)
 
+    def get_league_coef(self, player):
+        my_cp = self.clubplayer_set.last()
+        other_cp = player.clubplayer_set.last()
+        if (not my_cp or not my_cp.league or
+                not other_cp or not other_cp.league):
+            return 1.
+        my_league = my_cp.league.en_title.lower()
+        other_league = other_cp.league.en_title.lower()
+        if my_league == other_league:
+            return 1.
+        COEFFS = {
+            'mhl': {
+                'vhl': .8,  # MHL * 0.8 = VHL
+            },
+            'vhl': {
+                'khl': .8,  # VHL * 0.8 = KHL
+            },
+        }
+        # MHL2KHL = MHL2VHL * VHL2KHL
+        COEFFS['mhl']['khl'] = COEFFS['mhl']['vhl'] * COEFFS['vhl']['khl']
+        # reversed
+        COEFFS['vhl']['mhl'] = 1. / COEFFS['mhl']['vhl']
+        COEFFS['khl']['vhl'] = 1. / COEFFS['vhl']['khl']
+        COEFFS['khl']['mhl'] = 1. / COEFFS['mhl']['khl']
+        return COEFFS.get(my_league, {}).get(other_league, 1.)
+
     def get_absolute_url(self):
         if self.pk:
             return reverse('hockeyapp:players:card', kwargs={'pk': self.pk})
@@ -268,9 +294,11 @@ class RelatedPlayer(models.Model):
             for qs in aggregated:
                 yield {field: _calc_fields_rel(qs, field) for field in fields}
 
-        def _calc_mean_diff(rel1, rel2):
+        def _calc_mean_diff(rel1, rel2, coef=1):
             def _calc_fields_mean(field):
-                values = map(lambda x: abs(x[0].get(field) - x[1].get(field)), zip(rel1, rel2))
+                values = map(
+                    lambda x: abs(x[0].get(field) * coef - x[1].get(field)),
+                    zip(rel1, rel2))
                 if values:
                     return numpy.mean(values)
                 return 0
@@ -293,7 +321,9 @@ class RelatedPlayer(models.Model):
                     if rel2:
                         # limit array length by minimal
                         length = min(len(rel1), len(rel2))
-                        mean = _calc_mean_diff(rel1[:length], rel2[:length])
+                        mean = _calc_mean_diff(
+                            rel1[:length], rel2[:length],
+                            coef=player1.get_league_coef(player2))
                         # get model object to save values
                         rel_players = cls.objects.by_players(player1, player2)
                         if rel_players.exists():

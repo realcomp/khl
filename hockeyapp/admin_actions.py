@@ -133,3 +133,9 @@ def calculate_similarity_everyone(modeladmin, request, queryset):
         relatedplayer.relatedplayer_calc_player.delay(pk)
 calculate_similarity_everyone.short_description = _(
     'Calculate similarity between selected and everyone')
+
+
+def delete_without_confirmation(modeladmin, request, queryset):
+    queryset.delete()
+delete_without_confirmation.short_description = _(
+    'Delete selected without confirmation')

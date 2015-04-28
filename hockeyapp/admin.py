@@ -513,6 +513,7 @@ admin.site.register(Timeline, TimelineAdmin)
 
 
 class RelatedPlayerAdmin(admin.ModelAdmin):
+    actions = admin_actions.delete_without_confirmation,
     list_display = (
         'pk', 'player1', 'player2', 'modified', 'goals_value', 'assists_value',
         'points_value', 'penalty_time_value', 'plus_minus_value')
