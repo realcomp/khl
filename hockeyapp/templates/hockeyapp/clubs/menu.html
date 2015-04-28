@@ -1,8 +1,8 @@
 {% load i18n %}
 
-<div class="ui green menu ">
+<!--<div class="ui green menu ">
     <a class="{% if clubs_menu_active == 'club-news' %}active {% endif %}item"
-       href="{% url 'hockeyapp:clubs:news' pk %}">Главное</a>
+       href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
     <a class="{% if clubs_menu_active == 'club' %}active {% endif %}item"
        href="{% url 'hockeyapp:clubs:details' pk %}">Состав команды</a>
 
@@ -18,13 +18,52 @@
        href="{% url 'hockeyapp:clubs:fanzone' pk %}">Фан-клуб</a>
     <a class="{% if clubs_menu_active == 'club-numbers' %}active {% endif %}item"
        href="{% url 'hockeyapp:clubs:numbers' pk %}">{% trans "Player's numbers" %}</a>
-    <!-- <a class="{% if clubs_menu_active == 'club-forum' %}active {% endif %}item" -->
-    <!--    href="#">Форум</a> -->
-    <!-- <a class="{% if clubs_menu_active == 'club-shop' %}active {% endif %}item" -->
-    <!--    href="#">Магазин</a> -->
-</div> 
+    < <a class="{% if clubs_menu_active == 'club-forum' %}active {% endif %}item"
+       href="#">Форум</a>
+    <a class="{% if clubs_menu_active == 'club-shop' %}active {% endif %}item"    href="#">Магазин</a>
+</div>-->
+<section class="w-main-nav">
+    <div class="w-menu">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w-main-nav__b-menu">
+                <span class="sr-only">Menu</span>
+                <i class="icon content"></i>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="w-main-nav__b-menu">
+            <ul class="w-main-nav__b-menu ui inverted green menu">
+                <li class="item w-main-nav__b-menu__logo hidden-xs">
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="/static/new/images/l-hockey/logo.jpg" /></a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-news' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:details' pk %}">Состав</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-calendar' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:calendar' pk %}">Календарь</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-stats' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:stats' pk %}">Статистика</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-home' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:home' pk %}">Домашняя площадка</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-photos' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:photos' pk %}">Фотографии</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-fanzone' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:fanzone' pk %}">Фан-клуб</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section><!--w-main-nav-->
 
-<!-- 
+<!--
 <div class="ui menu">
   <a class="item">
     Home

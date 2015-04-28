@@ -64,16 +64,12 @@
         {% endblock %}
     </head>
     <body ng-app="{% block ngapp %}Sportomatics{% endblock %}">
-    <div ui-view></div>
-        <div class="wrapper">
         {% block header %}
             {% include "partial/header.html" %}
         {% endblock %}
-
         {% block body %}
-        <section class="content">
-
-        </section>
+        <div class="body_inner bg-image">
+        </div>
         {% endblock %}
         </div>
         {% include "partial/footer.html" %}

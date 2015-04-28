@@ -1,0 +1,308 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{title}}: новости и результаты матчей, хоккей  - Sportomatics.ru
+{% endblock %}
+
+
+{% comment %}
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-photos-page">
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="News" %}
+
+        <div class="page-content page-container" ng-controller="ClubNewsController">
+            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
+            <div class="page-inner-container">
+                <div class="clubs-photos-tabs">
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="column">
+                                <div class="heading">Портрет клуба</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="column club-logo-container">
+                                <img src="{{ logo|default:'' }}" style="width: 180px; height: 180px">
+                            </div>
+                            <div class="column" style="min-width: 700px">
+                                <div class="ui grid">
+                                    <div class="row">
+                                        <div class="column" style="min-width: 280px">
+                                            <div class="">
+                                                <h3>{{title}}</h3>
+                                                <p class="bold">{{address.title}}</p>
+                                            </div>
+                                            <ul class="info-list">
+                                                {% if site %}
+                                                <li class="info-item">{% trans "Site" %}: <a href="{{ site }}">{{ site }}</a></li>
+                                                {% endif %}
+                                                {% if email %}
+                                                <li class="info-item">E-mail: {{ email }}</li>
+                                                {% endif %}
+                                                {% if phone %}
+                                                <li class="info-item">{% trans "Tel." %}: {{ phone }}</li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+
+                                        <div class="column club-portrait-coaches" style="min-width: 400px">
+                                            <div class="column club-portrait-coach text-center">
+                                                <img src="/static//static/new/images/player-avatar.jpg">
+                                                <h5>Иван Петров</h5>
+                                                <p>главный тренер</p>
+                                            </div>
+                                            <div class="column club-portrait-coach text-center">
+                                                <img src="/static//static/new/images/player-avatar.jpg">
+                                                <h5>Александр Муратов</h5>
+                                                <p>второй тренер</p>
+                                            </div>
+                                            <div class="column club-portrait-coach text-center">
+                                                <img src="/static//static/new/images/player-avatar.jpg">
+                                                <h5>Иван Петров</h5>
+                                                <p>главный тренер</p>
+                                            </div>
+                                            <div class="column club-portrait-coach">
+
+                                            </div>
+                                            <div class="column club-portrait-coach">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="style-six" style="width: 100%; margin-top: 20px">
+                                    <div class="row">
+                                        <div class="column" style="min-width: 280px">
+                                            Арена: ЛДС "Петровский", СПб, просп Стачек 18<br>
+                                            <a href="#">карта проезда</a>
+                                        </div>
+                                        <div class="column" style="min-width: 400px">
+                                            Офис: ЛДС "Петровский", СПб, просп Стачек 18<br>
+                                            <a href="#">карта проезда</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="style-six2" style="width: 100%; margin-top: 20px">
+                        <div class="row">
+                            <div class="column">
+                                    <div class="heading">Позиции команды в чемпионате</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="chartdiv" style="width: 100%; height:400px; ">
+
+                            </div>
+                        </div>
+                        <hr class="style-six" style="width: 95%; margin-top: 20px">
+                        {% verbatim %}
+                        <div class="row" style="">
+                            <div class="column">
+                                    <div class="heading">Сезон {{currentSeasonString}}<br>
+                                    </div>
+                                <p>Место в чемпионате - {{currentPlace}}</p>
+                            </div>
+                        </div>
+                        {% endverbatim %}
+                        <div class="row">
+                            <div class="column" style="width: 315px !important;">
+                                <table class="ui celled table segment player-select-table text-center">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th class="text-center uppercase">
+                                            Дата
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Матч
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Счет
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="match in matchData track by $index">
+                                        <td>
+                                            <span ng-bind="match.date"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0">
+                                            <span ng-bind="match.opponent"></span> -
+                                            <span ng-bind="match.club"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0">
+                                            <span ng-bind="match.club"></span> -
+                                            <span ng-bind="match.opponent"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultOpponent"></span> :
+                                            <span ng-bind="match.resultClub"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultClub"></span> :
+                                            <span ng-bind="match.resultOpponent"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="column" style="width: 315px !important;">
+                                <table class="ui celled table segment player-select-table text-center">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th class="text-center uppercase">
+                                            Дата
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Матч
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Счет
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="match in matchData track by $index">
+                                        <td>
+                                            <span ng-bind="match.date"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0">
+                                            <span ng-bind="match.opponent"></span> -
+                                            <span ng-bind="match.club"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0">
+                                            <span ng-bind="match.club"></span> -
+                                            <span ng-bind="match.opponent"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultOpponent"></span> :
+                                            <span ng-bind="match.resultClub"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultClub"></span> :
+                                            <span ng-bind="match.resultOpponent"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="column" style="width: 315px !important;">
+                                <table class="ui celled table segment player-select-table text-center">
+                                    <thead class="text-center">
+                                    <tr>
+                                        <th class="text-center uppercase">
+                                            Дата
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Матч
+                                        </th>
+                                        <th class="text-center uppercase">
+                                            Счет
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="match in matchData track by $index">
+                                        <td>
+                                            <span ng-bind="match.date"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0">
+                                            <span ng-bind="match.opponent"></span> -
+                                            <span ng-bind="match.club"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0">
+                                            <span ng-bind="match.club"></span> -
+                                            <span ng-bind="match.opponent"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 === 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultOpponent"></span> :
+                                            <span ng-bind="match.resultClub"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                        <td ng-if="$index % 4 !== 0" ng-class="{'background-bad': match.resultClub < match.resultOpponent, 'background-good': match.resultClub >= match.resultOpponent}">
+                                            <span ng-bind="match.resultClub"></span> :
+                                            <span ng-bind="match.resultOpponent"></span>
+                                            <span ng-bind="match.resultNote"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row"></div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% endcomment %}
+
+{% block body %}
+<div class="w-page__main">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/clubs/clubs-header.html" with club_section="News" %}
+
+                {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
+
+                <section class="w-club__logo visible-xs">
+                    <div class="b-club__logo">
+                        <a href="#"><img src="/static/new/images/l-hockey/logo.jpg" /></a>
+                    </div>
+                    <h3 class="header-text w-club__name">
+                        СКА (Санкт-Петербург)
+                    </h3>
+                </section><!--w-club__logo-->
+
+                <section class="w-page-tabs">
+                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+                        <div class="text">Сезон 2014-15</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition hidden" tabindex="-1">
+                            <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                            <div class="item" data-text="Сезон 2013-14">2013-14</div>
+                            <div class="item" data-text="Сезон 2012-13">2012-13</div>
+                            <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                        </div>
+                    </div>
+
+                <!--tabs content-->
+
+                {% block tabs-content %}
+                {% endblock %}
+
+                <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+            </section><!--container-->
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+{% block extrahead %}
+
+<script src="{{ STATIC_URL }}js/libs/dropzone.js"></script>
+
+{% endblock %}

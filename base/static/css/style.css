@@ -509,9 +509,6 @@ i.icon {
   font-size: 10px;
   text-transform: uppercase;
 }
-.ui.green.menu .active.item {
-  margin-top: -1px;
-}
 
 /* line 257, ../sass/_base.sass */
 .heading {
@@ -5081,7 +5078,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     display: inline-block;
 }
 .block{
-    display: block !important;
+    display: block;
 }
 .ui.breadcrumb a:last-of-type{
     text-decoration: none !important;

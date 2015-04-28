@@ -1,4 +1,5 @@
 {% load i18n %}
+{% comment %}
 <div class="ui grid breadcrumb-search">
     <div class="twelve wide column">
         <div class="breadcrumbs">
@@ -38,9 +39,6 @@
                 <span id="club-address">({{ address.title }})</span>
             {% endif %}
         </a>
-        <input id="team-name-hidden" type="hidden" value="{{title}}">
-        <input id="team-id" type="hidden" value="{{pk}}">
-        <input id="team-arena-id" type="hidden" value="{{arena.pk}}">
     </div>
     <ul class="info-list">
         {% if site %}
@@ -54,3 +52,24 @@
         {% endif %}
     </ul>
 </div>
+{% endcomment %}
+
+<input id="team-name-hidden" type="hidden" value="{{title}}">
+<input id="team-id" type="hidden" value="{{pk}}">
+<input id="team-arena-id" type="hidden" value="{{arena.pk}}">
+
+<section class="row w-breadcrumb">
+    <div class="col-sm-9">
+        <div class="ui small breadcrumb">
+            <a href="{% url 'i18n_index' %}" class="section">{% trans 'Hockey' %}</a>
+            <i class="right chevron icon divider"></i>
+            <a class="section">КХЛ</a>
+            <i class="right chevron icon divider"></i>
+            <a class="section">Клубы</a>
+            <i class="right chevron icon divider"></i>
+            <a class="section">СКА</a>
+            <i class="right chevron icon divider"></i>
+            <div class="active section">Главное</div>
+        </div>
+    </div>
+</section><!--row w-breadcrumb-->

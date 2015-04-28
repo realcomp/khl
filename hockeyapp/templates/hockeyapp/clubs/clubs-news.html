@@ -5,6 +5,8 @@
 {{title}}: новости и результаты матчей, хоккей  - Sportomatics.ru
 {% endblock %}
 
+
+{% comment %}
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-photos-page">
@@ -48,17 +50,17 @@
 
                                         <div class="column club-portrait-coaches" style="min-width: 400px">
                                             <div class="column club-portrait-coach text-center">
-                                                <img src="/static/images/player-avatar.jpg">
+                                                <img src="/static//static/new/images/player-avatar.jpg">
                                                 <h5>Иван Петров</h5>
                                                 <p>главный тренер</p>
                                             </div>
                                             <div class="column club-portrait-coach text-center">
-                                                <img src="/static/images/player-avatar.jpg">
+                                                <img src="/static//static/new/images/player-avatar.jpg">
                                                 <h5>Александр Муратов</h5>
                                                 <p>второй тренер</p>
                                             </div>
                                             <div class="column club-portrait-coach text-center">
-                                                <img src="/static/images/player-avatar.jpg">
+                                                <img src="/static//static/new/images/player-avatar.jpg">
                                                 <h5>Иван Петров</h5>
                                                 <p>главный тренер</p>
                                             </div>
@@ -244,7 +246,86 @@
     </div>
 </section>
 {% endblock %}
+{% endcomment %}
+
+{% block body %}
+<div class="w-page__main">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/clubs/clubs-header.html" with club_section="News" %}
+
+                {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
+
+                <section class="w-club__logo visible-xs">
+                    <div class="b-club__logo">
+                        <a href="#"><img src="/static/new/images/l-hockey/logo.jpg" /></a>
+                    </div>
+                    <h3 class="header-text w-club__name">
+                        СКА (Санкт-Петербург)
+                    </h3>
+                </section><!--w-club__logo-->
+
+                <section class="w-page-tabs">
+                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+                        <div class="text">Сезон 2014-15</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition hidden" tabindex="-1">
+                            <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                            <div class="item" data-text="Сезон 2013-14">2013-14</div>
+                            <div class="item" data-text="Сезон 2012-13">2012-13</div>
+                            <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                        </div>
+                    </div>
+
+                <!--tabs items-->
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item active" data-tab="tab-name">О команде</div>
+                        <div class="item" data-tab="tab-name2">Матчи</div>
+                        <div class="item" data-tab="tab-name3">Слухи<span class="floating ui green circular label">+1</span></div>
+                        <div class="item" data-tab="tab-name4">География</div>
+                        <div class="item" data-tab="tab-name5">Тренеры</div>
+                        <div class="item" data-tab="tab-name6">История номеров</div>
+                        <div class="item" data-tab="tab-name7">Талисман</div>
+                    </div>
+                <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item active" data-tab="tab-name">О команде</div>
+                        <div class="item" data-tab="tab-name2">Матчи</div>
+                        <div class="item" data-tab="tab-name3">Слухи<span class="floating ui green circular label">+1</span></div>
+                        <div class="item" data-tab="tab-name4">География</div>
+                        <div class="item" data-tab="tab-name5">Тренеры</div>
+                        <div class="item" data-tab="tab-name6">История номеров</div>
+                        <div class="item" data-tab="tab-name7">Талисман</div>
+                    </div>
+                <!--tabs items ends-->
+
+                <!--tabs content-->
+
+                {% block tabs-content %}
+                {% endblock %}
+
+                <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+            </section><!--container-->
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
 {% block extrahead %}
+
 <script src="{{ STATIC_URL }}js/libs/dropzone.js"></script>
 
 {% endblock %}

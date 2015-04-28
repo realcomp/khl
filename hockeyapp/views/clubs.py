@@ -35,6 +35,34 @@ class ClubView(SeasonsMixin, DetailView):
         return context
 
 
+class ClubMainAboutView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-about.html'
+
+
+class ClubMainGamesView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-games.html'
+
+
+class ClubMainGeographyView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-geography.html'
+
+
+class ClubMainNumbersView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-numbers.html'
+
+
+class ClubMainRumorsView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-rumors.html'
+
+
+class ClubMainSymbolView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-symbol.html'
+
+
+class ClubMainCoachesView(ClubView):
+    template_name = 'hockeyapp/clubs/main/main-coaches.html'
+
+
 class ClubView2(TemplateView):
     template_name = 'hockeyapp/clubs/clubs-team2.html'
 
@@ -64,8 +92,8 @@ class ClubStatsView(ClubView):
         return context
 
 
-class ClubNewsView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-news.html'
+class ClubMainView(ClubView):
+    template_name = 'hockeyapp/clubs/main/clubs-main.html'
 
 
 class ClubNumbersView(ClubView):

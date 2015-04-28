@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load base_extras %}
+{% comment %}
 <div class="top-line">
     <div class="container">
         <div class="ui text menu">
@@ -57,3 +58,61 @@
         </div>
     </div>
 </div>
+{% endcomment %}
+
+<section class="w-head__navbar">
+        <nav class="navbar" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+                    <span class="sr-only">Menu</span>
+                    <i class="icon content"></i>
+                </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="nav navbar-nav navbar-left b-menu">
+                        <li class="label">
+                            Виды спорта:
+                        </li><li class="active">
+                            <a href="#">Хоккей</a>
+                        </li><li>
+                            <a href="#">Футбол</a>
+                        </li><li>
+                            <a href="#">Баскетбол</a>
+                        </li><li>
+                            <a href="#">Волейбол</a>
+                        </li><li>
+                            <a href="#">Бейсбол</a>
+                        </li><li class="ui dropdown top right pointing">
+                            <a class="default text" href="#">Все<i class="dropdown icon"></i></a>
+                            <ul class="menu">
+                                <li class="item">Clothing</li>
+                                <li class="item">Home Goods</li>
+                                <li class="item">Bedroom</li>
+                                <li class="item">Status</li>
+                                <li class="item">Cancellations</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right b-menu">
+                        <li>
+                            <a href="#">Регистрация</a>
+                        </li><li>
+                            <a href="#">Вход</a>
+                        </li><li class="ui dropdown top right pointing">
+                            <a class="default text" href="#">Язык<i class="dropdown icon"></i></a>
+                            <ul class="menu">
+                                <li class="item">Clothing</li>
+                                <li class="item">Home Goods</li>
+                                <li class="item">Bedroom</li>
+                                <li class="item">Status</li>
+                                <li class="item">Cancellations</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </section><!--w-head__navbar-->

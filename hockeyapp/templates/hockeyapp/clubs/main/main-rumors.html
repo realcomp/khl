@@ -1,0 +1,117 @@
+{% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+{% block tabs-content %}
+
+
+{% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-rumors' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Слухи
+            </h2>
+
+            <a class="b-cell b-change-views__item" href="club-list.html">
+                <i class="write icon"></i>
+            </a>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+
+    <form class="ui form">
+        <div class="field">
+            <label>Добавить слух:</label>
+            <textarea></textarea>
+        </div>
+        <div class="w-btn w-clearboth">
+            <button type="submit" class="right floated ui green button">Отправить</button>
+            <div class="ui toggle checkbox float-right">
+                <input type="checkbox" name="anonymous">
+                <label>Анонимно</label>
+            </div>
+        </div>
+    </form>
+
+
+    <section class="w-comment w-comment__full-page">
+        <div class="row b-comment__item">
+            <div class="col-sm-2 b-comment__author">
+                <a href="#" class="b-comment__author__img">
+                    <img src="/static/new/images/a-hockey/ava-10.jpg" alt="" title=""/>
+                </a>
+
+                <div class="b-comment__author__name">
+                    Иванов Александр
+                </div>
+            </div><!--b-comment__author-->
+
+            <div class="col-sm-10 b-comment__text">
+                <div class="inner">
+                    <p class="">
+                        Я слышал, что Ковальчук переходит в Спартак
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-12 b-comment__more">
+                9 комментариев <a class="b-dotted" href="#"><span>развернуть</span> <i class="icon-caret i-top-1"></i></a>
+            </div>
+        </div><!--row b-comment__item-->
+    </section><!--w-comment-->
+
+
+    <section class="w-comment w-comment__full-page">
+        <div class="row b-comment__item">
+            <div class="col-sm-2 b-comment__author">
+                <a href="#" class="b-comment__author__img">
+                    <img src="/static/new/images/a-hockey/ava-12.jpg" alt="" title=""/>
+                </a>
+
+                <div class="b-comment__author__name">
+                    Игорь Иванов
+                </div>
+            </div><!--b-comment__author-->
+
+            <div class="col-sm-10 b-comment__text">
+                <div class="inner">
+                    <p class="">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-12 b-comment__more">
+                2 комментария <a class="b-dotted" href="#"><span>развернуть</span> <i class="icon-caret i-top-1"></i></a>
+            </div>
+        </div><!--row b-comment__item-->
+    </section><!--w-comment-->
+
+
+    <section class="w-comment w-comment__full-page">
+        <div class="row b-comment__item">
+            <div class="col-sm-2 b-comment__author">
+                <a href="#" class="b-comment__author__img">
+                    <img src="/static/new/images/a-hockey/ava-11.jpg" alt="" title=""/>
+                </a>
+
+                <div class="b-comment__author__name">
+                    Петр Петров
+                </div>
+            </div><!--b-comment__author-->
+
+            <div class="col-sm-10 b-comment__text">
+                <div class="inner">
+                    <p class="">
+                        УКРК "Арена 2000" (Универсальный культурно-развлекательный комплекс "Арена 2000.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-sm-12 b-comment__more">
+                1 комментарий <a class="b-dotted" href="#"><span>развернуть</span> <i class="icon-caret i-top-1"></i></a>
+            </div>
+        </div><!--row b-comment__item-->
+    </section><!--w-comment-->
+</div>
+<!--tabs content items-->
+{% endblock %}

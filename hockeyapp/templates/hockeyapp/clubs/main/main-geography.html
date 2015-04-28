@@ -1,0 +1,20 @@
+{% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-geography' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Родные города игроков
+            </h2>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+    <div class="w-map">
+        <img src="/static/new/images/map.jpg" alt="" tittle=""/>
+    </div>
+</div>
+<!--tabs content items-->
+{% endblock %}
