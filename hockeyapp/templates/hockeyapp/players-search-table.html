@@ -321,7 +321,7 @@
                                     </span>
                                     <span class="player-name">{{ player.line_display|lowercase }}</span>
                                     <span class="player-country">{{ player.citizenship.title }}</span>
-                                    <span ng-if="player.similarity" class="player-country">{{ player.similarity * 100 | number:2 }}%</span>
+                                    <span ng-if="player.similarity !== null" class="player-country">{{ player.similarity * 100 | number:2 }}%</span>
                                 </div>
                                 {% endverbatim %}
                             </div>
