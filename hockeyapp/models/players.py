@@ -204,6 +204,8 @@ class Player(AbstractMan):
             'vhl': {
                 'khl': .8,  # VHL * 0.8 = KHL
             },
+            'khl': {
+            },
         }
         # MHL2KHL = MHL2VHL * VHL2KHL
         COEFFS['mhl']['khl'] = COEFFS['mhl']['vhl'] * COEFFS['vhl']['khl']
@@ -264,7 +266,8 @@ class RelatedPlayer(models.Model):
 
         def _calc_rel(player, max_length=None):
             '''
-            Calculate relative value (value_in_array / sum_of_values)
+            Calculate relative values for list [A1...An] limited by max_length
+            Ai / SUM(A1...An)
             '''
             params = {field: Avg(field) for field in fields}
             # list of qs
@@ -295,10 +298,15 @@ class RelatedPlayer(models.Model):
                 yield {field: _calc_fields_rel(qs, field) for field in fields}
 
         def _calc_mean_diff(rel1, rel2, coef=1):
+            '''
+            Calculate mean value
+            Di = |Ai * COEF - Bi|
+            MEAN(D1...Dn)
+            '''
             def _calc_fields_mean(field):
-                values = map(
-                    lambda x: abs(x[0].get(field) * coef - x[1].get(field)),
-                    zip(rel1, rel2))
+                values = [
+                    abs(a.get(field) * coef - b.get(field))
+                    for a, b in zip(rel1, rel2) if a and b]
                 if values:
                     return numpy.mean(values)
                 return 0
