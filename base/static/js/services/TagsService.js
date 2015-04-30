@@ -5,4 +5,7 @@ angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
   this.loadClubs = function(url, query) {
     return $http.get(url + '?s=' + query);
   };
+  this.loadPlayers = function(url, query) {
+    return $http.get(url + '?s=' + query);
+  };
 });

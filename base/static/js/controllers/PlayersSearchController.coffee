@@ -13,6 +13,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.loadClubs = (query) ->
             return $scope.tags.loadClubs($scope.clubsURL, query)
 
+        $scope.loadPlayers = (query) ->
+            return $scope.tags.loadPlayers($scope.playersURL, query)
+
         $scope.loadLeagues = (query) ->
             return $http.get($scope.leaguesURL)
 
@@ -44,8 +47,21 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                 'keyboard': true,
                 'min': 15,
                 'max': 65,
-                'from': $scope.params.age__lte or 18,
-                'to': $scope.params.age__gte or 25,
+                'from': $scope.params.age__lte or 15,
+                'to': $scope.params.age__gte or 65,
+                'type': 'double',
+                'step': 1,
+                'grid': false
+            })
+
+        if $("#relatedRange").length
+            $("#relatedRange").ionRangeSlider({
+                'hide_min_max': true,
+                'keyboard': true,
+                'min': 0,
+                'max': 100,
+                'from': $scope.params.related_value__lte or 40,
+                'to': $scope.params.related_value__gte or 80,
                 'type': 'double',
                 'step': 1,
                 'grid': false
