@@ -44,8 +44,8 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         'keyboard': true,
         'min': 15,
         'max': 65,
-        'from': $scope.params.age__lte || 18,
-        'to': $scope.params.age__gte || 25,
+        'from': $scope.params.age__lte || 15,
+        'to': $scope.params.age__gte || 65,
         'type': 'double',
         'step': 1,
         'grid': false
