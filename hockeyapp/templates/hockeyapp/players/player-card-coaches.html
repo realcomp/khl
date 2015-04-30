@@ -11,6 +11,8 @@
         <!-- {% trans "Coaches" %} -->
         {% include "hockeyapp/players/player-header.html" with player_section="Coaches" %}
 
+        <input id="api-player-indicators" class="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}">
+
         <div class="page-content page-container">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-coaches" %}
             <div class="page-inner-container"
