@@ -127,7 +127,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.search = function($scope) {
-    var age, checkBox, contract_types, d, e, k, league, line, multiSelect, params, relatedValue, url, x;
+    var age, checkBox, contract_types, d, e, k, league, lineAll, lineChecked, lineUnchecked, multiSelect, params, relatedValue, url, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
     };
@@ -150,7 +150,19 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     } else {
       $scope.$location.search('citizenship_other', null);
     }
-    line = (function() {
+    lineAll = (function() {
+      var i, len, ref, results;
+      ref = $('[name="line"]');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
+          results.push($(e).val());
+        }
+      }
+      return results;
+    })();
+    lineChecked = (function() {
       var i, len, ref, results;
       ref = $('[name="line"]:checked');
       results = [];
@@ -162,7 +174,39 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
       }
       return results;
     })();
-    $scope.$location.search('line', line || []);
+    lineUnchecked = (function() {
+      var i, len, results;
+      results = [];
+      for (i = 0, len = lineAll.length; i < len; i++) {
+        e = lineAll[i];
+        if (indexOf.call(lineChecked, e) < 0) {
+          results.push(e);
+        }
+      }
+      return results;
+    })();
+    $scope.$location.search('line', ((function() {
+      var i, len, results;
+      results = [];
+      for (i = 0, len = lineChecked.length; i < len; i++) {
+        e = lineChecked[i];
+        if (+e > 0) {
+          results.push(e);
+        }
+      }
+      return results;
+    })()) || []);
+    $scope.$location.search('line', ((function() {
+      var i, len, results;
+      results = [];
+      for (i = 0, len = lineUnchecked.length; i < len; i++) {
+        e = lineUnchecked[i];
+        if (+e < 0) {
+          results.push(e);
+        }
+      }
+      return results;
+    })()) || []);
     contract_types = (function() {
       var i, len, ref, results;
       ref = $('[name="contract_types"]:checked');
@@ -215,18 +259,6 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     params += '&order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
     if ($scope.params.reversed) {
       params += '&reversed=true';
-    }
-    if ($scope.params.line.length) {
-      params += ((function() {
-        var i, len, ref, results;
-        ref = $scope.params.line;
-        results = [];
-        for (i = 0, len = ref.length; i < len; i++) {
-          x = ref[i];
-          results.push('&line=' + x);
-        }
-        return results;
-      })()).join('');
     }
     if ($scope.params.contract_types) {
       params += ((function() {

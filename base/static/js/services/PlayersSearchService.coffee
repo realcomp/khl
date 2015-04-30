@@ -141,8 +141,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         else
             $scope.$location.search('citizenship_other', null)
 
-        line = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
-        $scope.$location.search('line', line or [])
+        lineAll = ($(e).val() for e in $('[name="line"]') when $(e).val())
+        lineChecked = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
+        lineUnchecked = (e for e in lineAll when e not in lineChecked)
+        $scope.$location.search('line', (e for e in lineChecked when +e > 0) or [])
+        $scope.$location.search('line', (e for e in lineUnchecked when +e < 0) or [])
 
         contract_types = ($(e).val() for e in $('[name="contract_types"]:checked') when $(e).val())
         $scope.$location.search('contract_types', contract_types or [])
@@ -194,8 +197,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
 
         if $scope.params.reversed
             params += '&reversed=true'
-        if $scope.params.line.length
-            params += (('&line=' + x) for x in $scope.params.line).join('')
+        # if $scope.params.line.length
+        #     params += (('&line=' + x) for x in $scope.params.line).join('')
         if $scope.params.contract_types
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1
