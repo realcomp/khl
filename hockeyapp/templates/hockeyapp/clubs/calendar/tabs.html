@@ -1,0 +1,15 @@
+<!--tabs items-->
+<div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+    <a href="{% url 'hockeyapp:clubs:calendar-shedule' pk %}" class="{% if clubs_main_tab == 'calendar-shedule' %}active {% endif %} item">Расписание</a>
+    <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}" class="{% if clubs_main_tab == 'calendar-winlose' %}active {% endif %} item">Победы и проигрыши</a>
+    <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}" class="{% if clubs_main_tab == 'calendar-geography' %}active {% endif %} item">География матчей</a>
+    <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}" class="{% if clubs_main_tab == 'calendar-trips' %}active {% endif %} item">Выезды</a>
+</div>
+<!--tabs items ends-->
+<div class="ui vertical tabular-xs menu visible-xs">
+    <a href="{% url 'hockeyapp:clubs:calendar-shedule' pk %}" class="{% if clubs_main_tab == 'calendar-shedule' %}active {% endif %} item">Расписание</a>
+    <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}" class="{% if clubs_main_tab == 'calendar-winlose' %}active {% endif %} item">Победы и проигрыши</a>
+    <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}" class="{% if clubs_main_tab == 'calendar-geography' %}active {% endif %} item">География матчей</a>
+    <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}" class="{% if clubs_main_tab == 'calendar-trips' %}active {% endif %} item">Выезды</a>
+</div>
+<!--tabs items ends-->

@@ -182,179 +182,41 @@ function getParameterByName(string, name) {
             results = regex.exec(string);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-//TODO: make expressions to check if already scrolled (for performance)
-/*
-$(function() {
-    var top = null;
-    var topSecondary = null;
-    var topThird = null;
-    var topPlayer = null;
-    var breadcrumbWidth = null;
-    var teamNameWidth = null;
-    var teamLogoMargin = null;
-    var playerNameWidth = null;
-    var scrolledAfterPlayer = false;
-    var scrolledAfterBreadcrumbs = false;
-    var scrolledAfterTeamInfo = false;
-    var scrolledAfterGreenMenu = false;
-    //jquery elements
-    if($('.breadcrumbs').length){
-        top = $('.breadcrumbs').offset().top;
-        if($('.breadcrumb').length)
-        breadcrumbWidth = $('.breadcrumb').first().css('width').substr(0, $('.breadcrumb').first().css('width').length -2);
-    }
-    if($('.team-info').length){
-        topSecondary = $('.team-info').offset().top + 60;
-        teamNameWidth = parseInt($('#team-name').css('width').substr(0, $('#team-name').css('width').length-2));
-    }
-    if($('.page-menu').length){
-        topThird = $('.page-menu').offset().top - 40;
-    }
-    if($('.player-card-block').length){
-        topPlayer = $('.breadcrumbs').next().offset().top + 132;
-        playerNameWidth = $('#player-card-name').textWidth();
-    }
-    if(breadcrumbWidth && teamNameWidth){
-        teamLogoMargin = (1000 - breadcrumbWidth*2 - (25+teamNameWidth))/2;
-    }
-    $(window).scroll(function(event) {
-        var y = $(window).scrollTop();
-        if (top && y >= top) {
-            if($('.team-info').length) {
-                $('.team-info').css('margin-top', '52px'); // club page
-            } else {
-                if($('.player-card-block').length){ // players-page
-                    if($('.breadcrumbs').length){
-                        $('.breadcrumbs').next().css('margin-top', '42px')
-                    }
-                } else ($('.page-container').css('margin-top', '42px')) // clubs page
-            }
-            if(!$('.sm-logo').length) $('.breadcrumb').before($("<img class='sm-logo' style='vertical-align: middle; margin-right: 5px; float: left;' src='/static/images/sm_micro.png'>"));
-            $('.breadcrumbs').addClass('fixed');
-        } else if(top && y < top) {
-            $('.breadcrumbs').removeClass('fixed');
-            if($('.sm-logo').length) $('.sm-logo').remove();
-            if($('.team-info').length) {
-                $('.team-info').css('margin-top', '0px');
-            } else {
-                if($('.player-card-block').length){
-                    if($('.breadcrumbs').length){
-                        $('.breadcrumbs').next().css('margin-top', '0px')
-                    }
-                } else ($('.page-container').css('margin-top', '0px'))
-            }
-        }
-        //player card
-        if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-            //console.log('player call ');
-            $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
-            $('#player-card-avatar').addClass('clipped-img');
-            $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
-            $('.min-photo-container').after($('#player-card-name').addClass('inline-block player-card-name-inner'));
-            $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important').css('box-shadow', '0 4px 2px -2px gray','important'));
-            $('.page-container').css('margin-top', '68px');
-            scrolledAfterPlayer = true;
-        } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-            //console.log('player reverse call ');
-            $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block player-card-inner'));
-            $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
-            $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important').css('box-shadow', '0','important'));
-            $('.page-container').css('margin-top', '0px');
-            $(".min-photo-container").remove();
-            scrolledAfterPlayer = false;
-        }
-        //team card
-        if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-            //console.log('team info call ');
-            $('.page-container').css('margin-top', '114px');
-            $('.my-team-btn').css('margin-top', '4px');
-            $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
-            $("#team-logo").after($('#team-name')).addClass('team-logo-inner inline-block').css('margin-left', teamLogoMargin + 'px', 'important');
-            $('#team-name').addClass('team-name-inner inline-block');
-            $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important').css('box-shadow', '0 4px 2px -2px gray','important'));
-            scrolledAfterTeamInfo = true;
-        } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-            //console.log('team info reverse call ');
-            $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
-            $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
-            $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
-            $('#team-name').removeClass('team-name-inner inline-block');
-            $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important').css('box-shadow', '0','important'));
-            $('.page-container').css('margin-top', '0px');
-            scrolledAfterTeamInfo = false;
-        }
-    });
-    var y = $(window).scrollTop();
-    //player card
-    if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-        //console.log('player call ');
-        $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
-        $('#player-card-avatar').addClass('clipped-img');
-        $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
-        $('.min-photo-container').after($('#player-card-name').addClass('inline-block').css('font-weight', '700', 'important'));
-        $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
-        $('.page-container').css('margin-top', '68px');
-        scrolledAfterPlayer = true;
-    } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-        //console.log('player reverse call ');
-        $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important').css('font-weight', '400', 'important'));
-        $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
-        $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
-        $('.page-container').css('margin-top', '0px');
-        $(".min-photo-container").remove();
-        scrolledAfterPlayer = false;
-    }
-    //team card
-    if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-        //console.log('team info call ');
-        $('.page-container').css('margin-top', '114px');
-        $('.my-team-btn').css('margin-top', '4px');
-        $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
-        $("#team-logo").after($('#team-name')).addClass('team-logo-inner inline-block').css('margin-left', teamLogoMargin + 'px', 'important');
-        $('#team-name').addClass('team-name-inner inline-block');
-        $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
-        scrolledAfterTeamInfo = true;
-    } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-        //console.log('team info reverse call ');
-        $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
-        $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
-        $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
-        $('#team-name').removeClass('team-name-inner inline-block');
-        $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
-        $('.page-container').css('margin-top', '0px');
-        scrolledAfterTeamInfo = false;
-    }
-    if (top && y >= top) {
-        if($('.team-info').length) {
-            $('.team-info').css('margin-top', '52px'); // club page
+function toSeason(value){
+    //TODO заменить
+    //14/15
+    if(value.indexOf('/') > -1 && value.length === 5){
+        value = parseInt(value.substring(2, 5));
+        if(value > 20){
+            value = '19' + value;
         } else {
-            if($('.player-card-block').length){ // players-page
-                if($('.breadcrumbs').length){
-                    $('.breadcrumbs').next().css('margin-top', '42px')
-                }
-            } else ($('.page-container').css('margin-top', '42px')) // clubs page
+            value = '20' + value;
         }
-        if(!$('.sm-logo').length) $('.breadcrumb').before($("<img class='sm-logo' style='vertical-align: middle; margin-right: 5px; float: left;' src='/static/images/sm_micro.png'>"));
-        $('.breadcrumbs').addClass('fixed');
-    } else if(top && y < top) {
-        $('.breadcrumbs').removeClass('fixed');
-        if($('.sm-logo').length) $('.sm-logo').remove();
-        if($('.team-info').length) {
-            $('.team-info').css('margin-top', '0px');
-        } else {
-            if($('.player-card-block').length){
-                if($('.breadcrumbs').length){
-                    $('.breadcrumbs').next().css('margin-top', '0px')
-                }
-            } else ($('.page-container').css('margin-top', '0px'))
-        }
+
     }
-});*/
-/*$(function(){
-    if($('.breadcrumb').length){
-        ($('.breadcrumb').first().find($('.section').last()).css('text-decoration', 'none'));
+    var seasons = {
+        s2002: 1,
+        s2003: 2,
+        s2001: 3,
+        s2004: 4,
+        s2000: 5,
+        s1999: 6,
+        s1998: 7,
+        s2005: 8,
+        s2006: 9,
+        s1997: 10,
+        s2007: 11,
+        s2008: 12,
+        s2009: 13,
+        s2010: 14,
+        s2011: 15,
+        s2012: 16,
+        s2013: 17,
+        s2014: 18,
+        s2015: 19
     }
-});*/
+    return seasons['s'+value];
+}
 $.fn.textWidth = function(){
     var html_org = $(this).html();
     var html_calc = '<span>' + html_org + '</span>';
@@ -1970,10 +1832,15 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.params = $location.search();
     $scope.clubName = document.getElementById('team-name-hidden').value;
     $scope.clubAddress = document.getElementById('club-address') != null ? document.getElementById('club-address').innerHTML : '';
-    $scope.clubMatchApi = document.getElementById('club-match-api').value;
+    $scope.clubMatchApi = document.getElementById('club-match-api') != null ? document.getElementById('club-match-api').value : void 0;
+    $scope.clubCalendarApi = $scope.url = document.getElementById('club-calendar-api') != null ? document.getElementById('club-calendar-api').value : void 0;
     $scope.clubPk = document.getElementById('team-id').value;
     $scope.games = [];
-    $scope.homeOnly = false;
+    $scope.selection = 'all';
+    $scope.setSelecton = function(selection) {
+      $scope.selection = selection;
+      return $scope.createGamesChart();
+    };
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
       var params;
@@ -2105,6 +1972,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       params = '';
       if ($scope.params.season) {
         params += '&season=' + $scope.params.season;
+      } else {
+        params += '&season=19';
       }
       $scope.data = {};
       $scope.loaded = false;
@@ -2114,7 +1983,9 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         if (MapService.isRendered()) {
           MapService.remove();
         }
-        MapService.createClubsMap(data.results, 'trips');
+        if ($('#clubs-map').length > 0) {
+          MapService.createClubsMap(data.results, 'trips');
+        }
         $scope.data = data;
         $scope.schedules = $scope.parseSchedules(data);
         date = $scope.getMinEndDate(data);
@@ -2155,7 +2026,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         opponentObject = {
           name: 'opponents',
           data: $scope.games.map(function(game, index) {
-            if ($scope.homeOnly && game.is_home === false) {
+            if ($scope.selection === 'home' && game.is_home === false) {
+              return;
+            }
+            if ($scope.selection === 'guest' && game.is_home === true) {
               return;
             }
             return {
@@ -2212,6 +2086,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         return results;
       })());
     };
+    $scope.list();
   }
 ]);
 
@@ -2868,9 +2743,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
     '$http', '$scope', '$timeout', 'MapService',
     function($http, $scope, $timeout, MapService) {
         var self = this,
-        url = $('#ClubTeamForm').attr('action'),
+        url = document.getElementById("club-team-api").value,//$('#ClubTeamForm').attr('action'),
         popup = null;
-        $scope.type = 'photos';
+        $scope.type = 'all';
         $scope.cache_players = null;
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
@@ -2892,6 +2767,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         $scope.playerFilter = function(value){
+            if($scope.state === 'coaches') return false;
             return value[$scope.state] != false;
         };
 
@@ -2939,8 +2815,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.workWithData = function(data){
             console.log(data);
 
-            if(MapService.isRendered()) MapService.remove();
-            MapService.createClubsMap(data.all_players, 'players');
+            //if(MapService.isRendered()) MapService.remove();
+            //MapService.createClubsMap(data.all_players, 'players');
 
             var all_players = data.all_players;
             var players = [];
@@ -2997,7 +2873,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         self.list = function(callback, callbackArg) {
-            var params = $('#ClubTeamForm').serialize();
+            var params = 'season=19';//$('#ClubTeamForm').serialize();
             self.players.data = null;
             self.players.table = null;
             self.players.loader = true;
@@ -3229,9 +3105,11 @@ angular.module('Sportomatics').controller('ClubTeamController', [
 
                 drawArr(c, x1,y1,x2,y2,1,2);
         }
+        self.list();
 
     }
 ]);
+
 angular.module('Sportomatics')
 .controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
     this.graph_type = 'linear';
@@ -4625,3 +4503,14 @@ angular.module('Sportomatics').controller('RegistrationController', [
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
         }
+
+angular.module('Sportomatics').controller('ClubGeographyController', function($http, MapService) {
+  var clubTeamApi;
+  clubTeamApi = document.getElementById("club-team-api").value;
+  $http.get(clubTeamApi + '?season=19').success(function(data) {
+    if (MapService.isRendered() === true) {
+      MapService.remove();
+    }
+    return MapService.createClubsMap(data.all_players, 'players');
+  });
+});

@@ -9,12 +9,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 
         $scope.clubName = document.getElementById('team-name-hidden').value
         $scope.clubAddress = if document.getElementById('club-address')? then document.getElementById('club-address').innerHTML else ''
-        $scope.clubMatchApi = document.getElementById('club-match-api').value;
+        $scope.clubMatchApi = if document.getElementById('club-match-api')? then document.getElementById('club-match-api').value;
+        $scope.clubCalendarApi = $scope.url = if document.getElementById('club-calendar-api')? then document.getElementById('club-calendar-api').value;
         $scope.clubPk = document.getElementById('team-id').value;
         $scope.games = []
 
+        $scope.selection = 'all'
+        $scope.setSelecton = (selection) ->
+            $scope.selection = selection
+            $scope.createGamesChart()
 
-        $scope.homeOnly = false
         $scope.CalendarEventPopup = {}
         $scope.CalendarEventPopupShow = (e, event) ->
             if $('.calendar-event-popup:hidden').length and @cell.schedule
@@ -138,6 +142,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             params = ''
             if $scope.params.season
                 params += '&season=' + $scope.params.season
+            else
+                params += '&season=19'
             $scope.data = {};
             $scope.loaded = false;
 
@@ -145,7 +151,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             ).success((data) ->
                 console.log data
                 MapService.remove() if MapService.isRendered()
-                MapService.createClubsMap(data.results, 'trips')
+                MapService.createClubsMap(data.results, 'trips') if $('#clubs-map').length > 0
                 $scope.data = data
                 $scope.schedules = $scope.parseSchedules(data)
                 date = $scope.getMinEndDate(data)
@@ -173,8 +179,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     opponentObject = (
                         name: 'opponents'
                         data: $scope.games.map((game, index) ->
-                            if $scope.homeOnly and game.is_home is false
-                                return
+                            if $scope.selection is 'home' and game.is_home is false then return
+                            if $scope.selection is 'guest' and game.is_home is true then return
                             return (
                                 x: index
                                 y: -Math.abs(game.opponent_score)
@@ -223,6 +229,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
                 'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
             } for deltaM in [-3, -2, -1])
+
+        $scope.list()
 
         return
 ])

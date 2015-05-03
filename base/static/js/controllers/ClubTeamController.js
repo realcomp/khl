@@ -2,9 +2,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
     '$http', '$scope', '$timeout', 'MapService',
     function($http, $scope, $timeout, MapService) {
         var self = this,
-        url = $('#ClubTeamForm').attr('action'),
+        url = document.getElementById("club-team-api").value,//$('#ClubTeamForm').attr('action'),
         popup = null;
-        $scope.type = 'photos';
+        $scope.type = 'all';
         $scope.cache_players = null;
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
@@ -26,6 +26,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         $scope.playerFilter = function(value){
+            if($scope.state === 'coaches') return false;
             return value[$scope.state] != false;
         };
 
@@ -73,8 +74,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.workWithData = function(data){
             console.log(data);
 
-            if(MapService.isRendered()) MapService.remove();
-            MapService.createClubsMap(data.all_players, 'players');
+            //if(MapService.isRendered()) MapService.remove();
+            //MapService.createClubsMap(data.all_players, 'players');
 
             var all_players = data.all_players;
             var players = [];
@@ -131,7 +132,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         self.list = function(callback, callbackArg) {
-            var params = $('#ClubTeamForm').serialize();
+            var params = 'season=19';//$('#ClubTeamForm').serialize();
             self.players.data = null;
             self.players.table = null;
             self.players.loader = true;
@@ -363,6 +364,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
 
                 drawArr(c, x1,y1,x2,y2,1,2);
         }
+        self.list();
 
     }
 ]);

@@ -7,19 +7,19 @@ var closure = require('gulp-jsclosure');
 var coffee = require('gulp-coffee');
 var less = require('gulp-less');
 var paths = {
-    scripts: ['base/static/js/sportomatics.js', 'base/static/js/classes/*.js',  'base/static/js/router.js', 'base/static/js/services/*.js', 'base/static/js/controllers/*.js'],
+    scripts: ['base/static/js/sportomatics.js', 'base/static/js/classes/*.js',  'base/static/js/router.js', 'base/static/js/services/*.js', 'base/static/js/controllers/**/*.js'],
     libs: ['base/static/js/libs/*.js'],
     less: ['base/static/less/*.less']
 };
 
 gulp.task('coffee-controllers', function() {
-  gulp.src('base/static/js/controllers/*.coffee')
+  gulp.src('base/static/js/controllers/**/*.coffee')
       .pipe(coffee({bare: true}))
       .pipe(gulp.dest('base/static/js/controllers'))
 });
 
 gulp.task('coffee-services', function() {
-  gulp.src('base/static/js/services/*.coffee')
+  gulp.src('base/static/js/services/**/*.coffee')
       .pipe(coffee({bare: true}))
       .pipe(gulp.dest('base/static/js/services'))
 });
@@ -67,9 +67,9 @@ gulp.task('build-less-css', function(){
 
 
 gulp.task('watch', function() {
-    gulp.watch(['base/static/js/controllers/*.coffee'], ['coffee-controllers']);
-    gulp.watch(['base/static/js/services/*.coffee'], ['coffee-services']);
-    gulp.watch(['base/static/js/classes/*.coffee'], ['coffee-classes']);
+    gulp.watch(['base/static/js/controllers/**/*.coffee'], ['coffee-controllers']);
+    gulp.watch(['base/static/js/services/**/*.coffee'], ['coffee-services']);
+    gulp.watch(['base/static/js/classes/**/*.coffee'], ['coffee-classes']);
     gulp.watch(paths.scripts, ['scripts']);
     gulp.watch(paths.libs, ['libs']);
     gulp.watch(['./base/static/less/*.less'], ['build-less']);

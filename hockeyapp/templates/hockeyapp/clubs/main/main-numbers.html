@@ -312,3 +312,7 @@
 </div>
 <!--tabs content items-->
 {% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/main/sticky_menu.html' with clubs_main_tab='main-numbers' %}
+{% endblock %}

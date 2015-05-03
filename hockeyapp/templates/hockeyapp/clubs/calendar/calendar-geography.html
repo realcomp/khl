@@ -1,0 +1,25 @@
+{% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-geography' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui" ng-controller="ClubCalendarController">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Карта выездных матчей
+            </h2>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+    <div style="text-align: center; height: 120px; width: 100%;" ng-show="!loaded">
+        <div style="z-index: 99999; font-size: 20px; background: rgba(255,255,255,0.7); text-align: center;">
+            <i style="z-index: 1; font-size: 50px; " class="circle notched loading icon"></i><br>
+            Загрузка данных...
+        </div>
+    </div>
+    <div class="w-map" style="height: auto !important">
+        <div id="clubs-map"></div>
+    </div>
+</div>
+<!--tabs content items-->
+{% endblock %}

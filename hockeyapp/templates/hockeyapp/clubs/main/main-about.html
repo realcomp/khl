@@ -11,7 +11,7 @@
                 <div class="b-command-info__logo col-sm-5">
                     <div class="img-wrap">
                         <figure class="figure-styled">
-                                <img src="/static/new/images/l-hockey/logo.jpg" />
+                                <img src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';"/>
                         </figure>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                 <div class="col-sm-7 b-command-info__main">
                     <div class="b-header b-header__sm">
                         <h3 class="b-header__text">
-                            CKA (Санкт-Петербург)
+                            {{club}}
                         </h3>
                         <p class="">
                             Год основания: 1946
@@ -28,15 +28,15 @@
 
                     <table class="ui unstackable very basic table w-labeled-list">
                         <tr>
-                            <td><span class="b-labeled">Адрес:</span></td>
+                            <td><span class="b-labeled">Адрес: {{ address.title }}</span></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td><span class="b-labeled">Телефон:</span></td>
+                            <td><span class="b-labeled">Телефон: {{ phone }}</span></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td><span class="b-labeled">E-mail:</span></td>
+                            <td><span class="b-labeled">E-mail: {{ email }}</span></td>
                             <td></td>
                         </tr>
                         <tr>
@@ -74,7 +74,7 @@
 
                         <div class="b-header b-header__xs">
                             <h5 class="b-header__text">
-                                Автомобилист - СКА
+                                Автомобилист - {{ title }}
                             </h5>
                         </div><!--b-header b-header__xs-->
 
@@ -91,7 +91,7 @@
 
                             <div class="col-sm-4 col-md-12 col-lg-4">
                                 <a href="#" class="ui image">
-                                    <img class="ui circular image" src="/static/new/images/l-hockey/logo.jpg">
+                                    <img class="ui circular image" src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';">
                                 </a>
                             </div>
                         </div><!--row-->
@@ -112,7 +112,7 @@
 
                         <div class="b-header b-header__xs">
                             <h5 class="b-header__text">
-                                Адмирал - СКА
+                                Адмирал - {{ title }}
                             </h5>
                         </div><!--b-header b-header__xs-->
 
@@ -129,7 +129,7 @@
 
                             <div class="col-sm-4 col-md-12 col-lg-4">
                                 <a href="#" class="ui image">
-                                    <img class="ui circular image" src="/static/new/images/l-hockey/logo.jpg">
+                                    <img class="ui circular image" src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';">
                                 </a>
                             </div>
                         </div><!--row-->
@@ -479,4 +479,8 @@
     </div><!--row-->
 </div>
 <!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/main/sticky_menu.html' with clubs_main_tab='main-about' %}
 {% endblock %}

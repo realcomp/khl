@@ -33,6 +33,15 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/main/symbol/$', clubs.ClubMainSymbolView.as_view(),
         name='main-symbol'),
 
+    url(r'^(?P<pk>\d+)/calendar/$', clubs.ClubCalendarView.as_view(),
+        name='calendar-shedule'),
+    url(r'^(?P<pk>\d+)/calendar/winlose/$', clubs.ClubCalendarWinLoseView.as_view(),
+        name='calendar-winlose'),
+    url(r'^(?P<pk>\d+)/calendar/geography/$', clubs.ClubCalendarGeographyView.as_view(),
+        name='calendar-geography'),
+    url(r'^(?P<pk>\d+)/calendar/trips/$', clubs.ClubCalendarTripsView.as_view(),
+        name='calendar-trips'),
+
     url(r'^(?P<pk>\d+)/numbers/$', clubs.ClubNumbersView.as_view(),
         name='numbers'),
     # testing purposes

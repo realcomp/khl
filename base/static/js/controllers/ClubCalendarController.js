@@ -5,10 +5,15 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.params = $location.search();
     $scope.clubName = document.getElementById('team-name-hidden').value;
     $scope.clubAddress = document.getElementById('club-address') != null ? document.getElementById('club-address').innerHTML : '';
-    $scope.clubMatchApi = document.getElementById('club-match-api').value;
+    $scope.clubMatchApi = document.getElementById('club-match-api') != null ? document.getElementById('club-match-api').value : void 0;
+    $scope.clubCalendarApi = $scope.url = document.getElementById('club-calendar-api') != null ? document.getElementById('club-calendar-api').value : void 0;
     $scope.clubPk = document.getElementById('team-id').value;
     $scope.games = [];
-    $scope.homeOnly = false;
+    $scope.selection = 'all';
+    $scope.setSelecton = function(selection) {
+      $scope.selection = selection;
+      return $scope.createGamesChart();
+    };
     $scope.CalendarEventPopup = {};
     $scope.CalendarEventPopupShow = function(e, event) {
       var params;
@@ -140,6 +145,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       params = '';
       if ($scope.params.season) {
         params += '&season=' + $scope.params.season;
+      } else {
+        params += '&season=19';
       }
       $scope.data = {};
       $scope.loaded = false;
@@ -149,7 +156,9 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         if (MapService.isRendered()) {
           MapService.remove();
         }
-        MapService.createClubsMap(data.results, 'trips');
+        if ($('#clubs-map').length > 0) {
+          MapService.createClubsMap(data.results, 'trips');
+        }
         $scope.data = data;
         $scope.schedules = $scope.parseSchedules(data);
         date = $scope.getMinEndDate(data);
@@ -190,7 +199,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         opponentObject = {
           name: 'opponents',
           data: $scope.games.map(function(game, index) {
-            if ($scope.homeOnly && game.is_home === false) {
+            if ($scope.selection === 'home' && game.is_home === false) {
+              return;
+            }
+            if ($scope.selection === 'guest' && game.is_home === true) {
               return;
             }
             return {
@@ -247,5 +259,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         return results;
       })());
     };
+    $scope.list();
   }
 ]);

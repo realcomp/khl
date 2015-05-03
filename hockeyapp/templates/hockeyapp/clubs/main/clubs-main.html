@@ -11,7 +11,6 @@
 <section class="content">
     <div class="container clubs-page clubs-photos-page">
         {% include "hockeyapp/clubs/clubs-header.html" with club_section="News" %}
-
         <div class="page-content page-container" ng-controller="ClubNewsController">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
             <div class="page-inner-container">
@@ -248,6 +247,7 @@
 {% endcomment %}
 
 {% block body %}
+<input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
 <div class="w-page__main">
     <div class="body_inner bg-image">
         <main id="main">
@@ -262,47 +262,31 @@
                         <a href="#"><img src="/static/new/images/l-hockey/logo.jpg" /></a>
                     </div>
                     <h3 class="header-text w-club__name">
-                        СКА (Санкт-Петербург)
+                        {{club}}
                     </h3>
                 </section><!--w-club__logo-->
 
                 <section class="w-page-tabs">
-                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
-                        <div class="text">Сезон 2014-15</div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu transition hidden" tabindex="-1">
-                            <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
-                            <div class="item" data-text="Сезон 2013-14">2013-14</div>
-                            <div class="item" data-text="Сезон 2012-13">2012-13</div>
-                            <div class="item" data-text="Сезон 2011-12">2011-12</div>
-                        </div>
-                    </div>
 
-                <!--tabs content-->
+                    <!--tabs content-->
 
-                {% block tabs-content %}
-                {% endblock %}
+                    {% block tabs-content %}
+                    {% endblock %}
 
-                <!--tabs content end-->
+                    <!--tabs content end-->
 
                 </section><!--w-page-tabs-->
+
             </section><!--container-->
+
+            {% comment %}
+                {% block sticky_menu %}
+                {% endblock %}
+            {% endcomment %}
         </main>
         <footer id="footer">
 
         </footer>
     </div>
 </div>
-{% endblock %}
-
-
-
-
-
-
-
-{% block extrahead %}
-
-<script src="{{ STATIC_URL }}js/libs/dropzone.js"></script>
-
 {% endblock %}

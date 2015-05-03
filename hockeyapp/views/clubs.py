@@ -66,9 +66,20 @@ class ClubMainCoachesView(ClubView):
 class ClubView2(TemplateView):
     template_name = 'hockeyapp/clubs/clubs-team2.html'
 
-
 class ClubCalendarView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-calendar.html'
+    template_name = 'hockeyapp/clubs/calendar/calendar-shedule.html'
+
+
+class ClubCalendarWinLoseView(ClubView):
+    template_name = 'hockeyapp/clubs/calendar/calendar-winlose.html'
+
+
+class ClubCalendarGeographyView(ClubView):
+    template_name = 'hockeyapp/clubs/calendar/calendar-geography.html'
+
+
+class ClubCalendarTripsView(ClubView):
+    template_name = 'hockeyapp/clubs/calendar/calendar-trips.html'
 
 
 class ClubHomeView(ClubView):
