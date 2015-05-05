@@ -145,7 +145,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             if _contract_to:
                 date = datetime.datetime.strptime(
                     _contract_to, '%Y-%m-%d').date()
-                q &= Q(contract_to__lte=date)
+                q &= Q(contract_to__gte=date)
 
         if _age__lte and _age__lte.isdigit():
             date = datetime.datetime.now() - relativedelta(
