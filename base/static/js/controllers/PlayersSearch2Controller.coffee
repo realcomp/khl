@@ -1,4 +1,4 @@
-angular.module('Sportomatics').controller('PlayersSearchController', [
+angular.module('Sportomatics').controller('PlayersSearch2Controller', [
     '$http', '$scope', '$location', 'PlayersSearchService', 'tags','$timeout',
     ($http, $scope, $location, PlayersSearchService, tags, $timeout) ->
         $scope.tags = tags
@@ -19,12 +19,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.loadLeagues = (query) ->
             return $http.get($scope.leaguesURL)
 
-        $scope.getUnchecker = (isDefault, defaultValue) ->
-            return () ->
-                if ((isDefault and $(this).attr('value') != defaultValue) or
-                        (!isDefault and $(this).attr('value') == defaultValue))
-                    $(this).attr('checked', false)
-
         $scope.PlayersSearchService = PlayersSearchService
         $scope.$location = $location
 
@@ -40,6 +34,32 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             $scope.club = JSON.parse($scope.params.club)
         if $scope.params.league2
             $scope.league2 = JSON.parse($scope.params.league2)
+
+        if $("#ageRange").length
+            $("#ageRange").ionRangeSlider({
+                'hide_min_max': true,
+                'keyboard': true,
+                'min': 15,
+                'max': 65,
+                'from': $scope.params.age__lte or 15,
+                'to': $scope.params.age__gte or 65,
+                'type': 'double',
+                'step': 1,
+                'grid': false
+            })
+
+        if $("#relatedRange").length
+            $("#relatedRange").ionRangeSlider({
+                'hide_min_max': true,
+                'keyboard': true,
+                'min': 0,
+                'max': 100,
+                'from': $scope.params.related_value__gte or 40,
+                'to': $scope.params.related_value__lte or 80,
+                'type': 'double',
+                'step': 1,
+                'grid': false
+            })
 
         $scope.PlayerPartnersPopup = {
             'data': null,
@@ -60,13 +80,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                 })
             return
 
-        $scope.lineCheck = (e) ->
-            defaultValue = ''
-            isDefault = $(e).attr('value') == defaultValue
-            if ($(e).is(':checked'))
-                $('input[name="line"]').each($scope.getUnchecker(isDefault, defaultValue))
-            return
-
         $scope.setCitizenship = (event) ->
             if (event.target.id == 'isCitizenshipAll' and event.target.checked)
                 $('#isCitizenshipRussia').attr('checked', false)
@@ -77,12 +90,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                 self.isCitizenshipOther = event.target.checked
                 self.isCitizenshipAll = false
                 $('#isCitizenshipAll').attr('checked', false)
-            return
-
-        $scope.contractCheck = (e) ->
-            isDefault = $(e).attr('value') == ''
-            if ($(e).is(':checked'))
-                $('input[name="contract_types"]').each($scope.getUnchecker(isDefault, ''))
             return
 
         $scope.setPlayersFilter = (obj) ->
@@ -115,9 +122,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                 $('.ui.dropdown.leagues .text').text('')
             $location.search('league', league or null)
             return
-
-        # PlayersSearchService.search($scope)
-        PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
 
         return
 ])
