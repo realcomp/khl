@@ -43,6 +43,22 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/calendar/trips/$', clubs.ClubCalendarTripsView.as_view(),
         name='calendar-trips'),
 
+    url(r'^(?P<pk>\d+)/stats/$', clubs.ClubStatsView.as_view(),
+        name='stats'),
+    url(r'^(?P<pk>\d+)/stats/compare/$', clubs.ClubStatsCompareView.as_view(),
+        name='stats-compare'),
+
+    url(r'^(?P<pk>\d+)/home/$', clubs.ClubHomeView.as_view(),
+        name='home-about'),
+    url(r'^(?P<pk>\d+)/home/shedule/$', clubs.ClubHomeSheduleView.as_view(),
+        name='home-shedule'),
+    url(r'^(?P<pk>\d+)/home/map/$', clubs.ClubHomeMapView.as_view(),
+        name='home-map'),
+    url(r'^(?P<pk>\d+)/home/attendance/$', clubs.ClubHomeAttendanceView.as_view(),
+        name='home-attendance'),
+    url(r'^(?P<pk>\d+)/home/photos/$', clubs.ClubHomePhotosView.as_view(),
+        name='home-photos'),
+
     url(r'^(?P<pk>\d+)/numbers/$', clubs.ClubNumbersView.as_view(),
         name='numbers'),
     # testing purposes

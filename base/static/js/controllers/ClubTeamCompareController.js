@@ -10,6 +10,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.clubs = [];
   $scope.offenders = true;
   $scope.defenders = true;
+  this.clubPk = document.getElementById('team-id').value;
   $scope.$watch('field', function() {
     if ($scope.clubs.length > 0) {
       return $scope.listAveragePlayer();
@@ -20,16 +21,30 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       return $scope.selectedPlayer = obj.originalObject;
     }
   };
-  $scope.addAverageClubPlayerData = function() {
+  $scope.addAverageClubPlayerData = function(clubPk) {
     var pk, url;
-    if ($scope.selectedClub == null) {
+    if (($scope.selectedClub == null) && (clubPk == null)) {
       return;
     }
-    pk = $scope.selectedClub.originalObject.pk;
+    if (($scope.selectedClub != null) && ($scope.selectedClub.originalObject != null)) {
+      pk = $scope.selectedClub.originalObject.pk;
+    }
     if (pk == null) {
-      return;
+      if (clubPk != null) {
+        pk = clubPk;
+        $scope.selectedClub = {
+          originalObject: {
+            title: document.getElementById('team-name-hidden').value,
+            pk: clubPk,
+            color: null,
+            logo: document.getElementById('club-logo').value
+          }
+        };
+      } else {
+        return;
+      }
     }
-    url = $('#club-team-api').val().replace('0/', '') + pk;
+    url = $('#club-team-api').val();
     $http.get(url).success(function(data, status, headers) {
       var players, queries;
       LocaleFactory.setLocale(headers()['content-language']);
@@ -50,9 +65,11 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           all_players: data.all_players,
           offender_players: data.offender_players,
           defender_players: data.defender_players,
-          title: $scope.selectedClub.originalObject.title,
-          color: $scope.selectedClub.originalObject.main_color || getRandomColor(),
-          id: $scope.selectedClub.originalObject.pk,
+          title: data.title,
+          color: data.main_color || getRandomColor(),
+          id: data.pk,
+          logo: data.logo,
+          address: data.address,
           dataBySeason: {
             results: [
               {
@@ -142,4 +159,5 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     averageClubPlayerIndicatorsChart.draw();
     return self.chart = $('#chartdiv').highcharts();
   };
+  $scope.addAverageClubPlayerData(this.clubPk);
 });

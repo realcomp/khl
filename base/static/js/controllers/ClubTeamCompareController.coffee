@@ -9,6 +9,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
     $scope.clubs = []
     $scope.offenders = true
     $scope.defenders = true
+    this.clubPk = document.getElementById('team-id').value
 
     $scope.$watch 'field', () ->
         if $scope.clubs.length > 0
@@ -18,13 +19,24 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         if obj? and obj.originalObject?
             $scope.selectedPlayer = obj.originalObject
 
-    $scope.addAverageClubPlayerData = () ->
-        if not $scope.selectedClub?
+    $scope.addAverageClubPlayerData = (clubPk) ->
+        if not $scope.selectedClub? and not clubPk?
             return
-        pk = $scope.selectedClub.originalObject.pk
+        if $scope.selectedClub? and $scope.selectedClub.originalObject?
+            pk = $scope.selectedClub.originalObject.pk
         if not pk?
-            return
-        url = $('#club-team-api').val().replace('0/', '') + pk
+            if clubPk?
+                pk = clubPk
+                $scope.selectedClub = (
+                    originalObject:
+                        title: document.getElementById('team-name-hidden').value
+                        pk: clubPk
+                        color: null
+                        logo: document.getElementById('club-logo').value
+                )
+            else
+                return
+        url = $('#club-team-api').val()#.replace('0/', '') + pk
         $http.get(url).success (data, status, headers) ->
             LocaleFactory.setLocale headers()['content-language']
             players = data.all_players = _.filter(data.all_players, (player) ->
@@ -40,12 +52,14 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                 $scope.loader = false
                 lastSeasonResult = _.last results[0].data.results
                 clubObject =
-                    all_players: data.all_players,
+                    all_players: data.all_players
                     offender_players: data.offender_players
                     defender_players: data.defender_players
-                    title: $scope.selectedClub.originalObject.title
-                    color: $scope.selectedClub.originalObject.main_color or getRandomColor()
-                    id: $scope.selectedClub.originalObject.pk
+                    title: data.title
+                    color: data.main_color or getRandomColor()
+                    id: data.pk
+                    logo: data.logo
+                    address: data.address
                     dataBySeason:
                         results: [{
                             season: lastSeasonResult['season']
@@ -113,6 +127,8 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         averageClubPlayerIndicatorsChart.setPeriod(30);
         averageClubPlayerIndicatorsChart.draw()
         self.chart = $('#chartdiv').highcharts()
+
+    $scope.addAverageClubPlayerData(this.clubPk)
 
 
     return

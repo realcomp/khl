@@ -95,7 +95,23 @@ class ClubCalendarTripsView(ClubView):
 
 
 class ClubHomeView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-home.html'
+    template_name = 'hockeyapp/clubs/home/home-about.html'
+
+
+class ClubHomeSheduleView(ClubView):
+    template_name = 'hockeyapp/clubs/home/home-shedule.html'
+
+
+class ClubHomeMapView(ClubView):
+    template_name = 'hockeyapp/clubs/home/home-map.html'
+
+
+class ClubHomeAttendanceView(ClubView):
+    template_name = 'hockeyapp/clubs/home/home-attendance.html'
+
+
+class ClubHomePhotosView(ClubView):
+    template_name = 'hockeyapp/clubs/home/home-photos.html'
 
 
 class ClubFanZoneView(ClubView):
@@ -107,10 +123,19 @@ class ClubPhotosView(ClubView):
 
 
 class ClubStatsView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-stats.html'
+    template_name = 'hockeyapp/clubs/stats/stats-table.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubStatsView, self).get_context_data(**kwargs)
+        context['alphabet'] = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+        return context
+
+
+class ClubStatsCompareView(ClubView):
+    template_name = 'hockeyapp/clubs/stats/stats-compare.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ClubStatsCompareView, self).get_context_data(**kwargs)
         context['alphabet'] = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         return context
 
