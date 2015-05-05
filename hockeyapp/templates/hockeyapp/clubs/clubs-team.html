@@ -2,6 +2,7 @@
 {% load i18n %}
 {% block body %}
 <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
+<a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
 <body class="w-page__crew">
     <div class="body_inner bg-image" ng-controller="ClubTeamController as ClubTeamCtrl">
         <main id="main">
@@ -24,10 +25,13 @@
                         <div class="text">Сезон 2014-15</div>
                         <i class="dropdown icon"></i>
                         <div class="menu transition hidden" tabindex="-1">
-                            <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                            <!--<div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
                             <div class="item" data-text="Сезон 2013-14">2013-14</div>
                             <div class="item" data-text="Сезон 2012-13">2012-13</div>
-                            <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                            <div class="item" data-text="Сезон 2011-12">2011-12</div>-->
+                            {% for season in seasons %}
+                                <div class="item" data-value="{{ season.pk }}" ng-click="setSeason('{{ season.pk }}')">{{ season.label }}</div>
+                            {% endfor %}
                         </div>
                     </div>
 
@@ -127,14 +131,14 @@
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
                                             <div class="w-gallery-preview__item__img">
-                                                <a href="#" class="ui image">
+                                                <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
                                                 </a>
                                             </div>
 
                                             <div class="w-gallery-preview__item__info">
                                                 <p class="name">
-                                                    <a href="#">{{player.lastname}} {{player.name}}</a>
+                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
                                                 </p>
                                                 <p class="">
                                                     {{player.line_display}}
@@ -161,14 +165,14 @@
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
                                             <div class="w-gallery-preview__item__img">
-                                                <a href="#" class="ui image">
+                                                <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
                                                 </a>
                                             </div>
 
                                             <div class="w-gallery-preview__item__info">
                                                 <p class="name">
-                                                    <a href="#">{{player.lastname}} {{player.name}}</a>
+                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
                                                 </p>
                                                 <p class="">
                                                     {{player.line_display}}
@@ -194,14 +198,14 @@
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
                                             <div class="w-gallery-preview__item__img">
-                                                <a href="#" class="ui image">
+                                                <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
                                                 </a>
                                             </div>
 
                                             <div class="w-gallery-preview__item__info">
                                                 <p class="name">
-                                                    <a href="#">{{player.lastname}} {{player.name}}</a>
+                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
                                                 </p>
                                                 <p class="">
                                                     {{player.line_display}}

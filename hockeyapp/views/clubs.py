@@ -11,8 +11,20 @@ from ..models import Club
 from ..serializers import SeasonSerializer, ClubListSerializer
 
 
+class ClubListTableView(TemplateView):
+    template_name = 'hockeyapp/clubs/clubs-list-table.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ClubListTableView, self).get_context_data(**kwargs)
+        context['request'] = self.request
+        seasons = Season.objects.order_by('-start_date')
+        context['seasons'] = SeasonSerializer(
+            seasons, context=context, many=True).data
+        return context
+
+
 class ClubListView(TemplateView):
-    template_name = 'hockeyapp/clubs/clubs.html'
+    template_name = 'hockeyapp/clubs/clubs-list.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)

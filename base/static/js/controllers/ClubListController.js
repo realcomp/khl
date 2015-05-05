@@ -115,8 +115,8 @@ angular.module('Sportomatics')
             $scope.clubs = data.results;
             $scope.loaded = true;
         }).then(function(){
-            if(MapService.isRendered()) MapService.remove();
-            MapService.createClubsMap($scope.clubs, 'clubs');
+            //if(MapService.isRendered()) MapService.remove();
+            //MapService.createClubsMap($scope.clubs, 'clubs');
         });
     };
 
@@ -136,8 +136,8 @@ angular.module('Sportomatics')
             }
             $scope.loaded = true;
         }).then(function(){
-            if(MapService.isRendered()) MapService.remove();
-            MapService.createClubsMap($scope.clubs, 'clubs');
+            //if(MapService.isRendered()) MapService.remove();
+            //MapService.createClubsMap($scope.clubs, 'clubs');
         });
     };
 

@@ -6,6 +6,7 @@ from ..views import clubs
 
 urlpatterns = [
     url(r'^$', clubs.ClubListView.as_view(), name='list'),
+    url(r'^table/$', clubs.ClubListTableView.as_view(), name='list-table'),
     url(r'^(?P<pk>\d+)/$', clubs.ClubView.as_view(), name='details'),
     url(r'^(?P<pk>\d+)/calendar/$', clubs.ClubCalendarView.as_view(),
         name='calendar'),

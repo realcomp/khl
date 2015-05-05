@@ -1,0 +1,311 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+Все клубы, хоккей - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<div class="w-page__clubs-list__table" ng-controller="ClubListController as ClubListCtrl">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+                <section class="row w-breadcrumb">
+                    <div class="col-sm-9">
+                        <div class="ui small breadcrumb">
+                            <a class="section">Хоккей</a>
+                            <i class="right chevron icon divider"></i>
+                            <a class="section">Клубы</a>
+                            <i class="right chevron icon divider"></i>
+                            <div class="active section">Главное</div>
+                        </div>
+                    </div>
+                </section><!--row w-breadcrumb-->
+
+                <section class="w-main-nav">
+                    <div class="w-menu">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w-main-nav__b-menu">
+                                <span class="sr-only">Menu</span>
+                                <i class="icon content"></i>
+                            </button>
+                        </div>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="w-main-nav__b-menu">
+                            <ul class="w-main-nav__b-menu ui inverted green menu">
+                                <li class="item active">
+                                    <a href="#">Россия</a>
+                                </li><li class="item">
+                                    <a href="#">США</a>
+                                </li><li class="item">
+                                    <a href="#">Канада</a>
+                                </li><li class="item">
+                                    <a href="#">Финляндия</a>
+                                </li><li class="item">
+                                    <a href="#">Чехия</a>
+                                </li><li class="item">
+                                    <a href="#">Швеция</a>
+                                </li><li class="item ui dropdown top pointing">
+                                    <a class="default text" href="#">Другие страны<i class="dropdown icon"></i></a>
+                                    <ul class="menu">
+                                        <li class="item">Япония</li>
+                                        <li class="item">Китай</li>
+                                        <li class="item">Германия</li>
+                                        <li class="item">Болгария</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section><!--w-main-nav-->
+
+                <section class="w-page-tabs">
+                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+                        <div class="text">Сезон 2014-15</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition hidden" tabindex="-1">
+                            <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                            <div class="item" data-text="Сезон 2013-14">2013-14</div>
+                            <div class="item" data-text="Сезон 2012-13">2012-13</div>
+                            <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                        </div>
+                    </div>
+
+                <!--tabs items-->
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item" ng-class="{ 'active':isLeagueActive(null) }" ng-click="setLeague(null)">Все лиги</div>
+                        {% verbatim %}
+                        <div class="item" ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">{{league.title}}</div>
+                        {% endverbatim %}
+                    </div>
+                <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item" ng-class="{ 'active':isLeagueActive(null) }" ng-click="setLeague(null)">Все лиги</div>
+                        {% verbatim %}
+                        <div class="item" ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">{{league.title}}</div>
+                        {% endverbatim %}
+                    </div>
+                <!--tabs items ends-->
+
+                <!--tabs content-->
+
+                    <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}">
+                    <!--tabs content items-->
+                    <div class="b-tabs-content w-clubs__khl ui tab active" data-tab="tab-name2">
+
+                        <section class="w-section">
+                            <div class="b-header b-header__md b-header__filter-in">
+                                <div class="w-table">
+                                    <h2 class="b-cell b-header__text">
+                                        Список клубов
+                                    </h2>
+
+                                    <a class="b-cell b-change-views__item" href="{% url 'hockeyapp:clubs:list' %}">
+                                        <i class="block layout icon"></i>
+                                    </a>
+
+                                    <a class="b-cell active b-change-views__item" href="{% url 'hockeyapp:clubs:list-table' %}">
+                                        <i class="table icon"></i>
+                                    </a>
+                                </div><!--row-->
+                            </div><!--b-header b-header__md-->
+
+                            <div class="row-xs">
+                                <table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
+                                    <tr>
+                                        <th class="b-table-team"><a href="#"><span>Команда</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs"><a href="#"><span>Город</span><i class="dropdown icon"></i></a></th>
+                                        <th class="b-td-sm"><a href="#"><span>Ближайшая игра</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs b-td-xs"><a href="#"><span>Игр</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs b-td-xs"><a href="#"><span>Очки</span><i class="dropdown icon"></i></a></th>
+                                        <th class="b-table-place b-td-xs hidden-xs"><a href="#"><span>Место</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs"><a href="#"><span>Арена</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs hidden-sm"><a href="#"><span>Тренер</span><i class="dropdown icon"></i></a></th>
+                                    </tr>
+
+
+                                    {% verbatim %}
+                                        <tr ng-repeat="club in data.results">
+                                            <!--<td>
+                                                <a class="clubs-link" href="{{ club.url }}">
+                                                    <img ng-src="{{ club.logo }}" alt="" class="club-logo">
+                                                    <span>{{ club.title }}</span>
+                                                </a>
+                                            </td>
+                                            <td>{{ club.address.title }}</td>
+                                            <td align="center">5</td>
+                                            <td><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
+                                            <td><a href="#">{{ club.coach.fio }}</a></td>-->
+
+                                            <td class="b-td-team">
+                                            <div class="w-gallery-preview__item__img">
+                                                <div class="img-wrap">
+                                                    <figure class="figure-styled">
+                                                        <a href="#" class="ui image"><img ng-src="{{ 'http://dev.sportomatics.ru' + club.logo }}" alt=""></a>
+                                                    </figure>
+                                                </div>
+                                                <div class="b-cell">
+                                                    <p><a href="{{ club.url }}">{{ club.title }}</a></p>
+                                                    <p class="text-small visible-xs">{{ club.address.title }}</p>
+                                                </div>
+                                            </div>
+                                            </td>
+                                            <td class="hidden-xs">{{ club.address.title }}</td>
+                                            <td>
+                                                <p>
+                                                    <a href="#">СКА-Автомобилист</a>
+                                                </p>
+                                                <p class="text-small">
+                                                    26 апреля 2015 20:20 МСК
+                                                </p>
+                                            </td>
+                                            <td class="b-td-xs hidden-xs text-center-sm">10</td>
+                                            <td class="b-td-xs hidden-xs text-center-sm">10</td>
+                                            <td class="b-td-xs text-center hidden-xs">6</td>
+                                            <td class="hidden-xs"><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
+                                            <td class="hidden-xs hidden-sm"><a href="#">{{ club.coach.fio }}</a></td>
+                                        </tr>
+                                    {% endverbatim %}
+
+                                    <!--<tr>
+                                        <td class="b-td-team">
+                                            <div class="w-gallery-preview__item__img">
+                                                <div class="img-wrap">
+                                                    <figure class="figure-styled">
+                                                        <a href="#" class="ui image"><img src="images/l-hockey/logo-1.jpg" alt="" title=""/></a>
+                                                    </figure>
+                                                </div>
+                                                <div class="b-cell">
+                                                    <p><a href="#">Адмирал</a></p>
+                                                    <p class="text-small visible-xs">Московская область</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="hidden-xs">Омская область</td>
+                                        <td>
+                                            <p>
+                                                <a href="#">СКА-Автомобилист</a>
+                                            </p>
+                                            <p class="text-small">
+                                                26 апреля 2015 20:20 МСК
+                                            </p>
+                                        </td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">10</td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">10</td>
+                                        <td class="b-td-xs text-center hidden-xs">6</td>
+                                        <td class="hidden-xs"><a href="#">Арена Омск</a></td>
+                                        <td class="hidden-xs hidden-sm"><a href="#">Александров Александр</a></td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="b-td-team">
+                                            <div class="w-gallery-preview__item__img">
+                                                <div class="img-wrap">
+                                                    <figure class="figure-styled">
+                                                        <a href="#" class="ui image"><img src="images/l-hockey/logo-2.jpg" alt="" title=""/></a>
+                                                    </figure>
+                                                </div>
+                                                <div class="b-cell">
+                                                    <p><a href="#">Ак барс</a></p>
+                                                    <p class="text-small visible-xs">Московская область</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="hidden-xs">Казань</td>
+                                        <td>
+                                            <p>
+                                                <a href="#">Ак барс-СКА</a>
+                                            </p>
+                                            <p class="text-small">
+                                                26 апреля 2015 20:20 МСК
+                                            </p>
+                                        </td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">11</td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">30</td>
+                                        <td class="b-td-xs text-center hidden-xs">3</td>
+                                        <td class="hidden-xs"><a href="#">ЛДС "Татнефть-Арена"</a></td>
+                                        <td class="hidden-xs hidden-sm"><a href="#">Иванов Иван</a></td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="b-td-team">
+                                            <div class="w-gallery-preview__item__img">
+                                                <div class="img-wrap">
+                                                    <figure class="figure-styled">
+                                                        <a href="#" class="ui image"><img src="images/l-hockey/logo.jpg" alt="" title=""/></a>
+                                                    </figure>
+                                                </div>
+                                                <div class="b-cell">
+                                                    <p><a href="#">СКА</a></p>
+                                                    <p class="text-small visible-xs">Московская область</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="hidden-xs">Омская область</td>
+                                        <td>
+                                            <p>
+                                                <a href="#">СКА-Автомобилист</a>
+                                            </p>
+                                            <p class="text-small">
+                                                26 апреля 2015 20:20 МСК
+                                            </p>
+                                        </td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">10</td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">20</td>
+                                        <td class="b-td-xs text-center hidden-xs">5</td>
+                                        <td class="hidden-xs"><a href="#">Арена Омск</a></td>
+                                        <td class="hidden-xs hidden-sm"><a href="#">Александров Александр</a></td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="b-td-team">
+                                            <div class="w-gallery-preview__item__img">
+                                                <div class="img-wrap">
+                                                    <figure class="figure-styled">
+                                                        <a href="#" class="ui image"><img src="images/l-hockey/logo-2.jpg" alt="" title=""/></a>
+                                                    </figure>
+                                                </div>
+                                                <div class="b-cell">
+                                                    <p><a href="#">Ак барс</a></p>
+                                                    <p class="text-small visible-xs">Московская область</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="hidden-xs">Казань</td>
+                                        <td>
+                                            <p>
+                                                <a href="#">Ак барс-СКА</a>
+                                            </p>
+                                            <p class="text-small">
+                                                26 апреля 2015 20:20 МСК
+                                            </p>
+                                        </td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">11</td>
+                                        <td class="b-td-xs hidden-xs text-center-sm">30</td>
+                                        <td class="b-td-xs text-center hidden-xs">2</td>
+                                        <td class="hidden-xs"><a href="#">ЛДС "Татнефть-Арена"</a></td>
+                                        <td class="hidden-xs hidden-sm"><a href="#">Иванов Иван</a></td>
+                                    </tr>-->
+                                </table>
+                            </div>
+
+                        </section><!--w-section-->
+                    </div>
+                    <!--tabs content items-->
+                    </form>
+
+                <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+            </section><!--container-->
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}

@@ -2375,8 +2375,8 @@ angular.module('Sportomatics')
             $scope.clubs = data.results;
             $scope.loaded = true;
         }).then(function(){
-            if(MapService.isRendered()) MapService.remove();
-            MapService.createClubsMap($scope.clubs, 'clubs');
+            //if(MapService.isRendered()) MapService.remove();
+            //MapService.createClubsMap($scope.clubs, 'clubs');
         });
     };
 
@@ -2396,8 +2396,8 @@ angular.module('Sportomatics')
             }
             $scope.loaded = true;
         }).then(function(){
-            if(MapService.isRendered()) MapService.remove();
-            MapService.createClubsMap($scope.clubs, 'clubs');
+            //if(MapService.isRendered()) MapService.remove();
+            //MapService.createClubsMap($scope.clubs, 'clubs');
         });
     };
 
@@ -2750,6 +2750,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
         $scope.state = 'fio';
+        $scope.season = 19;
 
         $scope.setType = function(type){
             $scope.type = type;
@@ -2808,7 +2809,8 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             'clubs': []
         };
 
-        $scope.setSeason = function(e) {
+        $scope.setSeason = function(season) {
+            $scope.season = season;
             self.list(self.compare);
         };
 
@@ -2873,7 +2875,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         self.list = function(callback, callbackArg) {
-            var params = 'season=19';//$('#ClubTeamForm').serialize();
+            var params = 'season=' + $scope.season;//$('#ClubTeamForm').serialize();
             self.players.data = null;
             self.players.table = null;
             self.players.loader = true;
