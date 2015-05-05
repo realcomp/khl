@@ -159,7 +159,8 @@
                           ng-model="contractTo"
                           ng-init="contractTo = params.contract_to"
                           ng-change="$location.search('contract_to', contractTo || null)">
-                   <img src="{% static 'pic/cal.png' %}">
+                   <img src="{% static 'pic/cal.png' %}"
+                        onclick="$('#datepicker').datepicker('show')" />
                <!-- </p> -->
                <!-- <p> -->
                    <select class="styler kind-contract dropdown"
