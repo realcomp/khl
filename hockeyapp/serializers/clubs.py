@@ -8,6 +8,7 @@ from rest_framework import pagination, response, serializers
 
 from api.addresses.serializers import AddressSerializer
 from base.models import Season
+from base.serializers import TitleBaseSerializer
 
 from . import (
     SeasonSerializer,
@@ -16,7 +17,8 @@ from . import (
     CoachSerializer,
     LeagueSerializer,
     CountrySerializer,
-    ClubListSerializer)
+    ClubListSerializer,
+    ArenaSerializer)
 from ..models import Club, ClubPlayer, Coach, Player, League, Schedule
 
 
@@ -342,3 +344,26 @@ class NumbersSerializer(serializers.ModelSerializer):
     class Meta(object):
         fields = 'players', 'number'
         model = Player
+
+
+class ClubMainAboutSerializer(TitleBaseSerializer):
+    '''
+    Serializer for ClubMainAboutView
+    '''
+    logo = serializers.ReadOnlyField(source='logo.url')
+    url = serializers.ReadOnlyField(source='get_absolute_url')
+    title_verbose = serializers.SerializerMethodField()
+    address = AddressSerializer()
+    arena = ArenaSerializer()
+    coach = CoachSerializer()
+    league = LeagueSerializer()
+
+    def get_title_verbose(self, obj):
+        return obj.get_title_verbose(request=self.context.get('request'))
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
+            'coach', 'league', 'site', 'email', 'phone', 'main_color',
+            'opening_dt', 'contacts')
+        model = Club
