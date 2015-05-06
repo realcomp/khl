@@ -10,6 +10,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     $scope.loadClubs = function(query) {
       return $scope.tags.loadClubs($scope.clubsURL, query);
     };
+    $scope.loadPlayers = function(query) {
+      return $scope.tags.loadPlayers($scope.playersURL, query);
+    };
     $scope.loadLeagues = function(query) {
       return $http.get($scope.leaguesURL);
     };
@@ -34,19 +37,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     }
     if ($scope.params.league2) {
       $scope.league2 = JSON.parse($scope.params.league2);
-    }
-    if ($("#ageRange").length) {
-      $("#ageRange").ionRangeSlider({
-        'hide_min_max': true,
-        'keyboard': true,
-        'min': 15,
-        'max': 65,
-        'from': $scope.params.age__lte || 18,
-        'to': $scope.params.age__gte || 25,
-        'type': 'double',
-        'step': 1,
-        'grid': false
-      });
     }
     $scope.PlayerPartnersPopup = {
       'data': null,

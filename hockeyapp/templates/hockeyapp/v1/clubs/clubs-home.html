@@ -1,0 +1,947 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{title}}: домашняя площадка, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="overlay-black" style="visibility: hidden"></div>
+    <div class="container clubs-page clubs-home-page">
+        <!-- {% trans "Home arena" %} -->
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Home arena" %}
+        <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
+
+        <div class="page-content page-container" ng-controller="ClubHomeController">
+            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-home" %}
+            <div class="page-inner-container">
+                {% verbatim %} <!-- Popup -->
+                <div id="#switcher" class=" player-partners-popup photo-popup no-transition">
+                    <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
+                    <div>
+                        <div style="display: inline-block; width: 645px">
+                            <div class="rightleft" ng-show="currentIndex !== 0">
+                                <i class="fa fa-angle-left photo-prev" ng-click="prevPhoto()"></i>
+                            </div>
+                            <img alt="" class="item-photo popup-photo float-left" ng-src="{{ PhotoPopup.data.photo.img.file }}">
+                            <div class="rightleft" ng-show="currentIndex !== photos.length - 1 ">
+                                <i class="fa fa-angle-right photo-next" ng-click="nextPhoto()"></i>
+                            </div>
+                        </div>
+                        <div style="display:inline-block;margin-left: 20px; vertical-align: top; background: #ffffff !important; width: inherit">
+                            <div class="m-t-20 m-r-30">
+                                <div class="inline-block vertical-top m-r-5">
+                                    <div>
+                                        <img class="instagram-profile-picture" ng-src="{{PhotoPopup.instagramUser.profile_picture}}" alt="" class="item-photo" width="150" height="150">
+                                    </div>
+                                    <div class="instagram-user-name">
+                                        <a href="https://instagram.com/{{PhotoPopup.instagramUser.username}}" target="_blank">{{PhotoPopup.instagramUser.username}}</a>
+                                    </div>
+                                </div>
+                                <div class="inline-block ">
+                                    <div class="instagram-comment">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="m-t-20">
+                                <strong class="font-16">{{PhotoPopup.arena.ru_title}}</strong>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                {% endverbatim %}
+
+                <div class="heading">Домашняя площадка</div>
+                <div class="stadium-block">
+                    <img src="{{ arena.photo }}" alt="" class="stadium-photo" width="450">
+                    <div class="stadium-desc">
+                        <div class="stadium-title">{{ arena.title }}</div>
+                        <div class="stadium-info"></div>
+                        <ul class="stadium-info-list">
+                            <li class="stadium-info-item">
+                                <span>Официальное название:</span> "{{ arena.title }}"
+                            </li>
+                            <li class="stadium-info-item">
+                                <span>Адрес:</span>
+                                {{ arena.contacts }}
+                            </li>
+                            <li class="stadium-info-item">
+                                <span>Вместимость:</span> {{ arena.capacity }} {% trans 'зрителей' %}
+                            </li>
+                            <li class="stadium-info-item">
+                                <span>Сайт:</span> <a href="{{ arena.site }}">{{ arena.site }}</a>
+                            </li>
+                            {% if arena.club_set.count > 1 %}
+                                <li class="stadium-info-item">
+                                    <span>Также, это домашняя площадка для:</span>
+                                    {% for club in arena.club_set %}
+                                        {% if club.pk != pk %}
+                                            <a href="{{ club.url }}">{{ club.title_verbose }}</a><br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="heading">Фотографии</div>
+                <div class="clubs-photos-slider">
+
+                    {% verbatim %}
+                    <div class="slides_container" >
+                            <div>
+                                <ul class="photos-list">
+                                    <li class="photo-item">
+                                        <a href="#" class="club-photo club-photo_add"><span class="add-photo-icon"><i class="add sign icon"></i></span>добавить свое фото</a>
+                                    </li>
+                                    <li ng-repeat="item in photos track by $index | limitTo: 4 " class="photo-item">
+                                        <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index, $event)">
+                                            <img ng-src="{{item.photo.img.file}}" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div ng-show="photosSlider[1].length">
+                                <ul class="photos-list">
+                                    <li ng-repeat="item in photosSlider[1]" class="photo-item">
+                                        <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index+5, $event)">
+                                            <img ng-src="{{item.photo.img.file}}"  alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div ng-show="photosSlider[2].length">
+                                <ul class="photos-list">
+                                    <li ng-repeat="item in photosSlider[2] | limitTo: 4 " class="photo-item">
+                                        <a href="#" class="club-photo" ng-click="PhotoPopupShow(item.id, $index+10, $event)">
+                                            <img ng-src="{{item.photo.img.file}}"  alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                    <a class="prev" ng-show="photosSlider[1].length"><i class="chevron circle left icon" ></i></a>
+                    <a class="next" ng-show="photosSlider[1].length"><i class="chevron circle right icon" ></i></a>
+
+                    {% endverbatim %}
+                </div>
+
+                <hr class="hr">
+
+                <div class="heading">Ближайшие матчи</div>
+                <ul class="calendars-list">
+                    <li class="calendar-item">
+                        <table class="ui celled table segment clubs-calendars-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">Январь 2015</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <span class="calendar-date">1</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">2</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">3</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">4</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">5</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">6</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">7</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">8</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">9</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">11</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">12</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">13</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">14</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">15</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">16</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">17</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">18</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">19</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">20</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">21</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">22</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">23</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">24</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">25</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">26</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">27</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">28</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">29</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">30</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">31</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <li class="calendar-item">
+                        <table class="ui celled table segment clubs-calendars-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">Февраль 2015</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <span class="calendar-date">1</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">2</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">3</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">4</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">5</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">6</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">7</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">8</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">9</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">11</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">12</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">13</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">14</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">15</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">16</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">17</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">18</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">19</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">20</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">21</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">22</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">23</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">24</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">25</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">26</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">27</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">28</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">29</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">30</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">31</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <li class="calendar-item">
+                        <table class="ui celled table segment clubs-calendars-table">
+                            <thead>
+                                <tr>
+                                    <th colspan="7">Март 2015</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <span class="calendar-date">1</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">2</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">3</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">4</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">5</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">6</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">7</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">8</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">9</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">10</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">11</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">12</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">13</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">14</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">15</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">16</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">17</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">18</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">19</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">20</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">21</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">22</span>
+                                    </td>
+                                    <td class="cell-calendar-event">
+                                        <div class="calendar-event-popup">
+                                            <div class="calendar-popup-title">Выездной матч</div>
+                                            <hr class="hr">
+                                            <div class="team-logo">
+                                                <img src="{{ STATIC_URL }}images/ska-logo.png" alt="" class="team-logo-image">
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="team-link">Нефтехимик (Уфа)</a>
+                                            </div>
+                                            <div class="event-details">
+                                                <p>Начало: 21:00 МСК</p>
+                                                <p><a href="#">Прошлые встречи</a>: 23, счет 32:4 В 21, П 2</p>
+                                                <p><a href="#">Превью матча</a></p>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="i_go" type="checkbox">
+                                                <label for="i_go">я пойду (идут 2031)</label>
+                                            </div>
+                                            <div class="ui checkbox">
+                                                <input id="get_news" type="checkbox">
+                                                <label for="get_news">получать новости</label>
+                                            </div>
+                                            <hr class="hr">
+                                            <div class="heading">УФА</div>
+                                            <div class="team-cities">
+                                                <div class="city">
+                                                    <div class="city-photos">
+                                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                                    </div>
+                                                    <div class="city-desc">
+                                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                                        <p>Телефон: 275-14-00</p>
+                                                        <p>Открыт: 27 августа 2007г.</p>
+                                                        <p>Вместимость: 2970 человек</p>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="align-center">
+                                                <a href="#" class="how-to-reach">Как добраться</a>
+                                            </div>
+                                        </div>
+                                        <img src="{{ STATIC_URL }}images/nhl-logo.png" alt="" class="calendar-event-logo">
+                                        <span class="calendar-date">23</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">24</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">25</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="calendar-date">26</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">27</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">28</span>
+                                    </td>
+                                    <td class="cell-calendar-event-other">
+                                        <span class="calendar-date">29</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">30</span>
+                                    </td>
+                                    <td>
+                                        <span class="calendar-date">31</span>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+
+                <hr class="hr">
+
+                <div class="row">
+                    <div class="column">
+                        <div class="ui tabular menu">
+                            <span class="heading">График посещаемости арены</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="m-t-10" id="chartdiv" style="width: 100%; height:300px; "></div>
+                </div>
+                <div class="margin-auto text-center m-t-10">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="line" value=""
+                               ng-checked="homeOnly"
+                               onchange="angular.element(this).scope().homeOnly = !angular.element(this).scope().homeOnly; angular.element(this).scope().createGamesChart();">
+                    </div>
+                </div>
+
+                <div class="team-track" ng-controller="ClubHomeMapController">
+                    <div class="heading">Как добраться</div>
+                    <div class="team-track-map">
+                        <div class="google-map-overlay-lock" style="position: relative;width: 932px; height: 486px; z-index: 999; background: rgba(0,0,0,0); top: 486px; margin-top: -486px; " >
+                            <!--<i class="fa fa-refresh" style="position: absolute; right: 95px; top: 10px; font-size: 30px; color: #ffffff; pointer-events: auto"></i>-->
+                            <i class="fa fa-lock" style="position: absolute; right: 60px; top: 10px; color: #ffffff;font-size: 30px;" onclick="$('.google-map-overlay-lock').hide(); $('.google-map-overlay-unlock').show();"></i>
+                        </div>
+                        <div class="google-map-overlay-unlock" style="position: relative;width: 932px; height: 486px; z-index:10000; background: rgba(0,0,0,0); top: 486px; margin-top: -486px;display: none; pointer-events: none;">
+                            <!--<i class="fa fa-refresh" style="position: absolute; right: 95px; top: 10px; font-size: 30px; color: #ffffff; pointer-events: auto"></i>-->
+                            <i class="fa fa-unlock" style="position: absolute; right: 60px;  top: 10px;font-size: 30px; color: #ffffff; pointer-events: auto !important;" onclick="$('.google-map-overlay-unlock').hide(); $('.google-map-overlay-lock').show();"></i>
+                        </div>
+                        <iframe src="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
+                                name="GoogleMap" width="932" height="486" frameborder="0" style="border:0"></iframe>
+                        <a class="map-refresher" href="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
+                           target="GoogleMap">
+                            Сбросить масштабирование
+                        </a>
+                    </div>
+                    <!--<input id="coordinates" type="hidden" value="{{ arena.coords|default:arena.contacts|escape }}">
+                    <input id="place-title" type="hidden" value="{{ arena.title }}">
+                    <div id="map"></div>-->
+                </div>
+
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

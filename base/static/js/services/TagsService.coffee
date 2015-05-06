@@ -5,5 +5,8 @@ angular.module('Sportomatics').service('tags', ($http, $q, $filter) ->
     @loadClubs = (url, query) ->
         return $http.get(url + '?s=' + query)
 
+    @loadPlayers = (url, query) ->
+        return $http.get(url + '?s=' + query)
+
     return
 )

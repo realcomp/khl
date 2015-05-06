@@ -11,7 +11,8 @@ from . import (
     CoachSerializer, CountrySerializer, ClubLightListSerializer,
     ClubListSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, ClubPlayer)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, ClubPlayer,
+    RelatedPlayer)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -27,6 +28,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     rating_index = serializers.SerializerMethodField()
     contract_to = serializers.SerializerMethodField()
     contract_type = serializers.ReadOnlyField(source='get_contract_type_display')
+    similarity = serializers.SerializerMethodField()
 
     #def get_clubplayers(self, obj):
         #clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
@@ -53,12 +55,22 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
             rating = getattr(self.context['view'], 'rating', {})
             return rating.get(obj.pk)
 
+    def get_similarity(self, obj):
+        request = self.context['request']
+        _related_field = request.query_params.get('related_field')
+        _related_player = request.query_params.get('related_player')
+        if _related_field and _related_player:
+            player = Player.objects.get(pk=_related_player)
+            rp = RelatedPlayer.objects.by_players(player, obj).last()
+            if rp:
+                return getattr(rp, _related_field)
+
     class Meta(object):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'club', 'age', 'birth_date_short',
             'rating', 'rating_index', 'fio', 'contract_to', 'contract_type',
-            'weight', 'height', 'grip', 'matches_total')
+            'weight', 'height', 'grip', 'matches_total', 'similarity')
         model = Player
 
 

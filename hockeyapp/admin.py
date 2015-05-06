@@ -108,7 +108,8 @@ class PlayerSocialsInline(admin.TabularInline):
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
     actions = tuple(admin_actions.get_recalc_counters_actions()) + (
-        admin_actions.calculate_similarity,)
+        admin_actions.calculate_similarity_expired,
+        admin_actions.calculate_similarity_everyone)
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
@@ -512,6 +513,7 @@ admin.site.register(Timeline, TimelineAdmin)
 
 
 class RelatedPlayerAdmin(admin.ModelAdmin):
+    actions = admin_actions.delete_without_confirmation,
     list_display = (
         'pk', 'player1', 'player2', 'modified', 'goals_value', 'assists_value',
         'points_value', 'penalty_time_value', 'plus_minus_value')

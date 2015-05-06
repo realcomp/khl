@@ -13,6 +13,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.loadClubs = (query) ->
             return $scope.tags.loadClubs($scope.clubsURL, query)
 
+        $scope.loadPlayers = (query) ->
+            return $scope.tags.loadPlayers($scope.playersURL, query)
+
         $scope.loadLeagues = (query) ->
             return $http.get($scope.leaguesURL)
 
@@ -37,19 +40,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             $scope.club = JSON.parse($scope.params.club)
         if $scope.params.league2
             $scope.league2 = JSON.parse($scope.params.league2)
-
-        if $("#ageRange").length
-            $("#ageRange").ionRangeSlider({
-                'hide_min_max': true,
-                'keyboard': true,
-                'min': 15,
-                'max': 65,
-                'from': $scope.params.age__lte or 18,
-                'to': $scope.params.age__gte or 25,
-                'type': 'double',
-                'step': 1,
-                'grid': false
-            })
 
         $scope.PlayerPartnersPopup = {
             'data': null,

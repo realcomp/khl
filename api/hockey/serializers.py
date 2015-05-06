@@ -9,7 +9,8 @@ from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
 from api.base.serializers import SeasonSerializer
 
-from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
+from hockeyapp.models import (
+    ArenaInstaPhoto, Club, Match, Player, Arena, CoachClub)
 
 from hockeyapp.serializers import CoachSerializer, LeagueSerializer
 
@@ -81,7 +82,20 @@ class ClubListSerializer(TitleBaseSerializer):
     url = drf.serializers.ReadOnlyField(source='get_absolute_url')
     address = AddressMinimalSerializer()
     arena = ArenaClubListSerializer()
-    coach = CoachSerializer()
+    coach = drf.serializers.SerializerMethodField()
+
+    def get_coach(self, obj):
+        coach = obj.coach
+        request = self.context.get('request')
+        if request and 'season' in request.query_params:
+            ccs = (
+                CoachClub.objects
+                .filter(
+                    season=request.query_params['season'], club=obj,
+                    head=True))
+            cc = ccs.last()
+            coach = cc and cc.coach or coach
+        return CoachSerializer(coach).data
 
     class Meta(object):
         fields = (

@@ -141,8 +141,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         else
             $scope.$location.search('citizenship_other', null)
 
-        line = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
-        $scope.$location.search('line', line or [])
+        lineAll = ($(e).val() for e in $('[name="line"]') when $(e).val())
+        lineChecked = ($(e).val() for e in $('[name="line"]:checked') when $(e).val())
+        lineUnchecked = (e for e in lineAll when e not in lineChecked)
+        $scope.$location.search('line', (e for e in lineChecked when +e > 0) or [])
+        $scope.$location.search('line', (e for e in lineUnchecked when +e < 0) or [])
 
         contract_types = ($(e).val() for e in $('[name="contract_types"]:checked') when $(e).val())
         $scope.$location.search('contract_types', contract_types or [])
@@ -161,10 +164,12 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         checkBox($scope, 'season_enabled', 'seasonEnabled')
         checkBox($scope, 'club_enabled', 'clubEnabled')
         checkBox($scope, 'league_enabled', 'league2Enabled')
+        checkBox($scope, 'related_enabled', 'relatedEnabled')
 
         multiSelect($scope, 'citizenship', $scope.citizenship)
         multiSelect($scope, 'club', $scope.club)
         multiSelect($scope, 'league2', $scope.league2)
+        multiSelect($scope, 'related_player', $scope.relatedPlayer)
 
         if $scope.number
             $scope.$location.search('number', $scope.number)
@@ -174,22 +179,26 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             $scope.$location.search('age__lte', age[0])
             $scope.$location.search('age__gte', age[1])
 
+        if $('[name="relatedValue"]').length
+            relatedValue = $('[name="relatedValue"]').val().split(';')
+            $scope.$location.search('related_value__gte', relatedValue[0])
+            $scope.$location.search('related_value__lte', relatedValue[1])
+
         $scope.params = $scope.$location.search()
 
-        params += 'order_by=' + ($scope.params.order_by or '%s_lastname,%s_name')
+        params += ((k + '=' + $scope.params[k]) for k in [
+            'player', 'season', 'number', 'contract_type', 'height',
+            'weight', 'grip', 'match_count', 'rated_by',
+            'age__lte', 'age__gte', 'gamingtime',
+            'related_value__lte', 'related_value__gte',
+        ] when $scope.params[k]).join('&')
 
-        for key in [
-                'player', 'season', 'number', 'contract_type', 'height',
-                'weight', 'grip', 'match_count', 'rated_by',
-                'age__lte', 'age__gte', 'gamingtime']
-            value = $scope.params[key]
-            if value
-                params += '&' + key + '=' + value
+        params += '&order_by=' + ($scope.params.order_by or '%s_lastname,%s_name')
 
         if $scope.params.reversed
             params += '&reversed=true'
-        if $scope.params.line.length
-            params += (('&line=' + x) for x in $scope.params.line).join('')
+        # if $scope.params.line.length
+        #     params += (('&line=' + x) for x in $scope.params.line).join('')
         if $scope.params.contract_types
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1
@@ -199,14 +208,14 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                 params += '&citizenship=' + $scope.params.citizenship2
             else
                 params += '&citizenship_other=true'
-        if $scope.params.league
-            params += '&league=' + $scope.params.league
         if $scope.params.is_playing != 'false'
             params += '&is_playing=true'
         if $scope.params.alphabet
             params += '&%s_lastname__startswith=' + $scope.params.alphabet
         if ($scope.club_enabled or $scope.params.club_enabled) and $scope.params.club
             params += (('&club=' + x['pk']) for x in JSON.parse($scope.params.club)).join('')
+        # if $scope.params.league
+        #     params += '&league=' + $scope.params.league
         if $scope.params.league
             params += (('&league=' + league) for league in $scope.params.league).join('')
         if $scope.params.contract_to
@@ -225,6 +234,9 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                 params += (
                     '&season_start=' + $scope.params.season_start +
                     '&season_end=' + $scope.params.season_end)
+        if $scope.params.related_enabled and $scope.params.related_player and $scope.params.related_field
+            params += (('&related_player=' + x['pk']) for x in JSON.parse($scope.params.related_player)).join('')
+            params += '&related_field=' + $scope.params.related_field
 
         $scope.data = {}
         $scope.loader = true
