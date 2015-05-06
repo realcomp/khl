@@ -17,12 +17,12 @@ class SeasonsMenuMixin(object):
         context['seasons'] = SeasonsMenuItemSerializer(
             seasons, context=context, many=True).data
 
-        _season = self.request.GET.get('season')
-        if _season:
-            default_season = get_object_or_404(Season, pk=_season)
-        else:
-            default_season = seasons[0] if seasons else None
+        # _season = self.request.GET.get('season')
+        # if _season:
+        #     default_season = get_object_or_404(Season, pk=_season)
+        # else:
+        #     default_season = seasons[0] if seasons else None
 
-        context['default_season'] = SeasonsMenuItemSerializer(
-            default_season, context=context).data
+        # context['default_season'] = SeasonsMenuItemSerializer(
+        #     default_season, context=context).data
         return context
