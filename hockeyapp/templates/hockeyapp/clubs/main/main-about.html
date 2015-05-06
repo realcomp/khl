@@ -3,6 +3,7 @@
 {% load i18n %}
 
 {% block tabs-content %}
+<div ng-controller="ClubMainAboutController">
 
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-about' %}
 <!--tabs content items-->
@@ -491,6 +492,8 @@
     </div><!--row-->
 </div>
 <!--tabs content items-->
+
+</div>
 {% endblock %}
 
 {% block sticky_menu %}

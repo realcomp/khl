@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.views.generic import DetailView, TemplateView
 from django.utils.translation import ugettext_lazy as _
 
+from base.mixins import SeasonsMenuMixin
 from base.models import Season
 
 from .mixins import SeasonsMixin
@@ -36,7 +37,7 @@ class ClubListView(TemplateView):
         return context
 
 
-class ClubView(SeasonsMixin, DetailView):
+class ClubView(SeasonsMenuMixin, DetailView):
     model = Club
     template_name = 'hockeyapp/clubs/clubs-team.html'
 
@@ -52,7 +53,7 @@ class ClubMainAboutView(ClubView):
     template_name = 'hockeyapp/clubs/main/main-about.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ClubView, self).get_context_data(**kwargs)
+        context = super(ClubMainAboutView, self).get_context_data(**kwargs)
         context['request'] = self.request
         context.update(ClubMainAboutSerializer(
             self.get_object(), context=context).data)

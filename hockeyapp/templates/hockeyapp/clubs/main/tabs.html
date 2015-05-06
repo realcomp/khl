@@ -1,11 +1,18 @@
+{% load i18n %}
+
 <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
-    <div class="text">Сезон 2014-15</div>
+    <input type="hidden" value="{{ default_season.pk }}" ng-update-hidden
+           ng-model="season" ng-init="season = {{ default_season.pk }}"
+           ng-change="setSeason(season)">
+    <div class="text">{% trans "Season" %} {{ default_season.label }}</div>
     <i class="dropdown icon"></i>
     <div class="menu transition hidden" tabindex="-1">
-        <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
-        <div class="item" data-text="Сезон 2013-14">2013-14</div>
-        <div class="item" data-text="Сезон 2012-13">2012-13</div>
-        <div class="item" data-text="Сезон 2011-12">2011-12</div>
+        {% for season in seasons %}
+            <div class="item {% if default_season.pk == season.pk %}active selected{% endif%}"
+                 data-text="{% trans "Season" %} {{ season.label }}" data-value="{{ season.pk }}">
+                {{ season.label }}
+            </div>
+        {% endfor %}
     </div>
 </div>
 <!--tabs items-->

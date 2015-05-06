@@ -2462,6 +2462,17 @@ angular.module('Sportomatics')
     $scope.list();
 }]);
 
+angular.module('Sportomatics').controller('ClubMainAboutController', [
+  '$scope', '$location', function($scope, $location) {
+    $scope.$location = $location;
+    $scope.params = $location.search();
+    $scope.setSeason = function(season) {
+      $location.search('season', season);
+      $scope.params = $location.search();
+    };
+  }
+]);
+
 angular.module('Sportomatics')
     .controller('ClubNewsController', function($scope, $http, LocaleFactory, $timeout){
         $scope.club = $("#team-name-hidden").length ? $("#team-name-hidden").val() : 'Club';
