@@ -127,9 +127,12 @@
                                     </div>-->
 
                                     {% verbatim %}
-                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.offender_players | filter : playerFilter">
+                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.offender_players" ng-class="{'b-notactive': !playerFilter(player)}">
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
+                                            <!--<div class="ui ribbon green label-flag">
+                                                <i class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                            </div>-->
                                             <div class="w-gallery-preview__item__img">
                                                 <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
@@ -161,9 +164,12 @@
                                 </div><!--b-header b-header__sm-->
                                 <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
                                     {% verbatim %}
-                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.defender_players | filter : playerFilter">
+                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.defender_players" ng-class="{'b-notactive': !playerFilter(player)}">
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
+                                            <!--<div class="ui ribbon green label-flag">
+                                                <i class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                            </div>-->
                                             <div class="w-gallery-preview__item__img">
                                                 <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
@@ -194,9 +200,12 @@
                                 </div><!--b-header b-header__sm-->
                                 <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
                                     {% verbatim %}
-                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.goalkeeper_players | filter : playerFilter">
+                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.goalkeeper_players" ng-class="{'b-notactive': !playerFilter(player)}">
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
+                                            <!--<div class="ui ribbon green label-flag">
+                                                <i class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                            </div>-->
                                             <div class="w-gallery-preview__item__img">
                                                 <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
@@ -205,7 +214,7 @@
 
                                             <div class="w-gallery-preview__item__info">
                                                 <p class="name">
-                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
+                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}} {{player.citizenship.code}}</a>
                                                 </p>
                                                 <p class="">
                                                     {{player.line_display}}

@@ -74,15 +74,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         $scope.workWithData = function(data){
-            console.log(data);
-
             //if(MapService.isRendered()) MapService.remove();
             //MapService.createClubsMap(data.all_players, 'players');
-
-            var all_players = data.all_players;
-            var players = [];
-            _.each(all_players, function(player){
-                players.push(player.pk);
+            var giveCountryCodes = function(player){
                 if(player.citizenship){
                     if(!player.citizenship.code){
                         _.each($scope.countryCodes, function(country){
@@ -93,7 +87,16 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                         })
                     }
                 }
-            });
+            }
+            var all_players = data.all_players;
+            var players = [];
+            _.each(all_players, function(player){
+                players.push(player.pk);
+            })
+            _.each(data.all_players, giveCountryCodes)
+            _.each(data.goalkeeper_players, giveCountryCodes)
+            _.each(data.offender_players, giveCountryCodes)
+            _.each(data.defender_players, giveCountryCodes)
         };
 
         self.getCell = function(table, cell_id) {
@@ -279,93 +282,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             }
         };
 
-        function drawArr(c, fromx, fromy, tox, toy){
-            //variables to be used when creating the arrow
-            var ctx = c;
-            var headlen = 5;
-            var angle = Math.atan2(toy-fromy,tox-fromx);
-            //starting path of the arrow from the start square to the end square and drawing the stroke
-            ctx.beginPath();
-            ctx.moveTo(fromx, fromy);
-            var amount = 0;
-            (function myLoop (amount) {
-               setTimeout(function () {
-                   amount += 0.05; // change to alter duration
-                    ctx.lineWidth = 5;
-                    ctx.lineTo(fromx + (tox - fromx) * amount,
-                             fromy + (toy - fromy) * amount);
-                    ctx.stroke();
-                    if (amount < 1){
-                       myLoop(amount);
-                    }
-                    else {
-                         //starting a new path from the head of the arrow to one of the sides of the point
-                        ctx.beginPath();
-                        ctx.moveTo(tox, toy);
-                        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
-
-                        //path from the side point of the arrow, to the other side point
-                        ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),toy-headlen*Math.sin(angle+Math.PI/7));
-
-                        //path from the side point back to the tip of the arrow, and then again to the opposite side point
-                        ctx.lineTo(tox, toy);
-                        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),toy-headlen*Math.sin(angle-Math.PI/7));
-
-                        //draws the paths created above
-                        //ctx.strokeStyle = "#cc0000";
-                        ctx.lineWidth = 5;
-                        ctx.stroke();
-                        ctx.fill();
-                    }
-               }, 30)
-            })(0);
-            //ctx.lineTo(tox, toy);
-            //ctx.strokeStyle = "#cc0000";
-            //ctx.lineWidth = 10;
-            //ctx.stroke();
-        }
-
-        function createTransferArrow(from, to, id){
-
-                var $from = $(from);
-                var $to = $(to);
-                if($to.length === 0 || $from.length === 0) return;
-                // find offset positions for the word (t = this) and image (i)
-                var ofrom = {
-                    x: $from.offset().left + $from.width() / 2,
-                    y: $from.offset().top + $from.height() / 2
-                };
-                var oto = {
-                    x: $to.offset().left + $to.width() / 2,
-                    y: $to.offset().top + $to.height() / 2
-                };
-                // x,y = top left corner
-                // x1,y1 = bottom right corner
-                var p = {
-                    x: ofrom.x < oto.x ? ofrom.x : oto.x,
-                    x1: ofrom.x > oto.x ? ofrom.x : oto.x,
-                    y: ofrom.y < oto.y ? ofrom.y : oto.y,
-                    y1: ofrom.y > oto.y ? ofrom.y : oto.y
-                };
-                // create canvas between those potonts
-                var c = $('<canvas id="'+id+'" player="'+ to.replace('#', '') + '" />').attr({
-                    'width': p.x1 - p.x + 20 ,
-                    'height': p.y1 - p.y + 20
-                }).css({
-                    'position': 'absolute',
-                    'left': p.x,
-                    'top': p.y,
-                    'z-index': 1
-                }).appendTo($('body'))[0].getContext('2d');
-
-                // draw line
-                var x1 = ofrom.x - p.x + 10;
-                var y1 = ofrom.y - p.y - 30;
-                var x2 = oto.x - p.x; //+20
-                var y2 = oto.y - p.y + 40;
-
-                drawArr(c, x1,y1,x2,y2,1,2);
-        }
         self.list();
 
     }
