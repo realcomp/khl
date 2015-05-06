@@ -119,7 +119,7 @@
                                         {% verbatim %}
                                         <tr ng-repeat="club in data.results">
                                             <td>
-                                                <a class="clubs-link" href="{{ club.url }}">
+                                                <a class="clubs-link" href="{{ club.url }}?season={{ params.season }}">
                                                     <img ng-src="{{ club.logo }}" alt="" class="club-logo">
                                                     <span>{{ club.title }}</span>
                                                 </a>

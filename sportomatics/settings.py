@@ -50,6 +50,9 @@ INSTALLED_APPS = (
     'base',
     'bower',
     'hockeyapp',
+    'hockeyapp.tasks.counters',
+    'hockeyapp.tasks.periodic',
+    'hockeyapp.tasks.relatedplayer',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -175,16 +178,20 @@ CELERYBEAT_SCHEDULE = {
         #'schedule': local_celery_crontab(hour=0, minute=0),
     #},
     'hockeyapp-periodic-player-generate-timeline': {
-        'task': 'hockeyapp.tasks.periodic_player_generate_timeline',
+        'task': 'hockeyapp.tasks.periodic.player_generate_timeline',
         'schedule': local_celery_crontab(hour=3, minute=0),
     },
     'hockeyapp-periodic-player-recalc-counters': {
-        'task': 'hockeyapp.tasks.periodic_player_recalc_counters',
+        'task': 'hockeyapp.tasks.periodic.player_recalc_counters',
         'schedule': local_celery_crontab(hour=5, minute=0),
     },
     'hockeyapp-periodic-player-recalc-counters_index': {
-        'task': 'hockeyapp.tasks.periodic_player_recalc_counters_index',
+        'task': 'hockeyapp.tasks.periodic.player_recalc_counters_index',
         'schedule': local_celery_crontab(hour=7, minute=0),
+    },
+    'hockeyapp-periodic-relatedplayer-calc-player': {
+        'task': 'hockeyapp.tasks.periodic.relatedplayer_calc_player',
+        'schedule': local_celery_crontab(hour=9, minute=0),
     },
 }
 CELERY_IGNORE_RESULT = True

@@ -2,7 +2,6 @@
 from __future__ import unicode_literals, print_function
 
 import datetime
-import itertools
 import re
 import sys
 import time
@@ -19,10 +18,10 @@ from instagram.client import InstagramAPI
 from base.models import InstagramImageFile
 from base.utils import str2int_safe
 
-from . import parsers
-from . import models
-from . import utils
-from . import timeline_tasks
+from .. import parsers
+from .. import models
+from .. import utils
+from .. import timeline_tasks
 
 
 @app.task(ignore_result=True, track_started=True)
@@ -205,74 +204,6 @@ def async_db_match_update(match_id):
         logger.error(exc, exc_info=sys.exc_info())
 
 
-@app.task(ignore_result=True, track_started=True)
-def player_recalc_counters(pks, fields, update_last_match_date=False):
-    b'''
-        Пересчет полей игрока на основе данных по матчам
-        seasons_total
-        matches_total
-        goals_total
-        assists_total
-        points_total
-        plus_minus_total
-        goals_average
-        assists_average
-        points_average
-        plus_minus_average
-        ...
-    '''
-    try:
-        models.Player.objects.filter(pk__in=pks).recalc_counters(
-            fields, update_last_match_date=update_last_match_date)
-    except Exception, exc:
-        logger.error(exc, exc_info=sys.exc_info())
-
-
-@app.task(ignore_result=True, track_started=True)
-def player_recalc_counters_index(field):
-    b'''
-        Пересчет позиции игрока в сортировке
-    '''
-    try:
-        models.Player.objects.recalc_counters_index(field)
-    except Exception, exc:
-        logger.error(exc, exc_info=sys.exc_info())
-
-
-COUNTERS_FIELDS = (
-    'seasons_total', 'matches_total', 'bullet_matches_total',
-    'shots_received_total', 'saves_total', 'loose_goals_total',
-    'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-    'matches_win_total', 'matches_lose_total', 'gamingtime_total',
-) + tuple(itertools.chain(*map(
-    lambda x: ('%s_total' % x, '%s_average' % x),
-    ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-
-
-@app.task(ignore_result=True, track_started=True)
-def periodic_player_recalc_counters():
-    '''
-    Update all fields for each group of players,
-    update last_match_date
-    '''
-    qs = models.Player.objects.all()
-    count = qs.count()
-    limit = 100
-    for i in range(0, count, limit):
-        pks = qs[i:i + limit].values_list('pk', flat=True)
-        player_recalc_counters.delay(
-            pks, COUNTERS_FIELDS, update_last_match_date=True)
-
-
-@app.task(ignore_result=True, track_started=True)
-def periodic_player_recalc_counters_index():
-    '''
-    Update index for each field
-    '''
-    for field in COUNTERS_FIELDS:
-        player_recalc_counters_index.delay(field)
-
-
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
@@ -316,10 +247,3 @@ def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
         locations = utils.get_arena_instagram_locations(arena.coords)
         for loc_id in locations:
                 get_instagram_pictures.delay(loc_id, arena, min_t, max_t)
-
-
-@app.task(ignore_result=True, track_started=True)
-def periodic_player_generate_timeline():
-    pks = models.Player.objects.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        timeline_tasks.PlayerTimelineGenerator().delay(pks[i:i + 1000])
