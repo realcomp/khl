@@ -74,10 +74,12 @@ urlpatterns = [
         name='metrics-compare-graph'),
     # players
     url(r'^players/', include('hockeyapp.urls.players', namespace='players')),
+    url(r'^v1/players/', include('hockeyapp.urls.v1.players', namespace='players_v1')),
     url(r'^players2/$', views_players.PlayersSearch2.as_view(),
         name='players-search2'),
     # clubs
     url(r'^clubs/', include('hockeyapp.urls.clubs', namespace='clubs')),
+    url(r'^v1/clubs/', include('hockeyapp.urls.v1.clubs', namespace='clubs_v1')),
 
     # admin
     url(r'^sporto-admin/club-insta-photo/$',

@@ -1,0 +1,108 @@
+{% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: фотографии, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="overlay-black" style="visibility: hidden"></div>
+    <div class="container player-card-short-page">
+        <!-- {% trans "Photos" %} -->
+        {% include "hockeyapp/players/player-header.html" with player_section="Photos" %}
+
+        <div class="page-content page-container">
+            {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-photos" %}
+            <div class="page-inner-container" ng-controller="PhotosController">
+                {% verbatim %} <!-- Popup -->
+                <div id="#switcher" class=" player-partners-popup photo-popup no-transition">
+                    <a href="#" id="close-popup-btn" class="close-popup-btn">×</a>
+                    <div>
+                        <div style="display: inline-block; width: 645px">
+                            <div class="rightleft" ng-show="currentIndex !== 0">
+                                <i class="fa fa-angle-left photo-prev" ng-click="prevPhoto()"></i>
+                            </div>
+                            <img alt="" class="item-photo popup-photo float-left" ng-src="{{ PhotoPopup.data.photo.img.file }}">
+                            <div class="rightleft" ng-show="currentIndex !== photos.length - 1 ">
+                                <i class="fa fa-angle-right photo-next" ng-click="nextPhoto()"></i>
+                            </div>
+                        </div>
+                        <div style="display:inline-block;margin-left: 20px; vertical-align: top; background: #ffffff !important; width: inherit">
+                            <div class="m-t-20 m-r-30">
+                                <div class="inline-block vertical-top m-r-5">
+                                    <div>
+                                        <img class="instagram-profile-picture" src="{{PhotoPopup.instagramUser.profile_picture}}" alt="" class="item-photo" width="150" height="150">
+                                    </div>
+                                    <div class="instagram-user-name">
+                                        <a href="https://instagram.com/{{PhotoPopup.instagramUser.username}}" target="_blank">{{PhotoPopup.instagramUser.username}}</a>
+                                    </div>
+                                </div>
+                                <div class="inline-block ">
+                                    <div class="instagram-comment">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="m-t-20">
+                                <strong class="font-16">{{PhotoPopup.arena.ru_title}}</strong>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+                {% endverbatim %}
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">Фотографии</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="position:relative;text-align: center; top: 50px; right: 34px" ng-show="photoDataLoader">
+                        <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                    </div>
+                    {% verbatim %}
+
+                    <div class="row" id="photos-new" data-tab="photos-new" >
+                        <div class="sixteen wide column">
+                            <div ng-show="!photos.length && !photoDataLoader" class="text-center">
+                                Нет фотографий
+                            </div>
+                            <div class="" style="min-height: 200px !important;">
+                                <div ng-hide="photoDataLoader" ng-repeat="item in photos track by $index" class="item instaphoto-container">
+                                    <div class="instaphoto-wrapper">
+                                        <div class="item-data text-center instaphoto-header">
+                                            <time id="instaphoto-header-time_photo_{{$index}}" class="instaphoto-header-time">{{item.created}}</time>
+                                        </div>
+                                        <img id="photo_{{$index}}" src="{{item.photo.img.file}}" alt="" class="item-photo pointer photo-square" ng-click="PhotoPopupShow(item.id, $index, $event)">
+                                        <div class="item-info text-center instaphoto-footer">
+                                            <div id="instaphoto-footer-stats_photo_{{$index}}" class="instaphoto-footer-stats">
+                                                <a class="item-views no-decoration"><i class="unhide icon"></i>1206</a>
+                                                <a class="item-comments no-decoration"><i class="like icon"></i>10</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<a href="#" class="item-photo-author">
+                                        <span class="item-author-avatar"><img src="/static/images/player1.png" alt="" class="item-author-image"></span>
+                                        <span class="item-author-name">Иванов Александр</span>
+                                    </a>-->
+                                </div>
+                            </div>
+                            <hr class="hr">
+                            <div class="align-center">
+                                <a class="ui small green button" ng-show="photos.length && next_page">ПОКАЗАТЬ ЕЩЕ</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endverbatim %}
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

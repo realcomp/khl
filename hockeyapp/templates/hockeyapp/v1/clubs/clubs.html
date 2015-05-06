@@ -1,0 +1,176 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+Все клубы, хоккей - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page">
+    <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+                    <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section" href="/">ХОККЕЙ</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:clubs:list' %}">Все клубы</a>
+            </div>
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="page-content page-container"
+             ng-controller="ClubListController as ClubListCtrl">
+            <div class="page-inner-container">
+                <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}">
+                <div class="clubs-tabs">
+                    <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:country-league-list-api' %}"></a>
+                    <div class="ui grid">
+                        <div class="row">
+                            <div class="column">
+                                <div class="ui tabular menu content-tabs">
+                                    <h4 class="ui header heading">Все клубы</h4>
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season" value="{{ current_season.pk|default:seasons.0.pk }}"
+                                               ng-model="season" ng-update-hidden
+                                               ng-init="season = $location.search().season || {{ current_season.pk|default:seasons.0.pk }}"
+                                               ng-change="setSeason(season)">
+                                        <div class="default text">{{ current_season.label|default:seasons.0.label }}</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            {% for season in seasons %}
+                                                <div class="item" data-value="{{ season.pk }}">
+                                                    {{ season.label }}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                                        <li class="ui-state-default ui-corner-top"
+                                            ng-class="{ 'ui-tabs-active ui-state-active':isLeagueActive(null) }">
+                                            <a class="item tab-btn ui-tabs-anchor" href=""
+                                               ng-click="setLeague(null)">
+                                                {% trans 'ALL' %}
+                                            </a>
+                                        </li>
+                                        {% verbatim %}
+                                            <li class="ui-state-default ui-corner-top"
+                                                ng-class="{ 'ui-tabs-active ui-state-active':isLeagueActive(league.pk) }"
+                                                ng-repeat="league in leagues">
+                                                <a class="item tab-btn ui-tabs-anchor" href=""
+                                                   ng-click="setLeague(league.pk)">
+                                                    {{ league.title }}
+                                                </a>
+                                            </li>
+                                        {% endverbatim %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="four wide column">
+                                {% verbatim %}
+                                    <ul class="options-list clubs-countries-menu-list">
+                                        <li class="option-item" ng-repeat="country in countries">
+                                            <a class="option-link"
+                                               ng-class="{ 'option-link_active':isCountryActive(country.pk) }"
+                                               ng-click="setCountry(country.pk)">
+                                                {{ country.title }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <a href="#" class="show-clubs-countries-menu-btn">полный список <i class="triangle down icon"></i></a>
+                                {% endverbatim %}
+                            </div>
+                            <div class="twelve wide column">
+                                <table class="ui celled table segment clubs-table">
+                                    <thead>
+                                        <tr>
+                                            <th width="220" ng-class="{ 'column-sort':!params.order_by }">
+                                                <a href="" ng-click="setOrderBy(null)">Название</a>
+                                            </th>
+                                            <th width="130" ng-class="{ 'column-sort':params.order_by === 'address__%s_title' }">
+                                                <a href="" ng-click="setOrderBy('address__%s_title')">Город</a>
+                                            </th>
+                                            <th width="80" ng-class="{ 'column-sort':params.order_by === '%s_title' }"> {# not implemented #}
+                                                <a href="" ng-click="setOrderBy('%s_title')">Место в чемпионате</a>
+                                            </th>
+                                            <th width="165" ng-class="{ 'column-sort':params.order_by === 'arena__%s_title' }">
+                                                <a href="" ng-click="setOrderBy('arena__%s_title')">Домашняя площадка</a>
+                                            </th>
+                                            <th ng-class="{ 'column-sort':params.order_by === 'coach__%s_fio' }">
+                                                <a href="" ng-click="setOrderBy('coach__%s_fio')">Главный тренер</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% verbatim %}
+                                        <tr ng-repeat="club in data.results">
+                                            <td>
+                                                <a class="clubs-link" href="{{ club.url }}?season={{ params.season }}">
+                                                    <img ng-src="{{ club.logo }}" alt="" class="club-logo">
+                                                    <span>{{ club.title }}</span>
+                                                </a>
+                                            </td>
+                                            <td>{{ club.address.title }}</td>
+                                            <td align="center">5</td>
+                                            <td><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
+                                            <td><a href="#">{{ club.coach.fio }}</a></td>
+                                        </tr>
+                                        {% endverbatim %}
+                                    </tbody>
+                                </table>
+                                <div style="text-align: center">
+                                    <img src="{{ STATIC_URL }}images/loader-large.gif"
+                                         ng-hide="loaded">
+                                    <a class="option-btn" href=""
+                                       ng-click="next()"
+                                       ng-show="loaded && data.next">
+                                        показать еще 50</a>
+                                    {% verbatim %}
+                                    <a class="option-btn" href=""
+                                       ng-click="next(true)"
+                                       ng-show="loaded && data.next">
+                                        показать все {{ data.count }}</a>
+                                    {% endverbatim %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </form>
+                <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu">
+                                <span class="heading">Карта клубов</span>
+                            </div>
+                        </div>
+                </div>
+                <div id="clubs-map-container">
+                    <div ng-show="ClubListCtrl.map" id="clubs-map">
+                    </div>
+                </div>
+
+                <hr class="hr">
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

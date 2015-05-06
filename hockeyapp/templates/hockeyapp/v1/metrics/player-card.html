@@ -1,0 +1,298 @@
+{% extends "hockeyapp/metrics/base.html" %}
+{% load i18n %}
+
+{% block body %}
+<section class="content">
+    <div class="container player-card-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:metrics-players' %}">Метрики</a>
+                <div class="divider"> / </div>
+                <div class="active section">Ковальчук Илья</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content page-container">
+            <div class="page-inner-container">
+                <div class="ui tabular menu content-tabs">
+                        <span class="heading">Карточка игрока</span>
+                    </div>
+                <div class="ui divided grid">
+                    <div class="row player-card-top">
+                        <div class="six wide column">
+                            <div class="player-card-block">
+                                <img src="{{ photo }}" width="222" alt="" class="player-card-avatar">
+                                <div class="player-card-desc">
+                                    <div class="player-card-name">{{ fio }}</div>
+                                    <div class="player-card-club">{{ club.title }}</div>
+                                    <ul class="player-card-list">
+                                        <li class="player-card-item">{% trans 'Line' %}: {{ line }}</li>
+                                        <li class="player-card-item">{% trans 'Height' %}: {{ height }} см.</li>
+                                        <li class="player-card-item">{% trans 'Weight' %}: {{ weight }} кг.</li>
+                                        <li class="player-card-item">{% trans 'Grip' %}: {{ grip }}</li>
+                                        <li class="player-card-item">{% trans 'Birth date' %}: {{ birth_date }}</li>
+                                        <li class="player-card-item">{% trans 'Age' %}: {{ age.0 }} {% trans 'years' %} {{ age.1 }} {% trans 'months' %}</li>
+                                        <li class="player-card-item">{% trans 'Citizenship' %}: {{ citizenship.title|default:"" }}</li>
+                                    </ul>
+                                    <ul class="player-card-list player-card-list-more">
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                        <li class="player-card-item">Инфо: доп. информация</li>
+                                    </ul>
+                                    <a href="#" class="player-card-more-btn">подробнее<i class="triangle down icon"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="six wide column">
+                            <div class="to-favorites">+ в избранных</div>
+                            <div class="sub-heading"><i class="pencil icon"></i>Примечания</div>
+                            <div class="player-comment-block">
+                                <textarea name="comment" id="" rows="12" class="player-comment" placeholder="Запишите любые комментарии (индивидуальные особенности, контакты агента, номер телефона и т.п.). Данные видны только Вам."></textarea>
+                            </div>
+                            <a class="small ui blue button save-btn">СОХРАНИТЬ</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-achievement-slider">
+                    <div class="slides_container">
+                        <div>
+                            <div class="player-achievement">
+                                <span class="achievement-icon">5</span>
+                                <span class="achievement-title">Клубы<br>по сезонам</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Локомотив</a> (13-14)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Адмирал</a> (12-13)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Динамо</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                                <div class="achievement-hidden-block">
+                                    <span class="achievement-item">КХЛ: <a href="#">Локомотив</a> (13-14)</span>
+                                    <span class="achievement-item">КХЛ: <a href="#">Адмирал</a> (12-13)</span>
+                                    <span class="achievement-item">КХЛ: <a href="#">Динамо</a> (09-10)</span>
+                                </div>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-2">
+                                <span class="achievement-icon">7</span>
+                                <span class="achievement-title">Тренеры<br>по времени работы</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-3">
+                                <span class="achievement-icon">42</span>
+                                <span class="achievement-title">Партнеры<br>по командам</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-4">
+                                <span class="achievement-icon">8</span>
+                                <span class="achievement-title">Награды<br>и достижения</span>
+                                <span class="achievement-item">Кубок НХЛ (2012г.)</span>
+                                <span class="achievement-item">Заслуж. мастер спорта (2011г.)</span>
+                                <span class="achievement-item">ЧМ Серебро (2010г.)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="player-achievement">
+                                <span class="achievement-icon">5</span>
+                                <span class="achievement-title">Клубы<br>по сезонам</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Локомотив</a> (13-14)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Адмирал</a> (12-13)</span>
+                                <span class="achievement-item">КХЛ: <a href="#">Динамо</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-2">
+                                <span class="achievement-icon">7</span>
+                                <span class="achievement-title">Тренеры<br>по времени работы</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-3">
+                                <span class="achievement-icon">42</span>
+                                <span class="achievement-title">Партнеры<br>по командам</span>
+                                <span class="achievement-item"><a href="#">Светлов А.С </a>(13-14)</span>
+                                <span class="achievement-item"><a href="#">Романцев О.П.</a> (12-13)</span>
+                                <span class="achievement-item"><a href="#">Александров П.И.</a> (09-10)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                            <div class="player-achievement player-achievement_mod-4">
+                                <span class="achievement-icon">8</span>
+                                <span class="achievement-title">Награды<br>и достижения</span>
+                                <span class="achievement-item">Кубок НХЛ (2012г.)</span>
+                                <span class="achievement-item">Заслуж. мастер спорта (2011г.)</span>
+                                <span class="achievement-item">ЧМ Серебро (2010г.)</span>
+                                <a href="#" class="achievement-link">показать все<i class="triangle down icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="prev"><i class="chevron circle left icon"></i></a>
+                    <a href="#" class="next"><i class="chevron circle right icon"></i></a>
+                </div>
+                <div class="diff-block">
+                    <div class="ui divided grid">
+                        <div class="one column row">
+                            <div class="diff-title">Настройки для сравнения</div>
+                        </div>
+                        <div class="four column row diff-options">
+                            <div class="column">
+                                <div class="sub-title">Выбрать период</div> 
+                                <p class="slider-desc">
+                                    <label class="slider-label" for="players-diff-first-year-amount">с </label>
+                                    <input type="text" class="slider-input players-diff-first-year-amount" id="players-diff-first-year-amount" readonly="">
+                                    <label class="slider-label" for="players-diff-second-year-amount">до </label>
+                                    <input type="text" class="slider-input players-diff-second-year-amount" id="players-diff-second-year-amount" readonly="">
+                                </p>
+                                <div class="players-diff-slider">
+                                    <div class="players-diff-year-slider ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><div class="ui-slider-range ui-widget-header ui-corner-all" style="left: 66.6666666666667%; width: 33.3333333333333%;"></div><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 66.6666666666667%;"></span><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0" style="left: 100%;"></span></div>
+                                </div>
+                                <p class="slider-limits players-diff-slider-limits">
+                                    <span class="slider-limits-max">2014</span>
+                                    <span class="slider-limits-min">1975</span>
+                                </p>
+                            </div>
+                            <div class="column">
+                                <div class="sub-title">Только в клубах</div> 
+                                <select name="players-diff-clubs" id="players-diff-clubs" class="select players-diff-select" multiple="multiple" size="4">
+                                    <option value="">Локомотив (Москва)</option>
+                                    <option value="">Атлант (Мытищи)</option>
+                                    <option value="">Динамо (Москва)</option>
+                                    <option value="">НьюТрейд (Сан-Льюс)</option>
+                                    <option value="">Локомотив (Москва)</option>
+                                    <option value="">Атлант (Мытищи)</option>
+                                    <option value="">Динамо (Москва)</option>
+                                    <option value="">НьюТрейд (Сан-Льюс)</option>
+                                </select>
+                            </div>
+                            <div class="column">
+                                <div class="sub-title">Отображение</div>
+                                <div class="graph-type-block">
+                                    <div class="grouped inline fields">
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="graph_type" checked="checked">
+                                                <label>Линейные графики</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="graph_type">
+                                                <label>Лепестковые диаграммы</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="graph_type">
+                                                <label>Таблицы</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <a href="{% url 'hockeyapp:metrics-compare' %}" class="graph-builder-btn">построитель графиков<i class="right arrow icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui grid">
+                    <div class="one column row">
+                        <div class="column">
+                            <div class="graph-controls-block">
+                                <ul class="graph-controls-list">
+                                    <li class="graph-control-item">Показать:</li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Ш</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link graph-control-link_active">А</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">О</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">+/-</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Штр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШР</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШБ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШМ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШО</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ШП</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">РБ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">БВ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">%БВ</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">БВ/И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">Вбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ВВбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">%Вбр</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">ВП/И</a>
+                                    </li>
+                                    <li class="graph-control-item">
+                                        <a href="#" class="graph-control-link">См/И</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="one column row">
+                        <div class="column">
+                            <img src="{{ STATIC_URL }}images/player-card-graph.png" width="944" alt="">
+                        </div>
+                    </div>
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

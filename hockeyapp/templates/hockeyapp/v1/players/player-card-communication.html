@@ -1,0 +1,93 @@
+{% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: общение, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container player-card-short-page">
+        <!-- {% trans "Communication" %} -->
+        {% include "hockeyapp/players/player-header.html" with player_section="Communication" %}
+
+        <div class="page-content page-container">
+            {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-communication" %}
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eight wide column">
+                            <div class="heading heading_communication">Общение</div>
+                            <form action="#" class="ask-question-form">
+                                <div class="ask-question-block">
+                                    <textarea name="question" id="question" class="ask-question-field" placeholder="Задай свой вопрос Сергею!"></textarea>
+                                </div>
+                                <button class="ui blue small button ask-question-btn">Отправить</button>
+                            </form>
+                            <div class="heading heading_communication">Ответы на вопросы</div>
+                            <ul class="answers-list">
+                                <li class="answer-item">
+                                    <span class="user-avatar">
+                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="user-avatar-image">
+                                    </span>
+                                    <a href="#" class="user-name">Иванова Екатерина</a>
+                                    <span class="question-date">12 августа 2014</span>
+                                    <div class="question-text">Как звали твою первую девушку? И помнишь ли ты ее?</div>
+                                    <div class="answer-block">
+                                        <span class="player-avatar">
+                                            <img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-avatar-image">
+                                        </span>
+                                        <span class="answer-container">
+                                            <span class="answer-text">Ее звали Катя, и я ее совсем не помню.</span>
+                                        </span>
+                                    </div>
+                                </li>
+                                <li class="answer-item">
+                                    <span class="user-avatar">
+                                        <img src="{{ STATIC_URL }}images/player1.png" alt="" class="user-avatar-image">
+                                    </span>
+                                    <a href="#" class="user-name">Иванова Екатерина</a>
+                                    <span class="question-date">12 августа 2014</span>
+                                    <div class="question-text">Как звали твою первую девушку? И помнишь ли ты ее?</div>
+                                    <div class="answer-block">
+                                        <span class="player-avatar">
+                                            <img src="{{ STATIC_URL }}images/player1.png" alt="" class="player-avatar-image">
+                                        </span>
+                                        <span class="answer-container">
+                                            <span class="answer-text">Ее звали Катя, и я ее совсем не помню.</span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="eight wide column">
+                            <div class="heading heading_news">Новости и интервью</div>
+                            <ul class="player-event-list">
+                                <li class="player-event-item">
+                                    <img src="http://lorempixel.com/200/160/sports/" alt="" class="player-event-image">
+                                    <div class="player-event-date">12 ноября 2014</div>
+                                    <div class="player-event-title">Первый год нового времени</div>
+                                    <div class="player-event-text">УКРК "Арена 2000" (Универсальный культурно-развлекательный комплекс "Арена 2000. Локомотив")...</div>
+                                </li>
+                                <li class="player-event-item">
+                                    <img src="http://lorempixel.com/200/160/sports/" alt="" class="player-event-image">
+                                    <div class="player-event-date">12 ноября 2014</div>
+                                    <div class="player-event-title">Первый год нового времени</div>
+                                    <div class="player-event-text">УКРК "Арена 2000" (Универсальный культурно-развлекательный комплекс "Арена 2000. Локомотив")...</div>
+                                </li>
+                                <li class="player-event-item">
+                                    <img src="http://lorempixel.com/200/160/sports/" alt="" class="player-event-image">
+                                    <div class="player-event-date">12 ноября 2014</div>
+                                    <div class="player-event-title">Первый год нового времени</div>
+                                    <div class="player-event-text">УКРК "Арена 2000" (Универсальный культурно-развлекательный комплекс "Арена 2000. Локомотив")...</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% load i18n %}
+<div class="player-partners-popup popup"
+     onclick="$(this).hide(300)">
+    <a href="{% url 'hockeyapp:player-card-api' 0 %}" class="hidden" id="PlayerCardLink">×</a>
+    <a href="#" class="close-popup-btn">×</a>
+    <div class="player-bio" ng-show="PlayerPartnersPopup">
+        {% verbatim %}
+            <img alt="" class="player-photo"
+                 ng-src="{{ PlayerPartnersPopup.data.photo || '/static/images/nophoto.gif' }}">
+        {% endverbatim %}
+        <div class="player-info">
+            {% verbatim %}
+                <div class="player-name">{{ PlayerPartnersPopup.data.photo.fio }}</div>
+            {% endverbatim %}
+            <div class="player-amplua">{% trans 'Line' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.line_display }}
+                {% endverbatim %}
+            </div>
+        </div>
+    </div>
+    <div class="player-clubs"
+         ng-show="PlayerPartnersPopup.data.clubplayers.length && PlayerPartnersPopup.isClubsVisible">
+        <div class="player-club"
+             ng-repeat="clubplayer in PlayerPartnersPopup.data.clubplayers">
+            {% verbatim %}
+                <span class="player-club-now"
+                      ng-show="$index === 0">Сейчас</span>
+                <a href="{{ clubplayer.club_url }}" class="player-club-link">
+                    {{ clubplayer.club.title_verbose }}
+                </a>
+            {% endverbatim %}
+        </div>
+    </div>
+    <div class="player-details" ng-show="PlayerPartnersPopup.data">
+        <div class="player-details_left">
+            <div class="player-detail">{% trans 'Height' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.height }} см.
+                {% endverbatim %}
+            </div>
+            <div class="player-detail">{% trans 'Weight' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.weight }} кг.
+                {% endverbatim %}
+            </div>
+            <div class="player-detail">{% trans 'Grip' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.grip }}
+                {% endverbatim %}
+            </div>
+        </div>
+        <div class="player-details_right">
+            <div class="player-detail">{% trans 'Birth date' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.birth_date_short }}
+                {% endverbatim %}
+            </div>
+            <div class="player-detail">{% trans 'Age' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.age[0] }}
+                {% endverbatim %}
+                года
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.age[1] }}
+                {% endverbatim %}
+                месяцев
+            </div>
+            <div class="player-detail">{% trans 'Citizenship' %}:
+                {% verbatim %}
+                    {{ PlayerPartnersPopup.data.citizenship.title }}
+                {% endverbatim %}
+            </div>
+        </div>
+    </div>
+    <div class="player-indexes" ng-show="PlayerPartnersPopup.data">
+        <div class="player-detail">SM-index: 2323</div>
+        <div class="player-detail">Corsi: 9483</div>
+    </div>
+    <div class="align-center" ng-show="PlayerPartnersPopup.data">
+        {% verbatim %}
+            <a href="{{ PlayerPartnersPopup.data.url }}" class="player-card-btn">
+                открыть карточку игрока
+            </a>
+        {% endverbatim %}
+    </div>
+    <div style="text-align: center" ng-hide="PlayerPartnersPopup.data">
+        <img src="{{ STATIC_URL }}images/loader-large.gif">
+    </div>
+</div>
