@@ -4,7 +4,7 @@
 
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-coaches' %}
 <!--tabs content items-->
-<div class="b-tabs-content ui ">
+<div class="b-tabs-content ui " ng-controller="ClubCoachesController">
     <div class="b-header b-header__md">
         <h2 class="b-header__text">
             Тренеры
@@ -264,10 +264,54 @@
         </div><!--row-->
     </div><!--w-gallery-preview-->
 
+    {% verbatim %}
+    <div class="w-gallery-preview" ng-repeat="season in seasonsData track by $index">
+        <div class="b-header b-header__sm">
+            <h3 class="b-header__text">
+                {{season.title}}
+            </h3>
+        </div><!--b-header b-header__sm-->
 
-    <div class="w-btn">
-        <a href="#" class="ui green tiny button">Предыдущий сезон</a>
+
+        <div class="row w-gallery-preview__items w-gallery-preview__items__8">
+             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="coach in season.coaches">
+                <div class="ui card">
+                    <div class="w-gallery-preview__item__img img-wrap">
+                        <figure class="figure-styled">
+                            <a href="#" class="ui image">
+                                <img class="ui image" src="/static/new/images/a-hockey/ava-13.jpg" data-src="/static/new/images/a-hockey/ava-13.jpg">
+                            </a>
+                        </figure>
+                    </div>
+
+                    <div class="w-gallery-preview__item__info">
+                        <p class="name">
+                            <a href="#">{{coach.fio}}</a>
+                        </p>
+                        <p class="">
+                            {{coach.role}}
+                        </p>
+                    </div>
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-seasons-play">
+                            {{season.title}}
+                        </p>
+                    </div>
+                </div>
+             </div><!--w-gallery-preview__item-->
+        </div><!--row-->
+    </div><!--w-gallery-preview-->
+
+    <div class="ui large centered inline text loader" style="background: none !important">
+        Загрузка...
     </div>
+
+    {% endverbatim %}
+
+    <!--<div class="w-btn">
+        <a href="#" class="ui green tiny button">Предыдущий сезон</a>
+    </div>-->
 </div>
 <!--tabs content items-->
 {% endblock %}
