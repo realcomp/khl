@@ -17,10 +17,10 @@
         <link rel="stylesheet" href="{{STATIC_PREFIX}}css/dropzone.css">
         <link rel="stylesheet" href="{% static 'css/icon.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
-        <!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <link rel="stylesheet" href="{% static 'css/button.css' %}">
         <link rel="stylesheet" href="{% static 'css/flag.css' %}">
-        <!--<link rel="stylesheet" href="{% static 'css/styleTwo.css' %}">-->
+        <link rel="stylesheet" href="{% static 'css/styleTwo.css' %}">
         <link rel="stylesheet" href="{% static 'font-awesome-4.3.0/css/font-awesome.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/ng-tags-input.css' %}">
         <link rel="stylesheet" href="{% static 'css/isteven-multi-select.css' %}">
@@ -28,7 +28,7 @@
         <link rel="stylesheet" href="{% static 'leaflet-0.7.3/leaflet.css' %}">
         <link rel="stylesheet" href="{% static 'semantic-ui/dist/components/flag.min.css' %}">
         <link rel="stylesheet" href="{% static 'leaflet.markercluster/dist/MarkerCluster.css' %}" />
-	    <link rel="stylesheet" href="{% static 'leaflet.markercluster/dist/MarkerCluster.Default.css' %}" />
+        <link rel="stylesheet" href="{% static 'leaflet.markercluster/dist/MarkerCluster.Default.css' %}" />
         <link rel="stylesheet" href="{% static 'Leaflet.label/dist/leaflet.label.css' %}"/>
         <link rel="stylesheet" href="{% static 'semantic-ui-icon/icon.min.css' %}">
         <!--[if lt IE 9]>
@@ -64,13 +64,9 @@
         {% endblock %}
     </head>
     <body ng-app="{% block ngapp %}Sportomatics{% endblock %}">
-        {% block header %}
-            {% include "partial/header.html" %}
-        {% endblock %}
-
         {% block body %}
         {% endblock %}
-
+        </div>
         {% include "partial/footer.html" %}
 
         <script src="{% static 'build/app.js' %}"></script>

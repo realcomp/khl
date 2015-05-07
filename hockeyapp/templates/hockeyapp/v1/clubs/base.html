@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base2.html" %}
 
 {% block extrahead %}
     {{ block.super }}
@@ -40,7 +40,3 @@
     {% endif %}
 {% endblock %}
 
-
-{% block header %}
-    {% include "partial/header.html" with user_card_menu_active="clubs" %}
-{% endblock %}

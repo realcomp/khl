@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block extrahead %}
@@ -48,10 +48,10 @@
 <section class="content">
     <div class="container clubs-page clubs-team-page">
         <!-- {% trans "Team" %} -->
-        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Team" %}
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="Team" %}
 
         <div class="page-content page-container">
-            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club" %}
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club" %}
             <div class="page-inner-container">
                 <div class="clubs-team-tabs"
                      ng-controller="ClubTeamController as ClubTeamCtrl">
