@@ -35,25 +35,25 @@
                     <table class="ui unstackable very basic table w-labeled-list">
                         {% if address %}
                             <tr>
-                                <td><span class="b-labeled">{% trans "Address" %}: {{ address.title }}</span></td>
+                                <td><span class="b-labeled">{% trans "Address" %}: </span><span class="font-weight-400">{{ address.title }}</span></td>
                                 <td></td>
                             </tr>
                         {% endif %}
                         {% if phone %}
                             <tr>
-                                <td><span class="b-labeled">{% trans "Phone" %}: {{ phone }}</span></td>
+                                <td><span class="b-labeled">{% trans "Phone" %}: </span><span class="font-weight-400">{{ phone }}</span></td>
                                 <td></td>
                             </tr>
                         {% endif %}
                         {% if email %}
                             <tr>
-                                <td><span class="b-labeled">E-mail: {{ email }}</span></td>
+                                <td><span class="b-labeled">E-mail: </span><span class="font-weight-400">{{ email }}</span></td>
                                 <td></td>
                            </tr>
                         {% endif %}
                         {% if contacts %}
                             <tr>
-                                <td><span class="b-labeled">{% trans "Contact person" %}: {{ contacts }}</span></td>
+                                <td><span class="b-labeled">{% trans "Contact person" %}: </span><span class="font-weight-400">{{ contacts }}</span></td>
                                 <td></td>
                             </tr>
                         {% endif %}
