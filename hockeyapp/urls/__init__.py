@@ -50,6 +50,8 @@ urlpatterns = [
         name='club-team-compare-api'),
     url(r'^api/clubs/(?P<pk>\d+)/calendar/$', api.ClubCalendar.as_view(),
         name='club-calendar-api'),
+    url(r'^api/clubs/(?P<club_id>\d+)/best/$',
+        api.clubs.BestPlayers.as_view(), name='club-best-players-api'),
     url(r'^api/metrics/$', api.MetricsPlayers.as_view(),
         name='metrics-list-api'),
     url(r'^api/news/$', api.NewsList.as_view(), name='news-list-api'),

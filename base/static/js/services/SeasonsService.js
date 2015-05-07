@@ -6,16 +6,23 @@ angular.module('Sportomatics').service('SeasonsService', function() {
       return isFirst;
     }
   };
-  this.getSeason = function(season) {
+  this.getDefaultSeason = function() {
     var e, es;
-    if (season) {
-      e = $('.menu.seasons .item[data-value="' + season + '"]');
-    } else {
-      es = $('.menu.seasons .item');
-      if (es) {
-        e = $(es[0]);
+    es = $('.menu.seasons .item');
+    if (es) {
+      e = $(es[0]);
+      if (e) {
+        return e.attr('data-value');
       }
     }
+  };
+  this.getSeasonTitle = function(season) {
+    var e, pk;
+    pk = season;
+    if (!pk) {
+      pk = this.getDefaultSeason();
+    }
+    e = $('.menu.seasons .item[data-value="' + pk + '"]');
     if (e) {
       return e.text().trim();
     }

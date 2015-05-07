@@ -5,7 +5,7 @@
     <input type="hidden" ng-update-hidden
            ng-model="season" ng-init="season = params.season"
            ng-change="setSeason(season)">
-    <div class="text">{% trans "Season" %} {% lcb %} SeasonsService.getSeason(season) {% rcb %}</div>
+    <div class="text">{% trans "Season" %} {% lcb %} SeasonsService.getSeasonTitle(season) {% rcb %}</div>
     <i class="dropdown icon"></i>
     <div class="menu transition hidden seasons" tabindex="-1">
         {% for season in seasons %}

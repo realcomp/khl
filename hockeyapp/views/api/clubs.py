@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+from rest_framework import generics
+
 from . import NumbersList
-from ...serializers.clubs import NumbersSerializer
+from ...models import ClubPlayer
+from ...serializers.clubs import NumbersSerializer, BestPlayersSerilizer
 
 
 class PlayerNumbers(NumbersList):
@@ -36,3 +40,17 @@ class PlayerNumbers(NumbersList):
                 players_by_number[number]['players'].append(player)
 
         return sorted(players_by_number.values(), key=lambda x: x['number'])
+
+
+class BestPlayers(generics.ListAPIView):
+    '''
+    Best players of the club
+    '''
+    queryset = ClubPlayer.objects.all()
+    serializer_class = BestPlayersSerilizer
+
+    def filter_queryset(self, qs):
+        qs = super(BestPlayers, self).filter_queryset(qs)
+        qs = qs.filter(club=self.kwargs['club_id'])
+
+        return qs

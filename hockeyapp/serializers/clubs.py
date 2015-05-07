@@ -367,3 +367,9 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
             'coach', 'league', 'site', 'email', 'phone', 'main_color',
             'opening_dt', 'contacts')
         model = Club
+
+
+class BestPlayersSerilizer(serializers.ModelSerializer):
+    class Meta(object):
+        fields = 'pk',
+        model = ClubPlayer

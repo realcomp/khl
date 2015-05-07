@@ -1877,16 +1877,23 @@ angular.module('Sportomatics').service('SeasonsService', function() {
       return isFirst;
     }
   };
-  this.getSeason = function(season) {
+  this.getDefaultSeason = function() {
     var e, es;
-    if (season) {
-      e = $('.menu.seasons .item[data-value="' + season + '"]');
-    } else {
-      es = $('.menu.seasons .item');
-      if (es) {
-        e = $(es[0]);
+    es = $('.menu.seasons .item');
+    if (es) {
+      e = $(es[0]);
+      if (e) {
+        return e.attr('data-value');
       }
     }
+  };
+  this.getSeasonTitle = function(season) {
+    var e, pk;
+    pk = season;
+    if (!pk) {
+      pk = this.getDefaultSeason();
+    }
+    e = $('.menu.seasons .item[data-value="' + pk + '"]');
     if (e) {
       return e.text().trim();
     }
@@ -2487,14 +2494,31 @@ angular.module('Sportomatics')
 }]);
 
 angular.module('Sportomatics').controller('ClubMainAboutController', [
-  '$scope', '$location', 'SeasonsService', function($scope, $location, SeasonsService) {
+  '$scope', '$location', '$http', 'SeasonsService', function($scope, $location, $http, SeasonsService) {
     $scope.$location = $location;
-    $scope.params = $location.search();
     $scope.SeasonsService = SeasonsService;
-    this.setSeason = function(season) {
+    $scope.params = $location.search();
+    $scope.bestPlayersURL = $('#bestPlayersURL').val();
+    $scope.setSeason = function(season) {
       $location.search('season', season);
       $scope.params = $location.search();
+      $scope.getBestPlayers();
     };
+    $scope.getBestPlayers = function() {
+      var params, season;
+      if ($scope.params.season) {
+        season = $scope.params.season;
+      } else {
+        season = SeasonsService.getDefaultSeason();
+      }
+      params = 'season=' + season;
+      $scope.loaded = false;
+      $http.get($scope.bestPlayersURL + '?' + params).success(function(data) {
+        $scope.data = data;
+        $scope.loaded = true;
+      });
+    };
+    $scope.getBestPlayers();
   }
 ]);
 
