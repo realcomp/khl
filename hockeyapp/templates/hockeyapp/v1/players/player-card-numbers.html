@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -9,11 +9,11 @@
 <section class="content">
     <div class="container player-card-short-page">
         <!-- {% trans "Player's numbers" %} -->
-        {% include "hockeyapp/players/player-header.html" with player_section="Favourite numbers" %}
+        {% include "hockeyapp/v1/players/player-header.html" with player_section="Favourite numbers" %}
 
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container">
-            {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-numbers" %}
+            {% include "hockeyapp/v1/players/menu.html" with players_menu_active="player-card-numbers" %}
             <div class="page-inner-container" ng-controller="NumbersController as NumbersCtrl"
                  ng-init="url = '{% url 'hockeyapp:player-numbers-api' %}'; player = {{ pk }}">
                 <a class="hidden" id="PlayerNumbersApi"

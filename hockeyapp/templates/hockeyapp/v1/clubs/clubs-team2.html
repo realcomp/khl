@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -16,26 +16,26 @@
                     <div class="clubs-team-tabs" style="padding-top: 20px;">
                         <input type="hidden" id="scope">
                         <div class="graph-controls-block">
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="И" field="count" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Ш" field="goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="О" field="points" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="+/-" field="plus_minus" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШР" field="es_goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШБ" field="pp_goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШМ" field="ev_goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШО" field="overtime_goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШП" field="win_goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="РБ" field="bullet_goals" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ" field="shots" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="%БВ" field="pis__avg" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Вбр" field="faceoff" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ВВбр" field="winfaceoff" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="См/И" field="change_count__avg" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Штр" field="penalty_time" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="И" field="count" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="Ш" field="goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="О" field="points" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="+/-" field="plus_minus" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШР" field="es_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШБ" field="pp_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШМ" field="ev_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШО" field="overtime_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШП" field="win_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="РБ" field="bullet_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="А" field="assists" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="БВ" field="shots" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="%БВ" field="pis__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="Вбр" field="faceoff" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ВВбр" field="winfaceoff" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="См/И" field="change_count__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="Штр" field="penalty_time" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg" %}
                                     <!--<li class="graph-control-item" style="margin-left: 100px">
                                         <a href="" class="graph-control-link" ng-click="setDataType('graph-radar')">Перейти к круговой диаграмме</a>
                                     </li>-->

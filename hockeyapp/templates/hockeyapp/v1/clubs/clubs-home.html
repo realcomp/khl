@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -10,11 +10,11 @@
     <div class="overlay-black" style="visibility: hidden"></div>
     <div class="container clubs-page clubs-home-page">
         <!-- {% trans "Home arena" %} -->
-        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Home arena" %}
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="Home arena" %}
         <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
 
         <div class="page-content page-container" ng-controller="ClubHomeController">
-            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-home" %}
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club-home" %}
             <div class="page-inner-container">
                 {% verbatim %} <!-- Popup -->
                 <div id="#switcher" class=" player-partners-popup photo-popup no-transition">

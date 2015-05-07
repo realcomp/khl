@@ -9,13 +9,13 @@
 <section class="content">
     <div class="container clubs-page clubs-calendar-page">
         <!-- {% trans "Calendar" %} -->
-        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Calendar" %}
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="Calendar" %}
         <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
 
         <div class="page-content page-container"
              ng-controller="ClubCalendarController as ClubCalendarCtrl"
              ng-init="url = '{% url 'hockeyapp:club-calendar-api' pk=pk %}'; urlPopup = '{% url 'hockeyapp:schedule-api' pk=0 %}'">
-            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-calendar" %}
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club-calendar" %}
             <div class="page-inner-container">
                 <div class="team-calendar">
                     <div class="ui tabular menu team-calendar-menu-off content-tabs">
@@ -99,7 +99,7 @@
                     </div>
                 </div>
 
-                {% include "hockeyapp/clubs/clubs-calendar-popup.html" %}
+                {% include "hockeyapp/v1/clubs/clubs-calendar-popup.html" %}
 
                 <hr class="hr">
 

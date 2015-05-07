@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -14,7 +14,7 @@
             <div class="ui small breadcrumb">
                 <a class="section" href="/">ХОККЕЙ</a>
                 <i class="right chevron icon divider"></i>
-                <a class="section" href="{% url 'hockeyapp:clubs:list' %}">Все клубы</a>
+                <a class="section" href="{% url 'hockeyapp:clubs_v1:list' %}">Все клубы</a>
             </div>
             </div>
         </div>

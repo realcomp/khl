@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -10,10 +10,10 @@
     <div class="overlay-black" style="visibility: hidden"></div>
     <div class="container clubs-page clubs-photos-page">
         <!-- {% trans "Photos" %} -->
-        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Photos" %}
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="Photos" %}
 
         <div class="page-content page-container">
-            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-photos" %}
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club-photos" %}
             <div class="page-inner-container" ng-controller="PhotosController">
 
                 {% verbatim %} <!-- Popup -->

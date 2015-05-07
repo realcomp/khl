@@ -1,4 +1,4 @@
-{% extends "hockeyapp/players/base.html" %}
+{% extends "hockeyapp/v1/players/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -272,10 +272,10 @@
             </div>
             <div class="page-inner-container">
                  <div class="ui grid">
-                    {% include "hockeyapp/players-search-table.html" %}
+                    {% include "hockeyapp/v1/players-search-table.html" %}
                 </div>
             </div>
-            {% include "hockeyapp/player-partners-popup.html" %}
+            {% include "hockeyapp/v1/player-partners-popup.html" %}
             </form>
         </div>
     </div>

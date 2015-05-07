@@ -1,4 +1,4 @@
-{% extends "hockeyapp/clubs/base.html" %}
+{% extends "hockeyapp/v1/clubs/base.html" %}
 {% load i18n %}
 
 {% block title %}
@@ -9,10 +9,10 @@
 <section class="content">
     <div class="container clubs-page clubs-photos-page">
         <!-- {% trans "News" %} -->
-        {% include "hockeyapp/clubs/clubs-header.html" with club_section="News" %}
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="News" %}
 
         <div class="page-content page-container" ng-controller="ClubNewsController">
-            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club-news" %}
             <div class="page-inner-container">
                 <div class="clubs-photos-tabs">
                     <div class="ui grid">
