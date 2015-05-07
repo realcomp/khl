@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import generics
 
+from base.models import Season
+
 from . import NumbersList
-from ...models import ClubPlayer
+from ...models import Player, ClubPlayer
 from ...serializers.clubs import NumbersSerializer, BestPlayersSerilizer
 
 
@@ -51,6 +56,49 @@ class BestPlayers(generics.ListAPIView):
 
     def filter_queryset(self, qs):
         qs = super(BestPlayers, self).filter_queryset(qs)
-        qs = qs.filter(club=self.kwargs['club_id'])
+        _season = self.request.query_params.get('season')
 
-        return qs
+        qs = qs.filter(
+            season=_season or Season.objects.get_current_season(),
+            club=self.kwargs['club_id'])
+
+        players = Player.objects.filter(pk__in=qs.values_list('player'))
+
+        class_fields = {
+            # Бомбардир - максимальное кол-во очков (Ш+А)
+            _('Bombardier'): 'points_total',
+            # Снайпер - максимальное кол-во шайб (Ш)
+            _('Sniper'): 'goals_total',
+            # Плюс/Минус - максимальный +/-
+            _('Plus/Minus'): 'plus_minus_total',
+            # Ассистент - максимальное кол-во очков (О)
+            _('Assistant'): 'assists_total',
+            # Штраф - максимальное штрафное время (Ш)
+            _('Penalty'): 'penalty_time_total',
+            # Вратарь - максимальное кол-во отраженных бросков (%ОБ)
+            _('Goalkeeper'): 'saves_total',
+        }
+
+        def players_by_class(class_, field, q=None):
+            filtered_players = players.filter(**{'%s__isnull' % field: False})
+            if q:
+                filtered_players = filtered_players.filter(q)
+            player = filtered_players.order_by(field).last()
+            return {
+                'class': class_,
+                'player': player,
+                'value': getattr(player, field),
+                'matches_total': player.matches_total,
+            }
+
+        classes = [players_by_class(k, v) for k, v in class_fields.items()]
+
+        # Бомбардир-защитник - защитник, с максимальным кол-вом очков (Ш+А)
+        classes.append(players_by_class(
+            _('Bombardier-Defender'), 'points_total', q=Q(line=2)))
+
+        # Железный человек - игрок (кроме вратаря),
+        # поучаствовавший во всех матчах сезона
+        # classes.append ... _('Ironman') ... players.exclude(line=1)
+
+        return classes
