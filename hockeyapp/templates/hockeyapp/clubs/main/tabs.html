@@ -1,11 +1,20 @@
+{% load i18n %}
+{% load base_extras %}
+
 <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
-    <div class="text">Сезон 2014-15</div>
+    <input type="hidden" ng-update-hidden
+           ng-model="season" ng-init="season = params.season"
+           ng-change="setSeason(season)">
+    <div class="text">{% trans "Season" %} {% lcb %} SeasonsService.getSeason(season) {% rcb %}</div>
     <i class="dropdown icon"></i>
-    <div class="menu transition hidden" tabindex="-1">
-        <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
-        <div class="item" data-text="Сезон 2013-14">2013-14</div>
-        <div class="item" data-text="Сезон 2012-13">2012-13</div>
-        <div class="item" data-text="Сезон 2011-12">2011-12</div>
+    <div class="menu transition hidden seasons" tabindex="-1">
+        {% for season in seasons %}
+        <div class="item"
+             ng-class="{ 'active selected': SeasonsService.isSeasonActive(season, {{ season.pk }}, {{ forloop.first|yesno:'true,false,' }}) }"
+                 data-text="{% trans "Season" %} {{ season.label }}" data-value="{{ season.pk }}">
+                {{ season.label }}
+            </div>
+        {% endfor %}
     </div>
 </div>
 <!--tabs items-->

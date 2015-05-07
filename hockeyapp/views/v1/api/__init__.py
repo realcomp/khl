@@ -11,22 +11,22 @@ from rest_framework import generics, response, viewsets
 
 from base.models import Season
 
-from ..events import EventFactory
+from ...events import EventFactory
 
-from ...filters import PlayersSearchFilter, PlayersSearchOrderFilter
-from ...models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
-from ...models import Timeline
+from ....filters import PlayersSearchFilter, PlayersSearchOrderFilter
+from ....models import Club, Player, ClubPlayerMatch, Schedule, ClubPlayer
+from ....models import Timeline
 
-from ...serializers import MetricsPlayerSerializer
-from ...serializers.clubs import (
+from ....serializers import MetricsPlayerSerializer
+from ....serializers.clubs import (
     ClubTeamSerializer, ClubTeamCompareSerializer, ClubCalendarSerializer,
     ClubCalendarPagination)
-from ...serializers.events import EventSerializer
-from ...serializers.players import (
+from ....serializers.events import EventSerializer
+from ....serializers.players import (
     PlayersSearchSerializer, ClubPlayerMatchSerilizer, PlayerNamesSerializer,
     ClubTitlesSerializer, ClubPlayerMatchPagination)
-from ...serializers.schedule import ScheduleSerializer
-from ...serializers.timeline import PlayerTimelineSerializer
+from ....serializers.schedule import ScheduleSerializer
+from ....serializers.timeline import PlayerTimelineSerializer
 
 
 class PlayerCardIndicators(generics.ListAPIView):

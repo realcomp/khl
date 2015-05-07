@@ -1,6 +1,9 @@
 {% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+{% load base_extras%}
+{% load i18n %}
 
 {% block tabs-content %}
+<div ng-controller="ClubMainAboutController">
 
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-about' %}
 <!--tabs content items-->
@@ -21,28 +24,38 @@
                         <h3 class="b-header__text">
                             {{club}}
                         </h3>
-                        <p class="">
-                            Год основания: 1946
-                        </p>
+                        {% if opening_dt %}
+                            <p class="">
+                                {% trans "Founding year" %}: {% lcb %} "{{ opening_dt }}"|date:"yyyy" {% rcb %}
+                            </p>
+                        {% endif %}
                     </div><!--b-header b-header__sm-->
 
                     <table class="ui unstackable very basic table w-labeled-list">
-                        <tr>
-                            <td><span class="b-labeled">Адрес: {{ address.title }}</span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><span class="b-labeled">Телефон: {{ phone }}</span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><span class="b-labeled">E-mail: {{ email }}</span></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><span class="b-labeled">Контакнтное лицо:</span></td>
-                            <td></td>
-                        </tr>
+                        {% if address %}
+                            <tr>
+                                <td><span class="b-labeled">{% trans "Address" %}: {{ address.title }}</span></td>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                        {% if phone %}
+                            <tr>
+                                <td><span class="b-labeled">{% trans "Phone" %}: {{ phone }}</span></td>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                        {% if email %}
+                            <tr>
+                                <td><span class="b-labeled">E-mail: {{ email }}</span></td>
+                                <td></td>
+                           </tr>
+                        {% endif %}
+                        {% if contacts %}
+                            <tr>
+                                <td><span class="b-labeled">{% trans "Contact person" %}: {{ contacts }}</span></td>
+                                <td></td>
+                            </tr>
+                        {% endif %}
                     </table>
                 </div><!--b-command-info__main-->
             </div><!--row-->
@@ -479,6 +492,8 @@
     </div><!--row-->
 </div>
 <!--tabs content items-->
+
+</div>
 {% endblock %}
 
 {% block sticky_menu %}

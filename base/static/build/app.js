@@ -1869,6 +1869,30 @@ angular.module('Sportomatics').service('ProfileService',
     }
 );
 
+angular.module('Sportomatics').service('SeasonsService', function() {
+  this.isSeasonActive = function(season, pk, isFirst) {
+    if (season) {
+      return +season === +pk;
+    } else {
+      return isFirst;
+    }
+  };
+  this.getSeason = function(season) {
+    var e, es;
+    if (season) {
+      e = $('.menu.seasons .item[data-value="' + season + '"]');
+    } else {
+      es = $('.menu.seasons .item');
+      if (es) {
+        e = $(es[0]);
+      }
+    }
+    if (e) {
+      return e.text().trim();
+    }
+  };
+});
+
 angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
   this.loadCountries = function(url, query) {
     return $http.get(url + '?s=' + query);
@@ -2461,6 +2485,18 @@ angular.module('Sportomatics')
 
     $scope.list();
 }]);
+
+angular.module('Sportomatics').controller('ClubMainAboutController', [
+  '$scope', '$location', 'SeasonsService', function($scope, $location, SeasonsService) {
+    $scope.$location = $location;
+    $scope.params = $location.search();
+    $scope.SeasonsService = SeasonsService;
+    this.setSeason = function(season) {
+      $location.search('season', season);
+      $scope.params = $location.search();
+    };
+  }
+]);
 
 angular.module('Sportomatics')
     .controller('ClubNewsController', function($scope, $http, LocaleFactory, $timeout){
