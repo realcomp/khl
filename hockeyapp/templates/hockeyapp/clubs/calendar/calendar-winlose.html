@@ -142,3 +142,7 @@
 </div>
 
 {% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-winlose' clubs_menu_active='club-calendar' %}
+{% endblock %}

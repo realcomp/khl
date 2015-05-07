@@ -43,13 +43,10 @@
                 </div>
             </div><!--end w-sticky-tabs__dropdown-->
             <div class="ui tabular w-page-tabs__tabs w-sticky-tab-menu menu hidden-xs">
-                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
-                <a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>
-                <a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>
-                <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
-                <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
-                <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
-                <a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-shedule' pk %}" class="{% if clubs_main_tab == 'calendar-shedule' %}active {% endif %} item">Расписание</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}" class="{% if clubs_main_tab == 'calendar-winlose' %}active {% endif %} item">Победы и проигрыши</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}" class="{% if clubs_main_tab == 'calendar-geography' %}active {% endif %} item">География матчей</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}" class="{% if clubs_main_tab == 'calendar-trips' %}active {% endif %} item">Выезды</a>
             </div><!--end w-sticky-tab-menu-->
         </div><!--end container-->
     </div><!--end b-sticky-menu__tabs-->
@@ -118,13 +115,10 @@
                 </div>
             </div><!--end w-sticky-tabs__dropdown-->
             <div class="ui tabular w-page-tabs__tabs w-sticky-tab-menu menu hidden-xs">
-                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
-                <a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>
-                <a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>
-                <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
-                <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
-                <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
-                <a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-shedule' pk %}" class="{% if clubs_main_tab == 'calendar-shedule' %}active {% endif %} item">Расписание</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}" class="{% if clubs_main_tab == 'calendar-winlose' %}active {% endif %} item">Победы и проигрыши</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}" class="{% if clubs_main_tab == 'calendar-geography' %}active {% endif %} item">География матчей</a>
+                <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}" class="{% if clubs_main_tab == 'calendar-trips' %}active {% endif %} item">Выезды</a>
             </div><!--end w-sticky-tab-menu-->
         </div><!--end container-->
     </div><!--end b-sticky-menu__tabs-->

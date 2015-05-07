@@ -5,3 +5,7 @@
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-map' %}
 
 {% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/home/sticky_menu.html' with clubs_main_tab='home-map' clubs_menu_active='club-home' %}
+{% endblock %}

@@ -357,3 +357,7 @@
 </div>
 <!--tabs content items-->
 {% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-trips' clubs_menu_active='club-calendar' %}
+{% endblock %}

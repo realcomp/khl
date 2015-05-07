@@ -43,13 +43,13 @@
                 </div>
             </div><!--end w-sticky-tabs__dropdown-->
             <div class="ui tabular w-page-tabs__tabs w-sticky-tab-menu menu hidden-xs">
-                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
-                <!--<a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>-->
-                <!--<a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>-->
-                <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
-                <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
-                <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
-                <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
+                <div class="item" ng-class="{'active': state === 'roaster'}" data-tab="tab-name" ng-click="setState('roaster')">Ростер</div>
+                <div class="item" ng-class="{'active': state === 'fio'}" data-tab="tab-name2" ng-click="setState('fio')">Все</div>
+                <div class="item" ng-class="{'active': state === 'is_joined'}" data-tab="tab-name3" ng-click="setState('is_joined')">Пришли</div>
+                <div class="item" ng-class="{'active': state === 'is_left'}" data-tab="tab-name4" ng-click="setState('is_left')">Ушли</div>
+                <div class="item" ng-class="{'active': state === 'is_legionnaire'}" data-tab="tab-name5" ng-click="setState('is_legionnaire')">Легионеры</div>
+                <div class="item" ng-class="{'active': state === 'is_home'}" data-tab="tab-name6" ng-click="setState('is_home')">Воспитанники</div>
+                <div class="item" ng-class="{'active': state === 'coaches'}" data-tab="tab-name7" ng-click="setState('coaches')">Тренеры</div>
             </div><!--end w-sticky-tab-menu-->
         </div><!--end container-->
     </div><!--end b-sticky-menu__tabs-->
@@ -118,13 +118,13 @@
                 </div>
             </div><!--end w-sticky-tabs__dropdown-->
             <div class="ui tabular w-page-tabs__tabs w-sticky-tab-menu menu hidden-xs">
-                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
-                <!--<a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>-->
-                <!--<a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>-->
-                <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
-                <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
-                <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
-                <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
+                <div class="item" ng-class="{'active': state === 'roaster'}" data-tab="tab-name" ng-click="setState('roaster')">Ростер</div>
+                <div class="item" ng-class="{'active': state === 'fio'}" data-tab="tab-name2" ng-click="setState('fio')">Все</div>
+                <div class="item" ng-class="{'active': state === 'is_joined'}" data-tab="tab-name3" ng-click="setState('is_joined')">Пришли</div>
+                <div class="item" ng-class="{'active': state === 'is_left'}" data-tab="tab-name4" ng-click="setState('is_left')">Ушли</div>
+                <div class="item" ng-class="{'active': state === 'is_legionnaire'}" data-tab="tab-name5" ng-click="setState('is_legionnaire')">Легионеры</div>
+                <div class="item" ng-class="{'active': state === 'is_home'}" data-tab="tab-name6" ng-click="setState('is_home')">Воспитанники</div>
+                <div class="item" ng-class="{'active': state === 'coaches'}" data-tab="tab-name7" ng-click="setState('coaches')">Тренеры</div>
             </div><!--end w-sticky-tab-menu-->
         </div><!--end container-->
     </div><!--end b-sticky-menu__tabs-->

@@ -188,3 +188,8 @@
 </div>
 <!--tabs content items-->
 {% endblock %}
+
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/stats/sticky_menu.html' with clubs_main_tab='stats-table' clubs_menu_active='club-stats' %}
+{% endblock %}
