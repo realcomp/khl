@@ -370,6 +370,11 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
 
 
 class BestPlayersSerilizer(serializers.ModelSerializer):
+    class_ = serializers.ReadOnlyField(source='class')
+    player = PlayerCardSerializer()
+    value = serializers.ReadOnlyField()
+    matches_total = serializers.ReadOnlyField()
+
     class Meta(object):
-        fields = 'pk',
+        fields = 'class_', 'player', 'value', 'matches_total'
         model = ClubPlayer

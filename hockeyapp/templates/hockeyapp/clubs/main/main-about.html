@@ -216,276 +216,50 @@
 
 
                 <div class="row w-gallery-preview__items">
-                     <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item"
+                         ng-repeat="item in data">
                         <div class="ui card">
-                            <div class="ui ribbon green label">30</div>
-                            <div class="w-mask">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-13.jpg">
-                                    </figure>
-                                </div>
-                                <div class="b-mask">
-                                    <a class="ui inverted button" href="#">
-                                        Link
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Бомбардир
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a> <i class="no flag"></i>
-                                </p>
-                                <p class="description">
-                                    нападающий
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        9
-                                    </div>
-                                    <div class="label">
-                                        часов за 27 игр
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div>
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-14.jpg">
-                                    </a>
-                                </figure>
-                            </div>
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Снайпер
-                                </p>
-                                <p class="name">
-                                    <a href="#">Андреев Алескандр</a>
-                                </p>
-                                <p class="">
-                                    нападающий
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        34
-                                    </div>
-                                    <div class="label">
-                                        мин за 39 игр
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div><!--ui card-->
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
+                            {% verbatim %}
                                 <div class="ui ribbon green label">30</div>
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-14.jpg">
-                                    </a>
-                                </figure>
-                            </div>
-
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Плюс/Минус
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a> <i class="no flag"></i>
-                                </p>
-                                <p class="">
-                                    защитник
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        1,19
+                                <div class="w-mask">
+                                    <div class="w-gallery-preview__item__img img-wrap">
+                                        <figure class="figure-styled">
+                                            <img class="ui image" ng-src="{{ item.player.photo }}">
+                                        </figure>
                                     </div>
-                                    <div class="label">
-                                        шайб за 61 игр
+                                    <div class="b-mask">
+                                        <a class="ui inverted button" href="#">
+                                            Link
+                                        </a>
                                     </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div><!--ui card-->
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-16.jpg">
-                                    </a>
-                                </figure>
-                            </div>
+                                </div>
 
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Ассистент
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a>
-                                </p>
-                                <p class="">
-                                    нападающий
-                                </p>
-                            </div>
+                                <div class="w-gallery-preview__item__info">
+                                    <p class="nickname">
+                                        {{ item.class_ }}
+                                    </p>
+                                    <p class="name">
+                                        <a href="#">{{ item.player.name }} {{ item.player.lastname }}
+                                        </a> <i class="no flag"></i>
+                                    </p>
+                                    <p class="description">
+                                        {{ item.player.line_display }}
+                                    </p>
+                                </div>
 
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        95.99%
-                                    </div>
-                                    <div class="label">
-                                        из 32989 бросков
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div><!--ui card-->
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-9.jpg">
-                                    </a>
-                                </figure>
-                            </div>
-
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Штраф
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a>
-                                </p>
-                                <p class="">
-                                    защитник
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        +4
-                                    </div>
-                                    <div class="label">
-                                    за 48 игр
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
+                                <div class="extra content w-gallery-preview__item__extra">
+                                    <div class="ui statistic">
+                                        <div class="value">
+                                            {{ item.value }}
+                                        </div>
+                                        <div class="label">
+                                            <!-- часов -->
+                                            за {{ item.matches_total }} игр
+                                        </div>
+                                    </div><!--ui static-->
+                                </div>
+                            {% endverbatim %}
                         </div>
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-10.jpg">
-                                    </a>
-                                </figure>
-                            </div>
-
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Вратарь
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a>
-                                </p>
-                                <p class="">
-                                    нападающий
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        95.99%
-                                    </div>
-                                    <div class="label">
-                                    за 48 игр
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div><!--ui card-->
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-11.jpg">
-                                    </a>
-                                </figure>
-                            </div>
-
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Бомбардир-защитник
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a>
-                                </p>
-                                <p class="">
-                                    защитник
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        2
-                                    </div>
-                                    <div class="label">
-                                    мин за 60 игр
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div><!--ui card-->
-                     </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                        <div class="ui card">
-                            <div class="w-gallery-preview__item__img img-wrap">
-                                <figure class="figure-styled">
-                                    <a href="#" class="ui image">
-                                        <img class="ui image" src="/static/new/images/a-hockey/ava-12.jpg">
-                                    </a>
-                                </figure>
-                            </div>
-
-                            <div class="w-gallery-preview__item__info">
-                                <p class="nickname">
-                                    Железный человек
-                                </p>
-                                <p class="name">
-                                    <a href="#">Иванов Игорь</a>
-                                </p>
-                                <p class="">
-                                    нападающий
-                                </p>
-                            </div>
-
-                            <div class="extra content w-gallery-preview__item__extra">
-                                <div class="ui statistic">
-                                    <div class="value">
-                                        1,19
-                                    </div>
-                                    <div class="label">
-                                    шайб за 55 игр
-                                    </div>
-                                </div><!--ui static-->
-                            </div>
-                        </div><!--ui card-->
                      </div><!--w-gallery-preview__item-->
                 </div><!--row w-gallery-preview__items-->
             </div><!--w-gallery-preview-->
