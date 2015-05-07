@@ -205,8 +205,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     clubObject = (
                         name: 'club'
                         data: $scope.games.map((game, index) ->
-                            if $scope.homeOnly and game.is_home is false
-                                return
+                            if $scope.selection is 'home' and game.is_home is false then return
+                            if $scope.selection is 'guest' and game.is_home is true then return
                             opponentAddress = if game.opponent.address and game.opponent.address.title then game.opponent.address.title else ''
                             return (
                                 x: index

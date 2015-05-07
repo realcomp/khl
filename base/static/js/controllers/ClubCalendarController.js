@@ -221,7 +221,10 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
           name: 'club',
           data: $scope.games.map(function(game, index) {
             var opponentAddress;
-            if ($scope.homeOnly && game.is_home === false) {
+            if ($scope.selection === 'home' && game.is_home === false) {
+              return;
+            }
+            if ($scope.selection === 'guest' && game.is_home === true) {
               return;
             }
             opponentAddress = game.opponent.address && game.opponent.address.title ? game.opponent.address.title : '';
