@@ -89,32 +89,56 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                <!-- {% trans "Seasons" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Seasons" key="seasons_total" value=seasons_total rating=seasons_total_index pk=pk %}
+                                <!-- {% trans "Matches" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Matches" key="matches_total" value=matches_total rating=matches_total_index pk=pk %}
                                 {% if line == 1 %}
+                                <!-- {% trans "Matches Win" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Matches Win" key="matches_win_total" value=matches_win_total rating=matches_win_total_index pk=pk %}
+                                <!-- {% trans "Matches Lose" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Matches Lose" key="matches_lose_total" value=matches_lose_total rating=matches_lose_total_index pk=pk %}
+                                <!-- {% trans "Matches with series of bullet goals" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Matches with series of bullet goals" key="bullet_matches_total" value=bullet_matches_total rating=bullet_matches_total_index pk=pk %}
+                                <!-- {% trans "Shots" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Shots" key="shots_received_total" value=shots_received_total rating=shots_received_total_index pk=pk %}
+                                <!-- {% trans "Blocked shots" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots" key="saves_total" value=saves_total rating=saves_total_index pk=pk %}
+                                <!-- {% trans "Blocked shots, %" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Blocked shots, %" key="saves_p_average" value=saves_p_average rating=saves_p_average_index pk=pk %}
+                                <!-- {% trans "Safety factor" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Safety factor" key="sf_average" value=sf_average rating=sf_average_index pk=pk %}
+                                <!-- {% trans "Missed goals" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Missed goals" key="loose_goals_total" value=loose_goals_total rating=loose_goals_total_index pk=pk %}
+                                <!-- {% trans "Goal transfers" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Goal transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
+                                <!-- {% trans "0 goals matches" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="0 goals matches" key="zero_goals_matches_total" value=zero_goals_matches_total rating=zero_goals_matches_total_index pk=pk %}
                                 {% else %}
+                                <!-- {% trans "Goals" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Goals" key="goals_total" value=goals_total rating=goals_total_index pk=pk %}
+                                <!-- {% trans "Transfers" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Transfers" key="assists_total" value=assists_total rating=assists_total_index pk=pk %}
+                                <!-- {% trans "Points" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Points" key="points_total" value=points_total rating=points_total_index pk=pk %}
+                                <!-- {% trans "Average goals count per game" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Average goals count per game" key="goals_average" value=goals_average rating=goals_average_index pk=pk %}
+                                <!-- {% trans "Average transfers count per game" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Average transfers count per game" key="assists_average" value=assists_average rating=assists_average_index pk=pk %}
+                                <!-- {% trans "Average score count per game" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Average score count per game" key="points_average" value=points_average rating=points_average_index pk=pk %}
+                                <!-- {% trans "Average penalty time" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Average penalty time" key="penalty_time_average" value=penalty_time_average rating=penalty_time_average_index pk=pk %}
+                                <!-- {% trans 'Average "plus/minus" per game' %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label='Average "plus/minus" per game' key="plus_minus_average" value=plus_minus_average rating=plus_minus_average_index pk=pk %}
                                 {% endif %}
+                                <!-- {% trans "Penalty time, min" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Penalty time, min" key="penalty_time_total" value=penalty_time_total rating=penalty_time_total_index pk=pk %}
+                                <!-- {% trans "Gaming time" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="Gaming time" key="gamingtime_total" value=gamingtime_total rating=gamingtime_total_index pk=pk %}
+                                <!-- {% trans "SM-индекс" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="SM-индекс" key="sm_index" value=12 rating=23 pk=pk %}
+                                <!-- {% trans "CORSI-индекс" %} -->
                                 {% include "hockeyapp/players/indicators-row.html" with label="CORSI-индекс" key="corsi_index" value=12 rating=23 pk=pk %}
                                 </tbody>
                             </table>

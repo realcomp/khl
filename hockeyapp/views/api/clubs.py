@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.db.models import Q
+from __future__ import unicode_literals
+
+from django.db.models import Q, Count, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import generics
@@ -58,44 +60,63 @@ class BestPlayers(generics.ListAPIView):
         qs = super(BestPlayers, self).filter_queryset(qs)
         _season = self.request.query_params.get('season')
 
-        qs = qs.filter(
-            season=_season or Season.objects.get_current_season(),
-            club=self.kwargs['club_id'])
-
-        players = Player.objects.filter(pk__in=qs.values_list('player'))
+        qs = (
+            qs
+            .filter(
+                season=_season or Season.objects.get_current_season(),
+                club=self.kwargs['club_id']))
+            # .filter(
+            #     clubplayermatch__match__isnull=False,
+            #     clubplayermatch__match__challenge_type__isnull=False,
+            #     clubplayermatch__match__challenge_type__gt=0))
 
         class_fields = {
             # Бомбардир - максимальное кол-во очков (Ш+А)
-            _('Bombardier'): 'points_total',
+            _('Bombardier'): 'points',
             # Снайпер - максимальное кол-во шайб (Ш)
-            _('Sniper'): 'goals_total',
+            _('Sniper'): 'goals',
             # Плюс/Минус - максимальный +/-
-            _('Plus/Minus'): 'plus_minus_total',
+            _('Plus/Minus'): 'plus_minus',
             # Ассистент - максимальное кол-во очков (О)
-            _('Assistant'): 'assists_total',
+            _('Assistant'): 'assists',
             # Штраф - максимальное штрафное время (Ш)
-            _('Penalty'): 'penalty_time_total',
+            _('Penalty'): 'penalty_time',
             # Вратарь - максимальное кол-во отраженных бросков (%ОБ)
-            _('Goalkeeper'): 'saves_total',
+            _('Goalkeeper'): 'saves',
         }
 
         def players_by_class(class_, field, q=None):
-            filtered_players = players.filter(**{'%s__isnull' % field: False})
+            field_total = '%s__total' % field
+            cps = qs
             if q:
-                filtered_players = filtered_players.filter(q)
-            player = filtered_players.order_by(field).last()
-            return {
-                'class': class_,
-                'player': player,
-                'value': getattr(player, field),
-                'matches_total': player.matches_total,
+                cps = cps.filter(q)
+            # cps = (
+            #     cps
+            #     .filter(**{'%s__isnull' % field: False})
+            #     .annotate(**{field_total: Sum(field)})
+            #     .order_by(field_total))
+            # last_cp = cps.last()
+
+            cp_values = {
+                cp: cp.clubplayermatch_set.is_active().aggregate(**{field_total: Sum(field)}).get(field_total, 0) or 0
+                for cp in cps
             }
+
+            if cp_values:
+                last_cp, value = sorted(
+                    cp_values.items(), key=lambda x: x[1])[-1]
+                return {
+                    'class': class_,
+                    'player': last_cp.player,
+                    'value': value,
+                    'count': last_cp.clubplayermatch_set.is_active().count(),
+                }
 
         classes = [players_by_class(k, v) for k, v in class_fields.items()]
 
         # Бомбардир-защитник - защитник, с максимальным кол-вом очков (Ш+А)
         classes.append(players_by_class(
-            _('Bombardier-Defender'), 'points_total', q=Q(line=2)))
+            _('Bombardier-Defender'), 'points', q=Q(line=2)))
 
         # Железный человек - игрок (кроме вратаря),
         # поучаствовавший во всех матчах сезона
