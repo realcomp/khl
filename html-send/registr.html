@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
 <head>
-	<title>Login - </title> 
+	<title>Registration - </title> 
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width,height=device-height">
 	
@@ -25,7 +25,7 @@
 	<script src="assets/js/modernizr.custom.js"></script>
 	
 </head>
-<body class="w-page__auth">
+<body class="w-page__registr">
 	<div class="body_inner bg-image">
 		<header id="header">
 			<section class="w-head__navbar">
@@ -109,10 +109,10 @@
 											<a href="club-list.html">Клубы</a>
 										</li>
 										<li class="two">
-											<a href="#">Игроки</a>
+											<a href="players-main.html">Игроки</a>
 										</li>
 										<li class="three">
-											<a href="#">Фан-зоны</a>
+											<a href="fans-main.html">Фан-зоны</a>
 										</li>
 									</ul>
 								</div><!-- /.navbar-collapse -->
@@ -136,36 +136,113 @@
 		</header>
 		<main id="main">
 			<section class="container">
-				<section class="w-center-form">
-					<div class="b-header b-header__md">
-						<h2 class="b-cell b-header__text">
-							Вход
-						</h2>
-					</div>
+			
+				<section class="w-page-tabs">
 					
-					<form class="ui form">
-						 <div class="field">
-							<div class="required field">
-								<label>Логин</label>
-								<div class="ui icon input">
-									<input type="text" placeholder="Логин">
-									<i class="user icon"></i>
-								</div>
+				<!--tabs items-->
+					<div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+						<div class="item" data-tab="tab-name">Через социальные сети</div>
+						<div class="item active" data-tab="tab-name2">Через регистрацию на сайте</div>
+						<div class="item" data-tab="tab-name3">Напомнить пароль</div>
+					</div>
+				<!--tabs items ends-->
+					<div class="ui vertical tabular-xs menu visible-xs">
+						<div class="item" data-tab="tab-name">Через социальные сети</div>
+						<div class="item active" data-tab="tab-name2">Через регистрацию на сайте</div>
+						<div class="item" data-tab="tab-name3">Напомнить пароль</div>
+					</div>
+				<!--tabs items ends-->
+					
+				<!--tabs content--><!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name">
+						2
+					</div>
+					<!--tabs content items-->
+					
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab active" data-tab="tab-name2">
+						<section class="registration">
+							<div class="b-header b-header__md b-header__filter-in">
+								<h2 class="b-cell b-header__text">
+									Регистрация на сайте
+								</h2>
 							</div>
-							<div class="required field">
-								<label>Пароль</label>
-								<div class="ui icon input">
-									<input type="password" placeholder="Пароль">
-									<i class="lock icon"></i>
+							
+							
+							<section class="registration__standart row">
+								<div class="ui vertical steps col-sm-4">
+									<a class="active step">
+										<div class="content">
+										<div class="title">Шаг 1</div>
+										<div class="description">все поля необходимы для заполнения</div>
+										</div>
+									</a>
+									<a class="step">
+										<div class="content">
+										<div class="title">Шаг 2</div>
+										<div class="description">Расскажите нам о себе</div>
+										</div>
+									</a>
+									<a class="step">
+										<div class="content">
+										<div class="title">Шаг 3</div>
+										<div class="description">Расскажите нам о себе</div>
+										</div>
+									</a>
 								</div>
-							</div>
-						</div>
-						<div class="w-btn w-clearboth">
-							<a class="float-left-sm b-forgot-pass" href="#">Напомнить пароль</a>
-							<button type="submit" class="ui button green float-right-sm">Войти</button>
-						</div>
-					</form>
-				</section>
+								
+								
+								<div class="col-sm-4">
+									<form class="ui form" action="registr-2.html">
+										<div class="required field">
+											<label>E-mail</label>
+											<div class="ui icon input">
+												<input type="text" placeholder="e-mail">
+												<i class="mail icon"></i>
+											</div>
+										</div>
+										
+										<div class="field w-checkbox">
+											<div class="ui checkbox">
+												<input type="checkbox" checked>
+												<label>получать e-mail уведомления</label>
+											</div>
+										</div>
+										
+										<div class="required field">
+											<label>Пароль</label>
+											<div class="ui icon input">
+												<input type="password" placeholder="Пароль">
+												<i class="lock icon"></i>
+											</div>
+										</div>
+											
+										<div class="required field">
+											<label>Подтвердите пароль</label>
+											<div class="ui icon input">
+												<input type="password" placeholder="Подтвердите пароль">
+												<i class="lock icon"></i>
+											</div>
+										</div>
+										<div class="w-btn w-clearboth">
+											<button type="submit" class="ui button green float-right">Далее</button>
+										</div>
+									</form>
+								</div>
+							</section>
+						</section><!--registration-->
+					</div>
+					<!--tabs content items-->
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name3">
+						1
+					</div>
+					<!--tabs content items-->
+				</section><!--w-tabs-->
 			</section><!--container-->
 		</main>
 		<footer id="footer">

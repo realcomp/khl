@@ -17,6 +17,7 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
     # Methods:
 
     @createClubsMap = (data, dataLabel) ->
+        deferred = $q.defer()
         # creates clubs map inside maps-div marked as mapsDivName
         self.map = L.map(self.mapsDivName, scrollWheelZoom: false).setView([
             startCoordinate1
@@ -41,7 +42,8 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
                 self.markersFunctionFans data
         self.map.addLayer self.markers
         @rendered = true
-        return
+        deferred.resolve true
+        return deferred.promise
 
     @cityClickFunction = (event) ->
         self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();

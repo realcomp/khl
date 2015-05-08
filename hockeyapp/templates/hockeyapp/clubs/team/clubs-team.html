@@ -130,9 +130,9 @@
                                     <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.offender_players" ng-class="{'b-notactive': !playerFilter(player)}">
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
-                                            <!--<div class="ui ribbon green label-flag">
-                                                <i class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
-                                            </div>-->
+                                            <div class="ui ribbon green label-flag">
+                                                <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                            </div>
                                             <div class="w-gallery-preview__item__img">
                                                 <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
@@ -167,9 +167,9 @@
                                     <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.defender_players" ng-class="{'b-notactive': !playerFilter(player)}">
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
-                                            <!--<div class="ui ribbon green label-flag">
-                                                <i class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
-                                            </div>-->
+                                            <div class="ui ribbon green label-flag">
+                                                <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                            </div>
                                             <div class="w-gallery-preview__item__img">
                                                 <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
@@ -203,9 +203,9 @@
                                     <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.goalkeeper_players" ng-class="{'b-notactive': !playerFilter(player)}">
                                         <div class="ui card">
                                             <div class="ui ribbon green label">{{player.number}}</div>
-                                            <!--<div class="ui ribbon green label-flag">
-                                                <i class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
-                                            </div>-->
+                                            <div class="ui ribbon green label-flag">
+                                                <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                            </div>
                                             <div class="w-gallery-preview__item__img">
                                                 <a href="{{ player.url }}" class="ui image">
                                                     <img class="ui image" src="{{player.photo}}">
@@ -214,7 +214,7 @@
 
                                             <div class="w-gallery-preview__item__info">
                                                 <p class="name">
-                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}} {{player.citizenship.code}}</a>
+                                                    <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
                                                 </p>
                                                 <p class="line-display">
                                                     {{player.line_display}}
@@ -225,8 +225,6 @@
                                     {% endverbatim %}
                                 </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
                             </div><!--w-gallery-preview-->
-
-
 
                             <section class="b-paging__styled">
                                 <div class="ui left labeled tiny icon button">
@@ -247,6 +245,8 @@
                 </section><!--w-page-tabs-->
 
             </section><!--container-->
+
+            {% include 'hockeyapp/clubs/team/sticky_menu.html' with clubs_menu_active='club' %}
 
         </main>
         <footer id="footer">

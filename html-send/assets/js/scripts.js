@@ -32,9 +32,38 @@ $(document).ready(function() {
 	$('.w-tooltip').popup();
 
 
-//-----------push mobile menu
-	new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ) );
+//-----------accordion
+	$('.ui.accordion').accordion();
 
+
+//-----------push mobile menu
+	//-------new mlPushMenu( document.getElementById( 'mp-menu' ), document.getElementById( 'trigger' ) );
+
+
+
+//-----------search variants
+
+	var content = [
+	  { title: 'Andorrs' },
+	  { title: 'United Arab Emirates' },
+	  { title: 'Afghanistas' },
+	  { title: 'Antigus' },
+	  { title: 'Anguills' },
+	  { title: 'Albanis' },
+	  { title: 'Armenis' },
+	  { title: 'Netherlands Antilles' },
+	  { title: 'Angols' },
+	  { title: 'Argentins' },
+	  { title: 'American Samos' },
+	  { title: 'Austris' },
+	  { title: 'Australis' },
+	  { title: 'Arubs' },
+	  { title: 'Aland Islands' },
+	  { title: 'Azerbaijas' }
+	];
+	$('.result').search({
+	    source: content
+	  });
 
 });
 

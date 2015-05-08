@@ -105,6 +105,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         result.push(row);
         i += 1;
       }
+      console.log(date, schedules, result);
       return result;
     };
     $scope.isHome = function(cell) {
@@ -178,7 +179,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return results;
           })()
         ];
-        return $scope.loaded = true;
+        $scope.loaded = true;
+        return console.log($scope.calendars);
       });
       return $scope.createGamesChart();
     };

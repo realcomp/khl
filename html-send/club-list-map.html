@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
 <head>
-	<title>Список клубов - </title> 
+	<title>Список клубов(map) - </title> 
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width,height=device-height">
 	
@@ -25,7 +25,7 @@
 	<script src="assets/js/modernizr.custom.js"></script>
 	
 </head>
-<body class="w-page__clubs-list__table">
+<body class="w-page__clubs-list__map">
 	<div class="body_inner bg-image">
 		<header id="header">
 			<section class="w-head__navbar">
@@ -160,6 +160,9 @@
 						<!-- Collect the nav links, forms, and other content for toggling -->
 						<div class="collapse navbar-collapse" id="w-main-nav__b-menu">
 							<ul class="w-main-nav__b-menu ui inverted green menu">
+							    <li class="item w-main-nav__b-menu__logo hidden-xs">
+                                    <a href="#"><img src="images/i-hockey.jpg"></a>
+                                </li>
 								<li class="item active">
 									<a href="#">Россия</a>
 								</li><li class="item">
@@ -169,9 +172,9 @@
 								</li><li class="item">
 									<a href="#">Финляндия</a>
 								</li><li class="item">
-									<a href="#">Чехия</a>
-								</li><li class="item">
 									<a href="#">Швеция</a>
+								</li><li class="item">
+									<a href="#">Чехия</a>
 								</li><li class="item ui dropdown top pointing">
 									<a class="default text" href="#">Другие страны<i class="dropdown icon"></i></a>
 									<ul class="menu">
@@ -200,17 +203,19 @@
 					
 				<!--tabs items-->
 					<div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
-						<div class="item" data-tab="tab-name">Все лиги</div>
+						<div class="item" data-tab="tab-name">Все</div>
 						<div class="item active" data-tab="tab-name2">КХЛ</div>
 						<div class="item" data-tab="tab-name3">ВХЛ</div>
 						<div class="item" data-tab="tab-name4">МХЛ</div>
+						<div class="item" data-tab="tab-name5">МХЛ-Первенство</div>
 					</div>
 				<!--tabs items ends-->
 					<div class="ui vertical tabular-xs menu visible-xs">
-						<div class="item" data-tab="tab-name">Все лиги</div>
+						<div class="item" data-tab="tab-name">Все</div>
 						<div class="item active" data-tab="tab-name2">КХЛ</div>
 						<div class="item" data-tab="tab-name3">ВХЛ</div>
 						<div class="item" data-tab="tab-name4">МХЛ</div>
+						<div class="item" data-tab="tab-name5">МХЛ-Первенство</div>
 					</div>
 				<!--tabs items ends-->
 					
@@ -233,151 +238,24 @@
 										Список клубов
 									</h2>
 									
-									<a class="b-cell b-change-views__item" href="club-list.html">
-										<i class="block layout icon"></i>
+									<a class="b-cell hidden-xs b-change-views__item w-tooltip" data-content="Алфавитный список" data-variation="basic" href="stats-table-history.html">
+                                        <i class="sort alphabet ascending icon"></i>
+                                    </a>
+									
+									<a class="b-cell b-change-views__item" href="club-list-table.html">
+										<i class="table icon"></i>
 									</a>
 									
-									<a class="b-cell active b-change-views__item" href="#">
-										<i class="table icon"></i>
+									<a class="b-cell active b-change-views__item w-tooltip" data-content="Клубы на карте" data-variation="basic" href="club-list-map.html">
+										<i class="map icon"></i>
 									</a>
 								</div><!--row-->
 							</div><!--b-header b-header__md-->
 							
-							<div class="row-xs">
-								<table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
-									<tr>
-										<th class="b-table-team"><a href="#"><span>Команда</span><i class="dropdown icon"></i></a></th>
-										<th class="hidden-xs"><a href="#"><span>Город</span><i class="dropdown icon"></i></a></th>
-										<th class="b-td-sm"><a href="#"><span>Ближайшая игра</span><i class="dropdown icon"></i></a></th>
-										<th class="hidden-xs b-td-xs"><a href="#"><span>Игр</span><i class="dropdown icon"></i></a></th>
-										<th class="hidden-xs b-td-xs"><a href="#"><span>Очки</span><i class="dropdown icon"></i></a></th>
-										<th class="b-table-place b-td-xs"><a href="#"><span>Место</span><i class="dropdown icon"></i></a></th>
-										<th class="hidden-xs"><a href="#"><span>Арена</span><i class="dropdown icon"></i></a></th>
-										<th class="hidden-xs hidden-sm"><a href="#"><span>Тренер</span><i class="dropdown icon"></i></a></th>
-									</tr>
-									
-									
-									<tr>
-										<td class="b-td-team">
-											<div class="w-gallery-preview__item__img">
-												<div class="img-wrap">
-													<figure class="figure-styled">
-														<a href="#" class="ui image"><img src="images/l-hockey/logo-1.jpg" alt="" title=""/></a>
-													</figure>
-												</div>
-												<p class="b-cell">
-													<a href="#">Адмирал</a>
-												</p>
-											</div>
-										</td>
-										<td class="hidden-xs">Омская область</td>
-										<td>
-											<p>
-												<a href="#">СКА-Автомобилист</a>
-											</p>
-											<p class="text-small">
-												26 апреля 2015 20:20 МСК
-											</p>
-										</td>
-										<td class="b-td-xs hidden-xs text-center-sm">10</td>
-										<td class="b-td-xs hidden-xs text-center-sm">10</td>
-										<td class="b-td-xs text-center">6</td>
-										<td class="hidden-xs"><a href="#">Арена Омск</a></td>
-										<td class="hidden-xs hidden-sm"><a href="#">Александров Александр</a></td>
-									</tr>
-									
-									
-									<tr>
-										<td class="b-td-team">
-											<div class="w-gallery-preview__item__img">
-												<div class="img-wrap">
-													<figure class="figure-styled">
-														<a href="#" class="ui image"><img src="images/l-hockey/logo-2.jpg" alt="" title=""/></a>
-													</figure>
-												</div>
-												<p class="b-cell">
-													<a href="#">Ак барс</a>
-												</p>
-											</div>
-										</td>
-										<td class="hidden-xs">Казань</td>
-										<td>
-											<p>
-												<a href="#">Ак барс-СКА</a>
-											</p>
-											<p class="text-small">
-												26 апреля 2015 20:20 МСК
-											</p>
-										</td>
-										<td class="b-td-xs hidden-xs text-center-sm">11</td>
-										<td class="b-td-xs hidden-xs text-center-sm">30</td>
-										<td class="b-td-xs text-center">3</td>
-										<td class="hidden-xs"><a href="#">ЛДС "Татнефть-Арена"</a></td>
-										<td class="hidden-xs hidden-sm"><a href="#">Иванов Иван</a></td>
-									</tr>
-									
-									
-									<tr>
-										<td class="b-td-team">
-											<div class="w-gallery-preview__item__img">
-												<div class="img-wrap">
-													<figure class="figure-styled">
-														<a href="#" class="ui image"><img src="images/l-hockey/logo.jpg" alt="" title=""/></a>
-													</figure>
-												</div>
-												<p class="b-cell">
-													<a href="#">СКА</a>
-												</p>
-											</div>
-										</td>
-										<td class="hidden-xs">Омская область</td>
-										<td>
-											<p>
-												<a href="#">СКА-Автомобилист</a>
-											</p>
-											<p class="text-small">
-												26 апреля 2015 20:20 МСК
-											</p>
-										</td>
-										<td class="b-td-xs hidden-xs text-center-sm">10</td>
-										<td class="b-td-xs hidden-xs text-center-sm">20</td>
-										<td class="b-td-xs text-center">5</td>
-										<td class="hidden-xs"><a href="#">Арена Омск</a></td>
-										<td class="hidden-xs hidden-sm"><a href="#">Александров Александр</a></td>
-									</tr>
-									
-									
-									<tr>
-										<td class="b-td-team">
-											<div class="w-gallery-preview__item__img">
-												<div class="img-wrap">
-													<figure class="figure-styled">
-														<a href="#" class="ui image"><img src="images/l-hockey/logo-2.jpg" alt="" title=""/></a>
-													</figure>
-												</div>
-												<p class="b-cell">
-													<a href="#">Ак барс</a>
-												</p>
-											</div>
-										</td>
-										<td class="hidden-xs">Казань</td>
-										<td>
-											<p>
-												<a href="#">Ак барс-СКА</a>
-											</p>
-											<p class="text-small">
-												26 апреля 2015 20:20 МСК
-											</p>
-										</td>
-										<td class="b-td-xs hidden-xs text-center-sm">11</td>
-										<td class="b-td-xs hidden-xs text-center-sm">30</td>
-										<td class="b-td-xs text-center">2</td>
-										<td class="hidden-xs"><a href="#">ЛДС "Татнефть-Арена"</a></td>
-										<td class="hidden-xs hidden-sm"><a href="#">Иванов Иван</a></td>
-									</tr>
-								</table>
-							</div>
 							
+							<div class="w-map">
+								<img src="images/map.jpg" alt="" tittle=""/>
+							</div><!--w-map-->
 						</section><!--w-section-->
 					</div>
 					<!--tabs content items-->

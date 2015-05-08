@@ -102,6 +102,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 result.push(row)
                 i += 1
 
+            console.log date, schedules, result
+
             return result
 
         $scope.isHome = (cell) ->
@@ -161,6 +163,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
                 } for deltaM in [-1, 0, 1])]
                 $scope.loaded = true
+                console.log $scope.calendars
             )
             return $scope.createGamesChart()
 

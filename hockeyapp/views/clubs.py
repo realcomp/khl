@@ -39,7 +39,7 @@ class ClubListView(TemplateView):
 
 class ClubView(SeasonsMenuMixin, DetailView):
     model = Club
-    template_name = 'hockeyapp/clubs/clubs-team.html'
+    template_name = 'hockeyapp/clubs/team/clubs-team.html'
 
     def get_context_data(self, **kwargs):
         context = super(ClubView, self).get_context_data(**kwargs)

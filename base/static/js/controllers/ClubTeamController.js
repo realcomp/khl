@@ -83,6 +83,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                             if(player.citizenship.title)
                             if(country.name === player.citizenship.title){
                                 player.citizenship.code = country.code;
+                                $('#player_'+player.pk+'_flag').addClass(country.code);
                             }
                         })
                     }

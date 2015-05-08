@@ -3,12 +3,1342 @@
 
 {% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-shedule' %}
 <!--tabs content items-->
-<div class="b-tabs-content ui">
+<div class="b-tabs-content ui" ng-controller="ClubCalendarController">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Расписание
+            </h2>
+
+            <a class="b-cell hidden-xs active b-change-views__item w-tooltip b-filter__with-checkbox" data-content="Календарь игр" data-variation="basic" href="stats-table-2.html">
+                <i class="calendar icon"></i>
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public">
+                    <label>показать прошедшие</label>
+                </div>
+            </a>
+
+            <a href="team-arena-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="Убрать неигровые дни" data-variation="basic">
+                <i class="ellipsis horizontal icon"></i>
+            </a>
+
+            <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="Расписание всех команд" data-variation="basic">
+                <i class="users icon"></i>
+            </a>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+    <!--<section class="w-calendar w-section hidden-xs hidden-sm" ng-repeat="month in calendars[0]">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                Сентябрь
+            </h3>
+        </div><!--b-header b-header__sm-
+        <div class="row b-calendar">
+            <div class="b-calendar__item b-calendar__date">
+            </div><div class="b-calendar__item b-calendar__date">
+                Понедельник
+            </div><div class="b-calendar__item b-calendar__date">
+                Вторник
+            </div><div class="b-calendar__item b-calendar__date">
+                Среда
+            </div><div class="b-calendar__item b-calendar__date">
+                Четверг
+            </div><div class="b-calendar__item b-calendar__date">
+                Пятница
+            </div><div class="b-calendar__item b-calendar__date">
+                Суббота
+            </div><div class="b-calendar__item b-calendar__date">
+                Воскресенье
+            </div>
+        </div>
+        <div class="b-calendar" ng-repeat="row in month">
+            <div class="b-calendar__item b-calendar__date">
+            </div>
+            <div class="b-calendar__item" ng-repeat="cell in row">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            2 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+                        <div class="w-btn">
+                            <div class="ui button green tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content">
+                                    <i class="icon checkmark"></i> Я был
+                                </div>
+                            </div>
+                        </div><!--w-btn
+                    </div>
+                </div><!--ui card
+            </div>
+        </div>
+    </section>-->
+
+    <section class="w-calendar w-section hidden-xs hidden-sm">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                Сентябрь
+            </h3>
+        </div><!--b-header b-header__sm-->
+
+        <div class="row b-calendar">
+            <div class="b-calendar__item b-calendar__date">
+            </div><div class="b-calendar__item b-calendar__date">
+                Понедельник
+            </div><div class="b-calendar__item b-calendar__date">
+                Вторник
+            </div><div class="b-calendar__item b-calendar__date">
+                Среда
+            </div><div class="b-calendar__item b-calendar__date">
+                Четверг
+            </div><div class="b-calendar__item b-calendar__date">
+                Пятница
+            </div><div class="b-calendar__item b-calendar__date">
+                Суббота
+            </div><div class="b-calendar__item b-calendar__date">
+                Воскресенье
+            </div>
+
+        <!--week-->
+            <a href="#" class="b-calendar__item"></a>
+            <a href="#" class="b-calendar__item"></a>
+            <a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            1
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a>
+            <div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            2 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+                        <div class="w-btn">
+                            <div class="ui button green tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content">
+                                    <i class="icon checkmark"></i> Я был
+                                </div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            3
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button blue tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            5
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                    <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 2
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Автомобилист</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><!--b-calendar__item-->
+
+        <!--week-->
+
+            <a href="#" class="b-calendar__item">
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 2
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Автомобилист</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button blue tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            8
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            9
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            11
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            12
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            2 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button green tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><!--b-calendar__item-->
+
+        <!--week-->
+
+            <a href="#" class="b-calendar__item">
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            14
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            15
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            2 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button green tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            17
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button blue tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            19
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 2
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Автомобилист</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><!--b-calendar__item-->
+
+        <!--week-->
+
+            <a href="#" class="b-calendar__item">
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 2
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Автомобилист</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button blue tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            22
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            23
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            25
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            26
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-1.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            2 : 5
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Адмирал</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button green tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><!--b-calendar__item-->
+
+        <!--week-->
+
+            <a href="#" class="b-calendar__item">
+            </a><div class="b-calendar__item">
+                <div class="ui card past-event">
+
+                    <a href="#" class="b-calendar__item__inner">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo-2.jpg">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="images/l-hockey/logo.jpg">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-positive-text b-calendar__item__score">
+                            0 : 2
+                        </p>
+
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>Автомобилист</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                17.03.2015
+                            </p>
+                            <p class="">
+                                20:20 МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+
+                    <div class="extra content w-gallery-preview__item__extra">
+                        <p class="b-calendar__item__comment">
+                            <i class="icon comments outline i-top-3"></i> 17
+                        </p>
+
+
+                        <div class="w-btn">
+                            <div class="ui button blue tiny animated">
+                                <div class="visible content">Были 2343</div>
+                                <div class="hidden content"><i class="icon checkmark"></i> Я был</div>
+                            </div>
+                        </div><!--w-btn-->
+                    </div>
+
+                </div><!--ui card-->
+            </div><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            29
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><a href="#" class="b-calendar__item">
+                <div class="ui card">
+                    <div class="ui statistic">
+                        <p class="value">
+                            30
+                        </p>
+                        <p class="">
+                            Сентября
+                        </p>
+                    </div><!--ui static-->
+                </div><!--ui card-->
+            </a><!--b-calendar__item-->
+        </div><!--row-->
+        <div class="w-btn btn-month">
+            <div class="ui button green tiny">Показать еще один месяц</div>
+        </div>
+    </section><!--w-calendar-->
+
+    <section class="w-command-mobile visible-sm visible-xs">
+
+        <div class="row">
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        6 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner w-command-calendar__item-past">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Автомобилист - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-2.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            0 : 5
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button green tiny">
+                            <div class="visible content">Были 2343</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        7 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner w-command-calendar__item-past">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Адмирал - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-1.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            0 : 5
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button blue tiny">
+                            <div class="visible content">Были 2343</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        9 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Адмирал - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-1.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            - : -
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button tiny">
+                            <div class="visible content">Я пойду</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        10 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Автомобилист - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-2.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            - : -
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button green tiny">
+                            <div class="visible content">Я пойду</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+        </div><!--row-->
+
+    </section><!--end w-command-mobile-->
 
 </div>
+<!--tabs content items-->
 <!--tabs content items-->
 {% endblock %}
 
 {% block sticky_menu %}
-    {% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-shedule' clubs_menu_active='club-calendar' %}
+{% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-shedule' clubs_menu_active='club-calendar' %}
 {% endblock %}

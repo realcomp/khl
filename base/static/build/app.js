@@ -1170,7 +1170,8 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   this.geocoder = new google.maps.Geocoder;
   this.addedMarkers = [];
   this.createClubsMap = function(data, dataLabel) {
-    var ggl, osm;
+    var deferred, ggl, osm;
+    deferred = $q.defer();
     self.map = L.map(self.mapsDivName, {
       scrollWheelZoom: false
     }).setView([startCoordinate1, startCoordinate2], 4);
@@ -1202,6 +1203,8 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
     }
     self.map.addLayer(self.markers);
     this.rendered = true;
+    deferred.resolve(true);
+    return deferred.promise;
   };
   this.cityClickFunction = function(event) {
     self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();
@@ -2019,6 +2022,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         result.push(row);
         i += 1;
       }
+      console.log(date, schedules, result);
       return result;
     };
     $scope.isHome = function(cell) {
@@ -2092,7 +2096,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return results;
           })()
         ];
-        return $scope.loaded = true;
+        $scope.loaded = true;
+        return console.log($scope.calendars);
       });
       return $scope.createGamesChart();
     };
@@ -2961,6 +2966,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                             if(player.citizenship.title)
                             if(country.name === player.citizenship.title){
                                 player.citizenship.code = country.code;
+                                $('#player_'+player.pk+'_flag').addClass(country.code);
                             }
                         })
                     }
@@ -4731,12 +4737,16 @@ angular.module('Sportomatics').controller('ClubCoachesController', function($sco
 });
 
 angular.module('Sportomatics').controller('ClubGeographyController', function($http, MapService) {
-  var clubTeamApi;
+  var clubTeamApi, loader;
   clubTeamApi = document.getElementById("club-team-api").value;
+  loader = $('.loader');
+  loader.addClass('active');
   $http.get(clubTeamApi + '?season=19').success(function(data) {
     if (MapService.isRendered() === true) {
       MapService.remove();
     }
-    return MapService.createClubsMap(data.all_players, 'players');
+    return MapService.createClubsMap(data.all_players, 'players').then(function() {
+      return loader.removeClass('active');
+    });
   });
 });

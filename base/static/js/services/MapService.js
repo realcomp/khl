@@ -12,7 +12,8 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
   this.geocoder = new google.maps.Geocoder;
   this.addedMarkers = [];
   this.createClubsMap = function(data, dataLabel) {
-    var ggl, osm;
+    var deferred, ggl, osm;
+    deferred = $q.defer();
     self.map = L.map(self.mapsDivName, {
       scrollWheelZoom: false
     }).setView([startCoordinate1, startCoordinate2], 4);
@@ -44,6 +45,8 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
     }
     self.map.addLayer(self.markers);
     this.rendered = true;
+    deferred.resolve(true);
+    return deferred.promise;
   };
   this.cityClickFunction = function(event) {
     self.context.selectedPlace = event.target.options.title.split('_')[0].toUpperCase();
