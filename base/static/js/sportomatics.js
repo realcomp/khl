@@ -149,6 +149,9 @@ Date.prototype.yyyymmddHHMMFormatted = function(){
     var dd  = this.getDate().toString();
     return dd + ' ' + monthNames[mm] + ' ' + yyyy + ' в ' + this.getHours() + ':' + this.getMinutes();
 }
+Date.prototype.HHMM = function(){
+    return this.getHours() + ':' + this.getMinutes();
+}
 Date.prototype.getWeekNumber = function(){
     var d = new Date(+this);
     d.setHours(0,0,0);

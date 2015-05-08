@@ -4,8 +4,12 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.MONTHS = [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
             'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+        $scope.MONTHS_ROD = [
+            'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля',
+            'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря']
         $scope.data = {}
         $scope.params = $location.search()
+        $scope.gameDaysOnly = false
 
         $scope.clubName = document.getElementById('team-name-hidden').value
         $scope.clubAddress = if document.getElementById('club-address')? then document.getElementById('club-address').innerHTML else ''
@@ -101,8 +105,36 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     row.push(cell)
                 result.push(row)
                 i += 1
+            return result
 
-            console.log date, schedules, result
+        $scope.getCalendarDays = (date, schedules) ->
+            year = date.getYear() + 1900
+            month = date.getMonth()
+            daysInM = new Date(year, month + 1, 0).getDate()
+            # day of week, shift left because sunday is 0
+            startDoW = new Date(year, month, 1).getDay() - 1
+            if startDoW < 0
+                startDoW = 6
+            result = []
+            i = 0
+            row = []
+            # last day not in row + infinite loop protection
+            # while row.indexOf(daysInM) == -1 and i <= 6
+            while i * 7 < daysInM + startDoW and i <= 6
+                row = []
+                result.push (cell: 'empty')
+                for j in [0...7]
+                    cell = {
+                        'cell': i * 7 + j,
+                    }
+                    day = cell.cell - startDoW + 1
+                    if 1 <= day <= daysInM
+                        cell['date'] = new Date(year, month, day)
+                        cell['schedule'] = $scope.getSchedule(schedules, cell.date)
+                    row.push(cell)
+                    result.push cell
+                #result.push(row)
+                i += 1
 
             return result
 
@@ -134,12 +166,13 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.getMinEndDate = (data) ->
             a = new Date()
             b = new Date(data.season.end_date)
-            if a < b
+            if a.getTime() < b.getTime()
                 return a
             else
                 return b
 
         $scope.list = () ->
+            $scope.wholeSeason = false
             $scope.params = $location.search()
             params = ''
             if $scope.params.season
@@ -151,19 +184,27 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
 
             $http.get($scope.url + '?' + params
             ).success((data) ->
-                console.log data
                 MapService.remove() if MapService.isRendered()
                 MapService.createClubsMap(data.results, 'trips') if $('#clubs-map').length > 0
                 $scope.data = data
                 $scope.schedules = $scope.parseSchedules(data)
                 date = $scope.getMinEndDate(data)
-                $scope.calendars = [({
-                    'date': $scope.monthDelta(date, deltaM),
-                    'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-                    'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
-                } for deltaM in [-1, 0, 1])]
+                array = []
+                if date isnt (new Date(data.season.end_date))
+                    countToEnd = new Date($scope.data.season.end_date).getMonth() - date.getMonth()
+                    i = 0
+                    while i < countToEnd
+                        array.push i
+                        i++
+                $scope.calendars = []
+                _.each array, (deltaM) ->
+                    $scope.calendars.push
+                        'date': $scope.monthDelta(date, deltaM),
+                        'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                        'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                        'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
                 $scope.loaded = true
-                console.log $scope.calendars
+                console.log $scope.data
             )
             return $scope.createGamesChart()
 
@@ -226,12 +267,54 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     clubGamesChart.draw()
 
         $scope.previous = () ->
-            date = $scope.calendars[$scope.calendars.length - 1][0].date
-            $scope.calendars.push({
-                'date': $scope.monthDelta(date, deltaM),
-                'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-                'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
-            } for deltaM in [-3, -2, -1])
+            date = $scope.calendars[$scope.calendars.length - 3].date
+            _.each [-3,-2,-1], (deltaM) ->
+                $scope.calendars.push
+                    'date': $scope.monthDelta(date, deltaM)
+                    'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()]
+                    'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                    'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+
+        $scope.toggleGameDaysOnly = () ->
+            $scope.gameDaysOnly = !$scope.gameDaysOnly
+
+        $scope.showWholeSeason = () ->
+            if $scope.wholeSeason is true
+                $scope.wholeSeason = false
+                data = $scope.data
+                date = $scope.getMinEndDate(data)
+                array = []
+                if date isnt (new Date(data.season.end_date))
+                    countToEnd = new Date($scope.data.season.end_date).getMonth() - date.getMonth()
+                    i = 0
+                    while i < countToEnd
+                        array.push i
+                        i++
+                $scope.calendars = []
+                _.each array, (deltaM) ->
+                    $scope.calendars.push
+                        'date': $scope.monthDelta(date, deltaM),
+                        'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                        'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                        'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                return
+            $scope.wholeSeason = true
+            date = new Date($scope.data.season.start_date)
+            array = []
+            countToEnd = Math.abs(new Date($scope.data.season.end_date).getMonth()+12 - date.getMonth())
+            i = 0
+            while i < countToEnd
+                array.push i
+                i++
+            $scope.calendars = []
+            _.each array, (deltaM) ->
+                $scope.calendars.push
+                    'date': $scope.monthDelta(date, deltaM),
+                    'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                    'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                    'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+            return
+
 
         $scope.list()
 

@@ -4,3 +4,7 @@
 .line-display{
     text-transform: lowercase !important;
 }
+
+.b-calendar__item .ui.card{
+    min-height: 170px;
+}

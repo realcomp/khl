@@ -19,7 +19,7 @@
 <!--tabs items ends-->
 <div class="ui vertical tabular-xs menu visible-xs">
     <a href="{% url 'hockeyapp:clubs:home-about' pk %}" class="{% if clubs_main_tab == 'home-about' %}active {% endif %} item">Описание</a>
-    <a href="{% url 'hockeyapp:clubs:home-shedule' pk %}" class="{% if clubs_main_tab == 'home-shedule' %}active {% endif %} item">Ближайшие матчи</a>
+    <a href="{% url 'hockeyapp:clubs:home-schedule' pk %}" class="{% if clubs_main_tab == 'home-schedule' %}active {% endif %} item">Ближайшие матчи</a>
     <a href="{% url 'hockeyapp:clubs:home-map' pk %}" class="{% if clubs_main_tab == 'home-map' %}active {% endif %} item">Карта проезда</a>
     <a href="{% url 'hockeyapp:clubs:home-attendance' pk %}" class="{% if clubs_main_tab == 'home-attendance' %}active {% endif %} item">Посещаемость</a>
     <a href="{% url 'hockeyapp:clubs:home-photos' pk %}" class="{% if clubs_main_tab == 'home-photos' %}active {% endif %} item">Фотографии</a>

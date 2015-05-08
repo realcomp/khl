@@ -1,8 +1,10 @@
 angular.module('Sportomatics').controller('ClubCalendarController', [
   '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', function($scope, $http, $location, $parse, MapService, HighchartsFactory) {
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    $scope.MONTHS_ROD = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
     $scope.data = {};
     $scope.params = $location.search();
+    $scope.gameDaysOnly = false;
     $scope.clubName = document.getElementById('team-name-hidden').value;
     $scope.clubAddress = document.getElementById('club-address') != null ? document.getElementById('club-address').innerHTML : '';
     $scope.clubMatchApi = document.getElementById('club-match-api') != null ? document.getElementById('club-match-api').value : void 0;
@@ -105,7 +107,39 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         result.push(row);
         i += 1;
       }
-      console.log(date, schedules, result);
+      return result;
+    };
+    $scope.getCalendarDays = function(date, schedules) {
+      var cell, day, daysInM, i, j, k, month, result, row, startDoW, year;
+      year = date.getYear() + 1900;
+      month = date.getMonth();
+      daysInM = new Date(year, month + 1, 0).getDate();
+      startDoW = new Date(year, month, 1).getDay() - 1;
+      if (startDoW < 0) {
+        startDoW = 6;
+      }
+      result = [];
+      i = 0;
+      row = [];
+      while (i * 7 < daysInM + startDoW && i <= 6) {
+        row = [];
+        result.push({
+          cell: 'empty'
+        });
+        for (j = k = 0; k < 7; j = ++k) {
+          cell = {
+            'cell': i * 7 + j
+          };
+          day = cell.cell - startDoW + 1;
+          if ((1 <= day && day <= daysInM)) {
+            cell['date'] = new Date(year, month, day);
+            cell['schedule'] = $scope.getSchedule(schedules, cell.date);
+          }
+          row.push(cell);
+          result.push(cell);
+        }
+        i += 1;
+      }
       return result;
     };
     $scope.isHome = function(cell) {
@@ -134,7 +168,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       var a, b;
       a = new Date();
       b = new Date(data.season.end_date);
-      if (a < b) {
+      if (a.getTime() < b.getTime()) {
         return a;
       } else {
         return b;
@@ -142,6 +176,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     };
     $scope.list = function() {
       var params;
+      $scope.wholeSeason = false;
       $scope.params = $location.search();
       params = '';
       if ($scope.params.season) {
@@ -152,8 +187,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       $scope.data = {};
       $scope.loaded = false;
       $http.get($scope.url + '?' + params).success(function(data) {
-        var date, deltaM;
-        console.log(data);
+        var array, countToEnd, date, i;
         if (MapService.isRendered()) {
           MapService.remove();
         }
@@ -163,24 +197,26 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.data = data;
         $scope.schedules = $scope.parseSchedules(data);
         date = $scope.getMinEndDate(data);
-        $scope.calendars = [
-          (function() {
-            var k, len, ref, results;
-            ref = [-1, 0, 1];
-            results = [];
-            for (k = 0, len = ref.length; k < len; k++) {
-              deltaM = ref[k];
-              results.push({
-                'date': $scope.monthDelta(date, deltaM),
-                'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-                'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
-              });
-            }
-            return results;
-          })()
-        ];
+        array = [];
+        if (date !== (new Date(data.season.end_date))) {
+          countToEnd = new Date($scope.data.season.end_date).getMonth() - date.getMonth();
+          i = 0;
+          while (i < countToEnd) {
+            array.push(i);
+            i++;
+          }
+        }
+        $scope.calendars = [];
+        _.each(array, function(deltaM) {
+          return $scope.calendars.push({
+            'date': $scope.monthDelta(date, deltaM),
+            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+            'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+          });
+        });
         $scope.loaded = true;
-        return console.log($scope.calendars);
+        return console.log($scope.data);
       });
       return $scope.createGamesChart();
     };
@@ -247,22 +283,64 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       });
     };
     $scope.previous = function() {
-      var date, deltaM;
-      date = $scope.calendars[$scope.calendars.length - 1][0].date;
-      return $scope.calendars.push((function() {
-        var k, len, ref, results;
-        ref = [-3, -2, -1];
-        results = [];
-        for (k = 0, len = ref.length; k < len; k++) {
-          deltaM = ref[k];
-          results.push({
+      var date;
+      date = $scope.calendars[$scope.calendars.length - 3].date;
+      return _.each([-3, -2, -1], function(deltaM) {
+        return $scope.calendars.push({
+          'date': $scope.monthDelta(date, deltaM),
+          'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+          'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+          'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+        });
+      });
+    };
+    $scope.toggleGameDaysOnly = function() {
+      return $scope.gameDaysOnly = !$scope.gameDaysOnly;
+    };
+    $scope.showWholeSeason = function() {
+      var array, countToEnd, data, date, i;
+      if ($scope.wholeSeason === true) {
+        $scope.wholeSeason = false;
+        data = $scope.data;
+        date = $scope.getMinEndDate(data);
+        array = [];
+        if (date !== (new Date(data.season.end_date))) {
+          countToEnd = new Date($scope.data.season.end_date).getMonth() - date.getMonth();
+          i = 0;
+          while (i < countToEnd) {
+            array.push(i);
+            i++;
+          }
+        }
+        $scope.calendars = [];
+        _.each(array, function(deltaM) {
+          return $scope.calendars.push({
             'date': $scope.monthDelta(date, deltaM),
             'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-            'table': $scope.getCalendar($scope.monthDelta(date, deltaM), $scope.schedules)
+            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+            'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
           });
-        }
-        return results;
-      })());
+        });
+        return;
+      }
+      $scope.wholeSeason = true;
+      date = new Date($scope.data.season.start_date);
+      array = [];
+      countToEnd = Math.abs(new Date($scope.data.season.end_date).getMonth() + 12 - date.getMonth());
+      i = 0;
+      while (i < countToEnd) {
+        array.push(i);
+        i++;
+      }
+      $scope.calendars = [];
+      _.each(array, function(deltaM) {
+        return $scope.calendars.push({
+          'date': $scope.monthDelta(date, deltaM),
+          'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+          'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+          'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+        });
+      });
     };
     $scope.list();
   }

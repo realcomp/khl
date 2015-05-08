@@ -88,7 +88,7 @@ class ClubView2(TemplateView):
     template_name = 'hockeyapp/clubs/clubs-team2.html'
 
 class ClubCalendarView(ClubView):
-    template_name = 'hockeyapp/clubs/calendar/calendar-shedule.html'
+    template_name = 'hockeyapp/clubs/calendar/calendar-schedule.html'
 
 
 class ClubCalendarWinLoseView(ClubView):
@@ -107,8 +107,8 @@ class ClubHomeView(ClubView):
     template_name = 'hockeyapp/clubs/home/home-about.html'
 
 
-class ClubHomeSheduleView(ClubView):
-    template_name = 'hockeyapp/clubs/home/home-shedule.html'
+class ClubHomeScheduleView(ClubView):
+    template_name = 'hockeyapp/clubs/home/home-schedule.html'
 
 
 class ClubHomeMapView(ClubView):

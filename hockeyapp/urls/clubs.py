@@ -35,7 +35,7 @@ urlpatterns = [
         name='main-symbol'),
 
     url(r'^(?P<pk>\d+)/calendar/$', clubs.ClubCalendarView.as_view(),
-        name='calendar-shedule'),
+        name='calendar-schedule'),
     url(r'^(?P<pk>\d+)/calendar/winlose/$', clubs.ClubCalendarWinLoseView.as_view(),
         name='calendar-winlose'),
     url(r'^(?P<pk>\d+)/calendar/geography/$', clubs.ClubCalendarGeographyView.as_view(),
@@ -50,8 +50,8 @@ urlpatterns = [
 
     url(r'^(?P<pk>\d+)/home/$', clubs.ClubHomeView.as_view(),
         name='home-about'),
-    url(r'^(?P<pk>\d+)/home/shedule/$', clubs.ClubHomeSheduleView.as_view(),
-        name='home-shedule'),
+    url(r'^(?P<pk>\d+)/home/schedule/$', clubs.ClubHomeScheduleView.as_view(),
+        name='home-schedule'),
     url(r'^(?P<pk>\d+)/home/map/$', clubs.ClubHomeMapView.as_view(),
         name='home-map'),
     url(r'^(?P<pk>\d+)/home/attendance/$', clubs.ClubHomeAttendanceView.as_view(),
