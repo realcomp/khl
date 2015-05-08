@@ -4,6 +4,9 @@
 .line-display{
     text-transform: lowercase !important;
 }
+.pointer{
+    cursor: pointer;
+}
 
 .b-calendar__item .ui.card{
     min-height: 170px;

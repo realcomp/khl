@@ -3,9 +3,128 @@
 {% block tabs-content %}
 
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-about' %}
+<div class="b-tabs-content ui tab active" data-tab="tab-name">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                {{arena.title}}
+            </h2>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
 
+    <div class="row">
+        <div class="col-md-5">
+
+            <!--carousel-->
+            <div class="connected-carousels connected-carousels-styled">
+                <div class="stage">
+                    <div class="carousel carousel-stage">
+                        <ul>
+                            <li><img src="http://dev.sportomatics.ru{{arena.photo}}" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="navigation hidden-xs">
+                    <a class="prev prev-navigation pointer"><i class="caret"></i></a>
+                    <a class="next next-navigation pointer"><i class="caret"></i></a>
+                    <div class="carousel carousel-navigation">
+                        <ul>
+                            <li><img src="http://dev.sportomatics.ru{{arena.photo}}" width="140" height="140" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
+                            <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!--connected-carousels-->
+
+
+        </div>
+
+
+        <div class="col-md-7">
+            <section class="w-section">
+                <div class="b-command-info__main">
+                    <table class="ui unstackable very basic table w-labeled-list">
+                        <tr>
+                            <td><span class="b-labeled">Адрес:</span><span class="font-weight-400"> {{ arena.contacts }}</span></td>
+                            <td></td>
+                        </tr>
+                        {% if arena.phone %}
+                        <tr>
+                            <td><span class="b-labeled">Телефон:</span><span class="font-weight-400"> {{ arena.phone }}</span></td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                        {% if arena.capacity %}
+                        <tr>
+                            <td><span class="b-labeled">Вместимость:</span><span class="font-weight-400"> {{ arena.capacity }} чел.</span></td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                        {% if arena.site %}
+                        <tr>
+                            <td><span class="b-labeled">Сайт:</span><span class="font-weight-400"> {{ arena.site }}</span></td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div><!--b-command-info__main-->
+            </section>
+
+
+            <div class="w-gallery-preview w-section">
+                <div class="b-header b-header__sm">
+                    <h3 class="b-cell b-header__text">
+                        Здесь играют:
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+
+                <div class="row w-gallery-preview__items">
+                    {% for arena_club in arena.club_set %}
+                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                        <div class="ui card">
+                            <div class="w-gallery-preview__item__img img-wrap">
+                                <figure class="figure-styled">
+                                    <a href="#" class="ui image"><img src="'http://dev.sportomatics.ru{{arena_club.logo}}'" alt="" title=""/></a>
+                                </figure>
+                            </div>
+
+                            <div class="w-gallery-preview__item__info">
+                                <p class="name">
+                                    <a href="#">{{arena_club.title}}</a>
+                                </p>
+                                <p class="">
+                                    {{arena_club.address.title}}
+                                </p>
+                            </div>
+
+                            <div class="extra content w-gallery-preview__item__extra">
+                                <p class="">
+                                    {{arena_club.league.title}}
+                                </p>
+                            </div><!--extra content w-gallery-preview__item__extra-->
+                        </div>
+                    </div><!--w-gallery-preview__item-->
+                    {% endfor %}
+                </div><!--row w-gallery-preview__items-->
+
+            </div><!--w-gallery-preview-->
+        </div>
+    </div><!--row-->
+</div>
+<!--tabs content items-->
 {% endblock %}
 
 {% block sticky_menu %}
-    {% include 'hockeyapp/clubs/home/sticky_menu.html' with clubs_main_tab='home-about' clubs_menu_active='club-home' %}
+{% include 'hockeyapp/clubs/home/sticky_menu.html' with clubs_main_tab='home-about' clubs_menu_active='club-home' %}
 {% endblock %}

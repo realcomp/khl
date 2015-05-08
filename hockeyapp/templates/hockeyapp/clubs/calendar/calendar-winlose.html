@@ -28,12 +28,11 @@
         <div class="w-map" style="height: auto !important">
             <div id="chartdiv"></div>
         </div>
-        <div style="text-align: center; height: 120px; width: 100%;" ng-show="!loaded">
-            <div style="z-index: 99999; font-size: 20px; background: rgba(255,255,255,0.7); text-align: center;">
-                <i style="z-index: 1; font-size: 50px; " class="circle notched loading icon"></i><br>
-                Загрузка данных...
-            </div>
+
+        <div class="ui large centered inline text loader" style="background: none !important" ng-class="{'active': !loaded}">
+            Загрузка...
         </div>
+
         <br>
 
         <p class="b-desription">
