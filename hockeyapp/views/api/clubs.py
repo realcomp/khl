@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db.models import Q, Count, Sum
+from django.db.models import Q, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import generics
@@ -9,7 +9,7 @@ from rest_framework import generics
 from base.models import Season
 
 from . import NumbersList
-from ...models import Player, ClubPlayer
+from ...models import ClubPlayer, Match
 from ...serializers.clubs import NumbersSerializer, BestPlayersSerilizer
 
 
@@ -59,16 +59,11 @@ class BestPlayers(generics.ListAPIView):
     def filter_queryset(self, qs):
         qs = super(BestPlayers, self).filter_queryset(qs)
         _season = self.request.query_params.get('season')
+        _club = self.kwargs['club_id']
 
-        qs = (
-            qs
-            .filter(
-                season=_season or Season.objects.get_current_season(),
-                club=self.kwargs['club_id']))
-            # .filter(
-            #     clubplayermatch__match__isnull=False,
-            #     clubplayermatch__match__challenge_type__isnull=False,
-            #     clubplayermatch__match__challenge_type__gt=0))
+        qs = qs.filter(
+            season=_season or Season.objects.get_current_season(),
+            club=_club)
 
         class_fields = {
             # Бомбардир - максимальное кол-во очков (Ш+А)
@@ -96,12 +91,10 @@ class BestPlayers(generics.ListAPIView):
             #     .annotate(**{field_total: Sum(field)})
             #     .order_by(field_total))
             # last_cp = cps.last()
-
             cp_values = {
                 cp: cp.clubplayermatch_set.is_active().aggregate(**{field_total: Sum(field)}).get(field_total, 0) or 0
                 for cp in cps
             }
-
             if cp_values:
                 last_cp, value = sorted(
                     cp_values.items(), key=lambda x: x[1])[-1]
@@ -120,6 +113,30 @@ class BestPlayers(generics.ListAPIView):
 
         # Железный человек - игрок (кроме вратаря),
         # поучаствовавший во всех матчах сезона
-        # classes.append ... _('Ironman') ... players.exclude(line=1)
+        cp = qs.filter(
+            clubplayermatch__match__isnull=False,
+            clubplayermatch__match__challenge_type__isnull=False,
+            clubplayermatch__match__challenge_type__gt=0)
+
+        matches_count = (
+            Match.objects
+            .filter(Q(home_team=_club) | Q(guest_team=_club))
+            .filter(challenge_type__isnull=False, challenge_type__gt=0)
+            .filter(clubplayermatch__clubplayer__season=_season)
+            .distinct('pk')
+            .count())
+        cp_values = {
+            cp: cp.clubplayermatch_set.is_active().count()
+            for cp in qs.exclude(line=1)
+        }
+        if cp_values:
+            last_cp, value = sorted(
+                cp_values.items(), key=lambda x: x[1])[-1]
+            classes.append({
+                'class': _('Ironman'),
+                'player': last_cp.player,
+                'value': value,
+                'count': matches_count,
+            })
 
         return classes
