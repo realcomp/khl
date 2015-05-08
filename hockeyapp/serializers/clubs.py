@@ -373,8 +373,8 @@ class BestPlayersSerilizer(serializers.ModelSerializer):
     class_ = serializers.ReadOnlyField(source='class')
     player = PlayerCardSerializer()
     value = serializers.ReadOnlyField()
-    matches_total = serializers.ReadOnlyField()
+    count = serializers.ReadOnlyField()
 
     class Meta(object):
-        fields = 'class_', 'player', 'value', 'matches_total'
+        fields = 'class_', 'player', 'value', 'count'
         model = ClubPlayer

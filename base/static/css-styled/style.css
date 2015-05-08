@@ -2531,6 +2531,10 @@ figure {
 
 
 
+.loader-large {
+    background: #ffffff url('/static/images/loader-large.gif') center no-repeat;
+    height: 100px;
+}
 
 
 
