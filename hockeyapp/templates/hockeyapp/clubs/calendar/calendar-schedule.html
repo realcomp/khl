@@ -18,7 +18,7 @@
                 </div>
             </a>
 
-            <a class="b-cell b-change-views__item w-tooltip" data-content="Убрать неигровые дни" data-variation="basic" ng-click="toggleGameDaysOnly()">
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Убрать неигровые дни" data-variation="basic" ng-click="toggleGameDaysOnly()" ng-class="{'active': gameDaysOnly === true}">
                 <i class="ellipsis horizontal icon"></i>
             </a>
 
@@ -31,6 +31,13 @@
     <div class="ui large centered inline text loader" style="background: none !important" ng-class="{'active': !loaded}">
         Загрузка...
     </div>
+    <div class="ui large center aligned grid message" ng-if="noGames">
+        В ближайшее время матчей нет
+        <br>
+        <!--<div class="w-btn " ng-click="showWholeSeason()">
+                <div class="ui button green tiny margin-auto">Показать прошедшие матчи</div>
+        </div>-->
+    </div>
 
     {% verbatim %}
     <section class="w-calendar w-section hidden-xs hidden-sm" ng-repeat="month in calendars">
@@ -39,7 +46,8 @@
                 {{month.month_display}}
             </h3>
         </div><!--b-header b-header__sm-->
-        <div class="row b-calendar">
+
+        <div class="row b-calendar" ng-if="!gameDaysOnly">
             <div class="b-calendar__item b-calendar__date">
             </div><div class="b-calendar__item b-calendar__date">
                 Понедельник
@@ -56,22 +64,6 @@
             </div><div class="b-calendar__item b-calendar__date">
                 Воскресенье
             </div>
-
-            <!--<section ng-repeat="row in month.table">
-                <div class="b-calendar__item"></div>
-                <div class="b-calendar__item" ng-repeat="cell in row">
-                    <div class="ui card">
-                        <div class="ui statistic">
-                            <p class="value">
-                                3
-                            </p>
-                            <p class="">
-                                Сентября
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>-->
 
             <div class="b-calendar__item" ng-repeat="cell in month.table">
                 <div class="ui card" ng-if="cell.date != null && cell.schedule == null && !gameDaysOnly">
@@ -168,26 +160,105 @@
                         </div>
                     </a><!--b-calendar__item__inner-->
 
-                    <!--<div class="extra content w-gallery-preview__item__extra">
-                        <p class="b-calendar__item__comment">
-                            <i class="icon comments outline i-top-3"></i> 17
-                        </p>
-
-                        <div class="w-btn">
-                            <div class="ui button green tiny animated">
-                                <div class="visible content">Были 2343</div>
-                                <div class="hidden content">
-                                    <i class="icon checkmark"></i> Я был
-                                </div>
-                            </div>
-                        </div><!--w-btn
-                    </div>-->
                 </div><!--ui card-->
             </div>
         </div>
+
+        <div class="row b-calendar" ng-if="gameDaysOnly">
+            <div class="b-calendar__item" ng-repeat="cell in month.table" ng-if="cell.schedule != null">
+                <div class="ui card past-event" ng-if="cell.date != null && cell.schedule != null">
+                    <!-- home -->
+                    <a href="#" class="b-calendar__item__inner" ng-if="cell.schedule.is_home">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.home_team.logo}}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.guest_team.logo}}">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            {{cell.schedule.home_team.score}}0 : 0{{cell.schedule.guest_team.score}}
+                        </p>
+
+
+                        <div class="b-calendar__item__team" ng-if="cell.schedule.is_home">
+                            <p class="">
+                                <span>{{cell.schedule.guest_team.title}}</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                {{cell.schedule.guest_team.address.title}}
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                {{cell.schedule.date | date: 'dd.MM.yyyy' }}
+                            </p>
+                            <p class="">
+                                {{cell.schedule.date | date: 'HH' }}:{{cell.schedule.date | date: 'mm' }} МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+                    <!--home-->
+
+                    <a href="#" class="b-calendar__item__inner" ng-if="!cell.schedule.is_home">
+                        <div class="row">
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.home_team.logo}}">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.guest_team.logo}}">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="b-negative-text b-calendar__item__score">
+                            {{cell.schedule.home_team.score}}0 : 0{{cell.schedule.guest_team.score}}
+                        </p>
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>{{cell.schedule.home_team.title}}</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                {{cell.schedule.home_team.address.title}}
+                            </p>
+                        </div>
+
+
+                        <div class="b-calendar__item__date">
+                            <p class="">
+                                {{cell.schedule.date | date: 'dd.MM.yyyy' }}
+                            </p>
+                            <p class="">
+                                {{cell.schedule.date | date: 'HH' }}:{{cell.schedule.date | date: 'mm' }} МСК
+                            </p>
+                        </div>
+                    </a><!--b-calendar__item__inner-->
+
+                </div><!--ui card-->
+            </div>
+        </div><!--row-->
+
         <!--<div class="w-btn btn-month" ng-click="previous()">
             <div class="ui button green tiny">Показать еще один месяц</div>
         </div>-->
+
+
     </section>
     {% endverbatim %}
 

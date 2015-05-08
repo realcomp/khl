@@ -198,13 +198,19 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                         i++
                 $scope.calendars = []
                 _.each array, (deltaM) ->
-                    $scope.calendars.push
-                        'date': $scope.monthDelta(date, deltaM),
-                        'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-                        'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
-                        'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                    table = $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                    gamesInMonth = _.filter table, (cell) ->
+                        cell.schedule?
+                    if gamesInMonth.length > 0
+                        $scope.calendars.push
+                            'date': $scope.monthDelta(date, deltaM),
+                            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                            'table': table
                 $scope.loaded = true
-                console.log $scope.data
+                if $scope.calendars.length is 0
+                    $scope.noGames = true
+                console.log $scope.calendars.length
             )
             return $scope.createGamesChart()
 
@@ -292,13 +298,18 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                         i++
                 $scope.calendars = []
                 _.each array, (deltaM) ->
-                    $scope.calendars.push
-                        'date': $scope.monthDelta(date, deltaM),
-                        'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-                        'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
-                        'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                    table = $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                    gamesInMonth = _.filter table, (cell) ->
+                        cell.schedule?
+                    if gamesInMonth.length > 0
+                        $scope.calendars.push
+                            'date': $scope.monthDelta(date, deltaM),
+                            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                            'table': table
                 return
             $scope.wholeSeason = true
+            $scope.noGames = false
             date = new Date($scope.data.season.start_date)
             array = []
             countToEnd = Math.abs(new Date($scope.data.season.end_date).getMonth()+12 - date.getMonth())
@@ -308,11 +319,15 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 i++
             $scope.calendars = []
             _.each array, (deltaM) ->
-                $scope.calendars.push
-                    'date': $scope.monthDelta(date, deltaM),
-                    'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-                    'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
-                    'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                table = $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+                gamesInMonth = _.filter table, (cell) ->
+                    cell.schedule?
+                if gamesInMonth.length > 0
+                    $scope.calendars.push
+                        'date': $scope.monthDelta(date, deltaM),
+                        'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+                        'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
+                        'table': table
             return
 
 

@@ -20,7 +20,7 @@
                 <div class="stage">
                     <div class="carousel carousel-stage">
                         <ul>
-                            <li><img src="http://dev.sportomatics.ru{{arena.photo}}" alt=""></li>
+                            <li><img src="{{arena.photo}}" alt=""></li>
                             <li><img src="http://placehold.it/500x500" alt=""></li>
                             <li><img src="http://placehold.it/500x500" alt=""></li>
                             <li><img src="http://placehold.it/500x500" alt=""></li>
@@ -35,7 +35,7 @@
                     <a class="next next-navigation pointer"><i class="caret"></i></a>
                     <div class="carousel carousel-navigation">
                         <ul>
-                            <li><img src="http://dev.sportomatics.ru{{arena.photo}}" width="140" height="140" alt=""></li>
+                            <li><img src="{{arena.photo}}" width="140" height="140" alt=""></li>
                             <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
                             <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
                             <li><img src="http://placehold.it/500x500" width="140" height="140" alt=""></li>
@@ -95,7 +95,7 @@
                         <div class="ui card">
                             <div class="w-gallery-preview__item__img img-wrap">
                                 <figure class="figure-styled">
-                                    <a href="#" class="ui image"><img src="'http://dev.sportomatics.ru{{arena_club.logo}}'" alt="" title=""/></a>
+                                    <a href="#" class="ui image"><img src="{{arena_club.logo}}" alt="" title=""/></a>
                                 </figure>
                             </div>
 
@@ -126,5 +126,5 @@
 {% endblock %}
 
 {% block sticky_menu %}
-{% include 'hockeyapp/clubs/home/sticky_menu.html' with clubs_main_tab='home-about' clubs_menu_active='club-home' %}
+    {% include 'hockeyapp/clubs/home/sticky_menu.html' with clubs_main_tab='home-about' clubs_menu_active='club-home' %}
 {% endblock %}

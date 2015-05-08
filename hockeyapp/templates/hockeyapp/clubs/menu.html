@@ -41,7 +41,7 @@
                     <a href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
                 </li>
                 <li class="{% if clubs_menu_active == 'club' %}active {% endif %} item">
-                    <a href="{% url 'hockeyapp:clubs:details' pk %}">Состав</a>
+                    <a href="{% url 'hockeyapp:clubs:team' pk %}">Состав</a>
                 </li>
                 <li class="{% if clubs_menu_active == 'club-calendar' %}active {% endif %} item">
                     <a href="{% url 'hockeyapp:clubs:calendar' pk %}">Календарь</a>

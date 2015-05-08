@@ -3,7 +3,29 @@
 {% block tabs-content %}
 
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-map' %}
+<!--tabs content items-->
+<input id="coordinates" type="hidden" value="{{ arena.coords|default:arena.contacts|escape }}">
+<div class="b-tabs-content ui" ng-controller="ClubHomeMapController">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Как добраться?
+            </h2>
+        </div><!--w-table-->
+    </div><!--b-header b-header__md-->
 
+    <div class="b-header b-header__sm b-header__filter-in">
+        <h3 class="b-cell b-header__text">Карта проезда</h3>
+    </div>
+
+    <p class="b-text__p"></p>
+
+    <div id="arena-map" class="w-map">
+    <iframe src="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE"
+                                name="GoogleMap" height="486" frameborder="0" style="border:0; width: 100%;"></iframe>
+    </div>
+
+</div><!--tabs content items-->
 {% endblock %}
 
 {% block sticky_menu %}

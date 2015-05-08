@@ -127,14 +127,8 @@
     <!--mob menu-->
     <!--mob menu-->
 
-
-    <div class="w-diagram" ng-if="loader && clubs.length === 0" style="padding-top: 120px;">
-        <div style="text-align: center; height: 120px; width: 100%; " ng-show="!loaded">
-            <div style="z-index: 99999; font-size: 20px; background: #ffeeee; text-align: center;">
-                <i style="z-index: 1; font-size: 50px; " class="circle notched loading icon"></i><br>
-                Загрузка данных...
-            </div>
-        </div>
+    <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': loader && clubs.length === 0}">
+        Загрузка...
     </div>
     <div ng-if="clubs.length > 0">
         <div id="chartdiv" style="width: 100%; height:480px; "></div>

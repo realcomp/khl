@@ -7,7 +7,7 @@ from ..views import clubs
 urlpatterns = [
     url(r'^$', clubs.ClubListView.as_view(), name='list'),
     url(r'^table/$', clubs.ClubListTableView.as_view(), name='list-table'),
-    url(r'^(?P<pk>\d+)/$', clubs.ClubView.as_view(), name='details'),
+    url(r'^(?P<pk>\d+)/$', clubs.ClubMainAboutView.as_view(), name='details'),
     url(r'^(?P<pk>\d+)/calendar/$', clubs.ClubCalendarView.as_view(),
         name='calendar'),
     url(r'^(?P<pk>\d+)/stats/$', clubs.ClubStatsView.as_view(),
@@ -58,6 +58,9 @@ urlpatterns = [
         name='home-attendance'),
     url(r'^(?P<pk>\d+)/home/photos/$', clubs.ClubHomePhotosView.as_view(),
         name='home-photos'),
+
+    url(r'^(?P<pk>\d+)/team/$', clubs.ClubView.as_view(),
+        name='team'),
 
     url(r'^(?P<pk>\d+)/numbers/$', clubs.ClubNumbersView.as_view(),
         name='numbers'),

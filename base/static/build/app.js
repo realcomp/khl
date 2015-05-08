@@ -2128,15 +2128,25 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         }
         $scope.calendars = [];
         _.each(array, function(deltaM) {
-          return $scope.calendars.push({
-            'date': $scope.monthDelta(date, deltaM),
-            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
-            'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+          var gamesInMonth, table;
+          table = $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules);
+          gamesInMonth = _.filter(table, function(cell) {
+            return cell.schedule != null;
           });
+          if (gamesInMonth.length > 0) {
+            return $scope.calendars.push({
+              'date': $scope.monthDelta(date, deltaM),
+              'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+              'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+              'table': table
+            });
+          }
         });
         $scope.loaded = true;
-        return console.log($scope.data);
+        if ($scope.calendars.length === 0) {
+          $scope.noGames = true;
+        }
+        return console.log($scope.calendars.length);
       });
       return $scope.createGamesChart();
     };
@@ -2234,16 +2244,24 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         }
         $scope.calendars = [];
         _.each(array, function(deltaM) {
-          return $scope.calendars.push({
-            'date': $scope.monthDelta(date, deltaM),
-            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
-            'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+          var gamesInMonth, table;
+          table = $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules);
+          gamesInMonth = _.filter(table, function(cell) {
+            return cell.schedule != null;
           });
+          if (gamesInMonth.length > 0) {
+            return $scope.calendars.push({
+              'date': $scope.monthDelta(date, deltaM),
+              'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+              'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+              'table': table
+            });
+          }
         });
         return;
       }
       $scope.wholeSeason = true;
+      $scope.noGames = false;
       date = new Date($scope.data.season.start_date);
       array = [];
       countToEnd = Math.abs(new Date($scope.data.season.end_date).getMonth() + 12 - date.getMonth());
@@ -2254,12 +2272,19 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       }
       $scope.calendars = [];
       _.each(array, function(deltaM) {
-        return $scope.calendars.push({
-          'date': $scope.monthDelta(date, deltaM),
-          'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
-          'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
-          'table': $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules)
+        var gamesInMonth, table;
+        table = $scope.getCalendarDays($scope.monthDelta(date, deltaM), $scope.schedules);
+        gamesInMonth = _.filter(table, function(cell) {
+          return cell.schedule != null;
         });
+        if (gamesInMonth.length > 0) {
+          return $scope.calendars.push({
+            'date': $scope.monthDelta(date, deltaM),
+            'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
+            'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()],
+            'table': table
+          });
+        }
       });
     };
     $scope.list();

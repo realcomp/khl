@@ -7,6 +7,10 @@
 .pointer{
     cursor: pointer;
 }
+.margin-auto{
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
 
 .b-calendar__item .ui.card{
     min-height: 170px;
