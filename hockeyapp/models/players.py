@@ -141,7 +141,7 @@ class Player(AbstractMan):
 
     def save(self, **kwargs):
         if self.pk and not self.line:
-            #смотрим амплуа игрока из истории 
+            #смотрим амплуа игрока из истории
             if self.clubplayer_set.exists():
                 self.line = self.clubplayer_set.all().last().line
         # update last club
@@ -217,7 +217,7 @@ class Player(AbstractMan):
 
     def get_absolute_url(self):
         if self.pk:
-            return reverse('hockeyapp:players:card', kwargs={'pk': self.pk})
+            return reverse('hockeyapp:players:main-card', kwargs={'pk': self.pk})
 
     class Meta(object):
         verbose_name = _('Player')

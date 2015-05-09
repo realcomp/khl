@@ -120,11 +120,12 @@ class ClubListPagination(ClubListMixin, pagination.PageNumberPagination):
 class PartnerPlayerSerializer(PlayerMinimalSerialiser):
     citizenship = CountrySerializer()
     line_display = serializers.ReadOnlyField(source='get_line_display')
+    club = ClubListSerializer()
 
     class Meta:
         model = Player
-        fields = (  'id', 'number', 'line', 'ru_fio', 'photo', 'fio', 'name', 
-                    'lastname', 'citizenship', 'line_display')
+        fields = (  'id', 'number', 'line', 'ru_fio', 'photo', 'fio', 'name',
+                    'lastname', 'citizenship', 'line_display', 'club', 'url')
         read_only_fields = fields
 
 

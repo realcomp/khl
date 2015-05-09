@@ -17,7 +17,7 @@ from ..serializers.players import (
 
 
 class PlayersSearch(TemplateView):
-    template_name = 'hockeyapp/players/players-search.html'
+    template_name = 'hockeyapp/players/players-search/players.html'
 
     def get_context_data(self, **kwargs):
         context = super(PlayersSearch, self).get_context_data(**kwargs)
@@ -42,12 +42,12 @@ class PlayersSearch2(PlayersSearch):
     template_name = 'hockeyapp/players/players-search2.html'
 
 
-class PlayerCard(DetailView):
+class PlayerMainCard(DetailView):
     model = Player
-    template_name = 'hockeyapp/players/player-card-short.html'
+    template_name = 'hockeyapp/players/main/main-card.html'
 
     def get_context_data(self, **kwargs):
-        context = super(PlayerCard, self).get_context_data(**kwargs)
+        context = super(PlayerMainCard, self).get_context_data(**kwargs)
         context['request'] = self.request
         clubs = Club.objects.active(
                             ).filter(clubplayer__player=self.get_object()
@@ -60,11 +60,11 @@ class PlayerCard(DetailView):
         return context
 
 
-class PlayerCardIndicators(PlayerCard):
+class PlayerCardIndicators(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-indicators.html'
 
 
-class PlayerCardClubs(PlayerCard):
+class PlayerCardClubs(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-clubs.html'
 
     def get_context_data(self, **kwargs):
@@ -78,7 +78,7 @@ class PlayerCardClubs(PlayerCard):
         return context
 
 
-class PlayerCardCoaches(PlayerCard):
+class PlayerCardCoaches(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-coaches.html'
 
     def get_context_data(self, **kwargs):
@@ -96,21 +96,21 @@ class PlayerCardCoaches(PlayerCard):
         return context
 
 
-class PlayerCardPartners(PlayerCard):
+class PlayerCardPartners(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-partners.html'
 
 
-class PlayerCardPhotos(PlayerCard):
+class PlayerCardPhotos(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-photos.html'
 
 
-class PlayerCardCommunication(PlayerCard):
+class PlayerCardCommunication(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-communication.html'
 
 
-class PlayerCardNews(PlayerCard):
+class PlayerCardNews(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-news.html'
 
 
-class PlayerCardNumbers(PlayerCard):
+class PlayerCardNumbers(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-numbers.html'

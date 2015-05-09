@@ -1,0 +1,316 @@
+{% extends "hockeyapp/players/main/player-main.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: карточка игрока, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block tabs-content %}
+
+{% include 'hockeyapp/players/main/tabs.html' with player_main_tab='main-card' %}
+<input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}">
+<input type="hidden" id="partners-url" value="{% url 'api:hockey:player_partners' pk %}">
+{% for club in clubs %}
+<input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}_{{club.main_color}}">
+{% endfor %}
+<!--tabs content items-->
+<div class="b-tabs-content ui tab active" ng-controller="PlayerPartnersController">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="w-command-info__main row b-row hidden-xs">
+                <div class="b-command-info__logo col-sm-5">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image">
+                                    <img class="ui image" src="http://dev.sportomatics.ru{{photo}}">
+                                </a>
+                            </figure>
+                        </div>
+                    </div><!--ui card-->
+                </div>
+
+                <div class="col-sm-7 b-command-info__main">
+                    <div class="b-header b-header__sm">
+                        <h3 class="b-header__text">
+                            {{fio}}
+                        </h3>
+                        <p class="">
+                            {{line_display}}
+                        </p>
+                    </div><!--b-header b-header__sm-->
+
+                    <div class="b-player-info__team ui feed">
+                        <div class="event">
+                            <div class="label">
+                                <img src="{{club.logo}}" alt="" title="">
+                            </div>
+                            <div class="content">
+                                <div class="summary">
+                                    <a class="team-now" href="#">сейчас в</a> <span>{{club.title}}</span>
+                                    <p class="location">{{club.address.title}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end b-player-info__team-->
+
+                    <table class="ui unstackable very basic table w-labeled-list">
+                        <tbody>
+                            <tr>
+                                <td><span class="b-labeled">{% trans 'Height' %}:</span></td>
+                                <td>{{ height }} {% trans 'sm' %}.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="b-labeled">{% trans 'Weight' %}:</span></td>
+                                <td>{{ weight }} {% trans 'kg' %}.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="b-labeled">{% trans 'Grip' %}:</span></td>
+                                <td>{% trans grip %}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="b-labeled">{% trans 'Birth date' %}:</span></td>
+                                <td>{% trans birth_date %}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="b-labeled">{% trans 'Age:' %}</span></td>
+                                <td>{{age.0}} {% trans 'years:' %}</td>
+                            </tr>
+                            <tr>
+                                <td><span class="b-labeled">{% trans 'Citizenship:' %}</span></td>
+                                <td>{{citizenship.title}}</td>
+                            </tr>
+                        </tbody>
+                   </table>
+
+                    <ul class="w-labeled-list unstyled hidden-lg hidden-md hidden-sm hidden-xs">
+                        <li>
+                            <label class="b-labeled">{% trans 'Height' %}:</label> {{ height }} {% trans 'sm' %}.
+                        </li>
+                        <li>
+                            <label class="b-labeled">{% trans 'Weight' %}:</label> {{ weight }} {% trans 'kg' %}.
+                        </li>
+                        <li>
+                            <label class="b-labeled">{% trans 'Grip' %}:</label> {% trans grip %}
+                        </li>
+                        <li>
+                            <label class="b-labeled">{% trans 'Birth date' %}:</label> {% trans birth_date %}
+                        </li>
+                        <li>
+                            <label class="b-labeled">{% trans 'Age:' %}</label> {{age.0}} {% trans 'years' %}
+                        </li>
+                        <li>
+                            <label class="b-labeled">{% trans 'Citizenship:' %}</label> {{ citizenship.title }}
+                        </li>
+                    </ul><!--end w-labeled-list-->
+
+                </div><!--b-command-info__main-->
+            </div><!--row-->
+
+            <div class="w-command-calendar b-row">
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Краткая статистика
+                        </h2>
+
+                        <a href="#" class="b-cell active b-change-views__item">
+                            <i class="block wait icon"></i>
+                        </a>
+
+                        <a href="team-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="" data-variation="basic">
+                            <i class="history icon"></i>
+                        </a>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+                <table class="ui unstackable striped table colored-th grey-th">
+                    <tbody>
+                        <tr>
+                            <th>
+                               <span class="hidden-xs">Характеристики</span>
+                               <span class="visible-xs">Хар-ки</span>
+                            </th>
+                            <th>Показатели</th>
+                            <th>Место</th>
+                        </tr>
+
+                        <tr>
+                            <td>Сезоны</td>
+                            <td>17</td>
+                            <td><a href="#">3</a></td>
+                        </tr>
+
+                        <tr>
+                            <td>Матчи</td>
+                            <td>22</td>
+                            <td><a href="#">10</a></td>
+                        </tr>
+
+                        <tr>
+                            <td>Голы</td>
+                            <td>348</td>
+                            <td><a href="#">2</a></td>
+                        </tr>
+
+                        <tr>
+                            <td>Передачи</td>
+                            <td>392</td>
+                            <td><a href="#">4</a></td>
+                        </tr>
+
+                        <tr>
+                            <td>Очки</td>
+                            <td>740</td>
+                            <td><a href="#">2</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div><!--w-command-calendar-->
+
+            <div class="w-command-info b-row">
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Достижения
+                        </h2>
+
+                        <a href="#" class="b-cell active b-change-views__item">
+                            <i class="block layout icon"></i>
+                        </a>
+
+                        <a href="team-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="" data-variation="basic">
+                            <i class="table icon"></i>
+                        </a>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+                <ul class="w-labeled-list unstyled">
+                    <li>
+                        17.03.2015 <label class="b-labeled">100-я шайба в карьере</label>
+                    </li>
+                    <li>
+                        17.03.2015 <label class="b-labeled">100-я шайба в карьере</label>
+                    </li>
+                </ul>
+
+            </div><!--w-command-info-->
+        </div>
+
+
+        <div class="col-md-7">
+            <div class="w-gallery-preview">
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Основные партнеры
+                        </h2>
+
+                        <a href="#" class="b-cell active b-change-views__item">
+                            <i class="block wait icon"></i>
+                        </a>
+
+                        <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="За всю историю команды" data-variation="basic">
+                            <i class="history icon"></i>
+                        </a>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+
+                <div class="row w-gallery-preview__items">
+
+
+                    {% verbatim %}
+                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in briefPartners">
+                        <div class="ui card">
+                            <div class="ui ribbon green label">{{player.player.number}}</div>
+                            <div class="w-mask">
+                                <div class="w-gallery-preview__item__img img-wrap">
+                                    <figure class="figure-styled">
+                                        <img class="ui image" src="{{player.player.photo.file}}">
+                                    </figure>
+                                </div>
+                                <!--<div class="b-mask">
+                                    <a class="ui inverted button" href="#">
+                                        Link
+                                    </a>
+                                </div>-->
+                            </div>
+
+                            <div class="w-gallery-preview__item__info">
+                                <p class="name">
+                                    <a href="{{ currentUrl + player.player.id}}">
+                                    {{player.player.fio}}</a> <i id="player_{{player.player.id}}_flag" class="flag {{player.player.citizenship.code}}"></i>
+                                </p>
+                                <p class="description line-display">
+                                    {{player.player.line_display}}
+                                </p>
+                            </div>
+
+                            <div class="w-gallery-preview__item__location">
+                                <a class="team-now" href="#">сейчас в</a>
+                                <p class="team-name">{{player.player.club.title}}</p>
+                                <p class="location">
+                                    {{player.player.club.address.title}}
+                                </p>
+                            </div>
+
+                            <div class="extra content w-gallery-preview__item__extra">
+                                <div class="ui statistic">
+                                    <div class="value">
+
+                                    </div>
+                                    <div class="label">
+                                        {{player.seasons_count}} сезонов вместе
+                                    </div>
+                                </div><!--ui static-->
+                            </div>
+                        </div>
+                     </div><!--w-gallery-preview__item-->
+                     {% endverbatim %}
+
+                     <div class="ui large centered inline text loader" style="background: none !important; height: 370px !important; margin-bottom: 20px;" ng-class="{'active': !loaded}">
+                        Загрузка...
+                    </div>
+
+                </div><!--row w-gallery-preview__items-->
+
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Клубная карьера
+                        </h2>
+
+                        <a href="#" class="b-cell active b-change-views__item">
+                            <i class="block layout icon"></i>
+                        </a>
+
+                        <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="За всю историю команды" data-variation="basic">
+                            <i class="history icon"></i>
+                        </a>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+                <div class="w-diagram">
+                    <div class="ui grid" ng-controller="PlayerCardIndicatorsController">
+                        <input type="hidden" id="isPlayerShort">
+                        <div class="row">
+                            <div class="ui large centered inline text loader" style="background: none !important; height: 480px;" ng-class="{'active': loader}">
+                                Загрузка...
+                            </div>
+                            <div class="sixteen wide column">
+                                <div id="chartdiv"  style="height: 200px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!--w-gallery-preview-->
+        </div>
+    </div><!--row-->
+</div>
+<!--tabs content items-->
+
+
+{% endblock %}

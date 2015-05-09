@@ -6,7 +6,7 @@ from ..views import players
 
 urlpatterns = [
     url(r'^$', players.PlayersSearch.as_view(), name='search'),
-    url(r'^(?P<pk>\d+)/$', players.PlayerCard.as_view(), name='card'),
+    url(r'^(?P<pk>\d+)/$', players.PlayerMainCard.as_view(), name='main-card'),
     url(r'^(?P<pk>\d+)/indicators/$', players.PlayerCardIndicators.as_view(),
         name='indicators'),
     url(r'^(?P<pk>\d+)/clubs/$', players.PlayerCardClubs.as_view(),

@@ -1,6 +1,6 @@
-<div class="ui green menu player-menu">
+<!--<div class="ui green menu player-menu">
     <a class="{% if players_menu_active == 'player-card' %}active {% endif %}item"
-       href="{% url 'hockeyapp:players:card' pk %}">Главное</a>
+       href="{% url 'hockeyapp:players:main-card' pk %}">Главное</a>
     <a class="{% if players_menu_active == 'player-card-indicators' %}active {% endif %}item"
        href="{% url 'hockeyapp:players:indicators' pk %}">Статистика</a>
     <a class="{% if players_menu_active == 'player-card-clubs' %}active {% endif %}item"
@@ -18,3 +18,48 @@
     <a class="{% if players_menu_active == 'player-card-numbers' %}active {% endif %}item"
        href="{% url 'hockeyapp:players:numbers' pk %}">Любимые номера</a>
 </div>
+-->
+
+<section class="w-main-nav">
+    <div class="w-menu">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w-main-nav__b-menu">
+                <span class="sr-only">Menu</span>
+                <i class="icon content"></i>
+            </button>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="w-main-nav__b-menu">
+            <ul class="w-main-nav__b-menu ui inverted green menu">
+                <li class="item w-main-nav__b-menu__logo hidden-xs">
+                    <a href="{% url 'hockeyapp:players:main-card' pk %}"><img src="{{photo}}" /></a>
+                </li>
+                <li class="{% if player_menu_active == 'player-main' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:players:main-card' pk %}">Главное</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-achievments' %}active {% endif %} item">
+                    <a href="#">Достижения</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-stats' %}active {% endif %} item">
+                    <a href="#">Статистика</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-clubs' %}active {% endif %} item">
+                    <a href="#">Клубы</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-coaches' %}active {% endif %} item">
+                    <a href="#">Тренеры</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-partners' %}active {% endif %} item">
+                    <a href="#">Партнеры</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-photos' %}active {% endif %} item">
+                    <a href="#">Фотографии</a>
+                </li>
+                <li class="{% if player_menu_active == 'player-communication' %}active {% endif %} item">
+                    <a href="#">Общение</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section><!--w-main-nav-->
