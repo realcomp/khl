@@ -8,6 +8,7 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
             params += '?club='+$scope.clubPk
             #if $scope.params.season
             params += '&season=19'# + $scope.params.season
+            $scope.loaded = false
             $http.get($scope.clubMatchApi + params)
                 .success (data) ->
                     $scope.games = _.filter(_.sortBy(data, (el) ->
@@ -15,7 +16,6 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
                     ).reverse(), (game) ->
                         return game.is_home is true
                     )
-                    console.log $scope.games
                     seriesClub = {}
                     seriesOpponent = {}
                     visitorsObject = (
@@ -33,7 +33,7 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
                         ).filter (toFilter) ->
                             return toFilter?
                     )
-                    console.log parseFloat($scope.games[0].arena_capacity_rate).toFixed(2)*100
+                    $scope.loaded = true
                     clubGamesChart = new HighchartsFactory.ArenaVisitorsChart 'chartdiv', [visitorsObject], $scope.games[0].arena_capacity
                     clubGamesChart.draw()
 

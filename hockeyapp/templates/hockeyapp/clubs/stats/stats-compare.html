@@ -162,7 +162,7 @@
                                 {{club.address.title}}
                             </p>
                             <p class="">
-                                сезон 12/13
+                                {{club.dataBySeason.results[0].season.title}}
                             </p>
                         </div>
                     </div><!--b-team-compare__card-header-->
@@ -1009,12 +1009,20 @@
                                 </h4>
                             </div><!--b-header b-header__xs-->
 
-                            <select class="ui search dropdown">
+                            <div class="ui input block" style="width: 100%;">
+                                <angucomplete id="clubs_filter"  style="width: 100%;"
+                                              pause="300" minlength="2"
+                                              selectedobject="selectedClub"
+                                              placeholder="Введите название"
+                                              url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                            </div>
+
+                            <!--<select class="ui search dropdown">
                                 <option value="">введите название</option>
                                 <option value="Адмирал">Адмирал</option>
                                 <option value="Автомобилист">Автомобилист</option>
                                 <option value="СКА">СКА</option>
-                            </select>
+                            </select>-->
                         </div>
 
                         <div class="b-team-compare__form__item b-team-compare__form__season">
@@ -1024,15 +1032,16 @@
                                 </h4>
                             </div><!--b-header b-header__xs-->
 
-                            <select class="ui dropdown">
+                            <select class="ui dropdown" ng-model="season">
                                 <option value="">Сезон</option>
-                                <option value="сезон 2015-14">Сезон 2015-14</option>
-                                <option value="сезон 2014-13">Сезон 2014-13</option>
+                                {% for season in seasons reversed %}
+                                <option value="{{season.pk}}">Сезон {{season.label}}</option>
+                                {% endfor %}
                             </select>
                         </div>
 
                         <div class="w-btn">
-                            <button type="submit" class="ui button blue">
+                            <button type="button" class="ui button blue" ng-click="addAverageClubPlayerData()">
                                 <i class="icon plus"></i> Добавить
                             </button>
 

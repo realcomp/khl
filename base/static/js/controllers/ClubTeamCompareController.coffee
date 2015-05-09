@@ -15,6 +15,10 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         if $scope.clubs.length > 0
             $scope.listAveragePlayer()
 
+    $scope.setSeason = (season) ->
+        $scope.season = season
+        console.log $scope.season
+
     $scope.setSelectedPlayer = (obj) ->
         if obj? and obj.originalObject?
             $scope.selectedPlayer = obj.originalObject
@@ -24,6 +28,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             return
         if $scope.selectedClub? and $scope.selectedClub.originalObject?
             pk = $scope.selectedClub.originalObject.pk
+            console.log pk
         if not pk?
             if clubPk?
                 pk = clubPk
@@ -36,7 +41,11 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                 )
             else
                 return
-        url = $('#club-team-api').val()#.replace('0/', '') + pk
+        url = $('#club-team-api').val().replace(/(\/)([0-9]+)(\/)/, '/') + pk
+        if $scope.season?
+            url += '?season=' + $scope.season
+        else
+            $scope.season = 19
         $http.get(url).success (data, status, headers) ->
             LocaleFactory.setLocale headers()['content-language']
             players = data.all_players = _.filter(data.all_players, (player) ->
@@ -50,7 +59,11 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             $scope.loader = true
             $q.all(queries).then (results) ->
                 $scope.loader = false
-                lastSeasonResult = _.last results[0].data.results
+                seasonResult = _.find(results[0].data.results, (result) ->
+                    return result.season.pk.toString() is $scope.season
+                )
+                if not seasonResult?
+                    seasonResult = _.last results[0].data.results
                 clubObject =
                     all_players: data.all_players
                     offender_players: data.offender_players
@@ -62,9 +75,10 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     address: data.address
                     dataBySeason:
                         results: [{
-                            season: lastSeasonResult['season']
+                            season: seasonResult['season']
                         }]
                     results: results
+                    seasonResult: seasonResult['season']
                 $scope.clubs.push clubObject
                 $timeout( () ->
                     $scope.listAveragePlayer()
@@ -102,7 +116,9 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     averageData = 0
                     _.each club.results, (result) ->
                         player = _.findWhere(club.all_players, pk: Number(result.config.url.match("players\/(.*)\/indicators")[1]))
-                        player.result = _.last(result.data.results)[$scope.field]
+                        player.result = _.find(result.data.results, (result) ->
+                            return result.season.pk.toString() is club.seasonResult.pk.toString()
+                        )[$scope.field]
                         return if player.line is 3 and not $scope.offenders or player.line is 2 and not $scope.defenders
                         if player.selected is true
                             averageData += parseFloat(_.last(result.data.results)[key])

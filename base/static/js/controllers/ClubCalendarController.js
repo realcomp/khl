@@ -225,9 +225,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         });
         $scope.loaded = true;
         if ($scope.calendars.length === 0) {
-          $scope.noGames = true;
+          return $scope.noGames = true;
         }
-        return console.log($scope.calendars.length);
       });
       return $scope.createGamesChart();
     };
@@ -295,7 +294,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return toFilter != null;
           })
         };
-        console.log($scope.games);
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
         return clubGamesChart.draw();
       });

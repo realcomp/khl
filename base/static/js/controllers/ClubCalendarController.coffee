@@ -211,7 +211,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 $scope.loaded = true
                 if $scope.calendars.length is 0
                     $scope.noGames = true
-                console.log $scope.calendars.length
             )
             return $scope.createGamesChart()
 
@@ -266,7 +265,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                         ).filter (toFilter) ->
                             return toFilter?
                     )
-                    console.log $scope.games
                     clubGamesChart = new HighchartsFactory.ClubGamesChart 'chartdiv', [clubObject, opponentObject]
                     clubGamesChart.draw()
 

@@ -3,7 +3,23 @@
 {% block tabs-content %}
 
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-attendance' %}
-
+<!--tabs content items-->
+<div class="b-tabs-content ui tab active" ng-controller="ClubHomeController">
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Посещаемость
+            </h2>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+    <div class="ui large centered inline text loader" style="background: none !important; height: 480px;" ng-class="{'active': !loaded}">
+        Загрузка...
+    </div>
+    <div>
+        <div class="m-t-10" id="chartdiv" style="width: 100%; height:300px; "></div>
+    </div>
+</div>
+<!--tabs content items-->
 {% endblock %}
 
 {% block sticky_menu %}

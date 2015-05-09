@@ -2148,9 +2148,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         });
         $scope.loaded = true;
         if ($scope.calendars.length === 0) {
-          $scope.noGames = true;
+          return $scope.noGames = true;
         }
-        return console.log($scope.calendars.length);
       });
       return $scope.createGamesChart();
     };
@@ -2218,7 +2217,6 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return toFilter != null;
           })
         };
-        console.log($scope.games);
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
         return clubGamesChart.draw();
       });
@@ -2415,6 +2413,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
     params = '';
     params += '?club=' + $scope.clubPk;
     params += '&season=19';
+    $scope.loaded = false;
     return $http.get($scope.clubMatchApi + params).success(function(data) {
       var clubGamesChart, seriesClub, seriesOpponent, visitorsObject;
       $scope.games = _.filter(_.sortBy(data, function(el) {
@@ -2422,7 +2421,6 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
       }).reverse(), function(game) {
         return game.is_home === true;
       });
-      console.log($scope.games);
       seriesClub = {};
       seriesOpponent = {};
       visitorsObject = {
@@ -2440,7 +2438,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
           return toFilter != null;
         })
       };
-      console.log(parseFloat($scope.games[0].arena_capacity_rate).toFixed(2) * 100);
+      $scope.loaded = true;
       clubGamesChart = new HighchartsFactory.ArenaVisitorsChart('chartdiv', [visitorsObject], $scope.games[0].arena_capacity);
       return clubGamesChart.draw();
     });
@@ -2852,6 +2850,10 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       return $scope.listAveragePlayer();
     }
   });
+  $scope.setSeason = function(season) {
+    $scope.season = season;
+    return console.log($scope.season);
+  };
   $scope.setSelectedPlayer = function(obj) {
     if ((obj != null) && (obj.originalObject != null)) {
       return $scope.selectedPlayer = obj.originalObject;
@@ -2864,6 +2866,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     }
     if (($scope.selectedClub != null) && ($scope.selectedClub.originalObject != null)) {
       pk = $scope.selectedClub.originalObject.pk;
+      console.log(pk);
     }
     if (pk == null) {
       if (clubPk != null) {
@@ -2880,7 +2883,12 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
         return;
       }
     }
-    url = $('#club-team-api').val();
+    url = $('#club-team-api').val().replace(/(\/)([0-9]+)(\/)/, '/') + pk;
+    if ($scope.season != null) {
+      url += '?season=' + $scope.season;
+    } else {
+      $scope.season = 19;
+    }
     $http.get(url).success(function(data, status, headers) {
       var players, queries;
       LocaleFactory.setLocale(headers()['content-language']);
@@ -2894,9 +2902,14 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       });
       $scope.loader = true;
       $q.all(queries).then(function(results) {
-        var clubObject, lastSeasonResult;
+        var clubObject, seasonResult;
         $scope.loader = false;
-        lastSeasonResult = _.last(results[0].data.results);
+        seasonResult = _.find(results[0].data.results, function(result) {
+          return result.season.pk.toString() === $scope.season;
+        });
+        if (seasonResult == null) {
+          seasonResult = _.last(results[0].data.results);
+        }
         clubObject = {
           all_players: data.all_players,
           offender_players: data.offender_players,
@@ -2909,11 +2922,12 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           dataBySeason: {
             results: [
               {
-                season: lastSeasonResult['season']
+                season: seasonResult['season']
               }
             ]
           },
-          results: results
+          results: results,
+          seasonResult: seasonResult['season']
         };
         $scope.clubs.push(clubObject);
         $timeout(function() {
@@ -2963,7 +2977,9 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
             player = _.findWhere(club.all_players, {
               pk: Number(result.config.url.match("players\/(.*)\/indicators")[1])
             });
-            player.result = _.last(result.data.results)[$scope.field];
+            player.result = _.find(result.data.results, function(result) {
+              return result.season.pk.toString() === club.seasonResult.pk.toString();
+            })[$scope.field];
             if (player.line === 3 && !$scope.offenders || player.line === 2 && !$scope.defenders) {
               return;
             }

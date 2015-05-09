@@ -7,6 +7,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
     params = '';
     params += '?club=' + $scope.clubPk;
     params += '&season=19';
+    $scope.loaded = false;
     return $http.get($scope.clubMatchApi + params).success(function(data) {
       var clubGamesChart, seriesClub, seriesOpponent, visitorsObject;
       $scope.games = _.filter(_.sortBy(data, function(el) {
@@ -14,7 +15,6 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
       }).reverse(), function(game) {
         return game.is_home === true;
       });
-      console.log($scope.games);
       seriesClub = {};
       seriesOpponent = {};
       visitorsObject = {
@@ -32,7 +32,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
           return toFilter != null;
         })
       };
-      console.log(parseFloat($scope.games[0].arena_capacity_rate).toFixed(2) * 100);
+      $scope.loaded = true;
       clubGamesChart = new HighchartsFactory.ArenaVisitorsChart('chartdiv', [visitorsObject], $scope.games[0].arena_capacity);
       return clubGamesChart.draw();
     });
