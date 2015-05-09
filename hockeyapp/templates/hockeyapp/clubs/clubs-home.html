@@ -12,6 +12,7 @@
         <!-- {% trans "Home arena" %} -->
         {% include "hockeyapp/clubs/clubs-header.html" with club_section="Home arena" %}
         <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
+        <input type="hidden" id="team-arena-id" value="{{arena.pk}}">
 
         <div class="page-content page-container" ng-controller="ClubHomeController">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-home" %}

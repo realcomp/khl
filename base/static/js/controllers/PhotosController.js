@@ -53,7 +53,7 @@ angular.module('Sportomatics')
 
         $scope.club_id = $('#team-id').val();
         $scope.player_id = $('#player-id').val();
-        $scope.arena_id = (document.URL.indexOf('photos') > -1) ? null : $('#team-arena-id').val();
+        $scope.arena_id = (document.URL.indexOf('home') === -1) ? null : $('#team-arena-id').val();
         $scope.photosSlider = [];
         $scope.photosChunk = [];
         console.log()

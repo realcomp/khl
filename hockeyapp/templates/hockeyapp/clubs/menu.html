@@ -55,9 +55,11 @@
                 <li class="{% if clubs_menu_active == 'club-photos' %}active {% endif %}item">
                     <a href="{% url 'hockeyapp:clubs:photos' pk %}">Фотографии</a>
                 </li>
+                {% comment %}
                 <li class="{% if clubs_menu_active == 'club-fanzone' %}active {% endif %}item">
                     <a href="{% url 'hockeyapp:clubs:fanzone' pk %}">Фан-клуб</a>
                 </li>
+                {% endcomment %}
             </ul>
         </div>
     </div>

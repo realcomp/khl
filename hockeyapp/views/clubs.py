@@ -128,7 +128,7 @@ class ClubFanZoneView(ClubView):
 
 
 class ClubPhotosView(ClubView):
-    template_name = 'hockeyapp/clubs/clubs-photos.html'
+    template_name = 'hockeyapp/clubs/photos/clubs-photos.html'
 
 
 class ClubStatsView(ClubView):

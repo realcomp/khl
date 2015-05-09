@@ -3,7 +3,193 @@
 {% block tabs-content %}
 
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-photos' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui" ng-controller="PhotosController">
 
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Фотографии арены
+            </h2>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+    <!--<div class="b-header b-header__xs">
+        <h4 class="b-header__text">
+            Апрель 2015
+        </h4>
+    </div><!--b-header b-header__sm-->
+
+    <div class="w-gallery-preview">
+        <div class="row w-gallery-preview__items w-gallery-preview__items__6">
+                {% verbatim %}
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="photo in photos track by $index">
+                    <div class="ui card b-arena__photo">
+                        <p class="text-center">
+                           {{photo.created}}
+                        </p>
+                        <a class="ui image" ng-click="PhotoPopupShow(photo.id, $index, $event)">
+                            <img class="ui image" src="{{photo.photo.img.file}}">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                {% endverbatim %}
+
+                {% comment %}
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                        <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card b-arena__photo">
+                       <p class="text-center">
+                           24 апреля 2015
+                        </p>
+                        <a href="#" class="ui image">
+                            <img class="ui image" src="http://placehold.it/500x500">
+                        </a>
+                        <p class="text-center">
+                            <a href="#">
+                                <i class="heart icon"> <span class="text-icon">95</span></i>
+                            </a>
+                            <a href="#">
+                                <i class="comment icon"> <span class="text-icon">5</span></i>
+                            </a>
+                        </p>
+                    </div>
+                </div><!--w-gallery-preview__item-->
+                {% endcomment %}
+        </div>
+    </div>
+
+    <div class="w-btn btn-month">
+        <div class="ui button green tiny">Показать еще</div>
+    </div>
+
+</div><!--tabs content items-->
 {% endblock %}
 
 {% block sticky_menu %}

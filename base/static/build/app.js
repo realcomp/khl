@@ -3504,7 +3504,7 @@ angular.module('Sportomatics')
 
         $scope.club_id = $('#team-id').val();
         $scope.player_id = $('#player-id').val();
-        $scope.arena_id = (document.URL.indexOf('photos') > -1) ? null : $('#team-arena-id').val();
+        $scope.arena_id = (document.URL.indexOf('home') === -1) ? null : $('#team-arena-id').val();
         $scope.photosSlider = [];
         $scope.photosChunk = [];
         console.log()
@@ -3663,6 +3663,7 @@ angular.module('Sportomatics')
             return this.getDate() + ' ' + monthsRu[this.getMonth()] + ' ' + this.getFullYear();
         }
 })
+
 angular.module('Sportomatics')
     .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $state, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/

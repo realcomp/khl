@@ -12,9 +12,80 @@
     margin-right: auto !important;
 }
 
+/* Highcharts */
+
+
+.highcharts-tooltip path{
+    stroke: #c0c0c0 !important;
+}
+.tooltip-header{
+    background: #141414 !important;
+    color: #ecf0f1 !important;
+    font-size: 14px;
+    border-bottom: 2px solid #c0c0c0;
+    padding: 8px;
+}
+.highcharts-tooltip > span {
+    min-width: 160px;
+    background: rgba(255,255,255,1);
+    border: 2px solid #141414;
+    box-shadow: 1px 1px 4px #888;
+    border-radius: 4px;
+    padding-bottom: 5px;
+}
+
+#chart-tooltip{
+    width: 938px;
+    height: 90px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    box-shadow: 1px 1px 4px #888;
+}
+#chart-tooltip-header{
+    font-weight: bold;
+    width: 930px;
+    height: 20px;
+    border-bottom: 2px solid #c0c0c0;
+    text-align: center;
+    padding: 4px;
+}
+#chart-tooltip-content{
+    padding: 8px;
+}
+.tooltip-block{
+    float: left;
+    text-align: left;
+    border-right: 2px solid #c0c0c0;
+    padding-right: 6px;
+    padding-left: 6px;
+    min-width: 120px;
+}
+/* Highcharts */
+
+/* LEAFLET */
+
+.map-popup {
+    width: 200px;
+}
+.map-popup .leaflet-poup-content{
+    text-align: center;
+}
+.leaflet-marker-icon{
+    margin-top: -43px !important;
+}
+.leaflet-marker-shadow{
+    margin-top: -50px !important;
+    margin-left: -18px !important;
+}
+/* LEAFLET JS */
 .b-calendar__item .ui.card{
     min-height: 170px;
 }
 .w-command-calendar__item{
     font-family: 'Roboto', sans-serif;
+}
+.b-arena__photo .image img{
+    width: 155px !important;
+    height: 155px !important;
 }
