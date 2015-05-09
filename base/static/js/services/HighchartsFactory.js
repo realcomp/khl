@@ -1,5 +1,5 @@
 angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location, $rootScope) {
-  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
+  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart, clubGamesFormatterDiv;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
       this.divId = divId;
@@ -172,7 +172,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
             padding: 0
           },
           formatter: function() {
-            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>';
+            return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
           }
         },
         plotOptions: {
@@ -582,6 +582,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     return HighchartsPlayerIndicatorsChart;
 
   })();
+  clubGamesFormatterDiv = function(title, score, date, leftLogo, rightLogo) {
+    return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score b-win-text">' + score + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
+  };
   return {
     PlayerStatsSpiderChart: HighchartsSpiderChart,
     ClubGamesChart: HighchartsClubGamesChart,

@@ -16,6 +16,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         $scope.clubMatchApi = if document.getElementById('club-match-api')? then document.getElementById('club-match-api').value;
         $scope.clubCalendarApi = $scope.url = if document.getElementById('club-calendar-api')? then document.getElementById('club-calendar-api').value;
         $scope.clubPk = document.getElementById('team-id').value;
+        $scope.clubLogo = document.getElementById('club-logo').value
         $scope.games = []
 
         $scope.selection = 'all'
@@ -219,6 +220,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             params += '?club='+$scope.clubPk
             if $scope.params.season
                 params += '&season=' + $scope.params.season
+            else
+                params += '&season=19'
             $http.get($scope.clubMatchApi + params)
                 .success (data) ->
                     $scope.games = _.sortBy(data, (el) ->
@@ -235,19 +238,11 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 x: index
                                 y: -Math.abs(game.opponent_score)
                                 date: game.date
-                                name: game.opponent.title_verbose + ' - ' + $scope.clubName + ' ' + $scope.clubAddress
+                                name: game.opponent.title + ' - ' + $scope.clubName
                                 score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score)
                                 color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
-                                #dataLabels:
-                                    #enabled: true
-                                    #align: 'center'
-                                    #verticalAlign: 'bottom'
-                                    #rotation: 270
-                                    #inside: true
-                                    #x: -2
-                                    #y: 70
-                                    #formatter: () ->
-                                    #    return this.key.split('-')[0]
+                                leftLogo: game.opponent.logo
+                                rightLogo: $scope.clubLogo
                             )
                         ).filter (toFilter) ->
                             return toFilter?
@@ -262,13 +257,16 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 x: index
                                 y: game.score
                                 date: game.date
-                                name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title_verbose
+                                name: $scope.clubName + ' - ' + game.opponent.title
                                 score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score)
                                 color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
+                                leftLogo: $scope.clubLogo
+                                rightLogo: game.opponent.logo
                             )
                         ).filter (toFilter) ->
                             return toFilter?
                     )
+                    console.log $scope.games
                     clubGamesChart = new HighchartsFactory.ClubGamesChart 'chartdiv', [clubObject, opponentObject]
                     clubGamesChart.draw()
 

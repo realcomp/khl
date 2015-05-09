@@ -15,3 +15,6 @@
 .b-calendar__item .ui.card{
     min-height: 170px;
 }
+.w-command-calendar__item{
+    font-family: 'Roboto', sans-serif;
+}

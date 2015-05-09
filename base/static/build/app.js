@@ -232,7 +232,7 @@ $.fn.textWidth = function(){
 angular.module('Sportomatics')
 
 angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location, $rootScope) {
-  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
+  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart, clubGamesFormatterDiv;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
       this.divId = divId;
@@ -405,7 +405,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
             padding: 0
           },
           formatter: function() {
-            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>';
+            return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
           }
         },
         plotOptions: {
@@ -815,6 +815,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     return HighchartsPlayerIndicatorsChart;
 
   })();
+  clubGamesFormatterDiv = function(title, score, date, leftLogo, rightLogo) {
+    return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score b-win-text">' + score + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
+  };
   return {
     PlayerStatsSpiderChart: HighchartsSpiderChart,
     ClubGamesChart: HighchartsClubGamesChart,
@@ -1930,6 +1933,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.clubMatchApi = document.getElementById('club-match-api') != null ? document.getElementById('club-match-api').value : void 0;
     $scope.clubCalendarApi = $scope.url = document.getElementById('club-calendar-api') != null ? document.getElementById('club-calendar-api').value : void 0;
     $scope.clubPk = document.getElementById('team-id').value;
+    $scope.clubLogo = document.getElementById('club-logo').value;
     $scope.games = [];
     $scope.selection = 'all';
     $scope.setSelecton = function(selection) {
@@ -2156,6 +2160,8 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       params += '?club=' + $scope.clubPk;
       if ($scope.params.season) {
         params += '&season=' + $scope.params.season;
+      } else {
+        params += '&season=19';
       }
       return $http.get($scope.clubMatchApi + params).success(function(data) {
         var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
@@ -2177,9 +2183,11 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               x: index,
               y: -Math.abs(game.opponent_score),
               date: game.date,
-              name: game.opponent.title_verbose + ' - ' + $scope.clubName + ' ' + $scope.clubAddress,
+              name: game.opponent.title + ' - ' + $scope.clubName,
               score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score),
-              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              leftLogo: game.opponent.logo,
+              rightLogo: $scope.clubLogo
             };
           }).filter(function(toFilter) {
             return toFilter != null;
@@ -2200,14 +2208,17 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               x: index,
               y: game.score,
               date: game.date,
-              name: $scope.clubName + ' ' + $scope.clubAddress + ' - ' + game.opponent.title_verbose,
+              name: $scope.clubName + ' - ' + game.opponent.title,
               score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
-              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71'
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              leftLogo: $scope.clubLogo,
+              rightLogo: game.opponent.logo
             };
           }).filter(function(toFilter) {
             return toFilter != null;
           })
         };
+        console.log($scope.games);
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
         return clubGamesChart.draw();
       });
