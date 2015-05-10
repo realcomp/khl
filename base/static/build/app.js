@@ -3026,6 +3026,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.notplaying_players = null;
         $scope.state = 'fio';
         $scope.season = 19;
+        $scope.seasons = [];
 
         $scope.setType = function(type){
             $scope.type = type;
@@ -3084,9 +3085,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             'clubs': []
         };
 
-        $scope.setSeason = function(season) {
+        $scope.setSeason = function(season, push) {
             $scope.season = season;
-            self.list(self.compare);
+            self.list(push);
         };
 
         $scope.workWithData = function(data){
@@ -3153,32 +3154,32 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             return cell;
         };
 
-        self.list = function(callback, callbackArg) {
+        self.list = function(push) {
             var params = 'season=' + $scope.season;//$('#ClubTeamForm').serialize();
-            self.players.data = null;
-            self.players.table = null;
-            self.players.loader = true;
-            self.clubs.clubs = [];
+            $scope.loaded = false;
             $http.get(url + '?' + params)
             .success(function(data) {
-                $scope.players = data;
-                self.players.data = data;
-                self.players.table = {
-                    'goalkeeper': data.goalkeeper_players,
-                    'defender': data.defender_players,
-                    'forward': data.offender_players,
-                    'trainer': data.coaches
-                };
-                $http.get('/static/json/countries-json-ru-codes.json')
-                .success(function(data){
-                    $scope.countryCodes = data;
-                }).then(function(){
-                    $scope.workWithData($scope.players);
-                });
-                self.players.loader = false;
-                if (typeof callback === 'function') {
-                    callback(callbackArg);
+                if (push){
+                    $scope.seasons.push({
+                        players: data,
+                        season: $scope.season,
+                        title: document.getElementById('season_'+$scope.season).value
+                    })
+                } else {
+                    $scope.seasons = [{
+                        players: data,
+                        season: $scope.season,
+                        title: document.getElementById('season_'+$scope.season).value
+                    }]
                 }
+                $scope.players = data;
+                $http.get('/static/json/countries-json-ru-codes.json')
+                    .success(function(data){
+                        $scope.countryCodes = data;
+                        $scope.loaded = true;
+                    }).then(function(){
+                        $scope.workWithData(_.last($scope.seasons).players);
+                    });
             });
         };
 
@@ -3196,7 +3197,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.clubs.loader = true;
             $http.get(url + '?' + params)
             .success(function(data) {
-                    console.log(data)
                 if (data.leagues.length) {
                     var clubRows = [];
                     var clubsInRow = [];
@@ -3300,6 +3300,15 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         };
 
         self.list();
+
+        $('.b-tabs-content').visibility({
+            once: false,
+            observeChanges: true,
+            onBottomVisible: function(){
+                if($scope.seasons.length > 0)
+                $scope.setSeason($scope.season-1, true)
+            }
+        })
 
     }
 ]);
