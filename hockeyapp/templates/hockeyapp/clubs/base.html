@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
+
+    <link href="/static/new/dist/mlpushmenu/jquery.multilevelpushmenu.css" rel="stylesheet">
     <link href="/static/new/dist/semantic.min.css" rel="stylesheet">
 
     <link href="/static/new/fonts/icon-fonts/style.css" rel="stylesheet">
@@ -15,10 +17,12 @@
     <script src="/static/new/assets/js/modernizr.custom.js"></script>
     <script type="text/javascript" src="/static/new/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/new/dist/semantic.min.js"></script>
+
     <!--push mobile menu-->
-    <script src="/static/new/assets/js/classie.js"></script>
+    <!--<script src="/static/new/assets/js/classie.js"></script>
     <script src="/static/new/assets/js/mlpushmenu.js"></script>
-    <!---->
+    -->
+    <script src="/static/new/dist/mlpushmenu/jquery.multilevelpushmenu.min.js"></script>
 
     <script type="text/javascript" src="/static/new/assets/js/jquery.jcarousel.min.js"></script>
     <script type="text/javascript" src="/static/new/assets/js/jcarousel.connected-carousels.js"></script>
@@ -29,3 +33,4 @@
 {% block header %}
     {% include "partial/header.html" with user_card_menu_active="clubs" %}
 {% endblock %}
+

@@ -3310,6 +3310,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             }
         })
 
+
     }
 ]);
 

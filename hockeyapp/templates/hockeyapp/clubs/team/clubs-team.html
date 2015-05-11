@@ -1,9 +1,15 @@
 {% extends "hockeyapp/clubs/base.html" %}
 {% load i18n %}
+
+{% block mobile_menu %}
+    {% include "hockeyapp/clubs/mlpushmenu.html" with active_menu="club-team" %}
+{% endblock %}
+
 {% block body %}
 <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
 <a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
 <div class="w-page__crew">
+
     <div class="body_inner bg-image" ng-controller="ClubTeamController as ClubTeamCtrl">
         <main id="main">
             <section class="container">
@@ -229,9 +235,32 @@
 
 
 </div>
-
+<script type="text/javascript">
+    $(document).ready(function(){
+        var menuState = 'not_exist';
+        $('.mlpushmenu-trigger').click(function(){
+            if (menuState === 'active') {
+                $('#mlpushmenu').multilevelpushmenu('collapse');
+                menuState = 'not_active';
+            } else {
+                if (menuState === 'not_exist') {
+                    $('#mlpushmenu').removeClass('display-none');
+                    $('#mlpushmenu').multilevelpushmenu({
+                        fullCollapse: true,
+                        mode: 'cover',
+                        onItemClick: function(event) {
+                            event.stopPropagation();
+                        }
+                    });
+                    $('#mlpushmenu').multilevelpushmenu('expand', 'Клуб');
+                }
+                $('#mlpushmenu').multilevelpushmenu('expand');
+                menuState = 'active';
+            }
+        })
+    });
+</script>
 {% endblock %}
-
 
 
 

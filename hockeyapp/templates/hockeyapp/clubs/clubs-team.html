@@ -1,5 +1,7 @@
 {% extends "hockeyapp/clubs/base.html" %}
 {% load i18n %}
+
+
 {% block body %}
 <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
 <a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>

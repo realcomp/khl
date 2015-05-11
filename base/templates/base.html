@@ -64,8 +64,12 @@
         {% endblock %}
     </head>
     <body ng-app="{% block ngapp %}Sportomatics{% endblock %}">
+
         {% block header %}
             {% include "partial/header.html" %}
+        {% endblock %}
+
+        {% block mobile_menu %}
         {% endblock %}
 
         {% block body %}

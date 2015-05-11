@@ -1,0 +1,107 @@
+<div id="mlpushmenu" class="visible-xs display-none">
+    <nav>
+        <!--<h2><i class="fa fa-reorder"></i>All Categories</h2>-->
+        <ul>
+            <li class="no-padding">
+                <a class="no-padding">
+                    <button type="button" class="navbar-toggle mlpushmenu-trigger" id="trigger">
+                        <i class="icon content"></i>
+                    </button>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class=""></i>
+                    Виды спорта
+                </a>
+                <h2><i class=""></i>Виды спорта</h2>
+                <ul>
+                    <li>
+                        <a href="#"><i class=""></i>Хоккей</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class=""></i>Футбол</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class=""></i>Баскетбол</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class=""></i>Разделы</a>
+                <h2><i class=""></i>Разделы</h2>
+                <ul>
+                    <li>
+                        <a href="{% url 'hockeyapp:clubs:list' %}">Клубы</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'hockeyapp:players:search' %}">Игроки</a>
+                    </li>
+                    <li>
+                        <a href="#">Фан-зона</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class=""></i>Клуб</a>
+                <h2><i class=""></i>Клуб</h2>
+                <ul>
+                    <li>
+                        <a>Главное</a>
+                        <h2><i class=""></i>Главное</h2>
+                        <ul>
+                            <li>
+                                <a href="#"><i class=""></i>О команде</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=""></i>География</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=""></i>Тренеры</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=""></i>История номеров</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li {% if active_menu == 'club-team' %} class="active" {% endif %}>
+                        <a href="#" style="margin-left: 14px;"><i class=""></i>Состав</a>
+                        <!--<h2><i class=""></i>Состав</h2>
+                        <ul>
+                            <li>
+                                <a href="#"><i class=""></i>Ростер</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=""></i>Все</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=""></i>Пришли</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class=""></i>Ушли</a>
+                            </li>
+                        </ul>-->
+                    </li>
+                    <li>
+                        <a>Календарь</a>
+                        <h2>Календарь</h2>
+                        <ul>
+                            <li {% if active_menu == 'calendar-schedule' %} class="active" {% endif %}>
+                                <a href="{% url 'hockeyapp:clubs:calendar-schedule' pk %}"><i class=""></i>Расписание</a>
+                            </li>
+                            <li {% if active_menu == 'calendar-winlose' %} class="active" {% endif %}>
+                                <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}"><i class=""></i>Победы и проигрыши</a>
+                            </li>
+                            <li {% if active_menu == 'calendar-geography' %} class="active" {% endif %}>
+                                <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}"><i class=""></i>География матчей</a>
+                            </li>
+                            <li {% if active_menu == 'calendar-trips' %} class="active" {% endif %}>
+                                <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}"><i class=""></i>Выезды</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>
