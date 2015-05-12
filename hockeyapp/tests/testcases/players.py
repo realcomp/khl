@@ -31,7 +31,7 @@ class PlayersMixin(object):
 
     def test_player_card(self):
         response = self.client.get(
-            reverse('hockeyapp:players:card', kwargs={'pk': self.player.pk}))
+            reverse('hockeyapp:players:main-card', kwargs={'pk': self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertEqualPlayer(response.context_data, self.player)
 
