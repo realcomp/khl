@@ -1,7 +1,7 @@
 angular.module('Sportomatics').controller('ClubListController', [
     '$http', '$scope', '$location', 'PlayersSearchService', 'MapService', 'SeasonsService',
     ($http, $scope, $location, PlayersSearchService, MapService, SeasonsService) ->
-        url = $('#ClubListForm').attr('action')
+        url = $('#ClubListURL').attr('href')
         @map = true;
 
         $scope.$location = $location
@@ -14,16 +14,17 @@ angular.module('Sportomatics').controller('ClubListController', [
         $scope.params = $location.search()
         $scope.params.league = ''
 
-        # // if ($scope.params.season) {
-        # //     $('[name="season"]').attr('value', $scope.params.season);
-        # // }
+        $scope.setSeason = (season) ->
+            $location.search('season', season)
+            $scope.params = $location.search()
+            $scope.params.league = '' # reset league
+            $scope.list()
+            return
 
-        # $scope.setSeason = function(season) {
-        #     $location.search('season', season);
-        #     $location.search('league', '');
-        #     $scope.params = $location.search();
-        #     $scope.list();
-        # };
+        $scope.setTable = (isTable) ->
+            $location.search('is_table', isTable or null)
+            $scope.params = $location.search()
+            return
 
         $scope.setCountry = (country) ->
             if not $scope.isCountryActive(country)
@@ -55,9 +56,7 @@ angular.module('Sportomatics').controller('ClubListController', [
                 return false
 
         $scope.list = (all) ->
-            params = '' #; //$('#ClubListForm').serialize();
-
-            params += '&order_by=' + ($scope.params.order_by or '%s_title')
+            params = '&order_by=' + ($scope.params.order_by or '%s_title')
             if $scope.params.reversed
                 params += '&reversed=true'
 

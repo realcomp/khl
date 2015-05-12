@@ -2471,7 +2471,7 @@ angular.module('Sportomatics')
 angular.module('Sportomatics').controller('ClubListController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'MapService', 'SeasonsService', function($http, $scope, $location, PlayersSearchService, MapService, SeasonsService) {
     var url;
-    url = $('#ClubListForm').attr('action');
+    url = $('#ClubListURL').attr('href');
     this.map = true;
     $scope.$location = $location;
     $scope.PlayersSearchService = PlayersSearchService;
@@ -2480,6 +2480,16 @@ angular.module('Sportomatics').controller('ClubListController', [
     $scope.sparams = {};
     $scope.params = $location.search();
     $scope.params.league = '';
+    $scope.setSeason = function(season) {
+      $location.search('season', season);
+      $scope.params = $location.search();
+      $scope.params.league = '';
+      $scope.list();
+    };
+    $scope.setTable = function(isTable) {
+      $location.search('is_table', isTable || null);
+      $scope.params = $location.search();
+    };
     $scope.setCountry = function(country) {
       if (!$scope.isCountryActive(country)) {
         $location.search('country', country);
@@ -2514,8 +2524,7 @@ angular.module('Sportomatics').controller('ClubListController', [
     };
     $scope.list = function(all) {
       var params;
-      params = '';
-      params += '&order_by=' + ($scope.params.order_by || '%s_title');
+      params = '&order_by=' + ($scope.params.order_by || '%s_title');
       if ($scope.params.reversed) {
         params += '&reversed=true';
       }

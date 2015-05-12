@@ -65,22 +65,7 @@
                 </section><!--w-main-nav-->
 
                 <section class="w-page-tabs">
-                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
-                        <input type="hidden" ng-update-hidden
-                               ng-model="season" ng-init="season = params.season"
-                               ng-change="setSeason(season)">
-                        <div class="text">{% trans "Season" %} {% lcb %} SeasonsService.getSeasonTitle(season) {% rcb %}</div>
-                        <i class="dropdown icon"></i>
-                        <div class="menu transition hidden seasons" tabindex="-1">
-                            {% for season in seasons %}
-                                <div class="item"
-                                     ng-class="{ 'active selected': SeasonsService.isSeasonActive(season, {{ season.pk }}, {{ forloop.first|yesno:'true,false,' }}) }"
-                                     data-text="{% trans "Season" %} {{ season.label }}" data-value="{{ season.pk }}">
-                                    {{ season.label }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
+                    {% include "hockeyapp/clubs/seasons.html" %}
 
                 <!--tabs items-->
                     <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
@@ -100,6 +85,8 @@
 
                 <!--tabs content-->
 
+                    <a id="ClubListURL" class="hidden" href="{% url 'api:hockey:club-list-api' %}"></a>
+
                     <!--tabs content items-->
                     <div class="b-tabs-content w-clubs__khl ui tab active">
 
@@ -118,14 +105,19 @@
                                         </div>
                                     </a>
 
-                                    <a class="b-cell b-change-views__item" href="{% url 'hockeyapp:clubs:list-table' %}">
+                                    <a class="b-cell b-change-views__item" href=""
+                                       ng-click="setTable(false)" ng-show="params.is_table">
+                                        <i class="block layout icon"></i>
+                                    </a>
+                                    <a class="b-cell b-change-views__item" href=""
+                                       ng-click="setTable(true)" ng-hide="params.is_table">
                                         <i class="table icon"></i>
                                     </a>
                                 </div><!--row-->
                             </div><!--b-header b-header__md-->
 
-                            <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}">
-                            <div class="w-gallery-preview">
+                            <!-- <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}"> -->
+                            <div class="w-gallery-preview" ng-hide="params.is_table">
                                 <div class="row w-gallery-preview__items w-gallery-preview__items__8">
 
                                     {% verbatim %}
@@ -171,7 +163,60 @@
 
                                 </div><!--row w-gallery-preview__items-->
                             </div><!--w-gallery-preview-->
-                            </form>
+                            <!-- </form> -->
+
+                            <div class="row-xs" ng-show="params.is_table">
+                                <table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
+                                    <tr>
+                                        <th class="b-table-team" colspan="2"><a href="#"><span>Команда</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs" colspan="2"><a href="#"><span>Город</span><i class="dropdown icon"></i></a></th>
+                                        <th class="b-td-sm" colspan="2"><a href="#"><span>Ближайшая игра</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1"><a href="#"><span>Игр</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center"  colspan="1"><a href="#"><span>Очки</span><i class="dropdown icon"></i></a></th>
+                                        <th class="b-table-place b-td-xs hidden-xs text-center-sm text-center" colspan="1"><a href="#"><span>Место</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs" colspan="2"><a href="#"><span>Арена</span><i class="dropdown icon"></i></a></th>
+                                        <th class="hidden-xs hidden-sm" colspan="2"><a href="#"><span>Тренер</span><i class="dropdown icon"></i></a></th>
+                                    </tr>
+
+                                    {% verbatim %}
+                                        <tr ng-repeat="club in data.results">
+                                            <td class="b-td-team" colspan="2">
+                                                <div class="w-gallery-preview__item__img">
+                                                    <div class="img-wrap">
+                                                        <figure class="figure-styled">
+                                                            <a href="#" class="ui image"><img ng-src="{{ 'http://dev.sportomatics.ru' + club.logo }}" alt=""></a>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="b-cell">
+                                                        <p><a href="{{ club.url }}">{{ club.title }}</a></p>
+                                                        <p class="text-small visible-xs">{{ club.address.title }}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="hidden-xs" colspan="2">
+                                                {{ club.address.title }}
+                                            </td>
+                                            <td colspan="2">
+                                                <p>
+                                                    <a href="#">СКА-Автомобилист</a>
+                                                </p>
+                                                <p class="text-small">
+                                                    26 апреля 2015 20:20 МСК
+                                                </p>
+                                            </td>
+                                            <td class="b-td-xs hidden-xs text-center-sm" colspan="1">10</td>
+                                            <td class="b-td-xs hidden-xs text-center-sm" colspan="1">10</td>
+                                            <td class="b-td-xs text-center hidden-xs" colspan="1">6</td>
+                                            <td class="hidden-xs" colspan="2"><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
+                                            <td class="hidden-xs hidden-sm" colspan="2"><a href="#">{{ club.coach.fio }}</a></td>
+                                        </tr>
+                                    {% endverbatim %}
+
+                                </table>
+                            </div>
+
+
+                            
                         </section><!--w-section-->
                     </div>
                     <!--tabs content items-->
