@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import copy
 
-from django.db.models import Q, Sum
+from django.db.models import Q, Avg, Sum
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import generics
@@ -81,7 +81,7 @@ class BestPlayers(generics.ListAPIView):
             # Плюс/Минус - максимальный +/-
             'class': _('Plus/Minus'),
             'field': 'plus_minus',
-            'label': _('points'),
+            'label': '',
         }, {
             # Ассистент - максимальное кол-во очков (О)
             'class': _('Assistant'),
@@ -95,7 +95,7 @@ class BestPlayers(generics.ListAPIView):
         }, {
             # Вратарь - максимальное кол-во отраженных бросков (%ОБ)
             'class': _('Goalkeeper'),
-            'field': 'saves',
+            'field': 'saves_p',
             'label': _('saved shots'),
         }]
 
@@ -111,10 +111,21 @@ class BestPlayers(generics.ListAPIView):
             #     .annotate(**{field_total: Sum(field)})
             #     .order_by(field_total))
             # last_cp = cps.last()
-            cp_values = {
-                cp: cp.clubplayermatch_set.is_active().aggregate(**{field_total: Sum(c['field'])}).get(field_total, 0) or 0
-                for cp in cps
-            }
+
+            def _aggregate(cp):
+                _OP = Sum
+                if c['field'] == 'saves_p':
+                    _OP = Avg
+                value = (
+                    cp.clubplayermatch_set
+                    .is_active()
+                    .aggregate(**{field_total: _OP(c['field'])})
+                    .get(field_total, 0) or 0)
+                if c['field'] == 'saves_p':
+                    value = int(value)
+                return value
+
+            cp_values = {cp: _aggregate(cp) for cp in cps}
             if cp_values:
                 last_cp, value = sorted(
                     cp_values.items(), key=lambda x: x[1])[-1]
@@ -122,6 +133,7 @@ class BestPlayers(generics.ListAPIView):
                 #     value /= 60
                 c.update({
                     'player': last_cp.player,
+                    'number': last_cp.number,
                     'value': value,
                     'count': last_cp.clubplayermatch_set.is_active().count(),
                 })
@@ -136,33 +148,17 @@ class BestPlayers(generics.ListAPIView):
             'label': _('points'),
          }, q=Q(line=2)))
 
-        # Железный человек - игрок (кроме вратаря),
-        # поучаствовавший во всех матчах сезона
-        cp = qs.filter(
-            clubplayermatch__match__isnull=False,
-            clubplayermatch__match__challenge_type__isnull=False,
-            clubplayermatch__match__challenge_type__gt=0)
-
-        matches_count = (
-            Match.objects
-            .filter(Q(home_team=_club) | Q(guest_team=_club))
-            .filter(challenge_type__isnull=False, challenge_type__gt=0)
-            .filter(clubplayermatch__clubplayer__season=_season)
-            .distinct('pk')
-            .count())
-        cp_values = {
-            cp: cp.clubplayermatch_set.is_active().count()
-            for cp in qs.exclude(line=1)
-        }
-        if cp_values:
-            last_cp, value = sorted(
-                cp_values.items(), key=lambda x: x[1])[-1]
+        # Железный человек
+        ironman = qs.ironmans(_club, _season).last()
+        if ironman:
             classes.append({
                 'class': _('Ironman'),
-                'player': last_cp.player,
-                'value': value,
+                'field': 'ironman',
+                'player': ironman.player,
+                'number': ironman.number,
+                'value': 100,
                 'label': _('matches'),
-                'count': matches_count,
+                'count': ironman.clubplayermatch_set.is_active().count(),
             })
 
         return classes

@@ -371,11 +371,14 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
 
 class BestPlayersSerilizer(serializers.ModelSerializer):
     class_ = serializers.ReadOnlyField(source='class')
+    field = serializers.ReadOnlyField()
     player = PlayerCardSerializer()
+    number = serializers.ReadOnlyField()
     value = serializers.ReadOnlyField()
     label = serializers.ReadOnlyField()
     count = serializers.ReadOnlyField()
 
     class Meta(object):
-        fields = 'class_', 'player', 'value', 'label', 'count'
+        fields = (
+            'class_', 'field', 'player', 'number', 'value', 'label', 'count')
         model = ClubPlayer
