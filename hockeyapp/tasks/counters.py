@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import sys
 
 from sportomatics.celery import app
@@ -36,5 +38,17 @@ def player_recalc_counters_index(field):
     '''
     try:
         models.Player.objects.recalc_counters_index(field)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def club_recalc_counters(pks, fields, update_last_match_date=False):
+    b'''
+        Пересчет полей клуба
+    '''
+    try:
+        models.Club.objects.filter(pk__in=pks).recalc_counters(
+            fields, update_last_match_date=update_last_match_date)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())

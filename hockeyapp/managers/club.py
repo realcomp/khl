@@ -79,3 +79,40 @@ class ClubQuerySet(LocaleOrderMixin, DataCleanMixin, models.QuerySet):
 
     def not_active(self):
         return self.filter(league__en_title="Not clubs")
+
+    def recalc_counters(self, fields, update_last_match_date=False):
+        for club in self:
+            q_not_parsed_yet = Q(date__gt=club.last_match_date)
+
+            if (not club.last_match_date or
+                    club.homematches.filter(q_not_parsed_yet).exists() or
+                    club.guestmatches.filter(q_not_parsed_yet).exists() or
+                    (not club.homematches.exists() and not club.guestmatches.exists())):
+
+                for field in fields:
+                    value = None
+                    if field == 'matches_total':
+                        value = (
+                            club.homematches.count() +
+                            club.guestmatches.count())
+
+                    setattr(club, field, value)
+
+                update_fields = list(fields)
+                if update_last_match_date:
+                    last_match = None
+                    last_homematch = club.homematches.order_by('date').last()
+                    last_guestmatch = club.guestmatches.order_by('date').last()
+                    if last_homematch and last_guestmatch:
+                        if last_homematch.date > last_guestmatch.date:
+                            last_match = last_homematch
+                        else:
+                            last_match = last_guestmatch
+                    else:
+                        last_match = last_homematch or last_guestmatch
+                    if last_match:
+                        club.last_match_date = last_match.date
+                        update_fields = update_fields + ['last_match_date']
+
+                club.save(update_fields=update_fields)
+        return self

@@ -75,6 +75,11 @@ class Club(AdminLinkMixin, TitleBaseModel):
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
 
+    # counters
+    matches_total = models.IntegerField(_('Matches Total'), null=True)
+    last_match_date = models.DateTimeField(
+        _('Last match history parsed'), null=True)
+
     __unicode__ = lambda self: '{} ({})'.format(self.ru_title, self.address)
 
     def get_title_verbose(self, request=None):

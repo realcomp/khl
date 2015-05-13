@@ -34,6 +34,22 @@ def player_recalc_counters():
 
 
 @app.task(ignore_result=True, track_started=True)
+def club_recalc_counters():
+    '''
+    Update all fields for each group of clubs,
+    update last_match_date
+    '''
+    qs = models.Club.objects.all()
+    count = qs.count()
+    limit = 30
+    FIELDS = 'matches_total',
+    for i in range(0, count, limit):
+        pks = qs[i:i + limit].values_list('pk', flat=True)
+        counters.club_recalc_counters.delay(
+            pks, FIELDS, update_last_match_date=True)
+
+
+@app.task(ignore_result=True, track_started=True)
 def player_recalc_counters_index():
     '''
     Update index for each field

@@ -100,7 +100,7 @@ class ClubListSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = (
             'pk', 'title', 'title_verbose', 'logo', 'url',
-            'address', 'arena', 'coach',)
+            'address', 'arena', 'coach', 'matches_total')
         model = Club
 
 
