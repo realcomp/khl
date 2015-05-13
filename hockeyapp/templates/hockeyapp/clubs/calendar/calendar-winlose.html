@@ -25,6 +25,17 @@
             </div><!--row-->
         </div><!--b-header b-header__md-->
 
+        {% verbatim %}
+        <div class="ui positive message" ng-if="loaded">
+            <i class="close icon"></i>
+            <p>На графике визуализированы выигрыши и проигрыши команды. Красным обозначена проигранная игра, зеленым - победная. Высота столбца показывает счет. Серым обозначены будущие игры.
+            <br>
+            Для перехода на карточку игры просто кликните в соответствующий столбец
+            <br>
+            По состоянию на {{stats.date}} выиграно {{stats.won.length}} игр (дома - {{stats.wonHome.length}}), проиграно {{stats.lost.length}} (дома - {{stats.lostHome.length}})</p>
+        </div>
+        {% endverbatim %}
+
         <div id="clubGamesChart" class="w-map" style="height: auto !important">
             <div id="chartdiv"></div>
         </div>
@@ -35,8 +46,9 @@
 
         <br>
 
+        {% comment %}
         <p class="b-desription">
-            На графике визуализированы выиграши и проигрыши команды. Красным обозначена проигранная игра, зеленым - победная. Высота столбца показывает счет. Серым обозначены будущие игры.
+            На графике визуализированы выигрыши и проигрыши команды. Красным обозначена проигранная игра, зеленым - победная. Высота столбца показывает счет. Серым обозначены будущие игры.
         </p>
         <p class="b-desription">
             Для перехода на карточку игры просто кликните в соответствующий столбец
@@ -44,7 +56,6 @@
         <p class="b-desription">
             По состоянию на 19.04.2015 выиграно 12 игр(дома - 4), проиграно 19(дома - 8)
         </p>
-
         <div class="w-command-calendar__item w-command-calendar__item-bg">
             <div class="b-header b-header__xs">
                 <h5 class="b-header__text">
@@ -137,6 +148,7 @@
                 </p>
             </div>
         </div><!--w-command-calendar__item-->
+        {% endcomment %}
     </section>
 </div>
 

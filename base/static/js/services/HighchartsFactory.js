@@ -112,10 +112,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
         chart: {
           type: 'column',
           alignTicks: false,
-          marginTop: 280
+          marginTop: 230
         },
         title: {
-          text: 'Счет в матчах'
+          text: ''
         },
         xAxis: [
           {
@@ -175,8 +175,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           },
           shadow: false,
           positioner: function(a, b, p) {
-            console.log(this);
-            console.log(p);
             return {
               y: 50,
               x: p.plotX

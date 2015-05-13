@@ -1,6 +1,6 @@
 angular.module('Sportomatics').controller('ClubCalendarController', [
-    '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory',
-    ($scope, $http, $location, $parse, MapService, HighchartsFactory) ->
+    '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', '$timeout',
+    ($scope, $http, $location, $parse, MapService, HighchartsFactory, $timeout) ->
         $scope.MONTHS = [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль',
             'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
@@ -221,6 +221,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 params += '&season=' + $scope.params.season
             else
                 params += '&season=19'
+            $scope.loaded = false
             $http.get($scope.clubMatchApi + params)
                 .success (data) ->
                     $scope.games = _.sortBy(data, (el) ->
@@ -239,7 +240,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 date: game.date
                                 name: game.opponent.title + ' - ' + $scope.clubName
                                 score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score)
-                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
+                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#82b440'
                                 leftLogo: game.opponent.logo
                                 rightLogo: $scope.clubLogo
                             )
@@ -258,13 +259,30 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                                 date: game.date
                                 name: $scope.clubName + ' - ' + game.opponent.title
                                 score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score)
-                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#2ecc71'
+                                color: if (Math.abs(game.opponent_score) > Math.abs(game.score)) then '#e74c3c' else '#82b440'
                                 leftLogo: $scope.clubLogo
                                 rightLogo: game.opponent.logo
                             )
                         ).filter (toFilter) ->
                             return toFilter?
                     )
+                    $scope.loaded = true
+                    $scope.stats = (
+                        date: new Date().ddmmyyyy('.')
+                        games: $scope.games.length
+                        won: _.filter $scope.games, (game) ->
+                            return game.score > game.opponent.score
+                        lost: _.filter $scope.games, (game) ->
+                            return game.score < game.opponent.score
+                        wonHome: _.filter $scope.games, (game) ->
+                            return game.score > game.opponent.score and game.is_home is true
+                        lostHome: _.filter $scope.games, (game) ->
+                            return game.score < game.opponent.score and game.is_home is true
+                    )
+                    $timeout(() ->
+                        $('.message .close').on 'click', () ->
+                            $(this).closest('.message').fadeOut()
+                    , 500)
                     clubGamesChart = new HighchartsFactory.ClubGamesChart 'chartdiv', [clubObject, opponentObject]
                     clubGamesChart.draw()
 

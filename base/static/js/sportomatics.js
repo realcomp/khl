@@ -131,6 +131,13 @@ Date.prototype.yyyymmdd = function(delimiter){
     var dd  = this.getDate().toString();
     return yyyy + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + (dd[1]?dd:"0"+dd[0]);
 };
+Date.prototype.ddmmyyyy = function(delimiter){
+    if(delimiter == null) delimiter = '';
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return (dd[1]?dd:"0"+dd[0]) + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + yyyy;
+};
 Date.prototype.yyyymmddFormatted = function(){
     var monthNames = [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',

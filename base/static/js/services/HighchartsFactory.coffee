@@ -74,9 +74,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 chart:
                     type: 'column'
                     alignTicks: false
-                    marginTop: 280
+                    marginTop: 230
                 title:
-                    text: 'Счет в матчах'
+                    text: ''
                 xAxis: [
                     {
                         labels:
@@ -127,8 +127,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                         padding: 0
                     shadow: false
                     positioner: (a,b,p) ->
-                        console.log this
-                        console.log p
                         return (
                             y: 50
                             x: p.plotX

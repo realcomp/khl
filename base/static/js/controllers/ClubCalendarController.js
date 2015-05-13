@@ -1,5 +1,5 @@
 angular.module('Sportomatics').controller('ClubCalendarController', [
-  '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', function($scope, $http, $location, $parse, MapService, HighchartsFactory) {
+  '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', '$timeout', function($scope, $http, $location, $parse, MapService, HighchartsFactory, $timeout) {
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.MONTHS_ROD = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
     $scope.data = {};
@@ -239,6 +239,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       } else {
         params += '&season=19';
       }
+      $scope.loaded = false;
       return $http.get($scope.clubMatchApi + params).success(function(data) {
         var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
         $scope.games = _.sortBy(data, function(el) {
@@ -261,7 +262,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               date: game.date,
               name: game.opponent.title + ' - ' + $scope.clubName,
               score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score),
-              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#82b440',
               leftLogo: game.opponent.logo,
               rightLogo: $scope.clubLogo
             };
@@ -286,7 +287,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               date: game.date,
               name: $scope.clubName + ' - ' + game.opponent.title,
               score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
-              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#82b440',
               leftLogo: $scope.clubLogo,
               rightLogo: game.opponent.logo
             };
@@ -294,6 +295,28 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return toFilter != null;
           })
         };
+        $scope.loaded = true;
+        $scope.stats = {
+          date: new Date().ddmmyyyy('.'),
+          games: $scope.games.length,
+          won: _.filter($scope.games, function(game) {
+            return game.score > game.opponent.score;
+          }),
+          lost: _.filter($scope.games, function(game) {
+            return game.score < game.opponent.score;
+          }),
+          wonHome: _.filter($scope.games, function(game) {
+            return game.score > game.opponent.score && game.is_home === true;
+          }),
+          lostHome: _.filter($scope.games, function(game) {
+            return game.score < game.opponent.score && game.is_home === true;
+          })
+        };
+        $timeout(function() {
+          return $('.message .close').on('click', function() {
+            return $(this).closest('.message').fadeOut();
+          });
+        }, 500);
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
         return clubGamesChart.draw();
       });
