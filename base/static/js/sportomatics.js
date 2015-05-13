@@ -220,6 +220,30 @@ function toSeason(value){
     }
     return seasons['s'+value];
 }
+function fromSeason(value){
+    var seasons = {
+        s1: 2002,
+        s2: 2003,
+        s3: 2001,
+        s4: 2004,
+        s5: 2000,
+        s6: 1999,
+        s7: 1998,
+        s8: 2005,
+        s9: 2006,
+        s10: 1997,
+        s11: 2007,
+        s12: 2008,
+        s13: 2009,
+        s14: 2010,
+        s15: 2011,
+        s16: 2012,
+        s17: 2013,
+        s18: 2014,
+        s19: 2015
+    }
+    return seasons['s'+value];
+}
 $.fn.textWidth = function(){
     var html_org = $(this).html();
     var html_calc = '<span>' + html_org + '</span>';

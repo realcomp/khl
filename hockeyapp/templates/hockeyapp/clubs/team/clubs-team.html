@@ -32,8 +32,8 @@
                         <i class="dropdown icon"></i>
                         <div class="menu transition hidden" tabindex="-1">
                             {% for season in seasons %}
-                                <div class="item season" data-value="{{ season.pk }}" ng-click="setSeason('{{ season.pk }}')">{{ season.label }}</div>
-                                <input type="hidden" id="season_{{season.pk}}" value="{% trans 'Season' %} {{season.label}}">
+                                <div class="item season" data-value="{{ season.pk }}" ng-click="setSeason('{{ season.pk }}')">{% trans 'Season' %} {{ season.label }}</div>
+                                <input class="season-input" type="hidden" id="season_{{season.pk}}" value="{% trans 'Season' %} {{season.label}}">
                             {% endfor %}
                         </div>
                     </div>
@@ -69,136 +69,213 @@
 
                             <div class="b-header b-header__md b-header__filter-in">
                                 <div class="w-table">
+
                                     <h2 class="b-cell b-header__text">
                                         Состав
                                     </h2>
 
-                                    <a href="#" class="b-cell active b-change-views__item w-tooltip" data-content="По алфавиту" data-variation="basic">
-                                        <i class="sort alphabet ascending icon"></i>
+                                    <a class="b-cell b-change-views__item w-tooltip" data-content="По алфавиту" data-variation="basic" ng-click="setOrderBy('lastname')" ng-class="{'active': order_by.indexOf('lastname') > -1}">
+                                        <i class="sort alphabet ascending icon" ng-class="{'ascending': order_by !== '-lastname', 'descending': order_by === '-lastname'}"></i>
                                     </a>
 
-                                    <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="По номерам" data-variation="basic">
-                                        <i class="sort numeric ascending icon"></i>
+                                    <a class="b-cell b-change-views__item w-tooltip" data-content="По номерам" data-variation="basic" ng-click="setOrderBy('number')" ng-class="{'active': order_by.indexOf('number') > -1}">
+                                        <i class="sort numeric ascending icon" ng-class="{'ascending': order_by !== '-number', 'descending': order_by === '-number'}"></i>
                                     </a>
                                 </div><!--row-->
                             </div><!--b-header b-header__md-->
 
                             <section class="w-section" ng-repeat="season in seasons track by $index">
                                 {% verbatim %}
-                                <div class="ui divider" ng-if="$index !== 0"></div>
-                                <h3 class="ui text-center header">
-                                    {{season.title}}
-                                </h3>
+                                <div class="b-header b-header__md b-header__filter-in" ng-if="$index !== 0">
+                                    <div class="w-table">
+                                        <h2 class="b-cell b-header__text" >
+                                            {{season.title}}
+                                        </h2>
+                                    </div>
+                                </div>
                                 {% endverbatim %}
 
-                                <div class="b-row w-gallery-preview">
-                                    <div class="b-header b-header__sm b-header__filter-in">
-                                        <h3 class="b-cell b-header__text">
-                                            Нападающие
-                                        </h3>
-                                    </div><!--b-header b-header__sm-->
-                                    <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
+                                <div ng-if="order_by.indexOf('number') === -1 && state === 'fio'">
+                                    <div class="b-row w-gallery-preview">
+                                        <div class="b-header b-header__sm b-header__filter-in">
+                                            <h3 class="b-cell b-header__text">
+                                                Нападающие
+                                            </h3>
+                                        </div><!--b-header b-header__sm-->
+                                        <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
 
-                                        {% verbatim %}
-                                        <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.offender_players" ng-class="{'b-notactive': !playerFilter(player)}">
-                                            <div class="ui card">
-                                                <div class="ui ribbon green label">{{player.number}}</div>
-                                                <div class="ui ribbon green label-flag">
-                                                    <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
-                                                </div>
-                                                <div class="w-gallery-preview__item__img">
-                                                    <a href="{{ player.url }}" class="ui image">
-                                                        <img class="ui image" src="{{player.photo}}">
-                                                    </a>
-                                                </div>
+                                            {% verbatim %}
+                                            <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.offender_players | orderBy: order_by " ng-class="{'b-notactive': !playerFilter(player)}">
+                                                <div class="ui card">
+                                                    <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
+                                                    <div class="ui ribbon green label-flag">
+                                                        <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                                    </div>
+                                                    <div class="w-gallery-preview__item__img">
+                                                        <a href="{{ player.url }}" class="ui image">
+                                                            <img class="ui image" src="{{player.photo}}">
+                                                        </a>
+                                                    </div>
 
-                                                <div class="w-gallery-preview__item__info">
-                                                    <p class="name">
-                                                        <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
-                                                    </p>
-                                                    <p class="line-display">
-                                                        {{player.line_display}}
-                                                    </p>
-                                                </div>
-                                            </div><!--ui card-->
-                                        </div><!--w-gallery-preview__item-->
-                                        {% endverbatim %}
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                    </div>
+                                                </div><!--ui card-->
+                                            </div><!--w-gallery-preview__item-->
+                                            {% endverbatim %}
 
-                                    </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
-                                </div><!--w-gallery-preview-->
+                                        </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+                                    </div><!--w-gallery-preview-->
 
 
 
-                                <div class="w-gallery-preview">
-                                    <div class="b-header b-header__sm b-header__filter-in">
-                                        <h3 class="b-cell b-header__text">
-                                            Защитники
-                                        </h3>
-                                    </div><!--b-header b-header__sm-->
-                                    <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
-                                        {% verbatim %}
-                                        <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.defender_players" ng-class="{'b-notactive': !playerFilter(player)}">
-                                            <div class="ui card">
-                                                <div class="ui ribbon green label">{{player.number}}</div>
-                                                <div class="ui ribbon green label-flag">
-                                                    <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
-                                                </div>
-                                                <div class="w-gallery-preview__item__img">
-                                                    <a href="{{ player.url }}" class="ui image">
-                                                        <img class="ui image" src="{{player.photo}}">
-                                                    </a>
-                                                </div>
+                                    <div class="w-gallery-preview">
+                                        <div class="b-header b-header__sm b-header__filter-in">
+                                            <h3 class="b-cell b-header__text">
+                                                Защитники
+                                            </h3>
+                                        </div><!--b-header b-header__sm-->
+                                        <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
+                                            {% verbatim %}
+                                            <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.defender_players | orderBy: order_by " ng-class="{'b-notactive': !playerFilter(player)}">
+                                                <div class="ui card">
+                                                    <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
+                                                    <div class="ui ribbon green label-flag">
+                                                        <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                                    </div>
+                                                    <div class="w-gallery-preview__item__img">
+                                                        <a href="{{ player.url }}" class="ui image">
+                                                            <img class="ui image" src="{{player.photo}}">
+                                                        </a>
+                                                    </div>
 
-                                                <div class="w-gallery-preview__item__info">
-                                                    <p class="name">
-                                                        <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
-                                                    </p>
-                                                    <p class="line-display">
-                                                        {{player.line_display}}
-                                                    </p>
-                                                </div>
-                                            </div><!--ui card-->
-                                        </div><!--w-gallery-preview__item-->
-                                        {% endverbatim %}
-                                    </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
-                                </div><!--w-gallery-preview-->
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                    </div>
+                                                </div><!--ui card-->
+                                            </div><!--w-gallery-preview__item-->
+                                            {% endverbatim %}
+                                        </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+                                    </div><!--w-gallery-preview-->
 
 
 
-                                <div class="w-gallery-preview">
-                                    <div class="b-header b-header__sm b-header__filter-in">
-                                        <h3 class="b-cell b-header__text">
-                                            Вратари
-                                        </h3>
-                                    </div><!--b-header b-header__sm-->
-                                    <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
-                                        {% verbatim %}
-                                        <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.goalkeeper_players" ng-class="{'b-notactive': !playerFilter(player)}">
-                                            <div class="ui card">
-                                                <div class="ui ribbon green label">{{player.number}}</div>
-                                                <div class="ui ribbon green label-flag">
-                                                    <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
-                                                </div>
-                                                <div class="w-gallery-preview__item__img">
-                                                    <a href="{{ player.url }}" class="ui image">
-                                                        <img class="ui image" src="{{player.photo}}">
-                                                    </a>
-                                                </div>
+                                    <div class="w-gallery-preview">
+                                        <div class="b-header b-header__sm b-header__filter-in">
+                                            <h3 class="b-cell b-header__text">
+                                                Вратари
+                                            </h3>
+                                        </div><!--b-header b-header__sm-->
+                                        <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
+                                            {% verbatim %}
+                                            <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.goalkeeper_players | orderBy: order_by" ng-class="{'b-notactive': !playerFilter(player)}">
+                                                <div class="ui card">
+                                                    <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
+                                                    <div class="ui ribbon green label-flag">
+                                                        <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                                    </div>
+                                                    <div class="w-gallery-preview__item__img">
+                                                        <a href="{{ player.url }}" class="ui image">
+                                                            <img class="ui image" src="{{player.photo}}">
+                                                        </a>
+                                                    </div>
 
-                                                <div class="w-gallery-preview__item__info">
-                                                    <p class="name">
-                                                        <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
-                                                    </p>
-                                                    <p class="line-display">
-                                                        {{player.line_display}}
-                                                    </p>
-                                                </div>
-                                            </div><!--ui card-->
-                                        </div><!--w-gallery-preview__item-->
-                                        {% endverbatim %}
-                                    </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
-                                </div><!--w-gallery-preview-->
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                    </div>
+                                                </div><!--ui card-->
+                                            </div><!--w-gallery-preview__item-->
+                                            {% endverbatim %}
+                                        </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+                                    </div><!--w-gallery-preview-->
+                                </div>
 
+                                <div ng-if="order_by.indexOf('number') > -1 && state === 'fio' || state === 'is_legionnaire' || state === 'is_home'">
+                                    <div class="b-row w-gallery-preview">
+                                        <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
+                                            {% verbatim %}
+                                            <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.all_players | orderBy: order_by " ng-if="playerFilter(player)">
+                                                <div class="ui card">
+                                                    <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
+                                                    <div class="ui ribbon green label-flag">
+                                                        <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                                    </div>
+                                                    <div class="w-gallery-preview__item__img">
+                                                        <a href="{{ player.url }}" class="ui image">
+                                                            <img class="ui image" src="{{player.photo}}">
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                        <p class="line-display">
+                                                            {{player.line_display}}
+                                                        </p>
+                                                    </div>
+                                                </div><!--ui card-->
+                                            </div><!--w-gallery-preview__item-->
+                                            {% endverbatim %}
+                                        </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+                                    </div><!--w-gallery-preview-->
+                                </div>
+
+                                <div ng-if="state === 'is_joined' || state === 'is_left'">
+                                    <div class="b-row w-gallery-preview">
+                                        <div class="w-gallery-preview__overflow row w-gallery-preview__items w-gallery-preview__items__8">
+                                            {% verbatim %}
+                                            <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.all_players | orderBy: order_by " ng-if="playerFilter(player)">
+                                                <div class="ui card">
+                                                    <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
+                                                    <div class="ui ribbon green label-flag">
+                                                        <i id="player_{{player.pk}}_flag" class="flag i-top-2" ng-class="{{player.citizenship.code}}"></i>
+                                                    </div>
+                                                    <div class="w-gallery-preview__item__img">
+                                                        <a href="{{ player.url }}" class="ui image">
+                                                            <img class="ui image" src="{{player.photo}}">
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{ player.url }}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                        <p class="line-display">
+                                                            {{player.line_display}}
+                                                        </p>
+                                                        <div class="ui feed">
+                                                            <div class="event">
+                                                                <div class="label">
+                                                                    <figure>
+                                                                        <img src="images/l-hockey/logo-1.jpg">
+                                                                    </figure>
+                                                                </div>
+                                                                <div class="content text-small">
+                                                                    <span ng-if="state === 'is_joined'">перешел из</span>
+                                                                    <span ng-if="state === 'is_left'">сейчас в</span>
+                                                                    <div class="summary">
+                                                                        Адмирал
+                                                                    </div>
+                                                                    <p class="">
+                                                                        Московская область
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div><!--ui card-->
+                                            </div><!--w-gallery-preview__item-->
+                                            {% endverbatim %}
+                                        </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+                                    </div><!--w-gallery-preview-->
+                                </div>
                             </section>
 
                             <div class="ui large centered inline text loader" style="background: none !important; height: 480px;" ng-class="{'active': !loaded}">

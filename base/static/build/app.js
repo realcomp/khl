@@ -220,6 +220,30 @@ function toSeason(value){
     }
     return seasons['s'+value];
 }
+function fromSeason(value){
+    var seasons = {
+        s1: 2002,
+        s2: 2003,
+        s3: 2001,
+        s4: 2004,
+        s5: 2000,
+        s6: 1999,
+        s7: 1998,
+        s8: 2005,
+        s9: 2006,
+        s10: 1997,
+        s11: 2007,
+        s12: 2008,
+        s13: 2009,
+        s14: 2010,
+        s15: 2011,
+        s16: 2012,
+        s17: 2013,
+        s18: 2014,
+        s19: 2015
+    }
+    return seasons['s'+value];
+}
 $.fn.textWidth = function(){
     var html_org = $(this).html();
     var html_calc = '<span>' + html_org + '</span>';
@@ -3025,8 +3049,21 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
         $scope.state = 'fio';
+        $scope.order_by = 'lastname'
         $scope.season = 19;
         $scope.seasons = [];
+
+        $scope.setOrderBy = function(order_by){
+            if($scope.order_by === order_by){
+                if ($scope.order_by.indexOf('-') > -1){
+                    $scope.order_by = $scope.order_by.replace('-', '');
+                } else {
+                    $scope.order_by = '-' + $scope.order_by;
+                }
+            } else {
+                $scope.order_by = order_by;
+            }
+        }
 
         $scope.setType = function(type){
             $scope.type = type;
@@ -3100,6 +3137,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                             if(player.citizenship.title)
                             if(country.name === player.citizenship.title){
                                 player.citizenship.code = country.code;
+                                player.number = parseInt(player.number);
                                 $('#player_'+player.pk+'_flag').addClass(country.code);
                             }
                         })
@@ -3305,8 +3343,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             once: false,
             observeChanges: true,
             onBottomVisible: function(){
-                if($scope.seasons.length > 0)
-                $scope.setSeason($scope.season-1, true)
+                var newSeason = 1;
+                if($scope.seasons.length > 0 && fromSeason($scope.season) !== 1997)
+                $scope.setSeason(toSeason(fromSeason($scope.season)-1), true)
             }
         })
 
