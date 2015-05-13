@@ -55,6 +55,20 @@
     display: none !important;
 }
 
+#clubGamesChart .highcharts-tooltip{
+
+}
+#clubGamesChart .highcharts-tooltip span{
+    border: none !important;
+    box-shadow: none !important;
+}
+#clubGamesChart svg .highcharts-tooltip{
+    display: none !important;
+    opacity: 0 !important;
+}
+#clubGamesChart g .highcharts-tooltip path{
+    fill: none;
+}
 /* angucomplete */
 .form-control {
     outline: 0;

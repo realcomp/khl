@@ -315,7 +315,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         var menuState = 'not_exist';
-        $('.mlpushmenu-trigger').click(function(){
+        /*$('.mlpushmenu-trigger').click(function(){
             if (menuState === 'active') {
                 $('#mlpushmenu').multilevelpushmenu('collapse');
                 menuState = 'not_active';
@@ -334,7 +334,14 @@
                 $('#mlpushmenu').multilevelpushmenu('expand');
                 menuState = 'active';
             }
-        })
+        })*/
+    $('#mlpushmenu').multilevelpushmenu({
+                        fullCollapse: true,
+                        mode: 'cover',
+                        onItemClick: function(event) {
+                            event.stopPropagation();
+                        }
+                    });
     });
 </script>
 {% endblock %}

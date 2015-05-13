@@ -368,7 +368,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return $('#' + this.divId).highcharts({
         chart: {
           type: 'column',
-          alignTicks: false
+          alignTicks: false,
+          marginTop: 280
         },
         title: {
           text: 'Счет в матчах'
@@ -425,8 +426,18 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           shared: true,
           useHTML: true,
           crosshairs: true,
+          borderWidth: 0,
           style: {
             padding: 0
+          },
+          shadow: false,
+          positioner: function(a, b, p) {
+            console.log(this);
+            console.log(p);
+            return {
+              y: 50,
+              x: p.plotX
+            };
           },
           formatter: function() {
             return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
