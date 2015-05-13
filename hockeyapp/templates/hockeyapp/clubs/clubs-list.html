@@ -97,10 +97,12 @@
                                         Список клубов
                                     </h2>
 
-                                    <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-content="Алфавитный список" data-variation="basic" href="stats-table-history.html">
+                                    <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-content="Алфавитный список" data-variation="basic" href=""
+                                       ng-click="switchHistory()">
                                         <i class="sort alphabet ascending icon"></i>
                                         <div class="ui toggle checkbox">
-                                            <input type="checkbox" name="public">
+                                            <input type="checkbox" name="public"
+                                                   ng-model="isHistory" ng-checked="params.is_history">
                                             <label>включая выбывшие из лиги</label>
                                         </div>
                                     </a>
@@ -168,14 +170,52 @@
                             <div class="row-xs" ng-show="params.is_table">
                                 <table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
                                     <tr>
-                                        <th class="b-table-team" colspan="2"><a href="#"><span>Команда</span><i class="dropdown icon"></i></a></th>
-                                        <th class="hidden-xs" colspan="2"><a href="#"><span>Город</span><i class="dropdown icon"></i></a></th>
-                                        <th class="b-td-sm" colspan="2"><a href="#"><span>Ближайшая игра</span><i class="dropdown icon"></i></a></th>
-                                        <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1"><a href="#"><span>Игр</span><i class="dropdown icon"></i></a></th>
-                                        <th class="hidden-xs b-td-xs text-center-sm text-center"  colspan="1"><a href="#"><span>Очки</span><i class="dropdown icon"></i></a></th>
-                                        <th class="b-table-place b-td-xs hidden-xs text-center-sm text-center" colspan="1"><a href="#"><span>Место</span><i class="dropdown icon"></i></a></th>
-                                        <th class="hidden-xs" colspan="2"><a href="#"><span>Арена</span><i class="dropdown icon"></i></a></th>
-                                        <th class="hidden-xs hidden-sm" colspan="2"><a href="#"><span>Тренер</span><i class="dropdown icon"></i></a></th>
+                                        <th class="b-table-team" colspan="2">
+                                            <a href="" ng-click="setOrderBy('')">
+                                                <span>Команда</span>
+                                                <i class="dropdown icon" ng-hide="params.order_by"></i>
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs" colspan="2">
+                                            <a href="" ng-click="setOrderBy('address__%s_title')">
+                                                <span>Город</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'address__%s_title'"></i>
+                                            </a>
+                                        </th>
+                                        <th class="b-td-sm" colspan="2">
+                                            <a href="#"><span>Ближайшая игра</span>
+                                                <!-- <i class="dropdown icon"></i> -->
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1">
+                                            <a href="#"><span>Игр</span>
+                                                <!-- <i class="dropdown icon"></i> -->
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center"  colspan="1">
+                                            <a href="#">
+                                                <span>Очки</span>
+                                                <!-- <i class="dropdown icon"></i> -->
+                                            </a>
+                                        </th>
+                                        <th class="b-table-place b-td-xs hidden-xs text-center-sm text-center" colspan="1">
+                                            <a href="#">
+                                                <span>Место</span>
+                                                <!-- <i class="dropdown icon"></i> -->
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs" colspan="2">
+                                            <a href="" ng-click="setOrderBy('arena__%s_title')">
+                                                <span>Арена</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'arena__%s_title'"></i>
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs hidden-sm" colspan="2">
+                                            <a href="" ng-click="setOrderBy('coach__%s_fio')">
+                                                <span>Тренер</span>
+                                                <i class="dropdown icon" ng-show="params.order === 'coach__%s_fio'"></i>
+                                            </a>
+                                        </th>
                                     </tr>
 
                                     {% verbatim %}
@@ -215,8 +255,6 @@
                                 </table>
                             </div>
 
-
-                            
                         </section><!--w-section-->
                     </div>
                     <!--tabs content items-->

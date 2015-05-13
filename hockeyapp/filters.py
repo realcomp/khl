@@ -21,6 +21,7 @@ class OrderFilter(filters.BaseFilterBackend):
         'contract_to',
         'matches_total',
         'address__%s_title',
+        'address__city__%s_title',
         '%s_title',
         'arena__%s_title',
         'coach__%s_fio',

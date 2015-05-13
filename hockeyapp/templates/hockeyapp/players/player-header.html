@@ -17,7 +17,7 @@
                 <i class="right chevron icon divider"></i>
             {% endif %}
             {% if club %}
-            <a class="section" href="{% url 'hockeyapp:clubs:details' club.pk%}">{{ club.title_verbose }}</a>
+                <a class="section" href="{% url 'hockeyapp:clubs:details' club.pk %}">{{ club.title_verbose }}</a>
             {% endif %}
             <i class="right chevron icon divider"></i>
             <a class="section" href="{% url 'hockeyapp:players:main-card' pk %}">{{ name }} {{ lastname }}</a>
