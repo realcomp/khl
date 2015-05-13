@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
+import operator
 import requests
 
 from dateutil import relativedelta
@@ -257,6 +258,26 @@ class ClubPlayerQuerySet(models.QuerySet):
 
     def by_leagues(self, leagues):
         return self.filter(league__in=leagues)
+
+    def ironmans(self, club, season):
+        ''''
+        Железный человек - игрок (кроме вратаря),
+        поучаствовавший во всех матчах сезона
+        '''
+        from hockeyapp.models import Match
+        matches = set(
+            Match.objects
+            .filter(Q(home_team=club) | Q(guest_team=club))
+            .filter(challenge_type__isnull=False, challenge_type__gt=0)
+            .filter(clubplayermatch__clubplayer__season=season)
+            .values_list('pk', flat=True))
+        qs = self.exclude(line=1).filter(
+            clubplayermatch__match__isnull=False,
+            clubplayermatch__match__challenge_type__isnull=False,
+            clubplayermatch__match__challenge_type__gt=0)
+        for pk in matches:
+            qs = qs.filter(clubplayermatch__match=pk)
+        return qs
 
 
 class RelatedPlayer(models.QuerySet):

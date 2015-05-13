@@ -312,7 +312,7 @@ class ClubPlayer(models.Model):
     def player_url(self):
         if self.pk and self.player:
             url = reverse(
-                'hockeyapp:players:card', kwargs={'pk': self.player.pk})
+                'hockeyapp:players:main-card', kwargs={'pk': self.player.pk})
             return '%s' % url
 
     @property

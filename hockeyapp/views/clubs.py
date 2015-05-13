@@ -6,23 +6,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from base.mixins import SeasonsMenuMixin
 from base.models import Season
+from base.serializers import SeasonsMenuItemSerializer
 
 from .mixins import SeasonsMixin
 from ..models import Club
 from ..serializers import SeasonSerializer, ClubListSerializer
 from ..serializers.clubs import ClubMainAboutSerializer
-
-
-class ClubListTableView(TemplateView):
-    template_name = 'hockeyapp/clubs/clubs-list-table.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ClubListTableView, self).get_context_data(**kwargs)
-        context['request'] = self.request
-        seasons = Season.objects.order_by('-start_date')
-        context['seasons'] = SeasonSerializer(
-            seasons, context=context, many=True).data
-        return context
 
 
 class ClubListView(TemplateView):
@@ -31,8 +20,9 @@ class ClubListView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ClubListView, self).get_context_data(**kwargs)
         context['request'] = self.request
+
         seasons = Season.objects.order_by('-start_date')
-        context['seasons'] = SeasonSerializer(
+        context['seasons'] = SeasonsMenuItemSerializer(
             seasons, context=context, many=True).data
         return context
 

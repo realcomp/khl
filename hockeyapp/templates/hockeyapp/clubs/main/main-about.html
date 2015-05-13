@@ -222,7 +222,9 @@
                          ng-repeat="item in data">
                         <div class="ui card">
                             {% verbatim %}
-                                <div class="ui ribbon green label">30</div>
+                                <div class="ui ribbon green label" ng-if="item.number">
+                                    {{ item.number }}
+                                </div>
                                 <div class="w-mask">
                                     <div class="w-gallery-preview__item__img img-wrap">
                                         <figure class="figure-styled">
@@ -252,10 +254,15 @@
                                 <div class="extra content w-gallery-preview__item__extra">
                                     <div class="ui statistic">
                                         <div class="value">
-                                            {{ item.value }}
+                                            <span ng-if="item.field === 'plus_minus' && item.value > 0">+</span>{{ item.value }}<span ng-if="item.field === 'saves_p' || item.field === 'ironman'">%</span>
                                         </div>
                                         <div class="label">
-                                            <!-- часов -->
+                                            <!-- {% trans "points" %} -->
+                                            <!-- {% trans "goals" %} -->
+                                            <!-- {% trans "minutes" %} -->
+                                            <!-- {% trans "saved shots" %} -->
+                                            <!-- {% trans "matches" %} -->
+                                            {{ item.label }}
                                             за {{ item.count }} игр
                                         </div>
                                     </div><!--ui static-->
