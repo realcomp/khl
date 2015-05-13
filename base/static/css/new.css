@@ -190,6 +190,29 @@
 .b-calendar__item .ui.card{
     min-height: 170px;
 }
+.b-calendar__item__icon{
+    font-size: 20px;
+    color: rgba(0,0,0,.5);
+    text-align: left;
+}
+.b-calendar__item__date-head{
+    color: white;
+    text-align: left;
+    font-size: 12px;
+}
+.b-calendar__item__game-type{
+    color: white;
+    font-size: 24px;
+    text-align: left;
+    padding: 0;
+}
+.b-calendar__item__blank{
+    opacity: 0.2;
+}
+.w-gallery-preview__item__head{
+    border-bottom: 1px solid rgba(0,0,0,.05);
+    max-width: 100%;
+}
 .w-command-calendar__item{
     font-family: 'Roboto', sans-serif;
 }

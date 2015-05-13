@@ -147,6 +147,15 @@ Date.prototype.yyyymmddFormatted = function(){
     var dd  = this.getDate().toString();
     return dd + ' ' + monthNames[mm] + ' ' + yyyy;
 }
+Date.prototype.ddmmFormatted = function(){
+    var monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+        'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return dd + ' ' + monthNames[mm];
+}
 Date.prototype.yyyymmddHHMMFormatted = function(){
     var monthNames = [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',

@@ -130,8 +130,11 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                     }
                     day = cell.cell - startDoW + 1
                     if 1 <= day <= daysInM
-                        cell['date'] = new Date(year, month, day)
+                        cellDate = new Date(year, month, day)
+                        cell['date'] = cellDate
                         cell['schedule'] = $scope.getSchedule(schedules, cell.date)
+                        if cell['schedule']?
+                            cell['schedule']['formattedDate'] = new Date(cell['schedule']['date']).ddmmFormatted()
                     row.push(cell)
                     result.push cell
                 #result.push(row)
@@ -189,6 +192,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 MapService.createClubsMap(data.results, 'trips') if $('#clubs-map').length > 0
                 $scope.data = data
                 $scope.schedules = $scope.parseSchedules(data)
+                console.log $scope.schedules
                 date = $scope.getMinEndDate(data)
                 array = []
                 if date isnt (new Date(data.season.end_date))
@@ -204,7 +208,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                         cell.schedule?
                     if gamesInMonth.length > 0
                         $scope.calendars.push
-                            'date': $scope.monthDelta(date, deltaM),
+                            'date': $scope.monthDelta(date, deltaM)
                             'month_display': $scope.MONTHS[$scope.monthDelta(date, deltaM).getMonth()],
                             'month_display_rod': $scope.MONTHS_ROD[$scope.monthDelta(date, deltaM).getMonth()]
                             'table': table
@@ -212,6 +216,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
                 if $scope.calendars.length is 0
                     $scope.noGames = true
             )
+            if $('#clubGamesChart').length is 0 then return
             return $scope.createGamesChart()
 
         $scope.createGamesChart = () ->

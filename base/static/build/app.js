@@ -147,6 +147,15 @@ Date.prototype.yyyymmddFormatted = function(){
     var dd  = this.getDate().toString();
     return dd + ' ' + monthNames[mm] + ' ' + yyyy;
 }
+Date.prototype.ddmmFormatted = function(){
+    var monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+        'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return dd + ' ' + monthNames[mm];
+}
 Date.prototype.yyyymmddHHMMFormatted = function(){
     var monthNames = [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
@@ -2074,7 +2083,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       return result;
     };
     $scope.getCalendarDays = function(date, schedules) {
-      var cell, day, daysInM, i, j, k, month, result, row, startDoW, year;
+      var cell, cellDate, day, daysInM, i, j, k, month, result, row, startDoW, year;
       year = date.getYear() + 1900;
       month = date.getMonth();
       daysInM = new Date(year, month + 1, 0).getDate();
@@ -2096,8 +2105,12 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
           };
           day = cell.cell - startDoW + 1;
           if ((1 <= day && day <= daysInM)) {
-            cell['date'] = new Date(year, month, day);
+            cellDate = new Date(year, month, day);
+            cell['date'] = cellDate;
             cell['schedule'] = $scope.getSchedule(schedules, cell.date);
+            if (cell['schedule'] != null) {
+              cell['schedule']['formattedDate'] = new Date(cell['schedule']['date']).ddmmFormatted();
+            }
           }
           row.push(cell);
           result.push(cell);
@@ -2160,6 +2173,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         }
         $scope.data = data;
         $scope.schedules = $scope.parseSchedules(data);
+        console.log($scope.schedules);
         date = $scope.getMinEndDate(data);
         array = [];
         if (date !== (new Date(data.season.end_date))) {
@@ -2191,6 +2205,9 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
           return $scope.noGames = true;
         }
       });
+      if ($('#clubGamesChart').length === 0) {
+        return;
+      }
       return $scope.createGamesChart();
     };
     $scope.createGamesChart = function() {
