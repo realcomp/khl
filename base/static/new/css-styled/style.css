@@ -2464,7 +2464,7 @@ figure {
 	width: 4px;
 	margin-right: 0;
 	margin-left: 3px;
-	visibility: hidden;
+	/* visibility: hidden; */
 	position: absolute;
 	margin-top: 2px;
 }

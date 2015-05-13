@@ -1,5 +1,5 @@
 angular.module('Sportomatics').controller('ClubListController', [
-  '$http', '$scope', '$location', 'PlayersSearchService', 'MapService', 'SeasonsService', function($http, $scope, $location, PlayersSearchService, MapService, SeasonsService) {
+  '$http', '$scope', '$location', 'PlayersSearchService', 'MapService', 'SeasonsService', 'OrderService', function($http, $scope, $location, PlayersSearchService, MapService, SeasonsService, OrderService) {
     var url;
     url = $('#ClubListURL').attr('href');
     this.map = true;
@@ -12,13 +12,18 @@ angular.module('Sportomatics').controller('ClubListController', [
     $scope.params.league = '';
     $scope.setSeason = function(season) {
       $location.search('season', season);
+      $location.search('league', '');
       $scope.params = $location.search();
-      $scope.params.league = '';
       $scope.list();
     };
     $scope.setTable = function(isTable) {
       $location.search('is_table', isTable || null);
       $scope.params = $location.search();
+    };
+    $scope.switchHistory = function() {
+      $location.search('is_history', !$scope.params.is_history || null);
+      $scope.params = $location.search();
+      $scope.list();
     };
     $scope.setCountry = function(country) {
       if (!$scope.isCountryActive(country)) {
@@ -52,6 +57,12 @@ angular.module('Sportomatics').controller('ClubListController', [
         return false;
       }
     };
+    $scope.setOrderBy = function(order_by) {
+      if ($scope.loaded) {
+        OrderService.setOrderBy($scope, order_by);
+        $scope.list();
+      }
+    };
     $scope.list = function(all) {
       var params;
       params = '&order_by=' + ($scope.params.order_by || '%s_title');
@@ -64,6 +75,9 @@ angular.module('Sportomatics').controller('ClubListController', [
       if ($scope.params.league !== void 0) {
         params += '&league=' + ($scope.params.league || '');
       }
+      if ($scope.params.is_history) {
+        params += '&is_history=true';
+      }
       params += '&country=' + ($scope.params.country || 1);
       $scope.params = $location.search();
       $scope.data = {};
@@ -72,23 +86,6 @@ angular.module('Sportomatics').controller('ClubListController', [
         $scope.leagues = data.leagues;
         $scope.data = data;
         $scope.clubs = data.results;
-        $scope.loaded = true;
-      });
-    };
-    $scope.next = function(isAll) {
-      url = $scope.data.next;
-      if (isAll) {
-        url = url.replace(/&page=\d+$/, '&paginate_by=' + $scope.data.count);
-      }
-      $scope.loaded = false;
-      return $http.get(url).success(function(data) {
-        if (isAll) {
-          $scope.data = data;
-        } else {
-          $scope.data.next = data.next;
-          $scope.data.results = $scope.data.results.concat(data.results);
-          $scope.clubs = $scope.clubs.concat(data.results);
-        }
         $scope.loaded = true;
       });
     };
