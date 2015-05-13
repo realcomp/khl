@@ -74,8 +74,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 chart:
                     type: 'column'
                     alignTicks: false
+                    marginTop: 230
                 title:
-                    text: 'Счет в матчах'
+                    text: ''
                 xAxis: [
                     {
                         labels:
@@ -121,8 +122,15 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     shared: true
                     useHTML: true
                     crosshairs: true
+                    borderWidth: 0
                     style:
                         padding: 0
+                    shadow: false
+                    positioner: (a,b,p) ->
+                        return (
+                            y: 50
+                            x: p.plotX
+                        )
                     #formatter: () ->
                     #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date).yyyymmddHHMMFormatted()) + '</a>'
                     formatter: () ->

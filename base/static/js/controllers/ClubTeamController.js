@@ -9,8 +9,21 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
         $scope.state = 'fio';
+        $scope.order_by = 'lastname'
         $scope.season = 19;
         $scope.seasons = [];
+
+        $scope.setOrderBy = function(order_by){
+            if($scope.order_by === order_by){
+                if ($scope.order_by.indexOf('-') > -1){
+                    $scope.order_by = $scope.order_by.replace('-', '');
+                } else {
+                    $scope.order_by = '-' + $scope.order_by;
+                }
+            } else {
+                $scope.order_by = order_by;
+            }
+        }
 
         $scope.setType = function(type){
             $scope.type = type;
@@ -84,6 +97,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                             if(player.citizenship.title)
                             if(country.name === player.citizenship.title){
                                 player.citizenship.code = country.code;
+                                player.number = parseInt(player.number);
                                 $('#player_'+player.pk+'_flag').addClass(country.code);
                             }
                         })
@@ -289,8 +303,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             once: false,
             observeChanges: true,
             onBottomVisible: function(){
-                if($scope.seasons.length > 0)
-                $scope.setSeason($scope.season-1, true)
+                var newSeason = 1;
+                if($scope.seasons.length > 0 && fromSeason($scope.season) !== 1997)
+                $scope.setSeason(toSeason(fromSeason($scope.season)-1), true)
             }
         })
 

@@ -131,6 +131,13 @@ Date.prototype.yyyymmdd = function(delimiter){
     var dd  = this.getDate().toString();
     return yyyy + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + (dd[1]?dd:"0"+dd[0]);
 };
+Date.prototype.ddmmyyyy = function(delimiter){
+    if(delimiter == null) delimiter = '';
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return (dd[1]?dd:"0"+dd[0]) + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + yyyy;
+};
 Date.prototype.yyyymmddFormatted = function(){
     var monthNames = [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
@@ -217,6 +224,30 @@ function toSeason(value){
         s2013: 17,
         s2014: 18,
         s2015: 19
+    }
+    return seasons['s'+value];
+}
+function fromSeason(value){
+    var seasons = {
+        s1: 2002,
+        s2: 2003,
+        s3: 2001,
+        s4: 2004,
+        s5: 2000,
+        s6: 1999,
+        s7: 1998,
+        s8: 2005,
+        s9: 2006,
+        s10: 1997,
+        s11: 2007,
+        s12: 2008,
+        s13: 2009,
+        s14: 2010,
+        s15: 2011,
+        s16: 2012,
+        s17: 2013,
+        s18: 2014,
+        s19: 2015
     }
     return seasons['s'+value];
 }

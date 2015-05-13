@@ -131,6 +131,13 @@ Date.prototype.yyyymmdd = function(delimiter){
     var dd  = this.getDate().toString();
     return yyyy + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + (dd[1]?dd:"0"+dd[0]);
 };
+Date.prototype.ddmmyyyy = function(delimiter){
+    if(delimiter == null) delimiter = '';
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return (dd[1]?dd:"0"+dd[0]) + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + yyyy;
+};
 Date.prototype.yyyymmddFormatted = function(){
     var monthNames = [
         'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
@@ -217,6 +224,30 @@ function toSeason(value){
         s2013: 17,
         s2014: 18,
         s2015: 19
+    }
+    return seasons['s'+value];
+}
+function fromSeason(value){
+    var seasons = {
+        s1: 2002,
+        s2: 2003,
+        s3: 2001,
+        s4: 2004,
+        s5: 2000,
+        s6: 1999,
+        s7: 1998,
+        s8: 2005,
+        s9: 2006,
+        s10: 1997,
+        s11: 2007,
+        s12: 2008,
+        s13: 2009,
+        s14: 2010,
+        s15: 2011,
+        s16: 2012,
+        s17: 2013,
+        s18: 2014,
+        s19: 2015
     }
     return seasons['s'+value];
 }
@@ -344,10 +375,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return $('#' + this.divId).highcharts({
         chart: {
           type: 'column',
-          alignTicks: false
+          alignTicks: false,
+          marginTop: 230
         },
         title: {
-          text: 'Счет в матчах'
+          text: ''
         },
         xAxis: [
           {
@@ -401,8 +433,16 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           shared: true,
           useHTML: true,
           crosshairs: true,
+          borderWidth: 0,
           style: {
             padding: 0
+          },
+          shadow: false,
+          positioner: function(a, b, p) {
+            return {
+              y: 50,
+              x: p.plotX
+            };
           },
           formatter: function() {
             return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
@@ -1943,7 +1983,7 @@ angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
 });
 
 angular.module('Sportomatics').controller('ClubCalendarController', [
-  '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', function($scope, $http, $location, $parse, MapService, HighchartsFactory) {
+  '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', '$timeout', function($scope, $http, $location, $parse, MapService, HighchartsFactory, $timeout) {
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     $scope.MONTHS_ROD = ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
     $scope.data = {};
@@ -2183,6 +2223,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
       } else {
         params += '&season=19';
       }
+      $scope.loaded = false;
       return $http.get($scope.clubMatchApi + params).success(function(data) {
         var clubGamesChart, clubObject, opponentObject, seriesClub, seriesOpponent;
         $scope.games = _.sortBy(data, function(el) {
@@ -2205,7 +2246,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               date: game.date,
               name: game.opponent.title + ' - ' + $scope.clubName,
               score: Math.abs(game.opponent_score) + ' : ' + Math.abs(game.score),
-              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#82b440',
               leftLogo: game.opponent.logo,
               rightLogo: $scope.clubLogo
             };
@@ -2230,7 +2271,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
               date: game.date,
               name: $scope.clubName + ' - ' + game.opponent.title,
               score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
-              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#2ecc71',
+              color: Math.abs(game.opponent_score) > Math.abs(game.score) ? '#e74c3c' : '#82b440',
               leftLogo: $scope.clubLogo,
               rightLogo: game.opponent.logo
             };
@@ -2238,6 +2279,28 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
             return toFilter != null;
           })
         };
+        $scope.loaded = true;
+        $scope.stats = {
+          date: new Date().ddmmyyyy('.'),
+          games: $scope.games.length,
+          won: _.filter($scope.games, function(game) {
+            return game.score > game.opponent.score;
+          }),
+          lost: _.filter($scope.games, function(game) {
+            return game.score < game.opponent.score;
+          }),
+          wonHome: _.filter($scope.games, function(game) {
+            return game.score > game.opponent.score && game.is_home === true;
+          }),
+          lostHome: _.filter($scope.games, function(game) {
+            return game.score < game.opponent.score && game.is_home === true;
+          })
+        };
+        $timeout(function() {
+          return $('.message .close').on('click', function() {
+            return $(this).closest('.message').fadeOut();
+          });
+        }, 500);
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
         return clubGamesChart.draw();
       });
@@ -2994,8 +3057,21 @@ angular.module('Sportomatics').controller('ClubTeamController', [
         $scope.cache_clubs = null;
         $scope.notplaying_players = null;
         $scope.state = 'fio';
+        $scope.order_by = 'lastname'
         $scope.season = 19;
         $scope.seasons = [];
+
+        $scope.setOrderBy = function(order_by){
+            if($scope.order_by === order_by){
+                if ($scope.order_by.indexOf('-') > -1){
+                    $scope.order_by = $scope.order_by.replace('-', '');
+                } else {
+                    $scope.order_by = '-' + $scope.order_by;
+                }
+            } else {
+                $scope.order_by = order_by;
+            }
+        }
 
         $scope.setType = function(type){
             $scope.type = type;
@@ -3069,6 +3145,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                             if(player.citizenship.title)
                             if(country.name === player.citizenship.title){
                                 player.citizenship.code = country.code;
+                                player.number = parseInt(player.number);
                                 $('#player_'+player.pk+'_flag').addClass(country.code);
                             }
                         })
@@ -3274,8 +3351,9 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             once: false,
             observeChanges: true,
             onBottomVisible: function(){
-                if($scope.seasons.length > 0)
-                $scope.setSeason($scope.season-1, true)
+                var newSeason = 1;
+                if($scope.seasons.length > 0 && fromSeason($scope.season) !== 1997)
+                $scope.setSeason(toSeason(fromSeason($scope.season)-1), true)
             }
         })
 
