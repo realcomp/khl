@@ -4,6 +4,11 @@
 {% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-geography' %}
 <!--tabs content items-->
 <div class="b-tabs-content ui" ng-controller="ClubCalendarController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-calendar" active_menu="calendar-geography" %}
+    {% endblock %}
+
     <div class="b-header b-header__md b-header__filter-in">
         <div class="w-table">
             <h2 class="b-cell b-header__text">

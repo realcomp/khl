@@ -4,6 +4,11 @@
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-geography' %}
 <!--tabs content items-->
 <div class="b-tabs-content ui" ng-controller="ClubGeographyController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-geography" %}
+    {% endblock %}
+
     <div class="b-header b-header__md b-header__filter-in">
         <div class="w-table">
             <h2 class="b-cell b-header__text">

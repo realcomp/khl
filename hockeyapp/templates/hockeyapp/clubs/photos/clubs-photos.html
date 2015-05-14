@@ -5,6 +5,11 @@
 <a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
 <div class="w-page__crew">
     <div class="body_inner bg-image" ng-controller="ClubTeamController as ClubTeamCtrl">
+
+        {% block mobile_menu %}
+            {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-photos" active_menu="photos" %}
+        {% endblock %}
+
         <main id="main">
             <section class="container">
 

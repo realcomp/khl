@@ -3226,13 +3226,13 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     $scope.seasons.push({
                         players: data,
                         season: $scope.season,
-                        title: document.getElementById('season_'+$scope.season).value
+                        title: (document.getElementById('season_'+$scope.season) != null ) ? document.getElementById('season_'+$scope.season).value : ''
                     })
                 } else {
                     $scope.seasons = [{
                         players: data,
                         season: $scope.season,
-                        title: document.getElementById('season_'+$scope.season).value
+                        title: (document.getElementById('season_'+$scope.season) != null ) ? document.getElementById('season_'+$scope.season).value : ''
                     }]
                 }
                 $scope.players = data;

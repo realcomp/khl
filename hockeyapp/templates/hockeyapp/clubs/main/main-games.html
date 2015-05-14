@@ -5,6 +5,11 @@
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-games' %}
 <!--tabs content items-->
 <div class="b-tabs-content ui">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-games" %}
+    {% endblock %}
+
     <section class="w-game-stats w-section">
         <div class="b-centered-btn b-row">
             <div class="ui buttons">

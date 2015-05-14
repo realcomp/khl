@@ -4,6 +4,11 @@
 
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-about' %}
 <div class="b-tabs-content ui tab active" data-tab="tab-name">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-home" active_menu="home-about" %}
+    {% endblock %}
+
     <div class="b-header b-header__md b-header__filter-in">
         <div class="w-table">
             <h2 class="b-cell b-header__text">

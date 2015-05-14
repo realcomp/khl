@@ -5,6 +5,11 @@
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-coaches' %}
 <!--tabs content items-->
 <div class="b-tabs-content ui " ng-controller="ClubCoachesController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-coaches" %}
+    {% endblock %}
+
     <div class="b-header b-header__md">
         <h2 class="b-header__text">
             Тренеры

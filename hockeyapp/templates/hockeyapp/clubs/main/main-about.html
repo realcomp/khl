@@ -4,6 +4,9 @@
 
 {% block tabs-content %}
 <div ng-controller="ClubMainAboutController">
+{% block mobile_menu %}
+    {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-about" %}
+{% endblock %}
 <input id="bestPlayersURL" type="hidden" value="{% url 'hockeyapp:club-best-players-api' pk %}" />
 
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-about' %}

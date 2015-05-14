@@ -2,6 +2,10 @@
 
 {% block tabs-content %}
 
+{% block mobile_menu %}
+    {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-home" active_menu="home-schedule" %}
+{% endblock %}
+
 {% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-schedule' %}
 
 {% endblock %}

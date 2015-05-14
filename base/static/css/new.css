@@ -220,3 +220,37 @@
     width: 155px !important;
     height: 155px !important;
 }
+
+
+.sidr ul li ul li ul{
+    padding-left: 15px;
+}
+.sidr-club-element{
+    background: white;
+    pointer-events: none;
+}
+.sidr-club-element a{
+    color: black !important;
+    font-weight: bold;
+    box-shadow: none;
+}
+.sidr-club-element a:active, .sidr-club-element a:hover{
+    box-shadow: none;
+}
+/*.sidr ul li {
+    background: #82b440;
+
+}
+.sidr ul li a{
+    box-shadow: none !important;
+    color: white;
+}
+.sidr ul li {
+    border-bottom: none;
+}
+.sidr ul li ul li a{
+    box-shadow: none !important;
+    color: white;
+}*/
+
+}

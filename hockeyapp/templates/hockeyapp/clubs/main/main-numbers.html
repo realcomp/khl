@@ -4,6 +4,11 @@
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-numbers' %}
 <!--tabs content items-->
 <div class="b-tabs-content ui">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-numbers" %}
+    {% endblock %}
+
     <div class="b-header b-header__md">
         <h2 class="b-header__text">
             История номеров

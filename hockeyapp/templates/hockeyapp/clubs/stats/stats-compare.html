@@ -7,6 +7,11 @@
 <input id="clubs-compare" type="hidden">
 <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' 0 %}"></a>
 <div class="b-tabs-content ui tab active" ng-controller="ClubTeamCompareController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-stats" active_menu="stats-compare" %}
+    {% endblock %}
+
     <div class="b-header b-header__md b-header__filter-in">
         <div class="w-table">
             <h2 class="b-cell b-header__text">

@@ -8,6 +8,11 @@
 
 {% block body %}
 <div class="w-page__clubs-list" ng-controller="ClubListController as ClubListCtrl">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="sections" active_section="sections-clubs" active_menu="club-team-all" %}
+    {% endblock %}
+
     <div class="body_inner bg-image">
         <main id="main">
             <section class="container">

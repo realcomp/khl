@@ -1,20 +1,16 @@
-<div id="mlpushmenu" class="visible-xs display-none">
-    <nav>
-        <!--<h2><i class="fa fa-reorder"></i>All Categories</h2> class="visible-xs display-none"-->
-        <ul>
-            <li class="no-padding">
-                <a class="no-padding">
-                    <button type="button" class="navbar-toggle mlpushmenu-trigger" id="trigger">
-                        <i class="icon content"></i>
-                    </button>
-                </a>
-            </li>
+{% load i18n %}
+<a id="simple-menu" href="#sidr" style="position: fixed; top: 5px; left: 20px; color: white; font-size: 24px; text-decoration: none;"><i class="icon sidebar"></i></a>
+
+<div id="sidr">
+  <!-- Your content -->
+  <ul>
+            {% if section == 'sports' %}
             <li>
                 <a href="#">
                     <i class=""></i>
                     Виды спорта
                 </a>
-                <h2><i class=""></i>Виды спорта</h2>
+
                 <ul>
                     <li>
                         <a href="#"><i class=""></i>Хоккей</a>
@@ -27,81 +23,170 @@
                     </li>
                 </ul>
             </li>
+            {% endif %}
+            {% if section == 'sections' %}
+                <li>
+                    <a href="{% url 'hockeyapp:index' %}" {% if active_section == 'club-main' %} class="active" {% endif %}><i class="icon angle left"></i>Главная</a>
+                </li>
+                <li>
+                    <a href="{% url 'hockeyapp:clubs:list' %}" {% if active_section == 'sections-clubs' %} class="active" {% endif %} >Клубы</a>
+                    <ul>
+                        <li ng-class="{ 'active':isLeagueActive(null) }" ng-click="setLeague(null)">
+                            <a><i class=""></i>{% trans 'All leagues' %}</a>
+                        </li>
+                        {% verbatim %}
+                        <li ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">
+                            <a><i class=""></i>{{league.title}}</a>
+                        </li>
+                        {% endverbatim %}
+                    </ul>
+                </li>
+                <li>
+                    <a href="{% url 'hockeyapp:players:search' %}" {% if active_section == 'sections-players' %} class="active" {% endif %}>Игроки</a>
+                </li>
+                <li>
+                    <a href="#">Фан-зона</a>
+                </li>
+            {% endif %}
+            {% if section == 'club' %}
             <li>
-                <a href="#"><i class=""></i>Разделы</a>
-                <h2><i class=""></i>Разделы</h2>
-                <ul>
-                    <li>
-                        <a href="{% url 'hockeyapp:clubs:list' %}">Клубы</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'hockeyapp:players:search' %}">Игроки</a>
-                    </li>
-                    <li>
-                        <a href="#">Фан-зона</a>
-                    </li>
-                </ul>
+                <a href="{% url 'hockeyapp:clubs:list' %}" {% if active_section == 'club-main' %} class="active" {% endif %}><i class="icon angle left"></i>Все клубы</a>
+            </li>
+            <li class="sidr-club-element">
+                <a class="bold" style="height: 48px;">
+                    <div class="col-xs-3">
+                    <img class="inline" src="http://dev.sportomatics.ru{{logo}}" width="45" height="45">
+                    </div>
+                    <div class="col-xs-9">
+                    {{title}}
+                    </div>
+                </a>
             </li>
             <li>
-                <a href="#"><i class=""></i>Клуб</a>
-                <h2><i class=""></i>Клуб</h2>
+                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" {% if active_section == 'club-main' %} class="active" {% endif %}><i class="icon heartbeat"></i>Главное</a>
+                {% if active_section == 'club-main' %}
                 <ul>
-                    <li>
-                        <a>Главное</a>
-                        <h2><i class=""></i>Главное</h2>
-                        <ul>
-                            <li>
-                                <a href="#"><i class=""></i>О команде</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class=""></i>География</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class=""></i>Тренеры</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class=""></i>История номеров</a>
-                            </li>
-                        </ul>
+                    <li {% if active_menu == 'main-about' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><i class=""></i>О команде</a>
                     </li>
-                    <li {% if active_menu == 'club-team' %} class="active" {% endif %}>
-                        <a href="#" style="margin-left: 14px;"><i class=""></i>Состав</a>
-                        <!--<h2><i class=""></i>Состав</h2>
-                        <ul>
-                            <li>
-                                <a href="#"><i class=""></i>Ростер</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class=""></i>Все</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class=""></i>Пришли</a>
-                            </li>
-                            <li>
-                                <a href="#"><i class=""></i>Ушли</a>
-                            </li>
-                        </ul>-->
+                    <li {% if active_menu == 'main-geography' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:main-geography' pk %}"><i class=""></i>География</a>
                     </li>
-                    <li>
-                        <a>Календарь</a>
-                        <h2>Календарь</h2>
-                        <ul>
-                            <li {% if active_menu == 'calendar-schedule' %} class="active" {% endif %}>
-                                <a href="{% url 'hockeyapp:clubs:calendar-schedule' pk %}"><i class=""></i>Расписание</a>
-                            </li>
-                            <li {% if active_menu == 'calendar-winlose' %} class="active" {% endif %}>
-                                <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}"><i class=""></i>Победы и проигрыши</a>
-                            </li>
-                            <li {% if active_menu == 'calendar-geography' %} class="active" {% endif %}>
-                                <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}"><i class=""></i>География матчей</a>
-                            </li>
-                            <li {% if active_menu == 'calendar-trips' %} class="active" {% endif %}>
-                                <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}"><i class=""></i>Выезды</a>
-                            </li>
-                        </ul>
+                    <li {% if active_menu == 'main-coaches' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}"><i class=""></i>Тренеры</a>
+                    </li>
+                    <li {% if active_menu == 'main-numbers' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}"><i class=""></i>История номеров</a>
                     </li>
                 </ul>
+                {% endif %}
             </li>
+            <li>
+                <a href="{% url 'hockeyapp:clubs:team' pk %}" {% if active_section == 'club-team' %} class="active" {% endif %}><i class="icon group"></i>Состав</a>
+                {% if active_section == 'club-team' %}
+                <ul>
+                    <li ng-class="{'active': state === 'roaster'}">
+                        <a ng-click="setState('roaster')"><i class=""></i>Ростер</a>
+                    </li>
+                    <li ng-class="{'active': state === 'fio'}">
+                        <a ng-click="setState('fio')"><i class=""></i>Все</a>
+                    </li>
+                    <li ng-class="{'active': state === 'is_joined'}">
+                        <a ng-click="setState('is_joined')"><i class=""></i>Пришли</a>
+                    </li>
+                    <li ng-class="{'active': state === 'is_left'}">
+                        <a ng-click="setState('is_left')"><i class=""></i>Ушли</a>
+                    </li>
+                    <li ng-class="{'active': state === 'is_legionnaire'}">
+                        <a ng-click="setState('is_legionnaire')"><i class=""></i>Легионеры</a>
+                    </li>
+                    <li ng-class="{'active': state === 'is_home'}">
+                        <a ng-click="setState('is_home')"><i class=""></i>Воспитанники</a>
+                    </li>
+                    <li ng-class="{'active': state === 'coaches'}">
+                        <a ng-click="setState('coaches')"><i class=""></i>Тренеры</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:clubs:calendar' pk %}" {% if active_section == 'club-calendar' %} class="active" {% endif %}><i class="icon calendar"></i>Календарь</a>
+                {% if active_section == 'club-calendar' %}
+                <ul>
+                    <li {% if active_menu == 'calendar-schedule' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:calendar-schedule' pk %}"><i class=""></i>Расписание</a>
+                    </li>
+                    <li {% if active_menu == 'calendar-winlose' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:calendar-winlose' pk %}"><i class=""></i>Победы и проигрыши</a>
+                    </li>
+                    <li {% if active_menu == 'calendar-geography' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:calendar-geography' pk %}"><i class=""></i>География матчей</a>
+                    </li>
+                    <li {% if active_menu == 'calendar-trips' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:calendar-trips' pk %}"><i class=""></i>Выезды</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:clubs:stats' pk %}" {% if active_section == 'club-stats' %} class="active" {% endif %}><i class="icon area chart"></i>Статистика</a>
+                {% if active_section == 'club-stats' %}
+                <ul>
+                    <li {% if active_menu == 'stats-table' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:stats' pk %}">Статистика</a>
+                    </li>
+                    <li {% if active_menu == 'stats-compare' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:stats-compare' pk %}">Сравнение команд</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:clubs:home' pk %}" {% if active_section == 'club-home' %} class="active" {% endif %}><i class="icon flag"></i>Домашняя площадка</a>
+                {% if active_section == 'club-home' %}
+                <ul>
+                    <li {% if active_menu == 'home-about' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:home-about' pk %}"><i class=""></i>Описание</a>
+                    </li>
+                    <li {% if active_menu == 'home-schedule' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:home-schedule' pk %}"><i class=""></i>Ближайшие матчи</a>
+                    </li>
+                    <li {% if active_menu == 'home-map' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:home-map' pk %}"><i class=""></i>Карта проезда</a>
+                    </li>
+                    <li {% if active_menu == 'home-attendance' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:home-attendance' pk %}"><i class=""></i>Посещаемость</a>
+                    </li>
+                    <li {% if active_menu == 'home-photos' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:home-photos' pk %}"><i class=""></i>Фотографии</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:clubs:photos' pk %}" {% if active_section == 'club-photos' %} class="active" {% endif %}><i class="icon photo"></i>Фотографии</a>
+                {% if active_section == 'club-photos' %}
+                <ul>
+                    <li {% if active_menu == 'photos' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:clubs:photos' pk %}"><i class=""></i>Фотографии</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </li>
+            {% endif %}
         </ul>
-    </nav>
+
+  <form>
+    <input type="text" placeholder="Search...">
+</form>
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#simple-menu').sidr({
+            renaming: false,
+            displace: false
+        });
+    });
+</script>
