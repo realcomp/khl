@@ -25,6 +25,8 @@ class OrderFilter(filters.BaseFilterBackend):
         '%s_title',
         'arena__%s_title',
         'coach__%s_fio',
+        'coach__%s_name',
+        'coach__%s_lastname',
         'seasons_total',
         'matches_total',
         'goals_total',

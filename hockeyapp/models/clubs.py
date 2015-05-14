@@ -6,6 +6,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from filer.fields.image import FilerImageField
@@ -74,6 +75,11 @@ class Club(AdminLinkMixin, TitleBaseModel):
     proccesed_time = models.DateTimeField(_('Processed time'),auto_now_add=True)
     url = models.URLField('URL', blank=True)
     html_body = models.TextField('Parse HTML', blank=True)
+
+    # counters
+    matches_total = models.IntegerField(_('Matches Total'), null=True)
+    last_match_date = models.DateTimeField(
+        _('Last match history parsed'), null=True)
 
     __unicode__ = lambda self: '{} ({})'.format(self.ru_title, self.address)
 
@@ -146,6 +152,25 @@ class Club(AdminLinkMixin, TitleBaseModel):
     def get_instagam_photo(self):
         return self.pk and self.arenainstaphoto_set.club_photo(self)
 
-    class Meta:
+    @property
+    def next_schedule(self):
+        '''
+        Next match schedule
+        '''
+        now = timezone.now()
+        homematch = (
+            self.schedule_homematches
+            .order_by('date').first())
+            # .filter(date__gt=now).order_by('date').first())
+        guestmatch = (
+            self.schedule_guestmatches
+            .order_by('date').first())
+            # .filter(date__gt=now).order_by('date').first())
+        if homematch and guestmatch:
+            return min((homematch, guestmatch), key=lambda x: x.date)
+        else:
+            return homematch or guestmatch
+
+    class Meta(object):
         verbose_name = _('Club')
         verbose_name_plural = _('Clubs')

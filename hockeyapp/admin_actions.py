@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 
-def get_recalc_counters_actions():
+def get_player_recalc_counters_actions():
     '''
     admin actions generator
     '''
@@ -25,7 +25,7 @@ def get_recalc_counters_actions():
             counters.player_recalc_counters.delay(pks, [field])
             counters.player_recalc_counters_index.delay(field)
         # make function unique for django
-        action.__name__ = str('action_%s' % field)
+        action.__name__ = str('player_action_%s' % field)
         action.short_description = _('Recalculate counters for "%s"') % field
         return action
 
@@ -139,3 +139,34 @@ def delete_without_confirmation(modeladmin, request, queryset):
     queryset.delete()
 delete_without_confirmation.short_description = _(
     'Delete selected without confirmation')
+
+
+def get_club_recalc_counters_actions():
+    '''
+    admin actions generator
+    '''
+    fields = 'matches_total',
+
+    def get_action(field):
+        def action(modeladmin, request, queryset):
+            from .tasks import counters
+            pks = queryset.values_list('pk', flat=True)
+            counters.club_recalc_counters.delay(pks, [field])
+        # make function unique for django
+        action.__name__ = str('club_action_%s' % field)
+        action.short_description = _('Recalculate counters for "%s"') % field
+        return action
+
+    for field in fields:
+        yield get_action(field)
+
+    def action_all(modeladmin, request, queryset):
+        from .tasks import periodic
+        periodic.club_recalc_counters.delay()
+    action_all.short_description = _('Recalculate all counters')
+    yield action_all
+
+    def reset_last_match_date(modeladmin, request, queryset):
+        queryset.update(last_match_date=None)
+    reset_last_match_date.short_description = _('Reset "last_match_date"')
+    yield reset_last_match_date

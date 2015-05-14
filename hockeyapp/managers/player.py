@@ -198,6 +198,7 @@ class PlayerQuerySet(models.QuerySet):
                             update_fields = update_fields + ['last_match_date']
 
                 player.save(update_fields=update_fields)
+        return self
 
     def recalc_counters_index(self, field):
         rating_index = 0

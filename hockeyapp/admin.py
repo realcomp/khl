@@ -107,7 +107,7 @@ class PlayerSocialsInline(admin.TabularInline):
 
 
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
-    actions = tuple(admin_actions.get_recalc_counters_actions()) + (
+    actions = tuple(admin_actions.get_player_recalc_counters_actions()) + (
         admin_actions.calculate_similarity_expired,
         admin_actions.calculate_similarity_everyone)
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
@@ -164,7 +164,10 @@ def obj_color_text(obj):
     else:
         return RED, _('No')
 
+
 class ClubAdmin(NoActionMixin, BaseAdmin):
+    actions = tuple(admin_actions.get_club_recalc_counters_actions()) + (
+        'make_notclubs_league',)
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
                 ClubTitleAliasInline,)# ClubSocialsInline)
     list_display = ('ru_title', 'address', 'has_en_title', 'has_address',
@@ -184,7 +187,6 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
                 'players', 'instagram_photo_link',
                 'rgb', 'main_color', 'secondary_color', 'third_color',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
-    actions = ('make_notclubs_league',)
 
     def get_queryset(self, request):
         qs = super(ClubAdmin, self).get_queryset(request)

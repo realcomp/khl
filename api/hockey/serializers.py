@@ -10,7 +10,7 @@ from api.base.serializers import TitleBaseSerializer, LangDepSerializer
 from api.base.serializers import SeasonSerializer
 
 from hockeyapp.models import (
-    ArenaInstaPhoto, Club, Match, Player, Arena, CoachClub)
+    ArenaInstaPhoto, Club, Match, Player, Arena, CoachClub, Schedule)
 
 from hockeyapp.serializers import CoachSerializer, LeagueSerializer
 
@@ -74,6 +74,19 @@ class ArenaClubListSerializer(TitleBaseSerializer):
         model = Arena
 
 
+class ScheduleClubListSerializer(TitleBaseSerializer):
+    title_verbose = drf.serializers.SerializerMethodField()
+
+    def get_title_verbose(self, obj):
+        return '%s-%s' % (
+            self._get_field(obj.home_team, 'title'),
+            self._get_field(obj.guest_team, 'title'))
+
+    class Meta(object):
+        fields = 'pk', 'date', 'title_verbose'
+        model = Schedule
+
+
 class ClubListSerializer(TitleBaseSerializer):
     title_verbose = drf.serializers.SerializerMethodField()
     def get_title_verbose(self, obj):
@@ -83,6 +96,7 @@ class ClubListSerializer(TitleBaseSerializer):
     address = AddressMinimalSerializer()
     arena = ArenaClubListSerializer()
     coach = drf.serializers.SerializerMethodField()
+    next_schedule = ScheduleClubListSerializer()
 
     def get_coach(self, obj):
         coach = obj.coach
@@ -100,7 +114,7 @@ class ClubListSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = (
             'pk', 'title', 'title_verbose', 'logo', 'url',
-            'address', 'arena', 'coach',)
+            'address', 'arena', 'coach', 'matches_total', 'next_schedule')
         model = Club
 
 
