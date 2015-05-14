@@ -171,6 +171,22 @@ class Club(AdminLinkMixin, TitleBaseModel):
         else:
             return homematch or guestmatch
 
+    @property
+    def previous_match(self):
+        now = timezone.now()
+        homematch = (
+            self.homematches
+            # .order_by('date').last())  # test mode
+            .filter(date__lt=now).order_by('date').last())
+        guestmatch = (
+            self.guestmatches
+            # .order_by('date').last())  # test mode
+            .filter(date__lt=now).order_by('date').last())
+        if homematch and guestmatch:
+            return max((homematch, guestmatch), key=lambda x: x.date)
+        else:
+            return homematch or guestmatch
+
     class Meta(object):
         verbose_name = _('Club')
         verbose_name_plural = _('Clubs')

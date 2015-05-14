@@ -78,25 +78,25 @@ class BestPlayers(generics.ListAPIView):
             'field': 'goals',
             'label': _('goals'),
         }, {
-            # Плюс/Минус - максимальный +/-
-            'class': _('Plus/Minus'),
-            'field': 'plus_minus',
-            'label': '',
-        }, {
             # Ассистент - максимальное кол-во очков (О)
             'class': _('Assistant'),
             'field': 'assists',
             'label': _('points'),
         }, {
-            # Штраф - максимальное штрафное время (Ш)
-            'class': _('Penalty'),
-            'field': 'penalty_time',
-            'label': _('minutes'),
+            # Плюс/Минус - максимальный +/-
+            'class': _('Plus/Minus'),
+            'field': 'plus_minus',
+            'label': '',
         }, {
             # Вратарь - максимальное кол-во отраженных бросков (%ОБ)
             'class': _('Goalkeeper'),
             'field': 'saves_p',
             'label': _('saved shots'),
+        }, {
+            # Штраф - максимальное штрафное время (Ш)
+            'class': _('Penalty'),
+            'field': 'penalty_time',
+            'label': _('minutes'),
         }]
 
         def calc_class(class_, q=None):
@@ -142,7 +142,7 @@ class BestPlayers(generics.ListAPIView):
         classes = list(map(calc_class, classes_init))
 
         # Бомбардир-защитник - защитник, с максимальным кол-вом очков (Ш+А)
-        classes.append(calc_class({
+        classes.insert(-1, calc_class({  # insert before last one
             'class': _('Bombardier-Defender'),
             'field': 'points',
             'label': _('points'),

@@ -89,35 +89,52 @@
                             </h4>
                         </div><!--b-header b-header__sm-->
 
-                        <div class="b-header b-header__xs">
-                            <h5 class="b-header__text">
-                                Автомобилист - {{ title }}
-                            </h5>
-                        </div><!--b-header b-header__xs-->
+                        {% if previous_match %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text">
+                                    {{ previous_match.home_team.title }}
+                                    -
+                                    {{ previous_match.guest_team.title }}
+                                </h5>
+                            </div><!--b-header b-header__xs-->
 
-                        <div class="row">
-                            <div class="col-sm-4 col-md-12 col-lg-4">
-                                <a href="#" class="ui image">
-                                    <img class="ui circular image" src="/static/new/images/l-hockey/logo-2.jpg">
-                                </a>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="#" class="ui image">
+                                        <img class="ui circular image" src="{{ previous_match.home_team.logo }}" />
+                                    </a>
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    {{ previous_match.count }}
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="#" class="ui image">
+                                        <img class="ui circular image" src="{{ previous_match.guest_team.logo }}" />
+                                    </a>
+                                </div>
+                            </div><!--row-->
+
+                            <div class="w-command-calendar__info">
+                                <p class="date">
+                                    {% lcb %} "{{ previous_match.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
+                                </p>
                             </div>
-
-                            <p class="col-sm-2 col-md-12 col-lg-4 b-score">
-                                0 : 5
-                            </p>
-
-                            <div class="col-sm-4 col-md-12 col-lg-4">
-                                <a href="#" class="ui image">
-                                    <img class="ui circular image" src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';">
-                                </a>
+                        {% else %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text"></h5>
+                            </div><!--b-header b-header__xs-->
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    {% trans "No data" %}
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                            </div><!--row-->
+                            <div class="w-command-calendar__info">
                             </div>
-                        </div><!--row-->
-
-                        <div class="w-command-calendar__info">
-                            <p class="date">
-                                17 марта 2015г. 20:20 МСК
-                            </p>
-                        </div>
+                        {% endif %}
                     </div><!--w-command-calendar__item-->
 
                     <div class="col-sm-6 w-command-calendar__item">
@@ -127,35 +144,52 @@
                             </h4>
                         </div><!--b-header b-header__sm-->
 
-                        <div class="b-header b-header__xs">
-                            <h5 class="b-header__text">
-                                Адмирал - {{ title }}
-                            </h5>
-                        </div><!--b-header b-header__xs-->
+                        {% if next_schedule %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text">
+                                    {{ next_schedule.home_team.title }}
+                                    -
+                                    {{ next_schedule.guest_team.title }}
+                                </h5>
+                            </div><!--b-header b-header__xs-->
 
-                        <div class="row">
-                            <div class="col-sm-4 col-md-12 col-lg-4">
-                                <a href="#" class="ui image">
-                                    <img class="ui circular image" src="/static/new/images/l-hockey/logo-1.jpg">
-                                </a>
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="#" class="ui image">
+                                        <img class="ui circular image" src="{{ next_schedule.home_team.logo }}">
+                                    </a>
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    - : -
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="#" class="ui image">
+                                        <img class="ui circular image" src="{{ next_schedule.guest_team.logo }}">
+                                    </a>
+                                </div>
+                            </div><!--row-->
+
+                            <div class="w-command-calendar__info">
+                                <p class="date">
+                                    {% lcb %} "{{ next_schedule.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
+                                </p>
                             </div>
-
-                            <p class="col-sm-2 col-md-12 col-lg-4 b-score">
-                                - : -
-                            </p>
-
-                            <div class="col-sm-4 col-md-12 col-lg-4">
-                                <a href="#" class="ui image">
-                                    <img class="ui circular image" src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';">
-                                </a>
+                        {% else %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text"></h5>
+                            </div><!--b-header b-header__xs-->
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    {% trans "No data" %}
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                            </div><!--row-->
+                            <div class="w-command-calendar__info">
                             </div>
-                        </div><!--row-->
-
-                        <div class="w-command-calendar__info">
-                            <p class="date">
-                                19 марта 2015г. 20:20 МСК
-                            </p>
-                        </div>
+                        {% endif %}
                     </div><!--w-command-calendar__item-->
                 </div><!--row-->
             </div><!--w-command-calendar-->
@@ -234,11 +268,11 @@
                                             <img class="ui image" ng-src="{{ item.player.photo }}">
                                         </figure>
                                     </div>
-                                    <div class="b-mask">
-                                        <a class="ui inverted button" href="#">
-                                            Link
-                                        </a>
-                                    </div>
+                                    <!-- <div class="b-mask"> -->
+                                    <!--     <a class="ui inverted button" href="#"> -->
+                                    <!--         Link -->
+                                    <!--     </a> -->
+                                    <!-- </div> -->
                                 </div>
 
                                 <div class="w-gallery-preview__item__info">
@@ -247,7 +281,7 @@
                                     </p>
                                     <p class="name">
                                         <a href="#">{{ item.player.name }} {{ item.player.lastname }}
-                                        </a> <i class="no flag"></i>
+                                        </a> <i class="flag {{ item.player.citizenship.code }}"></i>
                                     </p>
                                     <p class="description">
                                         {{ item.player.line_display }}
@@ -265,8 +299,12 @@
                                             <!-- {% trans "minutes" %} -->
                                             <!-- {% trans "saved shots" %} -->
                                             <!-- {% trans "matches" %} -->
-                                            {{ item.label }}
-                                            за {{ item.count }} игр
+                                            <span ng-if="item.field !== 'ironman'">
+                                                {{ item.label }} за {{ item.count }} игр
+                                            </span>
+                                            <span ng-if="item.field === 'ironman'">
+                                                {{ item.count }} из {{ item.count }} игр
+                                            </span>
                                         </div>
                                     </div><!--ui static-->
                                 </div>
