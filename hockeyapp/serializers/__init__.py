@@ -28,7 +28,7 @@ class AbstractManSerializer(LangDepSerializer):
 
 class CountrySerializer(TitleBaseSerializer):
     class Meta(object):
-        fields = 'pk', 'title'
+        fields = 'pk', 'title', 'code'
         model = Country
 
 class CitySerializer(TitleBaseSerializer):
