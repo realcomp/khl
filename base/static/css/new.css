@@ -237,6 +237,30 @@
 .sidr-club-element a:active, .sidr-club-element a:hover{
     box-shadow: none;
 }
+.sidr{
+    z-index: 9999;
+}
+.b-logo{
+      z-index: 1 !important;
+}
+.sidr-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+}
+@media (min-width:767px){
+    .sidr-button {
+        position: fixed;
+        top: 4px;
+        left: 10px;
+        color: white;
+        font-size: 24px;
+        text-decoration: none;
+    }
+}
 /*.sidr ul li {
     background: #82b440;
 
