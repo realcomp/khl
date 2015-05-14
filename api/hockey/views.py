@@ -5,6 +5,7 @@ import collections
 import rest_framework as drf
 
 from django.db.models import Q, Avg
+from django.utils import timezone
 
 from base.models import Season
 from hockeyapp.filters import OrderFilter
@@ -62,8 +63,8 @@ class ClubList(ClubListMixin, drf.generics.ListAPIView):
     def filter_queryset(self, qs):
         qs = super(ClubList, self).filter_queryset(qs)
         q = Q()
-        if 'country' in self.request.GET:
-            country = Country.objects.filter(pk=self.request.GET['country']
+        if 'country' in self.request.query_params:
+            country = Country.objects.filter(pk=self.request.query_params['country']
                                     ).last()
         else:
             country = Country.objects.filter(ru_title=b'Россия'
@@ -71,9 +72,9 @@ class ClubList(ClubListMixin, drf.generics.ListAPIView):
         if country:
             q &= Q(leagueclub__league__country_id=country)
 
-        if 'league' in self.request.GET:
+        if 'league' in self.request.query_params:
             league_q = Q(leagueclub__league=self._get_league())
-            if 'is_history' in self.request.GET:
+            if 'is_history' in self.request.query_params:
                 league_q |= Q(leagueclub__league__isnull=True)
             q &= league_q
 
@@ -81,6 +82,15 @@ class ClubList(ClubListMixin, drf.generics.ListAPIView):
 
         ids = set(qs.filter(q).values_list('pk', flat=True))
         qs = qs.filter(pk__in=ids)
+
+        if self.request.query_params.get('order_by') == 'next_schedule':
+            qs = list(qs)
+            now = timezone.now()
+            qs.sort(
+                key=lambda x: x.next_schedule and x.next_schedule.date or now)
+            if 'reversed' in self.request.query_params:
+                qs.reverse()
+
         return qs
 club_list = ClubList.as_view()
 

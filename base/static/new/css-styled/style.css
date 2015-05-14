@@ -2730,3 +2730,8 @@ figure {
 .w-diagram.bg {
 	background: url(../images/diagram.jpg) scroll left top no-repeat;
 }
+
+.loader-large {
+    background: #ffffff url('/static/images/loader-large.gif') center no-repeat;
+    height: 100px;
+}

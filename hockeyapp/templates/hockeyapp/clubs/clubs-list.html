@@ -118,8 +118,10 @@
                                 </div><!--row-->
                             </div><!--b-header b-header__md-->
 
+                            <div class="loader-large" ng-hide="loaded"></div>
+
                             <!-- <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}"> -->
-                            <div class="w-gallery-preview" ng-hide="params.is_table">
+                            <div class="w-gallery-preview" ng-show="!params.is_table && loaded">
                                 <div class="row w-gallery-preview__items w-gallery-preview__items__8">
 
                                     {% verbatim %}
@@ -167,7 +169,7 @@
                             </div><!--w-gallery-preview-->
                             <!-- </form> -->
 
-                            <div class="row-xs" ng-show="params.is_table">
+                            <div class="row-xs" ng-show="params.is_table && loaded">
                                 <table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
                                     <tr>
                                         <th class="b-table-team" colspan="2">
@@ -183,16 +185,18 @@
                                             </a>
                                         </th>
                                         <th class="b-td-sm" colspan="2">
-                                            <a href="#"><span>Ближайшая игра</span>
-                                                <!-- <i class="dropdown icon"></i> -->
+                                            <a href="" ng-click="setOrderBy('next_schedule')">
+                                                <span>Ближ. игра</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'next_schedule'"></i>
                                             </a>
                                         </th>
                                         <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1">
-                                            <a href="" ng-click="setOrderBy('matches_total')"><span>Игр</span>
+                                            <a href="" ng-click="setOrderBy('matches_total')">
+                                                <span>Игр</span>
                                                 <i class="dropdown icon" ng-show="params.order_by === 'matches_total'"></i>
                                             </a>
                                         </th>
-                                        <th class="hidden-xs b-td-xs text-center-sm text-center"  colspan="1">
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1">
                                             <a href="#">
                                                 <span>Очки</span>
                                                 <!-- <i class="dropdown icon"></i> -->
@@ -211,9 +215,9 @@
                                             </a>
                                         </th>
                                         <th class="hidden-xs hidden-sm" colspan="2">
-                                            <a href="" ng-click="setOrderBy('coach__%s_fio')">
+                                            <a href="" ng-click="setOrderBy('coach__%s_lastname,coach__%s_name')">
                                                 <span>Тренер</span>
-                                                <i class="dropdown icon" ng-show="params.order === 'coach__%s_fio'"></i>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'coach__%s_lastname,coach__%s_name'"></i>
                                             </a>
                                         </th>
                                     </tr>
@@ -238,17 +242,17 @@
                                             </td>
                                             <td colspan="2">
                                                 <p>
-                                                    <a href="#">СКА-Автомобилист</a>
+                                                    <a href="#">{{ club.next_schedule.title_verbose }}</a>
                                                 </p>
                                                 <p class="text-small">
-                                                    26 апреля 2015 20:20 МСК
+                                                    {{ club.next_schedule.date|date:"dd MMMM yyyy hh:mm" }}
                                                 </p>
                                             </td>
                                             <td class="b-td-xs hidden-xs text-center-sm" colspan="1">{{ club.matches_total }}</td>
                                             <td class="b-td-xs hidden-xs text-center-sm" colspan="1">10</td>
                                             <td class="b-td-xs text-center hidden-xs" colspan="1">6</td>
                                             <td class="hidden-xs" colspan="2"><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
-                                            <td class="hidden-xs hidden-sm" colspan="2"><a href="#">{{ club.coach.fio }}</a></td>
+                                            <td class="hidden-xs hidden-sm" colspan="2"><a href="#">{{ club.coach.lastname }} {{ club.coach.name }}</a></td>
                                         </tr>
                                     {% endverbatim %}
 

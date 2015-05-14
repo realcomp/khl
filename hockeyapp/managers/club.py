@@ -104,10 +104,9 @@ class ClubQuerySet(LocaleOrderMixin, DataCleanMixin, models.QuerySet):
                     last_homematch = club.homematches.order_by('date').last()
                     last_guestmatch = club.guestmatches.order_by('date').last()
                     if last_homematch and last_guestmatch:
-                        if last_homematch.date > last_guestmatch.date:
-                            last_match = last_homematch
-                        else:
-                            last_match = last_guestmatch
+                        return max(
+                            (last_homematch, last_guestmatch),
+                            key=lambda x: x.date)
                     else:
                         last_match = last_homematch or last_guestmatch
                     if last_match:
