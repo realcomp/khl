@@ -28,7 +28,12 @@
 
 
 
-
+.inline-block{
+    display: inline-block;
+}
+.vertical-top{
+    vertical-align: top;
+}
 .font-weight-300{
     font-weight: 300;
 }
@@ -260,6 +265,69 @@
         font-size: 24px;
         text-decoration: none;
     }
+}
+.b-diagram__legend__table-style__item {
+  min-width: 175px;
+}
+.b-diagram__legend__image{
+    height: 32px !important;
+    max-height: 32px;
+}
+.b-diagram__legend__table-style ul li:after{
+    display: none;
+}
+angucomplete input{
+    width: 100% !important;
+}
+.overlay-black{
+    background-color: #000; /* Чёрный фон */
+    height: 100%; /* Высота максимальна */
+    left: 0; /* Нулевой отступ слева */
+    opacity: 0.80; /* Степень прозрачности */
+    position: fixed; /* Фиксированное положение */
+    top: 0; /* Нулевой отступ сверху */
+    width: 100%; /* Ширина максимальна */
+    z-index: 999; /* Заведомо быть НАД другими элементами */
+}
+#personal-list{
+    background: white;
+    border: 1px;
+    max-width: 1500px !important;
+    min-width: 1100px;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 1000px;
+    height: 640px;
+    min-height: 640px;
+    z-index: 99999;
+}
+.photo-popup{
+    border: 1px;
+    max-width: 1500px !important;
+    min-width: 1100px;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 1000px;
+    height: 640px;
+    min-height: 640px;
+    z-index: 99999;
+    display: none;
+}
+.b-diagram__legend__table-style {
+    box-shadow: none;
+}
+.b-diagram__legend__table-style ul li {
+  border-left: 1px solid rgba(0,0,0,.1);
 }
 /*.sidr ul li {
     background: #82b440;

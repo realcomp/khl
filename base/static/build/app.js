@@ -272,7 +272,7 @@ $.fn.textWidth = function(){
 angular.module('Sportomatics')
 
 angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location, $rootScope) {
-  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart, clubGamesFormatterDiv;
+  var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart, clubGamesFormatterDiv, indicatorsListItem;
   HighchartsSpiderChart = (function() {
     function HighchartsSpiderChart(divId, data1, categories, season) {
       this.divId = divId;
@@ -819,21 +819,23 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           followPointer: true,
           crosshairs: true,
           formatter: function() {
-            var header, s;
+            var content, header, s;
             header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>';
             if (this.points[0].point.drilldown != null) {
-              s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear() - 1) + '/' + new Date(this.x).getFullYear() + '</b></div>';
+              header = LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '<br> СЕЗОН ' + (new Date(this.x).getFullYear() - 1) + '/' + (new Date(this.x).getFullYear()).toString().substr(2, 4);
+              $('#legend-header').html(header);
+              content = '';
               $.each(this.points, function() {
-                return s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
+                return content += indicatorsListItem(this.y, this.series.name, this.series.options.logo, this.series.options.color);
               });
-              $('#chart-tooltip-content').html(s);
+              $('#legend-content').html(content);
               return false;
             } else {
               s = '<div class="inline-block tooltip-block"><b>' + LocaleFactory.selectedLocale.monthNamesFull[new Date(this.x).getMonth()] + ' <br>' + new Date(this.x).getFullYear() + '</b></div>';
               $.each(this.points, function() {
                 return s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
               });
-              $('#chart-tooltip-content').html(s);
+              $('#legend-content').html(s);
               return false;
             }
           },
@@ -866,6 +868,14 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
   })();
   clubGamesFormatterDiv = function(title, score, date, leftLogo, rightLogo) {
     return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score b-win-text">' + score + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
+  };
+  indicatorsListItem = function(result, title, image, color) {
+
+    /*<p class="">
+        нападающий
+    </p>
+     */
+    return '<li class="" style="border-right: 5px solid ' + color + ';"> <div class="b-inline b-diagram__legend__table-style__item"> <div class="b-inline hidden-xs"> <a class="ui image" ><img class="ui image b-diagram__legend__image" src="' + image + '" width="32" height="32"></a> </div> <div class="b-inline"> <p class=""> <a href="#">' + title + '</a> <!--<i class="flag cz i-top-2 hidden-xs"></i>--> </p> </div> </div> <p class="b-inline b-diagram__legend__table-style__games">' + result + '</p> </li>';
   };
   return {
     PlayerStatsSpiderChart: HighchartsSpiderChart,
@@ -2893,12 +2903,34 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.clubs = [];
   $scope.offenders = true;
   $scope.defenders = true;
+  $scope.params = {
+    professional: false
+  };
+  $scope.setParams = function() {
+    $('#regularParams').toggleClass('display-none');
+    $('#professionalParams').toggleClass('display-none');
+    $('.ui.checkbox-regular').checkbox('uncheck');
+    $('.ui.checkbox-professional').checkbox('check');
+    return null;
+  };
   this.clubPk = document.getElementById('team-id').value;
   $scope.$watch('field', function() {
     if ($scope.clubs.length > 0) {
       return $scope.listAveragePlayer();
     }
   });
+  $scope.showPersonalList = function() {
+    $('.overlay-black').removeClass('hidden');
+    $('#personal-list').removeClass('hidden');
+    return null;
+  };
+  $scope.getActiveState = function(array) {
+    if (_.contains(array, $scope.field)) {
+      return 'active';
+    } else {
+      return '';
+    }
+  };
   $scope.setSeason = function(season) {
     $scope.season = season;
     return console.log($scope.season);
@@ -3050,7 +3082,8 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           };
         }),
         color: club.color,
-        stack: club.id
+        stack: club.id,
+        logo: club.logo
       };
       return newPlayerIndicatorsData.push(clubObject);
     });

@@ -6,6 +6,17 @@
 <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
 <input id="clubs-compare" type="hidden">
 <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' 0 %}"></a>
+
+<div class="overlay-black hidden"></div>
+<section id="personal-list" class="w-page-tabs hidden">
+    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+        <a class="item">Мои команды</a>
+        <a class="active  item">Выбранные игроки</a>
+    </div>
+    <div class="b-tabs-content ui tab active b-personal__list">
+
+    </div>
+</section>
 <div class="b-tabs-content ui tab active" ng-controller="ClubTeamCompareController">
 
     {% block mobile_menu %}
@@ -34,11 +45,10 @@
 
 
     <div class="ui menu b-ui-menu">
-        <ul class="menu unstyled">
-            <li class="item b-ui-menu__item">
-                <div class="ui toggle checkbox">
-                    <label>Параметры</label>
-                    <input type="checkbox" name="public" checked>
+        <ul id="regularParams" class="menu unstyled">
+            <li class="item b-ui-menu__item" ng-click="setParams('professional')">
+                <div class="ui toggle checkbox checkbox-regular">
+                    <input type="checkbox" name="public">
                 </div>
             </li>
 
@@ -46,17 +56,22 @@
                 <a>Количество игр</a>
             </li>
 
-            <li class="ui pointing dropdown link item b-ui-menu__item">
+            <li class="ui pointing dropdown link item b-ui-menu__item li-indicator">
                 <span class="text"  ng-click="setField('points')">Очки</span>
                 <i class="dropdown icon i-top-3"></i>
                 <ul class="menu">
+                    <li class="item" ng-click="setField('points')">Очки</li>
                     <li class="item" ng-click="setField('assists')">Передачи</li>
                     <li class="item dropdown-relative">
                         <i class="dropdown icon"></i>
-                        <span class="text" ng-click="setField('goals')">Шайбы</span>
+                        <span class="text">Шайбы</span>
                         <ul class="menu unstyled">
-                            <li class="header">Mens</li>
-                            <li class="item">Shirts</li>
+                            <li class="item" ng-click="setField('goals')">Шайбы</li>
+                            <li class="item" ng-click="setField('es_goals')">Шайбы в равенстве</li>
+                            <li class="item" ng-click="setField('pp_goals')">Шайбы в большинстве</li>
+                            <li class="item" ng-click="setField('ev_goals')">Шайбы в меньшинстве</li>
+                            <li class="item" ng-click="setField('overtime_goals')">Шайбы в овертайме</li>
+                            <li class="item" ng-click="setField('win_goals')">Победные шайбы</li>
                         </ul>
                     </li>
                 </ul>
@@ -71,34 +86,22 @@
             </li>
 
             <li class="ui pointing dropdown link item b-ui-menu__item">
-                <span class="text"  ng-click="setField('shots')">Броски</span>
+                <span class="text" ng-click="setField('shots')">Броски</span>
                 <i class="dropdown icon i-top-3"></i>
                 <ul class="menu">
-                    <li class="item">Передачи</li>
-                    <li class="item">
-                        <i class="dropdown icon"></i>
-                        <span class="text">Шайбы</span>
-                        <ul class="menu unstyled">
-                            <li class="header">Mens</li>
-                            <li class="item">Shirts</li>
-                        </ul>
-                    </li>
+                    <li class="item" ng-click="setField('shots')">Броски</li>
+                    <li class="item" ng-click="setField('pis__avg')">% реализованных бросков</li>
+                    <li class="item" ng-click="setField('shots__avg')">Среднее количество бросков за игру</li>
                 </ul>
             </li>
 
             <li class="ui pointing dropdown link item b-ui-menu__item">
-                <span class="text" ng-click="setField('faceoff')">Вбрасывания</span>
+                <span class="text">Вбрасывания</span>
                 <i class="dropdown icon i-top-3"></i>
                 <ul class="menu">
-                    <li class="item">Передачи</li>
-                    <li class="item">
-                        <i class="dropdown icon"></i>
-                        <span class="text">Шайбы</span>
-                        <ul class="menu unstyled">
-                            <li class="header">Mens</li>
-                            <li class="item">Shirts</li>
-                        </ul>
-                    </li>
+                    <li class="item" ng-click="setField('faceoff')">Вбрасывания</li>
+                    <li class="item" ng-click="setField('winfaceoff')">Выигранные брасывания</li>
+                    <li class="item" ng-click="setField('winfaceoff_p__avg')">Процент выигранных вбрасываний</li>
                 </ul>
             </li>
 
@@ -126,6 +129,74 @@
                 <a>Фолы против</a>
             </li>
         </ul>
+        <ul id="professionalParams" class="menu unstyled display-none" >
+            <li class="item b-ui-menu__item" ng-click="setParams('regular')">
+                <div class="ui toggle checkbox checkbox-professional" >
+                    <input type="checkbox" name="public" checked="true">
+                </div>
+            </li>
+
+            <li class="item b-ui-menu__item" ng-click="setField('count')" ng-class="{'active': field === 'count'}">
+                <a>И</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('points')" ng-class="{'active': field === 'points'}">
+                <a>О</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('goals')" ng-class="{'active': field === 'goals'}">
+                <a>Ш</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('assists')" ng-class="{'active': field === 'assists'}">
+                <a>А</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('plus_minus')" ng-class="{'active': field === 'plus_minus'}">
+                <a>+/-</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('es_goals')" ng-class="{'active': field === 'es_goals'}">
+                <a>ШР</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('pp_goals')" ng-class="{'active': field === 'pp_goals'}">
+                <a>ШБ</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('ev_goals')" ng-class="{'active': field === 'ev_goals'}">
+                <a>ШМ</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('overtime_goals')" ng-class="{'active': field === 'overtime_goals'}">
+                <a>ШО</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('win_goals')" ng-class="{'active': field === 'win_goals'}">
+                <a>ШП</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('bullet_goals')" ng-class="{'active': field === 'bullet_goals'}">
+                <a>РБ</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('shots')" ng-class="{'active': field === 'shots'}">
+                <a>БВ</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('pis__avg')" ng-class="{'active': field === 'pis__avg'}">
+                <a>%БВ</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('shots__avg')" ng-class="{'active': field === 'shots__avg'}">
+                <a>БВ/И</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('faceoff')" ng-class="{'active': field === 'faceoff'}">
+                <a>Вбр</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('winfaceoff')" ng-class="{'active': field === 'winfaceoff'}">
+                <a>ВВбр</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('winfaceoff_p__avg')" ng-class="{'active': field === 'winfaceoff_p__avg'}">
+                <a>%Вбр</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('change_count__avg')" ng-class="{'active': field === 'change_count__avg'}">
+                <a>См/И</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('penalty_time')" ng-class="{'active': field === 'penalty_time'}">
+                <a>Штр</a>
+            </li>
+            <li class="item b-ui-menu__item" ng-click="setField('gamingtime__avg')" ng-class="{'active': field === 'gamingtime__avg'}">
+                <a>ВП/И</a>
+            </li>
+        </ul>
     </div><!--b-ui-menu-->
 
 
@@ -135,8 +206,67 @@
     <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': loader && clubs.length === 0}">
         Загрузка...
     </div>
-    <div ng-if="clubs.length > 0">
-        <div id="chartdiv" style="width: 100%; height:480px; "></div>
+
+    <div class="row">
+        <div class="b-diagram__legend b-diagram__legend__table-style inline-block vertical-top col-md-3 no-padding" ng-if="clubs.length > 0" style="margin-left: 10px;">
+            <p id="legend-header" class="b-diagram__legend__table-style_header">
+                <span ng-bind="localeObject.fieldNames[field].fullName"></span>
+            </p>
+
+
+            <ul id="legend-content" class="unstyled">
+                <!--<li class="b-diagram__legend__table-style__blue">
+                    <div class="b-inline b-diagram__legend__table-style__item">
+                        <div class="b-inline hidden-xs">
+                            <a class="ui image" href="#"><img class="ui image" src="images/a-hockey/ava-12.jpg" alt="" tittle=""></a>
+                        </div>
+
+                        <div class="b-inline">
+                            <p class="">
+                                <a href="#">Петров Сергей</a> <i class="flag cz i-top-2 hidden-xs"></i>
+                            </p>
+                            <p class="">
+                                нападающий
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="b-inline b-diagram__legend__table-style__games">
+                        22
+                    </p>
+                </li>-->
+            </ul>
+
+            {% comment %}
+            <div class="w-player-compare">
+                <div class="b-header__sm">
+                    <h4 class="header-text">
+                        Команда для сравнения
+                    </h4>
+                </div><!--b-header__sm-->
+
+                <div class="ui input block" style="width: 100%;">
+                    <angucomplete id="clubs_filter"  style="width: 100%;"
+                                  pause="300" minlength="2"
+                                  selectedobject="selectedClub"
+                                  placeholder="Введите название"
+                                  url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                </div>
+
+                <div class="b-or-hr">
+                    <span>или</span>
+                </div>
+
+                <p class="text-center">
+                    <a ng-click="showPersonalList()">Выберите из списка</a>
+                </p>
+            </div>
+            {% endcomment %}
+        </div>
+
+        <div ng-if="clubs.length > 0" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+            <div id="chartdiv" style="height:480px; width: 100%;"></div>
+        </div>
     </div>
 
 

@@ -397,16 +397,18 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     formatter: () ->
                         header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>'
                         if this.points[0].point.drilldown?
-                            s = '<div class="inline-block tooltip-block"><b>Сезон <br>' + (new Date(this.x).getFullYear()-1) + '/'+ new Date(this.x).getFullYear() + '</b></div>';
+                            header = LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '<br> СЕЗОН ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4);
+                            $('#legend-header').html(header)
+                            content = ''
                             $.each this.points, () ->
-                                s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y  + '</span></div>'
-                            $('#chart-tooltip-content').html(s)
+                                content += indicatorsListItem(this.y, this.series.name, this.series.options.logo, this.series.options.color) #'<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y  + '</span></div>'
+                            $('#legend-content').html(content)
                             return false
                         else
                             s = '<div class="inline-block tooltip-block"><b>' + LocaleFactory.selectedLocale.monthNamesFull[new Date(this.x).getMonth()] + ' <br>'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
                                 s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
-                            $('#chart-tooltip-content').html(s)
+                            $('#legend-content').html(s)
                             return false;
                     shared: true
                 plotOptions:
@@ -453,6 +455,28 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 </p>
             </div>
         </div>'
+
+    indicatorsListItem = (result, title, image, color) ->
+        ###<p class="">
+            нападающий
+        </p>###
+        return '<li class="" style="border-right: 5px solid '+color+';">
+            <div class="b-inline b-diagram__legend__table-style__item">
+                <div class="b-inline hidden-xs">
+                    <a class="ui image" ><img class="ui image b-diagram__legend__image" src="'+image+'" width="32" height="32"></a>
+                </div>
+
+                <div class="b-inline">
+                    <p class="">
+                        <a href="#">'+title+'</a> <!--<i class="flag cz i-top-2 hidden-xs"></i>-->
+                    </p>
+                </div>
+            </div>
+
+            <p class="b-inline b-diagram__legend__table-style__games">
+                '+result+'
+            </p>
+        </li>'
 
 
     return (

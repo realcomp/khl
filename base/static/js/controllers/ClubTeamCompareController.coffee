@@ -9,11 +9,32 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
     $scope.clubs = []
     $scope.offenders = true
     $scope.defenders = true
+    $scope.params = (
+        professional: false
+    )
+
+    $scope.setParams = () ->
+        $('#regularParams').toggleClass('display-none');
+        $('#professionalParams').toggleClass('display-none');
+        $('.ui.checkbox-regular').checkbox('uncheck');
+        $('.ui.checkbox-professional').checkbox('check');
+        return null
+
     this.clubPk = document.getElementById('team-id').value
 
     $scope.$watch 'field', () ->
         if $scope.clubs.length > 0
             $scope.listAveragePlayer()
+
+    $scope.showPersonalList = () ->
+        $('.overlay-black').removeClass('hidden');
+        $('#personal-list').removeClass('hidden');
+        return null
+
+    $scope.getActiveState = (array) ->
+        if _.contains(array, $scope.field)
+            return 'active'
+        else return ''
 
     $scope.setSeason = (season) ->
         $scope.season = season
@@ -135,6 +156,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     )
                 color: club.color,
                 stack: club.id
+                logo: club.logo
             }
             newPlayerIndicatorsData.push clubObject
 
@@ -145,6 +167,5 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         self.chart = $('#chartdiv').highcharts()
 
     $scope.addAverageClubPlayerData(this.clubPk)
-
 
     return

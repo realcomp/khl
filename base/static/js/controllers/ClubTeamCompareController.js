@@ -10,12 +10,34 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.clubs = [];
   $scope.offenders = true;
   $scope.defenders = true;
+  $scope.params = {
+    professional: false
+  };
+  $scope.setParams = function() {
+    $('#regularParams').toggleClass('display-none');
+    $('#professionalParams').toggleClass('display-none');
+    $('.ui.checkbox-regular').checkbox('uncheck');
+    $('.ui.checkbox-professional').checkbox('check');
+    return null;
+  };
   this.clubPk = document.getElementById('team-id').value;
   $scope.$watch('field', function() {
     if ($scope.clubs.length > 0) {
       return $scope.listAveragePlayer();
     }
   });
+  $scope.showPersonalList = function() {
+    $('.overlay-black').removeClass('hidden');
+    $('#personal-list').removeClass('hidden');
+    return null;
+  };
+  $scope.getActiveState = function(array) {
+    if (_.contains(array, $scope.field)) {
+      return 'active';
+    } else {
+      return '';
+    }
+  };
   $scope.setSeason = function(season) {
     $scope.season = season;
     return console.log($scope.season);
@@ -167,7 +189,8 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           };
         }),
         color: club.color,
-        stack: club.id
+        stack: club.id,
+        logo: club.logo
       };
       return newPlayerIndicatorsData.push(clubObject);
     });
