@@ -19,7 +19,7 @@ from . import (
     CountrySerializer,
     ClubListSerializer,
     ArenaSerializer)
-from ..models import Club, ClubPlayer, Coach, Player, League, Schedule
+from ..models import Club, ClubPlayer, Coach, Player, League, Schedule, Match
 
 
 class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
@@ -346,6 +346,32 @@ class NumbersSerializer(serializers.ModelSerializer):
         model = Player
 
 
+class ScheduleClubSerializer(TitleBaseSerializer):
+    logo = serializers.ReadOnlyField(source='logo.url')
+
+    class Meta(object):
+        fields = 'pk', 'title', 'logo'
+        model = Club
+
+
+class MatchSerializer(TitleBaseSerializer):
+    home_team = ScheduleClubSerializer()
+    guest_team = ScheduleClubSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'date', 'home_team', 'guest_team', 'count'
+        model = Match
+
+
+class ScheduleSerializer(TitleBaseSerializer):
+    home_team = ScheduleClubSerializer()
+    guest_team = ScheduleClubSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'date', 'home_team', 'guest_team'
+        model = Schedule
+
+
 class ClubMainAboutSerializer(TitleBaseSerializer):
     '''
     Serializer for ClubMainAboutView
@@ -357,6 +383,8 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
     arena = ArenaSerializer()
     coach = CoachSerializer()
     league = LeagueSerializer()
+    next_schedule = ScheduleSerializer()
+    previous_match = MatchSerializer()
 
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
@@ -365,7 +393,7 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
             'coach', 'league', 'site', 'email', 'phone', 'main_color',
-            'opening_dt', 'contacts')
+            'opening_dt', 'contacts', 'next_schedule', 'previous_match')
         model = Club
 
 

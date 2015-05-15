@@ -160,14 +160,30 @@ class Club(AdminLinkMixin, TitleBaseModel):
         now = timezone.now()
         homematch = (
             self.schedule_homematches
-            .order_by('date').first())
-            # .filter(date__gt=now).order_by('date').first())
+            # .order_by('date').first())  # test mode
+            .filter(date__gt=now).order_by('date').first())
         guestmatch = (
             self.schedule_guestmatches
-            .order_by('date').first())
-            # .filter(date__gt=now).order_by('date').first())
+            # .order_by('date').first())  # test mode
+            .filter(date__gt=now).order_by('date').first())
         if homematch and guestmatch:
             return min((homematch, guestmatch), key=lambda x: x.date)
+        else:
+            return homematch or guestmatch
+
+    @property
+    def previous_match(self):
+        now = timezone.now()
+        homematch = (
+            self.homematches
+            # .order_by('date').last())  # test mode
+            .filter(date__lt=now).order_by('date').last())
+        guestmatch = (
+            self.guestmatches
+            # .order_by('date').last())  # test mode
+            .filter(date__lt=now).order_by('date').last())
+        if homematch and guestmatch:
+            return max((homematch, guestmatch), key=lambda x: x.date)
         else:
             return homematch or guestmatch
 

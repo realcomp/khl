@@ -538,6 +538,8 @@ class Match(AdminLinkMixin, TitleBaseModel):
 
     league = models.ForeignKey(League, null=True, blank=True,
                                 on_delete=models.SET_NULL,)
+    home_count = models.IntegerField(_('Home team count'), default=0)
+    guest_count = models.IntegerField(_('Guest team count'), default=0)
 
     class Meta:
         verbose_name=_('Match')
@@ -551,6 +553,15 @@ class Match(AdminLinkMixin, TitleBaseModel):
                                         self.guest_team,
                                         self.date)
         return self.ru_title
+
+    def save(self, **kwargs):
+        if self.count:
+            home_count, _, guest_count = self.count.partition(':')
+            self.home_count = int(filter(
+                lambda x: x.isdigit(), home_count) or 0)
+            self.guest_count = int(filter(
+                lambda x: x.isdigit(), guest_count) or 0)
+        super(Match, self).save(**kwargs)
 
 
 class Challenge(TitleBaseModel):
