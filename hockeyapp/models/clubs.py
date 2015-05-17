@@ -187,6 +187,45 @@ class Club(AdminLinkMixin, TitleBaseModel):
         else:
             return homematch or guestmatch
 
+    @property
+    def great_win(self):
+        homematch = (
+            self.homematches
+            .filter(guest_count=0)
+            .order_by('home_count').last())
+        guestmatch = (
+            self.guestmatches
+            .filter(home_count=0)
+            .order_by('guest_count').last())
+        print('★' * 80)
+        print(homematch)
+        print(guestmatch)
+        if homematch and guestmatch:
+            if homematch.home_count > guestmatch.guest_count:
+                return homematch
+            else:
+                return guestmatch
+        else:
+            return homematch or guestmatch
+
+    @property
+    def great_lose(self):
+        homematch = (
+            self.homematches
+            .filter(home_count=0)
+            .order_by('guest_count').last())
+        guestmatch = (
+            self.guestmatches
+            .filter(guest_count=0)
+            .order_by('home_count').last())
+        if homematch and guestmatch:
+            if homematch.guest_count > guestmatch.home_count:
+                return homematch
+            else:
+                return guestmatch
+        else:
+            return homematch or guestmatch
+
     class Meta(object):
         verbose_name = _('Club')
         verbose_name_plural = _('Clubs')

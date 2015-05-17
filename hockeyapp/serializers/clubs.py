@@ -385,6 +385,8 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
     league = LeagueSerializer()
     next_schedule = ScheduleSerializer()
     previous_match = MatchSerializer()
+    great_win = MatchSerializer()
+    great_lose = MatchSerializer()
 
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
@@ -393,7 +395,8 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
             'coach', 'league', 'site', 'email', 'phone', 'main_color',
-            'opening_dt', 'contacts', 'next_schedule', 'previous_match')
+            'opening_dt', 'contacts', 'next_schedule', 'previous_match',
+            'great_win', 'great_lose')
         model = Club
 
 

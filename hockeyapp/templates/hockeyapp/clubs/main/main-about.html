@@ -222,11 +222,31 @@
                     </tr>
                     <tr>
                         <td><span class="b-labeled">Крепнейшая победа:</span></td>
-                        <td>7:0<a class="block" href="#">Локомотив(Ярославль) 21.03.01</a></td>
+                        <td>
+                            {{ great_win.count }}
+                            <a class="block" href="#">
+                                {% if great_win.home_team.pk == pk %}
+                                    {{ great_win.guest_team.title }}
+                                {% else %}
+                                    {{ great_win.home_team.title }}
+                                {% endif %}
+                                21.03.01
+                            </a>
+                        </td>
                     </tr>
                     <tr>
-                        <td><span class="b-labeled">Крепнейшое поражение:</span></td>
-                        <td>0:12<a class="block" href="#">Спартак(Москва) 21.03.01</a></td>
+                        <td><span class="b-labeled">Крупнейшое поражение:</span></td>
+                        <td>
+                            {{ great_lose.count }}
+                            <a class="block" href="#">
+                                {% if great_lose.home_team.pk == pk %}
+                                    {{ great_win.guest_team.title }}
+                                {% else %}
+                                    {{ great_win.home_team.title }}
+                                {% endif %}
+                                21.03.01
+                            </a>
+                        </td>
                     </tr>
                 </table>
             </div><!--w-command-info-->
