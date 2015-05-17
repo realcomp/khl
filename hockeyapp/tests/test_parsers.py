@@ -96,7 +96,8 @@ class HockeyAppParserTest(base.tests.BaseTest):
         for field in ('ru_title', 'html_body', 'url', 'site', 'contacts',
         'title'):
             self.assertNotEqual(getattr(club, field), self.blank)
-        for field in ('proccesed_time', 'coach_id', 'logo_id',):# 'arena_id',):
+        # for field in ('proccesed_time', 'coach_id', 'logo_id',):# 'arena_id',):
+        for field in ('proccesed_time', 'logo_id'):
             self.assertIsNotNone(getattr(club, field))
         self.assertEqual(club.ru_title, club.title)
         #check arena fields
@@ -116,7 +117,7 @@ class HockeyAppParserTest(base.tests.BaseTest):
         self.assertEqual(Player.objects.filter(khl_id=id).count(), 1)
         #check fields
         for field in ('ru_fio', 'html_body', 'url', 'line', 'birth_date',
-            'height', 'weight', 'contract_type', 'contract_to', 'number',
+            'height', 'weight', 'contract_type', 'contract_to', #'number',
             'grip', 'citizenship', 'wiki_page', 'fio',
         ):
             self.assertNotEqual(getattr(player, field), self.blank)
