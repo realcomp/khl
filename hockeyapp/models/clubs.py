@@ -197,9 +197,6 @@ class Club(AdminLinkMixin, TitleBaseModel):
             self.guestmatches
             .filter(home_count=0)
             .order_by('guest_count').last())
-        print('★' * 80)
-        print(homematch)
-        print(guestmatch)
         if homematch and guestmatch:
             if homematch.home_count > guestmatch.guest_count:
                 return homematch

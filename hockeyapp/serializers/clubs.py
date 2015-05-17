@@ -387,16 +387,41 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
     previous_match = MatchSerializer()
     great_win = MatchSerializer()
     great_lose = MatchSerializer()
+    coaches__count = serializers.SerializerMethodField()
+    players__count = serializers.SerializerMethodField()
+    matches__count = serializers.SerializerMethodField()
+    seasons__count = serializers.SerializerMethodField()
+    earliest_season_year = serializers.SerializerMethodField()
+
+    def get_coaches__count(self, obj):
+        return obj.coaches.count()
+
+    def get_players__count(self, obj):
+        return obj.players.count()
+
+    def get_matches__count(self, obj):
+        return obj.homematches.count() + obj.guestmatches.count()
 
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
+
+    def get_seasons__count(self, obj):
+        return len(set(obj.clubplayer_set.values_list('season', flat=True)))
+
+    def get_earliest_season_year(self, obj):
+        seasons = Season.objects.filter(
+            pk__in=obj.clubplayer_set.values_list('season', flat=True))
+        season = seasons.order_by('start_date').first()
+        if season:
+            return season.start_date.year
 
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
             'coach', 'league', 'site', 'email', 'phone', 'main_color',
             'opening_dt', 'contacts', 'next_schedule', 'previous_match',
-            'great_win', 'great_lose')
+            'great_win', 'great_lose', 'coaches__count', 'players__count',
+            'matches__count', 'seasons__count', 'earliest_season_year')
         model = Club
 
 
