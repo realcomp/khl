@@ -356,25 +356,30 @@ class NumbersSerializer(serializers.ModelSerializer):
 
 class ScheduleClubSerializer(TitleBaseSerializer):
     logo = serializers.ReadOnlyField(source='logo.url')
+    url = serializers.ReadOnlyField(source='get_absolute_url')
 
     class Meta(object):
-        fields = 'pk', 'title', 'logo'
+        fields = 'pk', 'title', 'logo', 'url'
         model = Club
 
 
-class MatchSerializer(TitleBaseSerializer):
+class MatchSheduleBaseSerializer(TitleBaseSerializer):
     home_team = ScheduleClubSerializer()
     guest_team = ScheduleClubSerializer()
 
+
+class MatchSerializer(MatchSheduleBaseSerializer):
+    winner = ScheduleClubSerializer()
+    loser = ScheduleClubSerializer()
+
     class Meta(object):
-        fields = 'pk', 'date', 'home_team', 'guest_team', 'count'
+        fields = (
+            'pk', 'date', 'home_team', 'guest_team', 'count',
+            'winner', 'loser')
         model = Match
 
 
-class ScheduleSerializer(TitleBaseSerializer):
-    home_team = ScheduleClubSerializer()
-    guest_team = ScheduleClubSerializer()
-
+class ScheduleSerializer(MatchSheduleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'date', 'home_team', 'guest_team'
         model = Schedule

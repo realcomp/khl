@@ -75,7 +75,7 @@
                             <i class="block layout icon"></i>
                         </a>
 
-                        <a href="team-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="Показать все расписание" data-variation="basic">
+                        <a href="{% url 'hockeyapp:clubs:calendar' pk %}" class="b-cell b-change-views__item w-tooltip" data-content="Показать все расписание" data-variation="basic">
                             <i class="table icon"></i>
                         </a>
                     </div><!--row-->
@@ -100,7 +100,7 @@
 
                             <div class="row">
                                 <div class="col-sm-4 col-md-12 col-lg-4">
-                                    <a href="#" class="ui image">
+                                    <a href="{{ previous_match.home_team.url }}" class="ui image">
                                         <img class="ui circular image" src="{{ previous_match.home_team.logo }}" />
                                     </a>
                                 </div>
@@ -108,7 +108,7 @@
                                     {{ previous_match.count }}
                                 </p>
                                 <div class="col-sm-4 col-md-12 col-lg-4">
-                                    <a href="#" class="ui image">
+                                    <a href="{{ previous_match.guest_team.url }}" class="ui image">
                                         <img class="ui circular image" src="{{ previous_match.guest_team.logo }}" />
                                     </a>
                                 </div>
@@ -155,7 +155,7 @@
 
                             <div class="row">
                                 <div class="col-sm-4 col-md-12 col-lg-4">
-                                    <a href="#" class="ui image">
+                                    <a href="{{ next_schedule.home_team.url }}" class="ui image">
                                         <img class="ui circular image" src="{{ next_schedule.home_team.logo }}">
                                     </a>
                                 </div>
@@ -163,7 +163,7 @@
                                     - : -
                                 </p>
                                 <div class="col-sm-4 col-md-12 col-lg-4">
-                                    <a href="#" class="ui image">
+                                    <a href="{{ next_schedule.guest_team.url }}" class="ui image">
                                         <img class="ui circular image" src="{{ next_schedule.guest_team.logo }}">
                                     </a>
                                 </div>
@@ -210,26 +210,30 @@
                     </tr>
                     <tr>
                         <td><span class="b-labeled">Матчей:</span></td>
-                        <td><a href="#">{{ matches__count }}</a></td>
+                        <td>
+                            <a href="{% url 'hockeyapp:clubs:calendar' pk %}">
+                                {{ matches__count }}
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td><span class="b-labeled">Игроков в составе:</span></td>
-                        <td><a href="#">{{ players__count }}</a></td>
+                        <td>
+                            <a href="{% url 'hockeyapp:clubs:team' pk %}">
+                                {{ players__count }}
+                            </a>
+                        </td>
                     </tr>
                     <tr>
                         <td><span class="b-labeled">Тренеров:</span></td>
                         <td>{{ coaches__count }}</td>
                     </tr>
                     <tr>
-                        <td><span class="b-labeled">Крепнейшая победа:</span></td>
+                        <td><span class="b-labeled">Крупнейшая победа:</span></td>
                         <td>
                             {{ great_win.count }}
-                            <a class="block" href="#">
-                                {% if great_win.home_team.pk == pk %}
-                                    {{ great_win.guest_team.title }}
-                                {% else %}
-                                    {{ great_win.home_team.title }}
-                                {% endif %}
+                            <a class="block" href="{{ great_win.loser.url }}">
+                                {{ great_win.loser.title }}
                             </a>
                             {% lcb %} "{{ great_win.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
                         </td>
@@ -238,12 +242,8 @@
                         <td><span class="b-labeled">Крупнейшое поражение:</span></td>
                         <td>
                             {{ great_lose.count }}
-                            <a class="block" href="#">
-                                {% if great_lose.home_team.pk == pk %}
-                                    {{ great_lose.guest_team.title }}
-                                {% else %}
-                                    {{ great_lose.home_team.title }}
-                                {% endif %}
+                            <a class="block" href="{{ great_win.winner.url }}">
+                                {{ great_lose.winner.title }}
                             </a>
                             {% lcb %} "{{ great_lose.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
                         </td>

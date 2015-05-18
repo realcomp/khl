@@ -488,82 +488,6 @@ class MatchPenaltyHistory(models.Model):
         verbose_name_plural=_('Match penalty entries')
 
 
-class Match(AdminLinkMixin, TitleBaseModel):
-    objects = managers.match.MatchManager()
-    #service info
-    khl_id = models.PositiveIntegerField(_('Other site ID'), null=True)
-    challenge_type = models.PositiveSmallIntegerField(_('Challenge Type'),
-                                null=True, choices=CHALLENGE_TYPE)
-    proccesed_time = models.DateTimeField(_('Processed time'),auto_now=True)
-    url = models.URLField('URL', blank=True)
-    html_body = models.TextField('Parse HTML', blank=True)
-
-    #main info
-    spectators = models.PositiveIntegerField(_('Spectators count'), null=True)
-    spectators_str = models.CharField(_('Spectators count'), max_length=1024,
-                                    blank=True)
-    date_str = models.CharField(_('Match date'), max_length=1024, blank=True)
-    date = models.DateTimeField(_('Match date'), null=True, blank=True)
-    count = models.CharField(_('Match count'), max_length=1024, blank=True)
-    detail_count = models.CharField(_('Match detail count'), 
-                                    max_length=1024, blank=True)
-    home_score = models.PositiveSmallIntegerField(_('Home score'), null=True)
-    guest_score = models.PositiveSmallIntegerField(_('Guest score'), null=True)
-    overtime_win = models.BooleanField(_('Overtime'), default=False)
-    bullet_win = models.BooleanField(_('Bullets'), default=False)
-    judges = models.ManyToManyField(Judge, null=True, blank=True,
-                            related_name='matchjudges',
-                            verbose_name=Judge._meta.verbose_name_plural)
-    line_judges = models.ManyToManyField(Judge, null=True, blank=True,
-                            related_name='matchlinejudges',
-                            verbose_name=_('Line judges'))
-    home_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
-                                on_delete=models.SET_NULL,
-                                related_name='homematches',
-                                verbose_name=_('Home team'))
-    home_coach = models.ForeignKey(Coach, null=True, blank=True,
-                                    on_delete=models.SET_NULL,
-                                    related_name='homematches')
-    home_players = models.ManyToManyField(ClubPlayer, null=True, blank=True,
-                                    related_name='homematches')
-    guest_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
-                                on_delete=models.SET_NULL,
-                                related_name='guestmatches',
-                                verbose_name=_('Guest team'))
-    guest_coach = models.ForeignKey(Coach, null=True, blank=True,
-                                    on_delete=models.SET_NULL,
-                                    related_name='guestmatches')
-    guest_players = models.ManyToManyField(ClubPlayer, null=True, blank=True,
-                                    related_name='guestmatches')
-
-    league = models.ForeignKey(League, null=True, blank=True,
-                                on_delete=models.SET_NULL,)
-    home_count = models.IntegerField(_('Home team count'), default=0)
-    guest_count = models.IntegerField(_('Guest team count'), default=0)
-
-    class Meta:
-        verbose_name=_('Match')
-        verbose_name_plural=_('Matches')
-        ordering = '-khl_id',
-
-    def __unicode__(self):
-        if self.count and self.date and self.home_team and self.guest_team:
-            return '{} {} {} ({})'.format(self.home_team,
-                                        self.count,
-                                        self.guest_team,
-                                        self.date)
-        return self.ru_title
-
-    def save(self, **kwargs):
-        if self.count:
-            home_count, _, guest_count = self.count.partition(':')
-            self.home_count = int(filter(
-                lambda x: x.isdigit(), home_count) or 0)
-            self.guest_count = int(filter(
-                lambda x: x.isdigit(), guest_count) or 0)
-        super(Match, self).save(**kwargs)
-
-
 class Challenge(TitleBaseModel):
     khl_id = models.PositiveIntegerField(_('Other site calendar ID'))
     url = models.URLField('Challenge calendar for parsing', blank=True)
@@ -612,7 +536,7 @@ class Schedule(TitleBaseModel):
     #relations
     season = models.ForeignKey(Season, null=True, blank=True)
     league = models.ForeignKey(League, null=True, blank=True)
-    match = models.OneToOneField(Match, null=True, blank=True,
+    match = models.OneToOneField('hockeyapp.Match', null=True, blank=True,
                                 on_delete=models.SET_NULL,)
     home_team = models.ForeignKey('hockeyapp.Club', null=True, blank=True,
                                 on_delete=models.SET_NULL,
@@ -675,5 +599,5 @@ class Name(models.Model):
 
 
 from .clubs import Club
-from .match import ClubPlayerMatch
+from .match import Match, ClubPlayerMatch
 from .timeline import Timeline
