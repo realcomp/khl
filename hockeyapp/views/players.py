@@ -96,8 +96,8 @@ class PlayerCardCoaches(PlayerMainCard):
         return context
 
 
-class PlayerCardPartners(PlayerMainCard):
-    template_name = 'hockeyapp/players/player-card-partners.html'
+class PlayerPartners(PlayerMainCard):
+    template_name = 'hockeyapp/players/partners/player-partners.html'
 
 
 class PlayerCardPhotos(PlayerMainCard):

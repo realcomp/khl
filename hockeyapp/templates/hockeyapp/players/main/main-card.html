@@ -9,7 +9,7 @@
 
 {% include 'hockeyapp/players/main/tabs.html' with player_main_tab='main-card' %}
 <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}">
-<input type="hidden" id="partners-url" value="{% url 'api:hockey:player_partners' pk %}">
+<input type="hidden" id="api-player-partners" value="{% url 'api:hockey:player_partners' pk %}">
 {% for club in clubs %}
 <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}_{{club.main_color}}">
 {% endfor %}

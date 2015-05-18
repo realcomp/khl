@@ -13,7 +13,7 @@ urlpatterns = [
         name='clubs'),
     url(r'^(?P<pk>\d+)/coaches/$', players.PlayerCardCoaches.as_view(),
         name='coaches'),
-    url(r'^(?P<pk>\d+)/partners/$', players.PlayerCardPartners.as_view(),
+    url(r'^(?P<pk>\d+)/partners/$', players.PlayerPartners.as_view(),
         name='partners'),
     url(r'^(?P<pk>\d+)/photos/$', players.PlayerCardPhotos.as_view(),
         name='photos'),

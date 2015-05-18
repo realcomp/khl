@@ -9,6 +9,7 @@
     <div class="container player-card-short-page">
         <!-- {% trans "Partners" %} -->
         {% include "hockeyapp/players/player-header.html" with player_section="Partners" %}
+
         <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
         <div class="page-content page-container" ng-controller="PlayerPartnersController">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-partners" %}

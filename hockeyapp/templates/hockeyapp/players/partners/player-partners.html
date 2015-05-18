@@ -1,0 +1,256 @@
+{% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: партнеры по команде, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' club.pk %}">
+<input type="hidden" id="api-player-partners" value="{% url 'api:hockey:player_partners' pk %}">
+<div class="w-page__main">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/players/player-header.html" with player_section="Partners" %}
+
+                {% include "hockeyapp/players/menu.html" with player_menu_active="player-partners" %}
+
+                <section class="w-player-portrait visible-xs">
+
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image">
+                                    <img class="ui image" src="images/a-hockey/ava-16.jpg">
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <div class="w-player-portrait__info">
+                        <div class="b-header b-header__sm">
+                            <h3 class="b-header__text">
+                                {{fio}}
+                            </h3>
+                            <p class="">
+                                {{line_display}}
+                            </p>
+                        </div><!--b-header b-header__sm-->
+
+                        <div class="b-player-info__team ui feed">
+                            <div class="event">
+                                <div class="label">
+                                    <img src="images/l-hockey/logo-2.jpg" alt="" title="">
+                                </div>
+                                <div class="content">
+                                    <div class="summary">
+                                        <a class="team-now" href="#">сейчас в</a> <span>Автомобилист</span>
+                                        <p class="location">Московская область</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end b-player-info__team-->
+
+                        <table class="ui unstackable very basic table w-labeled-list">
+                            <tbody>
+                                <tr>
+                                    <td><span class="b-labeled">Рост:</span></td>
+                                    <td>184см</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Вес:</span></td>
+                                    <td>84кг</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Хват:</span></td>
+                                    <td>левый</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Дата рождения:</span></td>
+                                    <td>26 марта 1981года</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Возраст:</span></td>
+                                    <td>34 года</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Гражданство:</span></td>
+                                    <td>Россия</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section><!--end w-player-portrait-->
+
+                <section class="w-page-tabs" ng-controller="PlayerPartnersController">
+
+                    <!--tabs content-->
+
+                    {% block tabs-content %}
+                    <!-- Tabs -->
+                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+                        <div class="text">Сезон 2014-15</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu transition hidden" tabindex="-1">
+                            <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                            <div class="item" data-text="Сезон 2013-14">2013-14</div>
+                            <div class="item" data-text="Сезон 2012-13">2012-13</div>
+                            <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                        </div>
+                    </div>
+                    <!--tabs items-->
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item" ng-click="setRateBy('')" ng-class="{'active': params.rate_by !== 1}">Самые постоянные</div>
+                        <div class="item" ng-click="setRateBy(1)" ng-class="{'active': params.rate_by === 1}">Самые старые</div>
+                    </div>
+                    <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item" ng-click="setRateBy('')" ng-class="{'active': params.rate_by !== 1}">Самые постоянные</div>
+                        <div class="item" ng-click="setRateBy(1)" ng-class="{'active': params.rate_by === 1}">Самые старые</div>
+                    </div>
+                    <!--tabs items ends-->
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui">
+
+                        {% block mobile_menu %}
+                        {% endblock %}
+
+                        <div class="b-header b-header__md b-header__filter-in">
+                            <div class="w-table">
+
+                                <h2 class="b-cell b-header__text">
+                                    Партнеры по команде
+                                </h2>
+
+                                <a class="b-cell b-change-views__item w-tooltip" data-content="Сейчас играют" data-variation="basic" ng-class="{ 'active': params.is_playing === 1}" ng-click="setPlaying(1)">
+                                    <i class="checkmark icon"></i>
+                                </a>
+
+                                <a class="b-cell b-change-views__item w-tooltip" data-content="Включая закончивших карьеру" data-variation="basic" ng-click="setPlaying('')" ng-class="{ 'active': params.is_playing !== 1}" >
+                                    <i class="remove user icon"></i>
+                                </a>
+                                <a class="b-cell b-change-views__item w-tooltip" data-content="Сейчас в одной команде" data-variation="basic" ng-click="setCurrentTeam()" ng-class="{'active': current_team === true}">
+                                    <i class="group icon"></i>
+                                </a>
+                            </div><!--row-->
+                        </div><!--b-header b-header__md-->
+
+                        <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': !loaded}">
+                            Загрузка...
+                        </div>
+                        {% verbatim %}
+                        <div class="w-shirt-number" ng-repeat="players in playersBySeasonCount track by $index" ng-show="!playersBySeasonTime.length && loaded && playersBySeasonCount[$index].players.length">
+                            <div class="row">
+                                <div class="col-sm-2 b-shirt-number">
+                                    <span class="b-shirt-number">
+                                        {{players.seasons_count}}
+                                    </span>
+                                    <br>
+                                    <br>
+                                    <p class="b-positive-text">
+                                        сезонов вместе
+                                    </p>
+                                </div><!--b-shirt-number-->
+
+                                <div class="col-sm-10">
+                                    <div class="w-gallery-preview">
+                                        <div class="row w-gallery-preview__overflow w-gallery-preview__items w-gallery-preview__in-block w-gallery-preview__items__8">
+                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
+                                                <div class="ui card">
+                                                    <div class="w-gallery-preview__item__img img-wrap">
+                                                        <figure class="figure-styled">
+                                                            <a href="#" class="ui image">
+                                                                <img class="ui image" ng-src="{{player.photo.file}}">
+                                                            </a>
+                                                        </figure>
+                                                    </div>
+
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{player.url}}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                        <p class="">
+                                                            {{player.line_display}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                             </div><!--w-gallery-preview__item-->
+                                        </div><!--w-gallery-preview__items-->
+                                    </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+
+
+                                    <div class="w-btn" ng-click="increaseLimit($index)" ng-if="limit[$index] < players.players.length">
+                                        <a class="ui green tiny button">Показать еще</a>
+                                    </div>
+                                </div><!--w-gallery-preview-->
+                            </div><!--row-->
+                        </div><!--w-shirt-number-->
+
+                        <!-- Oldest -->
+                        <div class="w-shirt-number" ng-show="playersBySeasonTime && loaded && playersBySeasonTime[$index].players.length" ng-repeat="data in playersBySeasonTime track by $index">
+                            <div class="row">
+                                <div class="col-sm-2 b-shirt-number">
+                                    <p class="b-positive-text">
+                                        {{data.season.title}}
+                                    </p>
+                                </div><!--b-shirt-number-->
+
+                                <div class="col-sm-10">
+                                    <div class="w-gallery-preview">
+                                        <div class="row w-gallery-preview__overflow w-gallery-preview__items w-gallery-preview__in-block w-gallery-preview__items__8">
+                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in data.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
+                                                <div class="ui card">
+                                                    <div class="w-gallery-preview__item__img img-wrap">
+                                                        <figure class="figure-styled">
+                                                            <a href="#" class="ui image">
+                                                                <img class="ui image" ng-src="{{player.photo.file}}">
+                                                            </a>
+                                                        </figure>
+                                                    </div>
+
+                                                    <div class="w-gallery-preview__item__info">
+                                                        <p class="name">
+                                                            <a href="{{player.url}}">{{player.lastname}} {{player.name}}</a>
+                                                        </p>
+                                                        <p class="">
+                                                            {{player.line_display}}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                             </div><!--w-gallery-preview__item-->
+                                        </div><!--w-gallery-preview__items-->
+                                    </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
+
+
+                                    <div class="w-btn" ng-click="increaseLimit($index)" ng-if="limit[$index] < data.players.length">
+                                        <a class="ui green tiny button">Показать еще</a>
+                                    </div>
+                                </div><!--w-gallery-preview-->
+                            </div><!--row-->
+                        </div><!--w-shirt-number-->
+                        {% endverbatim %}
+                    </div>
+                    <!--tabs content items-->
+
+                    {% endblock %}
+
+                    <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+                {% block sticky_menu %}
+                {% endblock %}
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}

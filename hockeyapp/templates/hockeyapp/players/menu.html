@@ -51,7 +51,7 @@
                     <a href="#">Тренеры</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-partners' %}active {% endif %} item">
-                    <a href="#">Партнеры</a>
+                    <a href="{% url 'hockeyapp:players:partners' pk %}">Партнеры</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-photos' %}active {% endif %} item">
                     <a href="#">Фотографии</a>
