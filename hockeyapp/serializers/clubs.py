@@ -446,3 +446,20 @@ class BestPlayersSerilizer(serializers.ModelSerializer):
         fields = (
             'class_', 'field', 'player', 'number', 'value', 'label', 'count')
         model = ClubPlayer
+
+
+class OriginPlayersClubSerilizer(BaseClubSerializer):
+    address = AddressSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'title', 'address'
+        model = Club
+
+
+class OriginPlayersSerilizer(BasePlayerCardSerializer):
+    photo = serializers.ReadOnlyField(source='photo.url')
+    club = OriginPlayersClubSerilizer()
+
+    class Meta(object):
+        fields = 'pk', 'name', 'lastname', 'photo', 'club'
+        model = Player

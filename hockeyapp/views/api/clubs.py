@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 import copy
 
 from django.db.models import Q, Avg, Sum
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import generics
@@ -11,8 +13,9 @@ from rest_framework import generics
 from base.models import Season
 
 from . import NumbersList
-from ...models import ClubPlayer, Match
-from ...serializers.clubs import NumbersSerializer, BestPlayersSerilizer
+from ...models import ClubPlayer, Match, Player, Club
+from ...serializers.clubs import (
+    NumbersSerializer, BestPlayersSerilizer, OriginPlayersSerilizer)
 
 
 class PlayerNumbers(NumbersList):
@@ -20,10 +23,8 @@ class PlayerNumbers(NumbersList):
 
     def filter_queryset(self, qs):
         qs = super(PlayerNumbers, self).filter_queryset(qs)
-
-        _club = self.request.GET.get('club')
-        if _club:
-            qs = qs.filter(club=_club)
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+        qs = qs.filter(club=club)
 
         _season = self.request.GET.get('season')
         if _season:
@@ -162,3 +163,19 @@ class BestPlayers(generics.ListAPIView):
             })
 
         return classes
+
+
+class OriginPlayers(generics.ListAPIView):
+    queryset = Player.objects.all()
+    serializer_class = OriginPlayersSerilizer
+
+    def filter_queryset(self, qs):
+        qs = super(OriginPlayers, self).filter_queryset(qs)
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+        # if club.address and club.address.city and club.address.city.ru_title:
+        #     qs = qs.filter(birth_place=club.address.city.ru_title)
+        if club.address and club.address.ru_title:
+            qs = qs.filter(birth_place=club.address.ru_title)
+        else:
+            qs = qs.none()
+        return qs
