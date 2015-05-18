@@ -23,10 +23,8 @@ class PlayerNumbers(NumbersList):
 
     def filter_queryset(self, qs):
         qs = super(PlayerNumbers, self).filter_queryset(qs)
-
-        _club = self.request.GET.get('club')
-        if _club:
-            qs = qs.filter(club=_club)
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+        qs = qs.filter(club=club)
 
         _season = self.request.GET.get('season')
         if _season:

@@ -1,7 +1,8 @@
 angular.module('Sportomatics').controller('NumbersController', [
-    '$http', '$scope', '$location',
-    ($http, $scope, $location) ->
+    '$http', '$scope', '$location', 'SeasonsService',
+    ($http, $scope, $location, SeasonsService) ->
         $scope.$location = $location
+        $scope.SeasonsService = SeasonsService
 
         url = $('#PlayerNumbersApi').attr('href')
         club = $('[name="club"]').val()
@@ -32,14 +33,20 @@ angular.module('Sportomatics').controller('NumbersController', [
                 })
             return
 
+        $scope.setSeason = (season) ->
+            $location.search('season', season)
+            $scope.params = $location.search()
+            $scope.list()
+            return
+
         $scope.getLimit = (number) ->
             # get limit by player's number
             if not $scope.limit[number]
-                $scope.limit[number] = 4
+                $scope.limit[number] = 5
             return $scope.limit[number]
 
         $scope.increaseLimit = (number) ->
-            $scope.limit[number] += 4
+            $scope.limit[number] += 5
             return
 
         $scope.getSeasonsCount = (group) ->

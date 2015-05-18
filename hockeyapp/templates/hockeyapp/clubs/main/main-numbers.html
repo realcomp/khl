@@ -1,6 +1,7 @@
 {% extends 'hockeyapp/clubs/main/clubs-main.html' %}
 {% block tabs-content %}
-
+<div ng-controller="NumbersController">
+<a class="hidden" id="PlayerNumbersApi" href="{% url 'hockeyapp:club-player-numbers-api' club_id=pk %}"></a>
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-numbers' %}
 <!--tabs content items-->
 <div class="b-tabs-content ui">
@@ -15,307 +16,74 @@
         </h2>
     </div><!--b-header b-header__sm-->
 
+    {% verbatim %}
+        <div class="w-shirt-number" ng-repeat="group in data">
+            <div class="row">
+                <div class="col-sm-2 b-shirt-number">
+                    <span class="b-shirt-number">
+                        {{ group.number || '-' }}
+                    </span>
+                </div><!--b-shirt-number-->
 
-    <div class="w-shirt-number">
-        <div class="row">
-            <div class="col-sm-2 b-shirt-number">
-                <span class="b-shirt-number">
-                    1
-                </span>
-            </div><!--b-shirt-number-->
+                <div class="col-sm-10">
+                    <div class="w-gallery-preview">
+                        <div class="row w-gallery-preview__overflow w-gallery-preview__items w-gallery-preview__in-block w-gallery-preview__items__6">
+                            <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item"
+                                 ng-repeat="player in group.players track by $index"
+                                 ng-if="$index < getLimit(group.number)">
+                                <div class="ui card">
+                                    <div class="w-gallery-preview__item__img img-wrap">
+                                        <figure class="figure-styled">
+                                            <a href="#" class="ui image">
+                                                <img class="ui image" ng-src="{{ player.photo || '/static/images/no-photo.png' }}">
+                                            </a>
+                                        </figure>
+                                    </div>
 
-            <div class="col-sm-10">
-                <div class="w-gallery-preview">
-                    <div class="row w-gallery-preview__overflow w-gallery-preview__items w-gallery-preview__in-block w-gallery-preview__items__6">
-                         <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-9.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
+                                    <div class="w-gallery-preview__item__info">
+                                        <p class="name">
+                                            <a href="#">{{ player.lastname }} {{ player.name }}</a>
+                                        </p>
+                                        <p class="">
+                                            {{ player.line_display }}
+                                        </p>
+                                    </div>
 
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Александр</a>
-                                    </p>
-                                    <p class="">
-                                        главный тренер
-                                    </p>
+                                    <div class="extra content w-gallery-preview__item__extra">
+                                        <p class="b-seasons-play">
+                                            <span ng-repeat="clubplayer in player.clubplayers track by $index"
+                                                  ng-if="$index < (player.clubplayers_limit || 1)">
+                                                <a href="{{ clubplayer.club_url }}">{{ clubplayer.season.short_title }}</a><span ng-show="$index < player.clubplayers.length - 1">,</span>
+                                            </span>
+                                            <a href="" ng-click="player.clubplayers_limit = 999"
+                                               ng-show="(player.clubplayers_limit || 1) < player.clubplayers.length">
+                                                и еще {{ player.clubplayers.length - 1 }}
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div>
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-17.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник помощника
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-10.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник тренер
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-11.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник помощника
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item-->
-                    </div><!--w-gallery-preview__items-->
-                </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
-
-
-                <div class="w-btn">
-                    <a href="#" class="ui green tiny button">Показать еще</a>
-                </div>
-            </div><!--w-gallery-preview-->
-        </div><!--row-->
-    </div><!--w-shirt-number-->
-
-
-    <div class="w-shirt-number">
-        <div class="row">
-            <div class="col-sm-2 b-shirt-number">
-                <span class="b-shirt-number">
-                    2
-                </span>
-            </div><!--b-shirt-number-->
-
-            <div class="col-sm-10">
-                <div class="w-gallery-preview">
-                    <div class="row w-gallery-preview__overflow  w-gallery-preview__items w-gallery-preview__in-block w-gallery-preview__items__6">
-                         <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-13.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Александр</a>
-                                    </p>
-                                    <p class="">
-                                        главный тренер
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div>
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-14.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник помощника
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-15.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник тренер
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-16.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник помощника
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-10.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник помощника
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
-                            <div class="ui card">
-                                <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <a href="#" class="ui image">
-                                            <img class="ui image" src="/static/new/images/a-hockey/ava-12.jpg">
-                                        </a>
-                                    </figure>
-                                </div>
-
-                                <div class="w-gallery-preview__item__info">
-                                    <p class="name">
-                                        <a href="#">Иванов Игорь</a>
-                                    </p>
-                                    <p class="">
-                                        помощник помощника
-                                    </p>
-                                </div>
-
-                                <div class="extra content w-gallery-preview__item__extra">
-                                    <p class="b-seasons-play">
-                                        сезон 2012-13
-                                    </p>
-                                </div>
-                            </div><!--ui card-->
-                         </div><!--w-gallery-preview__item-->
+                             </div><!--w-gallery-preview__item-->
+                        </div><!--w-gallery-preview__items-->
                     </div><!--row w-gallery-preview__items w-gallery-preview__overflow-->
 
+
                     <div class="w-btn">
-                        <a href="#" class="ui green tiny button">Показать еще</a>
+                        <a href="" class="ui green tiny button"
+                           ng-click="increaseLimit(group.number)"
+                           ng-if="getLimit(group.number) < group.players.length">
+                            Показать еще
+                        </a>
                     </div>
                 </div><!--w-gallery-preview-->
-            </div>
-        </div><!--row-->
-    </div><!--w-shirt-number-->
+            </div><!--row-->
+        </div><!--w-shirt-number-->
+    {% endverbatim %}
+
+    <div class="loader-large" ng-hide="loaded"></div>
+
 </div>
 <!--tabs content items-->
+</div>
 {% endblock %}
 
 {% block sticky_menu %}
