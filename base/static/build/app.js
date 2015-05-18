@@ -3563,6 +3563,7 @@ angular.module('Sportomatics').controller('NumbersController', [
       if ($scope.params.season) {
         params += '&season=' + $scope.params.season;
       }
+      $scope.data = {};
       $scope.loaded = false;
       $http.get(url + '?' + params).success(function(data) {
         $scope.data = data;
