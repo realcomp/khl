@@ -282,17 +282,17 @@
                                 <div class="ui ribbon green label" ng-if="item.number">
                                     {{ item.number }}
                                 </div>
+                                <div class="ui ribbon green label-flag">
+                                    <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{item.player.citizenship.code}}"></i>
+                                </div>
                                 <div class="w-mask">
                                     <div class="w-gallery-preview__item__img img-wrap">
-                                        <figure class="figure-styled">
-                                            <img class="ui image" ng-src="{{ item.player.photo }}">
-                                        </figure>
+                                        <a href="{{item.player.url}}">
+                                            <figure class="figure-styled">
+                                                <img class="ui image" ng-src="{{ item.player.photo }}">
+                                            </figure>
+                                        </a>
                                     </div>
-                                    <!-- <div class="b-mask"> -->
-                                    <!--     <a class="ui inverted button" href="#"> -->
-                                    <!--         Link -->
-                                    <!--     </a> -->
-                                    <!-- </div> -->
                                 </div>
 
                                 <div class="w-gallery-preview__item__info">
@@ -300,8 +300,8 @@
                                         {{ item.class_ }}
                                     </p>
                                     <p class="name">
-                                        <a href="#">{{ item.player.name }} {{ item.player.lastname }}
-                                        </a> <i class="flag {{ item.player.citizenship.code }}"></i>
+                                        <a href="{{item.player.url}}">{{ item.player.name }} {{ item.player.lastname }}
+                                        </a>
                                     </p>
                                     <p class="description">
                                         {{ item.player.line_display }}
