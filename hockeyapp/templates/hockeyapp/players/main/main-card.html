@@ -14,7 +14,7 @@
 <input class="club-id" type="hidden" id="{{club.title}}_{{club.pk}}_{{club.main_color}}">
 {% endfor %}
 <!--tabs content items-->
-<div class="b-tabs-content ui tab active" ng-controller="PlayerPartnersController">
+<div class="b-tabs-content ui tab active">
     <div class="row">
         <div class="col-md-5">
             <div class="w-command-info__main row b-row hidden-xs">
@@ -22,7 +22,7 @@
                     <div class="ui card">
                         <div class="w-gallery-preview__item__img img-wrap">
                             <figure class="figure-styled">
-                                <a href="#" class="ui image">
+                                <a class="ui image">
                                     <img class="ui image" src="http://dev.sportomatics.ru{{photo}}">
                                 </a>
                             </figure>
@@ -47,8 +47,9 @@
                             </div>
                             <div class="content">
                                 <div class="summary">
-                                    <a class="team-now" href="#">сейчас в</a> <span>{{club.title}}</span>
-                                    <p class="location">{{club.address.title}}</p>
+                                    <a class="team-now no-decoration cursor-default" href="#">сейчас в</a>
+                                    <a href="{{club.url}}" class="black">{{club.title}}</a>
+                                    <p class="location pointer">{{club.address.title}}</p>
                                 </div>
                             </div>
                         </div>
@@ -110,15 +111,17 @@
             <div class="w-command-calendar b-row">
                 <div class="b-header b-header__md b-header__filter-in">
                     <div class="w-table">
+                    <a href="{% url 'hockeyapp:players:indicators' pk %}" class="no-decoration default-a">
                         <h2 class="b-cell b-header__text">
                             Краткая статистика
                         </h2>
+                    </a>
 
-                        <a href="#" class="b-cell active b-change-views__item">
+                        <a href="#" class="b-cell active b-change-views__item" data-content="За последний сезон">
                             <i class="block wait icon"></i>
                         </a>
 
-                        <a href="team-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="" data-variation="basic">
+                        <a href="team-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="За все время" data-variation="basic">
                             <i class="history icon"></i>
                         </a>
                     </div><!--row-->
@@ -172,17 +175,11 @@
             <div class="w-command-info b-row">
                 <div class="b-header b-header__md b-header__filter-in">
                     <div class="w-table">
+                    <a href="{% url 'hockeyapp:players:achievements' pk %}" class="no-decoration default-a">
                         <h2 class="b-cell b-header__text">
                             Достижения
                         </h2>
-
-                        <a href="#" class="b-cell active b-change-views__item">
-                            <i class="block layout icon"></i>
-                        </a>
-
-                        <a href="team-calendar.html" class="b-cell b-change-views__item w-tooltip" data-content="" data-variation="basic">
-                            <i class="table icon"></i>
-                        </a>
+                    </a>
                     </div><!--row-->
                 </div><!--b-header b-header__md-->
 
@@ -200,69 +197,83 @@
 
 
         <div class="col-md-7">
-            <div class="w-gallery-preview">
+            <div class="w-gallery-preview" ng-controller="PlayerPartnersController">
                 <div class="b-header b-header__md b-header__filter-in">
                     <div class="w-table">
-                        <h2 class="b-cell b-header__text">
-                            Основные партнеры
-                        </h2>
+                        <a href="{% url 'hockeyapp:players:partners' pk %}" class="no-decoration default-a">
+                            <h2 class="b-cell b-header__text">
+                                Основные партнеры
+                            </h2>
+                        </a>
 
-                        <a href="#" class="b-cell active b-change-views__item">
+                        <a class="b-cell b-change-views__item w-tooltip" data-content="Самые постоянные" data-variation="basic" ng-click="setRateBy('')" ng-class="{'active': params.rate_by !== 1}">
                             <i class="block wait icon"></i>
                         </a>
 
-                        <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="За всю историю команды" data-variation="basic">
+                        <a class="b-cell b-change-views__item w-tooltip" data-content="Самые старые" data-variation="basic" ng-click="setRateBy(1)" ng-class="{'active': params.rate_by === 1}">
                             <i class="history icon"></i>
                         </a>
                     </div><!--row-->
                 </div><!--b-header b-header__md-->
 
 
-                <div class="row w-gallery-preview__items">
+                <div class="row w-gallery-preview__items" >
 
 
                     {% verbatim %}
-                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in briefPartners">
+                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in briefPartners" ng-show="loaded">
                         <div class="ui card">
-                            <div class="ui ribbon green label">{{player.player.number}}</div>
+                            <div class="ui ribbon green label" ng-if="player.player.number">{{player.player.number}}</div>
+                            <div class="ui ribbon green label-flag" ng-if="player.player.citizenship.code">
+                                <i id="player_{{player.player.id}}_flag" class="flag i-top-2 {{player.player.citizenship.code}}"></i>
+                            </div>
                             <div class="w-mask">
                                 <div class="w-gallery-preview__item__img img-wrap">
-                                    <figure class="figure-styled">
-                                        <img class="ui image" src="{{player.player.photo.file}}">
-                                    </figure>
-                                </div>
-                                <!--<div class="b-mask">
-                                    <a class="ui inverted button" href="#">
-                                        Link
+                                    <a href="{{ currentUrl + player.player.id}}">
+                                        <figure class="figure-styled">
+                                            <img class="ui image" src="{{player.player.photo.file}}">
+                                        </figure>
                                     </a>
-                                </div>-->
+                                </div>
                             </div>
 
                             <div class="w-gallery-preview__item__info">
                                 <p class="name">
                                     <a href="{{ currentUrl + player.player.id}}">
-                                    {{player.player.fio}}</a> <i id="player_{{player.player.id}}_flag" class="flag {{player.player.citizenship.code}}"></i>
+                                        {{player.player.fio}}
+                                    </a>
                                 </p>
                                 <p class="description line-display">
                                     {{player.player.line_display}}
                                 </p>
                             </div>
 
-                            <div class="w-gallery-preview__item__location">
-                                <a class="team-now" href="#">сейчас в</a>
-                                <p class="team-name">{{player.player.club.title}}</p>
-                                <p class="location">
-                                    {{player.player.club.address.title}}
-                                </p>
+                            <div class="w-gallery-preview__item__location" ng-if="player.player.club">
+                                <div class="b-player-info__team ui feed">
+                                    <div class="event">
+                                        <div class="label">
+                                            <img src="{{player.player.club.logo}}" alt="" title="">
+                                        </div>
+                                        <div class="content">
+                                            <div class="summary">
+                                                <p class="font-weight-400">сейчас в</p>
+                                                <a href="{{player.player.club.url}}" class="team-name pointer"><span>{{player.player.club.title}}</span></a>
+                                                <p class="location font-weight-400">{{player.player.club.address.title}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="extra content w-gallery-preview__item__extra">
                                 <div class="ui statistic">
                                     <div class="value">
-
                                     </div>
-                                    <div class="label">
+                                    <div class="label" ng-if="params.rate_by !== 1">
                                         {{player.seasons_count}} сезонов вместе
+                                    </div>
+                                    <div class="label" ng-if="params.rate_by === 1">
+                                        {{player.season_title}}
                                     </div>
                                 </div><!--ui static-->
                             </div>
@@ -278,17 +289,11 @@
 
                 <div class="b-header b-header__md b-header__filter-in">
                     <div class="w-table">
+                    <a href="{% url 'hockeyapp:players:clubs' pk %}" class="no-decoration default-a">
                         <h2 class="b-cell b-header__text">
                             Клубная карьера
                         </h2>
-
-                        <a href="#" class="b-cell active b-change-views__item">
-                            <i class="block layout icon"></i>
-                        </a>
-
-                        <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="За всю историю команды" data-variation="basic">
-                            <i class="history icon"></i>
-                        </a>
+                    </a>
                     </div><!--row-->
                 </div><!--b-header b-header__md-->
 

@@ -38,8 +38,8 @@
                 <li class="{% if player_menu_active == 'player-main' %}active {% endif %} item">
                     <a href="{% url 'hockeyapp:players:main-card' pk %}">Главное</a>
                 </li>
-                <li class="{% if player_menu_active == 'player-achievments' %}active {% endif %} item">
-                    <a href="#">Достижения</a>
+                <li class="{% if player_menu_active == 'player-achievements' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:players:achievements' pk %}">Достижения</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-stats' %}active {% endif %} item">
                     <a href="#">Статистика</a>
@@ -54,11 +54,11 @@
                     <a href="{% url 'hockeyapp:players:partners' pk %}">Партнеры</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-photos' %}active {% endif %} item">
-                    <a href="#">Фотографии</a>
+                    <a href="{% url 'hockeyapp:players:photos' pk %}">Фотографии</a>
                 </li>
-                <li class="{% if player_menu_active == 'player-communication' %}active {% endif %} item">
+                <!--<li class="{% if player_menu_active == 'player-communication' %}active {% endif %} item">
                     <a href="#">Общение</a>
-                </li>
+                </li>-->
             </ul>
         </div>
     </div>

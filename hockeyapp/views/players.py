@@ -100,8 +100,12 @@ class PlayerPartners(PlayerMainCard):
     template_name = 'hockeyapp/players/partners/player-partners.html'
 
 
-class PlayerCardPhotos(PlayerMainCard):
-    template_name = 'hockeyapp/players/player-card-photos.html'
+class PlayerAchievements(PlayerMainCard):
+    template_name = 'hockeyapp/players/achievements/player-achievements.html'
+
+
+class PlayerPhotos(PlayerMainCard):
+    template_name = 'hockeyapp/players/photos/player-photos.html'
 
 
 class PlayerCardCommunication(PlayerMainCard):

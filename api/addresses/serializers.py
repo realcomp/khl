@@ -8,7 +8,7 @@ from addresses.models import Address, City, Country
 
 class CountrySerializer(TitleBaseSerializer):
     class Meta(object):
-        fields = 'pk', 'title'
+        fields = 'pk', 'title', 'code'
         model = Country
 
 

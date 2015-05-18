@@ -6,6 +6,7 @@ angular.module('Sportomatics')
         $scope.is_playing_param = parseInt($location.search()['is_playing']);
         $scope.currentUrl = window.location.href.replace(/(\/)([0-9]+)(\/)/, '/');
         $scope.current_team = false;
+        var section = (document.getElementById('section') != null) ? document.getElementById('section').value : null;
 
         $scope.params = {
             rate_by: $scope.rate_by_param || '',
@@ -62,26 +63,35 @@ angular.module('Sportomatics')
                         $scope.playersBySeasonCount = _.filter(_.sortBy(data, 'seasons_count').reverse(), function(el){ return el.seasons_count > 0});
                     }
                     $scope.briefPartners = [];
-                    _.each($scope.playersBySeasonCount, function(object){
-                        if (object.seasons_count < 4) return;
-                        _.each(object.players, function(player){
-                            if ($scope.briefPartners.length < 4) {
-                                $scope.briefPartners.push({
-                                    seasons_count: object.seasons_count,
-                                    player: player
-                                })
-                            }
+                    if($scope.params.rate_by !== 1){
+                        _.each($scope.playersBySeasonCount, function(object){
+                            if (object.seasons_count < 4) return;
+                            _.each(object.players, function(player){
+                                if ($scope.briefPartners.length < 4) {
+                                    $scope.briefPartners.push({
+                                        seasons_count: object.seasons_count,
+                                        player: player
+                                    })
+                                }
+                            })
                         })
-                    })
-                    /*$scope.params.rate_by = !$scope.params.rate_by;
-                    if(!stopPropagation)
-                        $scope.getPartners(true)
-                    else
-                        $scope.briefPartners*/
+                    } else {
+                        _.each($scope.playersBySeasonTime, function(object){
+                            if (object.seasons_count < 4) return;
+                            _.each(object.players, function(player){
+                                if ($scope.briefPartners.length < 4) {
+                                    $scope.briefPartners.push({
+                                        season_title: object.season.title,
+                                        player: player
+                                    })
+                                }
+                            })
+                        })
+                    }
                 })
         };
         $scope.getCurrentTeam = function(){
-            if($scope.currentTeam != null) return $scope.getPartners();
+            if($scope.currentTeam != null || section === 'Main') return $scope.getPartners();
             $http.get($scope.clubTeamApi)
                 .success(function(data){
                     $scope.currentTeam = data.all_players;
