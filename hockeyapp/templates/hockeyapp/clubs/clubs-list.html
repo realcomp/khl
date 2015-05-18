@@ -74,14 +74,14 @@
 
                 <!--tabs items-->
                     <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
-                        <div class="item" ng-class="{ 'active':isLeagueActive(null) }" ng-click="setLeague(null)">Все лиги</div>
+                        <div class="item" ng-class="{ 'active':isLeagueActive('*') }" ng-click="setLeague('*')">Все лиги</div>
                         {% verbatim %}
                         <div class="item" ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">{{league.title}}</div>
                         {% endverbatim %}
                     </div>
                 <!--tabs items ends-->
                     <div class="ui vertical tabular-xs menu visible-xs">
-                        <div class="item" ng-class="{ 'active':isLeagueActive(null) }" ng-click="setLeague(null)">Все лиги</div>
+                        <div class="item" ng-class="{ 'active':isLeagueActive('*') }" ng-click="setLeague('*')">Все лиги</div>
                         {% verbatim %}
                         <div class="item" ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">{{league.title}}</div>
                         {% endverbatim %}
@@ -123,10 +123,8 @@
                                 </div><!--row-->
                             </div><!--b-header b-header__md-->
 
-                            <div class="loader-large" ng-hide="loaded"></div>
-
                             <!-- <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}"> -->
-                            <div class="w-gallery-preview" ng-show="!params.is_table && loaded">
+                            <div class="w-gallery-preview" ng-show="!params.is_table && data">
                                 <div class="row w-gallery-preview__items w-gallery-preview__items__8">
 
                                     {% verbatim %}
@@ -174,7 +172,7 @@
                             </div><!--w-gallery-preview-->
                             <!-- </form> -->
 
-                            <div class="row-xs" ng-show="params.is_table && loaded">
+                            <div class="row-xs" ng-show="params.is_table && data">
                                 <table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
                                     <tr>
                                         <th class="b-table-team" colspan="2">
@@ -263,6 +261,8 @@
 
                                 </table>
                             </div>
+
+                            <div class="loader-large" ng-hide="loaded"></div>
 
                         </section><!--w-section-->
                     </div>

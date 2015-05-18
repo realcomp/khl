@@ -9,10 +9,9 @@ angular.module('Sportomatics').controller('ClubListController', [
     $scope.countries = {};
     $scope.sparams = {};
     $scope.params = $location.search();
-    $scope.params.league = '';
     $scope.setSeason = function(season) {
       $location.search('season', season);
-      $location.search('league', '');
+      $location.search('league', null);
       $scope.params = $location.search();
       $scope.list();
     };
@@ -47,15 +46,15 @@ angular.module('Sportomatics').controller('ClubListController', [
       }
     };
     $scope.isLeagueActive = function(league) {
-      if ($scope.data && $scope.data.league) {
-        if ($scope.data.league.pk) {
-          return $scope.data.league.pk === league;
-        } else {
-          return league === null;
-        }
-      } else {
-        return false;
+      if ($scope.params.league === '*' && league === '*') {
+        return true;
       }
+      if ($scope.params.league) {
+        return +$scope.params.league === +league;
+      } else if ($scope.data.league) {
+        return $scope.data.league.pk === +league;
+      }
+      return false;
     };
     $scope.setOrderBy = function(order_by) {
       if ($scope.loaded) {
@@ -72,7 +71,7 @@ angular.module('Sportomatics').controller('ClubListController', [
       if ($scope.params.season || $scope.season) {
         params += '&season=' + ($scope.params.season || $scope.season);
       }
-      if ($scope.params.league !== void 0) {
+      if ($scope.params.league !== '*') {
         params += '&league=' + ($scope.params.league || '');
       }
       if ($scope.params.is_history) {
@@ -89,7 +88,25 @@ angular.module('Sportomatics').controller('ClubListController', [
         $scope.loaded = true;
       });
     };
+    $scope.next = function() {
+      $scope.loaded = false;
+      return $http.get($scope.data.next).success(function(data) {
+        $scope.data.next = data.next;
+        $scope.data.results = $scope.data.results.concat(data.results);
+        $scope.clubs = $scope.clubs.concat(data.results);
+        $scope.loaded = true;
+      });
+    };
     PlayersSearchService.loadCountries($scope, $location, function() {});
     $scope.list();
+    $('.b-tabs-content').visibility({
+      'once': false,
+      'observeChanges': true,
+      'onBottomVisible': function() {
+        if ($scope.data.next) {
+          return $scope.next();
+        }
+      }
+    });
   }
 ]);
