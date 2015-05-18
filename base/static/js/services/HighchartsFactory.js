@@ -112,7 +112,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
         chart: {
           type: 'column',
           alignTicks: false,
-          marginTop: 230
+          marginBottom: 180
         },
         title: {
           text: ''
@@ -140,12 +140,19 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           }
         ],
         yAxis: {
-          gridLineWidth: 0,
+          gridLineWidth: 1,
+          gridLineColor: '#f7f7f7',
+          minorGridLineWidth: 1,
+          minorGridLineColor: '#f7f7f7',
+          minorTickInterval: 'auto',
+          minorTickLength: 10,
+          minorTickWidth: 1,
           plotLines: [
             {
-              color: '#141414',
+              color: '#000000',
               width: 1,
-              value: 0
+              value: 0,
+              zIndex: 1
             }
           ],
           title: 'Счет',
@@ -166,6 +173,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           margin: 30
         },
         tooltip: {
+          hideDelay: 5000,
           shared: true,
           useHTML: true,
           crosshairs: true,
@@ -176,19 +184,20 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           shadow: false,
           positioner: function(a, b, p) {
             return {
-              y: 50,
+              y: 240,
               x: p.plotX
             };
           },
           formatter: function() {
-            return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
+            return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo, this.points[0].point.color);
           }
         },
         plotOptions: {
           series: {
             stacking: 'normal',
             borderWidth: 0,
-            pointWidth: 5,
+            pointWidth: 6,
+            pointPadding: 2,
             pointPlacement: "on"
           },
           column: {
@@ -593,8 +602,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     return HighchartsPlayerIndicatorsChart;
 
   })();
-  clubGamesFormatterDiv = function(title, score, date, leftLogo, rightLogo) {
-    return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score b-win-text">' + score + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
+  clubGamesFormatterDiv = function(title, score, date, leftLogo, rightLogo, color) {
+    return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score" style="color: ' + color + '">' + score + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
   };
   indicatorsListItem = function(result, title, image, color) {
 

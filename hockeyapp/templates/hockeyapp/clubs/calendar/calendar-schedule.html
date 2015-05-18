@@ -132,8 +132,8 @@
                             </p>
                         </div>
 
-                        <p class="b-negative-text b-calendar__item__score">
-                            {{cell.schedule.match.home_count}}0 : 0{{cell.schedule.match.guest_count}}
+                        <p class="b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count > cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count < cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
                         </p>
                     </a><!--b-calendar__item__inner-->
                     <!--home-->
@@ -157,8 +157,8 @@
                             </p>
                         </div>
 
-                        <p class="b-negative-text b-calendar__item__score">
-                            {{cell.schedule.match.home_count}}0 : 0 {{cell.schedule.match.guest_count}}
+                        <p class="b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count < cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count > cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
                         </p>
 
                     </a><!--b-calendar__item__inner-->
@@ -214,7 +214,7 @@
                             </div>
                         </div>
 
-                        <div class="b-calendar__item__team" ng-if="cell.schedule.is_home">
+                        <div class="b-calendar__item__team">
                             <p class="">
                                 <span>{{cell.schedule.guest_team.title}}</span>
                             </p>
@@ -223,8 +223,8 @@
                             </p>
                         </div>
 
-                        <p class="b-negative-text b-calendar__item__score">
-                            {{cell.schedule.match.home_count}}0 : 0 {{cell.schedule.match.guest_count}}
+                        <p class="b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count > cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count < cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
                         </p>
 
                     </a><!--b-calendar__item__inner-->
@@ -249,8 +249,8 @@
                             </p>
                         </div>
 
-                        <p class="b-negative-text b-calendar__item__score">
-                            {{cell.schedule.match.home_count}}0 : 0{{cell.schedule.match.guest_count}}
+                        <p class="b-negative-text b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count < cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count > cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
                         </p>
 
                     </a><!--b-calendar__item__inner-->
