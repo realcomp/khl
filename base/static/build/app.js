@@ -3185,34 +3185,6 @@ angular.module('Sportomatics').controller('ClubTeamController', [
             self.list(push);
         };
 
-        $scope.workWithData = function(data){
-            //if(MapService.isRendered()) MapService.remove();
-            //MapService.createClubsMap(data.all_players, 'players');
-            var giveCountryCodes = function(player){
-                if(player.citizenship){
-                    if(!player.citizenship.code){
-                        _.each($scope.countryCodes, function(country){
-                            if(player.citizenship.title)
-                            if(country.name === player.citizenship.title){
-                                player.citizenship.code = country.code;
-                                player.number = parseInt(player.number);
-                                $('#player_'+player.pk+'_flag').addClass(country.code);
-                            }
-                        })
-                    }
-                }
-            }
-            var all_players = data.all_players;
-            var players = [];
-            _.each(all_players, function(player){
-                players.push(player.pk);
-            })
-            _.each(data.all_players, giveCountryCodes)
-            _.each(data.goalkeeper_players, giveCountryCodes)
-            _.each(data.offender_players, giveCountryCodes)
-            _.each(data.defender_players, giveCountryCodes)
-        };
-
         self.getCell = function(table, cell_id) {
             var group;
             if (table.table && cell_id && Array.isArray(cell_id) && cell_id[1] !== null) {
@@ -3269,13 +3241,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
                     }]
                 }
                 $scope.players = data;
-                $http.get('/static/json/countries-json-ru-codes.json')
-                    .success(function(data){
-                        $scope.countryCodes = data;
-                        $scope.loaded = true;
-                    }).then(function(){
-                        $scope.workWithData(_.last($scope.seasons).players);
-                    });
+                $scope.loaded = true;
             });
         };
 
