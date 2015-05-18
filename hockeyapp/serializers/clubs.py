@@ -292,11 +292,19 @@ class ClubTeamCompareSerializer(BaseClubTeamSerializer):
         model = Club
 
 
+class MinimalMatchSerializer(serializers.ModelSerializer):
+    class Meta(object):
+        fields = (
+            'pk', 'home_count', 'guest_count')
+        model = Match   
+
+
 class ClubCalendarSerializer(serializers.ModelSerializer):
     home_team = ClubListSerializer()
     guest_team = ClubListSerializer()#BaseClubSerializer()
     is_home = serializers.SerializerMethodField()
     is_guest = serializers.SerializerMethodField()
+    match = MinimalMatchSerializer()
 
     def get_is_home(self, obj):
         view = self.context['view']
@@ -307,7 +315,7 @@ class ClubCalendarSerializer(serializers.ModelSerializer):
         return int(view.kwargs.get('pk')) == obj.guest_team.pk
 
     class Meta(object):
-        fields = (
+        fields = ( 'match',
             'pk', 'date', 'home_team', 'guest_team', 'is_home', 'is_guest')
         model = Schedule
 
