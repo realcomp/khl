@@ -73,12 +73,10 @@ class ClubList(ClubListMixin, drf.generics.ListAPIView):
             q &= Q(leagueclub__league__country_id=country)
 
         if 'league' in self.request.query_params:
-            league_q = Q(leagueclub__league=self._get_league())
-            if 'is_history' in self.request.query_params:
-                league_q |= Q(leagueclub__league__isnull=True)
-            q &= league_q
+            q &= Q(leagueclub__league=self._get_league())
 
-        q &= Q(leagueclub__season=self._get_season())
+        if 'is_history' not in self.request.query_params:
+            q &= Q(leagueclub__season=self._get_season())
 
         ids = set(qs.filter(q).values_list('pk', flat=True))
         qs = qs.filter(pk__in=ids)
