@@ -125,9 +125,12 @@ class ClubListPagination(ClubListMixin, pagination.PageNumberPagination):
         leagues = LeagueSerializer(
             self._get_leagues(), many=True).data
         return response.Response({
-            'results': data,
+            'count': self.page.paginator.count,
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
             'league': league,
             'leagues': leagues,
+            'results': data,
         })
 
 

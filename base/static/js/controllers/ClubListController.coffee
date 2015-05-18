@@ -12,11 +12,10 @@ angular.module('Sportomatics').controller('ClubListController', [
         $scope.sparams = {}
 
         $scope.params = $location.search()
-        $scope.params.league = ''
 
         $scope.setSeason = (season) ->
             $location.search('season', season)
-            $location.search('league', '') # reset league
+            $location.search('league', null) # reset league
             $scope.params = $location.search()
             $scope.list()
             return
@@ -53,13 +52,14 @@ angular.module('Sportomatics').controller('ClubListController', [
                 return country == 1
 
         $scope.isLeagueActive = (league) ->
-            if $scope.data and $scope.data.league
-                if $scope.data.league.pk # selected league
-                    return $scope.data.league.pk == league
-                else # all leagues
-                    return league == null
-            else
-                return false
+            # all
+            if $scope.params.league == '*' and league == '*'
+                return true
+            if $scope.params.league  # selected
+                return +$scope.params.league == +league
+            else if $scope.data.league  # default
+                return $scope.data.league.pk == +league
+            return false
 
         $scope.setOrderBy = (order_by) ->
             if $scope.loaded
@@ -85,8 +85,8 @@ angular.module('Sportomatics').controller('ClubListController', [
 
             if $scope.params.season or $scope.season
                 params += '&season=' + ($scope.params.season or $scope.season)
-            if $scope.params.league != undefined
-                params += '&league=' + ($scope.params.league or '')
+            if $scope.params.league != '*'  # not all leagues
+                params += '&league=' + ($scope.params.league or '')  # selected or default
             if $scope.params.is_history
                 params += '&is_history=true'
             params += '&country=' + ($scope.params.country or 1)
@@ -104,28 +104,30 @@ angular.module('Sportomatics').controller('ClubListController', [
             )
             return
 
-        # $scope.next = (isAll) ->
-        #     url = $scope.data.next
-        #     if isAll
-        #         url = url.replace(/&page=\d+$/, '&paginate_by=' + $scope.data.count)
-        #     $scope.loaded = false
-        #     $http.get(url
-        #     ).success((data) ->
-        #         if isAll
-        #             $scope.data = data
-        #         else
-        #             $scope.data.next = data.next
-        #             $scope.data.results = $scope.data.results.concat(data.results)
-        #             $scope.clubs = $scope.clubs.concat(data.results)
-        #         $scope.loaded = true
-        #         return
-        #     )
+        $scope.next = () ->
+            $scope.loaded = false
+            $http.get($scope.data.next
+            ).success((data) ->
+                $scope.data.next = data.next
+                $scope.data.results = $scope.data.results.concat(data.results)
+                $scope.clubs = $scope.clubs.concat(data.results)
+                $scope.loaded = true
+                return
+            )
 
         PlayersSearchService.loadCountries($scope, $location, () ->
             return
         )
 
         $scope.list()
+
+        $('.b-tabs-content').visibility({
+            'once': false,
+            'observeChanges': true,
+            'onBottomVisible': () ->
+                if $scope.data.next
+                    $scope.next()
+        })
 
         return
 ])

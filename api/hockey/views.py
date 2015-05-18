@@ -53,7 +53,7 @@ paip_list = ProcessedArenaInstaPhotoList.as_view()
 
 class ClubList(ClubListMixin, drf.generics.ListAPIView):
     filter_backends = OrderFilter,
-    paginate_by = 50
+    paginate_by = 30
     pagination_class = ClubListPagination
     serializer_class = ClubListSerializer
 
