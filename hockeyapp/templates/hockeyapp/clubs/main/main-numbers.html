@@ -32,9 +32,13 @@
                                  ng-repeat="player in group.players track by $index"
                                  ng-if="$index < getLimit(group.number)">
                                 <div class="ui card">
+                                    <div class="ui ribbon green label-flag">
+                                        <i id="player_{{ player.pk }}_flag"
+                                           class="flag i-top-2 {{ player.citizenship.code }}"></i>
+                                    </div>
                                     <div class="w-gallery-preview__item__img img-wrap">
                                         <figure class="figure-styled">
-                                            <a href="#" class="ui image">
+                                            <a href="{{ player.url }}" class="ui image">
                                                 <img class="ui image" ng-src="{{ player.photo || '/static/images/no-photo.png' }}">
                                             </a>
                                         </figure>
@@ -42,7 +46,7 @@
 
                                     <div class="w-gallery-preview__item__info">
                                         <p class="name">
-                                            <a href="#">{{ player.lastname }} {{ player.name }}</a>
+                                            <a href="{{ player.url }}">{{ player.lastname }} {{ player.name }}</a>
                                         </p>
                                         <p class="">
                                             {{ player.line_display }}
@@ -52,12 +56,15 @@
                                     <div class="extra content w-gallery-preview__item__extra">
                                         <p class="b-seasons-play">
                                             <span ng-repeat="clubplayer in player.clubplayers track by $index"
-                                                  ng-if="$index < (player.clubplayers_limit || 1)">
-                                                <a href="{{ clubplayer.club_url }}">{{ clubplayer.season.short_title }}</a><span ng-show="$index < player.clubplayers.length - 1">,</span>
+                                                  ng-if="$index < (player.clubplayers_limit || 2)">
+                                                <a href="{{ clubplayer.club_url }}">
+                                                    {{ clubplayer.season.short_title }}
+                                                </a>
+                                                <span ng-show="$index < player.clubplayers.length - 1">,</span>
                                             </span>
                                             <a href="" ng-click="player.clubplayers_limit = 999"
-                                               ng-show="(player.clubplayers_limit || 1) < player.clubplayers.length">
-                                                и еще {{ player.clubplayers.length - 1 }}
+                                               ng-show="(player.clubplayers_limit || 2) < player.clubplayers.length">
+                                                и еще {{ player.clubplayers.length - 2 }}
                                             </a>
                                         </p>
                                     </div>
