@@ -472,3 +472,27 @@ class OriginPlayersSerilizer(BasePlayerCardSerializer):
             'pk', 'name', 'lastname', 'fio', 'birth_place', 'photo',
             'line_display', 'club', 'citizenship')
         model = Player
+
+
+class ClubCoachesPagination(pagination.PageNumberPagination):
+    def get_paginated_response(self, data):
+        season = get_object_or_404(
+            Season, pk=self.request.GET.get('season', 0))
+        previous_season = (
+            Season.objects
+            .exclude(pk=season.pk)
+            .filter(end_date__lt=season.end_date)
+            .order_by('end_date').last())
+        return response.Response({
+            'results': data,
+            'season': SeasonSerializer(season).data,
+            'previous_season': SeasonSerializer(previous_season).data,
+        })
+
+
+class ClubCoachesSerilizer(CoachSerializer):
+    photo = serializers.ReadOnlyField(source='photo.url')
+
+    class Meta(object):
+        fields = 'pk', 'name', 'lastname', 'fio', 'photo'
+        model = Coach
