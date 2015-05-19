@@ -1,6 +1,19 @@
-angular.module('Sportomatics').controller('ClubGeographyController', function($http, MapService, $scope, $timeout) {
-  var clubTeamApi, giveCountryCodes, loader, self;
-  clubTeamApi = document.getElementById("club-team-api").value;
+angular.module('Sportomatics').controller('ClubGeographyController', function($http, MapService, $scope, $timeout, $location, SeasonsService) {
+  var clubTeamApi, loader, self;
+  $scope.$location = $location;
+  $scope.SeasonsService = SeasonsService;
+  $scope.params = $location.search();
+  $scope.setSeason = function(season) {
+    $location.search('season', season);
+    $scope.params = $location.search();
+    $scope.list();
+  };
+  $scope.switchHistory = function() {
+    $location.search('is_history', !$scope.params.is_history || null);
+    $scope.params = $location.search();
+    $scope.list();
+  };
+  clubTeamApi = document.getElementById("club-players-api").value;
   loader = $('.loader');
   loader.addClass('active');
   self = this;
@@ -22,29 +35,22 @@ angular.module('Sportomatics').controller('ClubGeographyController', function($h
       return $scope.players = $scope.players.reverse();
     }
   };
-  giveCountryCodes = function(player) {
-    if (player.citizenship != null) {
-      if (player.citizenship.code == null) {
-        return _.each($scope.countryCodes, function(country) {
-          if (player.citizenship.title) {
-            if (country.name === player.citizenship.title) {
-              return player.citizenship.code = country.code;
-            }
-          }
-        });
+  $scope.list = function() {
+    var params, season;
+    params = '';
+    if (!$scope.params.is_history) {
+      if ($scope.params.season) {
+        season = $scope.params.season;
+      } else {
+        season = SeasonsService.getDefaultSeason();
       }
+      params = 'season=' + season;
     }
-  };
-  $http.get(clubTeamApi + '?season=19').success(function(data) {
-    $http.get('/static/json/countries-json-ru-codes.json').success(function(codes) {
-      $scope.countryCodes = codes;
-      $scope.loaded = true;
-      return _.each(data.all_players, giveCountryCodes);
-    }).then(function() {
-      $scope.players = _.sortBy(_.filter(data.all_players, function(player) {
+    return $http.get(clubTeamApi + '?' + params).success(function(data) {
+      $scope.players = _.sortBy(_.filter(data, function(player) {
         return (player.birth_place != null) && player.birth_place.length !== 0;
       }), $scope.sortBy);
-      return $scope.cities = _.sortBy(_.map(_.groupBy(_.map($scope.players, function(player) {
+      $scope.cities = _.sortBy(_.map(_.groupBy(_.map($scope.players, function(player) {
         return {
           city: player.birth_place
         };
@@ -54,9 +60,10 @@ angular.module('Sportomatics').controller('ClubGeographyController', function($h
           count: value.length
         };
       }), 'count').reverse();
+      return loader.removeClass('active');
     });
-    return loader.removeClass('active');
-  });
+  };
+  $scope.list();
   $scope.setMap = function() {
     if (MapService.isRendered() === true) {
       MapService.remove();

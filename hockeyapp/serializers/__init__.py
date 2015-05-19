@@ -21,7 +21,11 @@ class AbstractManSerializer(LangDepSerializer):
     fio = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
     lastname = serializers.SerializerMethodField()
-    get_fio = lambda self, obj: self._get_field(obj, 'fio')
+
+    # get_fio = lambda self, obj: self._get_field(obj, 'fio')
+    def get_fio(self, obj):
+        return '%s %s' % (self.get_lastname(obj), self.get_name(obj))
+
     get_name = lambda self, obj: self._get_field(obj, 'name')
     get_lastname = lambda self, obj: self._get_field(obj, 'lastname')
 

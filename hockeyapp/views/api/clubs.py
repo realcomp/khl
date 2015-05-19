@@ -165,6 +165,23 @@ class BestPlayers(generics.ListAPIView):
         return classes
 
 
+class ClubPlayers(generics.ListAPIView):
+    queryset = Player.objects.all()
+    serializer_class = OriginPlayersSerilizer
+
+    def filter_queryset(self, qs):
+        qs = super(ClubPlayers, self).filter_queryset(qs)
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+
+        clubplayers = ClubPlayer.objects.filter(club=club)
+
+        _season = self.request.query_params.get('season')
+        if _season:
+            clubplayers = clubplayers.filter(season=_season)
+
+        return qs.filter(pk__in=clubplayers.values_list('player', flat=True))
+
+
 class OriginPlayers(generics.ListAPIView):
     queryset = Player.objects.all()
     serializer_class = OriginPlayersSerilizer

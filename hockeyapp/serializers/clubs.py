@@ -463,8 +463,12 @@ class OriginPlayersClubSerilizer(BaseClubSerializer):
 
 class OriginPlayersSerilizer(BasePlayerCardSerializer):
     photo = serializers.ReadOnlyField(source='photo.url')
+    line_display = serializers.ReadOnlyField(source='get_line_display')
     club = OriginPlayersClubSerilizer()
+    citizenship = CountrySerializer()
 
     class Meta(object):
-        fields = 'pk', 'name', 'lastname', 'photo', 'club'
+        fields = (
+            'pk', 'name', 'lastname', 'fio', 'birth_place', 'photo',
+            'line_display', 'club', 'citizenship')
         model = Player

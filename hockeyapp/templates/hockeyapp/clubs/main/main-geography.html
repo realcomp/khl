@@ -1,9 +1,11 @@
 {% extends 'hockeyapp/clubs/main/clubs-main.html' %}
 {% block tabs-content %}
 
+<div ng-controller="ClubGeographyController">
+<input id="club-players-api" type="hidden" value="{% url 'hockeyapp:club-players-api' pk %}">
 {% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-geography' %}
 <!--tabs content items-->
-<div class="b-tabs-content ui" ng-controller="ClubGeographyController">
+<div class="b-tabs-content ui">
 
     {% block mobile_menu %}
         {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-geography" %}
@@ -19,13 +21,17 @@
                 <i class="table icon"></i>
             </a>
 
+            {% comment %}
             <a class="b-cell b-change-views__item w-tooltip" data-content="Алфавитный список" data-variation="basic" ng-click="setSortBy('fio')">
                 <i class="sort alphabet ascending icon"></i>
             </a>
+            {% endcomment %}
 
-            <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-variation="basic" >
+            <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-variation="basic" href=""
+               ng-click="switchHistory()">
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" name="public">
+                    <input type="checkbox" name="public"
+                           ng-model="isHistory" ng-checked="params.is_history">
                     <label>за всю историю команды</label>
                 </div>
             </a>
@@ -60,7 +66,7 @@
                 <tr ng-repeat="player in players">
                     <td class="b-player">
                         <div class="b-inline hidden-xs">
-                            <a class="ui image" href="#"><img class="ui image" src="images/a-hockey/ava-12.jpg" alt="" tittle=""/></a>
+                            <a class="ui image" href="#"><img class="ui image" ng-src="{{ player.photo }}" alt="" tittle=""/></a>
                         </div>
                         <div class="b-inline">
                             <p class="">
@@ -107,6 +113,7 @@
     </div>
 </div>
 <!--tabs content items-->
+</div>
 {% endblock %}
 
 {% block sticky_menu %}
