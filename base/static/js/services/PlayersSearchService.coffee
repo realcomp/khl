@@ -187,8 +187,10 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         $scope.params = $scope.$location.search()
 
         params += ((k + '=' + $scope.params[k]) for k in [
-            'player', 'season', 'number', 'contract_type', 'height',
-            'weight', 'grip', 'match_count', 'rated_by',
+            'player', 'season', 'number', 'contract_type',
+            'height', 'height__gte', 'height__lte',
+            'weight', 'weight__gte', 'weight__lte',
+            'grip', 'match_count', 'rated_by',
             'age__lte', 'age__gte', 'gamingtime',
             'related_value__lte', 'related_value__gte',
         ] when $scope.params[k]).join('&')
@@ -197,8 +199,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
 
         if $scope.params.reversed
             params += '&reversed=true'
-        # if $scope.params.line.length
-        #     params += (('&line=' + x) for x in $scope.params.line).join('')
+        if lineChecked.length
+            params += (('&line=' + Math.abs(+x)) for x in lineChecked).join('')
         if $scope.params.contract_types
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1

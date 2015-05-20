@@ -33,7 +33,9 @@
                         <label>Игровой номер</label>
                         <div class="three fields">
                             <div class="field">
-                                <input type="text" name="number" disabled>
+                                <input type="text" ng-model="number"
+                                       ng-init="number = params.number"
+                                       ng-change="$location.search('number', number || null)">
                             </div>
                         </div>
                     </div><!--field-->
@@ -43,21 +45,24 @@
                         <div class="grouped fields">
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="forward" disabled>
+                                    <input type="checkbox" name="line" value="-3"
+                                           ng-checked="!params.line || params.line.indexOf('-3') < 0">
                                     <label>нападающий</label>
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="defence" disabled>
+                                    <input type="checkbox" name="line" value="-2"
+                                           ng-checked="!params.line || params.line.indexOf('-2') < 0">
                                     <label>защитник</label>
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="goalkeeper" disabled>
+                                    <input type="checkbox" name="line" value="-1"
+                                           ng-checked="!params.line || params.line.indexOf('-1') < 0">
                                     <label>вратарь</label>
                                 </div>
                             </div>
@@ -112,10 +117,16 @@
                         <label>Возраст</label>
                         <div class="two fields">
                             <div class="field">
-                                <input type="text" name="age-from" placeholder="от" disabled>
+                                <input type="text" placeholder="от"
+                                       ng-model="age__gte"
+                                       ng-init="age__gte = params.age__gte"
+                                       ng-change="$location.search('age__gte', age__gte || null)">
                             </div>
                             <div class="field">
-                                <input type="text" name="age-to" placeholder="до" disabled>
+                                <input type="text" placeholder="до"
+                                       ng-model="age__lte"
+                                       ng-init="age__lte = params.age__lte"
+                                       ng-change="$location.search('age__lte', age__lte || null)">
                             </div>
                         </div>
                     </div><!--field-->
@@ -124,10 +135,16 @@
                         <label>Рост</label>
                         <div class="two fields">
                             <div class="field">
-                                <input type="text" name="height-from" placeholder="от" disabled>
+                                <input type="text" placeholder="от"
+                                       ng-model="height__gte"
+                                       ng-init="height__gte = params.height__gte"
+                                       ng-change="$location.search('height__gte', height__gte || null)">
                             </div>
                             <div class="field">
-                                <input type="text" name="height-to" placeholder="до" disabled>
+                                <input type="text" placeholder="до"
+                                       ng-model="height__lte"
+                                       ng-init="height__lte = params.height__lte"
+                                       ng-change="$location.search('height__lte', height__lte || null)">
                             </div>
                         </div>
                     </div><!--field-->
@@ -136,10 +153,16 @@
                         <label>Вес</label>
                         <div class="two fields">
                             <div class="field">
-                                <input type="text" name="weight-from" placeholder="от" disabled>
+                                <input type="text" placeholder="от"
+                                       ng-model="weight__gte"
+                                       ng-init="weight__gte = params.weight__gte"
+                                       ng-change="$location.search('weight__gte', weight__gte || null)">
                             </div>
                             <div class="field">
-                                <input type="text" name="weight-to" placeholder="до" disabled>
+                                <input type="text" placeholder="до"
+                                       ng-model="weight__lte"
+                                       ng-init="weight__lte = params.weight__lte"
+                                       ng-change="$location.search('weight__lte', weight__lte || null)">
                             </div>
                         </div>
                     </div><!--field-->
@@ -450,7 +473,9 @@
         <div class="active content">
             <div class="row">
                 <div class="w-btn b-player-filter__btn">
-                    <!-- <a class="ui button" href="#">Показать стандартные</a> -->
+                    <!-- <a class="ui button" href=""> -->
+                    <!--     Показать стандартные -->
+                    <!-- </a> -->
                     <a class="ui primary button" href=""
                        ng-click="search()">Показать выбранные</a>
                 </div><!--w-btn-->

@@ -86,11 +86,15 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _contract_types = request.query_params.getlist('contract_types')
         _contract_to = request.query_params.get('contract_to')
         _height = request.query_params.get('height')
+        _height__gte = request.query_params.get('height__gte')
+        _height__lte = request.query_params.get('height__lte')
         _weight = request.query_params.get('weight')
+        _weight__gte = request.query_params.get('weight__gte')
+        _weight__lte = request.query_params.get('weight__lte')
         _grip = request.query_params.get('grip')
         _contract_type__isnull = request.query_params.get('contract_type__isnull', '').lower() == 'true'
-        _age__lte = request.query_params.get('age__lte')
         _age__gte = request.query_params.get('age__gte')
+        _age__lte = request.query_params.get('age__lte')
         _related_field = request.query_params.get('related_field')
         _related_player = request.query_params.get('related_player')
         _related_value__lte = request.query_params.get('related_value__lte')
@@ -115,7 +119,8 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             q &= Q(clubplayer__season=Season.objects.get_current_season())
 
         if _number:
-            q &= Q(clubplayer__number=_number)
+            # q &= Q(clubplayer__number=_number)
+            q &= Q(number=_number)
 
         if _leagues:
             q &= Q(clubplayer__league__in=_leagues)
@@ -131,9 +136,17 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
 
         if _height and _height.isdigit():
             q &= Q(height__gte=_height)
+        if _height__gte and _height__gte.isdigit():
+            q &= Q(height__gte=_height__gte)
+        if _height__lte and _height__lte.isdigit():
+            q &= Q(height__lte=_height__lte)
 
         if _weight and _weight.isdigit():
             q &= Q(weight__gte=_weight)
+        if _weight__gte and _weight__gte.isdigit():
+            q &= Q(weight__gte=_weight__gte)
+        if _weight__lte and _weight__lte.isdigit():
+            q &= Q(weight__lte=_weight__lte)
 
         if _grip:
             q &= Q(grip=_grip)
@@ -150,14 +163,14 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
                     _contract_to, '%Y-%m-%d').date()
                 q &= Q(contract_to__gte=date)
 
-        if _age__lte and _age__lte.isdigit():
-            date = datetime.datetime.now() - relativedelta(
-                years=int(_age__lte))
-            q &= Q(birth_date__lte=date)
-
         if _age__gte and _age__gte.isdigit():
             date = datetime.datetime.now() - relativedelta(
                 years=int(_age__gte))
+            q &= Q(birth_date__lte=date)
+
+        if _age__lte and _age__lte.isdigit():
+            date = datetime.datetime.now() - relativedelta(
+                years=int(_age__lte))
             q &= Q(birth_date__gte=date)
 
         if _related_player and _related_field in (
@@ -180,11 +193,6 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             if _related_value__gte and _related_value__gte.isdigit():
                 value = int(_related_value__gte) / 100.0
                 q &= get_q(_related_field, value, _related_player, 'gte')
-
-        if _age__gte and _age__gte.isdigit():
-            date = datetime.datetime.now() - relativedelta(
-                years=int(_age__gte))
-            q &= Q(birth_date__gte=date)
 
         if _match_count and _match_count.isdigit():
             q &= Q(matches_total__gte=_match_count)
