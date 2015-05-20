@@ -1,14 +1,13 @@
 {% extends "hockeyapp/clubs/base.html" %}
 {% load i18n %}
 
-
-
 {% block body %}
+<div ng-controller="ClubTeamController">
 <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
-<a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
+<input id="club-team-compare-api" type="hidden" value="{% url 'hockeyapp:club-team-compare-api' pk %}">
 <div class="w-page__crew">
 
-    <div class="body_inner bg-image" ng-controller="ClubTeamController as ClubTeamCtrl">
+    <div class="body_inner bg-image">
         {% block mobile_menu %}
             {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-team" active_menu="club-team-all" %}
         {% endblock %}
@@ -312,6 +311,7 @@
     </div>
 
 
+</div>
 </div>
 {% endblock %}
 
