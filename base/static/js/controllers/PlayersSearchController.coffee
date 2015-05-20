@@ -3,9 +3,15 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     ($http, $scope, $location, PlayersSearchService, tags, $timeout) ->
         $scope.tags = tags
 
-        $timeout(() ->
-             $('.ui.dropdown').dropdown();
-        ,0)
+        $scope.PlayersSearchService = PlayersSearchService
+        $scope.$location = $location
+
+        $scope.params = $location.search()
+
+        $scope.setState = (state) ->
+            $location.search('state', state)
+            $scope.params = $location.search()
+            return
 
         $scope.loadCountries = (query) ->
             return $scope.tags.loadCountries($scope.countriesURL, query)
@@ -25,14 +31,10 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                         (!isDefault and $(this).attr('value') == defaultValue))
                     $(this).attr('checked', false)
 
-        $scope.PlayersSearchService = PlayersSearchService
-        $scope.$location = $location
-
         $scope.data = {}
         $scope.countries = []
         $scope.loader = false
 
-        $scope.params = $location.search()
 
         if $scope.params.citizenship
             $scope.citizenship = JSON.parse($scope.params.citizenship)
@@ -117,7 +119,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             return
 
         # PlayersSearchService.search($scope)
-        PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
+        # PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
 
         return
 ])

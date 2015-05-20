@@ -13,9 +13,10 @@ from rest_framework import generics
 from base.models import Season
 
 from . import NumbersList
-from ...models import ClubPlayer, Match, Player, Club
+from ...models import ClubPlayer, Match, Player, Club, Coach, CoachClub
 from ...serializers.clubs import (
-    NumbersSerializer, BestPlayersSerilizer, OriginPlayersSerilizer)
+    NumbersSerializer, BestPlayersSerilizer, OriginPlayersSerilizer,
+    ClubCoachesPagination, ClubCoachesSerilizer)
 
 
 class PlayerNumbers(NumbersList):
@@ -180,6 +181,25 @@ class ClubPlayers(generics.ListAPIView):
             clubplayers = clubplayers.filter(season=_season)
 
         return qs.filter(pk__in=clubplayers.values_list('player', flat=True))
+
+
+class ClubCoaches(generics.ListAPIView):
+    queryset = Coach.objects.all()
+    paginate_by = 99999
+    pagination_class = ClubCoachesPagination
+    serializer_class = ClubCoachesSerilizer
+
+    def filter_queryset(self, qs):
+        qs = super(ClubCoaches, self).filter_queryset(qs)
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
+
+        coachclubs = CoachClub.objects.filter(club=club)
+
+        _season = self.request.query_params.get('season')
+        if _season:
+            coachclubs = coachclubs.filter(season=_season)
+
+        return qs.filter(pk__in=coachclubs.values_list('coach', flat=True))
 
 
 class OriginPlayers(generics.ListAPIView):
