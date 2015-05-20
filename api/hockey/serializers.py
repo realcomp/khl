@@ -138,6 +138,7 @@ class PartnerPlayerSerializer(PlayerMinimalSerialiser):
     citizenship = CountrySerializer()
     line_display = serializers.ReadOnlyField(source='get_line_display')
     club = ClubListSerializer()
+    url = serializers.ReadOnlyField(source='get_absolute_url')
 
     class Meta:
         model = Player
