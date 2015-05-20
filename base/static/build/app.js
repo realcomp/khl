@@ -4530,9 +4530,13 @@ angular.module('Sportomatics').controller('PlayersSearch2Controller', [
 angular.module('Sportomatics').controller('PlayersSearchController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', function($http, $scope, $location, PlayersSearchService, tags, $timeout) {
     $scope.tags = tags;
-    $timeout(function() {
-      return $('.ui.dropdown').dropdown();
-    }, 0);
+    $scope.PlayersSearchService = PlayersSearchService;
+    $scope.$location = $location;
+    $scope.params = $location.search();
+    $scope.setState = function(state) {
+      $location.search('state', state);
+      $scope.params = $location.search();
+    };
     $scope.loadCountries = function(query) {
       return $scope.tags.loadCountries($scope.countriesURL, query);
     };
@@ -4552,12 +4556,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         }
       };
     };
-    $scope.PlayersSearchService = PlayersSearchService;
-    $scope.$location = $location;
     $scope.data = {};
     $scope.countries = [];
     $scope.loader = false;
-    $scope.params = $location.search();
     if ($scope.params.citizenship) {
       $scope.citizenship = JSON.parse($scope.params.citizenship);
     }
@@ -4642,7 +4643,6 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       }
       $location.search('league', league || null);
     };
-    PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
   }
 ]);
 

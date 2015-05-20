@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="w-page__clubs-list">
+<div class="w-page__clubs-list" ng-controller="PlayersSearchController">
     <div class="body_inner bg-image">
         <main id="main">
             <section class="container">
@@ -65,6 +65,7 @@
 
                 <section class="w-page-tabs">
 
+                {% comment %}
                 <!--tabs items-->
                     <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
                         <div class="item active" data-tab="tab-name">Все</div>
@@ -80,34 +81,39 @@
                         <div class="item" data-tab="tab-name4">Вратари</div>
                     </div>
                 <!--tabs items ends-->
+                {% endcomment %}
 
                 <!--tabs content-->
                     <!--tabs content items-->
                     <div class="b-tabs-content ui tab active" data-tab="tab-name">
                         <div class="b-header b-header__md b-header__filter-in">
                             <div class="w-table">
-                                <h2 class="b-cell b-header__text">
-                                    Данные по игрокам
-                                </h2>
+                                <h2 class="b-cell b-header__text">Данные по игрокам</h2>
 
-                                <a href="#" class="b-cell active b-change-views__item">
+                                <a href="" class="b-cell b-change-views__item"
+                                   ng-class="{ active:!params.state }"
+                                   ng-click="setState(null)">
                                     <i class="filter icon"></i>
                                 </a>
 
-                                <a href="players-main-table.html" class="b-cell b-change-views__item w-tooltip" data-content="" data-variation="basic">
+                                <a href="" class="b-cell b-change-views__item"
+                                   ng-class="{ active:params.state === 'table' }"
+                                   ng-click="setState('table')">
                                     <i class="table icon"></i>
                                 </a>
 
-                                <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="" data-variation="basic">
+                                <a href="#" class="b-cell b-change-views__item"
+                                   ng-class="{ active:params.state === 'trophy' }"
+                                   ng-click="setState('trophy')">
                                     <i class="trophy icon"></i>
                                 </a>
                             </div><!--row-->
                         </div><!--b-header b-header__md-->
 
-
-                        <form class="ui form form-styled">
-                            <div class="ui accordion">
-                                <div class="active ui header title">
+                        <form class="ui form form-styled" ng-hide="params.state">
+                            <div class="ui accordion ui-accordion ui-widget ui-helper-reset">
+                                <div class="active ui header title ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
+                                    <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                                     <i class="dropdown icon"></i>
                                     Параметры для поиска
                                 </div><!--accordion header-->
@@ -120,7 +126,6 @@
                                         </div>
                                         <p>Сейчас по вашему запросу найдено около 12 000 записей</p>
                                     </div><!--message-->
-
 
                                     <div class="row">
                                         <div class="col-sm-4 b-accordion-content__item">
@@ -317,6 +322,7 @@
 
 
 
+                                {% comment %}
                                 <div class="ui header title">
                                     <i class="dropdown icon"></i>
                                     Данные для отображения
@@ -537,13 +543,12 @@
                                                 <div class="field">
                                                     <div class="ui checkbox">
                                                         <input type="checkbox" name="shots-per-game">
-                                                        <label>БВ/И <span class="label-small">>бросков по воротам за игру</span></label>
+                                                        <label>БВ/И <span class="label-small">бросков по воротам за игру</span></label>
                                                     </div>
                                                 </div>
                                             </div><!--col-->
                                         </div><!--row-->
                                     </div><!--field-->
-
 
                                     <div class="ui negative message">
                                         <i class="close icon"></i>
@@ -553,6 +558,7 @@
                                         <p>В результате может быть отображено не более 20 параметров игрока</p>
                                     </div>
                                 </div><!--accordion content-->
+                                {% endcomment %}
                             </div><!--accordion-->
 
 
@@ -560,7 +566,325 @@
                                 <a class="ui button" href="#">Показать стандартные</a>
                                 <a class="ui primary button" href="#">Показать выбранные</a>
                             </div><!--w-btn-->
-                        </form>
+                        </form>{# ng-hide state #}
+
+                        <div ng-show="params.state === 'table'">
+                            <div class="ui accordion">
+                                <div class="ui header title">
+                                    <i class="dropdown icon"></i>
+                                    Быстрый поиск
+                                </div><!--accordion header-->
+
+                                <div class="content">
+                                    <form class="ui form">
+                                        <div class="row">
+
+                                            <div class="col-md-7 col-sm-12 b-filter__alphabet  b-filter__item">
+                                                <p class="b-inline b-label">
+                                                    По алфавиту:
+                                                </p>
+                                                <ul class="b-inline unstyled list-inline">
+                                                    <li class="active"><a href="#">Все</a></li>
+                                                    <li><a href="#">А</a></li>
+                                                    <li><a href="#">Б</a></li>
+                                                    <li><a href="#">В</a></li>
+                                                    <li><a href="#">Г</a></li>
+                                                    <li><a href="#">Д</a></li>
+                                                    <li><a href="#">Е</a></li>
+                                                    <li><a href="#">Ё</a></li>
+                                                    <li><a href="#">Ж</a></li>
+                                                    <li><a href="#">З</a></li>
+                                                    <li><a href="#">И</a></li>
+                                                    <li><a href="#">К</a></li>
+                                                    <li><a href="#">Л</a></li>
+                                                    <li><a href="#">М</a></li>
+                                                    <li><a href="#">Н</a></li>
+                                                    <li><a href="#">О</a></li>
+                                                    <li><a href="#">П</a></li>
+                                                    <li><a href="#">Р</a></li>
+                                                    <li><a href="#">С</a></li>
+                                                    <li><a href="#">Т</a></li>
+                                                    <li><a href="#">У</a></li>
+                                                    <li><a href="#">Ф</a></li>
+                                                    <li><a href="#">Х</a></li>
+                                                    <li><a href="#">Ц</a></li>
+                                                    <li><a href="#">Ч</a></li>
+                                                    <li><a href="#">Ш</a></li>
+                                                    <li><a href="#">Ш</a></li>
+                                                    <li><a href="#">Ы</a></li>
+                                                    <li><a href="#">Э</a></li>
+                                                    <li><a href="#">Ю</a></li>
+                                                    <li><a href="#">Я</a></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="col-md-3 col-sm-6 b-filter__item">
+                                                <div class="b-search ui category search result">
+                                                    <div class="ui icon input">
+                                                        <input class="c-search prompt" type="text" autocomplete="off">
+                                                        <i class="search link icon"></i>
+                                                    </div>
+                                                    <div class="results"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 col-sm-6 text-right  b-filter__item">
+                                                <div class="ui selection dropdown">
+                                                    <input type="hidden" name="gender">
+                                                    <div class="default text">сезон 2014-15</div>
+                                                    <i class="dropdown icon"></i>
+                                                    <div class="menu">
+                                                        <div class="item" data-value="сезон 14/15">сезон 2014-15</div>
+                                                        <div class="item" data-value="сезон 13/14">сезон 2013-14</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div><!--row-->
+                                    </form>
+                                </div><!--accordion content-->
+                            </div><!--accordion-->
+
+                            <div class="row-xs">
+                                <table class="ui unstackable striped table colored-th grey-th b-table-lg">
+                                    <tr>
+                                        <th class="b-place hidden-xs hidden-sm"><a href="#"><span>Место</span><i class="dropdown icon"></i></a></th>
+                                        <th class=""><a href="#"><span>Имя</span><i class="dropdown icon"></i></a></th>
+                                        <th class="b-team"><a href="#"><span>Команда</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm"><a href="#"><span>№</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs hidden-sm"><a href="#"><span>Контракт</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>Лет</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm visible-lg"><a href="#"><span>Рост</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm"><a href="#"><span>И</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm"><a href="#"><span>Ш</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>О</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>+/-</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>ШР</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>ШБ</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>ШМ</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>ШО</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>РБ</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>А</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>БВ</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs"><a href="#"><span>%БВ</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs hidden-sm"><a href="#"><span>БВ/И</span><i class="dropdown icon"></i></a></th>
+                                        <th class="text-center-sm hidden-xs hidden-sm"><a href="#"><span>%ВБР</span><i class="dropdown icon"></i></a></th>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="b-place hidden-xs hidden-sm">
+                                            <div class="ui checkbox w-tooltip" data-content="Добавить в мой список" data-variation="basic">
+                                                <input type="checkbox">
+                                                <label>1</label>
+                                            </div>
+                                        </td>
+
+                                        <td class="">
+                                            <p class="">
+                                                <a href="#">Петров Сергей</a> <i class="flag cz i-top-2 hidden-xs"></i>
+                                            </p>
+                                            <p class="">
+                                                нападающий
+                                            </p>
+                                        </td>
+
+                                        <td class="">
+                                            <p class="">
+                                                <a href="#">Авангард</a>
+                                            </p>
+                                            <p class="">
+                                                Омская область
+                                            </p>
+                                        </td>
+
+                                        <td class="text-center">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm hidden-sm hidden-xs">
+                                            <p class="">
+                                                до
+                                            </p>
+                                            <p class="">
+                                                30.04.2015
+                                            </p>
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm visible-lg">
+                                            180
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center">
+                                            6
+                                        </td>
+
+                                        <td class="text-center">
+                                            14
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            2283
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            180
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            6
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            14
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            180
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center hidden-xs hidden-sm">
+                                            6
+                                        </td>
+
+                                        <td class="text-center hidden-xs hidden-sm">
+                                            14
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td class="b-place hidden-xs hidden-sm">
+                                            <div class="ui checkbox w-tooltip" data-content="Добавить в мой список" data-variation="basic">
+                                                <input type="checkbox">
+                                                <label>2</label>
+                                            </div>
+                                        </td>
+
+                                        <td class="">
+                                            <div class="b-inline">
+                                                <p class="">
+                                                    <a href="#">Еременко Александр</a> <i class="flag ru i-top-2 hidden-xs"></i>
+                                                </p>
+                                                <p class="">
+                                                    нападающий
+                                                </p>
+                                            </div>
+                                        </td>
+
+                                        <td class="">
+                                            <p class="">
+                                                <a href="#">Автомобилист</a>
+                                            </p>
+                                            <p class="">
+                                                Ленинградская область
+                                            </p>
+                                        </td>
+
+                                        <td class="text-center">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm hidden-sm hidden-xs">
+                                            <p class="">
+                                                до
+                                            </p>
+                                            <p class="">
+                                                30.04.2015
+                                            </p>
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm visible-lg">
+                                            180
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center">
+                                            6
+                                        </td>
+
+                                        <td class="text-center">
+                                            14
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            2283
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            180
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            6
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            14
+                                        </td>
+
+                                        <td class="text-center hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            180
+                                        </td>
+
+                                        <td class="text-center-sm hidden-xs">
+                                            22
+                                        </td>
+
+                                        <td class="text-center hidden-xs hidden-sm">
+                                            6
+                                        </td>
+
+                                        <td class="text-center hidden-xs hidden-sm">
+                                            14
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>{# ng-show state == table' #}
 
                     </div>
                     <!--tabs content items-->
