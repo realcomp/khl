@@ -79,8 +79,8 @@ angular.module('Sportomatics')
         };
 
         $scope.$on('field-changed', function(event, preventList){
+            console.log(field)
             $location.search('field', field);
-            console.log(preventList)
             if(preventList == null)
             self.list();
         })
@@ -497,29 +497,4 @@ angular.module('Sportomatics')
         $scope.getPlayerData();
     })
 
-    function toSeason(value){
-        //TODO заменить
-        var seasons = {
-            s2002: 1,
-            s2003: 2,
-            s2001: 3,
-            s2004: 4,
-            s2000: 5,
-            s1999: 6,
-            s1998: 7,
-            s2005: 8,
-            s2006: 9,
-            s1997: 10,
-            s2007: 11,
-            s2008: 12,
-            s2009: 13,
-            s2010: 14,
-            s2011: 15,
-            s2012: 16,
-            s2013: 17,
-            s2014: 18,
-            s2015: 19
-        }
-        return seasons['s'+value];
-    }
 

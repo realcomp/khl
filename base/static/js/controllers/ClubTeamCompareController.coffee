@@ -1,17 +1,49 @@
 angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, $http, $q, IndicatorsFactory, HighchartsFactory, LocaleFactory, $timeout) ->
     self = this;
     this.url = document.getElementById('api-player-indicators').value
+    this.clubPk = document.getElementById('team-id').value
     averageClubPlayerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart()
-    $scope.localeObject = LocaleFactory.selectedLocale;
+    $scope.localeObject = LocaleFactory.selectedLocale
     $scope.setField = averageClubPlayerIndicatorsChart.setField
     $scope.field = averageClubPlayerIndicatorsChart.getField()
     $scope.dataType = averageClubPlayerIndicatorsChart.getDataType()
     $scope.clubs = []
+    $scope.clubsWithAddedPlayers = {}
+    $scope.clubsWithPlace = {}
     $scope.offenders = true
     $scope.defenders = true
+    $scope.currentClubId = 0
     $scope.params = (
-        professional: false
+        professional: true
     )
+    $scope.dataType = 'graph-serial';
+
+    $scope.setDataType = (type, event) ->
+        $scope.dataType = type;
+        if type is 'graph-radar'
+            $timeout(() ->
+                $('#params').addClass('display-none')
+                $scope.createRadar();
+            , 100)
+        else
+            $timeout(() ->
+                $('#params').removeClass('display-none')
+                $scope.listAveragePlayer();
+            , 100)
+
+    $scope.selectedRadarFields = [{
+        field: "goals"
+    }, {
+        field: "points"
+    }, {
+        field: "assists"
+    }, {
+        field: "plus_minus"
+    }];
+    $scope.$watch('selectedRadarFields', (newval) ->
+        if newval and $scope.dataType is 'graph-radar'
+            $scope.createRadar()
+    , true)
 
     $scope.setParams = () ->
         $('#regularParams').toggleClass('display-none');
@@ -20,11 +52,20 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         $('.ui.checkbox-professional').checkbox('check');
         return null
 
-    this.clubPk = document.getElementById('team-id').value
-
-    $scope.$watch 'field', () ->
+    $scope.$on 'field-changed', (newval) ->
+        $scope.field = field
         if $scope.clubs.length > 0
             $scope.listAveragePlayer()
+
+    $scope.$on 'tooltip', (value, value2) ->
+        $scope.clubTooltips = value2.points.map((point) ->
+            return {
+                result: point.y
+                color: point.series.color
+                logo: point.series.logo
+                title: point.series.title
+            }
+        )
 
     $scope.showPersonalList = () ->
         $('.overlay-black').removeClass('hidden');
@@ -38,7 +79,6 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
 
     $scope.setSeason = (season) ->
         $scope.season = season
-        console.log $scope.season
 
     $scope.setSelectedPlayer = (obj) ->
         if obj? and obj.originalObject?
@@ -49,7 +89,6 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             return
         if $scope.selectedClub? and $scope.selectedClub.originalObject?
             pk = $scope.selectedClub.originalObject.pk
-            console.log pk
         if not pk?
             if clubPk?
                 pk = clubPk
@@ -90,8 +129,9 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     offender_players: data.offender_players
                     defender_players: data.defender_players
                     title: data.title
-                    color: data.main_color or getRandomColor()
-                    id: data.pk
+                    color: if data.main_color? then data.main_color else CHART_COLORS[$scope.clubs.length]
+                    pk: data.pk
+                    id: $scope.currentClubId
                     logo: data.logo
                     address: data.address
                     dataBySeason:
@@ -101,26 +141,32 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     results: results
                     seasonResult: seasonResult['season']
                 $scope.clubs.push clubObject
+                $scope.currentClubId += 1
                 $timeout( () ->
+                    #if $scope.dataType is 'graph-serial' then $scope.listAveragePlayer()
+                    #if $scope.dataType is 'graph-radar' then $scope.createRadar()
                     $scope.listAveragePlayer()
                 , 100)
                 return
             return
         return
 
-    $scope.addPlayerToClub = (title) ->
-        club = _.findWhere($scope.clubs, title: title)
+    $scope.addPlayerToClub = (id) ->
+        club = _.findWhere($scope.clubs, id: id)
         $q.all([$http.get(self.url.replace('/0/', '/' + $scope.selectedPlayer.pk + '/') + '?group_by=season')]).then (results) ->
             $scope.selectedPlayer.selected = true
             $scope.selectedPlayer.added = true
             club.all_players.push $scope.selectedPlayer
             club.results.push results[0]
+            $scope.clubsWithAddedPlayers['club_' + club.id] = true
+            $scope.clubsWithPlace['club_' + id] = if _.filter(club.all_players, {selected: false}).length > _.filter(club.all_players, {added: true}).length then true else false
             $scope.listAveragePlayer()
 
-    $scope.togglePlayerSelection = (title, index) ->
-        club = _.findWhere($scope.clubs, title: title)
+    $scope.togglePlayerSelection = (id, index) ->
+        club = _.findWhere($scope.clubs, id: id)
         player = club.all_players[index]
         player.selected = not player.selected
+        $scope.clubsWithPlace['club_' + id] = if _.filter(club.all_players, {selected: false}).length > _.filter(club.all_players, {added: true}).length then true else false
         $('#player_'+index).attr('checked', !$('#player_'+index).attr('checked'))
         $scope.listAveragePlayer()
 
@@ -147,24 +193,78 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     averageData = parseFloat(averageData / selectedPlayers).toFixed(3)
                     club.dataBySeason.results[0][key] = averageData
             clubObject = {
-                name: club.title
+                name: '<span class="bold">' + club.title + '</span><br>' + club.seasonResult.title
                 data: club.dataBySeason.results.map (el) ->
                     return (
-                        x: new Date(el.season.end_date.split('-')[0]).getTime()
+                        x: new Date("2015").getTime()#new Date(el.season.end_date.split('-')[0]).getTime()
                         y: parseFloat(el[$scope.field])
                         drilldown: el.season.end_date
                     )
                 color: club.color,
-                stack: club.id
+                stack: club.pk + club.seasonResult.pk
                 logo: club.logo
             }
             newPlayerIndicatorsData.push clubObject
 
-        averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData)
-        averageClubPlayerIndicatorsChart.setContext($scope);
-        averageClubPlayerIndicatorsChart.setPeriod(30);
-        averageClubPlayerIndicatorsChart.draw()
-        self.chart = $('#chartdiv').highcharts()
+        if $scope.dataType is 'graph-serial'
+            averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData)
+            averageClubPlayerIndicatorsChart.setContext($scope);
+            averageClubPlayerIndicatorsChart.setPeriod(30);
+            averageClubPlayerIndicatorsChart.setPreventLabels(true);
+            averageClubPlayerIndicatorsChart.draw()
+            self.chart = $('#chartdiv').highcharts()
+            legendContent = ''
+            _.each newPlayerIndicatorsData, (result) ->
+                legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(result.data[0].y).toFixed(3), result.name, result.logo, result.color)
+            $('#legend-content').html(legendContent)
+            return null
+        else
+            $scope.createRadar()
+
+    $scope.createRadar = () ->
+        # function to create radar chart for one or multiple players
+        categories = $scope.selectedRadarFields.map((el) ->
+            el['field']
+        )
+        #$scope.playerSeasons = $scope.dataBySeason.results.map((e) ->
+        #    e.season.end_date.substr 0, 4
+        #)        if $scope.clubs.length > 0
+        chartData = []
+        _.each $scope.clubs, (club, index) ->
+            data = club.dataBySeason.results.map((el) ->
+                return {
+                    name: '<span class="bold">' + club.title + '</span><br>' + club.seasonResult.title
+                    data: categories.map((category) ->
+                        if category is 'shots'
+                            return parseInt(el[category]) / 10 / parseInt(el['count'])
+                        parseInt(el[category]) / parseInt(el['count'])
+                    )
+                    pointPlacement: 'on'
+                    color: club.color
+                    title: club.title
+                    seasonResult: club.seasonResult
+                    logo: club.logo
+                }
+            ).filter((toFilter) ->
+                toFilter?
+            )
+            chartData.push data[0]
+
+        console.log chartData
+        $scope.playerStatsSpiderChart = new (HighchartsFactory.PlayerStatsSpiderChart)('chartdiv2', chartData, categories)
+        $scope.playerStatsSpiderChart.setContext $scope
+        $scope.playerStatsSpiderChart.setLocaleObject $scope.localeObject
+        $scope.playerStatsSpiderChart.draw()
+        self.spiderChart = $('#chartdiv2').highcharts()
+        ### legend ###
+        legendContent = ''
+        _.each chartData, (result) ->
+            legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
+        $('#legend-content').html(legendContent)
+        $('#legend-header').html('<span>'+$scope.localeObject.fieldNames[_.last(categories)].fullName+' / '+$scope.localeObject.fieldNames['count'].fullName+'</span')
+        ### legend ###
+
+        return null
 
     $scope.addAverageClubPlayerData(this.clubPk)
 

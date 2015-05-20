@@ -17,6 +17,7 @@
 
     </div>
 </section>
+
 <div class="b-tabs-content ui tab active" ng-controller="ClubTeamCompareController">
 
     {% block mobile_menu %}
@@ -29,23 +30,23 @@
                 Сравнение команд
             </h2>
 
-            <a class="b-cell active hidden-xs b-change-views__item w-tooltip" data-content="Алфавитный список" data-variation="basic" href="#">
+            <a class="b-cell hidden-xs b-change-views__item w-tooltip" data-content="Столбчатая диаграмма" data-variation="basic"  ng-class="{'active': dataType === 'graph-serial'}" ng-click="setDataType('graph-serial')">
                 <i class="bar chart icon"></i>
             </a>
 
-            <a class="b-cell b-change-views__item w-tooltip" data-content="Игровые показатели" data-variation="basic" href="#">
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Круговая диаграмма" data-variation="basic"  ng-class="{'active': dataType === 'graph-radar'}" ng-click="setDataType('graph-radar')">
                 <i class="pie chart icon"></i>
             </a>
 
-            <a class="b-cell b-change-views__item w-tooltip" data-content="Показатели прошлого сезона" data-variation="basic" href="#">
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Таблица значений" data-variation="basic"  ng-class="{'active': dataType === 'table'}" ng-click="setDataType('table')">
                 <i class="table icon"></i>
             </a>
         </div><!--row-->
     </div><!--b-header b-header__md-->
 
 
-    <div class="ui menu b-ui-menu">
-        <ul id="regularParams" class="menu unstyled">
+    <div id="params" class="ui menu b-ui-menu">
+        <ul id="regularParams" class="menu unstyled display-none">
             <li class="item b-ui-menu__item" ng-click="setParams('professional')">
                 <div class="ui toggle checkbox checkbox-regular">
                     <input type="checkbox" name="public">
@@ -129,75 +130,76 @@
                 <a>Фолы против</a>
             </li>
         </ul>
-        <ul id="professionalParams" class="menu unstyled display-none" >
+        {% verbatim %}
+        <ul id="professionalParams" class="menu unstyled">
             <li class="item b-ui-menu__item" ng-click="setParams('regular')">
                 <div class="ui toggle checkbox checkbox-professional" >
                     <input type="checkbox" name="public" checked="true">
                 </div>
             </li>
-
-            <li class="item b-ui-menu__item" ng-click="setField('count')" ng-class="{'active': field === 'count'}">
-                <a>И</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('count')" ng-class="{'active': field === 'count'}" data-content="{{localeObject.fieldNames['count'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['count'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('points')" ng-class="{'active': field === 'points'}">
-                <a>О</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('points')" ng-class="{'active': field === 'points'}" data-content="{{localeObject.fieldNames['points'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['points'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('goals')" ng-class="{'active': field === 'goals'}">
-                <a>Ш</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('goals')" ng-class="{'active': field === 'goals'}" data-content="{{localeObject.fieldNames['goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('assists')" ng-class="{'active': field === 'assists'}">
-                <a>А</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('assists')" ng-class="{'active': field === 'assists'}" data-content="{{localeObject.fieldNames['assists'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['assists'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('plus_minus')" ng-class="{'active': field === 'plus_minus'}">
-                <a>+/-</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('plus_minus')" ng-class="{'active': field === 'plus_minus'}" data-content="{{localeObject.fieldNames['plus_minus'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['plus_minus'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('es_goals')" ng-class="{'active': field === 'es_goals'}">
-                <a>ШР</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('es_goals')" ng-class="{'active': field === 'es_goals'}" data-content="{{localeObject.fieldNames['es_goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['es_goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('pp_goals')" ng-class="{'active': field === 'pp_goals'}">
-                <a>ШБ</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('pp_goals')" ng-class="{'active': field === 'pp_goals'}" data-content="{{localeObject.fieldNames['pp_goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['pp_goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('ev_goals')" ng-class="{'active': field === 'ev_goals'}">
-                <a>ШМ</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('ev_goals')" ng-class="{'active': field === 'ev_goals'}" data-content="{{localeObject.fieldNames['ev_goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['ev_goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('overtime_goals')" ng-class="{'active': field === 'overtime_goals'}">
-                <a>ШО</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('overtime_goals')" ng-class="{'active': field === 'overtime_goals'}" data-content="{{localeObject.fieldNames['overtime_goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['overtime_goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('win_goals')" ng-class="{'active': field === 'win_goals'}">
-                <a>ШП</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('win_goals')" ng-class="{'active': field === 'win_goals'}" data-content="{{localeObject.fieldNames['win_goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['win_goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('bullet_goals')" ng-class="{'active': field === 'bullet_goals'}">
-                <a>РБ</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('bullet_goals')" ng-class="{'active': field === 'bullet_goals'}" data-content="{{localeObject.fieldNames['bullet_goals'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['bullet_goals'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('shots')" ng-class="{'active': field === 'shots'}">
-                <a>БВ</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('shots')" ng-class="{'active': field === 'shots'}" data-content="{{localeObject.fieldNames['shots'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['shots'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('pis__avg')" ng-class="{'active': field === 'pis__avg'}">
-                <a>%БВ</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('pis__avg')" ng-class="{'active': field === 'pis__avg'}" data-content="{{localeObject.fieldNames['pis__avg'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['pis__avg'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('shots__avg')" ng-class="{'active': field === 'shots__avg'}">
-                <a>БВ/И</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('shots__avg')" ng-class="{'active': field === 'shots__avg'}" data-content="{{localeObject.fieldNames['shots__avg'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['shots__avg'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('faceoff')" ng-class="{'active': field === 'faceoff'}">
-                <a>Вбр</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('faceoff')" ng-class="{'active': field === 'faceoff'}" data-content="{{localeObject.fieldNames['faceoff'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['faceoff'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('winfaceoff')" ng-class="{'active': field === 'winfaceoff'}">
-                <a>ВВбр</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('winfaceoff')" ng-class="{'active': field === 'winfaceoff'}" data-content="{{localeObject.fieldNames['winfaceoff'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['winfaceoff'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('winfaceoff_p__avg')" ng-class="{'active': field === 'winfaceoff_p__avg'}">
-                <a>%Вбр</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('winfaceoff_p__avg')" ng-class="{'active': field === 'winfaceoff_p__avg'}" data-content="{{localeObject.fieldNames['winfaceoff_p__avg'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['winfaceoff_p__avg'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('change_count__avg')" ng-class="{'active': field === 'change_count__avg'}">
-                <a>См/И</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('change_count__avg')" ng-class="{'active': field === 'change_count__avg'}" data-content="{{localeObject.fieldNames['change_count__avg'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['change_count__avg'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('penalty_time')" ng-class="{'active': field === 'penalty_time'}">
-                <a>Штр</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('penalty_time')" ng-class="{'active': field === 'penalty_time'}" data-content="{{localeObject.fieldNames['penalty_time'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['penalty_time'].shortName}}</a>
             </li>
-            <li class="item b-ui-menu__item" ng-click="setField('gamingtime__avg')" ng-class="{'active': field === 'gamingtime__avg'}">
-                <a>ВП/И</a>
+            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('gamingtime__avg')" ng-class="{'active': field === 'gamingtime__avg'}" data-content="{{localeObject.fieldNames['gamingtime__avg'].fullName}}" data-variation="basic">
+                <a>{{::localeObject.fieldNames['gamingtime__avg'].shortName}}</a>
             </li>
         </ul>
     </div><!--b-ui-menu-->
+    {% endverbatim %}
 
 
     <!--mob menu-->
@@ -209,33 +211,35 @@
 
     <div class="row">
         <div class="b-diagram__legend b-diagram__legend__table-style inline-block vertical-top col-md-3 no-padding" ng-if="clubs.length > 0" style="margin-left: 10px;">
+
             <p id="legend-header" class="b-diagram__legend__table-style_header">
                 <span ng-bind="localeObject.fieldNames[field].fullName"></span>
             </p>
 
-
+            {% verbatim %}
             <ul id="legend-content" class="unstyled">
-                <!--<li class="b-diagram__legend__table-style__blue">
+                <li class="" style="border-right: 5px solid {{club.color}};" ng-repeat="club in clubTooltips">
                     <div class="b-inline b-diagram__legend__table-style__item">
                         <div class="b-inline hidden-xs">
-                            <a class="ui image" href="#"><img class="ui image" src="images/a-hockey/ava-12.jpg" alt="" tittle=""></a>
+                            <a class="ui image" ><img class="ui image b-diagram__legend__image" src="{{club.logo}}" width="32" height="32"></a>
                         </div>
 
                         <div class="b-inline">
                             <p class="">
-                                <a href="#">Петров Сергей</a> <i class="flag cz i-top-2 hidden-xs"></i>
-                            </p>
-                            <p class="">
-                                нападающий
+                                <a class="no-decoration default-a pointer">
+                                    <span class="bold">{{club.title}}</span><br>
+                                    {{club.seasonResult.title}}
+                                </a> <!--<i class="flag cz i-top-2 hidden-xs"></i>-->
                             </p>
                         </div>
                     </div>
 
                     <p class="b-inline b-diagram__legend__table-style__games">
-                        22
+                        {{club.result}}
                     </p>
-                </li>-->
+                </li>
             </ul>
+            {% endverbatim %}
 
             {% comment %}
             <div class="w-player-compare">
@@ -264,8 +268,12 @@
             {% endcomment %}
         </div>
 
-        <div ng-if="clubs.length > 0" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+        <div ng-if="clubs.length > 0 && dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
             <div id="chartdiv" style="height:480px; width: 100%;"></div>
+        </div>
+
+        <div ng-if="clubs.length > 0 && dataType === 'graph-radar'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+            <div id="chartdiv2" style="height:480px; width: 100%;"></div>
         </div>
     </div>
 
@@ -312,7 +320,7 @@
                             </p>
                         </div><!--b-team-compare__list__item-->
 
-                        <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2" ng-click="togglePlayerSelection(club.title, $index)" style="cursor: pointer;">
+                        <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2 && !player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
                             <p class="">
                                 <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>{{player.fio}}
                             </p>
@@ -333,7 +341,7 @@
                             </p>
                         </div><!--b-team-compare__list__item-->
 
-                        <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3" ng-click="togglePlayerSelection(club.title, $index)" style="cursor: pointer;">
+                        <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3 && !player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
                             <p class="">
                                 <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>{{player.fio}}
                             </p>
@@ -346,30 +354,43 @@
 
                     <div class="b-team-compare__card-footer">
                         <div class="b-team-compare__list">
-                            <div class="b-team-compare__list__item b-team-compare__list__header">
+                            <div class="b-team-compare__list__item b-team-compare__list__header" ng-if="clubsWithAddedPlayers['club_'+club.id]">
                                 <p class="">
                                     Защитники
                                 </p>
                                 <p class="">
-                                    И
+                                {{localeObject.fieldNames[field].shortName}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
 
-                            <div class="b-team-compare__list__item">
+                            <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2 && player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
                                 <p class="">
-                                    <i class="icon exchange b-positive-text"></i>Антипов Анатолий<i class="icon remove b-negative-text"></i>
+                                    <i class="icon exchange b-positive-text"></i>
+                                    {{player.fio}}
+                                    <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>
                                 </p>
                                 <p class="">
-                                    22
+                                    {{player.result}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
 
-                            <div class="b-team-compare__list__item b-color-styled">
+                            <div class="b-team-compare__list__item b-team-compare__list__header" ng-if="clubsWithAddedPlayers['club_'+club.id]">
                                 <p class="">
-                                    <i class="icon exchange"></i>Никитин Александр<i class="icon remove b-negative-text"></i>
+                                    Нападающие
                                 </p>
                                 <p class="">
-                                    18
+                                {{localeObject.fieldNames[field].shortName}}
+                                </p>
+                            </div><!--b-team-compare__list__item-->
+
+                            <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3 && player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
+                                <p class="">
+                                    <i class="icon exchange b-positive-text"></i>
+                                    {{player.fio}}
+                                    <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>
+                                </p>
+                                <p class="">
+                                    {{player.result}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
 
@@ -381,11 +402,30 @@
                                 <i class="icon plus"></i> Мест нет
                             </a>
                         </div><!--w-btn-->
-                        <div class="w-btn">
-                            <a href="#" class="ui button green tiny">
+                        {% endverbatim %}
+                        <div class="ui input block" style="width: 100%; padding: 8px;" ng-if="clubsWithPlace['club_'+club.id]">
+                        <angucomplete id="players_filter" placeholder="Введите имя..."
+                                          pause="300" minlength="2"
+                                          selectedobject="selectedPlayer"
+                                          url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                          titlefield="lastname,name"
+                                          onchangecallback="setSelectedPlayer"
+                                          style="width: 100%"/>
+                        </div>
+                        {% verbatim %}
+
+                        <div class="w-btn" ng-if="!clubsWithPlace['club_'+club.id]">
+                            <a href="#" class="ui button disabled tiny">
+                                <!--<i class="icon plus"></i>--> Мест нет
+                            </a>
+                        </div><!--w-btn-->
+
+                        <div class="w-btn" ng-if="clubsWithPlace['club_'+club.id]">
+                            <a class="ui button green tiny" ng-click="addPlayerToClub(club.id)">
                                 <i class="icon plus"></i> Добавить игрока
                             </a>
                         </div><!--w-btn-->
+
                     </div><!--extra content w-gallery-preview__item__extra-->
 
                 </div><!--ui card-->
@@ -395,742 +435,6 @@
                 </p>
             </div><!--b-team-compare__item-->
             {% endverbatim %}
-
-            <!--b-team-compare__item-->
-            {% comment %}
-            <div class="col-xs-6 col-md-3 b-team-compare__item">
-
-                <div class="ui card">
-
-                    <div class="b-team-compare__card-header">
-                        <a class="#" class="ui image">
-                            <img class="ui image" src="/static/new/images/l-hockey/logo-2.jpg" alt="" tittle=""/>
-                        </a>
-
-                        <div class="b-team-compare__info">
-                            <p class="b-team-compare__name">
-                                Автомобилист
-                            </p>
-                            <p class="">
-                                Омская область
-                            </p>
-                            <p class="">
-                                сезон 12/13
-                            </p>
-                        </div>
-                    </div><!--b-team-compare__card-header-->
-
-                    <div class="b-team-compare__list">
-                        <div class="b-team-compare__list__item b-team-compare__list__header">
-                            <p class="">
-                                Защитники
-                            </p>
-                            <p class="">
-                                И
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Антипов Анатолий
-                            </p>
-                            <p class="">
-                                22
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item b-color-styled">
-                            <p class="">
-                                <i class="icon remove b-negative-text"></i>Билялетдинов Зинетула
-                            </p>
-                            <p class="">
-                                6
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Быков Владимир
-                            </p>
-                            <p class="">
-                                19
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Игорь
-                            </p>
-                            <p class="">
-                                30
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Вуйтек Владимир
-                            </p>
-                            <p class="">
-                                8
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Герсонский Сергей
-                            </p>
-                            <p class="">
-                                16
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Глинка Иван
-                            </p>
-                            <p class="">
-                                28
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Александр
-                            </p>
-                            <p class="">
-                                11
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                    </div><!--b-team-compare__list-->
-
-                    <div class="b-team-compare__list">
-                        <div class="b-team-compare__list__item b-team-compare__list__header">
-                            <p class="">
-                                Нападающие
-                            </p>
-                            <p class="">
-                                И
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Антипов Анатолий
-                            </p>
-                            <p class="">
-                                22
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item b-color-styled">
-                            <p class="">
-                                <i class="icon remove b-negative-text"></i>Билялетдинов Зинетула
-                            </p>
-                            <p class="">
-                                6
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Быков Владимир
-                            </p>
-                            <p class="">
-                                19
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Игорь
-                            </p>
-                            <p class="">
-                                30
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Вуйтек Владимир
-                            </p>
-                            <p class="">
-                                8
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Герсонский Сергей
-                            </p>
-                            <p class="">
-                                16
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Глинка Иван
-                            </p>
-                            <p class="">
-                                28
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Александр
-                            </p>
-                            <p class="">
-                                11
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                    </div><!--b-team-compare__list-->
-
-                    <div class="b-team-compare__card-footer">
-                        <div class="b-team-compare__list">
-                            <div class="b-team-compare__list__item b-team-compare__list__header">
-                                <p class="">
-                                    Защитники
-                                </p>
-                                <p class="">
-                                    И
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item">
-                                <p class="">
-                                    <i class="icon exchange b-positive-text"></i>Антипов Анатолий<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    22
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item b-color-styled">
-                                <p class="">
-                                    <i class="icon exchange"></i>Никитин Александр<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    18
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                        </div><!--b-team-compare__list-->
-
-                        <div class="w-btn">
-                            <a href="#" class="ui button disabled tiny">
-                                <i class="icon plus"></i> Мест нет
-                            </a>
-                        </div><!--w-btn-->
-                    </div><!--extra content w-gallery-preview__item__extra-->
-
-                </div><!--ui card-->
-
-                <p class="b-team-compare__delete">
-                    <a href="#">удалить команду из сравнения</a>
-                </p>
-            </div><!--b-team-compare__item-->
-
-            <div class="col-xs-6 col-md-3 b-team-compare__item">
-                <div class="ui card">
-
-                    <div class="b-team-compare__card-header">
-                        <a class="#" class="ui image">
-                            <img class="ui image" src="/static/new/images/l-hockey/logo-1.jpg" alt="" tittle=""/>
-                        </a>
-
-                        <div class="b-team-compare__info">
-                            <p class="b-team-compare__name">
-                                Адмирал
-                            </p>
-                            <p class="">
-                                Ленинградская область
-                            </p>
-                            <p class="">
-                                сезон 12/13
-                            </p>
-                        </div>
-                    </div><!--b-team-compare__card-header-->
-
-                    <div class="b-team-compare__list">
-                        <div class="b-team-compare__list__item b-team-compare__list__header">
-                            <p class="">
-                                Защитники
-                            </p>
-                            <p class="">
-                                И
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Антипов Анатолий
-                            </p>
-                            <p class="">
-                                22
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item b-color-styled">
-                            <p class="">
-                                <i class="icon remove b-negative-text"></i>Билялетдинов Зинетула
-                            </p>
-                            <p class="">
-                                6
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Быков Владимир
-                            </p>
-                            <p class="">
-                                19
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Игорь
-                            </p>
-                            <p class="">
-                                30
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Вуйтек Владимир
-                            </p>
-                            <p class="">
-                                8
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Герсонский Сергей
-                            </p>
-                            <p class="">
-                                16
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Глинка Иван
-                            </p>
-                            <p class="">
-                                28
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Александр
-                            </p>
-                            <p class="">
-                                11
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                    </div><!--b-team-compare__list-->
-
-                    <div class="b-team-compare__list">
-                        <div class="b-team-compare__list__item b-team-compare__list__header">
-                            <p class="">
-                                Нападающие
-                            </p>
-                            <p class="">
-                                И
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Антипов Анатолий
-                            </p>
-                            <p class="">
-                                22
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item b-color-styled">
-                            <p class="">
-                                <i class="icon remove b-negative-text"></i>Билялетдинов Зинетула
-                            </p>
-                            <p class="">
-                                6
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Быков Владимир
-                            </p>
-                            <p class="">
-                                19
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Игорь
-                            </p>
-                            <p class="">
-                                30
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Вуйтек Владимир
-                            </p>
-                            <p class="">
-                                8
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Герсонский Сергей
-                            </p>
-                            <p class="">
-                                16
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Глинка Иван
-                            </p>
-                            <p class="">
-                                28
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Александр
-                            </p>
-                            <p class="">
-                                11
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                    </div><!--b-team-compare__list-->
-
-                    <div class="b-team-compare__card-footer">
-                        <div class="b-team-compare__list">
-                            <div class="b-team-compare__list__item b-team-compare__list__header">
-                                <p class="">
-                                    Защитники
-                                </p>
-                                <p class="">
-                                    И
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item">
-                                <p class="">
-                                    <i class="icon exchange b-positive-text"></i>Антипов Анатолий<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    22
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item b-color-styled">
-                                <p class="">
-                                    <i class="icon exchange"></i>Никитин Александр<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    18
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                        </div><!--b-team-compare__list-->
-                        <div class="b-team-compare__list">
-                            <div class="b-team-compare__list__item b-team-compare__list__header">
-                                <p class="">
-                                    Нападющие
-                                </p>
-                                <p class="">
-                                    И
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item">
-                                <p class="">
-                                    <i class="icon exchange b-positive-text"></i>Антипов Анатолий<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    22
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item b-color-styled">
-                                <p class="">
-                                    <i class="icon exchange"></i>Никитин Александр<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    18
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                        </div><!--b-team-compare__list-->
-
-                        <div class="w-btn">
-                            <a href="#" class="ui button green tiny">
-                                <i class="icon plus"></i> Добавить игрока
-                            </a>
-                        </div><!--w-btn-->
-                    </div><!--extra content w-gallery-preview__item__extra-->
-
-                </div><!--ui card-->
-
-                <p class="b-team-compare__delete">
-                    <a href="#">удалить команду из сравнения</a>
-                </p>
-            </div><!--b-team-compare__item-->
-
-
-            <div class="col-xs-6 col-md-3 b-team-compare__item">
-                <div class="ui card">
-
-                    <div class="b-team-compare__card-header">
-                        <a class="#" class="ui image">
-                            <img class="ui image" src="/static/new/images/l-hockey/logo.jpg" alt="" tittle=""/>
-                        </a>
-
-                        <div class="b-team-compare__info">
-                            <p class="b-team-compare__name">
-                                СКА
-                            </p>
-                            <p class="">
-                                Омская область
-                            </p>
-                            <p class="">
-                                сезон 12/13
-                            </p>
-                        </div>
-                    </div><!--b-team-compare__card-header-->
-
-                    <div class="b-team-compare__list">
-                        <div class="b-team-compare__list__item b-team-compare__list__header">
-                            <p class="">
-                                Защитники
-                            </p>
-                            <p class="">
-                                И
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Антипов Анатолий
-                            </p>
-                            <p class="">
-                                22
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item b-color-styled">
-                            <p class="">
-                                <i class="icon remove b-negative-text"></i>Билялетдинов Зинетула
-                            </p>
-                            <p class="">
-                                6
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Быков Владимир
-                            </p>
-                            <p class="">
-                                19
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Игорь
-                            </p>
-                            <p class="">
-                                30
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Вуйтек Владимир
-                            </p>
-                            <p class="">
-                                8
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Герсонский Сергей
-                            </p>
-                            <p class="">
-                                16
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Глинка Иван
-                            </p>
-                            <p class="">
-                                28
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Александр
-                            </p>
-                            <p class="">
-                                11
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                    </div><!--b-team-compare__list-->
-
-                    <div class="b-team-compare__list">
-                        <div class="b-team-compare__list__item b-team-compare__list__header">
-                            <p class="">
-                                Нападающие
-                            </p>
-                            <p class="">
-                                И
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Антипов Анатолий
-                            </p>
-                            <p class="">
-                                22
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item b-color-styled">
-                            <p class="">
-                                <i class="icon remove b-negative-text"></i>Билялетдинов Зинетула
-                            </p>
-                            <p class="">
-                                6
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Быков Владимир
-                            </p>
-                            <p class="">
-                                19
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Игорь
-                            </p>
-                            <p class="">
-                                30
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Вуйтек Владимир
-                            </p>
-                            <p class="">
-                                8
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Герсонский Сергей
-                            </p>
-                            <p class="">
-                                16
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Глинка Иван
-                            </p>
-                            <p class="">
-                                28
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                        <div class="b-team-compare__list__item">
-                            <p class="">
-                                <i class="icon checkmark b-positive-text"></i>Никитин Александр
-                            </p>
-                            <p class="">
-                                11
-                            </p>
-                        </div><!--b-team-compare__list__item-->
-
-                    </div><!--b-team-compare__list-->
-
-                    <div class="b-team-compare__card-footer">
-                        <div class="b-team-compare__list">
-                            <div class="b-team-compare__list__item b-team-compare__list__header">
-                                <p class="">
-                                    Защитники
-                                </p>
-                                <p class="">
-                                    И
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item">
-                                <p class="">
-                                    <i class="icon exchange b-positive-text"></i>Антипов Анатолий<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    22
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                            <div class="b-team-compare__list__item b-color-styled">
-                                <p class="">
-                                    <i class="icon exchange"></i>Никитин Александр<i class="icon remove b-negative-text"></i>
-                                </p>
-                                <p class="">
-                                    18
-                                </p>
-                            </div><!--b-team-compare__list__item-->
-
-                        </div><!--b-team-compare__list-->
-
-                        <div class="w-btn">
-                            <a href="#" class="ui button disabled tiny">
-                                <i class="icon plus"></i> Мест нет
-                            </a>
-                        </div><!--w-btn-->
-                    </div><!--extra content w-gallery-preview__item__extra-->
-
-                </div><!--ui card-->
-
-                <p class="b-team-compare__delete">
-                    <a href="#">удалить команду из сравнения</a>
-                </p>
-            </div><!--b-team-compare__item-->
-            {% endcomment %}
 
 
 
@@ -1192,6 +496,7 @@
                 </div><!--ui card-->
 
             </div><!--b-team-compare__form-->
+
         </div><!--row-->
     </div><!--b-team-compare-->
 </div>

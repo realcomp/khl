@@ -25,7 +25,9 @@
 
 
 
-
+.bold {
+    font-weight: bold;
+}
 .icon{
     margin-right: 0 !important;
 }
@@ -350,6 +352,9 @@ angucomplete input{
 }
 .b-diagram__legend__table-style ul li {
   border-left: 1px solid rgba(0,0,0,.1);
+}
+.b-team-compare__list p:first-of-type{
+    width: 80% !important;
 }
 /*.sidr ul li {
     background: #82b440;

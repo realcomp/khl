@@ -22,6 +22,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     type: 'line'
                 title:
                     text: ''
+                legend:
+                    enabled: false
                 xAxis:
                     categories: @categories
                     tickmarkPlacement: 'on'
@@ -35,12 +37,20 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 tooltip:
                     shared: true
                     formatter: () ->
-                        s = '<span style="color:black">'+LocaleFactory.selectedLocale.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
+                        console.log this
+                        ###s=''#s = '<span style="color:black">'+LocaleFactory.selectedLocale.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
                         field = this.x
                         _.each this.points, (point, index) ->
                             value = if field is 'shots' then point.point.y*10 else point.point.y
                             s += '<span style="color:'+point.series.color+'">'+point.series.name+': <b>'+ parseFloat(value).toFixed(3)+'</b><br/>'
-                        return s
+                        return s###
+                        header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase() + ' / ' + LocaleFactory.selectedLocale.fieldNames['count'].fullName.toUpperCase()# + '<br> СЕЗОН ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4);
+                        $('#legend-header').html(header)
+                        content = ''
+                        $.each this.points, () ->
+                            content += HTML_INDICATORS_LIST_ITEM(parseFloat(this.y).toFixed(3), this.series.name, this.series.options.logo, this.series.options.color) #'<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y  + '</span></div>'
+                        $('#legend-content').html(content)
+                        return false
                 plotOptions:
                     series:
                         cursor: 'pointer'
@@ -48,6 +58,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                             events:
                                 click: () ->
                                     $('#return-control').click()
+                                    console.log 'ab'
                                     $timeout () =>
                                         self.context.setField this.category, true
                                         seasonIndex = 0
@@ -142,7 +153,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     #formatter: () ->
                     #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date).yyyymmddHHMMFormatted()) + '</a>'
                     formatter: () ->
-                        return clubGamesFormatterDiv(this.points[0].key, this.points[0].point.score, (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()),this.points[0].point.leftLogo, this.points[0].point.rightLogo, this.points[0].point.color)#'<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>'
+                        return HTML_CLUB_GAMES_DIV(this.points[0].key, this.points[0].point.score, (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()),this.points[0].point.leftLogo, this.points[0].point.rightLogo, this.points[0].point.color)#'<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.score + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>'
                 plotOptions:
                     series:
                         stacking: 'normal'
@@ -343,6 +354,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
         setContext: (@context) ->
             self.context = @context
 
+        setPreventLabels: (@preventLabels) ->
+            self.preventLabels = @preventLabels
+
         setField: (@field, preventList) ->
             self.field = @field
             $('#chart-tooltip-content').html ''
@@ -384,15 +398,16 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 title:
                     text: ''#@localeObject.fieldNames[@field].fullName.toUpperCase()
                 xAxis:
-                    "type": "datetime"
+                    "type": "linear"
                     labels:
                         align: 'center'
                         formatter: () ->
+                            if self.preventLabels is true then return ''
                             if this.dateTimeLabelFormat is '%Y'
                                 return (new Date(this.value).getFullYear()-1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
                             else
                                 return LocaleFactory.selectedLocale.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
-                    tickInterval: 24 * 3600 * 1000 * 30
+                    #tickInterval: 24 * 3600 * 1000 * 30
                 yAxis:
                     allowDecimals: false
                     title:
@@ -400,24 +415,24 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     maxPadding: 0.02
                 legend:
                     margin: 30
+                    enabled: false
                 tooltip:
                     followPointer: true
                     crosshairs: true
                     formatter: () ->
+                        #$rootScope.$broadcast 'tooltip', this
                         header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>'
                         if this.points[0].point.drilldown?
-                            header = LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '<br> СЕЗОН ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4);
-                            $('#legend-header').html(header)
                             content = ''
                             $.each this.points, () ->
-                                content += indicatorsListItem(this.y, this.series.name, this.series.options.logo, this.series.options.color) #'<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y  + '</span></div>'
+                                content += HTML_INDICATORS_LIST_ITEM(this.y, this.series.name, this.series.options.logo, this.series.options.color)
                             $('#legend-content').html(content)
                             return false
                         else
                             s = '<div class="inline-block tooltip-block"><b>' + LocaleFactory.selectedLocale.monthNamesFull[new Date(this.x).getMonth()] + ' <br>'+ new Date(this.x).getFullYear() + '</b></div>';
                             $.each this.points, () ->
                                 s += '<div class="inline-block tooltip-block"><b>' + this.series.name + '</b>:<br>' + '<span class="tooltip-value">' + this.y + '</span></div>';
-                            $('#legend-content').html(s)
+                            #$('#legend-content').html(s)
                             return false;
                     shared: true
                 plotOptions:
@@ -433,59 +448,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
 
         getChart: ()->
             @chart
-
-    clubGamesFormatterDiv = (title, score, date, leftLogo, rightLogo, color) ->
-        return '<div class="w-command-calendar__item w-command-calendar__item-bg">
-            <div class="b-header b-header__xs">
-                <h5 class="b-header__text">
-                    ' + title + '
-                </h5>
-            </div>
-            <div class="row">
-                <div class="col-sm-4 col-md-12 col-lg-4">
-                    <a href="#" class="ui image">
-                        <img class="ui circular image" src="'+leftLogo+'">
-                    </a>
-                </div>
-
-                <p class="col-sm-2 col-md-12 col-lg-4 b-score" style="color: '+color+'">
-                    '+score+'
-                </p>
-
-                <div class="col-sm-4 col-md-12 col-lg-4">
-                    <a href="#" class="ui image">
-                        <img class="ui circular image" src="'+rightLogo+'">
-                    </a>
-                </div>
-            </div>
-            <div class="w-command-calendar__info">
-                <p class="date">
-                    '+ date + ' МСК
-                </p>
-            </div>
-        </div>'
-
-    indicatorsListItem = (result, title, image, color) ->
-        ###<p class="">
-            нападающий
-        </p>###
-        return '<li class="" style="border-right: 5px solid '+color+';">
-            <div class="b-inline b-diagram__legend__table-style__item">
-                <div class="b-inline hidden-xs">
-                    <a class="ui image" ><img class="ui image b-diagram__legend__image" src="'+image+'" width="32" height="32"></a>
-                </div>
-
-                <div class="b-inline">
-                    <p class="">
-                        <a href="#">'+title+'</a> <!--<i class="flag cz i-top-2 hidden-xs"></i>-->
-                    </p>
-                </div>
-            </div>
-
-            <p class="b-inline b-diagram__legend__table-style__games">
-                '+result+'
-            </p>
-        </li>'
 
 
     return (

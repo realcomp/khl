@@ -2,17 +2,52 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   var averageClubPlayerIndicatorsChart, self;
   self = this;
   this.url = document.getElementById('api-player-indicators').value;
+  this.clubPk = document.getElementById('team-id').value;
   averageClubPlayerIndicatorsChart = new HighchartsFactory.PlayerIndicatorsChart();
   $scope.localeObject = LocaleFactory.selectedLocale;
   $scope.setField = averageClubPlayerIndicatorsChart.setField;
   $scope.field = averageClubPlayerIndicatorsChart.getField();
   $scope.dataType = averageClubPlayerIndicatorsChart.getDataType();
   $scope.clubs = [];
+  $scope.clubsWithAddedPlayers = {};
+  $scope.clubsWithPlace = {};
   $scope.offenders = true;
   $scope.defenders = true;
+  $scope.currentClubId = 0;
   $scope.params = {
-    professional: false
+    professional: true
   };
+  $scope.dataType = 'graph-serial';
+  $scope.setDataType = function(type, event) {
+    $scope.dataType = type;
+    if (type === 'graph-radar') {
+      return $timeout(function() {
+        $('#params').addClass('display-none');
+        return $scope.createRadar();
+      }, 100);
+    } else {
+      return $timeout(function() {
+        $('#params').removeClass('display-none');
+        return $scope.listAveragePlayer();
+      }, 100);
+    }
+  };
+  $scope.selectedRadarFields = [
+    {
+      field: "goals"
+    }, {
+      field: "points"
+    }, {
+      field: "assists"
+    }, {
+      field: "plus_minus"
+    }
+  ];
+  $scope.$watch('selectedRadarFields', function(newval) {
+    if (newval && $scope.dataType === 'graph-radar') {
+      return $scope.createRadar();
+    }
+  }, true);
   $scope.setParams = function() {
     $('#regularParams').toggleClass('display-none');
     $('#professionalParams').toggleClass('display-none');
@@ -20,11 +55,21 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     $('.ui.checkbox-professional').checkbox('check');
     return null;
   };
-  this.clubPk = document.getElementById('team-id').value;
-  $scope.$watch('field', function() {
+  $scope.$on('field-changed', function(newval) {
+    $scope.field = field;
     if ($scope.clubs.length > 0) {
       return $scope.listAveragePlayer();
     }
+  });
+  $scope.$on('tooltip', function(value, value2) {
+    return $scope.clubTooltips = value2.points.map(function(point) {
+      return {
+        result: point.y,
+        color: point.series.color,
+        logo: point.series.logo,
+        title: point.series.title
+      };
+    });
   });
   $scope.showPersonalList = function() {
     $('.overlay-black').removeClass('hidden');
@@ -39,8 +84,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     }
   };
   $scope.setSeason = function(season) {
-    $scope.season = season;
-    return console.log($scope.season);
+    return $scope.season = season;
   };
   $scope.setSelectedPlayer = function(obj) {
     if ((obj != null) && (obj.originalObject != null)) {
@@ -54,7 +98,6 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     }
     if (($scope.selectedClub != null) && ($scope.selectedClub.originalObject != null)) {
       pk = $scope.selectedClub.originalObject.pk;
-      console.log(pk);
     }
     if (pk == null) {
       if (clubPk != null) {
@@ -103,8 +146,9 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           offender_players: data.offender_players,
           defender_players: data.defender_players,
           title: data.title,
-          color: data.main_color || getRandomColor(),
-          id: data.pk,
+          color: data.main_color != null ? data.main_color : CHART_COLORS[$scope.clubs.length],
+          pk: data.pk,
+          id: $scope.currentClubId,
           logo: data.logo,
           address: data.address,
           dataBySeason: {
@@ -118,37 +162,49 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           seasonResult: seasonResult['season']
         };
         $scope.clubs.push(clubObject);
+        $scope.currentClubId += 1;
         $timeout(function() {
           return $scope.listAveragePlayer();
         }, 100);
       });
     });
   };
-  $scope.addPlayerToClub = function(title) {
+  $scope.addPlayerToClub = function(id) {
     var club;
     club = _.findWhere($scope.clubs, {
-      title: title
+      id: id
     });
     return $q.all([$http.get(self.url.replace('/0/', '/' + $scope.selectedPlayer.pk + '/') + '?group_by=season')]).then(function(results) {
       $scope.selectedPlayer.selected = true;
       $scope.selectedPlayer.added = true;
       club.all_players.push($scope.selectedPlayer);
       club.results.push(results[0]);
+      $scope.clubsWithAddedPlayers['club_' + club.id] = true;
+      $scope.clubsWithPlace['club_' + id] = _.filter(club.all_players, {
+        selected: false
+      }).length > _.filter(club.all_players, {
+        added: true
+      }).length ? true : false;
       return $scope.listAveragePlayer();
     });
   };
-  $scope.togglePlayerSelection = function(title, index) {
+  $scope.togglePlayerSelection = function(id, index) {
     var club, player;
     club = _.findWhere($scope.clubs, {
-      title: title
+      id: id
     });
     player = club.all_players[index];
     player.selected = !player.selected;
+    $scope.clubsWithPlace['club_' + id] = _.filter(club.all_players, {
+      selected: false
+    }).length > _.filter(club.all_players, {
+      added: true
+    }).length ? true : false;
     $('#player_' + index).attr('checked', !$('#player_' + index).attr('checked'));
     return $scope.listAveragePlayer();
   };
   $scope.listAveragePlayer = function() {
-    var newPlayerIndicatorsData;
+    var legendContent, newPlayerIndicatorsData;
     newPlayerIndicatorsData = [];
     _.each($scope.clubs, function(club) {
       var averageData, clubObject, key, selectedPlayers;
@@ -180,25 +236,82 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
         }
       }
       clubObject = {
-        name: club.title,
+        name: '<span class="bold">' + club.title + '</span><br>' + club.seasonResult.title,
         data: club.dataBySeason.results.map(function(el) {
           return {
-            x: new Date(el.season.end_date.split('-')[0]).getTime(),
+            x: new Date("2015").getTime(),
             y: parseFloat(el[$scope.field]),
             drilldown: el.season.end_date
           };
         }),
         color: club.color,
-        stack: club.id,
+        stack: club.pk + club.seasonResult.pk,
         logo: club.logo
       };
       return newPlayerIndicatorsData.push(clubObject);
     });
-    averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData);
-    averageClubPlayerIndicatorsChart.setContext($scope);
-    averageClubPlayerIndicatorsChart.setPeriod(30);
-    averageClubPlayerIndicatorsChart.draw();
-    return self.chart = $('#chartdiv').highcharts();
+    if ($scope.dataType === 'graph-serial') {
+      averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData);
+      averageClubPlayerIndicatorsChart.setContext($scope);
+      averageClubPlayerIndicatorsChart.setPeriod(30);
+      averageClubPlayerIndicatorsChart.setPreventLabels(true);
+      averageClubPlayerIndicatorsChart.draw();
+      self.chart = $('#chartdiv').highcharts();
+      legendContent = '';
+      _.each(newPlayerIndicatorsData, function(result) {
+        return legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(result.data[0].y).toFixed(3), result.name, result.logo, result.color);
+      });
+      $('#legend-content').html(legendContent);
+      return null;
+    } else {
+      return $scope.createRadar();
+    }
+  };
+  $scope.createRadar = function() {
+    var categories, chartData, legendContent;
+    categories = $scope.selectedRadarFields.map(function(el) {
+      return el['field'];
+    });
+    chartData = [];
+    _.each($scope.clubs, function(club, index) {
+      var data;
+      data = club.dataBySeason.results.map(function(el) {
+        return {
+          name: '<span class="bold">' + club.title + '</span><br>' + club.seasonResult.title,
+          data: categories.map(function(category) {
+            if (category === 'shots') {
+              return parseInt(el[category]) / 10 / parseInt(el['count']);
+            }
+            return parseInt(el[category]) / parseInt(el['count']);
+          }),
+          pointPlacement: 'on',
+          color: club.color,
+          title: club.title,
+          seasonResult: club.seasonResult,
+          logo: club.logo
+        };
+      }).filter(function(toFilter) {
+        return toFilter != null;
+      });
+      return chartData.push(data[0]);
+    });
+    console.log(chartData);
+    $scope.playerStatsSpiderChart = new HighchartsFactory.PlayerStatsSpiderChart('chartdiv2', chartData, categories);
+    $scope.playerStatsSpiderChart.setContext($scope);
+    $scope.playerStatsSpiderChart.setLocaleObject($scope.localeObject);
+    $scope.playerStatsSpiderChart.draw();
+    self.spiderChart = $('#chartdiv2').highcharts();
+
+    /* legend */
+    legendContent = '';
+    _.each(chartData, function(result) {
+      return legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color);
+    });
+    $('#legend-content').html(legendContent);
+    $('#legend-header').html('<span>' + $scope.localeObject.fieldNames[_.last(categories)].fullName + ' / ' + $scope.localeObject.fieldNames['count'].fullName + '</span');
+
+    /* legend */
+    return null;
   };
   $scope.addAverageClubPlayerData(this.clubPk);
 });

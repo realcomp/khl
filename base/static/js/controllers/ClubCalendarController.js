@@ -326,10 +326,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
         }, 500);
         clubGamesChart = new HighchartsFactory.ClubGamesChart('chartdiv', [clubObject, opponentObject]);
         clubGamesChart.draw();
-        self.chart = $("#chartdiv").highcharts();
-        self.chart.tooltip.hide();
-        _.last(self.chart.series[0].data).setState('hover');
-        return self.chart.tooltip.refresh([_.last(self.chart.series[0].data)]);
+        return self.chart = $("#chartdiv").highcharts();
       });
     };
     $scope.previous = function() {
