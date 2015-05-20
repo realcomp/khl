@@ -205,18 +205,18 @@
                         <i class="flag {{ player.citizenship.code }} i-top-2 hidden-xs"></i>
                     </p>
                     <p class="">
-                        {{ player.line_verbose }}
+                        {{ player.line_display }}
                     </p>
                 </div>
             </td>
 
             <td class="">
                 <p class="">
-                    <a href="{{ player.club.url }}">{{ player.club.title_verbose }}</a>
+                    <a href="{{ player.club.url }}">{{ player.club.title }}</a>
                 </p>
-                <!-- <p class=""> -->
-                <!--     {{ player.club.address.title }} -->
-                <!-- </p> -->
+                <p class="">
+                    {{ player.club.address.title }}
+                </p>
             </td>
 
             <td class="text-center">
@@ -224,9 +224,9 @@
             </td>
 
             <td class="text-center-sm hidden-sm hidden-xs">
-                <p class="" ng-if="player.contract_to">
-                    до
-                </p>
+                <!-- <p class="" ng-if="player.contract_to"> -->
+                <!--     до -->
+                <!-- </p> -->
                 <p class="">
                     {{ player.contract_to }}
                 </p>

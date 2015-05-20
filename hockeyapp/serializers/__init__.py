@@ -102,6 +102,7 @@ class BaseClubSerializer(TitleBaseSerializer):
 
 class ClubLightListSerializer(BaseClubSerializer):
     title_verbose = serializers.SerializerMethodField()
+    address = AddressSerializer()
 
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
@@ -109,7 +110,7 @@ class ClubLightListSerializer(BaseClubSerializer):
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose',
-            'main_color', 'secondary_color', 'third_color')
+            'main_color', 'secondary_color', 'third_color', 'address')
         model = Club
 
 
