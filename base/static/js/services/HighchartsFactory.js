@@ -20,6 +20,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return self.context = this.context;
     };
 
+    HighchartsSpiderChart.prototype.setHeaderChangeable = function(headerChangeable) {
+      this.headerChangeable = headerChangeable;
+      return self.headerChangeable = this.headerChangeable;
+    };
+
     HighchartsSpiderChart.prototype.setFormattedData = function(data) {
       return this.data = data;
     };
@@ -55,16 +60,10 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           shared: true,
           formatter: function() {
             var content, header;
-            console.log(this);
-
-            /*s=''#s = '<span style="color:black">'+LocaleFactory.selectedLocale.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
-            field = this.x
-            _.each this.points, (point, index) ->
-                value = if field is 'shots' then point.point.y*10 else point.point.y
-                s += '<span style="color:'+point.series.color+'">'+point.series.name+': <b>'+ parseFloat(value).toFixed(3)+'</b><br/>'
-            return s
-             */
-            header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase() + ' / ' + LocaleFactory.selectedLocale.fieldNames['count'].fullName.toUpperCase();
+            header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase();
+            if (self.headerChangeable) {
+              header += '<br> Сезон ' + (new Date(this.x).getFullYear() - 1) + '/' + (new Date(this.x).getFullYear()).toString().substr(2, 4);
+            }
             $('#legend-header').html(header);
             content = '';
             $.each(this.points, function() {
@@ -496,6 +495,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return self.preventLabels = this.preventLabels;
     };
 
+    HighchartsPlayerIndicatorsChart.prototype.setHeaderChangeable = function(headerChangeable) {
+      this.headerChangeable = headerChangeable;
+      return self.headerChangeable = this.headerChangeable;
+    };
+
     HighchartsPlayerIndicatorsChart.prototype.setField = function(field, preventList) {
       this.field = field;
       self.field = this.field;
@@ -587,8 +591,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           crosshairs: true,
           formatter: function() {
             var content, header, s;
-            header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>';
             if (this.points[0].point.drilldown != null) {
+              if (self.headerChangeable) {
+                header = LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '<br>' + 'Сезон ' + (new Date(this.points[0].point.drilldown.split('-')[0]).getFullYear() - 1) + '/' + (new Date(this.points[0].point.drilldown.split('-')[0]).getFullYear()).toString().substr(2, 4);
+                $('#legend-header').html(header);
+              }
               content = '';
               $.each(this.points, function() {
                 return content += HTML_INDICATORS_LIST_ITEM(this.y, this.series.name, this.series.options.logo, this.series.options.color);

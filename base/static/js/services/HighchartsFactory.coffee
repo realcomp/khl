@@ -12,6 +12,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
         setContext: (@context) ->
             self.context = @context
 
+        setHeaderChangeable: (@headerChangeable) ->
+            self.headerChangeable = @headerChangeable
+
         setFormattedData: (data) ->
             @data = data
 
@@ -37,14 +40,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 tooltip:
                     shared: true
                     formatter: () ->
-                        console.log this
-                        ###s=''#s = '<span style="color:black">'+LocaleFactory.selectedLocale.fieldNames[this.x].fullName+', Сезон '+(parseInt(self.season)-1)+'/'+parseInt(self.season)+'</span><br/>'
-                        field = this.x
-                        _.each this.points, (point, index) ->
-                            value = if field is 'shots' then point.point.y*10 else point.point.y
-                            s += '<span style="color:'+point.series.color+'">'+point.series.name+': <b>'+ parseFloat(value).toFixed(3)+'</b><br/>'
-                        return s###
-                        header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase() + ' / ' + LocaleFactory.selectedLocale.fieldNames['count'].fullName.toUpperCase()# + '<br> СЕЗОН ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4);
+                        header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase()
+                        if self.headerChangeable
+                            header +=   '<br> Сезон ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4)
                         $('#legend-header').html(header)
                         content = ''
                         $.each this.points, () ->
@@ -361,6 +359,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
         setPreventLabels: (@preventLabels) ->
             self.preventLabels = @preventLabels
 
+        setHeaderChangeable: (@headerChangeable) ->
+            self.headerChangeable = @headerChangeable
+
         setField: (@field, preventList) ->
             self.field = @field
             $('#chart-tooltip-content').html ''
@@ -427,8 +428,10 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     crosshairs: true
                     formatter: () ->
                         #$rootScope.$broadcast 'tooltip', this
-                        header = '<b>' + LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '</b>'
                         if this.points[0].point.drilldown?
+                            if self.headerChangeable
+                                header = LocaleFactory.selectedLocale.fieldNames[self.field].fullName.toUpperCase() + '<br>'  + 'Сезон ' + (new Date(this.points[0].point.drilldown.split('-')[0]).getFullYear()-1) + '/' + (new Date(this.points[0].point.drilldown.split('-')[0]).getFullYear()).toString().substr(2,4)
+                                $('#legend-header').html(header)
                             content = ''
                             $.each this.points, () ->
                                 content += HTML_INDICATORS_LIST_ITEM(this.y, this.series.name, this.series.options.logo, this.series.options.color)

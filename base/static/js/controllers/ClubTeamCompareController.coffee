@@ -262,7 +262,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
         _.each chartData, (result) ->
             legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
         $('#legend-content').html(legendContent)
-        $('#legend-header').html('<span>'+$scope.localeObject.fieldNames[_.last(categories)].fullName+' / '+$scope.localeObject.fieldNames['count'].fullName+'</span')
+        $('#legend-header').html('<span>'+$scope.localeObject.fieldNames[_.last(categories)].fullName+'</span')
         ### legend ###
 
         return null

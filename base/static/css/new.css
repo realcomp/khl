@@ -293,7 +293,7 @@
 .b-diagram__legend__table-style__item {
   min-width: 175px;
 }
-.b-diagram__legend__image{
+.stats-compare .b-diagram__legend__image{
     height: 32px !important;
     max-height: 32px;
 }

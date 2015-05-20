@@ -39,7 +39,7 @@
                             {% include 'hockeyapp/players/indicators-row.html' %}
                         </div>
 
-                        <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': loader}">
+                        <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': loader && dataBySeason == null}">
                             Загрузка...
                         </div>
 
@@ -72,13 +72,18 @@
                                           style="width: 100%"/>
                                     </div>
 
-                                    <div class="b-or-hr">
+                                    <div class="w-btn text-center" style="padding: 8px;">
+                                        <a class="ui button green tiny centered" ng-click="addGraph(playerToCompare.pk)">
+                                            <i class="icon plus"></i> Добавить
+                                        </a>
+                                    </div><!--w-btn-->
+                                    <!--<div class="b-or-hr">
                                         <span>или</span>
                                     </div>
 
                                     <p class="text-center">
                                         <a ng-click="showPersonalList()">Выберите из списка</a>
-                                    </p>
+                                    </p>-->
                                 </div>
                             </div>
 
