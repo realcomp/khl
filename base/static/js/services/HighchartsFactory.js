@@ -61,9 +61,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           formatter: function() {
             var content, header;
             header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase();
-            if (self.headerChangeable) {
-              header += '<br> Сезон ' + (new Date(this.x).getFullYear() - 1) + '/' + (new Date(this.x).getFullYear()).toString().substr(2, 4);
-            }
             $('#legend-header').html(header);
             content = '';
             $.each(this.points, function() {
@@ -80,7 +77,6 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               events: {
                 click: function() {
                   $('#return-control').click();
-                  console.log('ab');
                   $timeout((function(_this) {
                     return function() {
                       var seasonIndex;

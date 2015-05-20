@@ -78,9 +78,10 @@ angular.module('Sportomatics')
                         .success(function(data){
                             $scope.radarPlayers.push({
                                 id: id,
-                                color: player.club.main_color || null,
+                                color: player.club.main_color || CHART_COLORS[$scope.playersToCompare.length-2],
                                 fio: player.fio,
-                                dataBySeason: data
+                                dataBySeason: data,
+                                logo: player.photo
                             })
                             if(preventCreation == null)
                             $scope.createRadar();
@@ -525,7 +526,8 @@ angular.module('Sportomatics')
                                     return parseInt(el[category]) / parseInt(el['count']);
                                 }),
                                 pointPlacement: 'on',
-                                logo: playerObject.photo
+                                logo: playerObject.logo,
+                                color: playerObject.color
                             }
                         }
                     }).filter(function(toFilter){ return toFilter != undefined; });
@@ -534,7 +536,14 @@ angular.module('Sportomatics')
                     $scope.playerSeasons = _.uniq($scope.playerSeasons.concat(playerSeasons)).sort();
                 })
             }
-            console.log($scope.playerSeasons)
+            $('#legend-header').html($scope.localeObject.fieldNames[_.last(categories)].fullName)
+            var legendContent = ''
+            _.each(data, function(result){
+                console.log(result)
+                legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
+            })
+            $('#legend-content').html(legendContent)
+
         };
 
         // RUN

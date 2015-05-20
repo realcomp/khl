@@ -72,8 +72,14 @@
                                           style="width: 100%"/>
                                     </div>
 
-                                    <div class="w-btn text-center" style="padding: 8px;">
+                                    <div class="w-btn text-center" style="padding: 8px;" ng-if="dataType === 'graph-serial'">
                                         <a class="ui button green tiny centered" ng-click="addGraph(playerToCompare.pk)">
+                                            <i class="icon plus"></i> Добавить
+                                        </a>
+                                    </div><!--w-btn-->
+
+                                    <div class="w-btn text-center" style="padding: 8px;" ng-if="dataType === 'graph-radar'">
+                                        <a class="ui button green tiny centered" ng-click="addRadarGraph(playerToCompare.pk)">
                                             <i class="icon plus"></i> Добавить
                                         </a>
                                     </div><!--w-btn-->
@@ -87,7 +93,7 @@
                                 </div>
                             </div>
 
-                            <div ng-if="dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+                            <div ng-show="dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
 
                                 <div style="border-bottom: 1px solid #d4d4d5">
                                     <span class="bold" style="font-size: 22px;">Игровые показатели</span>

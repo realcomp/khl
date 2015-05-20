@@ -41,8 +41,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     shared: true
                     formatter: () ->
                         header = LocaleFactory.selectedLocale.fieldNames[this.x].fullName.toUpperCase()
-                        if self.headerChangeable
-                            header +=   '<br> Сезон ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4)
+                        #if self.headerChangeable
+                        #    header +=   '<br> Сезон ' + (new Date(this.x).getFullYear()-1) + '/'+ (new Date(this.x).getFullYear()).toString().substr(2,4)
                         $('#legend-header').html(header)
                         content = ''
                         $.each this.points, () ->
@@ -56,7 +56,6 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                             events:
                                 click: () ->
                                     $('#return-control').click()
-                                    console.log 'ab'
                                     $timeout () =>
                                         self.context.setField this.category, true
                                         seasonIndex = 0
