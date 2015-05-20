@@ -65,10 +65,12 @@
                                 <td><span class="b-labeled">{% trans 'Weight' %}:</span></td>
                                 <td>{{ weight }} {% trans 'kg' %}.</td>
                             </tr>
-                            <tr>
-                                <td><span class="b-labeled">{% trans 'Grip' %}:</span></td>
-                                <td>{% trans grip %}</td>
-                            </tr>
+                            {% if grip %}
+                                <tr>
+                                    <td><span class="b-labeled">{% trans 'Grip' %}:</span></td>
+                                    <td>{% trans grip %}</td>
+                                </tr>
+                            {% endif %}
                             <tr>
                                 <td><span class="b-labeled">{% trans 'Birth date' %}:</span></td>
                                 <td>{% trans birth_date %}</td>
