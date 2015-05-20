@@ -1,0 +1,324 @@
+<div class="row-xs">
+    <div class="ui ui-widget ui-helper-reset">
+        <div class="active ui header title ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
+            <!-- <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> -->
+            <i class="dropdown icon"></i>
+            Быстрый поиск
+        </div><!--accordion header-->
+
+        <div class="content">
+            <form class="ui form">
+                <div class="row">
+
+                    <div class="col-md-7 col-sm-12 b-filter__alphabet  b-filter__item">
+                        <!-- <p class="b-inline b-label"> -->
+                        <!--     По алфавиту: -->
+                        <!-- </p> -->
+                        <!-- <ul class="b-inline unstyled list-inline"> -->
+                        <!--     <li class="active"><a href="#">Все</a></li> -->
+                        <!--     <li><a href="#">А</a></li> -->
+                        <!--     <li><a href="#">Б</a></li> -->
+                        <!--     <li><a href="#">В</a></li> -->
+                        <!--     <li><a href="#">Г</a></li> -->
+                        <!--     <li><a href="#">Д</a></li> -->
+                        <!--     <li><a href="#">Е</a></li> -->
+                        <!--     <li><a href="#">Ё</a></li> -->
+                        <!--     <li><a href="#">Ж</a></li> -->
+                        <!--     <li><a href="#">З</a></li> -->
+                        <!--     <li><a href="#">И</a></li> -->
+                        <!--     <li><a href="#">К</a></li> -->
+                        <!--     <li><a href="#">Л</a></li> -->
+                        <!--     <li><a href="#">М</a></li> -->
+                        <!--     <li><a href="#">Н</a></li> -->
+                        <!--     <li><a href="#">О</a></li> -->
+                        <!--     <li><a href="#">П</a></li> -->
+                        <!--     <li><a href="#">Р</a></li> -->
+                        <!--     <li><a href="#">С</a></li> -->
+                        <!--     <li><a href="#">Т</a></li> -->
+                        <!--     <li><a href="#">У</a></li> -->
+                        <!--     <li><a href="#">Ф</a></li> -->
+                        <!--     <li><a href="#">Х</a></li> -->
+                        <!--     <li><a href="#">Ц</a></li> -->
+                        <!--     <li><a href="#">Ч</a></li> -->
+                        <!--     <li><a href="#">Ш</a></li> -->
+                        <!--     <li><a href="#">Ш</a></li> -->
+                        <!--     <li><a href="#">Ы</a></li> -->
+                        <!--     <li><a href="#">Э</a></li> -->
+                        <!--     <li><a href="#">Ю</a></li> -->
+                        <!--     <li><a href="#">Я</a></li> -->
+                        <!-- </ul> -->
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 b-filter__item">
+                        <div class="b-search ui category search result">
+                            <div class="ui icon input">
+                                <input class="c-search prompt" type="text" autocomplete="off" disabled>
+                                <i class="search link icon"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 col-sm-6 text-right  b-filter__item">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="gender">
+                            <div class="default text">сезон 2014-15</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <!-- <div class="item" data-value="сезон 14/15">сезон 2014-15</div> -->
+                                <!-- <div class="item" data-value="сезон 13/14">сезон 2013-14</div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!--row-->
+            </form>
+        </div><!--accordion content-->
+    </div><!--accordion-->
+</div>
+
+<div class="row-xs">
+    <table class="ui unstackable striped table colored-th grey-th b-table-lg" ng-show="data">
+        <tr>
+            <th class="b-place hidden-xs hidden-sm">
+                <a href="#">
+                    <span>Место</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="">
+                <a href="#">
+                    <span>Имя</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="b-team">
+                <a href="#">
+                    <span>Команда</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm">
+                <a href="#">
+                    <span>№</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs hidden-sm">
+                <a href="#">
+                    <span>Контракт</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>Лет</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm visible-lg">
+                <a href="#">
+                    <span>Рост</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm">
+                <a href="#">
+                    <span>И</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm">
+                <a href="#">
+                    <span>Ш</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>О</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>+/-</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>ШР</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>ШБ</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>ШМ</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>ШО</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>РБ</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>А</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>БВ</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs">
+                <a href="#">
+                    <span>%БВ</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs hidden-sm">
+                <a href="#">
+                    <span>БВ/И</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs hidden-sm">
+                <a href="#">
+                    <span>%ВБР</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+        </tr>
+
+        {% verbatim %}
+        <tr ng-repeat="player in data.results">
+            <td class="b-place hidden-xs hidden-sm">
+                <div class="ui checkbox w-tooltip" data-content="Добавить в мой список" data-variation="basic">
+                    <input type="checkbox">
+                    <label>{{ player.rating_index }}</label>
+                </div>
+            </td>
+
+            <td class="">
+                <div class="b-inline">
+                    <p class="">
+                        <a href="{{ player.url }}">{{ player.fio }}</a>
+                        <i class="flag {{ player.citizenship.code }} i-top-2 hidden-xs"></i>
+                    </p>
+                    <p class="">
+                        {{ player.line_verbose }}
+                    </p>
+                </div>
+            </td>
+
+            <td class="">
+                <p class="">
+                    <a href="{{ player.club.url }}">{{ player.club.title_verbose }}</a>
+                </p>
+                <!-- <p class=""> -->
+                <!--     {{ player.club.address.title }} -->
+                <!-- </p> -->
+            </td>
+
+            <td class="text-center">
+                {{ player.number }}
+            </td>
+
+            <td class="text-center-sm hidden-sm hidden-xs">
+                <p class="" ng-if="player.contract_to">
+                    до
+                </p>
+                <p class="">
+                    {{ player.contract_to }}
+                </p>
+            </td>
+
+            <td class="text-center hidden-xs">
+                {{ player.age[0] }}
+            </td>
+
+            <td class="text-center-sm visible-lg">
+                {{ player.height }}
+            </td>
+
+            <td class="text-center-sm hidden-xs">
+                {{ player.matches_total }}
+            </td>
+
+            <td class="text-center">
+                {{ player.goals_total }}
+            </td>
+
+            <td class="text-center">
+                {{ player.points_total }}
+            </td>
+
+            <td class="text-center hidden-xs">
+                {{ player.plus_minus_total }}
+            </td>
+
+            <td class="text-center hidden-xs">
+                <!-- es_goals -->
+                -
+            </td>
+
+            <td class="text-center-sm hidden-xs">
+                <!-- pp_goals -->
+                -
+            </td>
+
+            <td class="text-center-sm hidden-xs">
+                <!-- ev_goals -->
+                -
+            </td>
+
+            <td class="text-center hidden-xs">
+                -
+            </td>
+
+            <td class="text-center hidden-xs">
+                -
+            </td>
+
+            <td class="text-center hidden-xs">
+                {{ player.assists_total }}
+            </td>
+
+            <td class="text-center-sm hidden-xs">
+                -
+            </td>
+
+            <td class="text-center-sm hidden-xs">
+                -
+            </td>
+
+            <td class="text-center hidden-xs hidden-sm">
+                -
+            </td>
+
+            <td class="text-center hidden-xs hidden-sm">
+                -
+            </td>
+        </tr>
+        {% endverbatim %}
+    </table>
+    <div class="loader-large" ng-hide="loaded"></div>
+</div>

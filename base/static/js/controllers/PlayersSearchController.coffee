@@ -11,6 +11,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $scope.setState = (state) ->
             $location.search('state', state)
             $scope.params = $location.search()
+            # start searching
+            if state == 'table' and not $scope.data
+                PlayersSearchService.search($scope)
             return
 
         $scope.loadCountries = (query) ->
@@ -31,9 +34,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                         (!isDefault and $(this).attr('value') == defaultValue))
                     $(this).attr('checked', false)
 
-        $scope.data = {}
         $scope.countries = []
-        $scope.loader = false
 
 
         if $scope.params.citizenship
@@ -118,8 +119,22 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             $location.search('league', league or null)
             return
 
-        # PlayersSearchService.search($scope)
-        # PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search)
+        $scope.search = () ->
+            $scope.setState('table')
+            PlayersSearchService.search($scope)
+            return
+
+        # autorun if tab active
+        if $scope.params.state == 'table' and not $scope.data
+            PlayersSearchService.search($scope)
+
+        $('.unstackable.striped.table').visibility({
+            'once': false,
+            'observeChanges': true,
+            'onBottomVisible': () ->
+                if $scope.data and $scope.data.next
+                    PlayersSearchService.next($scope)
+        })
 
         return
 ])
