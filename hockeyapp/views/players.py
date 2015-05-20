@@ -60,8 +60,8 @@ class PlayerMainCard(DetailView):
         return context
 
 
-class PlayerCardIndicators(PlayerMainCard):
-    template_name = 'hockeyapp/players/player-card-indicators.html'
+class PlayerIndicators(PlayerMainCard):
+    template_name = 'hockeyapp/players/stats/player-stats.html'
 
 
 class PlayerCardClubs(PlayerMainCard):

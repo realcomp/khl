@@ -1,0 +1,84 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: фотографии, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<div class="w-page__crew">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/players/player-header.html" with player_section="Indicators" %}
+
+                {% include "hockeyapp/players/menu.html" with player_menu_active="player-indicators" %}
+
+                <section class="w-page-tabs">
+
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item active" data-tab="tab-name">Фотографии</div>
+                    </div>
+                    <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item active" data-tab="tab-name">Фотографии</div>
+                    </div>
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui" ng-controller="PhotosController">
+
+                        <div class="w-gallery-preview">
+                            <div class="row w-gallery-preview__items w-gallery-preview__items__6">
+                                    {% verbatim %}
+                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="photo in photos track by $index">
+                                        <div class="ui card b-arena__photo">
+                                            <p class="text-center">
+                                               {{photo.created}}
+                                            </p>
+                                            <a class="ui image" ng-click="PhotoPopupShow(photo.id, $index, $event)">
+                                                <img class="ui image" src="{{photo.photo.img.file}}">
+                                            </a>
+                                            <p class="text-center">
+                                                <a href="#">
+                                                    <i class="heart icon"> <span class="text-icon">95</span></i>
+                                                </a>
+                                                <a href="#">
+                                                    <i class="comment icon"> <span class="text-icon">5</span></i>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endverbatim %}
+                            </div>
+                        </div>
+
+                        <div class="w-btn btn-month" ng-if="photos.length">
+                            <div class="ui button green tiny">Показать еще</div>
+                        </div>
+
+                        <div class="ui large center aligned grid message" ng-if="!photoDataLoader && photos.length === 0">
+                            Фотографий нет
+                            <br>
+                        </div>
+
+                         <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': photoDataLoader}">
+                            Загрузка...
+                        </div>
+
+                    </div><!--tabs content items-->
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+
+
+</div>
+
+{% endblock %}

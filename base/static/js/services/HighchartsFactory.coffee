@@ -345,6 +345,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
             @field = if $location.search()['field'] then $location.search()['field'] else 'count'
             @dataType = 'graph-serial'
             self.field = @field
+            self.type = 'datetime'
 
         init: (@divId, @data) ->
 
@@ -353,6 +354,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
 
         setContext: (@context) ->
             self.context = @context
+
+        setType: (@type) ->
+            self.type = @type
 
         setPreventLabels: (@preventLabels) ->
             self.preventLabels = @preventLabels
@@ -398,7 +402,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 title:
                     text: ''#@localeObject.fieldNames[@field].fullName.toUpperCase()
                 xAxis:
-                    "type": "linear"
+                    "type": self.type
                     labels:
                         align: 'center'
                         formatter: () ->
@@ -407,12 +411,14 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                                 return (new Date(this.value).getFullYear()-1).toString().substr(2, 2) + '/' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
                             else
                                 return LocaleFactory.selectedLocale.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2)
-                    #tickInterval: 24 * 3600 * 1000 * 30
+                    tickInterval: 24 * 3600 * 1000 * 30
                 yAxis:
                     allowDecimals: false
                     title:
                         text: ''
                     maxPadding: 0.02
+                    labels:
+                        x: 3
                 legend:
                     margin: 30
                     enabled: false

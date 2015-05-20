@@ -253,6 +253,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
     if ($scope.dataType === 'graph-serial') {
       averageClubPlayerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData);
       averageClubPlayerIndicatorsChart.setContext($scope);
+      averageClubPlayerIndicatorsChart.setType('linear');
       averageClubPlayerIndicatorsChart.setPeriod(30);
       averageClubPlayerIndicatorsChart.setPreventLabels(true);
       averageClubPlayerIndicatorsChart.draw();

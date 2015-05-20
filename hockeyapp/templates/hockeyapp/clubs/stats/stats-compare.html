@@ -18,7 +18,7 @@
     </div>
 </section>
 
-<div class="b-tabs-content ui tab active" ng-controller="ClubTeamCompareController">
+<div class="b-tabs-content ui tab active stats-compare" ng-controller="ClubTeamCompareController">
 
     {% block mobile_menu %}
         {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-stats" active_menu="stats-compare" %}
@@ -46,160 +46,10 @@
 
 
     <div id="params" class="ui menu b-ui-menu">
-        <ul id="regularParams" class="menu unstyled display-none">
-            <li class="item b-ui-menu__item" ng-click="setParams('professional')">
-                <div class="ui toggle checkbox checkbox-regular">
-                    <input type="checkbox" name="public">
-                </div>
-            </li>
 
-            <li class="item b-ui-menu__item" ng-click="setField('count')" ng-class="{'active': field === 'count'}">
-                <a>Количество игр</a>
-            </li>
+        {% include 'hockeyapp/players/indicators-row.html' %}
 
-            <li class="ui pointing dropdown link item b-ui-menu__item li-indicator">
-                <span class="text"  ng-click="setField('points')">Очки</span>
-                <i class="dropdown icon i-top-3"></i>
-                <ul class="menu">
-                    <li class="item" ng-click="setField('points')">Очки</li>
-                    <li class="item" ng-click="setField('assists')">Передачи</li>
-                    <li class="item dropdown-relative">
-                        <i class="dropdown icon"></i>
-                        <span class="text">Шайбы</span>
-                        <ul class="menu unstyled">
-                            <li class="item" ng-click="setField('goals')">Шайбы</li>
-                            <li class="item" ng-click="setField('es_goals')">Шайбы в равенстве</li>
-                            <li class="item" ng-click="setField('pp_goals')">Шайбы в большинстве</li>
-                            <li class="item" ng-click="setField('ev_goals')">Шайбы в меньшинстве</li>
-                            <li class="item" ng-click="setField('overtime_goals')">Шайбы в овертайме</li>
-                            <li class="item" ng-click="setField('win_goals')">Победные шайбы</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="item b-ui-menu__item" ng-click="setField('plus_minus')">
-                <a>+/-</a>
-            </li>
-
-            <li class="item b-ui-menu__item" ng-click="setField('penalty_time')">
-                <a>Штраф</a>
-            </li>
-
-            <li class="ui pointing dropdown link item b-ui-menu__item">
-                <span class="text" ng-click="setField('shots')">Броски</span>
-                <i class="dropdown icon i-top-3"></i>
-                <ul class="menu">
-                    <li class="item" ng-click="setField('shots')">Броски</li>
-                    <li class="item" ng-click="setField('pis__avg')">% реализованных бросков</li>
-                    <li class="item" ng-click="setField('shots__avg')">Среднее количество бросков за игру</li>
-                </ul>
-            </li>
-
-            <li class="ui pointing dropdown link item b-ui-menu__item">
-                <span class="text">Вбрасывания</span>
-                <i class="dropdown icon i-top-3"></i>
-                <ul class="menu">
-                    <li class="item" ng-click="setField('faceoff')">Вбрасывания</li>
-                    <li class="item" ng-click="setField('winfaceoff')">Выигранные брасывания</li>
-                    <li class="item" ng-click="setField('winfaceoff_p__avg')">Процент выигранных вбрасываний</li>
-                </ul>
-            </li>
-
-            <li class="ui pointing dropdown link item b-ui-menu__item">
-                <span class="text" ng-click="setField('gamingtime__avg')">Время</span>
-                <i class="dropdown icon i-top-3"></i>
-                <ul class="menu">
-                    <li class="item">Передачи</li>
-                    <li class="item">
-                        <i class="dropdown icon"></i>
-                        <span class="text">Шайбы</span>
-                        <ul class="menu unstyled">
-                            <li class="header">Mens</li>
-                            <li class="item">Shirts</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-
-            <li class="item b-ui-menu__item">
-                <a>Сил. приемы</a>
-            </li>
-
-            <li class="item b-ui-menu__item">
-                <a>Фолы против</a>
-            </li>
-        </ul>
-        {% verbatim %}
-        <ul id="professionalParams" class="menu unstyled">
-            <li class="item b-ui-menu__item" ng-click="setParams('regular')">
-                <div class="ui toggle checkbox checkbox-professional" >
-                    <input type="checkbox" name="public" checked="true">
-                </div>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('count')" ng-class="{'active': field === 'count'}" data-content="{{localeObject.fieldNames['count'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['count'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('points')" ng-class="{'active': field === 'points'}" data-content="{{localeObject.fieldNames['points'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['points'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('goals')" ng-class="{'active': field === 'goals'}" data-content="{{localeObject.fieldNames['goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('assists')" ng-class="{'active': field === 'assists'}" data-content="{{localeObject.fieldNames['assists'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['assists'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('plus_minus')" ng-class="{'active': field === 'plus_minus'}" data-content="{{localeObject.fieldNames['plus_minus'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['plus_minus'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('es_goals')" ng-class="{'active': field === 'es_goals'}" data-content="{{localeObject.fieldNames['es_goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['es_goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('pp_goals')" ng-class="{'active': field === 'pp_goals'}" data-content="{{localeObject.fieldNames['pp_goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['pp_goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('ev_goals')" ng-class="{'active': field === 'ev_goals'}" data-content="{{localeObject.fieldNames['ev_goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['ev_goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('overtime_goals')" ng-class="{'active': field === 'overtime_goals'}" data-content="{{localeObject.fieldNames['overtime_goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['overtime_goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('win_goals')" ng-class="{'active': field === 'win_goals'}" data-content="{{localeObject.fieldNames['win_goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['win_goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('bullet_goals')" ng-class="{'active': field === 'bullet_goals'}" data-content="{{localeObject.fieldNames['bullet_goals'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['bullet_goals'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('shots')" ng-class="{'active': field === 'shots'}" data-content="{{localeObject.fieldNames['shots'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['shots'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('pis__avg')" ng-class="{'active': field === 'pis__avg'}" data-content="{{localeObject.fieldNames['pis__avg'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['pis__avg'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('shots__avg')" ng-class="{'active': field === 'shots__avg'}" data-content="{{localeObject.fieldNames['shots__avg'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['shots__avg'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('faceoff')" ng-class="{'active': field === 'faceoff'}" data-content="{{localeObject.fieldNames['faceoff'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['faceoff'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('winfaceoff')" ng-class="{'active': field === 'winfaceoff'}" data-content="{{localeObject.fieldNames['winfaceoff'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['winfaceoff'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('winfaceoff_p__avg')" ng-class="{'active': field === 'winfaceoff_p__avg'}" data-content="{{localeObject.fieldNames['winfaceoff_p__avg'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['winfaceoff_p__avg'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('change_count__avg')" ng-class="{'active': field === 'change_count__avg'}" data-content="{{localeObject.fieldNames['change_count__avg'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['change_count__avg'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('penalty_time')" ng-class="{'active': field === 'penalty_time'}" data-content="{{localeObject.fieldNames['penalty_time'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['penalty_time'].shortName}}</a>
-            </li>
-            <li class="item b-ui-menu__item w-tooltip" ng-click="setField('gamingtime__avg')" ng-class="{'active': field === 'gamingtime__avg'}" data-content="{{localeObject.fieldNames['gamingtime__avg'].fullName}}" data-variation="basic">
-                <a>{{::localeObject.fieldNames['gamingtime__avg'].shortName}}</a>
-            </li>
-        </ul>
-    </div><!--b-ui-menu-->
-    {% endverbatim %}
+    </div>
 
 
     <!--mob menu-->
@@ -218,26 +68,6 @@
 
             {% verbatim %}
             <ul id="legend-content" class="unstyled">
-                <li class="" style="border-right: 5px solid {{club.color}};" ng-repeat="club in clubTooltips">
-                    <div class="b-inline b-diagram__legend__table-style__item">
-                        <div class="b-inline hidden-xs">
-                            <a class="ui image" ><img class="ui image b-diagram__legend__image" src="{{club.logo}}" width="32" height="32"></a>
-                        </div>
-
-                        <div class="b-inline">
-                            <p class="">
-                                <a class="no-decoration default-a pointer">
-                                    <span class="bold">{{club.title}}</span><br>
-                                    {{club.seasonResult.title}}
-                                </a> <!--<i class="flag cz i-top-2 hidden-xs"></i>-->
-                            </p>
-                        </div>
-                    </div>
-
-                    <p class="b-inline b-diagram__legend__table-style__games">
-                        {{club.result}}
-                    </p>
-                </li>
             </ul>
             {% endverbatim %}
 

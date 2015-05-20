@@ -205,6 +205,7 @@ function getParameterByName(string, name) {
 function toSeason(value){
     //TODO заменить
     //14/15
+    if(typeof(value) === 'string')
     if(value.indexOf('/') > -1 && value.length === 5){
         value = parseInt(value.substring(2, 5));
         if(value > 20){

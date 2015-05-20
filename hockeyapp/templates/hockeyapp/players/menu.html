@@ -42,7 +42,7 @@
                     <a href="{% url 'hockeyapp:players:achievements' pk %}">Достижения</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-stats' %}active {% endif %} item">
-                    <a href="#">Статистика</a>
+                    <a href="{% url 'hockeyapp:players:indicators' pk %}">Статистика</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-clubs' %}active {% endif %} item">
                     <a href="#">Клубы</a>

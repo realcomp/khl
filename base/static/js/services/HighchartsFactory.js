@@ -468,6 +468,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       this.field = $location.search()['field'] ? $location.search()['field'] : 'count';
       this.dataType = 'graph-serial';
       self.field = this.field;
+      self.type = 'datetime';
     }
 
     HighchartsPlayerIndicatorsChart.prototype.init = function(divId, data1) {
@@ -483,6 +484,11 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     HighchartsPlayerIndicatorsChart.prototype.setContext = function(context) {
       this.context = context;
       return self.context = this.context;
+    };
+
+    HighchartsPlayerIndicatorsChart.prototype.setType = function(type) {
+      this.type = type;
+      return self.type = this.type;
     };
 
     HighchartsPlayerIndicatorsChart.prototype.setPreventLabels = function(preventLabels) {
@@ -546,7 +552,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           text: ''
         },
         xAxis: {
-          "type": "linear",
+          "type": self.type,
           labels: {
             align: 'center',
             formatter: function() {
@@ -559,14 +565,18 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
                 return LocaleFactory.selectedLocale.monthNames[new Date(this.value).getMonth()] + ' ' + (new Date(this.value).getFullYear()).toString().substr(2, 2);
               }
             }
-          }
+          },
+          tickInterval: 24 * 3600 * 1000 * 30
         },
         yAxis: {
           allowDecimals: false,
           title: {
             text: ''
           },
-          maxPadding: 0.02
+          maxPadding: 0.02,
+          labels: {
+            x: 3
+          }
         },
         legend: {
           margin: 30,

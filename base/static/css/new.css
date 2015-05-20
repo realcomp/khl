@@ -347,7 +347,7 @@ angucomplete input{
     z-index: 99999;
     display: none;
 }
-.b-diagram__legend__table-style {
+.stats-compare .b-diagram__legend__table-style {
     box-shadow: none;
 }
 .b-diagram__legend__table-style ul li {
@@ -355,6 +355,9 @@ angucomplete input{
 }
 .b-team-compare__list p:first-of-type{
     width: 80% !important;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
 /*.sidr ul li {
     background: #82b440;
@@ -371,5 +374,10 @@ angucomplete input{
     box-shadow: none !important;
     color: white;
 }*/
-
+.inputFilter, .helperContainer{
+    display: none;
+}
+.multiSelect button:first-of-type{
+    width: 270px;
+}
 }
