@@ -70,7 +70,9 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'club', 'age', 'birth_date_short',
             'rating', 'rating_index', 'fio', 'contract_to', 'contract_type',
-            'weight', 'height', 'grip', 'matches_total', 'similarity')
+            'weight', 'height', 'grip', 'matches_total', 'similarity',
+            'number', 'matches_total', 'goals_total', 'points_total',
+            'plus_minus_total')
         model = Player
 
 

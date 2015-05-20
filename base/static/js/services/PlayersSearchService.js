@@ -59,7 +59,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     return (ref = $scope.params.rated_by) === 'goals_average' || ref === 'assists_average' || ref === 'points_average' || ref === 'plus_minus_average';
   };
   this.setOrderBy = function($scope, order_by) {
-    if (!$scope.loader) {
+    if ($scope.loaded) {
       if ($scope.params.order_by === order_by || (!$scope.params.order_by && !order_by)) {
         if ($scope.params.reversed === 'true') {
           $scope.$location.search('reversed', null);
@@ -74,7 +74,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.setPlaying = function($scope, is_playing) {
-    if (!$scope.loader && $scope.params.is_playing !== is_playing) {
+    if ($scope.loaded && $scope.params.is_playing !== is_playing) {
       if (is_playing === 'false') {
         $scope.$location.search('is_playing', is_playing);
       } else {
@@ -84,7 +84,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.setRatedBy = function($scope, rated_by) {
-    if (!$scope.loader && $scope.params.rated_by !== rated_by) {
+    if ($scope.loaded && $scope.params.rated_by !== rated_by) {
       $scope.$location.search('alphabet', null);
       $scope.$location.search('rated_by', rated_by || null);
       if (rated_by) {
@@ -97,7 +97,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.setAlphabetFilter = function($scope, alphabet) {
-    if (!$scope.loader && $scope.params.alphabet !== alphabet) {
+    if ($scope.loaded && $scope.params.alphabet !== alphabet) {
       $scope.$location.search('alphabet', alphabet);
       this.search($scope);
     }
@@ -109,7 +109,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     } else {
       value = null;
     }
-    if (!$scope.loader && $scope.params.player !== value) {
+    if ($scope.loaded && $scope.params.player !== value) {
       $scope.$location.search('player', value);
       this.search($scope);
     }
@@ -121,7 +121,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     } else {
       value = null;
     }
-    if (!$scope.loader && $scope.club !== value) {
+    if ($scope.loaded && $scope.club !== value) {
       $scope.club = value;
       this.search($scope);
     }
@@ -138,7 +138,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
         $scope.$location.search(search, null);
       }
     };
-    url = $('#PlayersSearchLink').attr('href');
+    url = $('#players-search-api').val();
     params = '';
     if ($('#isCitizenshipRussia').is(':checked')) {
       $scope.$location.search('citizenship1', $('#citizenshipRussia').val());
@@ -246,7 +246,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     $scope.params = $scope.$location.search();
     params += ((function() {
       var i, len, ref, results;
-      ref = ['player', 'season', 'number', 'contract_type', 'height', 'weight', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime', 'related_value__lte', 'related_value__gte'];
+      ref = ['player', 'season', 'number', 'contract_type', 'height', 'height__gte', 'height__lte', 'weight', 'weight__gte', 'weight__lte', 'grip', 'match_count', 'rated_by', 'age__lte', 'age__gte', 'gamingtime', 'related_value__lte', 'related_value__gte'];
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         k = ref[i];
@@ -259,6 +259,17 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     params += '&order_by=' + ($scope.params.order_by || '%s_lastname,%s_name');
     if ($scope.params.reversed) {
       params += '&reversed=true';
+    }
+    if (lineChecked.length) {
+      params += ((function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = lineChecked.length; i < len; i++) {
+          x = lineChecked[i];
+          results.push('&line=' + Math.abs(+x));
+        }
+        return results;
+      })()).join('');
     }
     if ($scope.params.contract_types) {
       params += ((function() {
@@ -365,10 +376,10 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
       params += '&related_field=' + $scope.params.related_field;
     }
     $scope.data = {};
-    $scope.loader = true;
+    $scope.loaded = false;
     $http.get(url + '?' + params).success(function(data) {
       $scope.data = data;
-      return $scope.loader = false;
+      return $scope.loaded = true;
     });
   };
   this.next = function($scope, isAll) {
@@ -377,7 +388,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     if (isAll) {
       url = url.replace(/&page=\d+$/, '&paginate_by=' + $scope.data.count);
     }
-    $scope.loader = true;
+    $scope.loaded = false;
     $http.get(url).success(function(data) {
       if (isAll) {
         $scope.data = data;
@@ -385,7 +396,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
         $scope.data.next = data.next;
         $scope.data.results = $scope.data.results.concat(data.results);
       }
-      return $scope.loader = false;
+      return $scope.loaded = true;
     });
   };
 });

@@ -49,7 +49,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             'plus_minus_average']
 
     @setOrderBy = ($scope, order_by) ->
-        if !$scope.loader
+        if $scope.loaded
             if ($scope.params.order_by == order_by or
                     (!$scope.params.order_by and !order_by)) # same field -> reverse
                 if ($scope.params.reversed == 'true')
@@ -63,7 +63,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         return
 
     @setPlaying = ($scope, is_playing) ->
-        if !$scope.loader and $scope.params.is_playing != is_playing
+        if $scope.loaded and $scope.params.is_playing != is_playing
             if is_playing == 'false'
                 $scope.$location.search('is_playing', is_playing)
             else
@@ -72,7 +72,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         return
 
     @setRatedBy = ($scope, rated_by) ->
-        if !$scope.loader and $scope.params.rated_by != rated_by
+        if $scope.loaded and $scope.params.rated_by != rated_by
             $scope.$location.search('alphabet', null)
             $scope.$location.search('rated_by', rated_by || null)
             if rated_by # by rating -> set ordering
@@ -84,7 +84,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         return
 
     @setAlphabetFilter = ($scope, alphabet) ->
-        if !$scope.loader && $scope.params.alphabet != alphabet
+        if $scope.loaded && $scope.params.alphabet != alphabet
             $scope.$location.search('alphabet', alphabet)
             @search($scope)
         return
@@ -94,7 +94,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             value = String(obj.originalObject.pk)
         else
             value = null
-        if !$scope.loader and $scope.params.player != value
+        if $scope.loaded and $scope.params.player != value
             $scope.$location.search('player', value)
             @search($scope)
         return
@@ -104,7 +104,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             value = [obj.originalObject]
         else
             value = null
-        if !$scope.loader and $scope.club != value
+        if $scope.loaded and $scope.club != value
             $scope.club = value
             @search($scope)
         return
@@ -124,7 +124,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                 $scope.$location.search(search, null)
             return
 
-        url = $('#PlayersSearchLink').attr('href')
+        url = $('#players-search-api').val()
         params = ''
 
         if $('#isCitizenshipRussia').is(':checked')
@@ -187,8 +187,10 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         $scope.params = $scope.$location.search()
 
         params += ((k + '=' + $scope.params[k]) for k in [
-            'player', 'season', 'number', 'contract_type', 'height',
-            'weight', 'grip', 'match_count', 'rated_by',
+            'player', 'season', 'number', 'contract_type',
+            'height', 'height__gte', 'height__lte',
+            'weight', 'weight__gte', 'weight__lte',
+            'grip', 'match_count', 'rated_by',
             'age__lte', 'age__gte', 'gamingtime',
             'related_value__lte', 'related_value__gte',
         ] when $scope.params[k]).join('&')
@@ -197,8 +199,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
 
         if $scope.params.reversed
             params += '&reversed=true'
-        # if $scope.params.line.length
-        #     params += (('&line=' + x) for x in $scope.params.line).join('')
+        if lineChecked.length
+            params += (('&line=' + Math.abs(+x)) for x in lineChecked).join('')
         if $scope.params.contract_types
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1
@@ -239,11 +241,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             params += '&related_field=' + $scope.params.related_field
 
         $scope.data = {}
-        $scope.loader = true
+        $scope.loaded = false
         $http.get(url + '?' + params
         ).success((data) ->
             $scope.data = data
-            $scope.loader = false
+            $scope.loaded = true
         )
         return
 
@@ -251,7 +253,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         url = $scope.data.next
         if isAll
             url = url.replace(/&page=\d+$/, '&paginate_by=' + $scope.data.count)
-        $scope.loader = true
+        $scope.loaded = false
         $http.get(url
         ).success((data) ->
             if isAll
@@ -259,7 +261,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             else
                 $scope.data.next = data.next
                 $scope.data.results = $scope.data.results.concat(data.results)
-            $scope.loader = false
+            $scope.loaded = true
         )
         return
 
