@@ -45,6 +45,10 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             $scope.createRadar()
     , true)
 
+    $scope.removeClub = ($index) ->
+        $scope.clubs.splice($index, 1)
+        $scope.listAveragePlayer()
+
     $scope.setParams = () ->
         $('#regularParams').toggleClass('display-none');
         $('#professionalParams').toggleClass('display-none');
@@ -172,7 +176,7 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
 
     $scope.listAveragePlayer = () ->
         newPlayerIndicatorsData = []
-        _.each $scope.clubs, (club) ->
+        _.each $scope.clubs, (club, index) ->
             #if $scope.defenders is false then for player in club.all_players then if player.line_display is 'Defender' then player.selected = false
             #if $scope.offenders is false then for player in club.all_players then if player.line_display is 'Offender' then player.selected = false
             selectedPlayers = _.countBy(_.filter(club.all_players, (player) ->
@@ -201,9 +205,10 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                         drilldown: el.season.end_date
                     )
                 color: club.color,
-                stack: club.pk + club.seasonResult.pk
+                stack: club.pk + '_' + club.seasonResult.pk + '_' + index
                 logo: club.logo
             }
+            console.log clubObject.stack
             newPlayerIndicatorsData.push clubObject
 
         if $scope.dataType is 'graph-serial'
@@ -221,6 +226,22 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
             return null
         else
             $scope.createRadar()
+
+
+    $scope.availableFields = _.toArray LocaleFactory.locale_ru.fieldNames# generate available fields
+    _.each $scope.availableFields, (object) ->
+        object.ticked = !!(object.field is 'points' or object.field is 'goals' or object.field is'assists' or object.field is 'plus_minus')
+        return null
+
+    $scope.selectedRadarFields = [{ # default radar fields we use
+        field: "goals"
+    }, {
+        field: "points"
+    }, {
+        field: "assists"
+    }, {
+        field: "plus_minus"
+    }];
 
     $scope.createRadar = () ->
         # function to create radar chart for one or multiple players

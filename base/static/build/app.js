@@ -817,14 +817,15 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               var chart;
               if (!e.seriesOptions) {
                 chart = this;
-                chart.showLoading('Загрузка данных по месяцам ...');
-                if (self.context.dataByMonth == null) {
+                if ((self.context.dataByMonth == null) && (self.context.getPlayerDataByMonth != null)) {
+                  chart.showLoading('Загрузка данных по месяцам ...');
                   return self.context.getPlayerDataByMonth().then(function(dataByMonth) {
                     chart.hideLoading();
                     chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                     return self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
                   });
-                } else {
+                } else if (self.context.getPlayerDataByMonth != null) {
+                  chart.showLoading('Загрузка данных по месяцам ...');
                   chart.hideLoading();
                   chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                   return self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
@@ -3010,6 +3011,10 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       return $scope.createRadar();
     }
   }, true);
+  $scope.removeClub = function($index) {
+    $scope.clubs.splice($index, 1);
+    return $scope.listAveragePlayer();
+  };
   $scope.setParams = function() {
     $('#regularParams').toggleClass('display-none');
     $('#professionalParams').toggleClass('display-none');
@@ -3168,7 +3173,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   $scope.listAveragePlayer = function() {
     var legendContent, newPlayerIndicatorsData;
     newPlayerIndicatorsData = [];
-    _.each($scope.clubs, function(club) {
+    _.each($scope.clubs, function(club, index) {
       var averageData, clubObject, key, selectedPlayers;
       selectedPlayers = _.countBy(_.filter(club.all_players, function(player) {
         return player.line === 3 && $scope.offenders === true || player.line === 2 && $scope.defenders === true;
@@ -3207,9 +3212,10 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
           };
         }),
         color: club.color,
-        stack: club.pk + club.seasonResult.pk,
+        stack: club.pk + '_' + club.seasonResult.pk + '_' + index,
         logo: club.logo
       };
+      console.log(clubObject.stack);
       return newPlayerIndicatorsData.push(clubObject);
     });
     if ($scope.dataType === 'graph-serial') {
@@ -3230,6 +3236,22 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
       return $scope.createRadar();
     }
   };
+  $scope.availableFields = _.toArray(LocaleFactory.locale_ru.fieldNames);
+  _.each($scope.availableFields, function(object) {
+    object.ticked = !!(object.field === 'points' || object.field === 'goals' || object.field === 'assists' || object.field === 'plus_minus');
+    return null;
+  });
+  $scope.selectedRadarFields = [
+    {
+      field: "goals"
+    }, {
+      field: "points"
+    }, {
+      field: "assists"
+    }, {
+      field: "plus_minus"
+    }
+  ];
   $scope.createRadar = function() {
     var categories, chartData, legendContent;
     categories = $scope.selectedRadarFields.map(function(el) {

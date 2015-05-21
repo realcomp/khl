@@ -389,13 +389,14 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                         drilldown: (e) ->
                             if not e.seriesOptions
                                 chart = @
-                                chart.showLoading 'Загрузка данных по месяцам ...'
-                                if not self.context.dataByMonth?
+                                if not self.context.dataByMonth? and self.context.getPlayerDataByMonth?
+                                    chart.showLoading 'Загрузка данных по месяцам ...'
                                     self.context.getPlayerDataByMonth().then (dataByMonth) ->
                                         chart.hideLoading()
                                         chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30
                                         self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
-                                else
+                                else if self.context.getPlayerDataByMonth?
+                                    chart.showLoading 'Загрузка данных по месяцам ...'
                                     chart.hideLoading()
                                     chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                                     self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);

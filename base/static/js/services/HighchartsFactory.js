@@ -532,14 +532,15 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
               var chart;
               if (!e.seriesOptions) {
                 chart = this;
-                chart.showLoading('Загрузка данных по месяцам ...');
-                if (self.context.dataByMonth == null) {
+                if ((self.context.dataByMonth == null) && (self.context.getPlayerDataByMonth != null)) {
+                  chart.showLoading('Загрузка данных по месяцам ...');
                   return self.context.getPlayerDataByMonth().then(function(dataByMonth) {
                     chart.hideLoading();
                     chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                     return self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);
                   });
-                } else {
+                } else if (self.context.getPlayerDataByMonth != null) {
+                  chart.showLoading('Загрузка данных по месяцам ...');
                   chart.hideLoading();
                   chart.options.plotOptions.column.pointRange = 24 * 3600 * 1000 * 30;
                   return self.context.moveToSeason(e.point.index, e.point.index, e.point.drilldown);

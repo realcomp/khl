@@ -98,11 +98,26 @@
             {% endcomment %}
         </div>
 
-        <div ng-if="clubs.length > 0 && dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+        <div ng-show="clubs.length > 0 && dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
             <div id="chartdiv" style="height:480px; width: 100%;"></div>
         </div>
 
-        <div ng-if="clubs.length > 0 && dataType === 'graph-radar'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+        <div ng-show="clubs.length > 0 && dataType === 'graph-radar'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+            <div style="border-bottom: 1px solid #d4d4d5">
+                <span class="bold" style="font-size: 22px;">Средние показатели за один матч</span>
+                <div class="float-right">
+                    <div isteven-multi-select
+                         input-model="availableFields"
+                         output-model="selectedRadarFields"
+                         button-label="shortName"
+                         item-label="fullName"
+                         tick-property="ticked"
+                         class="inline-block"
+                         style="max-width: 350px !important; margin-top: -10px; margin-left: 10px;"
+                         on-item-click="createRadar()">
+                    </div>
+                </div>
+            </div>
             <div id="chartdiv2" style="height:480px; width: 100%;"></div>
         </div>
     </div>
@@ -119,7 +134,7 @@
 
             {% verbatim %}
             <!--b-team-compare__item-->
-            <div class="col-xs-6 col-md-3 b-team-compare__item" ng-repeat="club in clubs">
+            <div class="col-xs-6 col-md-3 b-team-compare__item" ng-repeat="club in clubs track  by $index">
 
                 <div class="ui card" >
                     <div class="b-team-compare__card-header">
@@ -145,7 +160,7 @@
                             <p class="">
                                 Защитники
                             </p>
-                            <p class="">
+                            <p ng-if="dataType === 'graph-serial'">
                                 {{localeObject.fieldNames[field].shortName}}
                             </p>
                         </div><!--b-team-compare__list__item-->
@@ -154,7 +169,7 @@
                             <p class="">
                                 <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>{{player.fio}}
                             </p>
-                            <p class="">
+                            <p ng-if="dataType === 'graph-serial'">
                                 {{player.result}}
                             </p>
                         </div><!--b-team-compare__list__item-->
@@ -166,7 +181,7 @@
                             <p class="">
                                 Нападающие
                             </p>
-                            <p class="">
+                            <p ng-if="dataType === 'graph-serial'">
                                 {{localeObject.fieldNames[field].shortName}}
                             </p>
                         </div><!--b-team-compare__list__item-->
@@ -175,7 +190,7 @@
                             <p class="">
                                 <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>{{player.fio}}
                             </p>
-                            <p class="">
+                            <p ng-if="dataType === 'graph-serial'">
                                 {{player.result}}
                             </p>
                         </div><!--b-team-compare__list__item-->
@@ -188,7 +203,7 @@
                                 <p class="">
                                     Защитники
                                 </p>
-                                <p class="">
+                                <p ng-if="dataType === 'graph-serial'">
                                 {{localeObject.fieldNames[field].shortName}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
@@ -199,7 +214,7 @@
                                     {{player.fio}}
                                     <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>
                                 </p>
-                                <p class="">
+                                <p ng-if="dataType === 'graph-serial'">
                                     {{player.result}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
@@ -208,7 +223,7 @@
                                 <p class="">
                                     Нападающие
                                 </p>
-                                <p class="">
+                                <p ng-if="dataType === 'graph-serial'">
                                 {{localeObject.fieldNames[field].shortName}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
@@ -219,7 +234,7 @@
                                     {{player.fio}}
                                     <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>
                                 </p>
-                                <p class="">
+                                <p ng-if="dataType === 'graph-serial'">
                                     {{player.result}}
                                 </p>
                             </div><!--b-team-compare__list__item-->
@@ -260,7 +275,7 @@
 
                 </div><!--ui card-->
 
-                <p class="b-team-compare__delete">
+                <p class="b-team-compare__delete" ng-if="$index !== 0" ng-click="removeClub($index)">
                     <a href="#">удалить команду из сравнения</a>
                 </p>
             </div><!--b-team-compare__item-->
