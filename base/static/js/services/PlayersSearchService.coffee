@@ -62,14 +62,14 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             @search($scope)
         return
 
-    @setPlaying = ($scope, is_playing) ->
-        if $scope.loaded and $scope.params.is_playing != is_playing
-            if is_playing == 'false'
-                $scope.$location.search('is_playing', is_playing)
-            else
-                $scope.$location.search('is_playing', null)
-            @search($scope)
-        return
+    # @setPlaying = ($scope, is_playing) ->
+    #     if $scope.loaded and $scope.params.is_playing != is_playing
+    #         if is_playing == 'false'
+    #             $scope.$location.search('is_playing', is_playing)
+    #         else
+    #             $scope.$location.search('is_playing', null)
+    #         @search($scope)
+    #     return
 
     @setRatedBy = ($scope, rated_by) ->
         if $scope.loaded and $scope.params.rated_by != rated_by
@@ -110,10 +110,15 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         return
 
     @search = ($scope) ->
-        checkBox = ($scope, search, name) ->
+        checkBox = ($scope, search, name, isUncheck) ->
             # checks checkbox and updates location search
-            $scope.$location.search(
-                search, $('[name="' + name + '"]').is(':checked') or null)
+            if not isUncheck
+                $scope.$location.search(
+                    search, $('[name="' + name + '"]').is(':checked') or null)
+            else
+                # checkbox is checked by default
+                $scope.$location.search(
+                    search, if $('[name="' + name + '"]').is(':checked') then null else 'false')
             return
 
         multiSelect = ($scope, search, value) ->
@@ -170,7 +175,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         checkBox($scope, 'club_enabled', 'clubEnabled')
         checkBox($scope, 'league_enabled', 'league2Enabled')
         checkBox($scope, 'related_enabled', 'relatedEnabled')
-        checkBox($scope, 'is_playing', 'isPlaying')
+        checkBox($scope, 'is_playing', 'is_playing', true)
 
         multiSelect($scope, 'citizenship', $scope.citizenship)
         multiSelect($scope, 'club', $scope.club)
@@ -193,7 +198,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         $scope.params = $scope.$location.search()
 
         params += ((k + '=' + $scope.params[k]) for k in [
-            'player', 'season', 'number', 'contract_type',
+            'player', 'season', 'number', 'contract_type', 'fio',
             'height', 'height__gte', 'height__lte',
             'weight', 'weight__gte', 'weight__lte',
             'grip', 'match_count', 'rated_by',
@@ -219,8 +224,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             else
                 params += '&citizenship_other=true'
         # if $scope.params.is_playing != 'false'
-        if $scope.params.is_playing
-            params += '&is_playing=true'
+        if $scope.params.is_playing == 'false'
+            params += '&is_playing=false'
         if $scope.params.alphabet
             params += '&%s_lastname__startswith=' + $scope.params.alphabet
         if ($scope.club_enabled or $scope.params.club_enabled) and $scope.params.club

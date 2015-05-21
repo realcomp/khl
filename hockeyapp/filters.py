@@ -80,7 +80,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _season_start = request.query_params.get('season_start')
         _season_end = request.query_params.get('season_end')
         _clubs = request.query_params.getlist('club')
-        _is_playing = request.query_params.get('is_playing')
+        _is_playing = request.query_params.get('is_playing') != 'false'
         _number = request.query_params.get('number')
         _contract_type = request.query_params.get('contract_type')
         _contract_types = request.query_params.getlist('contract_types')
@@ -91,7 +91,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _weight = request.query_params.get('weight')
         _weight__gte = request.query_params.get('weight__gte')
         _weight__lte = request.query_params.get('weight__lte')
-        _grip = request.query_params.get('grip')
+        _grip = request.query_params.getlist('grip')
         _contract_type__isnull = request.query_params.get('contract_type__isnull', '').lower() == 'true'
         _age__gte = request.query_params.get('age__gte')
         _age__lte = request.query_params.get('age__lte')
@@ -105,6 +105,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
         _leagues = request.query_params.getlist('league')
         _lines = request.query_params.getlist('line')
         _citizenships = request.query_params.getlist('citizenship')
+        _fio = request.query_params.get('fio')
 
         if _player_id and _player_id.isdigit():
             q &= Q(pk=_player_id)
@@ -149,7 +150,7 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
             q &= Q(weight__lte=_weight__lte)
 
         if _grip:
-            q &= Q(grip=_grip)
+            q &= Q(grip__in=_grip)
 
         if _contract_type__isnull:
             q &= Q(contract_type__isnull=True)
@@ -199,6 +200,14 @@ class PlayersSearchFilter(filters.BaseFilterBackend):
 
         if _gamingtime and _gamingtime.isdigit():
             q &= Q(gamingtime_total__gte=_gamingtime)
+
+        if _fio:
+            lang = request.LANGUAGE_CODE
+            # exclude empty strings
+            for name in filter(None, _fio.split(' ')):
+                q &= (
+                    Q(**{'{}_name__icontains'.format(lang): name}) |
+                    Q(**{'{}_lastname__icontains'.format(lang): name}))
 
         q_citizenship = Q()
         if _citizenships:

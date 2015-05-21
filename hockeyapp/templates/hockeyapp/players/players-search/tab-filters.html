@@ -23,7 +23,9 @@
                         <label>Имя, Фамилия</label>
                         <div class="b-search ui category search result">
                             <div class="ui icon input">
-                                <input class="c-search prompt" type="text" autocomplete="off" disabled>
+                                <input type="text" ng-model="fio"
+                                       ng-init="fio = params.fio"
+                                       ng-change="$location.search('fio', fio || null)">
                                 <i class="search link icon"></i>
                             </div>
                             <div class="results"></div>
@@ -112,7 +114,8 @@
                     <div class="field">
                         <label>Играет до сих пор</label>
                         <div class="ui checkbox">
-                            <input type="checkbox" name="isPlaying" checked>
+                            <input type="checkbox" name="is_playing" value="левый"
+                                   ng-checked="!params.is_playing || params.is_playing !== 'false'">
                             <label>да</label>
                         </div>
                     </div><!--field-->
