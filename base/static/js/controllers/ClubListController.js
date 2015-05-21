@@ -97,7 +97,7 @@ angular.module('Sportomatics').controller('ClubListController', [
         $scope.loaded = true;
       });
     };
-    PlayersSearchService.loadCountries($scope, $location, function() {});
+    PlayersSearchService.loadCountries($scope);
     $scope.list();
     $('.b-tabs-content').visibility({
       'once': false,

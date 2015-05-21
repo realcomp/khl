@@ -125,8 +125,9 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
             return
 
         # autorun if tab active
-        if $scope.params.state == 'table' and not $scope.data
-            PlayersSearchService.search($scope)
+        # if $scope.params.state == 'table' and not $scope.data
+        #     PlayersSearchService.search($scope)
+        PlayersSearchService.loadCountries($scope)
 
         $('.unstackable.striped.table').visibility({
             'once': false,

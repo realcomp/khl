@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <form class="ui form form-styled">
     <div class="ui ui-widget ui-helper-reset">
         <div class="active ui header title ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
@@ -74,14 +76,16 @@
                         <div class="grouped fields">
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="hand" disabled>
+                                    <input type="checkbox" name="grip_ex" value="правый"
+                                           ng-checked="!params.grip_ex || params.grip_ex.indexOf('правый') < 0">
                                     <label>правый</label>
                                 </div>
                             </div>
 
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="hand" disabled>
+                                    <input type="checkbox" name="grip_ex" value="левый"
+                                           ng-checked="!params.grip_ex || params.grip_ex.indexOf('левый') < 0">
                                     <label>левый</label>
                                 </div>
                             </div>
@@ -108,7 +112,7 @@
                     <div class="field">
                         <label>Играет до сих пор</label>
                         <div class="ui checkbox">
-                            <input type="checkbox" name="still-play" checked disabled>
+                            <input type="checkbox" name="isPlaying" checked>
                             <label>да</label>
                         </div>
                     </div><!--field-->
@@ -174,12 +178,18 @@
                     <div class="field">
                         <label>Страна</label>
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="gender">
+                            <input type="hidden" ng-update-hidden
+                                   ng-model="countriesSelected"
+                                   ng-init="countriesSelected = params.country || ['1']"
+                                   ng-change="PlayersSearchService.setCountries(this, countriesSelected || null)">
                             <div class="default text"></div>
                             <i class="dropdown icon"></i>
                             <div class="menu">
-                                <!-- <div class="item" data-value="сезон 14/15">сезон 14/15</div> -->
-                                <!-- <div class="item" data-value="сезон 13/14">сезон 13/14</div> -->
+                                {% for country in countries %}
+                                    <div class="item" data-value="{{ country.pk }}">
+                                        {{ country.title }}
+                                    </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div><!--field-->
@@ -187,12 +197,19 @@
                     <div class="field">
                         <label>Лига</label>
                         <div class="ui selection dropdown">
-                            <input type="hidden" name="gender">
+                            <input type="hidden" ng-update-hidden
+                                   ng-model="leaguesSelected"
+                                   ng-init="leaguesSelected = params.league"
+                                   ng-change="PlayersSearchService.setLeagues(this, leaguesSelected || null)">
                             <div class="default text"></div>
                             <i class="dropdown icon"></i>
                             <div class="menu">
-                                <!-- <div class="item" data-value="сезон 14/15">сезон 14/15</div> -->
-                                <!-- <div class="item" data-value="сезон 13/14">сезон 13/14</div> -->
+                                {% verbatim %}
+                                    <div class="item" data-value="{{ league.pk }}"
+                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, countriesSelected || [1])">
+                                        {{ league.title }}
+                                    </div>
+                                {% endverbatim %}
                             </div>
                         </div>
                     </div><!--field-->
@@ -219,11 +236,21 @@
                     <div class="field">
                         <label>Гражданство</label>
                         <div class="b-search ui category search result">
-                            <div class="ui icon input">
-                                <input class="c-search prompt" type="text" autocomplete="off" disabled>
-                                <i class="search link icon"></i>
-                            </div>
-                            <div class="results"></div>
+                            <!-- <div class="ui icon input"> -->
+                                <tags-input style="max-width: 448px !important; border: 0 !important;"
+                                            ng-model="citizenship"
+                                            ng-init="countriesURL = '{% url 'hockeyapp:country-list-api' %}'"
+                                            display-property="title"
+                                            placeholder="{% trans 'start typing' %}"
+                                            add-on-comma="{false}" add-from-autocomplete-only="true">
+                                    <auto-complete load-on-focus="true" load-on-empty="true"
+                                                   min-length="1" source="loadCountries($query)"
+                                                   max-results-to-show="4">
+                                    </auto-complete>
+                                </tags-input>
+                                <!-- <i class="search link icon"></i> -->
+                            <!-- </div> -->
+                            <!-- <div class="results"></div> -->
                         </div>
                     </div><!--field-->
                 </div><!--col-->
