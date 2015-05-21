@@ -1,13 +1,13 @@
 angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout) ->
-    @loadCountries = ($scope, $location, callback) ->
-        url = $('#LeagueListLink').attr('href')
+    @loadCountries = ($scope) ->
+        url = $('#country-league-list-api').val()
         if url
             $http.get(url
             ).success((data) ->
                 $scope.countries = data
-                $timeout(() ->
-                    $('.ui.dropdown.leagues').dropdown()
-                , 0)
+                # $timeout(() ->
+                #     $('.ui.dropdown.leagues').dropdown()
+                # , 0)
                 # if $scope.countries.length
                 #     country = $scope.countries[0]
                 #     if !$location.search().country
@@ -18,11 +18,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                 #             $location.search().league != '')
                 #         # $location.search('league', String(country.league_set[0].pk))
                 #         $scope.params = $location.search()
-                if callback and typeof callback == 'function'
-                    callback($scope)
             )
-        else if callback and typeof callback == 'function'
-            callback($scope)
         return
 
     @setCountries = ($scope, countries) ->
@@ -30,6 +26,10 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         $scope.leaguesSelected = []
         $scope.$location.search('country', countries or null)
         $scope.$location.search('league', null)
+        return
+
+    @setLeagues = ($scope, leagues) ->
+        $scope.$location.search('league', leagues or null)
         return
 
     @getLeagues = (countries, selected) ->
@@ -147,6 +147,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         $scope.$location.search('line', (e for e in lineChecked when +e > 0) or [])
         $scope.$location.search('line', (e for e in lineUnchecked when +e < 0) or [])
 
+        gripExAll = ($(e).val() for e in $('[name="grip_ex"]') when $(e).val())
+        gripExChecked = ($(e).val() for e in $('[name="grip_ex"]:checked') when $(e).val())
+        gripExUnchecked = (e for e in gripExAll when e not in gripExChecked)
+        $scope.$location.search('grip_ex', gripExUnchecked)
+
         contract_types = ($(e).val() for e in $('[name="contract_types"]:checked') when $(e).val())
         $scope.$location.search('contract_types', contract_types or [])
 
@@ -165,6 +170,7 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         checkBox($scope, 'club_enabled', 'clubEnabled')
         checkBox($scope, 'league_enabled', 'league2Enabled')
         checkBox($scope, 'related_enabled', 'relatedEnabled')
+        checkBox($scope, 'is_playing', 'isPlaying')
 
         multiSelect($scope, 'citizenship', $scope.citizenship)
         multiSelect($scope, 'club', $scope.club)
@@ -201,6 +207,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             params += '&reversed=true'
         if lineChecked.length
             params += (('&line=' + Math.abs(+x)) for x in lineChecked).join('')
+        if gripExChecked.length
+            params += (('&grip=' + x) for x in gripExChecked).join('')
         if $scope.params.contract_types
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1
@@ -210,7 +218,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                 params += '&citizenship=' + $scope.params.citizenship2
             else
                 params += '&citizenship_other=true'
-        if $scope.params.is_playing != 'false'
+        # if $scope.params.is_playing != 'false'
+        if $scope.params.is_playing
             params += '&is_playing=true'
         if $scope.params.alphabet
             params += '&%s_lastname__startswith=' + $scope.params.alphabet

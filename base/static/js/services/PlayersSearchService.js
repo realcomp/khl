@@ -1,21 +1,13 @@
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 angular.module('Sportomatics').service('PlayersSearchService', function($http, $timeout) {
-  this.loadCountries = function($scope, $location, callback) {
+  this.loadCountries = function($scope) {
     var url;
-    url = $('#LeagueListLink').attr('href');
+    url = $('#country-league-list-api').val();
     if (url) {
       $http.get(url).success(function(data) {
-        $scope.countries = data;
-        $timeout(function() {
-          return $('.ui.dropdown.leagues').dropdown();
-        }, 0);
-        if (callback && typeof callback === 'function') {
-          return callback($scope);
-        }
+        return $scope.countries = data;
       });
-    } else if (callback && typeof callback === 'function') {
-      callback($scope);
     }
   };
   this.setCountries = function($scope, countries) {
@@ -23,6 +15,9 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     $scope.leaguesSelected = [];
     $scope.$location.search('country', countries || null);
     $scope.$location.search('league', null);
+  };
+  this.setLeagues = function($scope, leagues) {
+    $scope.$location.search('league', leagues || null);
   };
   this.getLeagues = function(countries, selected) {
     var country, league_sets, x;
@@ -127,7 +122,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.search = function($scope) {
-    var age, checkBox, contract_types, d, e, k, league, lineAll, lineChecked, lineUnchecked, multiSelect, params, relatedValue, url, x;
+    var age, checkBox, contract_types, d, e, gripExAll, gripExChecked, gripExUnchecked, k, league, lineAll, lineChecked, lineUnchecked, multiSelect, params, relatedValue, url, x;
     checkBox = function($scope, search, name) {
       $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
     };
@@ -207,6 +202,42 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
       }
       return results;
     })()) || []);
+    gripExAll = (function() {
+      var i, len, ref, results;
+      ref = $('[name="grip_ex"]');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
+          results.push($(e).val());
+        }
+      }
+      return results;
+    })();
+    gripExChecked = (function() {
+      var i, len, ref, results;
+      ref = $('[name="grip_ex"]:checked');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
+          results.push($(e).val());
+        }
+      }
+      return results;
+    })();
+    gripExUnchecked = (function() {
+      var i, len, results;
+      results = [];
+      for (i = 0, len = gripExAll.length; i < len; i++) {
+        e = gripExAll[i];
+        if (indexOf.call(gripExChecked, e) < 0) {
+          results.push(e);
+        }
+      }
+      return results;
+    })();
+    $scope.$location.search('grip_ex', gripExUnchecked);
     contract_types = (function() {
       var i, len, ref, results;
       ref = $('[name="contract_types"]:checked');
@@ -226,6 +257,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     checkBox($scope, 'club_enabled', 'clubEnabled');
     checkBox($scope, 'league_enabled', 'league2Enabled');
     checkBox($scope, 'related_enabled', 'relatedEnabled');
+    checkBox($scope, 'is_playing', 'isPlaying');
     multiSelect($scope, 'citizenship', $scope.citizenship);
     multiSelect($scope, 'club', $scope.club);
     multiSelect($scope, 'league2', $scope.league2);
@@ -271,6 +303,17 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
         return results;
       })()).join('');
     }
+    if (gripExChecked.length) {
+      params += ((function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = gripExChecked.length; i < len; i++) {
+          x = gripExChecked[i];
+          results.push('&grip=' + x);
+        }
+        return results;
+      })()).join('');
+    }
     if ($scope.params.contract_types) {
       params += ((function() {
         var i, len, ref, results;
@@ -293,7 +336,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
         params += '&citizenship_other=true';
       }
     }
-    if ($scope.params.is_playing !== 'false') {
+    if ($scope.params.is_playing) {
       params += '&is_playing=true';
     }
     if ($scope.params.alphabet) {

@@ -8,6 +8,7 @@
 {% block body %}
 <div class="w-page__clubs-list" ng-controller="PlayersSearchController">
     <input id="players-search-api" type="hidden" value="{% url 'hockeyapp:players-search-api' %}">
+    <input id="country-league-list-api" type="hidden" value="{% url 'hockeyapp:country-league-list-api' %}">
     <div class="body_inner bg-image">
         <main id="main">
             <section class="container">

@@ -115,9 +115,7 @@ angular.module('Sportomatics').controller('ClubListController', [
                 return
             )
 
-        PlayersSearchService.loadCountries($scope, $location, () ->
-            return
-        )
+        PlayersSearchService.loadCountries($scope)
 
         $scope.list()
 

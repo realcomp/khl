@@ -119,9 +119,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       $scope.setState('table');
       PlayersSearchService.search($scope);
     };
-    if ($scope.params.state === 'table' && !$scope.data) {
-      PlayersSearchService.search($scope);
-    }
+    PlayersSearchService.loadCountries($scope);
     $('.unstackable.striped.table').visibility({
       'once': false,
       'observeChanges': true,
