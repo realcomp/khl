@@ -291,6 +291,7 @@ angular.module('Sportomatics')
 
             playerIndicatorsChart.init('chartdiv', newPlayerIndicatorsData, $scope.field)
             playerIndicatorsChart.setContext($scope);
+            playerIndicatorsChart.setPeriod(365);
             playerIndicatorsChart.setHeaderChangeable(true);
             playerIndicatorsChart.draw();
             self.chart = $('#chartdiv').highcharts();
