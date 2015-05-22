@@ -112,7 +112,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.search = function($scope) {
-    var age, checkBox, contract_types, d, e, gripExAll, gripExChecked, gripExUnchecked, k, league, lineAll, lineChecked, lineUnchecked, multiSelect, params, relatedValue, url, x;
+    var age, checkBox, contractExAll, contractExChecked, contractExUnchecked, contract_types, d, e, gripExAll, gripExChecked, gripExUnchecked, k, league, lineAll, lineChecked, lineUnchecked, multiSelect, params, relatedValue, url, x;
     checkBox = function($scope, search, name, isUncheck) {
       if (!isUncheck) {
         $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
@@ -232,6 +232,42 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
       return results;
     })();
     $scope.$location.search('grip_ex', gripExUnchecked);
+    contractExAll = (function() {
+      var i, len, ref, results;
+      ref = $('[name="contract_ex"]');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
+          results.push($(e).val());
+        }
+      }
+      return results;
+    })();
+    contractExChecked = (function() {
+      var i, len, ref, results;
+      ref = $('[name="contract_ex"]:checked');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        e = ref[i];
+        if ($(e).val()) {
+          results.push($(e).val());
+        }
+      }
+      return results;
+    })();
+    contractExUnchecked = (function() {
+      var i, len, results;
+      results = [];
+      for (i = 0, len = contractExAll.length; i < len; i++) {
+        e = contractExAll[i];
+        if (indexOf.call(contractExChecked, e) < 0) {
+          results.push(e);
+        }
+      }
+      return results;
+    })();
+    $scope.$location.search('contract_ex', contractExUnchecked);
     contract_types = (function() {
       var i, len, ref, results;
       ref = $('[name="contract_types"]:checked');
@@ -304,6 +340,17 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
         for (i = 0, len = gripExChecked.length; i < len; i++) {
           x = gripExChecked[i];
           results.push('&grip=' + x);
+        }
+        return results;
+      })()).join('');
+    }
+    if (contractExChecked.length) {
+      params += ((function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = contractExChecked.length; i < len; i++) {
+          x = contractExChecked[i];
+          results.push('&contract_types=' + (x === '*' ? '' : x));
         }
         return results;
       })()).join('');

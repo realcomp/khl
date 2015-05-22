@@ -157,6 +157,11 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         gripExUnchecked = (e for e in gripExAll when e not in gripExChecked)
         $scope.$location.search('grip_ex', gripExUnchecked)
 
+        contractExAll = ($(e).val() for e in $('[name="contract_ex"]') when $(e).val())
+        contractExChecked = ($(e).val() for e in $('[name="contract_ex"]:checked') when $(e).val())
+        contractExUnchecked = (e for e in contractExAll when e not in contractExChecked)
+        $scope.$location.search('contract_ex', contractExUnchecked)
+
         contract_types = ($(e).val() for e in $('[name="contract_types"]:checked') when $(e).val())
         $scope.$location.search('contract_types', contract_types or [])
 
@@ -214,6 +219,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
             params += (('&line=' + Math.abs(+x)) for x in lineChecked).join('')
         if gripExChecked.length
             params += (('&grip=' + x) for x in gripExChecked).join('')
+        if contractExChecked.length
+            params += (('&contract_types=' + if x == '*' then '' else x) for x in contractExChecked).join('')
         if $scope.params.contract_types
             params += (('&contract_types=' + x) for x in $scope.params.contract_types).join('')
         if $scope.params.citizenship1

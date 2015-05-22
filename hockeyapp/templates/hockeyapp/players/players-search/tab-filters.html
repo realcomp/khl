@@ -2,13 +2,13 @@
 
 <form class="ui form form-styled">
     <div class="ui ui-widget ui-helper-reset">
-        <div class="active ui header title ui-accordion-header ui-state-default ui-accordion-header-active ui-state-active ui-corner-top ui-accordion-icons">
-            <!-- <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> -->
+        <div class="ui header title"
+             ng-click="noSearchParams = !noSearchParams">
             <i class="dropdown icon"></i>
             Параметры для поиска
         </div><!--accordion header-->
 
-        <div class="active content">
+        <div class="content" ng-hide="noSearchParams">
             <!-- <div class="ui positive message"> -->
             <!--     <i class="close icon"></i> -->
             <!--     <div class="header"> -->
@@ -31,7 +31,6 @@
                             <div class="results"></div>
                         </div>
                     </div><!--field-->
-
 
                     <div class="field">
                         <label>Игровой номер</label>
@@ -94,8 +93,6 @@
                         </div>
                     </div><!--field-->
                 </div><!--col-->
-
-
 
                 <div class="col-sm-4 b-accordion-content__item">
                     <div class="field">
@@ -222,15 +219,30 @@
                         <div class="grouped fields">
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="yes-info" disabled>
-                                    <label>есть данные</label>
+                                    <input type="checkbox" name="contract_ex" value="*"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('*') < 0">
+                                    <label>Нет данных</label>
                                 </div>
                             </div>
-
                             <div class="field">
                                 <div class="ui checkbox">
-                                    <input type="checkbox" name="no-info" disabled>
-                                    <label>нет данных</label>
+                                    <input type="checkbox" name="contract_ex" value="Двусторонний КХЛ/МХЛ"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('Двусторонний КХЛ/МХЛ') < 0">
+                                    <label>Двусторонний КХЛ/МХЛ</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="contract_ex" value="Двусторонний КХЛ/ВХЛ"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('Двусторонний КХЛ/ВХЛ') < 0">
+                                    <label>Двусторонний КХЛ/ВХЛ</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="contract_ex" value="Односторонний КХЛ"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('Односторонний КХЛ') < 0">
+                                    <label>Односторонний КХЛ</label>
                                 </div>
                             </div>
                         </div>
@@ -260,15 +272,12 @@
             </div><!--row-->
         </div><!--accordion content-->
 
-
-
-        {% comment %}
-        <div class="ui header title">
+        <div class="ui header title" ng-click="isViewParams = !isViewParams">
             <i class="dropdown icon"></i>
             Данные для отображения
         </div><!--accordion header-->
 
-        <div class="content">
+        <div class="content" ng-show="isViewParams">
             <div class="fields-styled">
                 <div class="field">
                     <div class="ui checkbox">
@@ -277,12 +286,12 @@
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="age">
+                        <input type="checkbox">
                         <label>возраст</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="age">
+                        <input type="checkbox">
                         <label>контракт</label>
                     </div>
                 </div><div class="field">
@@ -302,12 +311,12 @@
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="age">
+                        <input type="checkbox">
                         <label>рост</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="age">
+                        <input type="checkbox">
                         <label>текущая команда</label>
                     </div>
                 </div><div class="field">
@@ -490,15 +499,14 @@
                 </div><!--row-->
             </div><!--field-->
 
-            <div class="ui negative message">
-                <i class="close icon"></i>
-                <div class="header">
-                    Выберите меньше параметров
-                </div>
-                <p>В результате может быть отображено не более 20 параметров игрока</p>
-            </div>
+            <!-- <div class="ui negative message"> -->
+            <!--     <i class="close icon"></i> -->
+            <!--     <div class="header"> -->
+            <!--         Выберите меньше параметров -->
+            <!--     </div> -->
+            <!--     <p>В результате может быть отображено не более 20 параметров игрока</p> -->
+            <!-- </div> -->
         </div><!--accordion content-->
-        {% endcomment %}
 
         <div class="active content">
             <div class="row">
