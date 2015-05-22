@@ -112,13 +112,41 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     }
   };
   this.search = function($scope) {
-    var age, checkBox, contractExAll, contractExChecked, contractExUnchecked, contract_types, d, e, gripExAll, gripExChecked, gripExUnchecked, k, league, lineAll, lineChecked, lineUnchecked, multiSelect, params, relatedValue, url, x;
+    var age, checkBox, contractExAll, contractExChecked, contractExUnchecked, contract_types, d, e, gripExAll, gripExChecked, gripExUnchecked, k, league, lineAll, lineChecked, lineUnchecked, multiCheckBox, multiSelect, params, relatedValue, url, x;
     checkBox = function($scope, search, name, isUncheck) {
       if (!isUncheck) {
         $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') || null);
       } else {
         $scope.$location.search(search, $('[name="' + name + '"]').is(':checked') ? null : 'false');
       }
+    };
+    multiCheckBox = function($scope, search, name) {
+      var all, checked, e;
+      all = (function() {
+        var i, len, ref, results;
+        ref = $('[name="' + name + '"]');
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          e = ref[i];
+          if ($(e).val()) {
+            results.push($(e).val());
+          }
+        }
+        return results;
+      })();
+      checked = (function() {
+        var i, len, ref, results;
+        ref = $('[name="' + name + '"]:checked');
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          e = ref[i];
+          if ($(e).val()) {
+            results.push($(e).val());
+          }
+        }
+        return results;
+      })();
+      $scope.$location.search(search, checked);
     };
     multiSelect = function($scope, search, value) {
       if (value && value.length) {
@@ -288,6 +316,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     checkBox($scope, 'league_enabled', 'league2Enabled');
     checkBox($scope, 'related_enabled', 'relatedEnabled');
     checkBox($scope, 'is_playing', 'is_playing', true);
+    multiCheckBox($scope, 'display_params', 'display_params');
     multiSelect($scope, 'citizenship', $scope.citizenship);
     multiSelect($scope, 'club', $scope.club);
     multiSelect($scope, 'league2', $scope.league2);

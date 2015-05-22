@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="row-xs">
     <div class="ui ui-widget ui-helper-reset">
         <div class="ui header title" ng-click="isQuickSearch = !isQuickSearch">
@@ -72,115 +74,148 @@
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="b-team">
+            <th class="b-team"
+                ng-show="params.display_params && params.display_params.indexOf('team') >= 0">
                 <a href="#">
                     <span>Команда</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm">
+            <th class="text-center-sm"
+                ng-show="params.display_params && params.display_params.indexOf('number') >= 0">
                 <a href="#">
                     <span>№</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs hidden-sm">
+            <th class="text-center-sm hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('contract') >= 0">
                 <a href="#">
                     <span>Контракт</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('age') >= 0">
                 <a href="#">
                     <span>Лет</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm visible-lg">
+            <th class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('height') >= 0">
                 <a href="#">
                     <span>Рост</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm">
+            <th class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('weight') >= 0">
+                <a href="#">
+                    <span>{% trans "Weight" %}</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('grip') >= 0">
+                <a href="#">
+                    <span>{% trans "Grip" %}</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm"
+                ng-show="params.display_params && params.display_params.indexOf('matches_total') >= 0">
                 <a href="#">
                     <span>И</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm">
+            <th class="text-center-sm"
+                ng-show="params.display_params && params.display_params.indexOf('goals_total') >= 0">
                 <a href="#">
                     <span>Ш</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('points_total') >= 0">
                 <a href="#">
                     <span>О</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('plus_minus_total') >= 0">
                 <a href="#">
                     <span>+/-</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
                 <a href="#">
                     <span>ШР</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
                 <a href="#">
                     <span>ШБ</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
                 <a href="#">
                     <span>ШМ</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('overtime_goals_total') >= 0">
                 <a href="#">
                     <span>ШО</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('win_bullet_goals_total') >= 0">
                 <a href="#">
                     <span>РБ</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('assists_total') >= 0">
                 <a href="#">
                     <span>А</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('shots_total') >= 0">
                 <a href="#">
                     <span>БВ</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs">
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pp_shots_total') >= 0">
                 <a href="#">
                     <span>%БВ</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs hidden-sm">
+            <th class="text-center-sm hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('shots_average') >= 0">
                 <a href="#">
                     <span>БВ/И</span>
                     <!-- <i class="dropdown icon"></i> -->
                 </a>
             </th>
-            <th class="text-center-sm hidden-xs hidden-sm">
+            <th class="text-center-sm hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('pp_shots_average') >= 0">
                 <a href="#">
                     <span>%ВБР</span>
                     <!-- <i class="dropdown icon"></i> -->
@@ -209,7 +244,8 @@
                 </div>
             </td>
 
-            <td class="">
+            <td class=""
+                ng-show="params.display_params && params.display_params.indexOf('team') >= 0">
                 <p class="">
                     <a href="{{ player.club.url }}">{{ player.club.title }}</a>
                 </p>
@@ -218,11 +254,13 @@
                 </p>
             </td>
 
-            <td class="text-center">
+            <td class="text-center"
+                ng-show="params.display_params && params.display_params.indexOf('number') >= 0">
                 {{ player.number }}
             </td>
 
-            <td class="text-center-sm hidden-sm hidden-xs">
+            <td class="text-center-sm hidden-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('contract') >= 0">
                 <!-- <p class="" ng-if="player.contract_to"> -->
                 <!--     до -->
                 <!-- </p> -->
@@ -231,70 +269,96 @@
                 </p>
             </td>
 
-            <td class="text-center hidden-xs">
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('age') >= 0">
                 {{ player.age[0] }}
             </td>
 
-            <td class="text-center-sm visible-lg">
+            <td class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('height') >= 0">
                 {{ player.height }}
             </td>
 
-            <td class="text-center-sm hidden-xs">
+            <td class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('weight') >= 0">
+                {{ player.weight }}
+            </td>
+
+            <td class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('grip') >= 0">
+                {{ player.grip }}
+            </td>
+
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('matches_total') >= 0">
                 {{ player.matches_total }}
             </td>
 
-            <td class="text-center">
+            <td class="text-center"
+                ng-show="params.display_params && params.display_params.indexOf('goals_total') >= 0">
                 {{ player.goals_total }}
             </td>
 
-            <td class="text-center">
+            <td class="text-center"
+                ng-show="params.display_params && params.display_params.indexOf('points_total') >= 0">
                 {{ player.points_total }}
             </td>
 
-            <td class="text-center hidden-xs">
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('plus_minus_total') >= 0">
                 {{ player.plus_minus_total }}
             </td>
 
-            <td class="text-center hidden-xs">
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
                 <!-- es_goals -->
                 -
             </td>
 
-            <td class="text-center-sm hidden-xs">
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
                 <!-- pp_goals -->
                 -
             </td>
 
-            <td class="text-center-sm hidden-xs">
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
                 <!-- ev_goals -->
                 -
             </td>
 
-            <td class="text-center hidden-xs">
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
                 -
             </td>
 
-            <td class="text-center hidden-xs">
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
                 -
             </td>
 
-            <td class="text-center hidden-xs">
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('assists_total') >= 0">
                 {{ player.assists_total }}
             </td>
 
-            <td class="text-center-sm hidden-xs">
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
                 -
             </td>
 
-            <td class="text-center-sm hidden-xs">
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
                 -
             </td>
 
-            <td class="text-center hidden-xs hidden-sm">
+            <td class="text-center hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
                 -
             </td>
 
-            <td class="text-center hidden-xs hidden-sm">
+            <td class="text-center hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
                 -
             </td>
         </tr>

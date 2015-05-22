@@ -272,62 +272,60 @@
             </div><!--row-->
         </div><!--accordion content-->
 
-        <div class="ui header title" ng-click="isViewParams = !isViewParams">
+        <div class="ui header title" ng-click="isDisplayParams = !isDisplayParams">
             <i class="dropdown icon"></i>
             Данные для отображения
         </div><!--accordion header-->
 
-        <div class="content" ng-show="isViewParams">
+        <div class="content" ng-show="isDisplayParams">
             <div class="fields-styled">
                 <div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="number">
+                        <input type="checkbox" name="display_params" value="number"
+                               ng-checked="params.display_params && params.display_params.indexOf('number') >= 0">
                         <label>игровой номер</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox">
+                        <input type="checkbox" name="display_params" value="age"
+                               ng-checked="params.display_params && params.display_params.indexOf('age') >= 0">
                         <label>возраст</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox">
+                        <input type="checkbox" name="display_params" value="contract"
+                               ng-checked="params.display_params && params.display_params.indexOf('contract') >= 0">
                         <label>контракт</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="nation">
+                        <input type="checkbox" name="display_params" value="citizenship"
+                               ng-checked="params.display_params && params.display_params.indexOf('citizenship') >= 0">
                         <label>гражданство</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="nation">
-                        <label>гражданство</label>
-                    </div>
-                </div><div class="field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="number">
+                        <input type="checkbox" name="display_params" value="grip"
+                               ng-checked="params.display_params && params.display_params.indexOf('grip') >= 0">
                         <label>хват</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox">
+                        <input type="checkbox" name="display_params" value="height"
+                               ng-checked="params.display_params && params.display_params.indexOf('height') >= 0">
                         <label>рост</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox">
+                        <input type="checkbox" name="display_params" value="club"
+                               ng-checked="params.display_params && params.display_params.indexOf('club') >= 0">
                         <label>текущая команда</label>
                     </div>
                 </div><div class="field">
                     <div class="ui checkbox">
-                        <input type="checkbox" name="nation">
+                        <input type="checkbox" name="display_params" value="weight"
+                               ng-checked="params.display_params && params.display_params.indexOf('weight') >= 0">
                         <label>вес</label>
-                    </div>
-                </div><div class="field">
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="nation">
-                        <label>гражданство</label>
                     </div>
                 </div>
             </div><!--fields-styled-->
@@ -340,56 +338,60 @@
                     <div class="col-sm-4 b-accordion-content__item">
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="games">
+                                <input type="checkbox" name="display_params" value="matches_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('matches_total') >= 0">
                                 <label>И <span class="label-small">игры</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls">
+                                <input type="checkbox" name="display_params" value="goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('goals_total') >= 0">
                                 <label>Ш <span class="label-small">шайбы</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="points">
+                                <input type="checkbox" name="display_params" value="points_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('points_total') >= 0">
                                 <label>О <span class="label-small">очки</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="plus-minus">
+                                <input type="checkbox" name="display_params" value="plus_minus_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('plus_minuss_total') >= 0">
                                 <label>+/-</label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-eq">
+                                <input type="checkbox" name="balls-eq" disabled>
                                 <label>ШР <span class="label-small">шайбы в равенстве</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-more">
+                                <input type="checkbox" name="balls-more" disabled>
                                 <label>ШБ <span class="label-small">шайбы в большинстве</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-less">
+                                <input type="checkbox" name="balls-less" disabled>
                                 <label>ШМ <span class="label-small">шайбы в меньшенстве</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-overtime">
+                                <input type="checkbox" name="balls-overtime" disabled>
                                 <label>ШО <span class="label-small">шайбы в овертайме</span></label>
                             </div>
                         </div>
@@ -398,49 +400,52 @@
                     <div class="col-sm-4 b-accordion-content__item">
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-win">
+                                <input type="checkbox" name="balls-win" disabled>
                                 <label>ШП <span class="label-small">шайбы победные</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="bullits-nes">
+                                <input type="checkbox" name="bullits-nes" disabled>
                                 <label>РБ <span class="label-small">решающие буллиты</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="assistant">
+                                <input type="checkbox" name="display_params" value="assists_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('assists_total') >= 0">
                                 <label>А <span class="label-small">ассистент</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal">
+                                <input type="checkbox" name="shots-on-goal" disabled>
                                 <label>БП <span class="label-small">бросков по воротам</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal__percent">
+                                <input type="checkbox" name="shots-on-goal__percent" disabled>
                                 <label>%БВ <span class="label-small">%бросков по воротам</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-per-game">
+                                <input type="checkbox" name="display_params" value="goals_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('goals_average') >= 0">
                                 <label>СрШ/И <span class="label-small">среднее кол-во шайб за игру</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="pass-per-game">
+                                <input type="checkbox" name="display_params" value="assists_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('assists_average') >= 0">
                                 <label>СрА/И <span class="label-small">среднее кол-во передач за игру</span></label>
                             </div>
                         </div>
@@ -449,50 +454,32 @@
                     <div class="col-sm-4 b-accordion-content__item">
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="point-per-game">
+                                <input type="checkbox" name="display_params" value="points_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('points_average') >= 0">
                                 <label>СрО/И <span class="label-small">среднее кол-во очков за игру</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="folls-per-game">
-                                <label>СрШ/И <span class="label-small">среднее штрафное время передач за игру</span></label>
+                                <input type="checkbox" name="display_params" value="penalty_time_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('penalty_time_average') >= 0">
+                                <label>СрШ/И <span class="label-small">среднее штрафное время за игру</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="assistant">
-                                <label>Ср+/-/И <span class="label-small">среднее показатель "плюс/минус" передач за игру</span></label>
+                                <input type="checkbox" name="display_params" value="plus_minus_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('plus_minus_average') >= 0">
+                                <label>Ср+/-/И <span class="label-small">среднее показатель "плюс/минус" за игру</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="assistant">
-                                <label>А <span class="label-small">ассистент</span></label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal">
-                                <label>БП <span class="label-small">бросков по воротам</span></label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal__percent">
+                                <input type="checkbox" name="shots-on-goal__percent" disabled>
                                 <label>%БВ <span class="label-small">%бросков по воротам</span></label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="shots-per-game">
-                                <label>БВ/И <span class="label-small">бросков по воротам за игру</span></label>
                             </div>
                         </div>
                     </div><!--col-->

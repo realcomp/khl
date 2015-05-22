@@ -121,6 +121,13 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
                     search, if $('[name="' + name + '"]').is(':checked') then null else 'false')
             return
 
+        multiCheckBox = ($scope, search, name) ->
+            # checks checkboxes and updates location search
+            all = ($(e).val() for e in $('[name="' + name + '"]') when $(e).val())
+            checked = ($(e).val() for e in $('[name="' + name + '"]:checked') when $(e).val())
+            $scope.$location.search(search, checked)
+            return
+
         multiSelect = ($scope, search, value) ->
             # checks select and updates location search with serialized data
             if value and value.length
@@ -181,6 +188,8 @@ angular.module('Sportomatics').service('PlayersSearchService', ($http, $timeout)
         checkBox($scope, 'league_enabled', 'league2Enabled')
         checkBox($scope, 'related_enabled', 'relatedEnabled')
         checkBox($scope, 'is_playing', 'is_playing', true)
+
+        multiCheckBox($scope, 'display_params', 'display_params')
 
         multiSelect($scope, 'citizenship', $scope.citizenship)
         multiSelect($scope, 'club', $scope.club)
