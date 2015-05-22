@@ -180,6 +180,13 @@
                 </a>
             </th>
             <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
+                <a href="#">
+                    <span>ШП</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
                 ng-show="params.display_params && params.display_params.indexOf('win_bullet_goals_total') >= 0">
                 <a href="#">
                     <span>РБ</span>
@@ -311,30 +318,27 @@
 
             <td class="text-center hidden-xs"
                 ng-show="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
-                <!-- es_goals -->
-                -
+                {{ player.es_goals_total }}
             </td>
 
             <td class="text-center-sm hidden-xs"
                 ng-show="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
-                <!-- pp_goals -->
-                -
+                {{ player.pp_goals_total }}
             </td>
 
             <td class="text-center-sm hidden-xs"
                 ng-show="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
-                <!-- ev_goals -->
-                -
+                {{ player.ev_goals_total }}
             </td>
 
             <td class="text-center hidden-xs"
-                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
-                -
+                ng-show="params.display_params && params.display_params.indexOf('overtime_goals_total') >= 0">
+                {{ player.overtime_goals_total }}
             </td>
 
             <td class="text-center hidden-xs"
-                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
-                -
+                ng-show="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
+                {{ player.win_goals_total }}
             </td>
 
             <td class="text-center hidden-xs"

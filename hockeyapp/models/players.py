@@ -60,6 +60,16 @@ class Player(AbstractMan):
     penalty_time_total = models.IntegerField(
         _('Penalty Time Total'), null=True)
     gamingtime_total = models.IntegerField(_('Gaming Time Total'), null=True)
+    ev_goals_total = models.IntegerField(_('EV Goals Total'), null=True)
+    pp_goals_total = models.IntegerField(
+        _('Power Play Goals Total'), null=True)
+    es_goals_total = models.IntegerField(
+        _('Even Strength Goals Total'), null=True)
+    overtime_goals_total = models.IntegerField(
+        _('Overtime Goals Total'), null=True)
+    win_goals_total = models.IntegerField(_('Win Goals Total'), null=True)
+    bullet_goals_total = models.IntegerField(
+        _('Win Bullet Goals Total'), null=True)
     goals_average = models.FloatField(_('Goals Average'), null=True)
     assists_average = models.FloatField(_('Assists Average'), null=True)
     points_average = models.FloatField(_('Points Average'), null=True)

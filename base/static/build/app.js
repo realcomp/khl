@@ -4848,6 +4848,7 @@ angular.module('Sportomatics').controller('PlayersSearch2Controller', [
 
 angular.module('Sportomatics').controller('PlayersSearchController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', function($http, $scope, $location, PlayersSearchService, tags, $timeout) {
+    var f;
     $scope.tags = tags;
     $scope.PlayersSearchService = PlayersSearchService;
     $scope.$location = $location;
@@ -4968,6 +4969,12 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
       PlayersSearchService.search($scope);
     };
     PlayersSearchService.loadCountries($scope);
+    if ($scope.params.state === 'table' && !$scope.data) {
+      f = function() {
+        return PlayersSearchService.search($scope);
+      };
+      $timeout(f, 1000);
+    }
     $('.unstackable.striped.table').visibility({
       'once': false,
       'observeChanges': true,

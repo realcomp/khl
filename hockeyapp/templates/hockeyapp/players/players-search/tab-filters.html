@@ -370,28 +370,32 @@
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-eq" disabled>
+                                <input type="checkbox" name="display_params" value="es_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
                                 <label>ШР <span class="label-small">шайбы в равенстве</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-more" disabled>
+                                <input type="checkbox" name="display_params" value="pp_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
                                 <label>ШБ <span class="label-small">шайбы в большинстве</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-less" disabled>
+                                <input type="checkbox" name="display_params" value="ev_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
                                 <label>ШМ <span class="label-small">шайбы в меньшенстве</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-overtime" disabled>
+                                <input type="checkbox" name="display_params" value="overtime_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('overtime_goals_total') >= 0">
                                 <label>ШО <span class="label-small">шайбы в овертайме</span></label>
                             </div>
                         </div>
@@ -400,7 +404,8 @@
                     <div class="col-sm-4 b-accordion-content__item">
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="balls-win" disabled>
+                                <input type="checkbox" name="display_params" value="win_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
                                 <label>ШП <span class="label-small">шайбы победные</span></label>
                             </div>
                         </div>

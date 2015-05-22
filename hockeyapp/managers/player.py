@@ -145,7 +145,10 @@ class PlayerQuerySet(models.QuerySet):
                     if field in (
                             'goals_total', 'assists_total', 'points_total',
                             'plus_minus_total', 'penalty_time_total',
-                            'saves_total', 'loose_goals_total', 'gamingtime_total'):
+                            'saves_total', 'loose_goals_total', 'gamingtime_total',
+                            'ev_goals_total', 'pp_goals_total', 'es_goals_total',
+                            'overtime_goals_total', 'win_goals_total',
+                            'bullet_goals_total'):
                         value = clubplayers.aggregate(**{
                             field: Sum('clubplayermatch__%s' % field.replace('_total', ''))
                         }).get(field, 0) or 0
