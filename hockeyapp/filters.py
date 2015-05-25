@@ -39,6 +39,20 @@ class OrderFilter(filters.BaseFilterBackend):
         'points_average',
         'penalty_time_average',
         'plus_minus_average',
+        'number',
+        'club',
+        'height',
+        'weight',
+        'grip',
+        'birth_date',
+        'ev_goals_total',
+        'pp_goals_total',
+        'es_goals_total',
+        'overtime_goals_total',
+        'win_goals_total',
+        'bullet_goals_total',
+        'shots_total',
+        'pis_average',
     )
 
     def filter_queryset(self, request, qs, view):
