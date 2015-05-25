@@ -1,5 +1,5 @@
 angular.module('Sportomatics').controller('PlayersSearchController', [
-  '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', function($http, $scope, $location, PlayersSearchService, tags, $timeout) {
+  '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', 'OrderService', function($http, $scope, $location, PlayersSearchService, tags, $timeout, OrderService) {
     var f;
     $scope.tags = tags;
     $scope.PlayersSearchService = PlayersSearchService;
@@ -115,6 +115,10 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
         $('.ui.dropdown.leagues .text').text('');
       }
       $location.search('league', league || null);
+    };
+    $scope.setOrderBy = function(order_by) {
+      OrderService.setOrderBy($scope, order_by);
+      return $scope.search();
     };
     $scope.search = function() {
       $scope.setState('table');

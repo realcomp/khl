@@ -1,6 +1,6 @@
 angular.module('Sportomatics').controller('PlayersSearchController', [
-    '$http', '$scope', '$location', 'PlayersSearchService', 'tags','$timeout',
-    ($http, $scope, $location, PlayersSearchService, tags, $timeout) ->
+    '$http', '$scope', '$location', 'PlayersSearchService', 'tags','$timeout', 'OrderService',
+    ($http, $scope, $location, PlayersSearchService, tags, $timeout, OrderService) ->
         $scope.tags = tags
 
         $scope.PlayersSearchService = PlayersSearchService
@@ -118,6 +118,10 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
                 $('.ui.dropdown.leagues .text').text('')
             $location.search('league', league or null)
             return
+
+        $scope.setOrderBy = (order_by) ->
+            OrderService.setOrderBy($scope, order_by)
+            $scope.search()
 
         $scope.search = () ->
             $scope.setState('table')
