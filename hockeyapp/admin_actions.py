@@ -16,6 +16,7 @@ def get_player_recalc_counters_actions():
         'matches_win_total', 'matches_lose_total', 'gamingtime_total',
         'ev_goals_total', 'pp_goals_total', 'es_goals_total',
         'overtime_goals_total', 'win_goals_total', 'bullet_goals_total',
+        'shots_total', 'pis_average',
     ) + tuple(itertools.chain(*map(
         lambda x: ('%s_total' % x, '%s_average' % x),
         ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))

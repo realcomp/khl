@@ -148,14 +148,14 @@ class PlayerQuerySet(models.QuerySet):
                             'saves_total', 'loose_goals_total', 'gamingtime_total',
                             'ev_goals_total', 'pp_goals_total', 'es_goals_total',
                             'overtime_goals_total', 'win_goals_total',
-                            'bullet_goals_total'):
+                            'bullet_goals_total', 'shots_total'):
                         value = clubplayers.aggregate(**{
                             field: Sum('clubplayermatch__%s' % field.replace('_total', ''))
                         }).get(field, 0) or 0
                     elif field in (
                             'goals_average', 'assists_average', 'points_average',
                             'plus_minus_average', 'penalty_time_average',
-                            'saves_p_average', 'sf_average'):
+                            'saves_p_average', 'sf_average', 'pis_average'):
                         if clubplayers.count() >= 10:
                             value = clubplayers.aggregate(**{
                                 field: Avg('clubplayermatch__%s' % field.replace('_average', ''))

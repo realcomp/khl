@@ -75,7 +75,7 @@ class AbstractMan(AdminLinkMixin, LocaleAttrMixin, models.Model):
         abstract=True
 
 
-from .players import Player, RelatedPlayer
+from .players import Player, ClubPlayer, RelatedPlayer
 
 
 class PlayerCitizenship(models.Model):
@@ -276,58 +276,6 @@ class LeagueClub(AdminLinkMixin, models.Model):
     class Meta:
         verbose_name=_('Club league')
         verbose_name_plural=_('Club leagues')
-
-
-class ClubPlayer(models.Model):
-    b''' связка игрок - клуб в сезоне '''
-    objects = managers.player.ClubPlayerQuerySet.as_manager()
-    player = models.ForeignKey(Player)
-    club = models.ForeignKey('hockeyapp.Club')
-    number = models.PositiveIntegerField(_('Number'), default=0)
-    line = models.PositiveSmallIntegerField(_('Line'), default=0,
-                                            choices=PLAYER_ROLE)
-    start_date = models.DateField(_('Start date'), null=True, blank=True)
-    end_date = models.DateField(_('End date'), null=True, blank=True)
-    league = models.ForeignKey(League, null=True, blank=True,
-                                on_delete=models.SET_NULL,)
-    season = models.ForeignKey( Season, null=True, blank=True,
-                                on_delete=models.SET_NULL,)
-
-    __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
-
-    def save(self, **kwargs):
-        if not self.league:
-            #добавляем лигу клуба
-            self.league = self._get_club_league()
-        super(ClubPlayer, self).save(**kwargs)
-
-    def _get_club_league(self):
-        if self.club:
-            if self.season:
-                qs = self.club.leagueclub_set.filter(season=self.season)
-                return qs.last() and qs.last().league
-            return self.club.league
-
-    @property
-    def player_url(self):
-        if self.pk and self.player:
-            url = reverse(
-                'hockeyapp:players:main-card', kwargs={'pk': self.player.pk})
-            return '%s' % url
-
-    @property
-    def club_url(self):
-        if self.pk and self.club:
-            url = reverse('hockeyapp:clubs:details', kwargs={'pk': self.club.pk})
-            if self.season:
-                url += '?%s' % urllib.urlencode({
-                    'season': self.season.pk,
-                })
-            return url
-
-    class Meta:
-        verbose_name=_('Club player')
-        verbose_name_plural=_('Club players')
 
 
 class CoachClub(models.Model):

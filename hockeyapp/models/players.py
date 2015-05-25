@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import bisect
 import numpy
+import urllib
 
 from operator import itemgetter, methodcaller
 
@@ -70,12 +71,15 @@ class Player(AbstractMan):
     win_goals_total = models.IntegerField(_('Win Goals Total'), null=True)
     bullet_goals_total = models.IntegerField(
         _('Win Bullet Goals Total'), null=True)
+    shots_total = models.IntegerField(_('Shots Count Total'), null=True)
     goals_average = models.FloatField(_('Goals Average'), null=True)
     assists_average = models.FloatField(_('Assists Average'), null=True)
     points_average = models.FloatField(_('Points Average'), null=True)
     plus_minus_average = models.FloatField(_('Plus/minus Average'), null=True)
     penalty_time_average = models.FloatField(
         _('Penalty Time Average'), null=True)
+    pis_average = models.FloatField(
+        _('% Implemented Shots Average'), null=True)
     # goalkeeper specific
     bullet_matches_total = models.IntegerField(
         _('Total Matches with Bullet'), null=True)
@@ -232,6 +236,60 @@ class Player(AbstractMan):
     class Meta(object):
         verbose_name = _('Player')
         verbose_name_plural = _('Players')
+
+
+class ClubPlayer(models.Model):
+    b''' связка игрок - клуб в сезоне '''
+    objects = managers.player.ClubPlayerQuerySet.as_manager()
+    player = models.ForeignKey(Player)
+    club = models.ForeignKey('hockeyapp.Club')
+    number = models.PositiveIntegerField(_('Number'), default=0)
+    line = models.PositiveSmallIntegerField(
+        _('Line'), default=0, choices=choices.PLAYER_ROLE)
+    start_date = models.DateField(_('Start date'), null=True, blank=True)
+    end_date = models.DateField(_('End date'), null=True, blank=True)
+    league = models.ForeignKey(
+        'hockeyapp.League', null=True, blank=True,
+        on_delete=models.SET_NULL,)
+    season = models.ForeignKey(
+        'base.Season', null=True, blank=True,
+        on_delete=models.SET_NULL,)
+
+    __unicode__ = lambda self: '{0} ({1})'.format(self.player, self.club)
+
+    def save(self, **kwargs):
+        if not self.league:
+            #добавляем лигу клуба
+            self.league = self._get_club_league()
+        super(ClubPlayer, self).save(**kwargs)
+
+    def _get_club_league(self):
+        if self.club:
+            if self.season:
+                qs = self.club.leagueclub_set.filter(season=self.season)
+                return qs.last() and qs.last().league
+            return self.club.league
+
+    @property
+    def player_url(self):
+        if self.pk and self.player:
+            url = reverse(
+                'hockeyapp:players:main-card', kwargs={'pk': self.player.pk})
+            return '%s' % url
+
+    @property
+    def club_url(self):
+        if self.pk and self.club:
+            url = reverse('hockeyapp:clubs:details', kwargs={'pk': self.club.pk})
+            if self.season:
+                url += '?%s' % urllib.urlencode({
+                    'season': self.season.pk,
+                })
+            return url
+
+    class Meta(object):
+        verbose_name = _('Club player')
+        verbose_name_plural = _('Club players')
 
 
 class RelatedPlayer(models.Model):

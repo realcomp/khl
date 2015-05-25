@@ -208,7 +208,7 @@
                 </a>
             </th>
             <th class="text-center-sm hidden-xs"
-                ng-show="params.display_params && params.display_params.indexOf('pp_shots_total') >= 0">
+                ng-show="params.display_params && params.display_params.indexOf('pis_average') >= 0">
                 <a href="#">
                     <span>%БВ</span>
                     <!-- <i class="dropdown icon"></i> -->
@@ -347,13 +347,13 @@
             </td>
 
             <td class="text-center-sm hidden-xs"
-                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
-                -
+                ng-show="params.display_params && params.display_params.indexOf('shots_total') >= 0">
+                {{ player.shots_total }}
             </td>
 
             <td class="text-center-sm hidden-xs"
-                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
-                -
+                ng-show="params.display_params && params.display_params.indexOf('pis_average') >= 0">
+                {{ player.pis_average }}
             </td>
 
             <td class="text-center hidden-xs hidden-sm"
