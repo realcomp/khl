@@ -74,7 +74,8 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
             'number', 'matches_total', 'goals_total', 'points_total',
             'plus_minus_total',
             'ev_goals_total', 'pp_goals_total', 'es_goals_total',
-            'overtime_goals_total', 'win_goals_total', 'bullet_goals_total')
+            'overtime_goals_total', 'win_goals_total', 'bullet_goals_total',
+            'shots_total', 'pis_average')
         model = Player
 
 

@@ -428,14 +428,16 @@
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal" disabled>
+                                <input type="checkbox" name="display_params" value="shots_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('shots_total') >= 0">
                                 <label>БП <span class="label-small">бросков по воротам</span></label>
                             </div>
                         </div>
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal__percent" disabled>
+                                <input type="checkbox" name="display_params" value="pis_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('pis_average') >= 0">
                                 <label>%БВ <span class="label-small">%бросков по воротам</span></label>
                             </div>
                         </div>
