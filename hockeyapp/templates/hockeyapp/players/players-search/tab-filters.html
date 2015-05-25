@@ -412,7 +412,8 @@
 
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="bullits-nes" disabled>
+                                <input type="checkbox" name="display_params" value="bullet_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('bullet_goals_total') >= 0">
                                 <label>РБ <span class="label-small">решающие буллиты</span></label>
                             </div>
                         </div>
@@ -478,13 +479,6 @@
                                 <input type="checkbox" name="display_params" value="plus_minus_average"
                                        ng-checked="params.display_params && params.display_params.indexOf('plus_minus_average') >= 0">
                                 <label>Ср+/-/И <span class="label-small">среднее показатель "плюс/минус" за игру</span></label>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="shots-on-goal__percent" disabled>
-                                <label>%БВ <span class="label-small">%бросков по воротам</span></label>
                             </div>
                         </div>
                     </div><!--col-->

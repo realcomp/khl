@@ -187,7 +187,7 @@
                 </a>
             </th>
             <th class="text-center-sm hidden-xs"
-                ng-show="params.display_params && params.display_params.indexOf('win_bullet_goals_total') >= 0">
+                ng-show="params.display_params && params.display_params.indexOf('bullet_goals_total') >= 0">
                 <a href="#">
                     <span>РБ</span>
                     <!-- <i class="dropdown icon"></i> -->
@@ -339,6 +339,11 @@
             <td class="text-center hidden-xs"
                 ng-show="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
                 {{ player.win_goals_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('bullet_goals_total') >= 0">
+                {{ player.bullet_goals_total }}
             </td>
 
             <td class="text-center hidden-xs"
