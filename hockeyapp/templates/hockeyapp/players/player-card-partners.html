@@ -52,7 +52,7 @@
                                     <div class="partners-heading">{{players.seasons_count}} сезонов вместе</div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer" ng-repeat="player in players.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
-                                            <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
+                                            <a class="player-partners-link"><img class="ui image" ng-src="{{player.photo.file || '/static/images/no-photo.png' }}" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{player.lastname}}</div>
                                                 <div class="player-partners-name">{{player.name}}</div>
@@ -73,7 +73,7 @@
                                     <div class="partners-heading">{{data.season.title}}</div>
                                     <ul class="player-partners-list">
                                         <li class="player-partners-item pointer" ng-repeat="player in data.players track by $index" ng-if="$index < limit[$parent.$index]" ng-click="go('/ru/hockey/players/'+player.id+'/partners/')">
-                                            <a class="player-partners-link"><img ng-src="{{player.photo.file}}" alt="" class="player-partners-photo"></a>
+                                            <a class="player-partners-link"><img ng-src="{{player.photo.file || '/static/images/no-photo.png' }}" alt="" class="player-partners-photo"></a>
                                             <div class="player-partners-info">
                                                 <div class="player-partners-name">{{player.lastname}}</div>
                                                 <div class="player-partners-name">{{player.name}}</div>

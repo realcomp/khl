@@ -85,25 +85,25 @@
                 <a href="{% url 'hockeyapp:clubs:team' pk %}" {% if active_section == 'club-team' %} class="active" {% endif %}><i class="icon group"></i>Состав</a>
                 {% if active_section == 'club-team' %}
                 <ul>
-                    <li ng-class="{'active': state === 'roaster'}">
-                        <a ng-click="setState('roaster')"><i class=""></i>Ростер</a>
+                    <li ng-class="{'active': state === 'roaster'}" class="sidr-close">
+                        <a ng-click="setState('roaster')" class="sidr-close"><i class=""></i>Ростер</a>
                     </li>
-                    <li ng-class="{'active': state === 'fio'}">
+                    <li ng-class="{'active': state === 'fio'}" class="sidr-close">
                         <a ng-click="setState('fio')"><i class=""></i>Все</a>
                     </li>
-                    <li ng-class="{'active': state === 'is_joined'}">
+                    <li ng-class="{'active': state === 'is_joined'}" class="sidr-close">
                         <a ng-click="setState('is_joined')"><i class=""></i>Пришли</a>
                     </li>
-                    <li ng-class="{'active': state === 'is_left'}">
+                    <li ng-class="{'active': state === 'is_left'}" class="sidr-close">
                         <a ng-click="setState('is_left')"><i class=""></i>Ушли</a>
                     </li>
-                    <li ng-class="{'active': state === 'is_legionnaire'}">
+                    <li ng-class="{'active': state === 'is_legionnaire'}" class="sidr-close">
                         <a ng-click="setState('is_legionnaire')"><i class=""></i>Легионеры</a>
                     </li>
-                    <li ng-class="{'active': state === 'is_home'}">
+                    <li ng-class="{'active': state === 'is_home'}" class="sidr-close">
                         <a ng-click="setState('is_home')"><i class=""></i>Воспитанники</a>
                     </li>
-                    <li ng-class="{'active': state === 'coaches'}">
+                    <li ng-class="{'active': state === 'coaches'}" class="sidr-close">
                         <a ng-click="setState('coaches')"><i class=""></i>Тренеры</a>
                     </li>
                 </ul>
@@ -181,12 +181,23 @@
 </form>
 </div>
 
+<div id="overlay" class="overlay-white" style="visibility: hidden"></div>
+
 
 <script type="text/javascript">
     $(document).ready(function(){
+        $('#overlay, .sidr-close').click(function(){
+            jQuery.sidr('close');
+        })
         $('#simple-menu').sidr({
             renaming: false,
-            displace: false
+            displace: false,
+            onOpen: function(){
+                $('#overlay').css('visibility', 'visible');
+            },
+            onClose: function(){
+                $('#overlay').css('visibility', 'hidden');
+            }
         });
     });
 </script>

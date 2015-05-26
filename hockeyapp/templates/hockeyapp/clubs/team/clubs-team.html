@@ -108,12 +108,12 @@
                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.offender_players | orderBy: order_by " ng-class="{'b-notactive': !playerFilter(player)}">
                                                 <div class="ui card">
                                                     <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
-                                                    <div class="ui ribbon green label-flag">
+                                                    <div class="ui ribbon green label-flag" ng-if="player.citizenship.code">
                                                         <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{player.citizenship.code}}"></i>
                                                     </div>
                                                     <div class="w-gallery-preview__item__img">
                                                         <a href="{{ player.url }}" class="ui image">
-                                                            <img class="ui image" src="{{player.photo}}">
+                                                            <img class="ui image" ng-src="{{player.photo || '/static/images/no-photo.png' }}">
                                                         </a>
                                                     </div>
 
@@ -142,12 +142,12 @@
                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.defender_players | orderBy: order_by " ng-class="{'b-notactive': !playerFilter(player)}">
                                                 <div class="ui card">
                                                     <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
-                                                    <div class="ui ribbon green label-flag">
+                                                    <div class="ui ribbon green label-flag" ng-if="player.citizenship.code">
                                                         <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{player.citizenship.code}}"></i>
                                                     </div>
                                                     <div class="w-gallery-preview__item__img">
                                                         <a href="{{ player.url }}" class="ui image">
-                                                            <img class="ui image" src="{{player.photo}}">
+                                                            <img class="ui image" ng-src="{{player.photo || '/static/images/no-photo.png' }}">
                                                         </a>
                                                     </div>
 
@@ -175,12 +175,12 @@
                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.goalkeeper_players | orderBy: order_by" ng-class="{'b-notactive': !playerFilter(player)}">
                                                 <div class="ui card">
                                                     <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
-                                                    <div class="ui ribbon green label-flag">
+                                                    <div class="ui ribbon green label-flag" ng-if="player.citizenship.code">
                                                         <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{player.citizenship.code}}"></i>
                                                     </div>
                                                     <div class="w-gallery-preview__item__img">
                                                         <a href="{{ player.url }}" class="ui image">
-                                                            <img class="ui image" src="{{player.photo}}">
+                                                            <img class="ui image" ng-src="{{player.photo || '/static/images/no-photo.png' }}">
                                                         </a>
                                                     </div>
 
@@ -203,12 +203,12 @@
                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.all_players | orderBy: order_by " ng-if="playerFilter(player)">
                                                 <div class="ui card">
                                                     <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
-                                                    <div class="ui ribbon green label-flag">
+                                                    <div class="ui ribbon green label-flag" ng-if="player.citizenship.code">
                                                         <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{player.citizenship.code}}"></i>
                                                     </div>
                                                     <div class="w-gallery-preview__item__img">
                                                         <a href="{{ player.url }}" class="ui image">
-                                                            <img class="ui image" src="{{player.photo}}">
+                                                            <img class="ui image" ng-src="{{player.photo || '/static/images/no-photo.png' }}">
                                                         </a>
                                                     </div>
 
@@ -234,12 +234,12 @@
                                             <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="player in season.players.all_players | orderBy: order_by " ng-if="playerFilter(player)">
                                                 <div class="ui card">
                                                     <div class="ui ribbon green label" ng-if="player.number">{{player.number}}</div>
-                                                    <div class="ui ribbon green label-flag">
+                                                    <div class="ui ribbon green label-flag" ng-if="player.citizenship.code">
                                                         <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{player.citizenship.code}}"></i>
                                                     </div>
                                                     <div class="w-gallery-preview__item__img">
                                                         <a href="{{ player.url }}" class="ui image">
-                                                            <img class="ui image" src="{{player.photo}}">
+                                                            <img class="ui image" ng-src="{{player.photo || '/static/images/no-photo.png' }}">
                                                         </a>
                                                     </div>
 
