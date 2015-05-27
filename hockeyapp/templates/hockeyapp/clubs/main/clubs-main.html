@@ -257,14 +257,16 @@
 
                 {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-news" %}
 
+                {% comment %}
                 <section class="w-club__logo visible-xs">
                     <div class="b-club__logo">
-                        <a href="#"><img src="/static/new/images/l-hockey/logo.jpg" /></a>
+                        <a href="#"><img src="{{logo}}" /></a>
                     </div>
                     <h3 class="header-text w-club__name">
                         {{club}}
                     </h3>
                 </section><!--w-club__logo-->
+                {% endcomment %}
 
                 <section class="w-page-tabs">
 

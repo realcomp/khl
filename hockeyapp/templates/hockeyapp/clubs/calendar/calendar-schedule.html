@@ -11,11 +11,12 @@
 
     <div class="b-header b-header__md b-header__filter-in">
         <div class="w-table">
+
             <h2 class="b-cell b-header__text">
                 Расписание
             </h2>
 
-            <a class="b-cell hidden-xs active b-change-views__item w-tooltip b-filter__with-checkbox">
+            <a class="b-cell active b-change-views__item w-tooltip b-filter__with-checkbox hidden-xs">
                 <i class="calendar icon"></i>
                 <div class="ui toggle checkbox" ng-click="showWholeSeason()">
                     <input type="checkbox" name="public">
@@ -23,7 +24,11 @@
                 </div>
             </a>
 
-            <a class="b-cell b-change-views__item w-tooltip" data-content="Убрать неигровые дни" data-variation="basic" ng-click="toggleGameDaysOnly()" ng-class="{'active': gameDaysOnly === true}">
+            <a class="b-cell b-change-views__item w-tooltip hidden-sm hidden-md hidden-lg" data-content="Показать прошедшие"  data-variation="basic" ng-click="showWholeSeason()" ng-class="{'active': wholeSeason === true}">
+                <i class="calendar icon"></i>
+            </a>
+
+            <a class="b-cell b-change-views__item w-tooltip hidden-xs" data-content="Убрать неигровые дни" data-variation="basic" ng-click="toggleGameDaysOnly()" ng-class="{'active': gameDaysOnly === true}">
                 <i class="ellipsis horizontal icon"></i>
             </a>
 
@@ -300,7 +305,7 @@
     </section><!--w-calendar-->
 
     <section class="w-command-mobile visible-sm visible-xs">
-
+    {% comment %}
         <div class="row">
             <div class="col-sm-6 w-command-calendar__item">
                 <div class="b-header b-header__sm hidden-xs hidden-sm">
@@ -490,6 +495,7 @@
             </div><!--w-command-calendar__item-->
 
         </div><!--row-->
+    {% endcomment %}
 
     </section><!--end w-command-mobile-->
 

@@ -173,7 +173,78 @@
                 </ul>
                 {% endif %}
             </li>
+            {% endif %}<!--End section Club-->
+
+            {% if section == 'player' %}<!--Section Player-->
+            <li>
+                <a href="{% url 'hockeyapp:players:search' %}" {% if active_section == 'club-main' %} class="active" {% endif %}><i class="icon angle left"></i>Все игроки</a>
+            </li>
+            <li class="sidr-club-element">
+                <a class="bold" style="height: 48px;">
+                    <div class="col-xs-3">
+                        <img class="inline" src="http://dev.sportomatics.ru{{photo}}" width="35" height="45">
+                    </div>
+                    <div class="col-xs-9">
+                    {{fio}}
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:main-card' pk %}" {% if active_section == 'player-main' %} class="active" {% endif %}><i class="icon heartbeat"></i>Главное</a>
+                {% if active_section == 'player-main' %}
+                <ul>
+                    <li {% if active_menu == 'main-card' %} class="active" {% endif %}>
+                        <a href="{% url 'hockeyapp:players:main-card' pk %}"><i class=""></i>Карточка игрока</a>
+                    </li>
+                    <li {% if active_menu == 'main-geography' %} class="active" {% endif %}>
+                        <a><i class=""></i>История переходов</a>
+                    </li>
+                    <li {% if active_menu == 'main-coaches' %} class="active" {% endif %}>
+                        <a><i class=""></i>Слухи</a>
+                    </li>
+                    <li {% if active_menu == 'main-numbers' %} class="active" {% endif %}>
+                        <a><i class=""></i>Любимые номера</a>
+                    </li>
+                    <li {% if active_menu == 'main-numbers' %} class="active" {% endif %}>
+                        <a ><i class=""></i>Новости</a>
+                    </li>
+                </ul>
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:achievements' pk %}" {% if active_section == 'player-achievements' %} class="active" {% endif %}><i class="icon trophy"></i>Достижения</a>
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:indicators' pk %}" {% if active_section == 'player-indicators' %} class="active" {% endif %}><i class="icon bar chart"></i>Статистика</a>
+                {% if active_section == 'player-indicators' %}
+                <ul>
+                    <li ng-class="{'active': dataType === 'graph-serial'}" class="sidr-close">
+                        <a ng-click="setDataType('graph-serial')" class="sidr-close"><i class=""></i>Столбчатая диаграмма</a>
+                    </li>
+                    <li ng-class="{'active': dataType === 'graph-radar'}" class="sidr-close">
+                        <a ng-click="setDataType('graph-radar')" class="sidr-close"><i class=""></i>Круговая диаграмма</a>
+                    </li>
+                    <!--
+                    <li ng-class="{'active': dataType === 'table'}" class="sidr-close">
+                        <a ng-click="setDataType('table')" class="sidr-close"><i class=""></i>Таблица</a>
+                    </li>-->
+                </ul>
+                {% endif %}
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:achievements' pk %}" {% if active_section == 'player-clubs' %} class="active" {% endif %}><i class="icon trophy"></i>Клубы</a>
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:achievements' pk %}" {% if active_section == 'player-coaches' %} class="active" {% endif %}><i class="icon user"></i>Тренеры</a>
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:partners' pk %}" {% if active_section == 'player-partners' %} class="active" {% endif %}><i class="icon users"></i>Партнеры</a>
+            </li>
+            <li>
+                <a href="{% url 'hockeyapp:players:photos' pk %}" {% if active_section == 'player-photos' %} class="active" {% endif %}><i class="icon photo"></i>Фотографии</a>
+            </li>
             {% endif %}
+
         </ul>
 
   <form>

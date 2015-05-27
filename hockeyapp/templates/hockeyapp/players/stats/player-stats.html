@@ -35,6 +35,10 @@
                     <!--tabs content items SERIAL-->
                     <div class="b-tabs-content ui">
 
+                        {% block mobile_menu %}
+                            {% include "hockeyapp/clubs/mlpushmenu.html" with section="player" active_section="player-indicators" active_menu="player-indicators" %}
+                        {% endblock %}
+
                         <div id="params" class="ui menu b-ui-menu">
                             {% include 'hockeyapp/players/indicators-row.html' %}
                         </div>

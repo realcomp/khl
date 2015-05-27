@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load base_extras %}
 
-<div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+<div class="ui inline dropdown w-page-tabs__dropdown hidden-xs" tabindex="0">
     <input type="hidden" ng-update-hidden
            ng-model="season" ng-init="season = params.season"
            ng-change="setSeason(season)">
@@ -27,6 +27,7 @@
     <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
     <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
 </div>
+{% comment %}
 <!--tabs items ends-->
 <div class="ui vertical tabular-xs menu visible-xs">
     <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item ">О команде</a>
@@ -37,4 +38,5 @@
     <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
     <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
 </div>
+{% endcomment %}
 <!--tabs items ends-->

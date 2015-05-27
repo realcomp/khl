@@ -14,9 +14,9 @@
                 <a class="section" href="{% url 'hockeyapp:clubs:list' %}#?country=1&league={{ league.pk }}">{{ league.title }}</a>
                 <i class="right chevron icon divider"></i>
             {% endif %}
-            <a class="section">{% trans 'Clubs' %}</a>
+            <a href="{% url 'hockeyapp:clubs:list' %}"class="section">{% trans 'Clubs' %}</a>
             <i class="right chevron icon divider"></i>
-            <a class="section">{{ title_verbose }}</a>
+            <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="section">{{ title_verbose }}</a>
             <i class="right chevron icon divider"></i>
             <a class="active section">{% trans club_section %}</a>
         </div>

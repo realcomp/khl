@@ -19,15 +19,15 @@
                 {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club" %}
                 <section class="w-club__logo visible-xs">
                     <div class="b-club__logo">
-                        <a href="#"><img src="/static/new/images/l-hockey/logo.jpg" /></a>
+                        <a href="#"><img src="{{logo}}" /></a>
                     </div>
                     <h3 class="header-text w-club__name">
-                        СКА (Санкт-Петербург)
+                        {{title}}
                     </h3>
                 </section><!--w-club__logo-->
 
                 <section class="w-page-tabs">
-                    <div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+                    <div class="ui inline dropdown w-page-tabs__dropdown hidden-xs" tabindex="0">
                         <div class="text">Сезон 2014-15</div>
                         <i class="dropdown icon"></i>
                         <div class="menu transition hidden" tabindex="-1">
@@ -49,6 +49,7 @@
                         <div class="item" ng-class="{'active': state === 'coaches'}" data-tab="tab-name7" ng-click="setState('coaches')">Тренеры</div>
                     </div>
                 <!--tabs items ends-->
+                {% comment %}
                     <div class="ui vertical tabular-xs menu visible-xs">
                         <div class="item" ng-class="{'active': state === 'roaster'}" data-tab="tab-name" ng-click="setState('roaster')">Ростер</div>
                         <div class="item" ng-class="{'active': state === 'fio'}" data-tab="tab-name2" ng-click="setState('fio')">Все</div>
@@ -58,6 +59,7 @@
                         <div class="item" ng-class="{'active': state === 'is_home'}" data-tab="tab-name6" ng-click="setState('is_home')">Воспитанники</div>
                         <div class="item" ng-class="{'active': state === 'coaches'}" data-tab="tab-name7" ng-click="setState('coaches')">Тренеры</div>
                     </div>
+                {% endcomment %}
                 <!--tabs items ends-->
 
                 <!--tabs content-->

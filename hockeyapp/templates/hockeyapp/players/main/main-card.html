@@ -15,6 +15,11 @@
 {% endfor %}
 <!--tabs content items-->
 <div class="b-tabs-content ui tab active">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="player" active_section="player-main" active_menu="main-card" %}
+    {% endblock %}
+
     <div class="row">
         <div class="col-md-5">
             <div class="w-command-info__main row b-row hidden-xs">

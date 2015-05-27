@@ -51,6 +51,10 @@
 
                     <!--tabs content items-->
                     <div class="b-tabs-content ui" >
+
+                    {% block mobile_menu %}
+                        {% include "hockeyapp/clubs/mlpushmenu.html" with section="player" active_section="player-achievements" active_menu="main-card" %}
+                    {% endblock %}
                         <div class="row">
                             <div class="column">
                                 <div id="player-timeline"></div>

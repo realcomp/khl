@@ -99,9 +99,33 @@
                     <ul class="nav navbar-nav navbar-right b-menu">
                         <li>
                             <a href="#">Регистрация</a>
-                        </li><li>
-                            <a href="#">Вход</a>
-                        </li><li class="ui dropdown top right pointing">
+                        </li>
+                        <li>
+                            {% comment %}
+                            {% if user.is_authenticated %}
+                                {% if request.user.avatar %}
+                                    <a href="{% url 'accounts:profile-private' %}" class="item">
+                                        <img src="{{ request.user.avatar.url }}" height="30" />
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'accounts:profile-private' %}" class="item">
+                                    {{ request.user.username }}
+                                </a>
+                                <a href="{% url 'auth_logout' %}?next={{ request.path }}" class="item">{% trans 'Logout' %}</a>
+                            {% else %}
+                                <form action="{% url 'auth_login' %}?next={{ request.path }}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="text" name="username" />
+                                    <input type="password" name="password" />
+                                    <input type="submit" value="{% trans 'Login' %}">
+                                </form>
+                                <!-- <a href="{% url 'auth_login' %}" class="item">{% trans 'Login' %}</a> -->
+                                <a href="{% url 'accounts:signup' %}" class="item">{% trans 'Signup' %}</a>
+                            {% endif %}
+                            {% endcomment %}
+                            <a href="{% url 'auth_login' %}?next={{ request.path }}" class="item">{% trans 'Signup' %}</a>
+                        </li>
+                        <li class="ui dropdown top right pointing">
                             <a class="default text" href="#">Язык<i class="dropdown icon"></i></a>
                             <ul class="menu">
                                 <li class="item">Clothing</li>

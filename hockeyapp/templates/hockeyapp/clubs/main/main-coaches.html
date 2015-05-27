@@ -32,7 +32,7 @@
                     <div class="w-gallery-preview__item__img img-wrap">
                         <figure class="figure-styled">
                             <a href="#" class="ui image">
-                                <img class="ui image" ng-src="{{ coach.photo }}">
+                                <img class="ui image" ng-src="{{ coach.photo  || '/static/images/no-photo.png'  }}">
                             </a>
                         </figure>
                     </div>
