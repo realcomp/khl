@@ -607,7 +607,6 @@ class HockeyKHLMatchParser(HockeyMHLMatchParser):
             _date_dict = _dt
             _m = _date_dict[0].split()[1].encode('utf-8')
             _mn = month_dict.get(_m) or md_alt.get(_m)
-            print(_date_dict, _m, _mn)
             _date_dict[0] = _date_dict[0].replace(_m.decode('utf-8'), _mn)
             if _date_dict[-1] != '':
                 mask = '%d %m %Y %H:%M'
