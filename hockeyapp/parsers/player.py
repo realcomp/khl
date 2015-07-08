@@ -1,7 +1,7 @@
-#coding: utf-8
+# coding: utf-8
 from __future__ import print_function, unicode_literals
 
-__author__='smirnov.ev'
+__author__ = 'smirnov.ev'
 
 import datetime
 import re
@@ -16,17 +16,17 @@ from . import xpathes
 
 
 KHL_PLAYER_RU_TO_EN = {
-        'club': b'Клуб',
-        'contract_type': b'Вид контракта',
-        'contract_to': b'Контракт до',
-        'number': b'Номер',
-        'line': b'Амплуа',
-        'height': b'Рост',
-        'weight': b'Вес',
-        'grip': b'Хват',
-        'birth_date': b'Дата рождения',
-        'birth_date_alt': b'Родился',
-        'citizenship': b'Гражданство',
+    'club': b'Клуб',
+    'contract_type': b'Вид контракта',
+    'contract_to': b'Контракт до',
+    'number': b'Номер',
+    'line': b'Амплуа',
+    'height': b'Рост',
+    'weight': b'Вес',
+    'grip': b'Хват',
+    'birth_date': b'Дата рождения',
+    'birth_date_alt': b'Родился',
+    'citizenship': b'Гражданство',
 }
 
 
@@ -44,10 +44,10 @@ class GetAllKHLPlayerIDs(GrabParser):
         '''
         if id:
             if self.as_get_param:
-                _url = b'?{0}={1}'.format(self.pk_kwarg,id.encode('utf-8'))
+                _url = b'?{0}={1}'.format(self.pk_kwarg, id.encode('utf-8'))
             else:
-                _url = b'{0}{1}'.format(id,'/' if slash else '')
-            self.absolute_url = b'{0}{1}'.format(self.url,_url)
+                _url = b'{0}{1}'.format(id, '/' if slash else '')
+            self.absolute_url = b'{0}{1}'.format(self.url, _url)
         return self.absolute_url
 
     def get_page(self, id=None):
@@ -72,19 +72,19 @@ class KHLPlayerInfo(GrabParser):
     body_xpath = xpathes.KHL_PLAYER_XPATH
     xpath_dict = xpathes.KHL_PLAYER_DATA_DICT
     model_name = 'Player'
-    stats_indexes =  {
-                        b'Клуб': -1,
-                        b'Вид контракта': -1,
-                        b'Контракт до': -1,
-                        b'Номер': -1,
-                        b'Амплуа': -1,
-                        b'Рост': -1,
-                        b'Вес': -1,
-                        b'Хват': -1,
-                        b'Дата рождения': -1,
-                        b'Родился': -1,
-                        b'Умер': -1,
-                        b'Гражданство': -1,
+    stats_indexes = {
+        b'Клуб': -1,
+        b'Вид контракта': -1,
+        b'Контракт до': -1,
+        b'Номер': -1,
+        b'Амплуа': -1,
+        b'Рост': -1,
+        b'Вес': -1,
+        b'Хват': -1,
+        b'Дата рождения': -1,
+        b'Родился': -1,
+        b'Умер': -1,
+        b'Гражданство': -1,
     }
 
     def get_page(self, id=None):
@@ -101,24 +101,24 @@ class KHLPlayerInfo(GrabParser):
         if self.page_tree is not None:
             self.update_stats_indexes()
             _res = {
-                    'khl_id': khl_id,
-                    'url': self.absolute_url,
-                    'html_body': self.get_html_body(html_body),
-                    'ru_fio': self.get_ru_fio(),
-                    'fio': self.get_ru_fio(),
-                    'en_fio': self.get_en_fio(),
-                    'ava_url': self.get_photo_url(),
-                    'club': self.get_club(),
-                    'contract_type': self.get_contract_type(),
-                    'contract_to': self.get_contract_to(),
-                    'number': self.get_number(),
-                    'line': self.get_line(),
-                    'height': str2int_safe(self.get_height()),
-                    'weight': str2int_safe(self.get_weight()),
-                    'grip': self.get_grip(),
-                    'birth_date': self.get_birth_date(),
-                    'death_date': self.get_death_date(),
-                    'citizenship': self.get_citizenship(),
+                'khl_id': khl_id,
+                'url': self.absolute_url,
+                'html_body': self.get_html_body(html_body),
+                'ru_fio': self.get_ru_fio(),
+                'fio': self.get_ru_fio(),
+                'en_fio': self.get_en_fio(),
+                'ava_url': self.get_photo_url(),
+                'club': self.get_club(),
+                'contract_type': self.get_contract_type(),
+                'contract_to': self.get_contract_to(),
+                'number': self.get_number(),
+                'line': self.get_line(),
+                'height': str2int_safe(self.get_height()),
+                'weight': str2int_safe(self.get_weight()),
+                'grip': self.get_grip(),
+                'birth_date': self.get_birth_date(),
+                'death_date': self.get_death_date(),
+                'citizenship': self.get_citizenship(),
             }
             _res['wiki_page'] = self.get_wiki_page(_res['ru_fio'])
             self.clear_stats_indexes()
@@ -136,9 +136,9 @@ class KHLPlayerInfo(GrabParser):
         for li in table:
             key = li.text.split(':', 1)[0].encode('utf-8')
             if self.stats_indexes.get(key):
-                self.stats_indexes[key] = table.index(li)+1
+                self.stats_indexes[key] = table.index(li) + 1
 
-    def _get_dynamic_table_value_xpath(self,key,proxydict=KHL_PLAYER_RU_TO_EN):
+    def _get_dynamic_table_value_xpath(self, key, proxydict=KHL_PLAYER_RU_TO_EN):
         b''' динамически изменяем xpath '''
         i = self.stats_indexes.get(proxydict.get(key))
         _xpath = self._get_value_xpath(key)
@@ -157,7 +157,7 @@ class KHLPlayerInfo(GrabParser):
             _res = _res[0].attrib.get('style')
             _res = re.search('url\((.*?)\)', _res).group(1)
             if _res != '/img/teamplayers_db//.jpg':
-                return xpathes.KHL_SITE_URL+_res
+                return xpathes.KHL_SITE_URL + _res
 
     def get_ru_fio(self):
         b''' возьмем ФИО игрока '''
@@ -196,10 +196,10 @@ class KHLPlayerInfo(GrabParser):
         b''' возьмем амплуа игрока '''
         _res = self._get_dynamic_table_value('line')
         return {
-                '': 0,
-                b'вратарь': 1,
-                b'защитник': 2,
-                b'нападающий': 3,
+            '': 0,
+            b'вратарь': 1,
+            b'защитник': 2,
+            b'нападающий': 3,
         }.get(_res[0].strip().lower().encode('utf-8')) if _res else ''
 
     def get_height(self):
@@ -226,17 +226,18 @@ class KHLPlayerInfo(GrabParser):
     def get_birth_date(self):
         b''' возьмем день рождения игрока '''
         _res = (self._get_dynamic_table_value('birth_date') or
-                self._get_dynamic_table_value('birth_date_alt'))          
+                self._get_dynamic_table_value('birth_date_alt'))
         if _res:
             _res = _res[0].strip().lower().encode('utf-8')
             _m = _res.split()[1]
-            _res = _res.replace(_m, xpathes.MDP.get(_m).encode('utf-8'))
+            _mn = xpathes.MDP.get(_m) or xpathes.MD.get(_m)
+            _res = _res.replace(_m, _mn.encode('utf-8'))
             return datetime.datetime.strptime(_res, '%d %m %Y')
         return ''
 
     def get_death_date(self):
         b''' возьмем дату смерти игрока '''
-        _res = self._get_dynamic_table_value('death_date')        
+        _res = self._get_dynamic_table_value('death_date')
         if _res:
             _res = _res[0].strip().lower().encode('utf-8')
             _m = _res.split()[1]
@@ -259,7 +260,7 @@ class KHLPlayerInfo(GrabParser):
         b''' URL страницы на wiki '''
         if ru_fio:
             url = 'https://ru.wikipedia.org/w/api.php?action=opensearch&format=json&search='
-            url = '{}{}'.format(url,ru_fio)
+            url = '{}{}'.format(url, ru_fio)
             r = requests.get(url)
             if r.status_code == 200 and r.json():
                 if len(r.json()) > 3:
@@ -274,13 +275,14 @@ class KHLPlayerInfo(GrabParser):
 
 
 MHL_PLAYER_RU_TO_EN = {
-        'number': b'Номер',
-        'line': b'Амплуа',
-        'height': b'Рост',
-        'weight': b'Вес',
-        'birth_date': b'Дата рожд.',
-        'citizenship': b'Гражданство',
+    'number': b'Номер',
+    'line': b'Амплуа',
+    'height': b'Рост',
+    'weight': b'Вес',
+    'birth_date': b'Дата рожд.',
+    'citizenship': b'Гражданство',
 }
+
 
 class GetAllMHLPlayerIDs(GetAllKHLPlayerIDs):
     b''' Парсер списка игроков МХЛ '''
@@ -295,13 +297,13 @@ class MHLPlayerInfo(KHLPlayerInfo):
     absolute_url = url
     body_xpath = xpathes.MHL_PLAYER_XPATH
     xpath_dict = xpathes.MHL_PLAYER_DATA_DICT
-    stats_indexes =  {
-                        b'Номер': -1,
-                        b'Амплуа': -1,
-                        b'Рост': -1,
-                        b'Вес': -1,
-                        b'Дата рожд.': -1,
-                        b'Гражданство': -1,
+    stats_indexes = {
+        b'Номер': -1,
+        b'Амплуа': -1,
+        b'Рост': -1,
+        b'Вес': -1,
+        b'Дата рожд.': -1,
+        b'Гражданство': -1,
     }
 
     def get_player_all_data(self, khl_id=None, html_body=None):
@@ -311,36 +313,36 @@ class MHLPlayerInfo(KHLPlayerInfo):
         if self.page_tree is not None:
             self.update_stats_indexes()
             _res = {
-                    'khl_id': khl_id,
-                    'url': self.absolute_url,
-                    'html_body': self.get_html_body(html_body),
-                    'fio': self.get_ru_fio(),
-                    'ava_url': self.get_photo_url(),
-                    'number': self.get_number(),
-                    'line': self.get_line(),
-                    'height': self.get_height(),
-                    'weight': self.get_weight(),
-                    'birth_date': self.get_birth_date(),
-                    'citizenship': self.get_citizenship(),
+                'khl_id': khl_id,
+                'url': self.absolute_url,
+                'html_body': self.get_html_body(html_body),
+                'fio': self.get_ru_fio(),
+                'ava_url': self.get_photo_url(),
+                'number': self.get_number(),
+                'line': self.get_line(),
+                'height': self.get_height(),
+                'weight': self.get_weight(),
+                'birth_date': self.get_birth_date(),
+                'citizenship': self.get_citizenship(),
             }
             _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
 
-    def _get_dynamic_table_value_xpath(self,key,proxydict=MHL_PLAYER_RU_TO_EN):
+    def _get_dynamic_table_value_xpath(self, key, proxydict=MHL_PLAYER_RU_TO_EN):
         b''' динамически изменяем xpath '''
         return super(MHLPlayerInfo, self)._get_dynamic_table_value_xpath(
-                                            key,
-                                            proxydict
+            key,
+            proxydict
         )
 
     def get_photo_url(self):
         b''' возьмем url photo игрока '''
         _res = self._get_value('photo')
         if _res:
-            if ('/img/teamplayers_db//.jpg' not in _res[0] or 
-                '/i/no_photo.gif' not in _res[0]
-            ):
+            if ('/img/teamplayers_db//.jpg' not in _res[0] or
+                    '/i/no_photo.gif' not in _res[0]
+                    ):
                 return _res[0]
 
     def get_birth_date(self):
@@ -366,29 +368,30 @@ class GetAllMHL2PlayerIDs(GetAllMHLPlayerIDs):
         '''
         if id:
             if self.as_get_param:
-                _url = b'?{0}={1}'.format(self.pk_kwarg,id)
+                _url = b'?{0}={1}'.format(self.pk_kwarg, id)
             else:
-                _url = b'{0}{1}'.format(id,'/' if slash else '')
-            self.absolute_url = b'{0}{1}'.format(self.url,_url)
+                _url = b'{0}{1}'.format(id, '/' if slash else '')
+            self.absolute_url = b'{0}{1}'.format(self.url, _url)
         return self.absolute_url
 
     def get_ids(self):
         ids = list()
-        for char in range(1,28):
+        for char in range(1, 28):
             lst_link = self.get_page(id=char)
             ids.extend([elem.split('/')[2] for elem in lst_link])
         return set(ids)
 
 
 MHL2_PLAYER_RU_TO_EN = {
-        'club': b'Клуб',
-        'number': b'Номер',
-        'line': b'Амплуа',
-        'height': b'Рост',
-        'weight': b'Вес',
-        'birth_date': b'Дата рожд.',
-        'citizenship': b'Гражданство',
+    'club': b'Клуб',
+    'number': b'Номер',
+    'line': b'Амплуа',
+    'height': b'Рост',
+    'weight': b'Вес',
+    'birth_date': b'Дата рожд.',
+    'citizenship': b'Гражданство',
 }
+
 
 class MHL2PlayerInfo(MHLPlayerInfo):
     b''' парсер данных о игроке МХЛ-2 '''
@@ -396,14 +399,14 @@ class MHL2PlayerInfo(MHLPlayerInfo):
     absolute_url = url
     body_xpath = xpathes.MHL2_PLAYER_XPATH
     xpath_dict = xpathes.MHL2_PLAYER_DATA_DICT
-    stats_indexes =  {
-                        b'Клуб': -1,
-                        b'Номер': -1,
-                        b'Амплуа': -1,
-                        b'Рост': -1,
-                        b'Вес': -1,
-                        b'Дата рожд.': -1,
-                        b'Гражданство': -1,
+    stats_indexes = {
+        b'Клуб': -1,
+        b'Номер': -1,
+        b'Амплуа': -1,
+        b'Рост': -1,
+        b'Вес': -1,
+        b'Дата рожд.': -1,
+        b'Гражданство': -1,
     }
 
     def get_player_all_data(self, khl_id=None, html_body=None):
@@ -413,28 +416,28 @@ class MHL2PlayerInfo(MHLPlayerInfo):
         if self.page_tree is not None:
             self.update_stats_indexes()
             _res = {
-                    'khl_id': khl_id,
-                    'url': self.absolute_url,
-                    'html_body': self.get_html_body(html_body),
-                    'fio': self.get_ru_fio(),
-                    'ava_url': self.get_photo_url(),
-                    'club': self.get_club(),
-                    'number': self.get_number(),
-                    'line': self.get_line(),
-                    'height': self.get_height(),
-                    'weight': self.get_weight(),
-                    'birth_date': self.get_birth_date(),
-                    'citizenship': self.get_citizenship(),
+                'khl_id': khl_id,
+                'url': self.absolute_url,
+                'html_body': self.get_html_body(html_body),
+                'fio': self.get_ru_fio(),
+                'ava_url': self.get_photo_url(),
+                'club': self.get_club(),
+                'number': self.get_number(),
+                'line': self.get_line(),
+                'height': self.get_height(),
+                'weight': self.get_weight(),
+                'birth_date': self.get_birth_date(),
+                'citizenship': self.get_citizenship(),
             }
             _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
             return _res
 
-    def _get_dynamic_table_value_xpath(self,key,proxydict=MHL2_PLAYER_RU_TO_EN):
+    def _get_dynamic_table_value_xpath(self, key, proxydict=MHL2_PLAYER_RU_TO_EN):
         b''' динамически изменяем xpath '''
         return super(MHL2PlayerInfo, self)._get_dynamic_table_value_xpath(
-                                            key,
-                                            proxydict
+            key,
+            proxydict
         )
 ################################################################################
 ################################################################################
@@ -462,18 +465,18 @@ class VHLPlayerInfo(MHL2PlayerInfo):
         if self.page_tree is not None:
             self.update_stats_indexes()
             _res = {
-                    'khl_id': khl_id,
-                    'url': self.absolute_url,
-                    'html_body': self.get_html_body(html_body),
-                    'fio': self.get_ru_fio(),
-                    'ava_url': self.get_photo_url(),
-                    'club': self.get_club(),
-                    'number': self.get_number(),
-                    'line': self.get_line(),
-                    'height': self.get_height(),
-                    'weight': self.get_weight(),
-                    'birth_date': self.get_birth_date(),
-                    'citizenship': self.get_citizenship(),
+                'khl_id': khl_id,
+                'url': self.absolute_url,
+                'html_body': self.get_html_body(html_body),
+                'fio': self.get_ru_fio(),
+                'ava_url': self.get_photo_url(),
+                'club': self.get_club(),
+                'number': self.get_number(),
+                'line': self.get_line(),
+                'height': self.get_height(),
+                'weight': self.get_weight(),
+                'birth_date': self.get_birth_date(),
+                'citizenship': self.get_citizenship(),
             }
             _res['wiki_page'] = self.get_wiki_page(_res['fio'])
             self.clear_stats_indexes()
@@ -491,10 +494,10 @@ class RhockeyPlayerInfoParser(GrabParser):
     pk_kwarg = 'TXT'
     body_xpath = 'body'
     xpath_dict = {
-                    'fio': '/span[@id="Player"]/@value',
-                    'birth_date': '/table/tr/td/table/tr/td/h3/text()',
-                    'birth_place': '/table/tr/td/table/tr/td/h3/text()',
-                    'first_school': '/table/tr/td/table/tr/td/h3/text()',
+        'fio': '/span[@id="Player"]/@value',
+        'birth_date': '/table/tr/td/table/tr/td/h3/text()',
+        'birth_place': '/table/tr/td/table/tr/td/h3/text()',
+        'first_school': '/table/tr/td/table/tr/td/h3/text()',
     }
     model_name = 'Player'
 
@@ -527,12 +530,12 @@ class RhockeyPlayerInfoParser(GrabParser):
         '''
         if self.page_tree is not None:
             _res = {
-                    'fio': self.get_fio(),
-                    'lastname': self.get_lastname(),
-                    'name': self.get_name(),
-                    'birth_date': self.get_birth_date(),
-                    'birth_place': self.get_birth_place(),
-                    'first_school': self.get_first_school(),
+                'fio': self.get_fio(),
+                'lastname': self.get_lastname(),
+                'name': self.get_name(),
+                'birth_date': self.get_birth_date(),
+                'birth_place': self.get_birth_place(),
+                'first_school': self.get_first_school(),
             }
             return _res
 
@@ -591,7 +594,7 @@ class ProbrosanetPlayerInfoParser(GrabParser):
     pk_kwarg = 'id'
     body_xpath = 'body/div/div[@id="intro"]/div[@class="fl_right"]'
     xpath_dict = {
-                    'pos': '/table/tr',
+        'pos': '/table/tr',
     }
     model_name = 'Player'
 
@@ -607,7 +610,7 @@ class ProbrosanetPlayerInfoParser(GrabParser):
         '''
         if self.page_tree is not None:
             _res = {
-                    'pos': self.get_pos(),
+                'pos': self.get_pos(),
             }
             return _res
 
