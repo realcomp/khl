@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block body %}
+{% if club.pk %}
 <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' club.pk %}">
+{% endif %}
 <input type="hidden" id="api-player-partners" value="{% url 'api:hockey:player_partners' pk %}">
 <div class="w-page__main">
     <div class="body_inner bg-image">
