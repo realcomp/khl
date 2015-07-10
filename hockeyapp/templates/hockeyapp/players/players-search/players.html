@@ -1,0 +1,164 @@
+{% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
+
+{% block title %}
+Все игроки, хоккей - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<div class="w-page__clubs-list" ng-controller="PlayersSearchController">
+    <input id="players-search-api" type="hidden" value="{% url 'hockeyapp:players-search-api' %}">
+    <input id="country-league-list-api" type="hidden" value="{% url 'hockeyapp:country-league-list-api' %}">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+                <section class="row w-breadcrumb">
+                    <div class="col-sm-9">
+                        <div class="ui small breadcrumb">
+                            <a class="section">Хоккей</a>
+                            <i class="right chevron icon divider"></i>
+                            <a class="section">Клубы</a>
+                            <i class="right chevron icon divider"></i>
+                            <div class="active section">Главное</div>
+                        </div>
+                    </div>
+                </section><!--row w-breadcrumb-->
+
+                <section class="w-main-nav">
+                    <div class="w-menu">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w-main-nav__b-menu">
+                                <span class="sr-only">Menu</span>
+                                <i class="icon content"></i>
+                            </button>
+                        </div>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="w-main-nav__b-menu">
+                            <ul class="w-main-nav__b-menu ui inverted green menu">
+                                <li class="item w-main-nav__b-menu__logo hidden-xs">
+                                    <a href="#"><img src="images/i-hockey.jpg"></a>
+                                </li>
+                                <li class="item active">
+                                    <a href="#">Россия</a>
+                                </li><li class="item">
+                                    <a href="#">США</a>
+                                </li><li class="item">
+                                    <a href="#">Канада</a>
+                                </li><li class="item">
+                                    <a href="#">Финляндия</a>
+                                </li><li class="item">
+                                    <a href="#">Швеция</a>
+                                </li><li class="item">
+                                    <a href="#">Чехия</a>
+                                </li><li class="item ui dropdown top pointing">
+                                    <a class="default text" href="#">Другие страны<i class="dropdown icon"></i></a>
+                                    <ul class="menu">
+                                        <li class="item">Япония</li>
+                                        <li class="item">Китай</li>
+                                        <li class="item">Германия</li>
+                                        <li class="item">Болгария</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section><!--w-main-nav-->
+
+                <section class="w-page-tabs">
+
+                {% comment %}
+                <!--tabs items-->
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item active" data-tab="tab-name">Все</div>
+                        <div class="item" data-tab="tab-name2">Нападающие</div>
+                        <div class="item" data-tab="tab-name3">Защитники</div>
+                        <div class="item" data-tab="tab-name4">Вратари</div>
+                    </div>
+                <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item active" data-tab="tab-name">Все</div>
+                        <div class="item" data-tab="tab-name2">Нападающие</div>
+                        <div class="item" data-tab="tab-name3">Защитники</div>
+                        <div class="item" data-tab="tab-name4">Вратари</div>
+                    </div>
+                <!--tabs items ends-->
+                {% endcomment %}
+
+                <!--tabs content-->
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui tab active" data-tab="tab-name">
+                        <div class="b-header b-header__md b-header__filter-in">
+                            <div class="w-table">
+                                <h2 class="b-cell b-header__text">Данные по игрокам</h2>
+
+                                <a href="" class="b-cell b-change-views__item"
+                                   ng-class="{ active:!params.state }"
+                                   ng-click="setState(null)">
+                                    <i class="filter icon"></i>
+                                </a>
+
+                                <a href="" class="b-cell b-change-views__item"
+                                   ng-class="{ active:params.state === 'table' }"
+                                   ng-click="setState('table')">
+                                    <i class="table icon"></i>
+                                </a>
+
+                                <a href="" class="b-cell b-change-views__item"
+                                   ng-class="{ active:params.state === 'trophy' }"
+                                   ng-click="setState('trophy')">
+                                    <i class="trophy icon"></i>
+                                </a>
+                            </div><!--row-->
+                        </div><!--b-header b-header__md-->
+
+                        <div ng-hide="params.state">
+                            {% include "hockeyapp/players/players-search/tab-filters.html" %}
+                        </div>
+
+                        <div ng-show="params.state === 'table'">
+                            {% include "hockeyapp/players/players-search/tab-table.html" %}
+                        </div>
+
+                        <div ng-show="params.state === 'trophy'">
+                            3
+                        </div>
+                    </div>
+                    <!--tabs content items-->
+
+
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content w-clubs__khl ui tab" data-tab="tab-name2">
+                        2
+                    </div>
+                    <!--tabs content items-->
+
+
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui tab" data-tab="tab-name3">
+                        3
+                    </div>
+                    <!--tabs content items-->
+
+
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui tab" data-tab="tab-name4">
+                        4
+                    </div>
+                    <!--tabs content items-->
+
+                <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+            </section><!--container-->
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+
+</div>
+{% endblock %}

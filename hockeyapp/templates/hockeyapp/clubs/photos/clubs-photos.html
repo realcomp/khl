@@ -1,0 +1,104 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+{% block body %}
+<input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
+<a class="hidden" id="ClubTeamCompareLink" href="{% url 'hockeyapp:club-team-compare-api' pk %}"></a>
+<div class="w-page__crew">
+    <div class="body_inner bg-image" ng-controller="ClubTeamController as ClubTeamCtrl">
+
+        {% block mobile_menu %}
+            {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-photos" active_menu="photos" %}
+        {% endblock %}
+
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/clubs/clubs-header.html" with club_section="Photos" %}
+
+                {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-photos" %}
+                <section class="w-club__logo visible-xs">
+                    <div class="b-club__logo">
+                        <a href="#"><img src="{{logo}}" /></a>
+                    </div>
+                    <h3 class="header-text w-club__name">
+                        {{title}}
+                    </h3>
+                </section><!--w-club__logo-->
+
+                <section class="w-page-tabs">
+
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+
+                        <div class="item active" ng-class="{'active': state === 'roaster'}" data-tab="tab-name">Фотографии</div>
+                    </div>
+                    <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item active" ng-class="{'active': state === 'roaster'}" data-tab="tab-name">Фотографии</div>
+                    </div>
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui" ng-controller="PhotosController">
+
+                        <!--<div class="b-header b-header__md b-header__filter-in">
+                            <div class="w-table">
+                                <h2 class="b-cell b-header__text">
+                                    Фотографии
+                                </h2>
+                            </div><!--row
+                        </div><!--b-header b-header__md-->
+
+                        <!--<div class="b-header b-header__xs">
+                            <h4 class="b-header__text">
+                                Апрель 2015
+                            </h4>
+                        </div><!--b-header b-header__sm-->
+
+                        <div class="w-gallery-preview">
+                            <div class="row w-gallery-preview__items w-gallery-preview__items__6">
+                                    {% verbatim %}
+                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="photo in photos track by $index">
+                                        <div class="ui card b-arena__photo">
+                                            <p class="text-center">
+                                               {{photo.created}}
+                                            </p>
+                                            <a class="ui image" ng-click="PhotoPopupShow(photo.id, $index, $event)">
+                                                <img class="ui image" src="{{photo.photo.img.file}}">
+                                            </a>
+                                            <p class="text-center">
+                                                <a href="#">
+                                                    <i class="heart icon"> <span class="text-icon">95</span></i>
+                                                </a>
+                                                <a href="#">
+                                                    <i class="comment icon"> <span class="text-icon">5</span></i>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endverbatim %}
+                            </div>
+                        </div>
+
+                        <div class="w-btn btn-month">
+                            <div class="ui button green tiny">Показать еще</div>
+                        </div>
+
+                    </div><!--tabs content items-->
+
+
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+            {% include 'hockeyapp/clubs/team/sticky_menu.html' with clubs_menu_active='club' %}
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+
+
+</div>
+
+{% endblock %}

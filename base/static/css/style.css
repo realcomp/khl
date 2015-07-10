@@ -70,6 +70,13 @@ table {
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Collegiate";
+  src: url("../fonts/collegiateHeavyOutlineMedium.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
 /* line 1, ../sass/_animations.sass */
 a {
   -moz-transition: 0.5s;
@@ -95,6 +102,9 @@ body {
   line-height: 1.5;
   font-weight: 400;
   background: #fff;
+}
+svg {
+    font-family: "Open Sans", sans-serif !important;
 }
 
 /* line 8, ../sass/_base.sass */
@@ -138,7 +148,7 @@ body {
 /* line 30, ../sass/_base.sass */
 .top-line .ui.text.menu > .item.header {
   font-weight: normal;
-  font-size: 10px;
+
 }
 /* line 33, ../sass/_base.sass */
 .top-line .ui.text.menu > .item.header:hover {
@@ -366,10 +376,10 @@ i.icon {
 }
 
 /* line 166, ../sass/_base.sass */
-.breadcrumbs {
+/*.breadcrumbs {
   border-top: 1px solid #dedede;
   border-bottom: 1px solid #dedede;
-}
+}*/
 /* line 169, ../sass/_base.sass */
 .breadcrumbs .breadcrumb {
   margin: 0;
@@ -377,6 +387,7 @@ i.icon {
 /* line 171, ../sass/_base.sass */
 .breadcrumbs .breadcrumb .divider {
   color: #666;
+  font-size: 9px !important;
 }
 /* line 173, ../sass/_base.sass */
 .breadcrumbs .section {
@@ -392,8 +403,9 @@ i.icon {
 }
 /* line 181, ../sass/_base.sass */
 .breadcrumbs .search-block .ui.icon.input input {
-  padding: 2px 10px;
-  margin-top: 6px;
+
+/*  padding: 2px 10px;
+  margin-top: 6px;*/
 }
 /* line 184, ../sass/_base.sass */
 .breadcrumbs .search-block .icon.search {
@@ -405,13 +417,14 @@ i.icon {
 /* line 189, ../sass/_base.sass */
 .team-info {
   text-align: center;
-  margin-bottom: 11px;
+  background: #fff;
 }
 /* line 192, ../sass/_base.sass */
 .team-info .team-heading {
   position: relative;
   text-align: center;
-  margin-top: 12px;
+  background: #fff;
+
 }
 /* line 196, ../sass/_base.sass */
 .team-info .team-logo {
@@ -470,18 +483,18 @@ i.icon {
 
 /* line 235, ../sass/_base.sass */
 .page-container {
-  background: #ecede4;
-  border-radius: 5px;
+  background: #fff !important;
+  border-radius: 0px 0px 5px 5px;
   padding: 0 5px 5px;
 }
 
 /* line 240, ../sass/_base.sass */
 .page-inner-container {
   background: #fff;
-  border: 1px dashed #ccc;
+
   border-radius: 0 0 8px 8px;
   border-top: none;
-  padding: 28px;
+  padding: 0px 25px 25px 25px;
 }
 
 /* line 248, ../sass/_base.sass */
@@ -606,18 +619,16 @@ i.icon {
 }
 /* line 329, ../sass/_base.sass */
 .team-controls .team-control-btn .ui.button {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 /* line 332, ../sass/_base.sass */
-.footer {
-  margin-top: 20px;
-}
+
 /* line 334, ../sass/_base.sass */
-.footer .container {
+/*.footer .container {
   border-top: 1px solid #9b9b9b;
   box-shadow: 0 -1px 0 0 #a6a6a6;
-}
+}*/
 /* line 337, ../sass/_base.sass */
 .footer .copyright {
   color: #000;
@@ -1412,7 +1423,7 @@ i.icon {
 }
 /* line 861, ../sass/_base.sass */
 .graph-controls-block .graph-control-link.graph-control-link_active {
-  background: #31782a;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
 }
 /* line 864, ../sass/_base.sass */
@@ -2045,7 +2056,8 @@ i.icon {
 .home-page .page-title {
   color: #a1173b;
   font-weight: 600;
-  font-size: 16px;
+  padding: 15px 0px 10px 0px;
+  font-size: 20px;
   line-height: 44px;
   text-align: center;
   text-transform: uppercase;
@@ -2520,7 +2532,6 @@ i.icon {
 }
 /* line 1576, ../sass/_base.sass */
 .players-search-page .player-controls-block {
-  border-top: 1px solid #d9d9d9;
   margin-top: 20px;
 }
 
@@ -2778,7 +2789,7 @@ i.icon {
 
 /* line 1737, ../sass/_base.sass */
 .player-card-short-page .player-card-block {
-  margin: 20px 0;
+  margin: 20px 25px;
 }
 /* line 1739, ../sass/_base.sass */
 .player-card-short-page .player-card-block .player-card-desc {
@@ -2965,7 +2976,7 @@ i.icon {
 }
 /* line 1850, ../sass/_base.sass */
 .player-card-short-page .graph-controls-block .graph-control-link.graph-control-link_active {
-  background: #31782a;
+  background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
 }
 /* line 1853, ../sass/_base.sass */
@@ -3002,7 +3013,7 @@ i.icon {
 }
 /* line 1869, ../sass/_base.sass */
 .player-card-short-page .player-clubs-list {
-  padding: 100px 0;
+  padding: 50px 0;
   box-shadow: inset -1px 0 #d7d7d7;
 }
 /* line 1872, ../sass/_base.sass */
@@ -3245,10 +3256,24 @@ i.icon {
 /* line 2034, ../sass/_base.sass */
 .partners-block .player-partners-item {
   float: left;
-  width: 100px;
-  margin-left: 18px;
+  width: 150px;
+  margin-right: 18px;
   border-bottom: 1px solid #e0e0e0;
   padding: 10px 0;
+    height: 70px;
+}
+.partners-block .player-partners-add-label{
+    float: left;
+    width: 150px;
+    margin-right: 18px;
+    padding: 10px 0;
+    height: 24px;
+    font-size: 10px;
+    color: blue;
+    text-decoration: underline;
+}
+.partners-block .player-partners-add-label:hover{
+    text-decoration: none;
 }
 /* line 2040, ../sass/_base.sass */
 .partners-block .player-partners-item:nth-child(6n+1) {
@@ -3260,7 +3285,7 @@ i.icon {
 }
 /* line 2044, ../sass/_base.sass */
 .partners-block .player-partners-photo {
-  width: 30px;
+  width: 60px;
   border-radius: 3px;
   float: left;
   margin-right: 12px;
@@ -3271,11 +3296,11 @@ i.icon {
 }
 /* line 2051, ../sass/_base.sass */
 .partners-block .player-partners-name {
-  font-size: 10px;
+  font-size: 14px;
 }
 /* line 2053, ../sass/_base.sass */
 .partners-block .player-partners-country {
-  font-size: 8px;
+  font-size: 10px;
 }
 
 /* line 2056, ../sass/_base.sass */
@@ -3946,7 +3971,8 @@ i.icon {
 
 /* line 2481, ../sass/_base.sass */
 .ui.inverted.menu .active.item {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+
 }
 
 /* line 2485, ../sass/_base.sass */
@@ -3954,9 +3980,9 @@ i.icon {
   /*border-bottom: none;*/
 }
 /* line 2487, ../sass/_base.sass */
-.clubs-page .page-inner-container {
+/*.clubs-page .page-inner-container {
   border-top: 1px dashed #ccc;
-}
+}*/
 /* line 2490, ../sass/_base.sass */
 .clubs-page .clubs-menu .heading {
   color: #31782a;
@@ -3975,7 +4001,7 @@ i.icon {
 /* line 2500, ../sass/_base.sass */
 .clubs-page .ui.tabular.menu .item {
   color: #30792a;
-  font-size: 13px;
+  font-size: 12px;
 }
 .user-page .ui.tabular.menu .item {
     color: #30792a;
@@ -4199,10 +4225,10 @@ i.icon {
 }
 
 /* line 2639, ../sass/_base.sass */
-.clubs-stats-page .breadcrumbs {
+/*.clubs-stats-page .breadcrumbs {
   border-bottom: 1px solid #dedede;
 }
-
+*/
 /* line 2643, ../sass/_base.sass */
 .clubs-calendar-page .heading {
   color: #649791;
@@ -5049,7 +5075,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     display: inline-block;
 }
 .block{
-    display: block !important;
+    display: block;
 }
 .ui.breadcrumb a:last-of-type{
     text-decoration: none !important;
@@ -5076,6 +5102,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     overflow: hidden;
     border: 1px solid #ffffff;
     border-radius: 6px;
+}
+.opacity-10{
+    opacity: 0.1 !important;
 }
 .opacity-30{
     opacity: 0.3 !important;
@@ -5197,6 +5226,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 }
 .m-l-8{
     margin-left: 8px !important;
+}
+.m-l-15{
+    margin-left: 15px !important;
 }
 .m-l-20{
     margin-left: 20px !important;
@@ -5514,6 +5546,9 @@ th a:hover, .clubs-page .clubs-table th a:hover {
 .text-right{
     text-align: right;
 }
+.text-left{
+    text-align: left;
+}
 .overlay-black{
     background-color: #000; /* Чёрный фон */
     height: 100%; /* Высота максимальна */
@@ -5644,7 +5679,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
             font-size: 12px !important;
     }
 .player-comparison-block{
-    width: 320px;
+    width: 600px;
     height: 60px;
     background: #FFFFFF;
     font-size: 14px;
@@ -5652,7 +5687,7 @@ th a:hover, .clubs-page .clubs-table th a:hover {
     border-radius: 2px;
     padding: 3px;
     margin: 5px;
-    max-width: 320px;
+    max-width: 600px;
     display: inline-block;
 }
 .player-comparison-legend{
@@ -5710,4 +5745,210 @@ hr.style-one {
     background-image:    -moz-linear-gradient(left, #ccc, #333, #ccc);
     background-image:     -ms-linear-gradient(left, #ccc, #333, #ccc);
     background-image:      -o-linear-gradient(left, #ccc, #333, #ccc);
+}
+#dropzone-container{
+    width: 100%;
+    height: 200px;
+    border: 4px dashed #c0c0c0;
+    margin-top: 20px;
+}
+.fileinput-label{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 30px;
+    font-size: 22px;
+    height: 50px;
+    text-align: center;
+}
+.fileinput-label span{
+    font-size: 16px;
+}
+.fileinput-button{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-top: 40px;
+    font-size: 18px;
+    width: 200px;
+    height: 50px;
+    background: #ecf0f1;
+    border: 2px solid #2c3e50;
+    border-radius: 2px;
+}
+.season-selector{
+    width: 200px;
+    height: 32px;
+    margin-top: -1px;
+}
+.input-new{
+    border: 1px solid #c0c0c0;
+    border-radius: 2px;
+    height: 22px;
+    padding: 2px;
+}
+.margin-auto{
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.amcharts-balloon-div div{
+    max-width: 350px !important;
+}
+.balloon-div{
+}
+.season-balloon{
+    min-height: 100%;
+    vertical-align: top;
+    background: #c0c0c0;
+    display: none !important;
+}
+.no-pointer-events{
+    pointer-events: none !important;
+}
+#map {
+    height: 400px;
+}
+#clubs-map {
+    height: 400px;
+}
+.player-partners-item i.flag:not(.icon):before{
+    height: 14px;
+}
+
+.disable-hover,
+.disable-hover *, canvas {
+  pointer-events: none !important;
+}
+.player-item{
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+#team-photos, #team-tables{
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.graph-span {
+    text-align: left;
+    float: left;
+}
+.map-popup {
+    width: 200px;
+}
+.map-popup .leaflet-poup-content{
+    text-align: center;
+}
+.leaflet-marker-icon{
+    margin-top: -43px !important;
+}
+.leaflet-marker-shadow{
+    margin-top: -50px !important;
+    margin-left: -18px !important;
+}
+.custom-divider{
+    left: 100% !important;
+}
+.custom-divider:before, .custom-divider:after{
+    height: 120% !important;
+}
+.custom-divider:after{
+    top: 20% !important;
+}
+.fan-item{
+    height: 95px !important;
+    width: 145px !important;
+}
+.player-clubs-list .option-link{
+    border-right: none !important;
+}
+.highcharts-axis-labels span {
+    text-decoration: none !important;
+}
+.highcharts-drilldown-axis-label{
+    text-decoration: none !important;
+}
+text tspan, text {
+    text-align: center !important;
+}
+.highcharts-data-labels text tspan{
+    text-shadow: none !important;
+    color: black !important;
+    fill: black;
+    font-size: 7px !important;
+}
+.score{
+    font-size: 22px;
+    font-weight: bold;
+}
+.match-date{
+    font-weight: 300;
+}
+
+.highcharts-tooltip path{
+    stroke: #c0c0c0 !important;
+}
+.tooltip-header{
+    background: #141414 !important;
+    color: #ecf0f1 !important;
+    font-size: 14px;
+    border-bottom: 2px solid #c0c0c0;
+    padding: 8px;
+}
+.highcharts-tooltip > span {
+    min-width: 160px;
+    background: rgba(255,255,255,1);
+    border: 2px solid #141414;
+    box-shadow: 1px 1px 4px #888;
+    border-radius: 4px;
+    padding-bottom: 5px;
+}
+
+#chart-tooltip{
+    width: 938px;
+    height: 90px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    box-shadow: 1px 1px 4px #888;
+}
+#chart-tooltip-header{
+    font-weight: bold;
+    width: 930px;
+    height: 20px;
+    border-bottom: 2px solid #c0c0c0;
+    text-align: center;
+    padding: 4px;
+}
+#chart-tooltip-content{
+    padding: 8px;
+}
+.tooltip-block{
+    float: left;
+    text-align: left;
+    border-right: 2px solid #c0c0c0;
+    padding-right: 6px;
+    padding-left: 6px;
+    min-width: 120px;
+}
+.club-indicators-list-block{
+    margin-left: 20px;
+    border-left: 2px solid #c0c0c0;
+    padding: 8px;
+}
+.club-indicators-list-head{
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+.color-teal{
+    color: #16a085;
+}
+
+.loader-large {
+    background: #ffffff url('/static/images/loader-large.gif') center no-repeat;
+    height: 100px;
 }

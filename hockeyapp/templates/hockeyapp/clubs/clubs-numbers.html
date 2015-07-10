@@ -1,0 +1,100 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{title}}: номера игроков, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-home-page">
+        <!-- {% trans "Player's numbers" %} -->
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Player's Numbers" %}
+
+        <input type="hidden" id="url" value="{% url 'api:hockey:player_partners' pk %}">
+        <div class="page-content page-container">
+            {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-numbers" %}
+            <div class="page-inner-container" ng-controller="NumbersController as NumbersCtrl"
+                 ng-init="url = '{% url 'hockeyapp:club-player-numbers-api' %}'; club = {{ pk }}">
+                <a class="hidden" id="PlayerNumbersApi"
+                   href="{% url 'hockeyapp:club-player-numbers-api' %}"></a>
+                <input name="club" type="hidden" value="{{ pk }}">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu content-tabs">
+                                <span class="heading">{% trans "Player's numbers" %}</span>
+                                <div class="ui selection dropdown">
+                                    <input type="hidden" name="season"
+                                           ng-model="season" ng-update-hidden
+                                           ng-change="setSeason(season)">
+                                    <div class="default text">{% trans "All seasons" %}</div>
+                                    <i class="dropdown icon"></i>
+                                    <div class="menu">
+                                        <div class="item" data-value="">{% trans "All seasons" %}</div>
+                                        {% for season in seasons %}
+                                            <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="twelve wide column">
+                            <div class="loader-large" ng-hide="loaded"></div>
+                            {% verbatim %}
+                            <div class="partners-block-container" ng-show="loaded">
+                                <div class="partners-block" ng-repeat="group in data">
+                                    <div class="partners-heading">{{ group.number || '-' }}</div>
+                                    <ul class="player-partners-list">
+                                        <li class="player-partners-item pointer"
+                                            ng-repeat="player in group.players track by $index"
+                                            ng-if="$index < getLimit(group.number)">
+                                            <a class="player-partners-link"
+                                               ng-click="PlayerPartnersPopupShow(player, $event)">
+                                                <img ng-src="{{ player.photo || '/static/images/no-photo.png' }}" alt="" class="player-partners-photo">
+                                            </a>
+                                            <div class="player-partners-info">
+                                                <div class="player-partners-name">{{ player.lastname }}</div>
+                                                <div class="player-partners-name">{{ player.name }}</div>
+                                                <div class="player-partners-country">{{ player.line_display }}</div>
+                                                <div class="player-partners-country">
+                                                    <span ng-repeat="clubplayer in player.clubplayers track by $index"
+                                                          ng-if="$index < (player.clubplayers_limit || 1)">
+                                                        <a href="{{ clubplayer.club_url }}">{{ clubplayer.season.short_title }}</a><span ng-show="$index < player.clubplayers.length - 1">,</span>
+                                                    </span>
+                                                    <a href="" ng-click="player.clubplayers_limit = 999"
+                                                       ng-show="(player.clubplayers_limit || 1) < player.clubplayers.length">
+                                                        и еще {{ player.clubplayers.length - 1 }}
+                                                    </a>
+                                                </div>
+                                                <!-- <i ng-if="player.citizenship.code" class="flag" ng-class="player.citizenship.code"></i> -->
+                                            </div>
+                                        </li>
+                                        <li class="player-partners-add-label pointer"
+                                            ng-click="increaseLimit(group.number)"
+                                            ng-if="getLimit(group.number) < group.players.length">
+                                            <div class="player-partners-info">
+                                                <div>Показать еще</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endverbatim %}
+                        </div>
+                    </div>
+                </div>
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+                {% include "hockeyapp/player-partners-popup.html" %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

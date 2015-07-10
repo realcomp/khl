@@ -1,0 +1,31 @@
+{% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-geography' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui" ng-controller="ClubCalendarController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-calendar" active_menu="calendar-geography" %}
+    {% endblock %}
+
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Карта выездных матчей
+            </h2>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+    <div class="ui large centered inline text loader" style="background: none !important" ng-class="{'active': !loaded}">
+        Загрузка...
+    </div>
+    <div class="w-map" style="height: 500px">
+        <div id="clubs-map" style="height: 500px"></div>
+    </div>
+</div>
+<!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-geography' clubs_menu_active='club-calendar' %}
+{% endblock %}

@@ -1,5 +1,6 @@
 #coding: utf-8
 import os
+import time
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -41,12 +42,17 @@ INSTALLED_APPS = (
     'relatives',
     'rest_framework',
     'rosetta',
+    'social_auth',
 
     'accounts',
     'addresses',
     'api',
     'base',
+    'bower',
     'hockeyapp',
+    'hockeyapp.tasks.counters',
+    'hockeyapp.tasks.periodic',
+    'hockeyapp.tasks.relatedplayer',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,6 +65,60 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    # 'social_auth.backends.google.GoogleOAuthBackend',  # not working
+    'social_auth.backends.google.GoogleOAuth2Backend',
+    # 'social_auth.backends.google.GoogleBackend',  # not working
+    # 'social_auth.backends.yahoo.YahooBackend',
+    # 'social_auth.backends.browserid.BrowserIDBackend',
+    # 'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    # 'social_auth.backends.contrib.disqus.DisqusBackend',
+    # 'social_auth.backends.contrib.livejournal.LiveJournalBackend',
+    # 'social_auth.backends.contrib.orkut.OrkutBackend',
+    # 'social_auth.backends.contrib.foursquare.FoursquareBackend',
+    'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.contrib.vk.VKOAuth2Backend',
+    # 'social_auth.backends.contrib.live.LiveBackend',
+    # 'social_auth.backends.contrib.skyrock.SkyrockBackend',
+    # 'social_auth.backends.contrib.yahoo.YahooOAuthBackend',
+    # 'social_auth.backends.contrib.readability.ReadabilityBackend',
+    # 'social_auth.backends.contrib.fedora.FedoraBackend',
+    'social_auth.backends.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_SLUGIFY_USERNAMES = False
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email']
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+TWITTER_CONSUMER_KEY = ''
+TWITTER_CONSUMER_SECRET = ''
+FACEBOOK_APP_ID = ''
+FACEBOOK_API_SECRET = ''
+LINKEDIN_CONSUMER_KEY = ''
+LINKEDIN_CONSUMER_SECRET = ''
+ORKUT_CONSUMER_KEY = ''
+ORKUT_CONSUMER_SECRET = ''
+GOOGLE_CONSUMER_KEY = ''
+GOOGLE_CONSUMER_SECRET = ''
+GOOGLE_OAUTH2_CLIENT_ID = '110426058524-3bdf21qirbucr548e8l5jg5mkdcupa2p.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'RAqyLD7ZY1gVkEqndwYRv-rJ'
+FOURSQUARE_CONSUMER_KEY = ''
+FOURSQUARE_CONSUMER_SECRET = ''
+VK_APP_ID = ''
+VK_API_SECRET = ''
+LIVE_CLIENT_ID = ''
+LIVE_CLIENT_SECRET = ''
+SKYROCK_CONSUMER_KEY = ''
+SKYROCK_CONSUMER_SECRET = ''
+YAHOO_CONSUMER_KEY = ''
+YAHOO_CONSUMER_SECRET = ''
+READABILITY_CONSUMER_SECRET = ''
+READABILITY_CONSUMER_SECRET = ''
 
 ROOT_URLCONF = 'sportomatics.urls'
 WSGI_APPLICATION = 'sportomatics.wsgi.application'
@@ -96,6 +156,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 CELERY_ACCEPT_CONTENT = ('pickle', 'json', 'msgpack', 'yaml')
 BROKER_URL = 'redis://localhost:6379/0'
+#BROKER_POOL_LIMIT = 2
+#CELERYD_NODES = 1
+#CELERY_ACKS_LATE = True
+#CELERYD_PREFETCH_MULTIPLIER = 1
 CELERYBEAT_SCHEDULE = {
     'hockeyapp-periodic-update-clubs-every-monday-midnight': {
         'task': 'hockeyapp.tasks.periodic_update_clubs',
@@ -114,8 +178,24 @@ CELERYBEAT_SCHEDULE = {
         #'schedule': local_celery_crontab(hour=0, minute=0),
     #},
     'hockeyapp-periodic-player-generate-timeline': {
-        'task': 'hockeyapp.tasks.periodic_player_generate_timeline',
+        'task': 'hockeyapp.tasks.periodic.player_generate_timeline',
         'schedule': local_celery_crontab(hour=3, minute=0),
+    },
+    'hockeyapp-periodic-club-recalc-counters': {
+        'task': 'hockeyapp.tasks.periodic.club_recalc_counters',
+        'schedule': local_celery_crontab(hour=4, minute=30),
+    },
+    'hockeyapp-periodic-player-recalc-counters': {
+        'task': 'hockeyapp.tasks.periodic.player_recalc_counters',
+        'schedule': local_celery_crontab(hour=5, minute=0),
+    },
+    'hockeyapp-periodic-player-recalc-counters_index': {
+        'task': 'hockeyapp.tasks.periodic.player_recalc_counters_index',
+        'schedule': local_celery_crontab(hour=7, minute=0),
+    },
+    'hockeyapp-periodic-relatedplayer-calc-player': {
+        'task': 'hockeyapp.tasks.periodic.relatedplayer_calc_player',
+        'schedule': local_celery_crontab(hour=9, minute=0),
     },
 }
 CELERY_IGNORE_RESULT = True
@@ -171,6 +251,7 @@ SUIT_CONFIG = {
             'url': '/admin/hockeyapp/leagueclub_multi_add/'
         },
         {'label': _('Translation'), 'icon':'icon-globe', 'url': '/rosetta/pick/'},
+        {'label': 'fix257', 'icon':'icon-edit', 'url': '/admin/hockeyapp/fix257/'},
     ),
     'MENU_EXCLUDE': ('sites', 'auth'),
     'LIST_PER_PAGE': 50,
@@ -211,7 +292,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 }
 
 CACHES = {
@@ -228,7 +310,11 @@ MIGRATION_MODULES = {
     'filer': 'filer.migrations_django',
 }
 
+# project frontend's version
+PROJECT_VERSION = int(time.time())
+
 try:
     from local_settings import *
 except ImportError:
     pass
+

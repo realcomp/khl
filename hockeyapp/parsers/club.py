@@ -129,7 +129,9 @@ class KHLClubInfo(GrabParser):
                     'coach': self.get_coach(),
                     'contacts': self.get_contacts(),
                     #'arena': self.get_arena_info(),
-                    'players': self.get_players(id) or []
+                    'players': self.get_players(id) or [],
+                    'league': get_model(CURRENT_APP, 'League'
+                                        ).objects.filter(en_title='KHL').last()
             }
             return _res
 
@@ -206,7 +208,9 @@ class VHLClubInfo(KHLClubInfo):
                     'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
                     'contacts': self.get_contacts(),
-                    'players': self.get_players() or []
+                    'players': self.get_players() or [],
+                    'league': get_model(CURRENT_APP, 'League'
+                                        ).objects.filter(en_title='VHL').last()
             }
             return _res
 
@@ -254,7 +258,9 @@ class MHLClubInfo(VHLClubInfo):
                     'title': self.get_title(),
                     'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
-                    'players': self.get_players() or []
+                    'players': self.get_players() or [],
+                    'league': get_model(CURRENT_APP, 'League'
+                                        ).objects.filter(en_title='MHL').last()
             }
             return _res
 ################################################################################
@@ -302,6 +308,9 @@ class MHL2ClubInfo(VHLClubInfo):
                     'title': self.get_title(),
                     #'site': self.get_site_url(),
                     'logo_url': self.get_logo_url(),
-                    'players': self.get_players() or []
+                    'players': self.get_players() or [],
+                    'league': get_model(CURRENT_APP, 'League'
+                                        ).objects.filter(en_title='MHL-2'
+                                        ).last()
             }
             return _res

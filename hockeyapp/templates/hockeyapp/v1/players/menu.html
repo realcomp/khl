@@ -1,0 +1,20 @@
+<div class="ui green menu player-menu">
+    <a class="{% if players_menu_active == 'player-card' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:card' pk %}">Главное</a>
+    <a class="{% if players_menu_active == 'player-card-indicators' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:indicators' pk %}">Статистика</a>
+    <a class="{% if players_menu_active == 'player-card-clubs' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:clubs' pk %}">Клубы</a>
+    <a class="{% if players_menu_active == 'player-card-coaches' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:coaches' pk %}">Тренеры</a>
+    <a class="{% if players_menu_active == 'player-card-partners' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:partners' pk %}">Партнеры по команде</a>
+    <a class="{% if players_menu_active == 'player-card-photos' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:photos' pk %}">Фотографии</a>
+    <a class="{% if players_menu_active == 'player-card-communication' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:communication' pk %}">Общение</a>
+    <a class="{% if players_menu_active == 'player-card-news' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:news' pk %}">Новости</a>
+    <a class="{% if players_menu_active == 'player-card-numbers' %}active {% endif %}item"
+       href="{% url 'hockeyapp:players_v1:numbers' pk %}">Любимые номера</a>
+</div>

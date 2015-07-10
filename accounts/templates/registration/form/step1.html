@@ -1,0 +1,79 @@
+{% load i18n %}
+<script type="text/ng-template" id="step1">
+        <div class="row registration-content-row">
+            <p>{% trans "Fine! Just three easy steps, and you're with us!" %}</p>
+        </div>
+        <div class="row registration-content-row">
+            <p><span class="registration-step-label">{% trans 'STEP 1' %}</span> <br>
+                {% trans 'All fields are required' %}</p>
+        </div>
+        <div class="row registration-content-row">
+            {% comment %}
+            <div class="row">
+                <div class="registration-label inline-block">
+                    {% trans 'Choose your login:' %}
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="text" ng-model="user.login">
+                </div>
+            </div>
+            {% endcomment %}
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    E-mail:
+                </div>
+                <div class="registration-input-email inline-block">
+                    <input type="email" ng-model="user.email" ng-hide="userCreated">
+                    <div ng-show="userCreated">
+                        {% verbatim %}
+                            {{ user.email }}
+                        {% endverbatim %}
+                    </div>
+                </div>
+                <div class="registration-passwords-comparison-label inline-block">
+                    <div ng-if="errors.username">
+                        {% verbatim %}
+                        <i class="fa fa-thumbs-o-down"></i> {{ errors.username[0] }}
+                        {% endverbatim %}
+                    </div>
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-checkbox">
+                    <input type="checkbox" ng-model="subscribe">
+                    {% trans 'receive email notifications' %}
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    {% trans 'Password' %}
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="password"
+                           ng-change="passwordsMatch = comparePasswords(user.password, user.password2)"
+                           ng-model="user.password">
+                </div>
+            </div>
+            <div class="row registration-content-row">
+                <div class="registration-label inline-block">
+                    {% trans 'Verify password' %}
+                </div>
+                <div class="registration-input inline-block">
+                    <input type="password"
+                           ng-change="passwordsMatch = comparePasswords(user.password, user.password2)"
+                           ng-model="user.password2">
+                </div>
+                <div class="registration-passwords-comparison-label inline-block">
+                    <div ng-if="user.password && user.password2 && passwordsMatch" ng-class="{'positive': passwordsMatch}">
+                        <i class="fa fa-thumbs-o-up"></i> {% trans 'Passwords match' %}
+                    </div>
+                    <div ng-if="user.password && user.password2 && !passwordsMatch" ng-class="{'negative': !passwordsMatch}">
+                        <i class="fa fa-thumbs-o-down"></i> {% trans 'Please make sure your passwords match' %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" class="small ui green button registration-next-form" ng-click="nextStep()" >{% trans 'NEXT' %}</button>
+            </div>
+        </div>
+</script>

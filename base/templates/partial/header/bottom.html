@@ -1,26 +1,30 @@
 {% load static i18n %}
 {% get_static_prefix as STATIC_PREFIX %}
+{% comment %}
 <div class="bottom-line">
     <div class="container">
-        <a href="{% url 'index' %}" class="logo"><img src="{{STATIC_PREFIX}}images/logo.png" alt="Sportomatics" class="logo-image"></a>
-
+      <div class="ui grid">
+        <div class="five wide column">
+            <a href="{% url 'index' %}" class="logo"><img src="{{STATIC_PREFIX}}new/images/logo.png" alt="Sportomatics" class="logo-image"></a>
+        </div>
+        <div class="ten wide column">
         {% if request.user.is_authenticated and request.user.version == 'PRO' %}
             <div class="ui secondary menu user-card-menu">
-                <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}item"
+                <a class="{% if user_card_menu_active == 'metrics' %}active {% endif %}ui inverted orange button small"
                    href="{% url 'hockeyapp:metrics-players' %}">{% trans 'METRICS' %}</a>
-                <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
-                   href="{% url 'hockeyapp:club-list' %}">{% trans 'CLUBS' %}</a>
-                <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}item"
+                <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}ui inverted red button small"
+                   href="{% url 'hockeyapp:clubs:list' %}">{% trans 'CLUBS' %}</a>
+                <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}ui inverted teal button small"
                    href="{% url 'accounts:profile-private' %}">{% trans 'PROFILE' %}</a>
             </div>
         {% else %}
             <div class="ui secondary menu user-card-menu">
-                <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}item"
-                   href="{% url 'hockeyapp:club-list' %}">{% trans 'CLUBS' %}</a>
-                <a class="{% if user_card_menu_active == 'players' %}active {% endif %}item"
-                   href="{% url 'hockeyapp:players-search' %}">{% trans 'PLAYERS' %}</a>
-{#                <a class="{% if user_card_menu_active == 'fan-zone' %}active {% endif %}item"#}
-                <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}item"
+                <a class="{% if user_card_menu_active == 'clubs' %}active {% endif %}ui inverted orange button small"
+                   href="{% url 'hockeyapp:clubs:list' %}">{% trans 'CLUBS' %}</a>
+                <a class="{% if user_card_menu_active == 'players' %}active {% endif %}ui inverted red button small"
+                   href="{% url 'hockeyapp:players:search' %}">{% trans 'PLAYERS' %}</a>
+{#                <a class="{% if user_card_menu_active == 'fan-zone' %}active {% endif %}ui inverted teal button small"#}
+                <a class="{% if user_card_menu_active == 'profile' %}active {% endif %}ui inverted teal button small"
                    href="{% url 'accounts:profile-private' %}">{% trans 'FAN-ZONE' %}</a>
             </div>
         {% endif %}
@@ -36,5 +40,55 @@
                 </a>
             </div>
         {% endif %}
+      </div>
+     </div>
     </div>
 </div>
+
+<!-- OLD VERSION -->
+{% endcomment %}
+
+<section class="w-head__navbar-two">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12 col-md-3 b-logo">
+                <a href="{% url 'hockeyapp:index' %}"><img src="/static/new/images/logo.png" alt="" tittle=""/></a>
+            </div>
+
+            <nav class="col-sm-8 col-md-6 navbar" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="w-head__navbar-two__b-menu">
+                        <ul class="nav navbar-nav navbar-left b-menu">
+                            <li class="{% if user_card_menu_active == 'clubs' %}active {% endif %} one">
+                                <a href="{% url 'hockeyapp:clubs:list' %}">{% trans 'Clubs' %}</a>
+                            </li>
+                            <li class="{% if user_card_menu_active == 'players' %}active {% endif %} two">
+                                <a href="{% url 'hockeyapp:players:search' %}">{% trans 'Players' %}</a>
+                            </li>
+                            <li class="{% if user_card_menu_active == 'fan-zone' %}active {% endif %} three">
+                                <a href="{% url 'accounts:profile-private' %}">{% trans 'Fan-zone' %}</a>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+
+
+            <div class="col-sm-4 col-md-3 float-right-sm w-search__top">
+                <form class="b-search">
+                    <div class="ui icon input">
+                        <input class="c-search" type="text" placeholder="Поиск...">
+                        <i class="search link icon"></i>
+                    </div>
+                </form>
+            </div><!--w-search__top-->
+
+
+        </div><!--row-->
+    </div><!--container-->
+</section><!--w-logo-menu__bg-->

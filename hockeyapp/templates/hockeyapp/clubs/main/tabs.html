@@ -1,0 +1,42 @@
+{% load i18n %}
+{% load base_extras %}
+
+<div class="ui inline dropdown w-page-tabs__dropdown hidden-xs" tabindex="0">
+    <input type="hidden" ng-update-hidden
+           ng-model="season" ng-init="season = params.season"
+           ng-change="setSeason(season)">
+    <div class="text">{% trans "Season" %} {% lcb %} SeasonsService.getSeasonTitle(season) {% rcb %}</div>
+    <i class="dropdown icon"></i>
+    <div class="menu transition hidden seasons" tabindex="-1">
+        {% for season in seasons %}
+        <div class="item"
+             ng-class="{ 'active selected': SeasonsService.isSeasonActive(season, {{ season.pk }}, {{ forloop.first|yesno:'true,false,' }}) }"
+                 data-text="{% trans "Season" %} {{ season.label }}" data-value="{{ season.pk }}">
+                {{ season.label }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<!--tabs items-->
+<div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+    <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
+    <!--<a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>-->
+    <!--<a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>-->
+    <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
+    <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
+    <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
+    <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
+</div>
+{% comment %}
+<!--tabs items ends-->
+<div class="ui vertical tabular-xs menu visible-xs">
+    <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item ">О команде</a>
+    <!--<a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>-->
+    <!--<a href="{% url 'hockeyapp:clubs:main-rumors' pk %}" class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>-->
+    <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
+    <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
+    <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
+    <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
+</div>
+{% endcomment %}
+<!--tabs items ends-->

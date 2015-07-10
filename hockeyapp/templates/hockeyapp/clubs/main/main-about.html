@@ -1,0 +1,346 @@
+{% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+{% load base_extras%}
+{% load i18n %}
+
+{% block tabs-content %}
+<div ng-controller="ClubMainAboutController">
+{% block mobile_menu %}
+    {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-about" %}
+{% endblock %}
+<input id="bestPlayersURL" type="hidden" value="{% url 'hockeyapp:club-best-players-api' pk %}" />
+
+{% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-about' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui tab active" data-tab="tab-name">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="w-command-info__main row b-row">
+                <div class="b-command-info__logo col-sm-5">
+                    <div class="img-wrap">
+                        <figure class="figure-styled">
+                                <img src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';"/>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="col-sm-7 b-command-info__main">
+                    <div class="b-header b-header__sm">
+                        <h3 class="b-header__text">
+                            {{club}}
+                        </h3>
+                        {% if opening_dt %}
+                            <p class="">
+                                {% trans "Founding year" %}: {% lcb %} "{{ opening_dt }}"|date:"yyyy" {% rcb %}
+                            </p>
+                        {% endif %}
+                    </div><!--b-header b-header__sm-->
+
+                    <table class="ui unstackable very basic table w-labeled-list">
+                        {% if address %}
+                            <tr>
+                                <td><span class="b-labeled">{% trans "Address" %}: </span><span class="font-weight-400">{{ address.title }}</span></td>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                        {% if phone %}
+                            <tr>
+                                <td><span class="b-labeled">{% trans "Phone" %}: </span><span class="font-weight-400">{{ phone }}</span></td>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                        {% if email %}
+                            <tr>
+                                <td><span class="b-labeled">E-mail: </span><span class="font-weight-400">{{ email }}</span></td>
+                                <td></td>
+                           </tr>
+                        {% endif %}
+                        {% if contacts %}
+                            <tr>
+                                <td><span class="b-labeled">{% trans "Contact person" %}: </span><span class="font-weight-400">{{ contacts }}</span></td>
+                                <td></td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div><!--b-command-info__main-->
+            </div><!--row-->
+
+            <div class="w-command-calendar b-row">
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Календарь
+                        </h2>
+
+                        <a href="#" class="b-cell active b-change-views__item">
+                            <i class="block layout icon"></i>
+                        </a>
+
+                        <a href="{% url 'hockeyapp:clubs:calendar' pk %}" class="b-cell b-change-views__item w-tooltip" data-content="Показать все расписание" data-variation="basic">
+                            <i class="table icon"></i>
+                        </a>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+                <div class="row">
+                    <div class="col-sm-6 w-command-calendar__item">
+                        <div class="b-header b-header__sm">
+                            <h4 class="b-header__text">
+                                Предыдущий матч
+                            </h4>
+                        </div><!--b-header b-header__sm-->
+
+                        {% if previous_match %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text">
+                                    {{ previous_match.home_team.title }}
+                                    -
+                                    {{ previous_match.guest_team.title }}
+                                </h5>
+                            </div><!--b-header b-header__xs-->
+
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="{{ previous_match.home_team.url }}" class="ui image">
+                                        <img class="ui circular image" src="{{ previous_match.home_team.logo }}" />
+                                    </a>
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    {{ previous_match.count }}
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="{{ previous_match.guest_team.url }}" class="ui image">
+                                        <img class="ui circular image" src="{{ previous_match.guest_team.logo }}" />
+                                    </a>
+                                </div>
+                            </div><!--row-->
+
+                            <div class="w-command-calendar__info">
+                                <p class="date">
+                                    {% lcb %} "{{ previous_match.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
+                                </p>
+                            </div>
+                        {% else %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text"></h5>
+                            </div><!--b-header b-header__xs-->
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    {% trans "No data" %}
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                            </div><!--row-->
+                            <div class="w-command-calendar__info">
+                            </div>
+                        {% endif %}
+                    </div><!--w-command-calendar__item-->
+
+                    <div class="col-sm-6 w-command-calendar__item">
+                        <div class="b-header b-header__sm">
+                            <h4 class="b-header__text">
+                                Ближайший матч
+                            </h4>
+                        </div><!--b-header b-header__sm-->
+
+                        {% if next_schedule %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text">
+                                    {{ next_schedule.home_team.title }}
+                                    -
+                                    {{ next_schedule.guest_team.title }}
+                                </h5>
+                            </div><!--b-header b-header__xs-->
+
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="{{ next_schedule.home_team.url }}" class="ui image">
+                                        <img class="ui circular image" src="{{ next_schedule.home_team.logo }}">
+                                    </a>
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    - : -
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                    <a href="{{ next_schedule.guest_team.url }}" class="ui image">
+                                        <img class="ui circular image" src="{{ next_schedule.guest_team.logo }}">
+                                    </a>
+                                </div>
+                            </div><!--row-->
+
+                            <div class="w-command-calendar__info">
+                                <p class="date">
+                                    {% lcb %} "{{ next_schedule.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
+                                </p>
+                            </div>
+                        {% else %}
+                            <div class="b-header b-header__xs">
+                                <h5 class="b-header__text"></h5>
+                            </div><!--b-header b-header__xs-->
+                            <div class="row">
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                                    {% trans "No data" %}
+                                </p>
+                                <div class="col-sm-4 col-md-12 col-lg-4">
+                                </div>
+                            </div><!--row-->
+                            <div class="w-command-calendar__info">
+                            </div>
+                        {% endif %}
+                    </div><!--w-command-calendar__item-->
+                </div><!--row-->
+            </div><!--w-command-calendar-->
+
+            <div class="w-command-info b-row">
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Данные о команде
+                        </h2>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+                <table class="ui very basic unstackable table w-labeled-list">
+                    <tr>
+                        <td><span class="b-labeled">Сезонов:</span></td>
+                        <td>{{ seasons__count }} (с {{ earliest_season_year }} года)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="b-labeled">Матчей:</span></td>
+                        <td>
+                            <a href="{% url 'hockeyapp:clubs:calendar' pk %}">
+                                {{ matches__count }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="b-labeled">Игроков в составе:</span></td>
+                        <td>
+                            <a href="{% url 'hockeyapp:clubs:team' pk %}">
+                                {{ players__count }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="b-labeled">Тренеров:</span></td>
+                        <td>{{ coaches__count }}</td>
+                    </tr>
+                    <tr>
+                        <td><span class="b-labeled">Крупнейшая победа:</span></td>
+                        <td>
+                            {{ great_win.count }}
+                            <a class="block" href="{{ great_win.loser.url }}">
+                                {{ great_win.loser.title }}
+                            </a>
+                            {% lcb %} "{{ great_win.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="b-labeled">Крупнейшое поражение:</span></td>
+                        <td>
+                            {{ great_lose.count }}
+                            <a class="block" href="{{ great_win.winner.url }}">
+                                {{ great_lose.winner.title }}
+                            </a>
+                            {% lcb %} "{{ great_lose.date }}"|date:"dd MMMM yyyy hh:mm" {% rcb %}
+                        </td>
+                    </tr>
+                </table>
+            </div><!--w-command-info-->
+        </div>
+
+
+        <div class="col-md-7">
+            <div class="w-gallery-preview">
+                <div class="b-header b-header__md b-header__filter-in">
+                    <div class="w-table">
+                        <h2 class="b-cell b-header__text">
+                            Лидеры команды
+                        </h2>
+
+                        <a href="#" class="b-cell active b-change-views__item">
+                            <i class="block layout icon"></i>
+                        </a>
+
+                        <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="За всю историю команды" data-variation="basic">
+                            <i class="history icon"></i>
+                        </a>
+                    </div><!--row-->
+                </div><!--b-header b-header__md-->
+
+                <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': !loaded}">
+                    Загрузка...
+                </div>
+                <div class="row w-gallery-preview__items" ng-show="loaded">
+                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item"
+                         ng-repeat="item in data">
+                        <div class="ui card">
+                            {% verbatim %}
+                                <div class="ui ribbon green label" ng-if="item.number">
+                                    {{ item.number }}
+                                </div>
+                                <div class="ui ribbon green label-flag">
+                                    <i id="player_{{player.pk}}_flag" class="flag i-top-2 {{item.player.citizenship.code}}"></i>
+                                </div>
+                                <div class="w-mask">
+                                    <div class="w-gallery-preview__item__img img-wrap">
+                                        <a href="{{item.player.url}}">
+                                            <figure class="figure-styled">
+                                                <img class="ui image" ng-src="{{ item.player.photo }}">
+                                            </figure>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="w-gallery-preview__item__info">
+                                    <p class="nickname">
+                                        {{ item.class_ }}
+                                    </p>
+                                    <p class="name">
+                                        <a href="{{item.player.url}}">{{ item.player.name }} {{ item.player.lastname }}
+                                        </a>
+                                    </p>
+                                    <p class="description">
+                                        {{ item.player.line_display }}
+                                    </p>
+                                </div>
+
+                                <div class="extra content w-gallery-preview__item__extra">
+                                    <div class="ui statistic">
+                                        <div class="value">
+                                            <span ng-if="item.field === 'plus_minus' && item.value > 0">+</span>{{ item.value }}<span ng-if="item.field === 'saves_p' || item.field === 'ironman'">%</span>
+                                        </div>
+                                        <div class="label">
+                                            <!-- {% trans "points" %} -->
+                                            <!-- {% trans "goals" %} -->
+                                            <!-- {% trans "minutes" %} -->
+                                            <!-- {% trans "saved shots" %} -->
+                                            <!-- {% trans "matches" %} -->
+                                            <span ng-if="item.field !== 'ironman'">
+                                                {{ item.label }} за {{ item.count }} игр
+                                            </span>
+                                            <span ng-if="item.field === 'ironman'">
+                                                {{ item.count }} из {{ item.count }} игр
+                                            </span>
+                                        </div>
+                                    </div><!--ui static-->
+                                </div>
+                            {% endverbatim %}
+                        </div>
+                     </div><!--w-gallery-preview__item-->
+                </div><!--row w-gallery-preview__items-->
+            </div><!--w-gallery-preview-->
+        </div>
+    </div><!--row-->
+</div>
+<!--tabs content items-->
+
+</div>
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/main/sticky_menu.html' with clubs_main_tab='main-about' clubs_menu_active='club-main' %}
+{% endblock %}

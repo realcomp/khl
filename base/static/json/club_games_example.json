@@ -1,0 +1,1202 @@
+[
+    {
+        "id": 36733,
+        "date": "2015-02-24T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 92,
+            "title_verbose": "Динамо Мн (Минск)",
+            "url": "/ru/hockey/clubs/92/",
+            "logo": "/media/filer_public/87/76/87765483-7780-4371-bd60-3adc68aa0859/dinamo-mn.gif",
+            "address": {
+                "pk": 60,
+                "title": "Минск"
+            },
+            "title": "Динамо Мн"
+        },
+        "score": 3,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 36721,
+        "date": "2015-02-22T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 10,
+            "title_verbose": "Торпедо (Нижний Новгород)",
+            "url": "/ru/hockey/clubs/10/",
+            "logo": "/media/filer_public/95/38/95388318-66ba-4083-8652-8f9207c6e7cf/bbfce1c18b92b3ccc5091f10a20a731b.jpg",
+            "address": {
+                "pk": 8,
+                "title": "Нижний Новгород"
+            },
+            "title": "Торпедо"
+        },
+        "score": 2,
+        "opponent_score": 3,
+        "is_home": true
+    },
+    {
+        "id": 36686,
+        "date": "2015-02-20T16:30:00Z",
+        "overtime_win": true,
+        "bullet_win": false,
+        "opponent": {
+            "id": 27,
+            "title_verbose": "ЦСКА (Москва)",
+            "url": "/ru/hockey/clubs/27/",
+            "logo": "/media/filer_public/22/ab/22abd896-cfb7-41fe-91f9-ed216b4c2381/873b8ab6871bcd67ce0f76d50eda209b.jpg",
+            "address": {
+                "pk": 2,
+                "title": "Москва"
+            },
+            "title": "ЦСКА"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 36673,
+        "date": "2015-02-18T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 9,
+            "title_verbose": "Северсталь (Череповец)",
+            "url": "/ru/hockey/clubs/9/",
+            "logo": "/media/filer_public/88/b1/88b1eb7d-b380-4678-a876-d71fafdf7cfe/4919a0b4f92b29a921dbfa5cfdef450e.jpg",
+            "address": {
+                "pk": 7,
+                "title": "Череповец"
+            },
+            "title": "Северсталь"
+        },
+        "score": 1,
+        "opponent_score": 3,
+        "is_home": true
+    },
+    {
+        "id": 36662,
+        "date": "2015-02-15T14:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 27,
+            "title_verbose": "ЦСКА (Москва)",
+            "url": "/ru/hockey/clubs/27/",
+            "logo": "/media/filer_public/22/ab/22abd896-cfb7-41fe-91f9-ed216b4c2381/873b8ab6871bcd67ce0f76d50eda209b.jpg",
+            "address": {
+                "pk": 2,
+                "title": "Москва"
+            },
+            "title": "ЦСКА"
+        },
+        "score": 2,
+        "opponent_score": 0,
+        "is_home": false
+    },
+    {
+        "id": 36650,
+        "date": "2015-02-13T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 12,
+            "title_verbose": "Локомотив (Ярославль)",
+            "url": "/ru/hockey/clubs/12/",
+            "logo": "/media/filer_public/9e/97/9e97cd8d-5c01-42aa-b29e-b86d04a521a2/2cf68953c6cd4fabe9285a28a5b3267a.jpg",
+            "address": {
+                "pk": 10,
+                "title": "Ярославль"
+            },
+            "title": "Локомотив"
+        },
+        "score": 3,
+        "opponent_score": 4,
+        "is_home": false
+    },
+    {
+        "id": 36638,
+        "date": "2015-02-11T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 20,
+            "title_verbose": "Витязь (Московская область)",
+            "url": "/ru/hockey/clubs/20/",
+            "logo": "/media/filer_public/81/db/81dbfb6a-30ca-40aa-9873-6af45efd2438/97c602120c26bffddf2ce5779921cd94.jpg",
+            "address": {
+                "pk": 46,
+                "title": "Московская область"
+            },
+            "title": "Витязь"
+        },
+        "score": 6,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 36628,
+        "date": "2015-02-09T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 53,
+            "title_verbose": "Йокерит (Хельсинки)",
+            "url": "/ru/hockey/clubs/53/",
+            "logo": "/media/filer_public/7c/68/7c686875-efbb-452b-8560-4ed3867202a5/a78704a94b9f8c9adb73ab3fcb533f65.jpg",
+            "address": {
+                "pk": 97,
+                "title": "Хельсинки"
+            },
+            "title": "Йокерит"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 36473,
+        "date": "2015-02-03T16:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 17,
+            "title_verbose": "Ак Барс (Казань)",
+            "url": "/ru/hockey/clubs/17/",
+            "logo": "/media/filer_public/bf/a8/bfa88912-5d5b-4f04-823d-693821f4ce1b/89eec748745b21cb5cd68131a21a9718.jpg",
+            "address": {
+                "pk": 14,
+                "title": "Казань"
+            },
+            "title": "Ак Барс"
+        },
+        "score": 4,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 36451,
+        "date": "2015-02-01T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 20,
+            "title_verbose": "Витязь (Московская область)",
+            "url": "/ru/hockey/clubs/20/",
+            "logo": "/media/filer_public/81/db/81dbfb6a-30ca-40aa-9873-6af45efd2438/97c602120c26bffddf2ce5779921cd94.jpg",
+            "address": {
+                "pk": 46,
+                "title": "Московская область"
+            },
+            "title": "Витязь"
+        },
+        "score": 3,
+        "opponent_score": 2,
+        "is_home": true
+    },
+    {
+        "id": 36417,
+        "date": "2015-01-30T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 12,
+            "title_verbose": "Локомотив (Ярославль)",
+            "url": "/ru/hockey/clubs/12/",
+            "logo": "/media/filer_public/9e/97/9e97cd8d-5c01-42aa-b29e-b86d04a521a2/2cf68953c6cd4fabe9285a28a5b3267a.jpg",
+            "address": {
+                "pk": 10,
+                "title": "Ярославль"
+            },
+            "title": "Локомотив"
+        },
+        "score": 1,
+        "opponent_score": 0,
+        "is_home": true
+    },
+    {
+        "id": 36381,
+        "date": "2015-01-28T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 56,
+            "title_verbose": "ХК Сочи (Сочи)",
+            "url": "/ru/hockey/clubs/56/",
+            "logo": "/media/filer_public/7a/3a/7a3a9186-4055-4fbe-9d72-3e05f9cf92a7/4a39e817291e2e8d0fdef66c76f31fbd.jpg",
+            "address": {
+                "pk": 124,
+                "title": "Сочи"
+            },
+            "title": "ХК Сочи"
+        },
+        "score": 3,
+        "opponent_score": 0,
+        "is_home": true
+    },
+    {
+        "id": 36153,
+        "date": "2015-01-22T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 18,
+            "title_verbose": "Нефтехимик (Нижнекамск)",
+            "url": "/ru/hockey/clubs/18/",
+            "logo": "/media/filer_public/0a/a7/0aa7b70c-18df-4cf7-b73a-b0b67a41ada4/873a6498c0d793f9ab988e02ad3afb6d.jpg",
+            "address": {
+                "pk": 15,
+                "title": "Нижнекамск"
+            },
+            "title": "Нефтехимик"
+        },
+        "score": 2,
+        "opponent_score": 0,
+        "is_home": true
+    },
+    {
+        "id": 36139,
+        "date": "2015-01-20T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 16,
+            "title_verbose": "Лада (Тольятти)",
+            "url": "/ru/hockey/clubs/16/",
+            "logo": "/media/filer_public/73/18/73181860-0910-4a71-b3bd-22d38145e012/eb0c02803b9e72c0b25545e04d530062.jpg",
+            "address": {
+                "pk": 13,
+                "title": "Тольятти"
+            },
+            "title": "Лада"
+        },
+        "score": 1,
+        "opponent_score": 2,
+        "is_home": true
+    },
+    {
+        "id": 36124,
+        "date": "2015-01-17T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 55,
+            "title_verbose": "Слован (Братислава)",
+            "url": "/ru/hockey/clubs/55/",
+            "logo": "/media/filer_public/32/5d/325ddde8-56fc-4451-9db5-8ef4ff215c73/58fd2a739bb9dc9190231af6a7bac575.jpg",
+            "address": {
+                "pk": 91,
+                "title": "Братислава"
+            },
+            "title": "Слован"
+        },
+        "score": 2,
+        "opponent_score": 0,
+        "is_home": false
+    },
+    {
+        "id": 36117,
+        "date": "2015-01-15T17:30:00Z",
+        "overtime_win": true,
+        "bullet_win": false,
+        "opponent": {
+            "id": 54,
+            "title_verbose": "Медвешчак (Загреб)",
+            "url": "/ru/hockey/clubs/54/",
+            "logo": "/media/filer_public/e6/e6/e6e68459-2db5-4aa6-b185-f6f5bcb69eaf/e11c30916343c60e685e3ae82d6076b2.jpg",
+            "address": {
+                "pk": 107,
+                "title": "Загреб"
+            },
+            "title": "Медвешчак"
+        },
+        "score": 4,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 36106,
+        "date": "2015-01-13T16:00:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 92,
+            "title_verbose": "Динамо Мн (Минск)",
+            "url": "/ru/hockey/clubs/92/",
+            "logo": "/media/filer_public/87/76/87765483-7780-4371-bd60-3adc68aa0859/dinamo-mn.gif",
+            "address": {
+                "pk": 60,
+                "title": "Минск"
+            },
+            "title": "Динамо Мн"
+        },
+        "score": 2,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 35905,
+        "date": "2015-01-10T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 51,
+            "title_verbose": "Атлант (Московская область)",
+            "url": "/ru/hockey/clubs/51/",
+            "logo": "/media/filer_public/47/24/472403c7-5cc2-4d84-9268-b78b3a42e45f/6c1a7394af880566b4b4afdb003df140.jpg",
+            "address": {
+                "pk": 46,
+                "title": "Московская область"
+            },
+            "title": "Атлант"
+        },
+        "score": 3,
+        "opponent_score": 2,
+        "is_home": false
+    },
+    {
+        "id": 35893,
+        "date": "2015-01-08T11:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 5,
+            "title_verbose": "Авангард (Омская область)",
+            "url": "/ru/hockey/clubs/5/",
+            "logo": "/media/filer_public/46/fe/46fe213f-cbfb-452e-a27b-473530274d0b/6a4532ecbbf83bbf5e44ec91f004df02.jpg",
+            "address": {
+                "pk": 5,
+                "title": "Омская область"
+            },
+            "title": "Авангард"
+        },
+        "score": 7,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 35882,
+        "date": "2015-01-05T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 27,
+            "title_verbose": "ЦСКА (Москва)",
+            "url": "/ru/hockey/clubs/27/",
+            "logo": "/media/filer_public/22/ab/22abd896-cfb7-41fe-91f9-ed216b4c2381/873b8ab6871bcd67ce0f76d50eda209b.jpg",
+            "address": {
+                "pk": 2,
+                "title": "Москва"
+            },
+            "title": "ЦСКА"
+        },
+        "score": 0,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 35862,
+        "date": "2014-12-28T14:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 11,
+            "title_verbose": "СКА (Санкт-Петербург)",
+            "url": "/ru/hockey/clubs/11/",
+            "logo": "/media/filer_public/44/91/4491d1f4-f838-432a-bfa3-5e738b01f55d/74515728fdbe9c39b803d8c970a06dfb.jpg",
+            "address": {
+                "pk": 9,
+                "title": "Санкт-Петербург"
+            },
+            "title": "СКА"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 35851,
+        "date": "2014-12-26T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 10,
+            "title_verbose": "Торпедо (Нижний Новгород)",
+            "url": "/ru/hockey/clubs/10/",
+            "logo": "/media/filer_public/95/38/95388318-66ba-4083-8652-8f9207c6e7cf/bbfce1c18b92b3ccc5091f10a20a731b.jpg",
+            "address": {
+                "pk": 8,
+                "title": "Нижний Новгород"
+            },
+            "title": "Торпедо"
+        },
+        "score": 1,
+        "opponent_score": 2,
+        "is_home": false
+    },
+    {
+        "id": 33460,
+        "date": "2014-12-24T16:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 9,
+            "title_verbose": "Северсталь (Череповец)",
+            "url": "/ru/hockey/clubs/9/",
+            "logo": "/media/filer_public/88/b1/88b1eb7d-b380-4678-a876-d71fafdf7cfe/4919a0b4f92b29a921dbfa5cfdef450e.jpg",
+            "address": {
+                "pk": 7,
+                "title": "Череповец"
+            },
+            "title": "Северсталь"
+        },
+        "score": 2,
+        "opponent_score": 5,
+        "is_home": false
+    },
+    {
+        "id": 33445,
+        "date": "2014-12-14T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 27,
+            "title_verbose": "ЦСКА (Москва)",
+            "url": "/ru/hockey/clubs/27/",
+            "logo": "/media/filer_public/22/ab/22abd896-cfb7-41fe-91f9-ed216b4c2381/873b8ab6871bcd67ce0f76d50eda209b.jpg",
+            "address": {
+                "pk": 2,
+                "title": "Москва"
+            },
+            "title": "ЦСКА"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 33432,
+        "date": "2014-12-12T16:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 56,
+            "title_verbose": "ХК Сочи (Сочи)",
+            "url": "/ru/hockey/clubs/56/",
+            "logo": "/media/filer_public/7a/3a/7a3a9186-4055-4fbe-9d72-3e05f9cf92a7/4a39e817291e2e8d0fdef66c76f31fbd.jpg",
+            "address": {
+                "pk": 124,
+                "title": "Сочи"
+            },
+            "title": "ХК Сочи"
+        },
+        "score": 6,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 33401,
+        "date": "2014-12-07T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 11,
+            "title_verbose": "СКА (Санкт-Петербург)",
+            "url": "/ru/hockey/clubs/11/",
+            "logo": "/media/filer_public/44/91/4491d1f4-f838-432a-bfa3-5e738b01f55d/74515728fdbe9c39b803d8c970a06dfb.jpg",
+            "address": {
+                "pk": 9,
+                "title": "Санкт-Петербург"
+            },
+            "title": "СКА"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 33398,
+        "date": "2014-12-05T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 55,
+            "title_verbose": "Слован (Братислава)",
+            "url": "/ru/hockey/clubs/55/",
+            "logo": "/media/filer_public/32/5d/325ddde8-56fc-4451-9db5-8ef4ff215c73/58fd2a739bb9dc9190231af6a7bac575.jpg",
+            "address": {
+                "pk": 91,
+                "title": "Братислава"
+            },
+            "title": "Слован"
+        },
+        "score": 7,
+        "opponent_score": 2,
+        "is_home": true
+    },
+    {
+        "id": 33391,
+        "date": "2014-12-03T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 54,
+            "title_verbose": "Медвешчак (Загреб)",
+            "url": "/ru/hockey/clubs/54/",
+            "logo": "/media/filer_public/e6/e6/e6e68459-2db5-4aa6-b185-f6f5bcb69eaf/e11c30916343c60e685e3ae82d6076b2.jpg",
+            "address": {
+                "pk": 107,
+                "title": "Загреб"
+            },
+            "title": "Медвешчак"
+        },
+        "score": 2,
+        "opponent_score": 3,
+        "is_home": true
+    },
+    {
+        "id": 33378,
+        "date": "2014-12-01T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 10,
+            "title_verbose": "Торпедо (Нижний Новгород)",
+            "url": "/ru/hockey/clubs/10/",
+            "logo": "/media/filer_public/95/38/95388318-66ba-4083-8652-8f9207c6e7cf/bbfce1c18b92b3ccc5091f10a20a731b.jpg",
+            "address": {
+                "pk": 8,
+                "title": "Нижний Новгород"
+            },
+            "title": "Торпедо"
+        },
+        "score": 5,
+        "opponent_score": 3,
+        "is_home": true
+    },
+    {
+        "id": 33364,
+        "date": "2014-11-29T14:30:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 27,
+            "title_verbose": "ЦСКА (Москва)",
+            "url": "/ru/hockey/clubs/27/",
+            "logo": "/media/filer_public/22/ab/22abd896-cfb7-41fe-91f9-ed216b4c2381/873b8ab6871bcd67ce0f76d50eda209b.jpg",
+            "address": {
+                "pk": 2,
+                "title": "Москва"
+            },
+            "title": "ЦСКА"
+        },
+        "score": 3,
+        "opponent_score": 4,
+        "is_home": true
+    },
+    {
+        "id": 33344,
+        "date": "2014-11-24T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 51,
+            "title_verbose": "Атлант (Московская область)",
+            "url": "/ru/hockey/clubs/51/",
+            "logo": "/media/filer_public/47/24/472403c7-5cc2-4d84-9268-b78b3a42e45f/6c1a7394af880566b4b4afdb003df140.jpg",
+            "address": {
+                "pk": 46,
+                "title": "Московская область"
+            },
+            "title": "Атлант"
+        },
+        "score": 3,
+        "opponent_score": 2,
+        "is_home": true
+    },
+    {
+        "id": 33317,
+        "date": "2014-11-19T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 59,
+            "title_verbose": "Югра (Ханты-Мансийск)",
+            "url": "/ru/hockey/clubs/59/",
+            "logo": "/media/filer_public/35/08/35081041-e814-4283-a404-b6f744b28583/7d3df77462524aa8184d721aa2f632d3.jpg",
+            "address": {
+                "pk": 61,
+                "title": "Ханты-Мансийск"
+            },
+            "title": "Югра"
+        },
+        "score": 4,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 33303,
+        "date": "2014-11-16T15:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 91,
+            "title_verbose": "Динамо Р (Рига)",
+            "url": "/ru/hockey/clubs/91/",
+            "logo": "/media/filer_public/2b/56/2b56f66e-55b7-4c52-9075-19bac874f7af/dinamo-r.gif",
+            "address": {
+                "pk": 59,
+                "title": "Рига"
+            },
+            "title": "Динамо Р"
+        },
+        "score": 1,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 33283,
+        "date": "2014-11-12T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 11,
+            "title_verbose": "СКА (Санкт-Петербург)",
+            "url": "/ru/hockey/clubs/11/",
+            "logo": "/media/filer_public/44/91/4491d1f4-f838-432a-bfa3-5e738b01f55d/74515728fdbe9c39b803d8c970a06dfb.jpg",
+            "address": {
+                "pk": 9,
+                "title": "Санкт-Петербург"
+            },
+            "title": "СКА"
+        },
+        "score": 4,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 33274,
+        "date": "2014-11-10T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 20,
+            "title_verbose": "Витязь (Московская область)",
+            "url": "/ru/hockey/clubs/20/",
+            "logo": "/media/filer_public/81/db/81dbfb6a-30ca-40aa-9873-6af45efd2438/97c602120c26bffddf2ce5779921cd94.jpg",
+            "address": {
+                "pk": 46,
+                "title": "Московская область"
+            },
+            "title": "Витязь"
+        },
+        "score": 1,
+        "opponent_score": 0,
+        "is_home": false
+    },
+    {
+        "id": 33260,
+        "date": "2014-11-06T16:30:00Z",
+        "overtime_win": true,
+        "bullet_win": false,
+        "opponent": {
+            "id": 5,
+            "title_verbose": "Авангард (Омская область)",
+            "url": "/ru/hockey/clubs/5/",
+            "logo": "/media/filer_public/46/fe/46fe213f-cbfb-452e-a27b-473530274d0b/6a4532ecbbf83bbf5e44ec91f004df02.jpg",
+            "address": {
+                "pk": 5,
+                "title": "Омская область"
+            },
+            "title": "Авангард"
+        },
+        "score": 5,
+        "opponent_score": 4,
+        "is_home": true
+    },
+    {
+        "id": 33249,
+        "date": "2014-11-04T14:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 14,
+            "title_verbose": "Салават Юлаев (Уфа)",
+            "url": "/ru/hockey/clubs/14/",
+            "logo": "/media/filer_public/9a/f7/9af72665-d8a0-4603-b2f2-2b07809aa6a2/salavat-iulaev.gif",
+            "address": {
+                "pk": 12,
+                "title": "Уфа"
+            },
+            "title": "Салават Юлаев"
+        },
+        "score": 6,
+        "opponent_score": 0,
+        "is_home": true
+    },
+    {
+        "id": 33241,
+        "date": "2014-11-02T14:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 53,
+            "title_verbose": "Йокерит (Хельсинки)",
+            "url": "/ru/hockey/clubs/53/",
+            "logo": "/media/filer_public/7c/68/7c686875-efbb-452b-8560-4ed3867202a5/a78704a94b9f8c9adb73ab3fcb533f65.jpg",
+            "address": {
+                "pk": 97,
+                "title": "Хельсинки"
+            },
+            "title": "Йокерит"
+        },
+        "score": 1,
+        "opponent_score": 3,
+        "is_home": true
+    },
+    {
+        "id": 33232,
+        "date": "2014-10-31T16:30:00Z",
+        "overtime_win": true,
+        "bullet_win": false,
+        "opponent": {
+            "id": 11,
+            "title_verbose": "СКА (Санкт-Петербург)",
+            "url": "/ru/hockey/clubs/11/",
+            "logo": "/media/filer_public/44/91/4491d1f4-f838-432a-bfa3-5e738b01f55d/74515728fdbe9c39b803d8c970a06dfb.jpg",
+            "address": {
+                "pk": 9,
+                "title": "Санкт-Петербург"
+            },
+            "title": "СКА"
+        },
+        "score": 4,
+        "opponent_score": 3,
+        "is_home": true
+    },
+    {
+        "id": 33210,
+        "date": "2014-10-27T16:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 91,
+            "title_verbose": "Динамо Р (Рига)",
+            "url": "/ru/hockey/clubs/91/",
+            "logo": "/media/filer_public/2b/56/2b56f66e-55b7-4c52-9075-19bac874f7af/dinamo-r.gif",
+            "address": {
+                "pk": 59,
+                "title": "Рига"
+            },
+            "title": "Динамо Р"
+        },
+        "score": 3,
+        "opponent_score": 4,
+        "is_home": true
+    },
+    {
+        "id": 33191,
+        "date": "2014-10-23T12:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 42,
+            "title_verbose": "Сибирь (Новосибирская область)",
+            "url": "/ru/hockey/clubs/42/",
+            "logo": "/media/filer_public/00/6d/006d81a8-5cd9-4691-9105-f72992e0cd58/7af58a349de57ede56d9a28bfd4afe0c.jpg",
+            "address": {
+                "pk": 105,
+                "title": "Новосибирская область"
+            },
+            "title": "Сибирь"
+        },
+        "score": 5,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 33176,
+        "date": "2014-10-21T12:00:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 8,
+            "title_verbose": "Металлург Нк (Новокузнецк)",
+            "url": "/ru/hockey/clubs/8/",
+            "logo": "/media/filer_public/66/99/6699f71e-b3ae-45f3-ab94-49f8714a57bb/logo_metallurg_novokuznetsk.gif",
+            "address": {
+                "pk": 6,
+                "title": "Новокузнецк"
+            },
+            "title": "Металлург Нк"
+        },
+        "score": 2,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 33162,
+        "date": "2014-10-19T06:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 4,
+            "title_verbose": "Амур (Хабаровск)",
+            "url": "/ru/hockey/clubs/4/",
+            "logo": "/media/filer_public/7f/d4/7fd47629-4dad-4612-8789-713a368c20bb/5dfadd8d4b156ed313bdd2303000f014.jpg",
+            "address": {
+                "pk": 4,
+                "title": "Хабаровск"
+            },
+            "title": "Амур"
+        },
+        "score": 3,
+        "opponent_score": 2,
+        "is_home": false
+    },
+    {
+        "id": 33151,
+        "date": "2014-10-17T09:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 60,
+            "title_verbose": "Адмирал (Владивосток)",
+            "url": "/ru/hockey/clubs/60/",
+            "logo": "/media/filer_public/00/c2/00c20f09-e4d7-4715-b4e0-35915ce71f8f/9124c36ae605a27df2d04c87a53f5226.jpg",
+            "address": {
+                "pk": 106,
+                "title": "Владивосток"
+            },
+            "title": "Адмирал"
+        },
+        "score": 4,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 33130,
+        "date": "2014-10-12T13:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 9,
+            "title_verbose": "Северсталь (Череповец)",
+            "url": "/ru/hockey/clubs/9/",
+            "logo": "/media/filer_public/88/b1/88b1eb7d-b380-4678-a876-d71fafdf7cfe/4919a0b4f92b29a921dbfa5cfdef450e.jpg",
+            "address": {
+                "pk": 7,
+                "title": "Череповец"
+            },
+            "title": "Северсталь"
+        },
+        "score": 5,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 33113,
+        "date": "2014-10-09T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 10,
+            "title_verbose": "Торпедо (Нижний Новгород)",
+            "url": "/ru/hockey/clubs/10/",
+            "logo": "/media/filer_public/95/38/95388318-66ba-4083-8652-8f9207c6e7cf/bbfce1c18b92b3ccc5091f10a20a731b.jpg",
+            "address": {
+                "pk": 8,
+                "title": "Нижний Новгород"
+            },
+            "title": "Торпедо"
+        },
+        "score": 1,
+        "opponent_score": 3,
+        "is_home": false
+    },
+    {
+        "id": 33106,
+        "date": "2014-10-07T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 12,
+            "title_verbose": "Локомотив (Ярославль)",
+            "url": "/ru/hockey/clubs/12/",
+            "logo": "/media/filer_public/9e/97/9e97cd8d-5c01-42aa-b29e-b86d04a521a2/2cf68953c6cd4fabe9285a28a5b3267a.jpg",
+            "address": {
+                "pk": 10,
+                "title": "Ярославль"
+            },
+            "title": "Локомотив"
+        },
+        "score": 2,
+        "opponent_score": 0,
+        "is_home": true
+    },
+    {
+        "id": 33095,
+        "date": "2014-10-05T13:00:00Z",
+        "overtime_win": true,
+        "bullet_win": false,
+        "opponent": {
+            "id": 56,
+            "title_verbose": "ХК Сочи (Сочи)",
+            "url": "/ru/hockey/clubs/56/",
+            "logo": "/media/filer_public/7a/3a/7a3a9186-4055-4fbe-9d72-3e05f9cf92a7/4a39e817291e2e8d0fdef66c76f31fbd.jpg",
+            "address": {
+                "pk": 124,
+                "title": "Сочи"
+            },
+            "title": "ХК Сочи"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 33081,
+        "date": "2014-10-02T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 12,
+            "title_verbose": "Локомотив (Ярославль)",
+            "url": "/ru/hockey/clubs/12/",
+            "logo": "/media/filer_public/9e/97/9e97cd8d-5c01-42aa-b29e-b86d04a521a2/2cf68953c6cd4fabe9285a28a5b3267a.jpg",
+            "address": {
+                "pk": 10,
+                "title": "Ярославль"
+            },
+            "title": "Локомотив"
+        },
+        "score": 2,
+        "opponent_score": 4,
+        "is_home": false
+    },
+    {
+        "id": 33070,
+        "date": "2014-09-30T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 20,
+            "title_verbose": "Витязь (Московская область)",
+            "url": "/ru/hockey/clubs/20/",
+            "logo": "/media/filer_public/81/db/81dbfb6a-30ca-40aa-9873-6af45efd2438/97c602120c26bffddf2ce5779921cd94.jpg",
+            "address": {
+                "pk": 46,
+                "title": "Московская область"
+            },
+            "title": "Витязь"
+        },
+        "score": 6,
+        "opponent_score": 4,
+        "is_home": true
+    },
+    {
+        "id": 33051,
+        "date": "2014-09-27T11:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 61,
+            "title_verbose": "Барыс (Астана)",
+            "url": "/ru/hockey/clubs/61/",
+            "logo": "/media/filer_public/e9/cc/e9cc19d7-99ae-499b-8f31-0afae1397e52/bcf515fc3fff50fc092e270ca3243547.jpg",
+            "address": {
+                "pk": 58,
+                "title": "Астана"
+            },
+            "title": "Барыс"
+        },
+        "score": 2,
+        "opponent_score": 1,
+        "is_home": false
+    },
+    {
+        "id": 33041,
+        "date": "2014-09-25T15:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 56,
+            "title_verbose": "ХК Сочи (Сочи)",
+            "url": "/ru/hockey/clubs/56/",
+            "logo": "/media/filer_public/7a/3a/7a3a9186-4055-4fbe-9d72-3e05f9cf92a7/4a39e817291e2e8d0fdef66c76f31fbd.jpg",
+            "address": {
+                "pk": 124,
+                "title": "Сочи"
+            },
+            "title": "ХК Сочи"
+        },
+        "score": 1,
+        "opponent_score": 0,
+        "is_home": false
+    },
+    {
+        "id": 33025,
+        "date": "2014-09-23T13:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 14,
+            "title_verbose": "Салават Юлаев (Уфа)",
+            "url": "/ru/hockey/clubs/14/",
+            "logo": "/media/filer_public/9a/f7/9af72665-d8a0-4603-b2f2-2b07809aa6a2/salavat-iulaev.gif",
+            "address": {
+                "pk": 12,
+                "title": "Уфа"
+            },
+            "title": "Салават Юлаев"
+        },
+        "score": 4,
+        "opponent_score": 2,
+        "is_home": false
+    },
+    {
+        "id": 33020,
+        "date": "2014-09-21T13:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 34,
+            "title_verbose": "Трактор (Челябинск)",
+            "url": "/ru/hockey/clubs/34/",
+            "logo": "/media/filer_public/54/05/540591f7-076d-45d6-9d5f-1dda359a32f5/afc9e3d12dd54656d7b4a7fd6a3f7d12.jpg",
+            "address": {
+                "pk": 3,
+                "title": "Челябинск"
+            },
+            "title": "Трактор"
+        },
+        "score": 4,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 33015,
+        "date": "2014-09-19T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 57,
+            "title_verbose": "Автомобилист (Екатеринбург)",
+            "url": "/ru/hockey/clubs/57/",
+            "logo": "/media/filer_public/80/c9/80c97662-11d2-4caf-90de-3d68380fe1a0/7b84c940f884393f3b79dbd94dd9fa15.jpg",
+            "address": {
+                "pk": 35,
+                "title": "Екатеринбург"
+            },
+            "title": "Автомобилист"
+        },
+        "score": 4,
+        "opponent_score": 2,
+        "is_home": true
+    },
+    {
+        "id": 33003,
+        "date": "2014-09-17T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": true,
+        "opponent": {
+            "id": 58,
+            "title_verbose": "Металлург (Магнитогорск)",
+            "url": "/ru/hockey/clubs/58/",
+            "logo": "/media/filer_public/c4/6e/c46e8a0f-3069-4733-8555-4471ec146216/2c8183806235cb9f5632d250cf96c491.jpg",
+            "address": {
+                "pk": 1,
+                "title": "Магнитогорск"
+            },
+            "title": "Металлург"
+        },
+        "score": 0,
+        "opponent_score": 1,
+        "is_home": true
+    },
+    {
+        "id": 32975,
+        "date": "2014-09-13T13:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 17,
+            "title_verbose": "Ак Барс (Казань)",
+            "url": "/ru/hockey/clubs/17/",
+            "logo": "/media/filer_public/bf/a8/bfa88912-5d5b-4f04-823d-693821f4ce1b/89eec748745b21cb5cd68131a21a9718.jpg",
+            "address": {
+                "pk": 14,
+                "title": "Казань"
+            },
+            "title": "Ак Барс"
+        },
+        "score": 3,
+        "opponent_score": 2,
+        "is_home": true
+    },
+    {
+        "id": 32953,
+        "date": "2014-09-08T15:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 9,
+            "title_verbose": "Северсталь (Череповец)",
+            "url": "/ru/hockey/clubs/9/",
+            "logo": "/media/filer_public/88/b1/88b1eb7d-b380-4678-a876-d71fafdf7cfe/4919a0b4f92b29a921dbfa5cfdef450e.jpg",
+            "address": {
+                "pk": 7,
+                "title": "Череповец"
+            },
+            "title": "Северсталь"
+        },
+        "score": 3,
+        "opponent_score": 2,
+        "is_home": false
+    },
+    {
+        "id": 32933,
+        "date": "2014-09-05T15:30:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 27,
+            "title_verbose": "ЦСКА (Москва)",
+            "url": "/ru/hockey/clubs/27/",
+            "logo": "/media/filer_public/22/ab/22abd896-cfb7-41fe-91f9-ed216b4c2381/873b8ab6871bcd67ce0f76d50eda209b.jpg",
+            "address": {
+                "pk": 2,
+                "title": "Москва"
+            },
+            "title": "ЦСКА"
+        },
+        "score": 1,
+        "opponent_score": 4,
+        "is_home": true
+    },
+    {
+        "id": 32922,
+        "date": "2014-09-03T13:00:00Z",
+        "overtime_win": false,
+        "bullet_win": false,
+        "opponent": {
+            "id": 58,
+            "title_verbose": "Металлург (Магнитогорск)",
+            "url": "/ru/hockey/clubs/58/",
+            "logo": "/media/filer_public/c4/6e/c46e8a0f-3069-4733-8555-4471ec146216/2c8183806235cb9f5632d250cf96c491.jpg",
+            "address": {
+                "pk": 1,
+                "title": "Магнитогорск"
+            },
+            "title": "Металлург"
+        },
+        "score": 1,
+        "opponent_score": 6,
+        "is_home": false
+    }
+]

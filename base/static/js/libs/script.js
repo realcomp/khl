@@ -15,14 +15,16 @@ $(document).ready(function(){
 
     $('.ui.dropdown').dropdown();
     // $('.tabular .item').tab({history:false});
-    $('.ui.selection.dropdown').dropdown();
+    /*$('.ui.selection.dropdown').dropdown();
+    $('.ui.selection.dropdown.leagues').dropdown();*/
     $('.ui.checkbox').checkbox();
     $('.payment-block_new').tabs();
     $('.payment-block_old').tabs();
-    $('.team-calendar').tabs();
+    // $('.team-calendar').tabs();
     // $('.clubs-tabs').tabs();
     $('.clubs-photos-tabs').tabs();
     $('.clubs-team-tabs').tabs();
+    $('.clubs-team-inner-tabs').tabs();
     $('.team-view-type-tabs').tabs();
     $('.season-last-tabs').tabs();
     $('.season-prev-tabs').tabs();
@@ -60,7 +62,7 @@ $(document).ready(function(){
             $(".players-graph-year").val( ui.value);
         }
     });
-    
+
     $(".players-graph-year").val( $(".players-graph-slider").slider("values", 0));
     $(".players-graph-slider-limits .slider-limits-min").text( $(".players-graph-slider").slider("option", "min"));
     $(".players-graph-slider-limits .slider-limits-max").text( $(".players-graph-slider").slider("option", "max"));
@@ -110,7 +112,7 @@ $(document).ready(function(){
 
     closePopupBtn.on('click', function(e) {
         e.preventDefault();
-        
+
         $(this).parent().hide(300);
     });
 
@@ -145,13 +147,13 @@ $(document).ready(function(){
 
     moreClubsBtn.on('click', function(e) {
         e.preventDefault();
-        
+
         $(this).closest('td').toggleClass('show-more-clubs');
     });
 
     showClubsCountriesMenuBtn.on('click', function(e) {
         e.preventDefault();
-        
+
         clubsCountriesMenu.toggleClass('clubs-countries-menu-list_all');
     });
 });

@@ -17,8 +17,8 @@ from relatives.utils import object_link
 from base.admin import AutocompleteFieldFilter, SimpleRangeFilter, BaseForm
 from base.admin import BaseAdmin, NoActionMixin, NoFilterAdmin, BaseListAdmin
 from base.admin import DynamicDisplayFilterMixin, TabularInlineReadOnly
-from base.admin import YesNoListFilter
 
+from . import admin_actions
 from .forms import TimelineForm
 from .models import Player, Coach, Judge, Club, Match, CoachClub, AddressClub
 from .models import MatchGoalHistory, MatchPenaltyHistory, ClubPlayer, Arena
@@ -27,6 +27,7 @@ from .models import League, LeagueClub, PlayerCitizenship, ArenaPhotos
 from .models import AddressClubPhotos, Name, Schedule, ClubTitleAlias
 from .models import PlayerCoachJudge, ClubSocial, PlayerSocial, CoachSocial
 from .models import JudgeSocial, ArenaInstaPhoto, Timeline, Challenge
+from .models import RelatedPlayer
 
 
 class GoalEntryInline(TabularInlineReadOnly):
@@ -56,6 +57,7 @@ class MatchAdmin(NoActionMixin, DynamicDisplayFilterMixin, BaseListAdmin):
         (None, {
             'classes': ('suit-tab suit-tab-general',),
             'fields': ('ru_title', 'en_title', 'date', 'count', 'detail_count',
+                        'home_score', 'guest_score', 'overtime_win', 'bullet_win',
                         'spectators', 'judges', 'line_judges', 'challenge_type',
                         'title',
                     )
@@ -104,31 +106,10 @@ class PlayerSocialsInline(admin.TabularInline):
     fields = ('url', 'stype')
 
 
-def recalc_counters(modeladmin, request, queryset):
-    from .tasks import player_recalc_counters
-    pks = queryset.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        player_recalc_counters.delay(pks[i:i + 1000])
-recalc_counters.short_description = _('Recalculate counters')
-
-
-def recalc_rating(modeladmin, request, queryset):
-    from .tasks import player_recalc_rating
-    fields = (
-        'seasons_total', 'matches_total', 'bullet_matches_total',
-        'shots_received_total', 'saves_total', 'loose_goals_total',
-        'saves_p_average', 'sf_average', 'zero_goals_matches_total',
-        'matches_win_total', 'matches_lose_total', 'gamingtime_total',
-    ) + tuple(itertools.chain(*map(
-        lambda x: ('%s_total' % x, '%s_average' % x),
-        ('goals', 'assists', 'points', 'plus_minus', 'penalty_time'))))
-    for field in fields:
-        player_recalc_rating.delay(field)
-recalc_rating.short_description = _('Recalculate rating')
-
-
 class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
-    actions = recalc_counters, recalc_rating
+    actions = tuple(admin_actions.get_player_recalc_counters_actions()) + (
+        admin_actions.calculate_similarity_expired,
+        admin_actions.calculate_similarity_everyone)
     inlines = (ClubPlayerInline, PlayerCitizenshipInline,)# PlayerSocialsInline)
     list_display = ('khl_id', 'ru_fio', 'line', 'birth_date', 'weight',
                     'height', 'url', 'ru_name', 'ru_lastname',
@@ -141,6 +122,11 @@ class PlayerAdmin(DynamicDisplayFilterMixin, BaseListAdmin):
                     ('birth_date', DateRangeFilter),
     )
     readonly_fields = ('fio',)
+
+    class Media:
+        css = {"all": ("css/dropzone.css", "css/dnd_filer_upload.css"),}
+        js = (  "js/libs/dropzone.js",
+                "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Player, PlayerAdmin)
 
 
@@ -178,7 +164,10 @@ def obj_color_text(obj):
     else:
         return RED, _('No')
 
+
 class ClubAdmin(NoActionMixin, BaseAdmin):
+    actions = tuple(admin_actions.get_club_recalc_counters_actions()) + (
+        'make_notclubs_league',)
     inlines = ( CoachClubInline, AddressClubInline, LeagueClubInline,
                 ClubTitleAliasInline,)# ClubSocialsInline)
     list_display = ('ru_title', 'address', 'has_en_title', 'has_address',
@@ -195,13 +184,13 @@ class ClubAdmin(NoActionMixin, BaseAdmin):
     fields = (  'ru_title', 'en_title', 'title', 'address', 'coach', 'coaches',
                 'opening_dt', 'closing_dt', 'logo', 'arena', 'league',
                 'farm_club', 'junior_club', 'site', 'email', 'phone',
-                'players', 'rgb', 'instagram_photo_link',
+                'players', 'instagram_photo_link',
+                'rgb', 'main_color', 'secondary_color', 'third_color',
                 'vk', 'ok', 'fb', 'gl', 'tw', 'im', 'pp', 'ut')
-    actions = ('make_notclubs_league',)
 
     def get_queryset(self, request):
         qs = super(ClubAdmin, self).get_queryset(request)
-        return qs.exclude(league__en_title="Not clubs")
+        return qs.active()
 
     def make_notclubs_league(self, request, queryset):
         l = League.objects.filter(en_title="Not clubs").last()
@@ -393,7 +382,7 @@ class ArenaAdmin(DynamicDisplayFilterMixin, BaseAdmin):
     def get_form(self, request, obj=None, **kwargs):
         self.form.base_fields['club_set'] = forms.ModelMultipleChoiceField(
                     label=_('Clubs'),
-                    queryset=Club.objects.all().order_by('ru_title'),
+                    queryset=Club.objects.active().order_by('ru_title'),
                     initial=obj and obj.club_set.all(),
                     widget=Select2MultipleWidget(select2_options = {'width': 'resolve', 'dropdownAutoWidth': True,}),
         )
@@ -433,9 +422,14 @@ class JudgeSocialsInline(admin.TabularInline):
     model = JudgeSocial
     fields = ('url', 'stype')
 
-class JudgeAdmin(BaseListAdmin):
+class JudgeAdmin(NoFilterAdmin):
     inlines = (JudgeMatchesInline,LineJudgeMatchesInline,)# JudgeSocialsInline)
     readonly_fields = ('fio',)
+
+    class Media:
+        css = {"all": ("css/dropzone.css", "css/dnd_filer_upload.css"),}
+        js = (  "js/libs/dropzone.js",
+                "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Judge, JudgeAdmin)
 
 
@@ -443,9 +437,14 @@ class CoachSocialsInline(admin.TabularInline):
     model = CoachSocial
     fields = ('url', 'stype')
 
-class CoachAdmin(BaseListAdmin):
+class CoachAdmin(NoFilterAdmin):
     inlines = (CoachClubInline,CoachSocialsInline)
     readonly_fields = ('fio',)
+
+    class Media:
+        css = {"all": ("css/dropzone.css", "css/dnd_filer_upload.css"),}
+        js = (  "js/libs/dropzone.js",
+                "hockey/js/dnd_filer_upload.js",)
 admin.site.register(Coach, CoachAdmin)
 
 class ClubPlayerMatchInline(TabularInlineReadOnly):
@@ -494,72 +493,18 @@ admin.site.register(ClubPlayerMatch, ClubPlayerMatchAdmin)
 admin.site.register(AdvancedPlayerStats)
 
 
-def import_names(modeladmin, request, queryset):
-    def update_or_create_name(**kwargs):
-        name, created = Name.objects.get_or_create(
-            ru_name=kwargs['ru_name'], en_name=kwargs['en_name'])
-        if not name.type:
-            name.type = kwargs['type']
-            name.save()
-        return name
-
-    q_named = Q(ru_name__isnull=False) & Q(en_name__isnull=False)
-    players = Player.objects.filter(q_named)
-    coaches = Coach.objects.filter(q_named)
-    for type, field in (
-            (0, 'name'),
-            (1, 'lastname')):
-        for ru_name, en_name in itertools.chain(
-                players.values_list('ru_%s' % field, 'en_%s' % field),
-                coaches.values_list('ru_%s' % field, 'en_%s' % field)):
-            update_or_create_name(ru_name=ru_name, en_name=en_name, type=type)
-import_names.short_description = _('Import Names')
-
-
-def export_names(modeladmin, request, queryset):
-    def swap_names(obj):
-        ''' swaps first and last names '''
-        obj.ru_lastname, obj.ru_name = obj.ru_name, obj.ru_lastname
-        obj.en_lastname, obj.en_name = obj.en_name, obj.en_lastname
-
-    for model in (Player, Coach):
-        for type, field in (
-                (0, 'ru_lastname'),  # first names
-                (1, 'ru_name')):  # last names
-            names = queryset.filter(type=type)
-            for obj in model.objects.filter(**{
-                    '%s__in' % field: names.values_list('ru_name')}):
-                swap_names(obj)
-                obj.save()
-export_names.short_description = _('Export Names')
-
-
 class NameAdmin(admin.ModelAdmin):
-    actions = import_names, export_names
+    actions = admin_actions.import_names, admin_actions.export_names
     list_display = 'type', 'ru_name', 'en_name'
     list_filter = 'type',
     search_fields = 'ru_name', 'en_name'
 admin.site.register(Name, NameAdmin)
 
 
-def generate_timeline(modeladmin, request, queryset):
-    from . import tasks
-    pks = Player.objects.values_list('pk', flat=True)
-    for i in range(0, len(pks), 1000):  # 1000 players per task
-        tasks.player_generate_timeline.delay(pks[i:i + 1000])
-    # tasks.player_generate_timeline.delay([1830, 2210])  # dev mode
-    # tasks.player_generate_timeline.delay(pks[0:100])  # dev mode
-generate_timeline.short_description = _('Generate new timeline events')
-
-
-def regenerate_timeline(modeladmin, request, queryset):
-    Timeline.objects.all().delete()
-    # generate_timeline(modeladmin, request, queryset)
-regenerate_timeline.short_description = _('Re-generate timeline events')
-
-
 class TimelineAdmin(admin.ModelAdmin):
-    actions = generate_timeline, regenerate_timeline,
+    actions = (
+        admin_actions.generate_timeline,
+        admin_actions.regenerate_timeline)
     form = TimelineForm
     list_display = (
         'player', 'start_date', 'end_date', 'ru_headline', 'en_headline',
@@ -567,3 +512,12 @@ class TimelineAdmin(admin.ModelAdmin):
     list_filter = 'type',
     search_fields = 'ru_headline', 'en_headline', 'ru_text', 'en_text', 'tag'
 admin.site.register(Timeline, TimelineAdmin)
+
+
+class RelatedPlayerAdmin(admin.ModelAdmin):
+    actions = admin_actions.delete_without_confirmation,
+    list_display = (
+        'pk', 'player1', 'player2', 'modified', 'goals_value', 'assists_value',
+        'points_value', 'penalty_time_value', 'plus_minus_value')
+    list_filter = 'modified',
+admin.site.register(RelatedPlayer, RelatedPlayerAdmin)

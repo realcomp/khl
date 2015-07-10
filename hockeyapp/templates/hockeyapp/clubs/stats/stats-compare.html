@@ -1,0 +1,353 @@
+{% extends 'hockeyapp/clubs/stats/clubs-stats.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/stats/tabs.html' with clubs_main_tab='stats-compare' %}
+<!--tabs content items-->
+<input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
+<input id="clubs-compare" type="hidden">
+<input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' 0 %}"></a>
+
+<div class="overlay-black hidden"></div>
+<section id="personal-list" class="w-page-tabs hidden">
+    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+        <a class="item">Мои команды</a>
+        <a class="active  item">Выбранные игроки</a>
+    </div>
+    <div class="b-tabs-content ui tab active b-personal__list">
+
+    </div>
+</section>
+
+<div class="b-tabs-content ui tab active stats-compare" ng-controller="ClubTeamCompareController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-stats" active_menu="stats-compare" %}
+    {% endblock %}
+
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Сравнение команд
+            </h2>
+
+            <a class="b-cell hidden-xs b-change-views__item w-tooltip" data-content="Столбчатая диаграмма" data-variation="basic"  ng-class="{'active': dataType === 'graph-serial'}" ng-click="setDataType('graph-serial')">
+                <i class="bar chart icon"></i>
+            </a>
+
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Круговая диаграмма" data-variation="basic"  ng-class="{'active': dataType === 'graph-radar'}" ng-click="setDataType('graph-radar')">
+                <i class="pie chart icon"></i>
+            </a>
+
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Таблица значений" data-variation="basic"  ng-class="{'active': dataType === 'table'}" ng-click="setDataType('table')">
+                <i class="table icon"></i>
+            </a>
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+
+    <div id="params" class="ui menu b-ui-menu">
+
+        {% include 'hockeyapp/players/indicators-row.html' %}
+
+    </div>
+
+
+    <!--mob menu-->
+    <!--mob menu-->
+
+    <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': loader && clubs.length === 0}">
+        Загрузка...
+    </div>
+
+    <div class="row">
+        <div class="b-diagram__legend b-diagram__legend__table-style inline-block vertical-top col-md-3 no-padding" ng-if="clubs.length > 0" style="margin-left: 10px;">
+
+            <p id="legend-header" class="b-diagram__legend__table-style_header">
+                <span ng-bind="localeObject.fieldNames[field].fullName"></span>
+            </p>
+
+            {% verbatim %}
+            <ul id="legend-content" class="unstyled">
+            </ul>
+            {% endverbatim %}
+
+            {% comment %}
+            <div class="w-player-compare">
+                <div class="b-header__sm">
+                    <h4 class="header-text">
+                        Команда для сравнения
+                    </h4>
+                </div><!--b-header__sm-->
+
+                <div class="ui input block" style="width: 100%;">
+                    <angucomplete id="clubs_filter"  style="width: 100%;"
+                                  pause="300" minlength="2"
+                                  selectedobject="selectedClub"
+                                  placeholder="Введите название"
+                                  url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                </div>
+
+                <div class="b-or-hr">
+                    <span>или</span>
+                </div>
+
+                <p class="text-center">
+                    <a ng-click="showPersonalList()">Выберите из списка</a>
+                </p>
+            </div>
+            {% endcomment %}
+        </div>
+
+        <div ng-show="clubs.length > 0 && dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+            <div id="chartdiv" style="height:480px; width: 100%;"></div>
+        </div>
+
+        <div ng-show="clubs.length > 0 && dataType === 'graph-radar'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+            <div style="border-bottom: 1px solid #d4d4d5">
+                <span class="bold" style="font-size: 22px;">Средние показатели за один матч</span>
+                <div class="float-right">
+                    <div isteven-multi-select
+                         input-model="availableFields"
+                         output-model="selectedRadarFields"
+                         button-label="shortName"
+                         item-label="fullName"
+                         tick-property="ticked"
+                         class="inline-block"
+                         style="max-width: 350px !important; margin-top: -10px; margin-left: 10px;"
+                         on-item-click="createRadar()">
+                    </div>
+                </div>
+            </div>
+            <div id="chartdiv2" style="height:480px; width: 100%;"></div>
+        </div>
+    </div>
+
+
+    <div class="b-team-compare">
+        <div class="b-header b-header__sm">
+            <h3 class="b-cell b-header__text">
+                Команды для сравнения
+            </h3>
+        </div><!--b-header b-header__sm-->
+
+        <div class="row">
+
+            {% verbatim %}
+            <!--b-team-compare__item-->
+            <div class="col-xs-6 col-md-3 b-team-compare__item" ng-repeat="club in clubs track  by $index">
+
+                <div class="ui card" >
+                    <div class="b-team-compare__card-header">
+                        <a class="#" class="ui image">
+                            <img ng-src="http://dev.sportomatics.ru{{club.logo}}" />
+                        </a>
+
+                        <div class="b-team-compare__info">
+                            <p class="b-team-compare__name">
+                                {{club.title}}
+                            </p>
+                            <p class="">
+                                {{club.address.title}}
+                            </p>
+                            <p class="">
+                                {{club.dataBySeason.results[0].season.title}}
+                            </p>
+                        </div>
+                    </div><!--b-team-compare__card-header-->
+
+                    <div class="b-team-compare__list">
+                        <div class="b-team-compare__list__item b-team-compare__list__header">
+                            <p class="">
+                                Защитники
+                            </p>
+                            <p ng-if="dataType === 'graph-serial'">
+                                {{localeObject.fieldNames[field].shortName}}
+                            </p>
+                        </div><!--b-team-compare__list__item-->
+
+                        <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2 && !player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
+                            <p class="">
+                                <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>{{player.fio}}
+                            </p>
+                            <p ng-if="dataType === 'graph-serial'">
+                                {{player.result}}
+                            </p>
+                        </div><!--b-team-compare__list__item-->
+
+                    </div><!--b-team-compare__list-->
+
+                    <div class="b-team-compare__list">
+                        <div class="b-team-compare__list__item b-team-compare__list__header">
+                            <p class="">
+                                Нападающие
+                            </p>
+                            <p ng-if="dataType === 'graph-serial'">
+                                {{localeObject.fieldNames[field].shortName}}
+                            </p>
+                        </div><!--b-team-compare__list__item-->
+
+                        <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3 && !player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
+                            <p class="">
+                                <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>{{player.fio}}
+                            </p>
+                            <p ng-if="dataType === 'graph-serial'">
+                                {{player.result}}
+                            </p>
+                        </div><!--b-team-compare__list__item-->
+
+                    </div><!--b-team-compare__list-->
+
+                    <div class="b-team-compare__card-footer">
+                        <div class="b-team-compare__list">
+                            <div class="b-team-compare__list__item b-team-compare__list__header" ng-if="clubsWithAddedPlayers['club_'+club.id]">
+                                <p class="">
+                                    Защитники
+                                </p>
+                                <p ng-if="dataType === 'graph-serial'">
+                                {{localeObject.fieldNames[field].shortName}}
+                                </p>
+                            </div><!--b-team-compare__list__item-->
+
+                            <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2 && player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
+                                <p class="">
+                                    <i class="icon exchange b-positive-text"></i>
+                                    {{player.fio}}
+                                    <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>
+                                </p>
+                                <p ng-if="dataType === 'graph-serial'">
+                                    {{player.result}}
+                                </p>
+                            </div><!--b-team-compare__list__item-->
+
+                            <div class="b-team-compare__list__item b-team-compare__list__header" ng-if="clubsWithAddedPlayers['club_'+club.id]">
+                                <p class="">
+                                    Нападающие
+                                </p>
+                                <p ng-if="dataType === 'graph-serial'">
+                                {{localeObject.fieldNames[field].shortName}}
+                                </p>
+                            </div><!--b-team-compare__list__item-->
+
+                            <div class="b-team-compare__list__item" ng-class="{'b-color-styled': !player.selected}" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3 && player.added" ng-click="togglePlayerSelection(club.id, $index)" style="cursor: pointer;">
+                                <p class="">
+                                    <i class="icon exchange b-positive-text"></i>
+                                    {{player.fio}}
+                                    <i class="icon" ng-class="{'b-positive-text checkmark': player.selected, 'b-negative-text remove': !player.selected}"></i>
+                                </p>
+                                <p ng-if="dataType === 'graph-serial'">
+                                    {{player.result}}
+                                </p>
+                            </div><!--b-team-compare__list__item-->
+
+                        </div><!--b-team-compare__list-->
+
+                        <!--
+                        <div class="w-btn">
+                            <a href="#" class="ui button disabled tiny">
+                                <i class="icon plus"></i> Мест нет
+                            </a>
+                        </div><!--w-btn-->
+                        {% endverbatim %}
+                        <div class="ui input block" style="width: 100%; padding: 8px;" ng-if="clubsWithPlace['club_'+club.id]">
+                        <angucomplete id="players_filter" placeholder="Введите имя..."
+                                          pause="300" minlength="2"
+                                          selectedobject="selectedPlayer"
+                                          url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                          titlefield="lastname,name"
+                                          onchangecallback="setSelectedPlayer"
+                                          style="width: 100%"/>
+                        </div>
+                        {% verbatim %}
+
+                        <div class="w-btn" ng-if="!clubsWithPlace['club_'+club.id]">
+                            <a href="#" class="ui button disabled tiny">
+                                <!--<i class="icon plus"></i>--> Мест нет
+                            </a>
+                        </div><!--w-btn-->
+
+                        <div class="w-btn" ng-if="clubsWithPlace['club_'+club.id]">
+                            <a class="ui button green tiny" ng-click="addPlayerToClub(club.id)">
+                                <i class="icon plus"></i> Добавить игрока
+                            </a>
+                        </div><!--w-btn-->
+
+                    </div><!--extra content w-gallery-preview__item__extra-->
+
+                </div><!--ui card-->
+
+                <p class="b-team-compare__delete" ng-if="$index !== 0" ng-click="removeClub($index)">
+                    <a href="#">удалить команду из сравнения</a>
+                </p>
+            </div><!--b-team-compare__item-->
+            {% endverbatim %}
+
+
+
+            <div class="col-xs-6 col-md-3 b-team-compare__item">
+                <div class="ui card">
+                    <form class="b-team-compare__form">
+                        <div class="b-team-compare__form__item b-team-compare__form__team-name">
+                            <div class="b-header b-header__xs">
+                                <h4 class="b-cell b-header__text">
+                                    Выберите команду для сравнения
+                                </h4>
+                            </div><!--b-header b-header__xs-->
+
+                            <div class="ui input block" style="width: 100%;">
+                                <angucomplete id="clubs_filter"  style="width: 100%;"
+                                              pause="300" minlength="2"
+                                              selectedobject="selectedClub"
+                                              placeholder="Введите название"
+                                              url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                            </div>
+
+                            <!--<select class="ui search dropdown">
+                                <option value="">введите название</option>
+                                <option value="Адмирал">Адмирал</option>
+                                <option value="Автомобилист">Автомобилист</option>
+                                <option value="СКА">СКА</option>
+                            </select>-->
+                        </div>
+
+                        <div class="b-team-compare__form__item b-team-compare__form__season">
+                            <div class="b-header b-header__xs">
+                                <h4 class="b-cell b-header__text">
+                                    Выберите сезон
+                                </h4>
+                            </div><!--b-header b-header__xs-->
+
+                            <select class="ui dropdown" ng-model="season">
+                                <option value="">Сезон</option>
+                                {% for season in seasons reversed %}
+                                <option value="{{season.pk}}">Сезон {{season.label}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="w-btn">
+                            <button type="button" class="ui button blue" ng-click="addAverageClubPlayerData()">
+                                <i class="icon plus"></i> Добавить
+                            </button>
+
+                            <div class="b-or-hr">
+                                <span>или</span>
+                            </div>
+
+                            <button type="submit" class="ui button mini blue">
+                                Составьте команду самостоятельно
+                            </button>
+                        </div>
+                    </form>
+                </div><!--ui card-->
+
+            </div><!--b-team-compare__form-->
+
+        </div><!--row-->
+    </div><!--b-team-compare-->
+</div>
+<!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/stats/sticky_menu.html' with clubs_main_tab='stats-compare' clubs_menu_active='club-stats' %}
+{% endblock %}

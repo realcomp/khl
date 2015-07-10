@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{title}}: фотографии, хоккей  - Sportomatics.ru
@@ -8,30 +9,8 @@
 <section class="content">
     <div class="overlay-black" style="visibility: hidden"></div>
     <div class="container clubs-page clubs-photos-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">Хоккей</a>
-                <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <div class="divider"> / </div>
-                <a class="section" href="/ru/hockey/clubs/#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="/ru/hockey/clubs/#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="">{{title}}</a>
-                <div class="divider"> / </div>
-                <a class="active section">Фотографии</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include "hockeyapp/clubs/team-info.html" %}
+        <!-- {% trans "Photos" %} -->
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Photos" %}
 
         <div class="page-content page-container">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-photos" %}
@@ -100,7 +79,7 @@
 
                         {% verbatim %}
 
-                        <div class="row" id="photos-new" data-tab="photos-new" >
+                        <div class="row" id="photos-new" data-tab="photos-new">
                             <div class="sixteen wide column">
                                 <div ng-show="!photos.length && !photoDataLoader" class="text-center">
                                     Нет фотографий

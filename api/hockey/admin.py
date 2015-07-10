@@ -4,21 +4,73 @@ from __future__ import unicode_literals
 import datetime
 
 from django.db.models import Q
+from django.db.models.loading import get_model
 
 import rest_framework as drf
+import filer
 
 from api.base.permissions import SportoAdminPermission
-from api.base.paginators import AltPaginationSerializer
+from api.base.paginators import AltPagination
 from hockeyapp.models import ArenaInstaPhoto, Club, Match, Player, Arena
 
 from . import serializers
 
 
+class FilerImageUpload(drf.views.APIView):
+    permission_classes = (SportoAdminPermission,)
+    allowed_methods = ('POST', 'PUT')
+
+    def post(self, request, format=None):
+        if request.data:
+            fl = request.data.get('file')
+            model_name = request.data.get('model_name','').capitalize()
+            model = get_model('hockeyapp', model_name)
+            instance_id = request.data.get('id')
+            filer_file = self.create_filer_image(fl, model_name)
+            if self.set_relation(filer_file, model, instance_id):
+                _furl = filer_file.folder.get_admin_directory_listing_url_path()
+                res = dict( url=filer_file.url,
+                            icon =  filer_file.icons.get('48'),
+                            name = filer_file.name,
+                            folder_url = _furl,
+                            pk = filer_file.pk,
+                )
+                return drf.response.Response(data=res,status=201)
+        return drf.response.Response(status=404)
+
+    def put(self, request, format=None):
+        return self.post(request, format)
+
+    def create_filer_image(self, image, folder_name):
+        _folder_objects = filer.models.Folder.objects
+        folder = _folder_objects.filter(name=folder_name).last()
+        if not folder:
+            folder = _folder_objects.create(name=folder_name)
+        _file_objects = filer.models.Image.objects
+        data = dict(folder=folder,
+                    name=image.name,
+                    is_public=True
+        )
+        _file = _file_objects.filter(**data).last()
+        if not _file:
+            _file = _file_objects.create(**data)
+            _file.file.save(image.name, image)
+            _file.save()
+        return _file
+
+    def set_relation(self, filer_image, model, instance_id):
+        instance = model.objects.filter(pk=instance_id).last()
+        if instance:
+            instance.photo = filer_image
+            instance.save(update_fields=['photo'])
+            return 1
+fiu_admin = FilerImageUpload.as_view()
+
 class CPAPIBase(object):
     queryset = ArenaInstaPhoto.objects.all()
     serializer_class = serializers.ArenaInstaPhotoSerializer
     permission_classes = (SportoAdminPermission,)
-    pagination_serializer_class = AltPaginationSerializer
+    pagination_class = AltPagination
     paginate_by = 40
 
 
@@ -65,14 +117,14 @@ arena_detail = ArenaDetail.as_view()
 
 
 class ClubList(drf.generics.ListAPIView):
-    queryset = Club.objects.all()
+    queryset = Club.objects.active()
     serializer_class = serializers.ClubMinimalSerialiser
     permission_classes = (SportoAdminPermission,)
 club_list = ClubList.as_view()
 
 
 class ClubDetail(drf.generics.RetrieveAPIView):
-    queryset = Club.objects.all()
+    queryset = Club.objects.active()
     serializer_class = serializers.ClubMinimalSerialiser
     permission_classes = (SportoAdminPermission,)
 club_detail = ClubDetail.as_view()
@@ -99,13 +151,13 @@ match_list = MatchList.as_view()
 
 
 class PlayerList(drf.generics.ListAPIView):
-    queryset = Player.objects.filter(number__isnull=False)
+    queryset = Player.objects.filter(number__isnull=False).exclude(number='')
     serializer_class = serializers.PlayerMinimalSerialiser
     permission_classes = (SportoAdminPermission,)
 
     def filter_queryset(self, qs):
         qs = super(PlayerList, self).filter_queryset(qs)
-        club = self.request.GET.get('club')
+        club = self.request.GET.getlist('club')
         q = Q()
         if club:
             q&= Q(club__in=set(club))

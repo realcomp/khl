@@ -8,13 +8,18 @@
 {% block body %}
 <section class="content">
     <div class="container players-search-page">
-        <div class="breadcrumbs">
+    <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+                    <div class="breadcrumbs">
             <div class="ui small breadcrumb">
                 <a class="section" href="/">ХОККЕЙ</a>
-                <div class="divider"> / </div>
+                <i class="right chevron icon divider"></i>
                 <a class="section">Игроки</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -23,6 +28,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
         <div class="page-content page-container"
              ng-controller="PlayersSearchController as PlayersSearchCtrl">
@@ -41,11 +47,28 @@
                         </div>
                     </div>
                     <div class="row">
-                        <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
-                        {% verbatim %}
+                        <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:country-league-list-api' %}"></a>
                         <div class="three wide column">
                             <div class="column-title">Страна:</div>
-                            <select id="players-search-country"
+
+                            <div class="ui fluid search selection dropdown">
+                                <input type="hidden" name="country" class="search"
+                                       ng-model="country" ng-update-hidden
+                                       ng-init="country = $location.search().country || 1"
+                                       ng-change="setCountry(country)">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Выберите страну</div>
+                                <div class="menu">
+                                    {% for country in countries %}
+                                        <div class="item" data-value="{{ country.pk }}">
+                                            <i class="{{ country.code }} flag"></i>
+                                            {{ country.title }}
+                                        </div>
+                                    {% endfor %}
+                                  </div>
+                            </div>
+
+                           <!--  <select id="players-search-country"
                                     class="select players-search-select" multiple="multiple" size="8"
                                     ng-model="countriesSelected">
                                 <option value="{{ country.pk }}"
@@ -53,19 +76,35 @@
                                         ng-selected="$index === 0">
                                     {{ country.title }}
                                 </option>
-                            </select>
+                            </select> -->
                         </div>
+                        {% verbatim %}
                         <div class="three wide column">
                             <div class="column-title">Лига:</div>
-                            <select id="players-search-league"
-                                    class="select players-search-select" multiple="multiple" size="8"
-                                    ng-model="leaguesSelected">
-                                <option value="{{ league.pk }}"
-                                        ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)"
-                                        ng-selected="$index === 0">
-                                    {{ league.title }}
-                                </option>
-                            </select>
+
+                            <div class="ui fluid search selection dropdown leagues">
+                                <input type="hidden" name="league" class="search"
+                                       ng-model="league" ng-update-hidden
+                                       ng-init="league = $location.search().league"
+                                       ng-change="setLeague(league)">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Выберите лигу</div>
+                                <div class="menu">
+                                    <div class="item" data-value="{{ league.pk }}"
+                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, country)">
+                                        {{ league.title }}
+                                    </div>
+                                </div>
+                            </div>
+                             <!--<select id="players-search-league"
+                                        class="select players-search-select" multiple="multiple" size="8"
+                                        ng-model="leaguesSelected">
+                                    <option value="{{ league.pk }}"
+                                            ng-repeat="league in PlayersSearchService.getLeagues(countries, params.country)"
+                                            ng-selected="$index === 0">
+                                        {{ league.title }}
+                                    </option>
+                            </select> -->
                         </div>
                         {% endverbatim %}
                         <div class="two wide column">
@@ -105,7 +144,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="four wide column">
+                        <div class="three wide column">
                             <div class="column-title">Гражданство:</div>
                             <div class="ui form">
                                 <div class="inline">
@@ -131,9 +170,12 @@
                                                ng-checked="params.citizenship_other === 'true'"
                                                onchange="angular.element(this).scope().setCitizenship(event)">
                                         <label>иное</label>
-                                    </div>
+                                    </div><br>
                                     <div class="ui selection dropdown dropdown-small-inline">
-                                        <input type="hidden" id="citizenshipOther" value="">
+                                        <input type="hidden" id="citizenshipOther" value=""
+                                               ng-model="citizenship2" ng-update-hidden
+                                               ng-init="citizenship2 = $location.search().citizenship2"
+                                               ng-change="$location.search('citizenship2', citizenship2 || null)">
                                         <div class="default text">любое</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
@@ -146,49 +188,82 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="four wide column">
+                        <div class="five wide column">
                             <div class="column-title">Контракт:</div>
                             <div class="ui form">
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="" checked="checked"
+                                        <input type="checkbox" name="contract_types" value=""
+                                               ng-checked="!params.contract_types.length"
                                                onchange="angular.element(this).scope().contractCheck(this)">
                                         <label>все</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="limited"
+                                        <input type="checkbox" name="contract_types" value="Двусторонний КХЛ/МХЛ"
+                                               ng-checked="params.contract_types.indexOf('Двусторонний КХЛ/МХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>ограниченно свободный агент</label>
+                                        <label>Двусторонний КХЛ/МХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="unlimited"
+                                        <input type="checkbox" name="contract_types" value="Двусторонний КХЛ/ВХЛ"
+                                               ng-checked="params.contract_types.indexOf('Двусторонний КХЛ/ВХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>неограниченно свободный агент</label>
+                                        <label>Двусторонний КХЛ/ВХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="contract" value="junior"
+                                        <input type="checkbox" name="contract_types" value="Односторонний КХЛ"
+                                               ng-checked="params.contract_types.indexOf('Односторонний КХЛ') >= 0"
                                                onchange="angular.element(this).scope().contractCheck(this)">
-                                        <label>юниор</label>
+                                        <label>Односторонний КХЛ</label>
                                     </div>
                                 </div>
                                 <div class="inline">
                                     <span>на дату</span>
-                                    <input type="text" class="datepicker">
+                                    <input type="text" class="datepicker"
+                                           ng-model="contractTo"
+                                           ng-init="contractTo = params.contract_to"
+                                           ng-change="$location.search('contract_to', contractTo || null)">
                                     <i class="calendar icon"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="three wide column">
+                            <div class="column-title">Номер игрока:</div>
+                            <div class="ui form">
+                                <div class="inline">
+                                    <input type="text" ng-model="number">
+                                </div>
+                                <div class="inline">
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season" value=""
+                                               ng-model="season"
+                                               onchange="angular.element(this).scope().setSeason(this)">
+                                        <div class="default text">Выберите сезон</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            {% for season in seasons %}
+                                            <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="column">
                             <div class="align-center">
-                                <a class="ui tiny green button"
+                                <a class="ui small green button"
                                    ng-click="PlayersSearchService.search(this)">показать</a>
                             </div>
                         </div>
@@ -196,7 +271,7 @@
                 </div>
             </div>
             <div class="page-inner-container">
-                <div class="ui grid">
+                 <div class="ui grid">
                     {% include "hockeyapp/players-search-table.html" %}
                 </div>
             </div>

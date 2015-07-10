@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 import itertools
-from operator import attrgetter
 
 from django.db.models import Avg, Sum
 
-from rest_framework import serializers
+from rest_framework import pagination, response, serializers
 
 from . import (
     AbstractManSerializer, TitleBaseSerializer, BasePlayerCardSerializer,
     SeasonSerializer, BaseClubSerializer,
-    CoachSerializer, CountrySerializer, ClubLightListSerializer)#ClubPlayerSerializer)
+    CoachSerializer, CountrySerializer, ClubLightListSerializer,
+    ClubListSerializer)
 from ..models import (
-    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player)
+    AdvancedPlayerStats, ClubPlayerMatch, Club, Coach, Player, ClubPlayer,
+    RelatedPlayer)
 
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
@@ -27,6 +28,7 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     rating_index = serializers.SerializerMethodField()
     contract_to = serializers.SerializerMethodField()
     contract_type = serializers.ReadOnlyField(source='get_contract_type_display')
+    similarity = serializers.SerializerMethodField()
 
     #def get_clubplayers(self, obj):
         #clubplayers_data = getattr(self.context['view'], 'clubplayers', None)
@@ -53,12 +55,27 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
             rating = getattr(self.context['view'], 'rating', {})
             return rating.get(obj.pk)
 
+    def get_similarity(self, obj):
+        request = self.context['request']
+        _related_field = request.query_params.get('related_field')
+        _related_player = request.query_params.get('related_player')
+        if _related_field and _related_player:
+            player = Player.objects.get(pk=_related_player)
+            rp = RelatedPlayer.objects.by_players(player, obj).last()
+            if rp:
+                return getattr(rp, _related_field)
+
     class Meta(object):
         fields = (
             'pk', 'url', 'photo', 'lastname', 'name', 'line_display',
             'citizenship', 'club', 'age', 'birth_date_short',
             'rating', 'rating_index', 'fio', 'contract_to', 'contract_type',
-            'weight', 'height', 'grip', 'matches_total')
+            'weight', 'height', 'grip', 'matches_total', 'similarity',
+            'number', 'matches_total', 'goals_total', 'points_total',
+            'plus_minus_total',
+            'ev_goals_total', 'pp_goals_total', 'es_goals_total',
+            'overtime_goals_total', 'win_goals_total', 'bullet_goals_total',
+            'shots_total', 'pis_average')
         model = Player
 
 
@@ -178,21 +195,15 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         return loose_goals + saves
 
     def get_matches_win(self, obj):
-        home_matches = obj.home_matches_win()
-        guest_matches = obj.guest_matches_win()
-        return (
-            (home_matches and home_matches.count() or 0) +
-            (guest_matches and guest_matches.count() or 0))
+        return obj.home_matches_win().count() + obj.guest_matches_win().count()
 
     def get_matches_lose(self, obj):
-        home_matches = obj.home_matches_lose()
-        guest_matches = obj.guest_matches_lose()
         return (
-            (home_matches and home_matches.count() or 0) +
-            (guest_matches and guest_matches.count() or 0))
+            obj.home_matches_lose().count() + obj.guest_matches_lose().count())
 
     def get_zero_goals_matches(self, obj):
-        return obj.filter(loose_goals=0).count()
+        # at least 58 minutes
+        return obj.filter(loose_goals=0, gamingtime__gte=58*60).count()
 
     def get_bullet_matches(self, obj):
         return obj.filter(bullet_goals__gt=0).count()
@@ -211,46 +222,37 @@ class ClubPlayerMatchSerilizer(serializers.ModelSerializer):
         model = ClubPlayerMatch
 
 
+class ClubPlayerMatchPagination(pagination.PageNumberPagination):
+    def _is_limited(self):
+        if self.request.user.is_authenticated():
+            return False
+        return True
+
+    def get_paginated_response(self, data):
+        return response.Response({
+            'results': data,
+            'is_limited': self._is_limited(),
+        })
+
+
 class PlayerCardClubsSerializer(BaseClubSerializer):
-    seasons_title = serializers.SerializerMethodField()
-
-    def get_seasons_title(self, obj):
-        # clubleague = LeagueClub.objects.get(
-        #     club=obj, season=obj.selected_seasons[0])
-        league_title = ''
-        if obj.league:
-            league_title = '%s: ' % obj.league.get_locale_attr(
-                'title', request=self.context.get('request'))
-        return '%(league)s%(club)s (%(seasons)s)' % {
-            'league': league_title,
-            'club': obj.get_locale_attr(
-                'title', request=self.context.get('request')),
-            'seasons': ' '.join(map(
-                attrgetter('short_title'),
-                filter(None, obj.selected_seasons))),
-        }
-
     class Meta(object):
-        fields = (
-            'pk', 'title', 'logo', 'url', 'seasons_title')
+        fields = 'pk', 'title', 'logo', 'url', 'main_color'
         model = Club
 
 
 class PlayerCardCoachesSerializer(CoachSerializer):
-    years_months = serializers.SerializerMethodField()
-
-    def get_years_months(self, obj):
-        total_months = obj.total_days / 30
-        return [total_months / 12, total_months % 12]
-
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname', 'years_months'
+        fields = 'pk', 'fio', 'name', 'lastname'
         model = Coach
 
 
 class PlayerNamesSerializer(AbstractManSerializer):
+    line_display = serializers.ReadOnlyField(source='get_line_display')
+    club = ClubLightListSerializer()
+
     class Meta(object):
-        fields = 'pk', 'fio', 'name', 'lastname'
+        fields = 'pk', 'fio', 'name', 'lastname', 'line', 'line_display', 'club'
         model = Player
 
 
@@ -258,3 +260,28 @@ class ClubTitlesSerializer(TitleBaseSerializer):
     class Meta(object):
         fields = 'pk', 'title'
         model = Club
+
+
+class NumbersClubPlayerSerializer(serializers.ModelSerializer):
+    season = SeasonSerializer()
+
+    class Meta(object):
+        fields = 'pk', 'season', 'club_url'
+        model = ClubPlayer
+
+
+class NumbersClubSerializer(ClubListSerializer):
+    clubplayers = NumbersClubPlayerSerializer(many=True)
+
+    class Meta(ClubListSerializer.Meta):
+        fields = ClubListSerializer.Meta.fields + ('clubplayers',)
+        model = Club
+
+
+class NumbersSerializer(serializers.ModelSerializer):
+    clubs = NumbersClubSerializer(many=True)
+    number = serializers.ReadOnlyField()
+
+    class Meta(object):
+        fields = 'clubs', 'number'
+        model = Player

@@ -1,0 +1,36 @@
+{% extends "hockeyapp/v1/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{title}}: командная статистика, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-stats-page players-search-page">
+        <!-- {% trans "Team stats" %} -->
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="Team stats" %}
+
+        <div class="page-content page-container"
+             ng-controller="ClubStatsController as ClubStatsCtrl">
+            <a class="hidden" id="PlayersSearchLink"
+               href="{% url 'hockeyapp:players-search-api' %}"></a>
+            <input name="club" type="hidden" value="{{ pk }}">
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club-stats" %}
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu">
+                                <span class="heading">Командная статистика</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% include "hockeyapp/v1/players-search-table.html" with club_hidden=True %}
+                </div>
+            </div>
+            {% include "hockeyapp/v1/player-partners-popup.html" %}
+        </div>
+    </div>
+</section>
+{% endblock %}

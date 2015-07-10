@@ -1,5 +1,11 @@
 'use strict';
-angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router', 'ngResource', 'ngCookies'])
+angular.module('Sportomatics', [
+    'angucomplete',
+    'ngTagsInput',
+    'ui.router',
+    'ngResource',
+    'ngCookies',
+    'isteven-multi-select'])
 .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {
@@ -9,7 +15,44 @@ angular.module('Sportomatics', ['angucomplete', 'ngTagsInput', 'ui.router', 'ngR
                 alert($state)
             }
         })
+})
+
+.directive('ngUpdateHidden', function() {
+    return {
+        'restrict': 'AE',
+        'scope': {},
+        'replace': true,
+        'require': 'ngModel',
+        'link': function($scope, elem, attr, ngModel) {
+            $scope.$watch(ngModel, function(nv) {
+                elem.val(nv);
+            });
+            elem.change(function() {
+                $scope.$apply(function() {
+                    ngModel.$setViewValue(elem.val());
+                });
+            });
+        }
+    };
 });
+
+/* better fps test
+var body = document.body, timer;
+window.addEventListener('scroll', function() {
+  clearTimeout(timer);
+  if(!body.classList.contains('disable-hover')) {
+    body.classList.add('disable-hover')
+  }
+  timer = setTimeout(function(){
+    body.classList.remove('disable-hover')
+  }, 500);
+}, false);
+ better fps test */
+var ALL_FIELDS = ["count", "goals", "assists", "points", "plus_minus", "penalty_time", "es_goals", "pp_goals", "ev_goals", "overtime_goals", "win_goals", "bullet_goals", "shots", "pis__avg", "shots__avg", "faceoff", "winfaceoff", "winfaceoff_p_avg", "gamingtime__avg", "change_count__avg", "shots_received", "loose_goals", "saves", "saves_p__avg", "sf__avg", "matches_win", "matches_lose", "zero_goals_matches", "bullet_matches", "position"];
+var KHL_NEWEST_FIELDS = ['shots', 'pis__avg', 'shots__avg', 'faceoff', 'winfaceoff', 'winfaceoff_p__avg', 'gamingtime__avg', 'change_count__avg'];
+var AVERAGE_AVAILABLE_FIELDS = ['goals', 'assists', 'points', 'plus_minus', 'penalty_time'];
+var CHART_COLORS = ['#CD015A','#FBBB01', '#F0530E','#064E3A','#03832E','#112AA0','#590074'];
+
 var next = function($http) {
     return function(isAll) {
         var self = this,
@@ -75,12 +118,56 @@ var getLeagues = function(countries, countries_selected) {
     });
     return result;
 }
+Array.prototype.getIndexBy = function (name, value) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i][name] == value) {
+            return i;
+        }
+    }
+}
 Date.prototype.yyyymmdd = function(delimiter){
     if(delimiter == null) delimiter = '';
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
     var dd  = this.getDate().toString();
     return yyyy + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + (dd[1]?dd:"0"+dd[0]);
+};
+Date.prototype.ddmmyyyy = function(delimiter){
+    if(delimiter == null) delimiter = '';
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return (dd[1]?dd:"0"+dd[0]) + delimiter + (mm[1]?mm:"0"+mm[0]) + delimiter + yyyy;
+};
+Date.prototype.yyyymmddFormatted = function(){
+    var monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+        'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return dd + ' ' + monthNames[mm] + ' ' + yyyy;
+}
+Date.prototype.ddmmFormatted = function(){
+    var monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+        'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return dd + ' ' + monthNames[mm];
+}
+Date.prototype.yyyymmddHHMMFormatted = function(){
+    var monthNames = [
+        'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля',
+        'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth()); // getMonth() is zero-based
+    var dd  = this.getDate().toString();
+    return dd + ' ' + monthNames[mm] + ' ' + yyyy + ' в ' + this.getHours() + ':' + this.getMinutes();
+}
+Date.prototype.HHMM = function(){
+    return this.getHours() + ':' + this.getMinutes();
 }
 Date.prototype.getWeekNumber = function(){
     var d = new Date(+this);
@@ -93,178 +180,88 @@ function getDateOfWeek(w, y) {
 
     return new Date(y, 0, d);
 }
-//TODO: make expressions to check if already scrolled (for performance)
-$(function() {
-    var top = null;
-    var topSecondary = null;
-    var topThird = null;
-    var topPlayer = null;
-    var breadcrumbWidth = null;
-    var teamNameWidth = null;
-    var teamLogoMargin = null;
-    var playerNameWidth = null;
-    var scrolledAfterPlayer = false;
-    var scrolledAfterBreadcrumbs = false;
-    var scrolledAfterTeamInfo = false;
-    var scrolledAfterGreenMenu = false;
-    //jquery elements
-    if($('.breadcrumbs').length){
-        top = $('.breadcrumbs').offset().top;
-        if($('.breadcrumb').length)
-        breadcrumbWidth = $('.breadcrumb').first().css('width').substr(0, $('.breadcrumb').first().css('width').length -2);
-    }
-    if($('.team-info').length){
-        topSecondary = $('.team-info').offset().top + 60;
-        teamNameWidth = parseInt($('#team-name').css('width').substr(0, $('#team-name').css('width').length-2));
-    }
-    if($('.page-menu').length){
-        topThird = $('.page-menu').offset().top - 40;
-    }
-    if($('.player-card-block').length){
-        topPlayer = $('.breadcrumbs').next().offset().top + 132;
-        playerNameWidth = $('#player-card-name').textWidth();
-    }
-    if(breadcrumbWidth && teamNameWidth){
-        teamLogoMargin = (1000 - breadcrumbWidth*2 - (25+teamNameWidth))/2;
-    }
-    $(window).scroll(function(event) {
-        var y = $(window).scrollTop();
-        if (top && y >= top) {
-            if($('.team-info').length) {
-                $('.team-info').css('margin-top', '52px'); // club page
-            } else {
-                if($('.player-card-block').length){ // players-page
-                    if($('.breadcrumbs').length){
-                        $('.breadcrumbs').next().css('margin-top', '42px')
-                    }
-                } else ($('.page-container').css('margin-top', '42px')) // clubs page
-            }
-            if(!$('.sm-logo').length) $('.breadcrumb').before($("<img class='sm-logo' style='vertical-align: middle; margin-right: 5px; float: left;' src='/static/images/sm_micro.png'>"));
-            $('.breadcrumbs').addClass('fixed');
-        } else if(top && y < top) {
-            $('.breadcrumbs').removeClass('fixed');
-            if($('.sm-logo').length) $('.sm-logo').remove();
-            if($('.team-info').length) {
-                $('.team-info').css('margin-top', '0px');
-            } else {
-                if($('.player-card-block').length){
-                    if($('.breadcrumbs').length){
-                        $('.breadcrumbs').next().css('margin-top', '0px')
-                    }
-                } else ($('.page-container').css('margin-top', '0px'))
+function contains(array, field, value){
+        for(var i = 0; i < array.length; i++) {
+            if (array[i][field] === value) {
+                return true;
             }
         }
-        //player card
-        if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-            //console.log('player call ');
-            $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
-            $('#player-card-avatar').addClass('clipped-img');
-            $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
-            $('.min-photo-container').after($('#player-card-name').addClass('inline-block player-card-name-inner'));
-            $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important').css('box-shadow', '0 4px 2px -2px gray','important'));
-            $('.page-container').css('margin-top', '68px');
-            scrolledAfterPlayer = true;
-        } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-            //console.log('player reverse call ');
-            $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block player-card-inner'));
-            $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
-            $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important').css('box-shadow', '0','important'));
-            $('.page-container').css('margin-top', '0px');
-            $(".min-photo-container").remove();
-            scrolledAfterPlayer = false;
-        }
-        //team card
-        if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-            //console.log('team info call ');
-            $('.page-container').css('margin-top', '114px');
-            $('.my-team-btn').css('margin-top', '4px');
-            $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
-            $("#team-logo").after($('#team-name')).addClass('team-logo-inner inline-block').css('margin-left', teamLogoMargin + 'px', 'important');
-            $('#team-name').addClass('team-name-inner inline-block');
-            $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important').css('box-shadow', '0 4px 2px -2px gray','important'));
-            scrolledAfterTeamInfo = true;
-        } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-            //console.log('team info reverse call ');
-            $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
-            $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
-            $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
-            $('#team-name').removeClass('team-name-inner inline-block');
-            $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important').css('box-shadow', '0','important'));
-            $('.page-container').css('margin-top', '0px');
-            scrolledAfterTeamInfo = false;
-        }
-    });
-    var y = $(window).scrollTop();
-    //player card
-    if(topPlayer && y >= topPlayer && !scrolledAfterPlayer){
-        //console.log('player call ');
-        $('.breadcrumb').after($("<div class='inline-block min-photo-container'></div>"));
-        $('#player-card-avatar').addClass('clipped-img');
-        $('#player-card-avatar').detach().appendTo($('.min-photo-container').css('margin-left', (1000 - 110 - breadcrumbWidth*2 - playerNameWidth)/2 + 'px', 'important'));
-        $('.min-photo-container').after($('#player-card-name').addClass('inline-block').css('font-weight', '700', 'important'));
-        $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
-        $('.page-container').css('margin-top', '68px');
-        scrolledAfterPlayer = true;
-    } else if (topPlayer && y < topPlayer && scrolledAfterPlayer){
-        //console.log('player reverse call ');
-        $('#player-card-amplua').before($('#player-card-name').removeClass('inline-block').css('margin-left', 0 + 'px', 'important'));
-        $('#player-card-desc').before($('#player-card-avatar').removeClass('clipped-img').css('margin-left', '0'));
-        $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
-        $('.page-container').css('margin-top', '0px');
-        $(".min-photo-container").remove();
-        scrolledAfterPlayer = false;
+        return false;
     }
-    //team card
-    if (topSecondary && y >= topSecondary && !scrolledAfterTeamInfo && !$('#player-card-block').length){
-        //console.log('team info call ');
-        $('.page-container').css('margin-top', '114px');
-        $('.my-team-btn').css('margin-top', '4px');
-        $('.breadcrumb').after($('#team-logo')).addClass('inline-block breadcrumb-inner');
-        $("#team-logo").after($('#team-name')).addClass('team-logo-inner inline-block').css('margin-left', teamLogoMargin + 'px', 'important');
-        $('#team-name').addClass('team-name-inner inline-block');
-        $('.search-block').after($('.page-menu').css('margin-left', '5px', 'important').css('margin-right', '5px', 'important'));
-        scrolledAfterTeamInfo = true;
-    } else if (topSecondary && y < topSecondary && scrolledAfterTeamInfo){
-        //console.log('team info reverse call ');
-        $('.my-team-btn').after($('#team-logo')).css('margin-top', '10px');
-        $('.breadcrumb').removeClass('inline-block breadcrumb-inner');
-        $('#team-logo').after($('#team-name')).removeClass('team-logo-inner inline-block').css('margin-left', '0px');
-        $('#team-name').removeClass('team-name-inner inline-block');
-        $('.page-inner-container').before($('.page-menu').removeClass('fixed').css('margin-left', '0px', 'important').css('margin-right', '0px', 'important'));
-        $('.page-container').css('margin-top', '0px');
-        scrolledAfterTeamInfo = false;
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
     }
-    if (top && y >= top) {
-        if($('.team-info').length) {
-            $('.team-info').css('margin-top', '52px'); // club page
+    return color;
+}
+function getParameterByName(string, name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(string);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+function toSeason(value){
+    //TODO заменить
+    //14/15
+    if(typeof(value) === 'string')
+    if(value.indexOf('/') > -1 && value.length === 5){
+        value = parseInt(value.substring(2, 5));
+        if(value > 20){
+            value = '19' + value;
         } else {
-            if($('.player-card-block').length){ // players-page
-                if($('.breadcrumbs').length){
-                    $('.breadcrumbs').next().css('margin-top', '42px')
-                }
-            } else ($('.page-container').css('margin-top', '42px')) // clubs page
+            value = '20' + value;
         }
-        if(!$('.sm-logo').length) $('.breadcrumb').before($("<img class='sm-logo' style='vertical-align: middle; margin-right: 5px; float: left;' src='/static/images/sm_micro.png'>"));
-        $('.breadcrumbs').addClass('fixed');
-    } else if(top && y < top) {
-        $('.breadcrumbs').removeClass('fixed');
-        if($('.sm-logo').length) $('.sm-logo').remove();
-        if($('.team-info').length) {
-            $('.team-info').css('margin-top', '0px');
-        } else {
-            if($('.player-card-block').length){
-                if($('.breadcrumbs').length){
-                    $('.breadcrumbs').next().css('margin-top', '0px')
-                }
-            } else ($('.page-container').css('margin-top', '0px'))
-        }
+
     }
-});
-/*$(function(){
-    if($('.breadcrumb').length){
-        ($('.breadcrumb').first().find($('.section').last()).css('text-decoration', 'none'));
+    var seasons = {
+        s2002: 1,
+        s2003: 2,
+        s2001: 3,
+        s2004: 4,
+        s2000: 5,
+        s1999: 6,
+        s1998: 7,
+        s2005: 8,
+        s2006: 9,
+        s1997: 10,
+        s2007: 11,
+        s2008: 12,
+        s2009: 13,
+        s2010: 14,
+        s2011: 15,
+        s2012: 16,
+        s2013: 17,
+        s2014: 18,
+        s2015: 19
     }
-});*/
+    return seasons['s'+value];
+}
+function fromSeason(value){
+    var seasons = {
+        s1: 2002,
+        s2: 2003,
+        s3: 2001,
+        s4: 2004,
+        s5: 2000,
+        s6: 1999,
+        s7: 1998,
+        s8: 2005,
+        s9: 2006,
+        s10: 1997,
+        s11: 2007,
+        s12: 2008,
+        s13: 2009,
+        s14: 2010,
+        s15: 2011,
+        s16: 2012,
+        s17: 2013,
+        s18: 2014,
+        s19: 2015
+    }
+    return seasons['s'+value];
+}
 $.fn.textWidth = function(){
     var html_org = $(this).html();
     var html_calc = '<span>' + html_org + '</span>';

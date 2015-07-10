@@ -64,11 +64,13 @@ class Season(TitleBaseModel):
 
     @property
     def is_last(self):
-        try:
-            season = Season.objects.active().latest('end_date')
-            return self.pk == season.pk
-        except Season.DoesNotExist:
-            return False
+        season = Season.objects.active().order_by('end_date').last()
+        return self.pk == (season and season.pk)
+
+    @property
+    def is_current(self):
+        season = Season.objects.get_current_season()
+        return self.pk == (season and season.pk)
 
 
 class TitleAlias(TitleBaseModel):

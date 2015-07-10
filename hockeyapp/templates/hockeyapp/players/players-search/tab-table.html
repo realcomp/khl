@@ -1,0 +1,370 @@
+{% load i18n %}
+
+<div class="row-xs">
+    <div class="ui ui-widget ui-helper-reset">
+        <div class="ui header title" ng-click="isQuickSearch = !isQuickSearch">
+            <i class="dropdown icon"></i>
+            Быстрый поиск
+        </div><!--accordion header-->
+
+        <div class="content" ng-show="isQuickSearch">
+            <form class="ui form">
+                <div class="row">
+
+                    <div class="col-md-7 col-sm-12 b-filter__alphabet  b-filter__item">
+                        <p class="b-inline b-label">
+                            По алфавиту:
+                        </p>
+                        <ul class="b-inline unstyled list-inline">
+                            <li ng-class="{ 'active':!params.alphabet }">
+                                <a href="" ng-click="PlayersSearchService.setAlphabetFilter(this, null)">
+                                    Все
+                                </a>
+                            </li>
+                            {% for letter in alphabet %}
+                                <li ng-class="{ 'active':params.alphabet === '{{ letter }}' }">
+                                    <a href="" ng-click="PlayersSearchService.setAlphabetFilter(this, '{{ letter }}')">
+                                        {{ letter }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6 b-filter__item">
+                        <div class="b-search ui category search result">
+                            <div class="ui icon input">
+                                <input class="c-search prompt" type="text" autocomplete="off" disabled>
+                                <i class="search link icon"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 col-sm-6 text-right  b-filter__item">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="gender">
+                            <div class="default text">сезон 2014-15</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <!-- <div class="item" data-value="сезон 14/15">сезон 2014-15</div> -->
+                                <!-- <div class="item" data-value="сезон 13/14">сезон 2013-14</div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!--row-->
+            </form>
+        </div><!--accordion content-->
+    </div><!--accordion-->
+</div>
+
+<div class="row-xs">
+    <table class="ui unstackable striped table colored-th grey-th b-table-lg" ng-show="data">
+        <tr>
+            <th class="b-place hidden-xs hidden-sm">
+                <a href="#">
+                    <span>Место</span>
+                    <!-- <i class="dropdown icon"></i> -->
+                </a>
+            </th>
+            <th class="">
+                <a href="" ng-click="setOrderBy('%s_lastname,%s_name')">
+                    <span>Имя</span>
+                    <i class="dropdown icon" ng-show="params.order_by === '%s_lastname,%s_name'"></i>
+                </a>
+            </th>
+            <th class="b-team"
+                ng-show="params.display_params && params.display_params.indexOf('club') >= 0">
+                <a href="" ng-click="setOrderBy('club')">
+                    <span>Команда</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'club'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm"
+                ng-show="params.display_params && params.display_params.indexOf('number') >= 0">
+                <a href="" ng-click="setOrderBy('number')">
+                    <span>№</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'number'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('contract') >= 0">
+                <a href="" ng-click="setOrderBy('contract_to')">
+                    <span>Контракт</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'contract_to'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('age') >= 0">
+                <a href="" ng-click="setOrderBy('birth_date')">
+                    <span>Лет</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'birth_date'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('height') >= 0">
+                <a href="" ng-click="setOrderBy('height')">
+                    <span>Рост</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'height'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('weight') >= 0">
+                <a href="" ng-click="setOrderBy('weight')">
+                    <span>{% trans "Weight" %}</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'weight'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('grip') >= 0">
+                <a href="" ng-click="setOrderBy('grip')">
+                    <span>{% trans "Grip" %}</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'grip'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm"
+                ng-show="params.display_params && params.display_params.indexOf('matches_total') >= 0">
+                <a href="" ng-click="setOrderBy('matches_total')">
+                    <span>И</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'matches_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm"
+                ng-show="params.display_params && params.display_params.indexOf('goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('goals_total')">
+                    <span>Ш</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('points_total') >= 0">
+                <a href="" ng-click="setOrderBy('points_total')">
+                    <span>О</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'points_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('plus_minus_total') >= 0">
+                <a href="" ng-click="setOrderBy('plus_minus_total')">
+                    <span>+/-</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'plus_minus_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('es_goals_total')">
+                    <span>ШР</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'es_goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('pp_goals_total')">
+                    <span>ШБ</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'pp_goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('ev_goals_total')">
+                    <span>ШМ</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'ev_goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('overtime_goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('overtime_goals_total')">
+                    <span>ШО</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'overtime_goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('win_goals_total')">
+                    <span>ШП</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'win_goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('bullet_goals_total') >= 0">
+                <a href="" ng-click="setOrderBy('bullet_goals_total')">
+                    <span>РБ</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'bullet_goals_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('assists_total') >= 0">
+                <a href="" ng-click="setOrderBy('assists_total')">
+                    <span>А</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'assists_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('shots_total') >= 0">
+                <a href="" ng-click="setOrderBy('shots_total')">
+                    <span>БВ</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'shots_total'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pis_average') >= 0">
+                <a href="" ng-click="setOrderBy('pis_average')">
+                    <span>%БВ</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'pis_average'"></i>
+                </a>
+            </th>
+            <th class="text-center-sm hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('shots_average') >= 0">
+                <a href="" ng-click="setOrderBy('shots_average')">
+                    <span>БВ/И</span>
+                    <i class="dropdown icon" ng-show="params.order_by === 'shots_average'"></i>
+                </a>
+            </th>
+        </tr>
+
+        {% verbatim %}
+        <tr ng-repeat="player in data.results">
+            <td class="b-place hidden-xs hidden-sm">
+                <div class="ui checkbox w-tooltip" data-content="Добавить в мой список" data-variation="basic">
+                    <input type="checkbox">
+                    <label>{{ player.rating_index }}</label>
+                </div>
+            </td>
+
+            <td class="">
+                <div class="b-inline">
+                    <p class="">
+                        <a href="{{ player.url }}">{{ player.fio }}</a>
+                        <i class="flag {{ player.citizenship.code }} i-top-2 hidden-xs"></i>
+                    </p>
+                    <p class="">
+                        {{ player.line_display }}
+                    </p>
+                </div>
+            </td>
+
+            <td class=""
+                ng-show="params.display_params && params.display_params.indexOf('club') >= 0">
+                <p class="">
+                    <a href="{{ player.club.url }}">{{ player.club.title }}</a>
+                </p>
+                <p class="">
+                    {{ player.club.address.title }}
+                </p>
+            </td>
+
+            <td class="text-center"
+                ng-show="params.display_params && params.display_params.indexOf('number') >= 0">
+                {{ player.number }}
+            </td>
+
+            <td class="text-center-sm hidden-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('contract') >= 0">
+                <!-- <p class="" ng-if="player.contract_to"> -->
+                <!--     до -->
+                <!-- </p> -->
+                <p class="">
+                    {{ player.contract_to }}
+                </p>
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('age') >= 0">
+                {{ player.age[0] }}
+            </td>
+
+            <td class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('height') >= 0">
+                {{ player.height }}
+            </td>
+
+            <td class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('weight') >= 0">
+                {{ player.weight }}
+            </td>
+
+            <td class="text-center-sm visible-lg"
+                ng-show="params.display_params && params.display_params.indexOf('grip') >= 0">
+                {{ player.grip }}
+            </td>
+
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('matches_total') >= 0">
+                {{ player.matches_total }}
+            </td>
+
+            <td class="text-center"
+                ng-show="params.display_params && params.display_params.indexOf('goals_total') >= 0">
+                {{ player.goals_total }}
+            </td>
+
+            <td class="text-center"
+                ng-show="params.display_params && params.display_params.indexOf('points_total') >= 0">
+                {{ player.points_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('plus_minus_total') >= 0">
+                {{ player.plus_minus_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
+                {{ player.es_goals_total }}
+            </td>
+
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
+                {{ player.pp_goals_total }}
+            </td>
+
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
+                {{ player.ev_goals_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('overtime_goals_total') >= 0">
+                {{ player.overtime_goals_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
+                {{ player.win_goals_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('bullet_goals_total') >= 0">
+                {{ player.bullet_goals_total }}
+            </td>
+
+            <td class="text-center hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('assists_total') >= 0">
+                {{ player.assists_total }}
+            </td>
+
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('shots_total') >= 0">
+                {{ player.shots_total }}
+            </td>
+
+            <td class="text-center-sm hidden-xs"
+                ng-show="params.display_params && params.display_params.indexOf('pis_average') >= 0">
+                {{ player.pis_average }}
+            </td>
+
+            <td class="text-center hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
+                -
+            </td>
+
+            <td class="text-center hidden-xs hidden-sm"
+                ng-show="params.display_params && params.display_params.indexOf('not_implemented') >= 0">
+                -
+            </td>
+        </tr>
+        {% endverbatim %}
+    </table>
+    <div class="loader-large" ng-hide="loaded"></div>
+</div>

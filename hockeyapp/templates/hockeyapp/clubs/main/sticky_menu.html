@@ -1,0 +1,132 @@
+<div class="b-sticky-menu hidden-xs">
+    <div class="b-sticky-menu__main">
+        <div class="container">
+            <ul class="w-main-nav__b-menu ui inverted green menu">
+                <li class="item w-main-nav__b-menu__logo hidden-xs">
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';"/></a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-main' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:details' pk %}">Состав</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-calendar' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:calendar' pk %}">Календарь</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-stats' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:stats' pk %}">Статистика</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-home' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:home' pk %}">Домашняя площадка</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-photos' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:photos' pk %}">Фотографии</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-fanzone' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:fanzone' pk %}">Фан-клуб</a>
+                </li>
+            </ul>
+        </div><!--container-->
+    </div><!--b-sticky-menu__main-->
+
+    <div class="b-sticky-menu__tabs hidden-xs">
+        <div class="container">
+            <div class="ui inline dropdown w-sticky-tabs__dropdown" tabindex="0">
+                <div class="text">Сезон 2014-15</div>
+                <i class="dropdown icon"></i>
+                <div class="menu transition hidden" tabindex="-1">
+                    <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                    <div class="item" data-text="Сезон 2013-14">2013-14</div>
+                    <div class="item" data-text="Сезон 2012-13">2012-13</div>
+                    <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                </div>
+            </div><!--end w-sticky-tabs__dropdown-->
+            <div class="ui tabular w-page-tabs__tabs w-sticky-tab-menu menu hidden-xs">
+                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
+                <!--<a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>-->
+                <!--<a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>-->
+                <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
+                <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
+                <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
+                <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
+            </div><!--end w-sticky-tab-menu-->
+        </div><!--end container-->
+    </div><!--end b-sticky-menu__tabs-->
+</div>
+
+<div class="b-sticky-menu hidden-xs">
+    <div class="b-sticky-menu__main">
+        <div class="container w-clearboth">
+            <ul class="w-main-nav__b-menu ui inverted green menu">
+                <li class="item w-main-nav__b-menu__logo hidden-xs">
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';"/></a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-main' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:details' pk %}">Состав</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-calendar' %}active {% endif %} item">
+                    <a href="{% url 'hockeyapp:clubs:calendar' pk %}">Календарь</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-stats' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:stats' pk %}">Статистика</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-home' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:home' pk %}">Домашняя площадка</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-photos' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:photos' pk %}">Фотографии</a>
+                </li>
+                <li class="{% if clubs_menu_active == 'club-fanzone' %}active {% endif %}item">
+                    <a href="{% url 'hockeyapp:clubs:fanzone' pk %}">Фан-клуб</a>
+                </li>
+            </ul>
+
+            <ul class="b-sticky-reg list-inline">
+                <li>
+                    <a href="#">Регистрация</a>
+                </li><li>
+                    <a href="#">Вход</a>
+                </li><li class="ui dropdown top right pointing">
+                    <a href="#">Язык<i class="dropdown icon"></i></a>
+                    <ul class="menu">
+                        <li class="item">Clothing</li>
+                        <li class="item">Home Goods</li>
+                        <li class="item">Bedroom</li>
+                        <li class="item">Status</li>
+                        <li class="item">Cancellations</li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div><!--container-->
+    </div><!--b-sticky-menu__main-->
+
+    <div class="b-sticky-menu__tabs">
+        <div class="container">
+            <div class="ui inline dropdown w-sticky-tabs__dropdown" tabindex="0">
+                <div class="text">Сезон 2014-15</div>
+                <i class="dropdown icon"></i>
+                <div class="menu transition hidden" tabindex="-1">
+                    <div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+                    <div class="item" data-text="Сезон 2013-14">2013-14</div>
+                    <div class="item" data-text="Сезон 2012-13">2012-13</div>
+                    <div class="item" data-text="Сезон 2011-12">2011-12</div>
+                </div>
+            </div><!--end w-sticky-tabs__dropdown-->
+            <div class="ui tabular w-page-tabs__tabs w-sticky-tab-menu menu hidden-xs">
+                <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="{% if clubs_main_tab == 'main-about' %}active {% endif %} item">О команде</a>
+                <!--<a href="{% url 'hockeyapp:clubs:main-games' pk %}" class="{% if clubs_main_tab == 'main-games' %}active {% endif %} item">Матчи</a>-->
+                <!--<a href="{% url 'hockeyapp:clubs:main-rumors' pk %}"class="{% if clubs_main_tab == 'main-rumors' %}active {% endif %} item">Слухи<span class="floating ui green circular label">+1</span></a>-->
+                <a href="{% url 'hockeyapp:clubs:main-geography' pk %}" class="{% if clubs_main_tab == 'main-geography' %}active {% endif %} item">География</a>
+                <a href="{% url 'hockeyapp:clubs:main-coaches' pk %}" class="{% if clubs_main_tab == 'main-coaches' %}active {% endif %} item">Тренеры</a>
+                <a href="{% url 'hockeyapp:clubs:main-numbers' pk %}" class="{% if clubs_main_tab == 'main-numbers' %}active {% endif %} item">История номеров</a>
+                <!--<a href="{% url 'hockeyapp:clubs:main-symbol' pk %}" class="{% if clubs_main_tab == 'main-symbol' %}active {% endif %} item">Талисман</a>-->
+            </div><!--end w-sticky-tab-menu-->
+        </div><!--end container-->
+    </div><!--end b-sticky-menu__tabs-->
+
+</div><!--b-sticky-->

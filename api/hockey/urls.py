@@ -10,11 +10,14 @@ urlpatterns = patterns('api.hockey',
     url(r'^arena/(?P<pk>\d+)/$', 'admin.arena_detail', name='arena'),
     url(r'^admin/club/$', 'admin.club_list', name='club_list'),
     url(r'^admin/club/(?P<pk>\d+)/$', 'admin.club_detail', name='club_detail'),
+    url(r'^admin/fiu/$', 'admin.fiu_admin', name='fiu_admin'),
     url(r'^clubinstaphoto/$', 'views.cip_list', name='cip_list'),
-    url(r'^match/$', 'admin.match_list', name='match_list'),
+    url(r'^admin/match/$', 'admin.match_list', name='match_list'),
     url(r'^player/$', 'admin.player_list', name='player_list'),
     url(r'^playerinstaphoto/$', 'views.pip_list', name='pip_list'),
 
 
     url(r'^clubs/$', 'views.club_list', name='club-list-api'),
+    url(r'^match/$', 'views.matches', name='matches'),
+    url(r'^player/(?P<player_id>\d+)/partners/$', 'views.player_partners', name='player_partners'),
 )

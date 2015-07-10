@@ -1,0 +1,75 @@
+{% load i18n %}
+<div class="calendar-event-popup"
+     onclick="$(this).hide(300)">
+    <div class="calendar-popup-title" ng-show="CalendarEventPopup.is_home">
+        {% trans "Home match" %}
+    </div>
+    <div class="calendar-popup-title" ng-show="CalendarEventPopup.is_guest">
+        {% trans "Guest match" %}
+    </div>
+    <hr class="hr">
+    <div class="team-logo">
+        {% verbatim %}
+            <img alt="" class="team-logo-image"
+                 ng-src="{{ CalendarEventPopup.data.team.logo }}">
+        {% endverbatim %}
+    </div>
+    <div class="align-center">
+        {% verbatim %}
+            <a href="{{ CalendarEventPopup.data.team.url }}" class="team-link">
+                {{ CalendarEventPopup.data.team.title_verbose }}
+            </a>
+        {% endverbatim %}
+    </div>
+    <div class="event-details">
+        {% verbatim %}
+            <p>Начало: {{ CalendarEventPopup.data.date|date:"HH:mm" }} МСК</p>
+            <p ng-show="CalendarEventPopup.data.related_match">
+                <a href="#">Прошлые встречи</a>:
+                {{ CalendarEventPopup.data.related_match.date|date:"dd.MM" }},
+                счет {{ CalendarEventPopup.data.related_match.count }}
+            </p>
+            <p><a href="#">Превью матча</a></p>
+        {% endverbatim %}
+    </div>
+    <div class="ui checkbox">
+        <input id="i_go" type="checkbox">
+        <label for="i_go">я пойду (идут 2031)</label>
+    </div>
+    <div class="ui checkbox">
+        <input id="get_news" type="checkbox">
+        <label for="get_news">получать новости</label>
+    </div>
+    <hr class="hr">
+    {% verbatim %}
+        <div class="heading">{{ CalendarEventPopup.data.arena.country.title }}</div>
+        <div class="team-cities">
+            <div class="city">
+                <div class="city-photos">
+                    <img ng-src="{{ CalendarEventPopup.data.arena.photo }}" alt="" class="city-photo">
+                </div>
+                <div class="city-desc">
+                    <p><span class="lang-icon"></span>
+                        <span ng-show="CalendarEventPopup.data.arena.country">
+                            {{ CalendarEventPopup.data.arena.country.title }},
+                        </span>
+                        {{ CalendarEventPopup.data.arena.address.title }}
+                    </p>
+                    <p>
+                        Название: {{ CalendarEventPopup.data.arena.title }}
+                        <span ng-show="CalendarEventPopup.data.arena.title !== CalendarEventPopup.data.arena.en_title ">
+                            / {{ CalendarEventPopup.data.arena.en_title }}
+                        </span>
+                    </p>
+                    <p>{{ CalendarEventPopup.data.arena.address.title }}</p>
+                    <p>{{ CalendarEventPopup.data.arena.contacts }}</p>
+                    <p>Вместимость:  {{ CalendarEventPopup.data.arena.capacity }} человек</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="align-center">
+            <a href="{{ CalendarEventPopup.data.arena.url }}" class="how-to-reach">Как добраться</a>
+        </div>
+    {% endverbatim %}
+</div>

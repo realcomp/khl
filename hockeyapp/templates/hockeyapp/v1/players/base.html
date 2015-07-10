@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+</style>
+{% if object.club.main_color %}
+<style>
+     .ui.tabular.menu .item {
+    color: {{object.club.main_color}} !important; /* текст табов secondary */
+    }
+     .team-player-number{
+    background: {{object.club.main_color}} !important; /* номер игрока secondary */
+    }
+     .heading{
+    color: {{object.club.main_color}} !important; /* заголовок сезонов secondary */
+    }
+     .team-info .info-item .icon{
+    color: {{object.club.main_color}} !important; /* иконки над меню primary */
+    }
+     .page-menu.ui.green.menu {
+    background: {{object.club.main_color}} !important; /* цвет меню primary */
+    }
+     .ui-tabs-nav .ui-state-active {
+        color: #000000 !important;
+    }
+     .ui.tabular.menu .ui-tabs-active .item{
+        color: #000000 !important;
+    }
+    .player-select-table th {
+    background: {{object.club.main_color}} !important;
+    }
+    .clubs-calendars-table th {
+    background: {{object.club.main_color}} !important;
+    }
+    .clubs-team-table th {
+    background: {{object.club.main_color}} !important;
+    }
+     .graph-controls-block {
+     background: {{object.club.main_color}} !important;
+     }
+     .chart-button {
+        background: {{object.club.main_color}} !important;
+     }
+     .active-season-button {
+     background: {{object.club.main_color}} !important;
+     border: 1px solid {{object.club.main_color}} !important;
+
+     }
+     .page-menu.ui.green.menu {
+     background: {{object.club.main_color}} !important;
+     }
+     .tabs-list .tabs-link {
+     color: {{object.club.main_color}} !important;
+     }
+     .design-table.ui.table th{
+     background: {{object.club.main_color}} !important;
+     }
+</style>
+{% endif %}
+{% endblock %}
+
+
+{% block header %}
+    {% include "partial/header.html" with user_card_menu_active="players" %}
+{% endblock %}

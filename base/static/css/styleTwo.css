@@ -1,0 +1,146 @@
+body{
+    background: url(../images/bgContent.jpg) no-repeat center;
+    background-size: cover;
+    -webkit-background-position: cover; 
+    -moz-background-position: cover; 
+    -o-background-position: cover;
+    background-attachment: fixed;
+}/*HEADER*/
+/*menu buttons*/
+.user-card-menu .ui.inverted.button {box-shadow: 0px 1px 1px #f1f2e9 !important}
+.breadcrumbs .search-block{margin-right: 10px}
+
+
+/*menu buttons*/
+.bottom-line .ui.menu.user-card-menu{margin-left: 0px;}
+/*.ui.green.menu{background-color:  #408e3a}*/
+.ui.green.menu a{font-size: 15px;/*text-transform: uppercase;*/}
+.ui.green.menu .active.item{color: #fff !important;background-color:  #408e3a}
+.ui.green.menu .item{padding: 20px 16px;}
+.ui.green.menu.player-menu .item{padding: 20px 22px;}
+.player-card-short-page{background: #fff}
+
+/*HEADER END*/
+/*CONTENT*/
+.wrapper{
+  height: auto;
+  min-height: 100%;
+  margin-bottom: 20px;
+}
+.content{
+	padding-bottom: 130px;
+}
+.clearfix:after {content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;}
+.clearfix {
+  display: inline-block;
+}
+.ui.menu{margin-top: 0px}
+.player-card-short-page{background: #fff}
+.home-page{
+  background: #fff;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  border-radius: 0px 0px 8px 8px;
+  
+}
+/*CONTENT END*/
+
+
+
+/*Player-Table.html*/
+
+.players-search-page .ui.checkbox label{font-size: 13px}
+.search-block .ui.icon.input input{font-size: 15px}
+/*.breadcrumb-search{border-bottom: 1px solid rgb(224, 218, 218);border-top: 1px solid rgb(224, 218, 218);}*/
+.breadcrumb-search{margin: 0px !important;background: #fff}
+
+
+/*Player-Table.html END*/
+
+/*clubs-team.html*/
+.tab-photo-wrap{position: relative;width: 100%;text-align: center;margin-top: 25px}
+.tab-photo-wrap .ui.small.button, .ui.small.buttons .button, .ui.small.buttons .or{
+	font-size: 0.675rem;
+}
+.tab-photo-wrap .ui.buttons .or:before{content: ''!important;}
+.tab-photo-wrap .ui.button{width: 100px; background-color: #e4e5da;color: rgba(64, 142, 58, 1);font-size: 16px}
+.tab-photo-wrap .active-photo-table{background-color: rgba(64, 142, 58, 1) !important;color: #fff !important;}
+
+.clubs-team-wrap{
+	width: 960px;
+	margin: 0 auto;
+	overflow: hidden;
+
+}
+.ui.grid > .row .clubs-team-wrap{font-size: 12px;padding:0px 15px }
+.clubs-team-wrap .head-player-block a{
+	transition: all 0.2s linear 0s;
+    -webkit-transition: all 0.2s linear 0s;
+    -moz-transition: all 0.2s linear 0s;
+    -o-transition: all 0.2s linear 0s;
+    
+}
+.player-block-wrap{float: left;}
+.player-item {position: relative; width: 180px; border-bottom: 1px solid grey;float: left;margin-right: 10px;cursor: pointer;}
+.players-list{position: relative;}
+.players-list img{width: 60px;height: 80px;float: left;border-radius: 4px}
+.players-list img:after{content: "";display: inline-block;position: relative;overflow: hidden;clear: both}
+.player-club-info{margin-left: 65px;}
+.clubs-team-wrap .player-item .ui.teal.ribbon.label{position: absolute;width: 24px; background-color: #73A755 ;border-color: #73A755 ;height: 21px;font-size: 90%;
+font-weight: bold;}
+.clubs-team-wrap .player-item .ui.teal.ribbon.label:before{background-color: #73A755 ;border-width: 0px 0px 1px 0px}
+.clubs-team-wrap .player-item .ui.teal.ribbon.label:after{border-width: 0px 6px 6px 0px;opacity: .5}
+.clubs-team-wrap .player-item .ribbon{top: 15px;}
+.clubs-team-wrap .player-item .ribbon.label{left: -8px;top: 25px;}
+.clubs-team-wrap .player-item .ui.label{padding: 2px 6px}
+.clubs-team-wrap .one-block .player-item .ribbon.label{left: 4px;}
+
+
+/*clubs-team END*/
+
+/*Datepicker*/
+.players-search-page .ui.form .datepicker{
+	width: 70px;
+    height: 25px;
+    margin-top: 15px;
+    padding: 5px;
+    font-size: 85%;
+}
+.ui-datepicker .ui-datepicker-header{
+	background: none repeat scroll 0% 0% rgba(43, 147, 224, 0.8);
+	border: 1px solid rgba(159, 93, 93, 0.32);
+
+}
+.ui-datepicker th{
+	background: none repeat scroll 0% 0% rgb(109, 189, 22);
+}
+.ui-datepicker td span, .ui-datepicker td a{background: none repeat scroll 0% 0% rgba(221, 233, 209, 0.94);}
+.ui-datepicker .ui-datepicker-prev{background: url(../images/arrowDatePrew.png) no-repeat center;}
+.ui-datepicker .ui-datepicker-next{background: url(../images/arrowDateNext.png) no-repeat center;}
+/*Datepicker End*/
+
+
+/*Clubs HTML */
+.clubs-tabs .heading{display: inline-block;margin: 5px 15px}
+
+/*Clubs HTML END*/
+
+
+/*Footer*/
+footer{
+  height: 130px;
+  clear: both;
+  margin-top: -130px;
+}
+.footer .socials .button{margin-bottom: 20px;margin-top: 0px}
+.footer{
+	background: #F1F2E9;
+}
+/*Footer END*/

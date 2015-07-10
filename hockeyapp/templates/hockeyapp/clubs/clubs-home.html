@@ -9,32 +9,12 @@
 <section class="content">
     <div class="overlay-black" style="visibility: hidden"></div>
     <div class="container clubs-page clubs-home-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">Хоккей</a>
-                <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <div class="divider"> / </div>
-                <a class="section" href="/ru/hockey/clubs/#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="/ru/hockey/clubs/#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="">{{title}}</a>
-                <div class="divider"> / </div>
-                <a class="active section">Домашняя площадка</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include "hockeyapp/clubs/team-info.html" %}
+        <!-- {% trans "Home arena" %} -->
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Home arena" %}
+        <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
+        <input type="hidden" id="team-arena-id" value="{{arena.pk}}">
 
-        <div class="page-content page-container" ng-controller="PhotosController">
+        <div class="page-content page-container" ng-controller="ClubHomeController">
             {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-home" %}
             <div class="page-inner-container">
                 {% verbatim %} <!-- Popup -->
@@ -93,6 +73,16 @@
                             <li class="stadium-info-item">
                                 <span>Сайт:</span> <a href="{{ arena.site }}">{{ arena.site }}</a>
                             </li>
+                            {% if arena.club_set.count > 1 %}
+                                <li class="stadium-info-item">
+                                    <span>Также, это домашняя площадка для:</span>
+                                    {% for club in arena.club_set %}
+                                        {% if club.pk != pk %}
+                                            <a href="{{ club.url }}">{{ club.title_verbose }}</a><br/>
+                                        {% endif %}
+                                    {% endfor %}
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -215,7 +205,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -274,7 +264,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -348,7 +338,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -468,7 +458,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -527,7 +517,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -601,7 +591,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -721,7 +711,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -780,7 +770,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -854,7 +844,7 @@
                                                     </div>
                                                     <div class="city-desc">
                                                         <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
-                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p> 
+                                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
                                                         <p>Адрес: Уфа, ул.Ленина, 114</p>
                                                         <p>Телефон: 275-14-00</p>
                                                         <p>Открыт: 27 августа 2007г.</p>
@@ -905,7 +895,25 @@
 
                 <hr class="hr">
 
-                <div class="team-track">
+                <div class="row">
+                    <div class="column">
+                        <div class="ui tabular menu">
+                            <span class="heading">График посещаемости арены</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="m-t-10" id="chartdiv" style="width: 100%; height:300px; "></div>
+                </div>
+                <div class="margin-auto text-center m-t-10">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="line" value=""
+                               ng-checked="homeOnly"
+                               onchange="angular.element(this).scope().homeOnly = !angular.element(this).scope().homeOnly; angular.element(this).scope().createGamesChart();">
+                    </div>
+                </div>
+
+                <div class="team-track" ng-controller="ClubHomeMapController">
                     <div class="heading">Как добраться</div>
                     <div class="team-track-map">
                         <div class="google-map-overlay-lock" style="position: relative;width: 932px; height: 486px; z-index: 999; background: rgba(0,0,0,0); top: 486px; margin-top: -486px; " >
@@ -923,6 +931,9 @@
                             Сбросить масштабирование
                         </a>
                     </div>
+                    <!--<input id="coordinates" type="hidden" value="{{ arena.coords|default:arena.contacts|escape }}">
+                    <input id="place-title" type="hidden" value="{{ arena.title }}">
+                    <div id="map"></div>-->
                 </div>
 
                 <ul class="team-controls player-controls-block">

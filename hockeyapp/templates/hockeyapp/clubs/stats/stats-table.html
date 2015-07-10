@@ -1,0 +1,199 @@
+{% extends 'hockeyapp/clubs/stats/clubs-stats.html' %}
+{% block tabs-content %}
+
+
+{% include 'hockeyapp/clubs/stats/tabs.html' with clubs_main_tab='stats-table' %}
+<div class="b-tabs-content ui tab active" data-tab="tab-name">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-stats" active_menu="stats-table" %}
+    {% endblock %}
+
+    <section class="w-section">
+        <div class="b-header b-header__md b-header__filter-in">
+            <div class="w-table">
+                <h2 class="b-cell b-header__text">
+                    Командная статистика
+                </h2>
+
+                <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-content="Алфавитный список" data-variation="basic" href="stats-table-history.html">
+                    <i class="sort alphabet ascending icon"></i>
+                    <div class="ui toggle checkbox">
+                        <input type="checkbox" name="public">
+                        <label>учесть всю историю игроков</label>
+                    </div>
+                </a>
+
+                <a class="b-cell b-change-views__item w-tooltip" data-content="Игровые показатели" data-variation="basic" href="stats-table-2.html">
+                    <i class="table icon"></i>
+                </a>
+
+                <a class="b-cell b-change-views__item w-tooltip" data-content="Показатели прошлого сезона" data-variation="basic" href="#">
+                    <i class="history icon"></i>
+                </a>
+
+                <a class="b-cell b-change-views__item w-tooltip" data-content="С учетом ушедших в сезоне игроков" data-variation="basic" href="#">
+                    <i class="remove user icon"></i>
+                </a>
+            </div><!--row-->
+        </div><!--b-header b-header__md-->
+
+        <div class="row-xs">
+            <table class="ui unstackable striped table colored-th grey-th b-table-lg">
+                <tr>
+                    <th class="b-place hidden-xs hidden-sm"><a href="#"><span>Место</span><i class="dropdown icon"></i></a></th>
+                    <th class=""><a href="#"><span>Имя</span><i class="dropdown icon"></i></a></th>
+                    <th class="b-td-number hidden-360"><a href="#"><span>Номер</span><i class="dropdown icon"></i></a></th>
+                    <th class="hidden-xs"><a href="#"><span>Возраст</span><i class="dropdown icon"></i></a></th>
+                    <th class="hidden-xs hidden-sm"><a href="#"><span>Контракт</span><i class="dropdown icon"></i></a></th>
+                    <th class="b-table-place hidden-xs hidden-sm"><a href="#"><span>Тип контракта</span><i class="dropdown icon"></i></a></th>
+                    <th class=""><a href="#"><span>Сезонов<span class="hidden-xs"> всего</span></span><i class="dropdown icon"></i></a></th>
+                    <th class=""><a href="#"><span>Игр<span class="hidden-xs"> за клуб</span></span><i class="dropdown icon"></i></a></th>
+                    <th class="b-td-corsi"><a href="#"><span>CORSI</span><i class="dropdown icon"></i></a></th>
+                </tr>
+
+
+                <tr>
+                    <td class="b-place hidden-xs hidden-sm">
+                        <div class="ui checkbox w-tooltip" data-content="Добавить в мой список" data-variation="basic">
+                            <input type="checkbox">
+                            <label>1</label>
+                        </div>
+                    </td>
+
+                    <td class="b-player">
+                        <div class="b-inline hidden-xs">
+                            <a class="ui image" href="#"><img class="ui image" src="images/a-hockey/ava-12.jpg" alt="" tittle=""/></a>
+                        </div>
+                        <div class="b-inline">
+                            <p class="">
+                                <a href="#">Петров Сергей</a> <i class="flag cz i-top-2 hidden-xs"></i>
+                            </p>
+                            <p class="">
+                                нападающий
+                            </p>
+                        </div>
+                    </td>
+
+                    <td class="text-center hidden-360">
+                        22
+                    </td>
+
+                    <td class="text-center-sm hidden-xs">
+                        <p class="">
+                            19
+                        </p>
+                        <p class="text-small">
+                            28.10.1983
+                        </p>
+                    </td>
+
+                    <td class="text-center-sm hidden-sm hidden-xs">
+                        <p class="">
+                            до
+                        </p>
+                        <p class="">
+                            30.04.2015
+                        </p>
+                    </td>
+
+                    <td class="text-center-sm hidden-sm hidden-xs">
+                        <p class="">
+                            односторонний
+                        </p>
+                        <p class="">
+                            КХЛ
+                        </p>
+                    </td>
+
+                    <td class="text-center">
+                        6
+                    </td>
+
+                    <td class="text-center">
+                        14
+                    </td>
+
+                    <td class="">
+                        2283
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="b-place hidden-xs hidden-sm">
+                        <div class="ui checkbox w-tooltip" data-content="Добавить в мой список" data-variation="basic">
+                            <input type="checkbox">
+                            <label>2</label>
+                        </div>
+                    </td>
+
+                    <td class="b-player">
+                        <div class="b-inline hidden-xs">
+                            <a class="ui image" href="#"><img class="ui image" src="images/a-hockey/ava-16.jpg" alt="" tittle=""/></a>
+                        </div>
+                        <div class="b-inline">
+                            <p class="">
+                                <a href="#">Еременко Александр</a> <i class="flag ru i-top-2 hidden-xs"></i>
+                            </p>
+                            <p class="">
+                                нападающий
+                            </p>
+                        </div>
+                    </td>
+
+                    <td class="text-center hidden-360">
+                        10
+                    </td>
+
+                    <td class="text-center-sm hidden-xs">
+                        <p class="">
+                            22
+                        </p>
+                        <p class="text-small">
+                            28.10.1993
+                        </p>
+                    </td>
+
+                    <td class="text-center-sm hidden-sm hidden-xs">
+                        <p class="">
+                            до
+                        </p>
+                        <p class="">
+                            30.04.2015
+                        </p>
+                    </td>
+
+                    <td class="text-center-sm hidden-sm hidden-xs">
+                        <p class="">
+                            односторонний
+                        </p>
+                        <p class="">
+                            КХЛ
+                        </p>
+                    </td>
+
+                    <td class="text-center">
+                        4
+                    </td>
+
+                    <td class="text-center">
+                        10
+                    </td>
+
+                    <td class="">
+                        2183
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </section><!--w-section-->
+</div>
+<!--tabs content items-->
+{% endblock %}
+
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/stats/sticky_menu.html' with clubs_main_tab='stats-table' clubs_menu_active='club-stats' %}
+{% endblock %}

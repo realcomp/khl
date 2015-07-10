@@ -1,0 +1,37 @@
+{% extends 'hockeyapp/clubs/home/clubs-home.html' %}
+
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/home/tabs.html' with clubs_main_tab='home-map' %}
+<!--tabs content items-->
+<input id="coordinates" type="hidden" value="{{ arena.coords|default:arena.contacts|escape }}">
+<div class="b-tabs-content ui" ng-controller="ClubHomeMapController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-home" active_menu="home-map" %}
+    {% endblock %}
+
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Как добраться?
+            </h2>
+        </div><!--w-table-->
+    </div><!--b-header b-header__md-->
+
+    <div class="b-header b-header__sm b-header__filter-in">
+        <!--<h3 class="b-cell b-header__text">Карта проезда</h3>-->
+        <p class="b-text__p">{{arena.contacts}}</p>
+    </div>
+
+    <div id="arena-map" class="w-map">
+    <iframe src="https://www.google.com/maps/embed/v1/place?q={{ arena.coords|default:arena.contacts|escape }}&key=AIzaSyCm4UC1Z8KDD1lJc7b864ErCrpzH5j9lvE&zoom=12"
+                                name="GoogleMap" height="486" frameborder="0" style="border:0; width: 100%;"></iframe>
+    </div>
+
+</div><!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/home/sticky_menu.html' with clubs_main_tab='home-map' clubs_menu_active='club-home' %}
+{% endblock %}

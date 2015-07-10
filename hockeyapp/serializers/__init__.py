@@ -9,51 +9,45 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 
-from addresses.models import Address, Country
+from addresses.models import Address, Country, City
 from base.models import Season
+from base.serializers import LangDepSerializer, TitleBaseSerializer
 
-from ..models import Coach, Arena, Club, Player, League, ClubPlayer
-
-
-class LangDepSerializer(serializers.ModelSerializer):
-    '''
-    Language-Dependent Serializer
-    '''
-    def _get_field(self, obj, field_name):
-        # request = self.context.get('request')
-        # get_field_name = lambda lang: '%s_%s' % (lang or 'en', field_name)
-        # lang = request and request.LANGUAGE_CODE
-        # if hasattr(obj, get_field_name(lang)):
-        #     return getattr(obj, get_field_name(lang))
-        # return getattr(obj, get_field_name(None))
-        return obj.get_locale_attr(
-            field_name, request=self.context.get('request'))
+from ..models import (
+    Coach, Arena, Club, Player, League, ClubPlayer, ClubPlayerMatch)
 
 
 class AbstractManSerializer(LangDepSerializer):
     fio = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
     lastname = serializers.SerializerMethodField()
-    get_fio = lambda self, obj: self._get_field(obj, 'fio')
+
+    # get_fio = lambda self, obj: self._get_field(obj, 'fio')
+    def get_fio(self, obj):
+        return '%s %s' % (self.get_lastname(obj), self.get_name(obj))
+
     get_name = lambda self, obj: self._get_field(obj, 'name')
     get_lastname = lambda self, obj: self._get_field(obj, 'lastname')
 
 
-class TitleBaseSerializer(LangDepSerializer):
-    title = serializers.SerializerMethodField()
-    get_title = lambda self, obj: self._get_field(obj, 'title')
-
-
-class AddressSerializer(TitleBaseSerializer):
-    class Meta(object):
-        fields = 'pk', 'title'
-        model = Address
-
-
 class CountrySerializer(TitleBaseSerializer):
     class Meta(object):
-        fields = 'pk', 'title'
+        fields = 'pk', 'title', 'code'
         model = Country
+
+class CitySerializer(TitleBaseSerializer):
+    country = CountrySerializer()
+
+    class Meta(object):
+        fields = 'pk', 'title', 'country'
+        model = City
+
+class AddressSerializer(TitleBaseSerializer):
+    city = CitySerializer()
+
+    class Meta(object):
+        fields = 'pk', 'title', 'city'
+        model = Address
 
 
 class LeagueSerializer(TitleBaseSerializer):
@@ -66,7 +60,7 @@ class CountryLeaguesSerializer(CountrySerializer):
     league_set = LeagueSerializer(many=True)
 
     class Meta(CountrySerializer.Meta):
-        fields = 'pk', 'title', 'league_set'
+        fields = 'pk', 'title', 'code', 'league_set'
 
 
 class CoachSerializer(AbstractManSerializer):
@@ -89,15 +83,11 @@ class SeasonSerializer(TitleBaseSerializer):
         model = Season
 
 
-class ArenaSerializer(TitleBaseSerializer):
-    photo = serializers.ReadOnlyField(source='photo.url')
-    url = serializers.ReadOnlyField(source='get_absolute_url')
+class BaseClubPlayerSerializer(serializers.ModelSerializer):
 
     class Meta(object):
-        fields = (
-            'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url',
-            'coords')
-        model = Arena
+        fields = 'pk'
+        model = ClubPlayer
 
 
 class BaseClubSerializer(TitleBaseSerializer):
@@ -112,25 +102,51 @@ class BaseClubSerializer(TitleBaseSerializer):
 
 class ClubLightListSerializer(BaseClubSerializer):
     title_verbose = serializers.SerializerMethodField()
+    address = AddressSerializer()
 
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
 
     class Meta(object):
         fields = (
-            'pk', 'title', 'logo', 'url', 'title_verbose')
+            'pk', 'title', 'logo', 'url', 'title_verbose',
+            'main_color', 'secondary_color', 'third_color', 'address')
         model = Club
+
+
+class ClubListArenaSerializer(ClubLightListSerializer):
+    address = AddressSerializer()
+    league = LeagueSerializer()
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'logo', 'url', 'title_verbose', 'address',
+        'site', 'email', 'phone', 'league', 'main_color')
+        model = Club
+
+
+class ArenaSerializer(TitleBaseSerializer):
+    photo = serializers.ReadOnlyField(source='photo.url')
+    url = serializers.ReadOnlyField(source='get_absolute_url')
+    club_set = ClubListArenaSerializer(many=True)
+
+    class Meta(object):
+        fields = (
+            'pk', 'title', 'photo', 'capacity', 'site', 'contacts', 'url',
+            'coords', 'club_set')
+        model = Arena
 
 
 class ClubListSerializer(ClubLightListSerializer):
     address = AddressSerializer()
     arena = ArenaSerializer()
     coach = CoachSerializer()
+    league = LeagueSerializer()
 
     class Meta(object):
         fields = (
             'pk', 'title', 'logo', 'url', 'title_verbose', 'address', 'arena',
-            'coach', 'site', 'email', 'phone')
+            'coach', 'site', 'email', 'phone', 'league', 'main_color')
         model = Club
 
 
@@ -188,7 +204,22 @@ class PlayerCardSerializer(BasePlayerCardSerializer):
         model = Player
 
 
+class LastClubPlayerMatchSerializer(serializers.ModelSerializer):
+    date = serializers.DateTimeField(source='match.date')
+    gamingtime_m = serializers.SerializerMethodField()
+
+    def get_gamingtime_m(self, obj):
+        return (obj.gamingtime or 0) / 60
+
+    class Meta(object):
+        fields = 'pk', 'date', 'gamingtime_m'
+        model = ClubPlayerMatch
+
+
 class PlayerCardDetailSerializer(PlayerCardSerializer):
+    club = ClubListSerializer()
+    last_match = LastClubPlayerMatchSerializer()
+
     class Meta(object):
         fields = (
             'pk', 'fio', 'line', 'birth_date', 'age', 'weight', 'height',
@@ -214,6 +245,7 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
             'saves_p_average_index', 'sf_average_index',
             'loose_goals_total_index', 'matches_win_total_index',
             'matches_lose_total_index', 'gamingtime_total_index',
+            'fb', 'vk', 'last_match',
             )
         model = Player
 

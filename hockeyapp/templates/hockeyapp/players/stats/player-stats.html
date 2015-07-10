@@ -1,0 +1,170 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: фотографии, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+
+<input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
+
+<div class="w-page__crew">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/players/player-header.html" with player_section="Stats" %}
+
+                {% include "hockeyapp/players/menu.html" with player_menu_active="player-stats" %}
+
+                <section class="w-page-tabs" ng-controller="PlayerCardIndicatorsController">
+
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item" data-tab="tab-name" ng-class="{'active': dataType === 'graph-serial'}" ng-click="setDataType('graph-serial')">Столбчатая диаграмма</div>
+                        <div class="item" data-tab="tab-name" ng-class="{'active': dataType === 'graph-radar'}" ng-click="setDataType('graph-radar')">Круговая диаграмма</div>
+                        <!--<div class="item" data-tab="tab-name" ng-class="{'active': dataType === 'table'}" ng-click="setDataType('table')">Таблица значений</div>-->
+                    </div>
+                    <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item" data-tab="tab-name" ng-class="{'active': dataType === 'graph-serial'}" ng-click="setDataType('graph-serial')">Столбчатая диаграмма</div>
+                        <div class="item" data-tab="tab-name" ng-class="{'active': dataType === 'graph-radar'}" ng-click="setDataType('graph-radar')">Круговая диаграмма</div>
+                        <!--<div class="item" data-tab="tab-name" ng-class="{'active': dataType === 'table'}" ng-click="setDataType('table')">Таблица значений</div>-->
+                    </div>
+
+                    <!--tabs content items SERIAL-->
+                    <div class="b-tabs-content ui">
+
+                        {% block mobile_menu %}
+                            {% include "hockeyapp/clubs/mlpushmenu.html" with section="player" active_section="player-indicators" active_menu="player-indicators" %}
+                        {% endblock %}
+
+                        <div id="params" class="ui menu b-ui-menu">
+                            {% include 'hockeyapp/players/indicators-row.html' %}
+                        </div>
+
+                        <div class="ui large centered inline text loader" style="background: none !important; height: 480px; padding-top: 120px;" ng-class="{'active': loader && dataBySeason == null}">
+                            Загрузка...
+                        </div>
+
+                        <div class="row">
+                            <div class="b-diagram__legend b-diagram__legend__table-style inline-block vertical-top col-md-3 no-padding" style="margin-left: 10px;">
+
+                                <p id="legend-header" class="b-diagram__legend__table-style_header">
+                                    <span ng-bind="localeObject.fieldNames[field].fullName"></span>
+                                </p>
+
+                                {% verbatim %}
+                                <ul id="legend-content" class="unstyled">
+                                </ul>
+                                {% endverbatim %}
+
+                                <div class="w-player-compare">
+                                    <div class="b-header__sm">
+                                        <h4 class="header-text">
+                                            Игрок для сравнения
+                                        </h4>
+                                    </div><!--b-header__sm-->
+
+                                    <div class="ui input block" style="width: 100%;">
+                                        <angucomplete id="players_filter" placeholder="Введите имя..."
+                                          pause="300" minlength="2"
+                                          selectedobject="selectedPlayer"
+                                          url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                          titlefield="lastname,name"
+                                          onchangecallback="setSelectedPlayer"
+                                          style="width: 100%"/>
+                                    </div>
+
+                                    <div class="w-btn text-center" style="padding: 8px;" ng-if="dataType === 'graph-serial'">
+                                        <a class="ui button green tiny centered" ng-click="addGraph(playerToCompare.pk)">
+                                            <i class="icon plus"></i> Добавить
+                                        </a>
+                                    </div><!--w-btn-->
+
+                                    <div class="w-btn text-center" style="padding: 8px;" ng-if="dataType === 'graph-radar'">
+                                        <a class="ui button green tiny centered" ng-click="addRadarGraph(playerToCompare.pk)">
+                                            <i class="icon plus"></i> Добавить
+                                        </a>
+                                    </div><!--w-btn-->
+                                    <!--<div class="b-or-hr">
+                                        <span>или</span>
+                                    </div>
+
+                                    <p class="text-center">
+                                        <a ng-click="showPersonalList()">Выберите из списка</a>
+                                    </p>-->
+                                </div>
+                            </div>
+
+                            <div ng-show="dataType === 'graph-serial'" class="inline-block col-md-9 no-padding" style="margin-left: 10px;">
+
+                                <div style="border-bottom: 1px solid #d4d4d5">
+                                    <span class="bold" style="font-size: 22px;">Игровые показатели</span>
+                                    <div class="float-right">
+                                        {% verbatim %}
+                                        <div class="ui inline dropdown inline-block" style="font-size: 16px;">
+                                            <div class="text">Все сезоны</div>
+                                            <i class="dropdown icon"></i>
+                                            <div class="menu transition hidden" tabindex="-1">
+                                                <div class="item active selected" data-text="Все сезоны" ng-click="moveToSeason(0, -1)">Все сезоны</div>
+                                                <div class="item" data-text="{{result.season.title}}" ng-click="moveToSeason(result.season, $index)" ng-repeat="result in dataBySeason.results track by $index"><span ng-bind="result.season.title"></span></div>
+                                            </div>
+                                        </div>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                                <div id="chartdiv" style="height:480px; width: 100%; margin-left: 10px;"></div>
+                            </div>
+
+                            <div ng-show="dataType === 'graph-radar'" class="inline-block col-md-9 no-padding" style="margin-left: 15px;">
+                                <div style="border-bottom: 1px solid #d4d4d5">
+                                    <span class="bold" style="font-size: 22px;">Средние показатели за один матч</span>
+                                    <div class="float-right">
+                                        {% verbatim %}
+                                        <div class="ui inline dropdown inline-block" style="font-size: 16px;">
+                                            <div class="text">{{ 'Сезон ' + playerSeasons[playerSeasons.length-1]}}</div>
+                                            <i class="dropdown icon"></i>
+                                            <div class="menu transition hidden" tabindex="-1">
+                                                <div class="item active selected" data-text="playerSeasons[playerSeasons.length-1]" ng-click="setLastSeason(playerSeasons[playerSeasons.length-1])">{{playerSeasons[playerSeasons.length-1]}}</div>
+                                                <div class="item" data-text="{{ 'Сезон ' +  season}}" ng-click="setLastSeason(season)" ng-repeat="season in playerSeasons track by $index"><span ng-bind="season"></span></div>
+                                            </div>
+                                        </div>
+                                        <div isteven-multi-select
+                                             input-model="availableFields"
+                                             output-model="selectedRadarFields"
+                                             button-label="shortName"
+                                             item-label="fullName"
+                                             tick-property="ticked"
+                                             class="inline-block"
+                                             style="max-width: 350px !important; margin-top: -10px; margin-left: 10px;"
+                                             on-item-click="createRadar()">
+                                        </div>
+                                        {% endverbatim %}
+                                    </div>
+                                </div>
+                                <div id="chartdiv2" style="height:480px; width: 100%;"></div>
+                            </div>
+                        </div>
+
+                    </div><!--tabs content items-->
+
+                    <!--tabs content items TABLE-->
+                    <div class="b-tabs-content ui">
+
+                    </div><!--tabs content items-->
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+
+
+</div>
+
+{% endblock %}

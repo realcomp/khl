@@ -1,0 +1,109 @@
+{% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{fio}}: краткая информация, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
+<div class="w-page__main">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/players/player-header.html" with player_section="Main" %}
+
+                {% include "hockeyapp/players/menu.html" with player_menu_active="player-main" %}
+
+                <section class="w-player-portrait visible-xs">
+
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image">
+                                    <img class="ui image" src="images/a-hockey/ava-16.jpg">
+                                </a>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <div class="w-player-portrait__info">
+                        <div class="b-header b-header__sm">
+                            <h3 class="b-header__text">
+                                {{fio}}
+                            </h3>
+                            <p class="">
+                                {{line_display}}
+                            </p>
+                        </div><!--b-header b-header__sm-->
+
+                        <div class="b-player-info__team ui feed">
+                            <div class="event">
+                                <div class="label">
+                                    <img src="images/l-hockey/logo-2.jpg" alt="" title="">
+                                </div>
+                                <div class="content">
+                                    <div class="summary">
+                                        <a class="team-now" href="#">сейчас в</a> <span>Автомобилист</span>
+                                        <p class="location">Московская область</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end b-player-info__team-->
+
+                        <table class="ui unstackable very basic table w-labeled-list">
+                            <tbody>
+                                <tr>
+                                    <td><span class="b-labeled">Рост:</span></td>
+                                    <td>184см</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Вес:</span></td>
+                                    <td>84кг</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Хват:</span></td>
+                                    <td>левый</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Дата рождения:</span></td>
+                                    <td>26 марта 1981года</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Возраст:</span></td>
+                                    <td>34 года</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="b-labeled">Гражданство:</span></td>
+                                    <td>Россия</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section><!--end w-player-portrait-->
+
+                <section class="w-page-tabs">
+
+                    <!--tabs content-->
+
+                    {% block tabs-content %}
+                    {% endblock %}
+
+                    <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+                {% block sticky_menu %}
+                {% endblock %}
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% extends "hockeyapp/v1/metrics/base.html" %}
+
+{% block body %}
+<section class="content">
+    <div class="container players-diff-page">
+        <div class="breadcrumbs">
+            <div class="ui small breadcrumb">
+                <a class="section">ХОККЕЙ</a>
+                <div class="divider"> / </div>
+                <a class="section" href="{% url 'hockeyapp:metrics-players' %}">Метрики</a>
+                <div class="divider"> / </div>
+                <div class="active section">Сравнение игроков</div>
+            </div>
+            <div class="search-block">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="page-content page-container">
+            <div class="diff-block">
+                <div class="ui divided grid">
+                    <div class="one column row">
+                        <div class="diff-title">Сравнение игроков</div>
+                    </div>
+                    <div class="one column row">
+                        <span class="heading">Построитель графиков</span>
+                        <a href="#" class="graph-back-to-results-btn">вернуться к готовым результатам<i class="right arrow icon"></i></a>
+                    </div>
+                    <div class="three column row diff-options">
+                        <div class="column">
+                            <div class="graph-block">
+                                <div class="graph-block-title">График 1</div>
+                                <div class="graph-block-left">
+                                    <div class="graph-block-desc">Выберите данные для оси Y</div>
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season">
+                                        <div class="default text">Выберите</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" data-value="1">Очки</div>
+                                            <div class="item" data-value="0">Голы</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="graph-block-right">
+                                    <img src="{{ STATIC_URL }}images/graph-block-image.png" alt="" class="graph-block-image">
+                                    <div class="graph-block-desc">Выберите данные для оси X</div>
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season">
+                                        <div class="default text">Выберите</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" data-value="1">Очки</div>
+                                            <div class="item" data-value="0">Голы</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="link graph-block-btn">готово!</a>
+                        </div>
+                        <div class="column">
+                            <div class="graph-block">
+                                <div class="graph-block-title">График 2</div>
+                                <div class="graph-block-left">
+                                    <div class="graph-block-desc">Выберите данные для оси Y</div>
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season">
+                                        <div class="default text">Выберите</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" data-value="1">Очки</div>
+                                            <div class="item" data-value="0">Голы</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="graph-block-right">
+                                    <img src="{{ STATIC_URL }}images/graph-block-image.png" alt="" class="graph-block-image">
+                                    <div class="graph-block-desc">Выберите данные для оси X</div>
+                                    <div class="ui selection dropdown">
+                                        <input type="hidden" name="season">
+                                        <div class="default text">Выберите</div>
+                                        <i class="dropdown icon"></i>
+                                        <div class="menu">
+                                            <div class="item" data-value="1">Очки</div>
+                                            <div class="item" data-value="0">Голы</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="#" class="link graph-block-btn">готово!</a>
+                        </div>
+                        <div class="column">
+                            <a href="#" class="graph-builder-btn graph-builder-add-btn">добавить еще график<i class="right arrow icon"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    <div class="row players-controls">
+                        <div class="four wide column">
+                            <ul class="players-list">
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                                <li class="player-item">
+                                    <div class="player-avatar-block">
+                                        <img src="{{ STATIC_URL }}images/player1.png" width="48" alt="" class="player-avatar">
+                                        <span class="player-line"></span>
+                                    </div>
+                                    <div class="player-name">Кержаков</div>
+                                    <div class="player-name">Александр</div>
+                                    <div class="player-country">Россия</div>
+                                    <a href="#" class="player-off"><i class="remove circle icon"></i>выключить</a>
+                                    <a href="#" class="player-remove"><i class="remove circle icon"></i>удалить</a>
+                                </li>
+                            </ul>
+                            <a href="#" class="player-add-btn">+ Добавить игрока</a>
+                        </div>
+                        <div class="twelve wide column">
+                            <img class="player-diff-graph" src="{{ STATIC_URL }}images/player-diff.jpg" alt="" width="660">
+                        </div>
+                    </div>
+                    <ul class="team-controls player-controls-block">
+                        <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                        <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                        <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

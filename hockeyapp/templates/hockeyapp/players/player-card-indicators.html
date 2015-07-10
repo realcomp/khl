@@ -6,26 +6,10 @@
 {% endblock %}
 
 {% block body %}
-<section class="content">
+<section class="content ng-cloak">
     <div class="container player-card-short-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">ХОККЕЙ</a>
-                <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
-                <div class="divider"> / </div>
-                <a class="active section">Спортивные показатели</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include "hockeyapp/players/card.html" %}
+        <!-- {% trans "Indicators" %} -->
+        {% include "hockeyapp/players/player-header.html" with player_section="Indicators" %}
 
         <div class="page-content page-container">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-indicators" %}
@@ -71,46 +55,56 @@
                         {% endcomment %}
                         <!-- <div class="ten wide column"> -->
                         <div class="sixteen wide column">
-                            <div class="graph-controls-block">
+                            <div class="graph-controls-block" ng-show="dataType === 'graph-serial'" ng-class="{'no-pointer-events': PlayerCardIndicatorsCtrl.loader}">
                                 <ul class="graph-controls-list">
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="И" field="count" %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="И" field="count"  %}
                                     {% if line == 1 %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="В" field="matches_win" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="П" field="matches_lose" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label='И"0"' field="zero_goals_matches" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ИБ" field="bullet_matches" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="Бр" field="shots_received" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ПШ" field="loose_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ОБ" field="saves" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="%ОБ" field="saves_p__avg" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="КН" field="sf__avg" %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="В" field="matches_win"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="П" field="matches_lose"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ИБ" field="bullet_matches"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Бр" field="shots_received"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ОБ" field="saves"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="%ОБ" field="saves_p__avg"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="КН" field="sf__avg"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ПШ" field="loose_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label='И"0"' field="zero_goals_matches"  %}
                                     {% else %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="Ш" field="goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="О" field="points" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="+/-" field="plus_minus" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШР" field="es_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШБ" field="pp_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШМ" field="ev_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШО" field="overtime_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ШП" field="win_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="РБ" field="bullet_goals" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ" field="shots" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="%БВ" field="pis__avg" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="Вбр" field="faceoff" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="ВВбр" field="winfaceoff" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg" %}
-                                        {% include "hockeyapp/players/indicators-menuitem.html" with label="См/И" field="change_count__avg" %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Ш" field="goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="О" field="points"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="+/-" field="plus_minus"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШР" field="es_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШБ" field="pp_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШМ" field="ev_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШО" field="overtime_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ШП" field="win_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="РБ" field="bullet_goals"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ" field="shots"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="%БВ" field="pis__avg"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Вбр" field="faceoff"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ВВбр" field="winfaceoff"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="См/И" field="change_count__avg"  %}
                                     {% endif %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="А" field="assists" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Штр" field="penalty_time" %}
-                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg" %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="Штр" field="penalty_time"  %}
+                                    {% include "hockeyapp/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg"  %}
+                                    <li class="graph-control-item" style="margin-left: 100px">
+                                        <a href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === '{{ field }}'}"
+                                           ng-click="setDataType('graph-radar')">Перейти к круговой диаграмме</a>
+                                    </li>
                                 </ul>
-                                <!--<select ng-model="PlayerCardIndicatorsCtrl.group_by"
-                                        ng-change="PlayerCardIndicatorsCtrl.list()">
-                                    <option value="month">{% trans 'by month' %}</option>
-                                    <option value="season">{% trans 'by season' %}</option>
-                                </select>-->
+                            </div>
+                            <div class="graph-controls-block" ng-show="dataType === 'graph-radar'">
+                                <ul class="graph-controls-list">
+                                    <li class="graph-control-item" style="">
+                                        <a id="return-control" href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':PlayerCardIndicatorsCtrl.field === '{{ field }}'}"
+                                           ng-click="setDataType('graph-serial', $event)">Вернуться</a>
+                                    </li>
+                                </ul>
                             </div>
                             <!--<ul class="indicators-list">
                                 <li class="indicator-item">
@@ -122,29 +116,39 @@
                                        ng-click="PlayerCardIndicatorsCtrl.setIndicatorsType('table')">Таблица</a>
                                 </li>
                             </ul>-->
-                            <a id="IndicatorsLink" class="hidden"
-                               href="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
-                            <div style="position:relative;text-align: center; top: 50px; right: 34px" ng-show="PlayerCardIndicatorsCtrl.loader">
+                            <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' pk %}"></a>
+                            <div style="position:relative;text-align: center; top: 100px; right: 34px; background: #ffffff" ng-show="PlayerCardIndicatorsCtrl.loader">
                                 <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
                             </div>
-                            <!--<div class="indicator-name">
-                                 <span class="indicator-name-span heading" ng-bind="PlayerCardIndicatorsCtrl.fieldName"></span>
-                            </div>-->
-                            <div ng-show="PlayerCardIndicatorsCtrl.indicatorsType === 'graph'">
+                            {% verbatim %}
+                            <div id="chart-tooltip" ng-show="dataType === 'graph-serial'">
+                                <div id="chart-tooltip-header">
+                                    {{localeObject.fieldNames[field].fullName.toUpperCase()}}
+                                </div>
+                                <div id="chart-tooltip-content"></div>
+                            </div>
+                            {% endverbatim %}
+                            <div ng-show="dataType === 'graph-serial'">
                                 <div id="chartdiv" style="width: 100%; height:400px; "></div>
                             </div>
 
-                            {% comment %}
-                            <div class="chart-button-panel" ng-show="localeObject">
-                                <!--<a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('month')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'month' && onSeason != true}"><span ng-bind="localeObject.buttonNames.month"></span></a>
-                                <a class="ui green button chart-button chart-button-noselect" ng-click="setGroupBy('season')" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span ng-bind="localeObject.buttonNames.season"></span></a>-->
-                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/gorohov', 0)">Сравнить с игроком 2186</a>
-                                <a class="ui green button chart-button" ng-click="addGraph('/static/json/soin', 1)">Сравнить с игроком 401</a>
-                                <!--<a class="ui green button chart-button" ng-click="animateAgain" ng-class="{'chart-button-selected': PlayerCardIndicatorsCtrl.groupBy === 'season' || onSeason === true}"><span>animate </span></a>-->
-                            </div>
-                            {% endcomment %}
                             {% verbatim %}
-                            <div  ng-show="playersStats.length">
+                            <div class="chart-button-panel" ng-if="!limited && localeObject && dataType === 'graph-serial' " >
+                                <div class="m-t-20">
+                                    {% endverbatim %}
+                                    <div class="ui input m-t-10 inline-block">
+                                    <angucomplete id="players_filter" placeholder="Введите имя..."
+                                                      pause="300" minlength="2"
+                                                      selectedobject="selectedPlayer"
+                                                      url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                                      titlefield="lastname,name"
+                                                      onchangecallback="setSelectedPlayer"/>
+                                    </div>
+                                    {% verbatim %}
+                                    <a class="ui green button chart-button inline-block" ng-click="addGraph(playerToCompare.pk)">Сравнить с игроком</a>
+                                </div>
+                            </div>
+                            <div  ng-show="playersStats.length && dataType === 'graph-serial' && !limited">
                                 <span class="season-buttons-label"> Игроки для сравнения:</span>
                                 <div class="player-comparison-container">
                                     <div ng-repeat="player in playersStats">
@@ -156,9 +160,6 @@
                                             <div class="player-comparison-label inline-block">
                                                 {{player.title}}
                                             </div>
-                                            <div class="inline-block pointer" ng-click="disableGraph(player)">
-                                                <i class="fa fa-minus-square-o"></i> выключить
-                                            </div>
                                             <div class="inline-block pointer" ng-click="removeGraph(player)">
                                                 <i class="fa fa-minus-square-o"></i> удалить
                                             </div>
@@ -166,108 +167,148 @@
                                     </div>
                                 </div>
                             </div>
-                            <div  ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && PlayerCardIndicatorsCtrl.indicatorsType !== 'table' || onSeason ">
+                            <div ng-if="!disabled && PlayerCardIndicatorsCtrl.groupBy === 'season' && dataBySeason && dataType === 'graph-serial' || onSeason ">
                                 <span class="season-buttons-label"> Выбрать сезон:</span>
                                 <div class="season-buttons-container">
                                     <a class="ui season-button" ng-class="{'active-season-button': activeSeason === -1}">
-                                        <div ng-bind="localeObject.buttonNames.allSeasons" ng-click="setGroupBy('season')"></div>
+                                        <div ng-bind="localeObject.buttonNames.allSeasons" ng-click="moveToSeason(0, -1)"></div>
                                     </a>
                                     <a class="ui season-button" ng-repeat="result in dataBySeason.results track by $index" ng-class="{'active-season-button': activeSeason === $index, 'disabled': isDisabled(result.season), 'm-l-1': $index === 0}">
                                         <div ng-bind="result.season.title" ng-click="moveToSeason(result.season, $index)"></div>
                                     </a>
-                               </div>
+                                </div>
                             </div>
                             {% endverbatim %}
+
+
+                            <div ng-show="dataType === 'graph-radar'" style="padding-left: 3%; margin-top: 20px">
+                                <!--<hr class="style-six2">
+                                Круговая диаграмма-->
+                                <div class="inline-block">
+                                    <a>Выберите сезон: </a>
+                                    <select class="season-selector" ng-model="lastSeason" ng-options="season as season for season in playerSeasons"></select>
+                                </div>
+                                <div class="inline-block">
+                                    <a>Выбранные поля: </a>
+                                </div>
+                                <div class="inline-block">
+
+                                    <div isteven-multi-select
+                                         input-model="availableFields"
+                                         output-model="selectedRadarFields"
+                                         button-label="shortName"
+                                         item-label="fullName"
+                                         tick-property="ticked">
+                                    </div>
+                                </div>
+                                <br>
+
+                                <div id="chartdiv2" class="m-t-20" style="width: 100%; height:400px; ">
+                                </div>
+
+                                <div class="m-t-20">
+                                    <div class="ui input m-t-10 inline-block">
+                                    <angucomplete id="players_filter" placeholder="Введите имя..."
+                                                      pause="300" minlength="2"
+                                                      selectedobject="selectedPlayer"
+                                                      url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                                      titlefield="lastname,name"
+                                                      onchangecallback="setSelectedPlayer"/>
+                                    </div>
+                                    <a class="ui green button chart-button inline-block" ng-click="addRadarGraph(playerToCompare.pk)">Сравнить с игроком</a>
+                                </div>
+                                <!--<a class="ui green button chart-button m-t-20" ng-click="sumRadars()">Суммировать</a>-->
+                            </div>
 
                             <div ng-show="PlayerCardIndicatorsCtrl.indicatorsType === 'table' && PlayerCardIndicatorsCtrl.data.results.length">
                                 <table class="ui celled table segment player-select-table">
                                     <thead>
-                                        <tr>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.group_by === 'month'">
-                                                {% trans 'Date' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.group_by === 'season'">
-                                                {% trans 'Season' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'count'">
-                                                {% trans 'Matches' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'assists'">
-                                                {% trans 'Assists' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'goals'">
-                                                {% trans 'Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'points'">
-                                                {% trans 'Score' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'plus_minus'">
-                                                {% trans '+/-' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'penalty_time'">
-                                                {% trans 'Penalty Time, sec' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'ev_goals'">
-                                                {% trans 'EV Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'pp_goals'">
-                                                {% trans 'Power Play Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'es_goals'">
-                                                {% trans 'Even Strength Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'overtime_goals'">
-                                                {% trans 'Overtime Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'win_goals'">
-                                                {% trans 'Win Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'bullet_goals'">
-                                                {% trans 'Win Bullet Goals' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'shots'">
-                                                {% trans 'Shots count' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'pis__avg'">
-                                                {% trans 'Implemented Shots, %' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'faceoff'">
-                                                {% trans 'Face-off' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'winfaceoff'">
-                                                {% trans 'Face-off Wins' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'winfaceoff_p__avg'">
-                                                {% trans 'Face-off Wins, %' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'shots__avg'">
-                                                {% trans 'Shots/match' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'gamingtime__avg'">
-                                                {% trans 'Time in game / match, sec' %}
-                                            </th>
-                                            <th ng-show="PlayerCardIndicatorsCtrl.field === 'change_count__avg'">
-                                                {% trans 'Change count / match' %}
-                                            </th>
-                                        </tr>
+                                    <tr>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.group_by === 'month'">
+                                            {% trans 'Date' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.group_by === 'season'">
+                                            {% trans 'Season' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'count'">
+                                            {% trans 'Matches' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'assists'">
+                                            {% trans 'Assists' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'goals'">
+                                            {% trans 'Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'points'">
+                                            {% trans 'Score' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'plus_minus'">
+                                            {% trans '+/-' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'penalty_time'">
+                                            {% trans 'Penalty Time, sec' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'ev_goals'">
+                                            {% trans 'EV Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'pp_goals'">
+                                            {% trans 'Power Play Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'es_goals'">
+                                            {% trans 'Even Strength Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'overtime_goals'">
+                                            {% trans 'Overtime Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'win_goals'">
+                                            {% trans 'Win Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'bullet_goals'">
+                                            {% trans 'Win Bullet Goals' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'shots'">
+                                            {% trans 'Shots count' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'pis__avg'">
+                                            {% trans 'Implemented Shots, %' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'faceoff'">
+                                            {% trans 'Face-off' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'winfaceoff'">
+                                            {% trans 'Face-off Wins' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'winfaceoff_p__avg'">
+                                            {% trans 'Face-off Wins, %' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'shots__avg'">
+                                            {% trans 'Shots/match' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'gamingtime__avg'">
+                                            {% trans 'Time in game / match, sec' %}
+                                        </th>
+                                        <th ng-show="PlayerCardIndicatorsCtrl.field === 'change_count__avg'">
+                                            {% trans 'Change count / match' %}
+                                        </th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        {% verbatim %}
-                                            <tr ng-repeat="row in PlayerCardIndicatorsCtrl.data.results">
-                                                <td ng-show="PlayerCardIndicatorsCtrl.groupBy === 'month'">
-                                                    {{ row.date|date:'MM.yyyy' }}
-                                                </td>
-                                                <td ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season'">
-                                                    {{ row.season.label }}
-                                                </td>
-                                                <td>
-                                                    {{ row[PlayerCardIndicatorsCtrl.field] }}
+                                    {% verbatim %}
+                                    <tr ng-repeat="row in PlayerCardIndicatorsCtrl.data.results">
+                                        <td ng-show="PlayerCardIndicatorsCtrl.groupBy === 'month'">
+                                            {{ row.date|date:'MM.yyyy' }}
+                                        </td>
+                                        <td ng-show="PlayerCardIndicatorsCtrl.groupBy === 'season'">
+                                            {{ row.season.label }}
+                                        </td>
+                                        <td>
+                                            {{ row[PlayerCardIndicatorsCtrl.field] }}
                                                     <span ng-show="PlayerCardIndicatorsCtrl.field === 'winfaceoff_p__avg' || PlayerCardIndicatorsCtrl.field === 'pis__avg'">
                                                         %
                                                     </span>
-                                                </td>
-                                            </tr>
-                                        {% endverbatim %}
+                                        </td>
+                                    </tr>
+                                    {% endverbatim %}
                                     </tbody>
                                 </table>
                             </div>

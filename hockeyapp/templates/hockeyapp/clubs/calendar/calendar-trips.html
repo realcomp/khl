@@ -1,0 +1,368 @@
+{% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-trips' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-calendar" active_menu="calendar-trips" %}
+    {% endblock %}
+
+    <section class="w-section">
+        <div class="b-header b-header__md b-header__filter-in">
+            <div class="w-table">
+                <h2 class="b-cell b-header__text">
+                    Выезды
+                </h2>
+
+                <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="Прошедшие матчи" data-variation="basic">
+                    <i class="history icon"></i>
+                </a>
+
+                <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="Будущие матчи" data-variation="basic">
+                    <i class="ellipsis horizontal icon"></i>
+                </a>
+
+                <a href="#" class="b-cell active b-change-views__item w-tooltip" data-content="Домашние матчи" data-variation="basic">
+                    <i class="home icon"></i>
+                </a>
+
+                <a href="#" class="b-cell b-change-views__item w-tooltip" data-content="Гостевые матчи" data-variation="basic">
+                    <i class="plane icon"></i>
+                </a>
+            </div><!--row-->
+        </div><!--b-header b-header__md-->
+    </section>
+
+
+
+    <section class="w-section">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                Сентябрь
+            </h3>
+        </div><!--b-header b-header__sm-->
+
+
+        <div class="w-gallery-preview">
+            <div class="row w-gallery-preview__items w-gallery-preview__items__6">
+
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo-1.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">Адмирал</a>
+                            </p>
+                            <p class="">
+                                Омская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Омск
+                            </p>
+                            <div class="w-btn text-right">
+                                <div class="ui button blue tiny animated">
+                                    <div class="visible content">2332 идут</div>
+                                    <div class="hidden content"><i class="icon checkmark"></i> Я иду</div>
+                                </div>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div>
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo-2.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">Автомобилист</a>
+                            </p>
+                            <p class="">
+                                Московская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Москва
+                            </p>
+                            <div class="w-btn text-right">
+                                <div class="ui button green tiny animated">
+                                    <div class="visible content">Вы + 2332 <span class="hidden-xs">идут</span></div>
+                                    <div class="hidden content"><i class="icon undo"></i> Я не иду</div>
+                                </div>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item--><div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">СКА</a>
+                            </p>
+                            <p class="">
+                                Ленинградская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Санкт-Петербург
+                            </p>
+                            <div class="w-btn text-right">
+                                <div class="ui button tiny animated">
+                                    <div class="visible content">2343 были</div>
+                                    <div class="hidden content"><i class="icon checkmark"></i> Посещен</div>
+                                </div>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item-->
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="w-section">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                Октябрь
+            </h3>
+        </div><!--b-header b-header__sm-->
+        <div class="w-gallery-preview">
+            <div class="row w-gallery-preview__items w-gallery-preview__items__6">
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item b-notactive">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo-1.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">Адмирал</a>
+                            </p>
+                            <p class="">
+                                Омская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Омск
+                            </p>
+                            <div class="w-btn text-right">
+                                <a class="ui button tiny" href="#"><i class="icon checkmark"></i> Пойду</a>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item-->
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo-2.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">Автомобилист</a>
+                            </p>
+                            <p class="">
+                                Омская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Омск
+                            </p>
+                            <div class="w-btn text-right">
+                                <a class="ui button tiny green" href="#"><i class="icon checkmark"></i> Пойду</a>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item-->
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">СКА</a>
+                            </p>
+                            <p class="">
+                                Ленинградская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Омск
+                            </p>
+                            <div class="w-btn text-right">
+                                <a class="ui button tiny blue" href="#"><i class="icon checkmark"></i> <span class="hidden-xs">Посещен</span><span class="hidden-lg hidden-md hidden-sm">Готово</span></a>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item-->
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="w-section">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                Ноябрь
+            </h3>
+        </div><!--b-header b-header__sm-->
+        <div class="w-gallery-preview">
+            <div class="row w-gallery-preview__items w-gallery-preview__items__6">
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">СКА</a>
+                            </p>
+                            <p class="">
+                                Ленинградская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Омск
+                            </p>
+                            <div class="w-btn text-right">
+                                <a class="ui button tiny green" href="#"><i class="icon checkmark"></i> Пойду</a>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item-->
+                <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item">
+                    <div class="ui card">
+                        <div class="w-gallery-preview__item__img img-wrap">
+                            <figure class="figure-styled">
+                                <a href="#" class="ui image"><img src="images/l-hockey/logo-1.jpg" alt="" title=""/></a>
+                            </figure>
+                        </div>
+
+                        <div class="w-gallery-preview__item__info">
+                            <p class="name">
+                                <a href="#">Адмирал</a>
+                            </p>
+                            <p class="">
+                                Омская область
+                            </p>
+                        </div>
+
+
+                        <div class="extra content w-gallery-preview__item__extra">
+                            <p class="">
+                                22 ноября, ВСК
+                            </p>
+                            <p class="">
+                                19:00 МСК
+                            </p>
+                            <p class="">
+                                Омск
+                            </p>
+                            <div class="w-btn text-right">
+                                <a class="ui button tiny green" href="#"><i class="icon checkmark"></i> Пойду</a>
+                            </div>
+                        </div><!--extra content w-gallery-preview__item__extra-->
+                    </div><!--ui card-->
+                </div><!--w-gallery-preview__item-->
+
+            </div><!--row w-gallery-preview__items-->
+        </div><!--w-gallery-preview-->
+    </section><!--w-section-->
+</div>
+<!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-trips' clubs_menu_active='club-calendar' %}
+{% endblock %}

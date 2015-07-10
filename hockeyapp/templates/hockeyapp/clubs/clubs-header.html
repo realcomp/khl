@@ -1,0 +1,24 @@
+{% load i18n %}
+<input id="team-name-hidden" type="hidden" value="{{title}}">
+<input id="team-id" type="hidden" value="{{pk}}">
+<input id="team-arena-id" type="hidden" value="{{arena.pk}}">
+<input id="club-logo" type="hidden" value="{{logo}}">
+<input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
+
+<section class="row w-breadcrumb">
+    <div class="col-sm-9">
+        <div class="ui small breadcrumb">
+            <a href="{% url 'i18n_index' %}" class="section">{% trans 'Hockey' %}</a>
+            <i class="right chevron icon divider"></i>
+            {% if league %}
+                <a class="section" href="{% url 'hockeyapp:clubs:list' %}#?country=1&league={{ league.pk }}">{{ league.title }}</a>
+                <i class="right chevron icon divider"></i>
+            {% endif %}
+            <a href="{% url 'hockeyapp:clubs:list' %}"class="section">{% trans 'Clubs' %}</a>
+            <i class="right chevron icon divider"></i>
+            <a href="{% url 'hockeyapp:clubs:main-about' pk %}" class="section">{{ title_verbose }}</a>
+            <i class="right chevron icon divider"></i>
+            <a class="active section">{% trans club_section %}</a>
+        </div>
+    </div>
+</section><!--row w-breadcrumb-->

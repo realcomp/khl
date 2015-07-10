@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+	<title>Список клубов(map) - </title> 
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width,height=device-height">
+	
+	<link href="dist/semantic.min.css" rel="stylesheet">
+	
+	<!--push mobile menu
+	<link rel="stylesheet" type="text/css" href="assets/css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/component.css" />-->
+		
+	<link href="fonts/icon-fonts/style.css" rel="stylesheet">
+	
+	<link href="css-styled/grid.css" rel="stylesheet">
+	<link href="css-styled/style.css" media="all" type="text/css" rel="stylesheet">
+	<!--[if IE 9]>
+	<link rel="stylesheet" type="text/css" href="stylesheets/ie9.css" />
+	<![endif]-->
+	
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed|Roboto:400,300,300italic,400italic,500,700,900&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
+	
+	<!--push mobile menu-->
+	<script src="assets/js/modernizr.custom.js"></script>
+	
+</head>
+<body class="w-page__clubs-list__map">
+	<div class="body_inner bg-image">
+		<header id="header">
+			<section class="w-head__navbar">
+				<nav class="navbar" role="navigation">
+					<div class="container">
+						<!-- Brand and toggle get grouped for better mobile display -->
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+							<span class="sr-only">Menu</span>
+							<i class="icon content"></i>
+						</button>
+						</div>
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="menu">
+							<ul class="nav navbar-nav navbar-left b-menu">
+								<li class="label">
+									Виды спорта:
+								</li><li class="active">
+									<a href="#">Хоккей</a>
+								</li><li>
+									<a href="#">Футбол</a>
+								</li><li>
+									<a href="#">Баскетбол</a>
+								</li><li>
+									<a href="#">Волейбол</a>
+								</li><li>
+									<a href="#">Бейсбол</a>
+								</li><li class="ui dropdown top right pointing">
+									<a class="default text" href="#">Все<i class="dropdown icon"></i></a>
+									<ul class="menu">
+										<li class="item">Clothing</li>
+										<li class="item">Home Goods</li>
+										<li class="item">Bedroom</li>
+										<li class="item">Status</li>
+										<li class="item">Cancellations</li>
+									</ul>
+								</li>
+							</ul>
+							<ul class="nav navbar-nav navbar-right b-menu">
+								<li>
+									<a href="#">Регистрация</a>
+								</li><li>
+									<a href="#">Вход</a>
+								</li><li class="ui dropdown top right pointing">
+									<a class="default text" href="#">Язык<i class="dropdown icon"></i></a>
+									<ul class="menu">
+										<li class="item">Clothing</li>
+										<li class="item">Home Goods</li>
+										<li class="item">Bedroom</li>
+										<li class="item">Status</li>
+										<li class="item">Cancellations</li>
+									</ul>
+								</li>
+							</ul>
+						</div><!-- /.navbar-collapse -->
+					</div><!-- /.container-fluid -->
+				</nav>
+			</section><!--w-head__navbar-->
+			
+			<section class="w-head__navbar-two">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 col-md-3 b-logo">
+							<a href="index.html"><img src="images/logo.png" alt="" tittle=""/></a>
+						</div>
+						
+						
+						<nav class="col-sm-8 col-md-6 navbar" role="navigation">
+							<div class="container-fluid">
+								<!-- Brand and toggle get grouped for better mobile display -->
+								<div class="navbar-header">
+									<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w-head__navbar-two__b-menu">
+										<span class="sr-only">Menu</span>
+										<i class="icon content"></i>
+									</button>
+								</div>
+								<!-- Collect the nav links, forms, and other content for toggling -->
+								<div class="collapse navbar-collapse" id="w-head__navbar-two__b-menu">
+									<ul class="nav navbar-nav navbar-left b-menu">
+										<li class="one active">
+											<a href="#">Клубы</a>
+										</li>
+										<li class="two">
+											<a href="#">Игроки</a>
+										</li>
+										<li class="three">
+											<a href="#">Фан-зоны</a>
+										</li>
+									</ul>
+								</div><!-- /.navbar-collapse -->
+							</div><!-- /.container-fluid -->
+						</nav>
+						
+						
+						<div class="col-sm-4 col-md-3 float-right-sm w-search__top">
+							<form class="b-search">
+								<div class="ui icon input">
+									<input class="c-search" type="text" placeholder="Поиск...">
+									<i class="search link icon"></i>
+								</div>
+							</form>
+						</div><!--w-search__top-->
+						
+						
+					</div><!--row-->
+				</div><!--container-->
+			</section><!--w-logo-menu__bg-->
+		</header>
+		<main id="main">
+			<section class="container">
+				<section class="row w-breadcrumb">
+					<div class="col-sm-9">
+						<div class="ui small breadcrumb">
+							<a class="section">Хоккей</a>
+							<i class="right chevron icon divider"></i>
+							<a class="section">Клубы</a>
+							<i class="right chevron icon divider"></i>
+							<div class="active section">Главное</div>
+						</div>
+					</div>
+				</section><!--row w-breadcrumb-->
+				
+				<section class="w-main-nav">
+					<div class="w-menu">
+						<!-- Brand and toggle get grouped for better mobile display -->
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#w-main-nav__b-menu">
+								<span class="sr-only">Menu</span>
+								<i class="icon content"></i>
+							</button>
+						</div>
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="w-main-nav__b-menu">
+							<ul class="w-main-nav__b-menu ui inverted green menu">
+							    <li class="item w-main-nav__b-menu__logo hidden-xs">
+                                    <a href="#"><img src="images/i-hockey.jpg"></a>
+                                </li>
+								<li class="item active">
+									<a href="#">Россия</a>
+								</li><li class="item">
+									<a href="#">США</a>
+								</li><li class="item">
+									<a href="#">Канада</a>
+								</li><li class="item">
+									<a href="#">Финляндия</a>
+								</li><li class="item">
+									<a href="#">Швеция</a>
+								</li><li class="item">
+									<a href="#">Чехия</a>
+								</li><li class="item ui dropdown top pointing">
+									<a class="default text" href="#">Другие страны<i class="dropdown icon"></i></a>
+									<ul class="menu">
+										<li class="item">Япония</li>
+										<li class="item">Китай</li>
+										<li class="item">Германия</li>
+										<li class="item">Болгария</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</section><!--w-main-nav-->
+			
+				<section class="w-page-tabs">
+					<div class="ui inline dropdown w-page-tabs__dropdown" tabindex="0">
+						<div class="text">Сезон 2014-15</div>
+						<i class="dropdown icon"></i>
+						<div class="menu transition hidden" tabindex="-1">
+							<div class="item active selected" data-text="Сезон 2014-15">2014-15</div>
+							<div class="item" data-text="Сезон 2013-14">2013-14</div>
+							<div class="item" data-text="Сезон 2012-13">2012-13</div>
+							<div class="item" data-text="Сезон 2011-12">2011-12</div>
+						</div>
+					</div>
+					
+				<!--tabs items-->
+					<div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+						<div class="item" data-tab="tab-name">Все</div>
+						<div class="item active" data-tab="tab-name2">КХЛ</div>
+						<div class="item" data-tab="tab-name3">ВХЛ</div>
+						<div class="item" data-tab="tab-name4">МХЛ</div>
+						<div class="item" data-tab="tab-name5">МХЛ-Первенство</div>
+					</div>
+				<!--tabs items ends-->
+					<div class="ui vertical tabular-xs menu visible-xs">
+						<div class="item" data-tab="tab-name">Все</div>
+						<div class="item active" data-tab="tab-name2">КХЛ</div>
+						<div class="item" data-tab="tab-name3">ВХЛ</div>
+						<div class="item" data-tab="tab-name4">МХЛ</div>
+						<div class="item" data-tab="tab-name5">МХЛ-Первенство</div>
+					</div>
+				<!--tabs items ends-->
+					
+				<!--tabs content-->
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name">
+						1
+					</div>
+					<!--tabs content items-->
+					
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content w-clubs__khl ui tab active" data-tab="tab-name2">
+					
+						<section class="w-section">
+							<div class="b-header b-header__md b-header__filter-in">
+								<div class="w-table">
+									<h2 class="b-cell b-header__text">
+										Список клубов
+									</h2>
+									
+									<a class="b-cell hidden-xs b-change-views__item w-tooltip" data-content="Алфавитный список" data-variation="basic" href="stats-table-history.html">
+                                        <i class="sort alphabet ascending icon"></i>
+                                    </a>
+									
+									<a class="b-cell b-change-views__item" href="club-list-table.html">
+										<i class="table icon"></i>
+									</a>
+									
+									<a class="b-cell active b-change-views__item w-tooltip" data-content="Клубы на карте" data-variation="basic" href="club-list-map.html">
+										<i class="map icon"></i>
+									</a>
+								</div><!--row-->
+							</div><!--b-header b-header__md-->
+							
+							
+							<div class="w-map">
+								<img src="images/map.jpg" alt="" tittle=""/>
+							</div><!--w-map-->
+						</section><!--w-section-->
+					</div>
+					<!--tabs content items-->
+					
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name3">
+						3
+					</div>
+					<!--tabs content items-->
+					
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name4">
+						4
+					</div>
+					<!--tabs content items-->
+					
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name5">
+						5
+					</div>
+					<!--tabs content items-->
+					
+					
+					
+					<!--tabs content items-->
+					<div class="b-tabs-content ui tab" data-tab="tab-name6">
+						6
+					</div>
+					<!--tabs content items-->
+					
+				<!--tabs content end-->
+					
+				</section><!--w-page-tabs-->
+			</section><!--container-->
+		</main>
+		<footer id="footer">
+			
+		</footer>
+	</div>
+	
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript" src="dist/semantic.min.js"></script>
+	
+	<!--push mobile menu-->
+	<script src="assets/js/classie.js"></script>
+	<script src="assets/js/mlpushmenu.js"></script>
+	
+	<script type="text/javascript" src="assets/js/scripts.js"></script>
+</body>
+</html>

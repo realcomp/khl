@@ -1,0 +1,50 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{title}}: домашняя площадка, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' pk %}">
+<body class="w-page__arena">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/clubs/clubs-header.html" with club_section="Home arena" %}
+
+                {% include "hockeyapp/clubs/menu.html" with clubs_menu_active="club-home" %}
+
+                <section class="w-club__logo visible-xs">
+                    <div class="b-club__logo">
+                        <a href="#"><img src="{{logo}}" /></a>
+                    </div>
+                    <h3 class="header-text w-club__name">
+                        {{club}}
+                    </h3>
+                </section><!--w-club__logo-->
+
+                <section class="w-page-tabs">
+
+                    <!--tabs content-->
+
+                    {% block tabs-content %}
+                    {% endblock %}
+
+                    <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+            {% block sticky_menu %}
+            {% endblock %}
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}

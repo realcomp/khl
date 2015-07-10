@@ -1,0 +1,395 @@
+/* animations */
+.animate-if {
+  background:white;
+  border:1px solid black;
+  padding:10px;
+}
+
+.animate-if.ng-enter, .animate-if.ng-leave {
+  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+}
+
+.animate-if.ng-enter,
+.animate-if.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+.animate-if.ng-leave,
+.animate-if.ng-enter.ng-enter-active {
+  opacity:1;
+}
+/* animations */
+
+
+
+
+
+.bold {
+    font-weight: bold;
+}
+.icon{
+    margin-right: 0 !important;
+}
+.black{
+    color: black;
+}
+.default-a{
+    color: rgba(0,0,0,.8);
+}
+/*.default-a:hover{
+    color: rgba(0,0,0,.8);
+}*/
+.inline-block{
+    display: inline-block;
+}
+.vertical-top{
+    vertical-align: top;
+}
+.font-weight-300{
+    font-weight: 300;
+}
+.font-weight-400{
+    font-weight: 400;
+}
+.line-display{
+    text-transform: lowercase !important;
+}
+.pointer{
+    cursor: pointer;
+}
+.margin-auto{
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.no-padding{
+    padding: 0 !important;
+}
+.no-decoration{
+    text-decoration: none !important;
+}
+.no-margin{
+    margin: 0 !important;
+}
+.cursor-default{
+    cursor: default !important;
+}
+.float-left{
+    float: left;
+}
+.hidden{
+    visibility: hidden;
+}
+.display-none{
+    display: none !important;
+}
+
+#clubGamesChart .highcharts-tooltip{
+
+}
+#clubGamesChart .highcharts-tooltip span{
+    border: none !important;
+    box-shadow: none !important;
+}
+#clubGamesChart svg .highcharts-tooltip{
+    display: none !important;
+    opacity: 0 !important;
+}
+#clubGamesChart g .highcharts-tooltip path{
+    fill: none;
+}
+/* angucomplete */
+.form-control {
+    outline: 0;
+    border-color: #ECECEC;
+    border-style: solid;
+    border-width: 1px;
+    width: 95%;
+    background-color: #ffffff;
+    padding: 6px;
+    border-radius: 2px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.angucomplete-holder {
+    position: relative;
+}
+.angucomplete-dropdown {
+    border-color: #ececec;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    width: 250px;
+    padding: 6px;
+    cursor: pointer;
+    z-index: 9999;
+    position: absolute;
+    /* top: 32px; */
+    /* left: 0px; */
+    /* margin-top: -6px; */
+    background-color: #ffffff;
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.angucomplete-searching {
+    color: #acacac;
+    font-size: 14px;
+}
+.angucomplete-description {
+    font-size: 14px;
+}
+.angucomplete-row {
+    padding: 5px;
+    color: #000000;
+    margin-bottom: 4px;
+}
+.angucomplete-selected-row, .angucomplete-row:hover {
+    background-color: lightblue;
+    color: #ffffff;
+}
+
+/* Highcharts */
+
+
+.highcharts-tooltip path{
+    stroke: #c0c0c0 !important;
+}
+.tooltip-header{
+    background: #141414 !important;
+    color: #ecf0f1 !important;
+    font-size: 14px;
+    border-bottom: 2px solid #c0c0c0;
+    padding: 8px;
+}
+.highcharts-tooltip > span {
+    min-width: 160px;
+    background: rgba(255,255,255,1);
+    border: 2px solid #141414;
+    box-shadow: 1px 1px 4px #888;
+    border-radius: 4px;
+    padding-bottom: 5px;
+}
+
+#chart-tooltip{
+    width: 938px;
+    height: 90px;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    box-shadow: 1px 1px 4px #888;
+}
+#chart-tooltip-header{
+    font-weight: bold;
+    width: 930px;
+    height: 20px;
+    border-bottom: 2px solid #c0c0c0;
+    text-align: center;
+    padding: 4px;
+}
+#chart-tooltip-content{
+    padding: 8px;
+}
+.tooltip-block{
+    float: left;
+    text-align: left;
+    border-right: 2px solid #c0c0c0;
+    padding-right: 6px;
+    padding-left: 6px;
+    min-width: 120px;
+}
+/* Highcharts */
+
+/* LEAFLET */
+
+.map-popup {
+    width: 200px;
+}
+.map-popup .leaflet-poup-content{
+    text-align: center;
+}
+.leaflet-marker-icon{
+    margin-top: -43px !important;
+}
+.leaflet-marker-shadow{
+    margin-top: -50px !important;
+    margin-left: -18px !important;
+}
+/* LEAFLET JS */
+.b-calendar__item .ui.card{
+    min-height: 170px;
+}
+.b-calendar__item__icon{
+    font-size: 20px;
+    color: rgba(0,0,0,.5);
+    text-align: left;
+}
+.b-calendar__item__date-head{
+    color: white;
+    text-align: left;
+    font-size: 12px;
+}
+.b-calendar__item__game-type{
+    color: white;
+    font-size: 24px;
+    text-align: left;
+    padding: 0;
+}
+.b-calendar__item__blank{
+    opacity: 0.2;
+}
+.w-gallery-preview__item__head{
+    border-bottom: 1px solid rgba(0,0,0,.05);
+    max-width: 100%;
+}
+.w-command-calendar__item{
+    font-family: 'Roboto', sans-serif;
+}
+.b-arena__photo .image img{
+    width: 155px !important;
+    height: 155px !important;
+}
+
+
+.sidr ul li ul li ul{
+    padding-left: 15px;
+}
+.sidr-club-element{
+    background: white;
+    pointer-events: none;
+}
+.sidr-club-element a{
+    color: black !important;
+    font-weight: bold;
+    box-shadow: none;
+}
+.sidr-club-element a:active, .sidr-club-element a:hover{
+    box-shadow: none;
+}
+.sidr{
+    z-index: 9999;
+}
+.b-logo{
+      z-index: 1 !important;
+}
+.sidr-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+}
+@media (min-width:767px){
+    .sidr-button {
+        position: fixed;
+        top: 4px;
+        left: 10px;
+        color: white;
+        font-size: 24px;
+        text-decoration: none;
+    }
+}
+.b-diagram__legend__table-style__item {
+  min-width: 175px;
+}
+.stats-compare .b-diagram__legend__image{
+    height: 32px !important;
+    max-height: 32px;
+}
+.b-diagram__legend__table-style ul li:after{
+    display: none;
+}
+angucomplete input{
+    width: 100% !important;
+}
+.overlay-black{
+    background-color: #000; /* Чёрный фон */
+    height: 100%; /* Высота максимальна */
+    left: 0; /* Нулевой отступ слева */
+    opacity: 0.80; /* Степень прозрачности */
+    position: fixed; /* Фиксированное положение */
+    top: 0; /* Нулевой отступ сверху */
+    width: 100%; /* Ширина максимальна */
+    z-index: 999; /* Заведомо быть НАД другими элементами */
+}
+.overlay-white{
+    background-color: #ecf0f1; /* Чёрный фон */
+    height: 100%; /* Высота максимальна */
+    left: 0; /* Нулевой отступ слева */
+    opacity: 0.80; /* Степень прозрачности */
+    position: fixed; /* Фиксированное положение */
+    top: 0; /* Нулевой отступ сверху */
+    width: 100%; /* Ширина максимальна */
+    z-index: 999; /* Заведомо быть НАД другими элементами */
+}
+#personal-list{
+    background: white;
+    border: 1px;
+    max-width: 1500px !important;
+    min-width: 1100px;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 1000px;
+    height: 640px;
+    min-height: 640px;
+    z-index: 99999;
+}
+.photo-popup{
+    border: 1px;
+    max-width: 1500px !important;
+    min-width: 1100px;
+    padding: 0 !important;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-height: 1000px;
+    height: 640px;
+    min-height: 640px;
+    z-index: 99999;
+    display: none;
+}
+.stats-compare .b-diagram__legend__table-style {
+    box-shadow: none;
+}
+.b-diagram__legend__table-style ul li {
+  border-left: 1px solid rgba(0,0,0,.1);
+}
+.b-team-compare__list p:first-of-type{
+    width: 80% !important;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+/*.sidr ul li {
+    background: #82b440;
+
+}
+.sidr ul li a{
+    box-shadow: none !important;
+    color: white;
+}
+.sidr ul li {
+    border-bottom: none;
+}
+.sidr ul li ul li a{
+    box-shadow: none !important;
+    color: white;
+}*/
+.inputFilter, .helperContainer{
+    display: none;
+}
+.multiSelect button:first-of-type{
+    width: 270px;
+}
+#sidr li a i{
+    margin-right: 5px !important;
+}

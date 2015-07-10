@@ -1,0 +1,78 @@
+{% load i18n %}
+<script type="text/ng-template" id="step3">
+    <div class="row registration-content-row">
+        <p>{% trans 'Customize the website!' %}</p>
+    </div>
+    <div class="row registration-content-row">
+        <p><span class="registration-step-label">{% trans 'STEP 3' %}</span></p>
+    </div>
+    <div class="row registration-content-row">
+        <div class="row registration-content-row">
+            <div class="inline-block">
+                {% trans 'Set up your preferences' %}
+            </div>
+        </div>
+        <div class="row registration-content-row registration-preferences">
+            <div class="inline-block registration-preferences-sports vertical-top">
+                <div class="registration-preferences-sport bold">
+                    {% trans "I'm interested in:" %}
+                </div>
+                <div class="registration-preferences-sport">
+                    <input class="vertical-middle" type="checkbox" ng-change="log()" ng-model="preferencesSports['hockey']">
+                    <div class="vertical-middle inline-block">{% trans 'Hockey' %}</div>
+                </div>
+                <div class="registration-preferences-sport">
+                    <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['football']">
+                    <div class="vertical-middle inline-block">{% trans 'Football' %}</div>
+                </div>
+                <div class="registration-preferences-sport">
+                    <input class="vertical-middle" type="checkbox" ng-model="preferencesSports['basketball']">
+                    <div class="vertical-middle inline-block">{% trans 'Basketball' %}</div>
+                </div>
+            </div>
+            <div class="inline-block registration-preferences-countires vertical-top">
+                <div class="registration-preferences-sport bold">
+                    {% trans 'In countries:' %}
+                </div>
+                <!--<div class="registration-preferences-country" ng-repeat="country in countries track by $index">
+                    <input class="vertical-middle" type="checkbox" ng-model="countries[$index][1]">
+                    <div class="vertical-middle inline-block"><span ng-bind="country[0]"></span></div>
+                </div>-->
+                <div class="inline-block">
+                    <tags-input style="max-width:200px !important;"
+                                ng-model="countries" display-property="title"
+                                placeholder="{% trans 'start typing' %}"
+                                add-on-comma="{false}" add-from-autocomplete-only="true">
+                        <auto-complete load-on-focus="true" load-on-empty="true"
+                                       min-length="1" source="loadCountries($query)">
+                        </auto-complete>
+                </div>
+            </div>
+            <div class="inline-block m-l-50">
+                <div class="registration-preferences-sport bold">
+                    {% trans 'My favourite clubs:' %}
+                </div>
+                <div class="">
+                    <div class="inline-block bold vertical-top">
+                        {% trans 'Hockey' %}
+                    </div>
+                    <div class="inline-block m-l-20">
+                        <tags-input style="max-width:450px !important;"
+                                    ng-model="clubs" display-property="title"
+                                    placeholder="{% trans 'start typing' %}"
+                                    add-on-comma="{false}" add-from-autocomplete-only="true">
+                            <auto-complete load-on-focus="true" load-on-empty="true"
+                                           min-length="1" source="loadClubs($query)">
+                            </auto-complete>
+                        </tags-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button type="button" class="small ui green button registration-next" ng-click="prevStep()">{% trans 'PREV' %}</button>
+            <button type="button" class="small ui green button registration-next" ng-click="nextStep()">{% trans 'END' %}</button>
+            <button type="button" class="small ui button registration-next" ng-click="nextStep(true)">{% trans 'SKIP' %}</button>
+        </div>
+    </div>
+</script>

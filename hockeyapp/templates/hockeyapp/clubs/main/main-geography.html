@@ -1,0 +1,121 @@
+{% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+{% block tabs-content %}
+
+<div ng-controller="ClubGeographyController">
+<input id="club-players-api" type="hidden" value="{% url 'hockeyapp:club-players-api' pk %}">
+{% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-geography' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-geography" %}
+    {% endblock %}
+
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+            <h2 class="b-cell b-header__text">
+                Родные города игроков
+            </h2>
+
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Таблица" data-variation="basic" ng-click="setState('table')" ng-class="{'active': state === 'table'}">
+                <i class="table icon"></i>
+            </a>
+
+            {% comment %}
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Алфавитный список" data-variation="basic" ng-click="setSortBy('fio')">
+                <i class="sort alphabet ascending icon"></i>
+            </a>
+            {% endcomment %}
+
+            <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-variation="basic" href=""
+               ng-click="switchHistory()">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="public"
+                           ng-model="isHistory" ng-checked="params.is_history">
+                    <label>за всю историю команды</label>
+                </div>
+            </a>
+
+            <a class="b-cell b-change-views__item w-tooltip" data-content="Посмотреть на карте" data-variation="basic" ng-click="setState('map')" ng-class="{'active': state === 'map'}">
+                <i class="map icon"></i>
+            </a>
+
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+    <div class="ui large centered inline text loader" style="background: none !important">
+        Загрузка...
+    </div>
+
+    {% verbatim %}
+    <div class="ui large center aligned grid message" ng-if="players.length === 0 && loaded">
+            Нет информации
+            <br>
+            <!--<div class="w-btn " ng-click="showWholeSeason()">
+                    <div class="ui button green tiny margin-auto">Показать прошедшие матчи</div>
+            </div>-->
+    </div>
+    <div class="row" ng-if="state === 'table'">
+
+        <div class="col-md-6">
+            <table class="ui unstackable striped table colored-th grey-th b-table-lg" ng-if="players.length > 0">
+                <tr>
+                    <th class=""><a class="pointer" ng-click="setSortBy('fio')"><span>Имя</span><i class="dropdown icon"></i></a></th>
+                    <th class=""><a class="pointer" ng-click="setSortBy('birth_place')"><span>Город</span><i class="dropdown icon"></i></a></th>
+                </tr>
+                <tr ng-repeat="player in players">
+                    <td class="b-player">
+                        <div class="b-inline hidden-xs">
+                            <a class="ui image" href="#"><img class="ui image" ng-src="{{ player.photo }}" alt="" tittle=""/></a>
+                        </div>
+                        <div class="b-inline">
+                            <p class="">
+                                <a href="#">{{player.fio}}</a> <i class="flag {{player.citizenship.code}} i-top-2 hidden-xs"></i>
+                            </p>
+                            <p class="">
+                                {{player.line_display}}
+                            </p>
+                        </div>
+                    </td>
+
+                    <td class="">
+                        {{player.birth_place}}
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="col-md-5 col-md-offset-1" ng-if="players.length > 0">
+            <h3 class="ui dividing header">
+              Суммарно
+            </h3>
+            <table class="ui unstackable  table colored-th b-table-lg">
+                <tr ng-repeat="city in cities">
+                    <td class="b-player">
+                        <div class="b-inline">
+                            <p class="">
+                                <a href="#">{{city.name}}</a>
+                            </p>
+                        </div>
+                    </td>
+
+                    <td class="">
+                        {{city.count}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% endverbatim %}
+
+    <div class="w-map" ng-if="state === 'map'">
+        <div id="clubs-map" style="height: 400px;"></div>
+    </div>
+</div>
+<!--tabs content items-->
+</div>
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/main/sticky_menu.html' with clubs_main_tab='main-geography' clubs_menu_active='club-main' %}
+{% endblock %}

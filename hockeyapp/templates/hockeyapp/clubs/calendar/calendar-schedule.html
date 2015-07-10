@@ -1,0 +1,509 @@
+{% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-schedule' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui" ng-controller="ClubCalendarController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-calendar" active_menu="calendar-schedule" %}
+    {% endblock %}
+
+    <div class="b-header b-header__md b-header__filter-in">
+        <div class="w-table">
+
+            <h2 class="b-cell b-header__text">
+                Расписание
+            </h2>
+
+            <a class="b-cell active b-change-views__item w-tooltip b-filter__with-checkbox hidden-xs">
+                <i class="calendar icon"></i>
+                <div class="ui toggle checkbox" ng-click="showWholeSeason()">
+                    <input type="checkbox" name="public">
+                    <label>показать прошедшие</label>
+                </div>
+            </a>
+
+            <a class="b-cell b-change-views__item w-tooltip hidden-sm hidden-md hidden-lg" data-content="Показать прошедшие"  data-variation="basic" ng-click="showWholeSeason()" ng-class="{'active': wholeSeason === true}">
+                <i class="calendar icon"></i>
+            </a>
+
+            <a class="b-cell b-change-views__item w-tooltip hidden-xs" data-content="Убрать неигровые дни" data-variation="basic" ng-click="toggleGameDaysOnly()" ng-class="{'active': gameDaysOnly === true}">
+                <i class="ellipsis horizontal icon"></i>
+            </a>
+
+            <!--<a href="#" class="b-cell b-change-views__item w-tooltip" data-content="Расписание всех команд" data-variation="basic">
+                <i class="users icon"></i>
+            </a>-->
+        </div><!--row-->
+    </div><!--b-header b-header__md-->
+
+    <div class="ui large centered inline text loader" style="background: none !important" ng-class="{'active': !loaded}">
+        Загрузка...
+    </div>
+    <div class="ui large center aligned grid message" ng-if="noGames">
+        В ближайшее время матчей нет
+        <br>
+        <!--<div class="w-btn " ng-click="showWholeSeason()">
+                <div class="ui button green tiny margin-auto">Показать прошедшие матчи</div>
+        </div>-->
+    </div>
+
+    {% verbatim %}
+    <section class="w-calendar w-section hidden-xs hidden-sm" ng-repeat="month in calendars">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                {{month.month_display}}
+            </h3>
+        </div><!--b-header b-header__sm-->
+
+        <div class="row b-calendar" ng-if="!gameDaysOnly">
+            <div class="b-calendar__item b-calendar__date">
+            </div><div class="b-calendar__item b-calendar__date">
+                Понедельник
+            </div><div class="b-calendar__item b-calendar__date">
+                Вторник
+            </div><div class="b-calendar__item b-calendar__date">
+                Среда
+            </div><div class="b-calendar__item b-calendar__date">
+                Четверг
+            </div><div class="b-calendar__item b-calendar__date">
+                Пятница
+            </div><div class="b-calendar__item b-calendar__date">
+                Суббота
+            </div><div class="b-calendar__item b-calendar__date">
+                Воскресенье
+            </div>
+
+            <div class="b-calendar__item" ng-repeat="cell in month.table">
+                <div class="ui card" ng-if="cell.date != null && cell.schedule == null && !gameDaysOnly">
+                    <div class="ui statistic b-calendar__item__blank">
+                        <p class="value">
+                            {{cell.date.getDate()}}
+                        </p>
+                        <p class="">
+                            {{ month.month_display_rod }}
+                        </p>
+                    </div>
+                </div>
+                <div class="ui card past-event" ng-if="cell.date != null && cell.schedule != null">
+                    <!-- home -->
+                    <a href="#" class="b-calendar__item__inner" style="background: #999;" ng-if="cell.schedule.is_home">
+                        <div class="row" >
+                            <div class="col-sm-9 b-calendar__item__date-head">
+                                <p class="">
+                                    {{cell.schedule.formattedDate }}
+                                </p>
+                                <p class="">
+                                    {{cell.schedule.date | date: 'HH' }}:{{cell.schedule.date | date: 'mm' }} МСК
+                                </p>
+                            </div>
+                            <div class="col-sm-3 b-calendar__item__game-type">
+                                <i class="home icon"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="b-calendar__item__inner" style="background: #999;" ng-if="!cell.schedule.is_home">
+                        <div class="row" >
+                            <div class="col-sm-9 b-calendar__item__date-head">
+                                <p class="">
+                                    {{cell.schedule.formattedDate }}
+                                </p>
+                                <p class="">
+                                    {{cell.schedule.date | date: 'HH' }}:{{cell.schedule.date | date: 'mm' }} МСК
+                                </p>
+                            </div>
+                            <div class="col-sm-3 b-calendar__item__game-type">
+                                <i class="plane icon"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="b-calendar__item__inner" style="border-top: 1px solid rgba(0,0,0,.05);" ng-if="cell.schedule.is_home">
+                        <div class="row">
+
+                            <div class="col-sm-6 col-sm-offset-3 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.guest_team.logo}}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>{{cell.schedule.guest_team.title}}</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                {{cell.schedule.guest_team.address.title}}
+                            </p>
+                        </div>
+
+                        <p class="b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count > cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count < cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
+                        </p>
+                    </a><!--b-calendar__item__inner-->
+                    <!--home-->
+
+                    <a href="#" class="b-calendar__item__inner" ng-if="!cell.schedule.is_home">
+
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.home_team.logo}}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>{{cell.schedule.home_team.title}}</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                {{cell.schedule.home_team.address.title}}
+                            </p>
+                        </div>
+
+                        <p class="b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count < cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count > cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
+                        </p>
+
+                    </a><!--b-calendar__item__inner-->
+
+                </div><!--ui card-->
+            </div>
+        </div>
+
+        <div class="row b-calendar" ng-if="gameDaysOnly">
+            <div class="b-calendar__item" ng-repeat="cell in month.table" ng-if="cell.schedule != null">
+                <div class="ui card past-event" ng-if="cell.date != null && cell.schedule != null">
+                    <!-- home -->
+
+                    <a href="#" class="b-calendar__item__inner" style="background: #999;" ng-if="cell.schedule.is_home">
+                        <div class="row" >
+                            <div class="col-sm-9 b-calendar__item__date-head">
+                                <p class="">
+                                    {{cell.schedule.formattedDate }}
+                                </p>
+                                <p class="">
+                                    {{cell.schedule.date | date: 'HH' }}:{{cell.schedule.date | date: 'mm' }} МСК
+                                </p>
+                            </div>
+                            <div class="col-sm-3 b-calendar__item__game-type">
+                                <i class="home icon"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="b-calendar__item__inner" style="background: #999;" ng-if="!cell.schedule.is_home">
+                        <div class="row" >
+                            <div class="col-sm-9 b-calendar__item__date-head">
+                                <p class="">
+                                    {{cell.schedule.formattedDate }}
+                                </p>
+                                <p class="">
+                                    {{cell.schedule.date | date: 'HH' }}:{{cell.schedule.date | date: 'mm' }} МСК
+                                </p>
+                            </div>
+                            <div class="col-sm-3 b-calendar__item__game-type">
+                                <i class="plane icon"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="b-calendar__item__inner" ng-if="cell.schedule.is_home">
+
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.guest_team.logo}}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>{{cell.schedule.guest_team.title}}</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                {{cell.schedule.guest_team.address.title}}
+                            </p>
+                        </div>
+
+                        <p class="b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count > cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count < cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
+                        </p>
+
+                    </a><!--b-calendar__item__inner-->
+                    <!--home-->
+
+                    <a href="#" class="b-calendar__item__inner" ng-if="!cell.schedule.is_home">
+
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 b-calendar__item__team-logo">
+                                <div class="ui image">
+                                    <img class="ui image" src="{{cell.schedule.home_team.logo}}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="b-calendar__item__team">
+                            <p class="">
+                                <span>{{cell.schedule.home_team.title}}</span>
+                            </p>
+                            <p class="b-calendar__item__team__location">
+                                {{cell.schedule.home_team.address.title}}
+                            </p>
+                        </div>
+
+                        <p class="b-negative-text b-calendar__item__score" ng-class="{'b-positive-text': cell.schedule.match.home_count < cell.schedule.match.guest_count, 'b-negative-text': cell.schedule.match.home_count > cell.schedule.match.guest_count}">
+                            {{cell.schedule.match.home_count}} : {{cell.schedule.match.guest_count}}
+                        </p>
+
+                    </a><!--b-calendar__item__inner-->
+
+                </div><!--ui card-->
+            </div>
+        </div><!--row-->
+
+        <!--<div class="w-btn btn-month" ng-click="previous()">
+            <div class="ui button green tiny">Показать еще один месяц</div>
+        </div>-->
+
+
+    </section>
+    {% endverbatim %}
+
+    <!--<section class="w-calendar w-section hidden-xs hidden-sm">
+        <div class="b-header b-header__sm b-header__filter-in">
+            <h3 class="b-cell b-header__text">
+                Сентябрь
+            </h3>
+        </div><!--b-header b-header__sm
+
+        <div class="row b-calendar">
+            <div class="b-calendar__item b-calendar__date">
+            </div><div class="b-calendar__item b-calendar__date">
+                Понедельник
+            </div><div class="b-calendar__item b-calendar__date">
+                Вторник
+            </div><div class="b-calendar__item b-calendar__date">
+                Среда
+            </div><div class="b-calendar__item b-calendar__date">
+                Четверг
+            </div><div class="b-calendar__item b-calendar__date">
+                Пятница
+            </div><div class="b-calendar__item b-calendar__date">
+                Суббота
+            </div><div class="b-calendar__item b-calendar__date">
+                Воскресенье
+            </div>
+
+
+        </div><!--row
+        <div class="w-btn btn-month">
+            <div class="ui button green tiny">Показать еще один месяц</div>
+        </div>
+    </section><!--w-calendar-->
+
+    <section class="w-command-mobile visible-sm visible-xs">
+    {% comment %}
+        <div class="row">
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        6 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner w-command-calendar__item-past">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Автомобилист - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-2.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            0 : 5
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button green tiny">
+                            <div class="visible content">Были 2343</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        7 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner w-command-calendar__item-past">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Адмирал - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-1.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            0 : 5
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button blue tiny">
+                            <div class="visible content">Были 2343</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        9 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Адмирал - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-1.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            - : -
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button tiny">
+                            <div class="visible content">Я пойду</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+
+            <div class="col-sm-6 w-command-calendar__item">
+                <div class="b-header b-header__sm hidden-xs hidden-sm">
+                    <h3 class="b-header__text">
+                        10 Сентября 2015, 20:20 МСК
+                    </h3>
+                </div><!--b-header b-header__sm-->
+
+                <div class="w-command-calendar__item-inner">
+                    <div class="b-header b-header__xs">
+                        <h5 class="b-header__text">
+                            Автомобилист - СКА
+                        </h5>
+                    </div><!--b-header b-header__xs-->
+
+                    <div class="row">
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo-2.jpg">
+                            </a>
+                        </div>
+
+                        <p class="col-xs-2 col-md-12 col-lg-4 b-score">
+                            - : -
+                        </p>
+
+                        <div class="col-xs-5 col-md-12 col-lg-4">
+                            <a href="#" class="ui image">
+                                <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                            </a>
+                        </div>
+                    </div><!--row-->
+
+                    <div class="w-command-calendar__info">
+                        <p class="date">
+                            17 марта 2015г. 20:20 МСК
+                        </p>
+                    </div>
+
+                    <div class="w-btn">
+                        <div class="ui button green tiny">
+                            <div class="visible content">Я пойду</div>
+                        </div>
+                    </div><!--w-btn-->
+                </div><!--w-command-calendar__item-inner-->
+            </div><!--w-command-calendar__item-->
+
+        </div><!--row-->
+    {% endcomment %}
+
+    </section><!--end w-command-mobile-->
+
+</div>
+<!--tabs content items-->
+<!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+{% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-schedule' clubs_menu_active='club-calendar' %}
+{% endblock %}

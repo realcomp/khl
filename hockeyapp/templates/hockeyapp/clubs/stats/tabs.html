@@ -1,0 +1,6 @@
+<!--tabs items-->
+<div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+    <a href="{% url 'hockeyapp:clubs:stats' pk %}" class="{% if clubs_main_tab == 'stats-table' %}active {% endif %} item">Таблица</a>
+    <a href="{% url 'hockeyapp:clubs:stats-compare' pk %}" class="{% if clubs_main_tab == 'stats-compare' %}active {% endif %} item">Сравнение команд</a>
+</div>
+<!--tabs items ends-->

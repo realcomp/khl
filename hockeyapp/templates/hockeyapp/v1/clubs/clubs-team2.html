@@ -1,0 +1,153 @@
+{% extends "hockeyapp/v1/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+Сравнение команд, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-team-page">
+            <div class="page-content page-container" ng-controller="ClubTeamCompareController" >
+                <div class="page-inner-container">
+                    <input id="club-team-api" type="hidden" value="{% url 'hockeyapp:club-team-api' 0 %}">
+                    <input id="clubs-compare" type="hidden">
+                    <input id="api-player-indicators" type="hidden" value="{% url 'hockeyapp:player-card-indicators-api' 0 %}"></a>
+                    <div class="clubs-team-tabs" style="padding-top: 20px;">
+                        <input type="hidden" id="scope">
+                        <div class="graph-controls-block">
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="И" field="count" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="Ш" field="goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="О" field="points" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="+/-" field="plus_minus" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШР" field="es_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШБ" field="pp_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШМ" field="ev_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШО" field="overtime_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ШП" field="win_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="РБ" field="bullet_goals" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="А" field="assists" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="БВ" field="shots" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="%БВ" field="pis__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="БВ/И" field="shots__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="Вбр" field="faceoff" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ВВбр" field="winfaceoff" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="%Вбр" field="winfaceoff_p__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="См/И" field="change_count__avg" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="Штр" field="penalty_time" %}
+                                    {% include "hockeyapp/v1/players/indicators-menuitem.html" with label="ВП/И" field="gamingtime__avg" %}
+                                    <!--<li class="graph-control-item" style="margin-left: 100px">
+                                        <a href="" class="graph-control-link" ng-click="setDataType('graph-radar')">Перейти к круговой диаграмме</a>
+                                    </li>-->
+                            </div>
+                            <div class="graph-controls-block" ng-show="dataType === 'graph-radar'">
+                                    <li class="graph-control-item" style="">
+                                        <a id="return-control" href="" class="graph-control-link"
+                                           ng-class="{ 'graph-control-link_active':field === '{{ field }}'}"
+                                           ng-click="setDataType('graph-serial', $event)">Вернуться</a>
+                                    </li>
+                            </div>
+                    </div>
+
+
+                    <div style="position:relative;text-align: center; right: 34px; top: 100px;" ng-show="loader">
+                        <div class="text-center" style="position: absolute;z-index: 99999; font-size: 20px; top: 30px; left: 210px; width: 600px; background: rgba(255,255,255,0.7)">
+                            <i style="z-index: 1; font-size: 50px; top: 40px;  left: 40px" class="circle notched loading icon"></i><br>
+                            Загрузка данных...
+                        </div>
+                    </div>
+                    {% verbatim %}
+                    <div id="chart-tooltip" ng-show="dataType === 'graph-serial'">
+                        <div id="chart-tooltip-header">
+                            {{localeObject.fieldNames[field].fullName.toUpperCase()}}
+                        </div>
+                        <div id="chart-tooltip-content"></div>
+                    </div>
+                    {% endverbatim %}
+                    <div ng-if="dataType === 'graph-serial' && clubs.length > 0">
+                        <div id="chartdiv" style="width: 100%; height:400px; "></div>
+                    </div>
+                    <div class="text-center" ng-show="dataType === 'graph-serial' && clubs.length > 0">
+                        <div class="ui checkbox m-r-10">
+                            <input type="checkbox" name="line" value=""
+                                   ng-checked="defenders"
+                                   onchange="angular.element(this).scope().defenders = !angular.element(this).scope().defenders; angular.element(this).scope().listAveragePlayer();">
+                            <label>защитники</label>
+                        </div>
+                        <div class="ui checkbox inline-block">
+                            <input type="checkbox" name="line" value=""
+                                   ng-checked="offenders"
+                                   onchange="angular.element(this).scope().offenders = !angular.element(this).scope().offenders; angular.element(this).scope().listAveragePlayer();">
+                            <label>нападающие</label>
+                        </div>
+                    </div>
+
+                    <div class="inline-block vertical-top">
+                        Команда для сравнения
+                        <div class="ui input block m-t-10">
+                        <angucomplete id="clubs_filter"
+                                      pause="300" minlength="2"
+                                      selectedobject="selectedClub"
+                                      placeholder="Введите название"
+                                      url="{% url 'hockeyapp:club-titles-search-api' %}?s=" titlefield="title"/>
+                        </div>
+                        <div class="ui button m-t-20 block" ng-click="addAverageClubPlayerData()">
+                            добавить
+                        </div>
+                    </div>
+                    {% verbatim %}
+                    <div class="inline-block">
+                        <div ng-repeat="club in clubs" class="inline-block vertical-top club-indicators-list-block">
+                            <div class="club-indicators-list-head">
+                                {{club.title}}
+                            </div>
+                                Нападающие
+                            <hr>
+                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 3"
+                                           ng-click="togglePlayerSelection(club.title, $index)">
+                                    <input class="pointer" type="checkbox" id="player_{{$index}}"
+                                           ng-model="player.selected">
+                                    <label class="pointer" ng-class="{'color-teal': player.added}">{{player.fio}} - {{player.result}}</label><br>
+                                    <div ng-if="player.added" class="color-teal m-l-15"> ({{ player.club.title }})</div>
+                            </div>
+                            <br>
+                                Защитники
+                            <hr>
+                            <div class="pointer" ng-repeat="player in club.all_players track by $index" ng-if="player.line === 2"
+                                           ng-click="togglePlayerSelection(club.title, $index)">
+                                    <input class="pointer" type="checkbox" id="player_{{$index}}"
+                                           ng-model="player.selected">
+                                    <label class="pointer" ng-class="{'color-teal': player.added}">{{player.fio}} - {{player.result}}</label><br>
+                                    <div ng-if="player.added" class="color-teal m-l-15"> ({{ player.club.title }})</div>
+                            </div>
+                            <br>
+                            <hr>
+                            Добавить игрока
+                            {% endverbatim %}
+                            <div class="ui input block m-t-10">
+                            <angucomplete id="players_filter" placeholder="Введите имя..."
+                                              pause="300" minlength="2"
+                                              selectedobject="selectedPlayer"
+                                              url="{% url 'hockeyapp:player-names-search-api' %}?s="
+                                              titlefield="lastname,name"
+                                              onchangecallback="setSelectedPlayer"/>
+                            </div>
+                            {% verbatim %}
+                            <div class="ui button m-t-20 block" ng-click="addPlayerToClub(club.title)">
+                                добавить
+                            </div>
+                    </div>
+                    {% endverbatim %}
+
+
+                </div>
+            <!--end-->
+        </div>
+        <ul class="team-controls player-controls-block">
+            <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+            <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+            <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

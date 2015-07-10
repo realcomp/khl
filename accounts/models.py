@@ -49,6 +49,7 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     objects = BaseUserManager()
     USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'username'
     REQUIRED_FIELDS = ()
 
     @property
@@ -87,6 +88,7 @@ class User(AbstractUser):
         'addresses.Country', verbose_name=_('Countries'))
     clubs = models.ManyToManyField(
         'hockeyapp.Club', verbose_name=_('Clubs'))
+    email_validated = models.BooleanField(_('E-mail validated'), default=False)
 
     __unicode__ = lambda self: self.username
 

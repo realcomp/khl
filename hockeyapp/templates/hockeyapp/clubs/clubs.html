@@ -8,13 +8,18 @@
 {% block body %}
 <section class="content">
     <div class="container clubs-page">
-        <div class="breadcrumbs">
+    <div class="ui grid breadcrumb-search">
+        <div class="twelve wide column">
+                    <div class="breadcrumbs">
             <div class="ui small breadcrumb">
                 <a class="section" href="/">ХОККЕЙ</a>
-                <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:club-list' %}">Все клубы</a>
+                <i class="right chevron icon divider"></i>
+                <a class="section" href="{% url 'hockeyapp:clubs:list' %}">Все клубы</a>
             </div>
-            <div class="search-block">
+            </div>
+        </div>
+        <div class="four wide column">
+              <div class="search-block">
                 <div class="item">
                     <div class="ui icon input">
                         <input type="text" placeholder="Search...">
@@ -23,21 +28,25 @@
                 </div>
             </div>
         </div>
+    </div>
+
 
         <div class="page-content page-container"
              ng-controller="ClubListController as ClubListCtrl">
             <div class="page-inner-container">
                 <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}">
                 <div class="clubs-tabs">
-                    <a id="LeagueListLink" class="hidden" href="{% url 'hockeyapp:league-list-api' %}"></a>
+                    <input id="country-league-list-api" type="hidden" value="{% url 'hockeyapp:country-league-list-api' %}">
                     <div class="ui grid">
                         <div class="row">
                             <div class="column">
                                 <div class="ui tabular menu content-tabs">
-                                    <span class="heading">Все клубы </span>
+                                    <h4 class="ui header heading">Все клубы</h4>
                                     <div class="ui selection dropdown">
                                         <input type="hidden" name="season" value="{{ current_season.pk|default:seasons.0.pk }}"
-                                               onchange="angular.element(this).scope().setSeason(this)">
+                                               ng-model="season" ng-update-hidden
+                                               ng-init="season = $location.search().season || {{ current_season.pk|default:seasons.0.pk }}"
+                                               ng-change="setSeason(season)">
                                         <div class="default text">{{ current_season.label|default:seasons.0.label }}</div>
                                         <i class="dropdown icon"></i>
                                         <div class="menu">
@@ -50,16 +59,16 @@
                                     </div>
                                     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
                                         <li class="ui-state-default ui-corner-top"
-                                            ng-class="{ 'ui-tabs-active ui-state-active':!params.league }">
+                                            ng-class="{ 'ui-tabs-active ui-state-active':isLeagueActive(null) }">
                                             <a class="item tab-btn ui-tabs-anchor" href=""
-                                               ng-click="setLeague('')">
+                                               ng-click="setLeague(null)">
                                                 {% trans 'ALL' %}
                                             </a>
                                         </li>
                                         {% verbatim %}
                                             <li class="ui-state-default ui-corner-top"
-                                                ng-class="{ 'ui-tabs-active ui-state-active':params.league == league.pk }"
-                                                ng-repeat="league in PlayersSearchService.getLeagues(countries, [params.country])">
+                                                ng-class="{ 'ui-tabs-active ui-state-active':isLeagueActive(league.pk) }"
+                                                ng-repeat="league in leagues">
                                                 <a class="item tab-btn ui-tabs-anchor" href=""
                                                    ng-click="setLeague(league.pk)">
                                                     {{ league.title }}
@@ -76,7 +85,7 @@
                                     <ul class="options-list clubs-countries-menu-list">
                                         <li class="option-item" ng-repeat="country in countries">
                                             <a class="option-link"
-                                               ng-class="{ 'option-link_active':params.country == country.pk }"
+                                               ng-class="{ 'option-link_active':isCountryActive(country.pk) }"
                                                ng-click="setCountry(country.pk)">
                                                 {{ country.title }}
                                             </a>
@@ -110,7 +119,7 @@
                                         {% verbatim %}
                                         <tr ng-repeat="club in data.results">
                                             <td>
-                                                <a class="clubs-link" href="{{ club.url }}">
+                                                <a class="clubs-link" href="{{ club.url }}?season={{ params.season }}">
                                                     <img ng-src="{{ club.logo }}" alt="" class="club-logo">
                                                     <span>{{ club.title }}</span>
                                                 </a>
@@ -142,6 +151,18 @@
                     </div>
                 </div>
                 </form>
+                <div class="row">
+                        <div class="column">
+                            <div class="ui tabular menu">
+                                <span class="heading">Карта клубов</span>
+                            </div>
+                        </div>
+                </div>
+                <div id="clubs-map-container">
+                    <div ng-show="ClubListCtrl.map" id="clubs-map">
+                    </div>
+                </div>
+
                 <hr class="hr">
                 <ul class="team-controls player-controls-block">
                     <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>

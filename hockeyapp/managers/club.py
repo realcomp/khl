@@ -9,12 +9,12 @@ from django.db.models.loading import get_model
 
 from .. import parsers
 
-from . import DataCleanMixin
+from . import DataCleanMixin, LocaleOrderMixin
 
 CURRENT_APP = __package__.split('.')[0]
 
 
-class ClubQuerySet(DataCleanMixin, models.QuerySet):
+class ClubQuerySet(LocaleOrderMixin, DataCleanMixin, models.QuerySet):
     b''' Менеджер клуба '''
     def _get_data(self, url):
         b''' Берем данные со стороннего сайта парсером '''
@@ -26,6 +26,9 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
             # берем данные о клубе со стороннего ресурса
             data = self._get_data(url)
         title = data.get('title', None)
+        # TODO: refact
+        if data.get('league') and data.get('league').en_title == 'VHL':
+            if title == 'Динамо': title+= ' Бшх'
         if title:
             _club = self.by_title_alias(title).last()
             if not _club or update:
@@ -59,23 +62,8 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
                         _club.players = _plrs
             return _club
 
-    # def by_season(self, season):
-    #     '''
-    #     :param season: season years ('2014', '2015')
-    #     :type season: tuple
-    #     '''
-    #     season_start = get_season_start_date(year=season[0])
-    #     season_end = get_season_end_date(year=season[1])
-    #     q_start = (
-    #         Q(leagueclub__start_date__lte=season_start) |
-    #         Q(leagueclub__start_date__isnull=True))
-    #     q_end = (
-    #         Q(leagueclub__end_date__gte=season_end) |
-    #         Q(leagueclub__end_date__isnull=True))
-    #     return self.filter(q_start & q_end)
-
     def by_season(self, season):
-        return self.filter(leagueclub__season=season)
+        return self.active().filter(leagueclub__season=season)
 
     def by_title_alias(self, title):
         q_title = ( Q(ru_title=title) |
@@ -84,4 +72,46 @@ class ClubQuerySet(DataCleanMixin, models.QuerySet):
         q_title|= ( Q(clubtitlealias__alias__ru_title=title) |
                     Q(clubtitlealias__alias__en_title=title)
         )
-        return self.filter(q_title)
+        return self.active().filter(q_title)
+
+    def active(self):
+        return self.exclude(league__en_title="Not clubs")
+
+    def not_active(self):
+        return self.filter(league__en_title="Not clubs")
+
+    def recalc_counters(self, fields, update_last_match_date=False):
+        for club in self:
+            q_not_parsed_yet = Q(date__gt=club.last_match_date)
+
+            if (not club.last_match_date or
+                    club.homematches.filter(q_not_parsed_yet).exists() or
+                    club.guestmatches.filter(q_not_parsed_yet).exists() or
+                    (not club.homematches.exists() and not club.guestmatches.exists())):
+
+                for field in fields:
+                    value = None
+                    if field == 'matches_total':
+                        value = (
+                            club.homematches.count() +
+                            club.guestmatches.count())
+
+                    setattr(club, field, value)
+
+                update_fields = list(fields)
+                if update_last_match_date:
+                    last_match = None
+                    last_homematch = club.homematches.order_by('date').last()
+                    last_guestmatch = club.guestmatches.order_by('date').last()
+                    if last_homematch and last_guestmatch:
+                        return max(
+                            (last_homematch, last_guestmatch),
+                            key=lambda x: x.date)
+                    else:
+                        last_match = last_homematch or last_guestmatch
+                    if last_match:
+                        club.last_match_date = last_match.date
+                        update_fields = update_fields + ['last_match_date']
+
+                club.save(update_fields=update_fields)
+        return self

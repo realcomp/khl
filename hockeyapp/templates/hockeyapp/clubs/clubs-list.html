@@ -1,0 +1,277 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+{% load base_extras %}
+
+{% block title %}
+Все клубы, хоккей - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<div class="w-page__clubs-list" ng-controller="ClubListController as ClubListCtrl">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="sections" active_section="sections-clubs" active_menu="club-team-all" %}
+    {% endblock %}
+
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+                <section class="row w-breadcrumb">
+                    <div class="col-sm-9">
+                        <div class="ui small breadcrumb">
+                            <a class="section">Хоккей</a>
+                            <i class="right chevron icon divider"></i>
+                            <a class="section">Клубы</a>
+                            <i class="right chevron icon divider"></i>
+                            <div class="active section">Главное</div>
+                        </div>
+                    </div>
+                </section><!--row w-breadcrumb-->
+
+                <section class="w-main-nav">
+                    <div class="w-menu">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                        </div>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse" id="w-main-nav__b-menu">
+                            <ul class="w-main-nav__b-menu ui inverted green menu">
+                                <li class="item w-main-nav__b-menu__logo hidden-xs">
+                                    <a href="#"><img src="/static/new/images/i-hockey.jpg"></a>
+                                </li>
+                                <li class="item active">
+                                    <a href="#">Россия</a>
+                                </li><li class="item">
+                                    <a href="#">США</a>
+                                </li><li class="item">
+                                    <a href="#">Канада</a>
+                                </li><li class="item">
+                                    <a href="#">Финляндия</a>
+                                </li><li class="item">
+                                    <a href="#">Швеция</a>
+                                </li><li class="item">
+                                    <a href="#">Чехия</a>
+                                </li><li class="item ui dropdown top pointing">
+                                    <a class="default text" href="#">Другие страны<i class="dropdown icon"></i></a>
+                                    <ul class="menu">
+                                        <li class="item">Япония</li>
+                                        <li class="item">Китай</li>
+                                        <li class="item">Германия</li>
+                                        <li class="item">Болгария</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section><!--w-main-nav-->
+
+                <section class="w-page-tabs">
+                    {% include "hockeyapp/clubs/seasons.html" %}
+
+                <!--tabs items-->
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item" ng-class="{ 'active':isLeagueActive('*') }" ng-click="setLeague('*')">Все лиги</div>
+                        {% verbatim %}
+                        <div class="item" ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">{{league.title}}</div>
+                        {% endverbatim %}
+                    </div>
+                <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item" ng-class="{ 'active':isLeagueActive('*') }" ng-click="setLeague('*')">Все лиги</div>
+                        {% verbatim %}
+                        <div class="item" ng-repeat="league in leagues" ng-class="{ 'active':isLeagueActive(league.pk) }" ng-click="setLeague(league.pk)">{{league.title}}</div>
+                        {% endverbatim %}
+                    </div>
+                <!--tabs items ends-->
+
+                <!--tabs content-->
+
+                    <a id="ClubListURL" class="hidden" href="{% url 'api:hockey:club-list-api' %}"></a>
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content w-clubs__khl ui tab active">
+
+                        <section class="w-section">
+                            <div class="b-header b-header__md b-header__filter-in">
+                                <div class="w-table">
+                                    <h2 class="b-cell b-header__text">
+                                        Список клубов
+                                    </h2>
+
+                                    <a class="b-cell active hidden-xs b-change-views__item b-filter__with-checkbox w-tooltip" data-content="Алфавитный список" data-variation="basic" href=""
+                                       ng-click="switchHistory()">
+                                        <i class="sort alphabet ascending icon"></i>
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="public"
+                                                   ng-model="isHistory" ng-checked="params.is_history">
+                                            <label>включая выбывшие из лиги</label>
+                                        </div>
+                                    </a>
+
+                                    <a class="b-cell b-change-views__item" href=""
+                                       ng-click="setTable(false)" ng-show="params.is_table">
+                                        <i class="block layout icon"></i>
+                                    </a>
+                                    <a class="b-cell b-change-views__item" href=""
+                                       ng-click="setTable(true)" ng-hide="params.is_table">
+                                        <i class="table icon"></i>
+                                    </a>
+                                </div><!--row-->
+                            </div><!--b-header b-header__md-->
+
+                            <!-- <form id="ClubListForm" action="{% url 'api:hockey:club-list-api' %}"> -->
+                            <div class="w-gallery-preview" ng-show="!params.is_table && data">
+                                <div class="row w-gallery-preview__items w-gallery-preview__items__8">
+
+                                    {% verbatim %}
+                                    <div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item" ng-repeat="club in data.results">
+                                        <div class="ui card">
+                                            <div class="w-gallery-preview__item__img img-wrap">
+                                                <figure class="figure-styled">
+                                                    <a href="{{ club.url }}" class="ui image"><img ng-src="{{ 'http://dev.sportomatics.ru' + club.logo }}" alt=""/></a>
+                                                </figure>
+                                            </div>
+
+                                            <div class="w-gallery-preview__item__info">
+                                                <p class="name">
+                                                    <a href="{{ club.url }}">{{ club.title }}</a>
+                                                </p>
+                                                <p class="">
+                                                    {{ club.address.title }}
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </div><!--w-gallery-preview__item-->
+                                    {% endverbatim %}
+                                    <!--<div class="col-xs-6 col-sm-3 col-lg-3 col-md-4 w-gallery-preview__item b-notactive">
+                                        <div class="ui card">
+                                            <div class="w-gallery-preview__item__img img-wrap">
+                                                <figure class="figure-styled">
+                                                    <a href="#" class="ui image"><img src="images/l-hockey/logo.jpg" alt="" title=""/></a>
+                                                </figure>
+                                            </div>
+
+                                            <div class="w-gallery-preview__item__info">
+                                                <p class="name">
+                                                    <a href="#">СКА</a>
+                                                </p>
+                                                <p class="">
+                                                    Ленинградская область
+                                                </p>
+                                            </div>
+
+                                        </div><!--ui card
+                                    </div><!--w-gallery-preview__item-->
+
+                                </div><!--row w-gallery-preview__items-->
+                            </div><!--w-gallery-preview-->
+                            <!-- </form> -->
+
+                            <div class="row-xs" ng-show="params.is_table && data">
+                                <table class="ui unstackable striped table colored-th grey-th b-table-lg b-table-fixed">
+                                    <tr>
+                                        <th class="b-table-team" colspan="2">
+                                            <a href="" ng-click="setOrderBy('')">
+                                                <span>Команда</span>
+                                                <i class="dropdown icon" ng-hide="params.order_by"></i>
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs" colspan="2">
+                                            <a href="" ng-click="setOrderBy('address__%s_title')">
+                                                <span>Город</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'address__%s_title'"></i>
+                                            </a>
+                                        </th>
+                                        <th class="b-td-sm" colspan="2">
+                                            <a href="" ng-click="setOrderBy('next_schedule')">
+                                                <span>Ближ. игра</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'next_schedule'"></i>
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1">
+                                            <a href="" ng-click="setOrderBy('matches_total')">
+                                                <span>Игр</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'matches_total'"></i>
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs b-td-xs text-center-sm text-center" colspan="1">
+                                            <a href="#">
+                                                <span>Очки</span>
+                                                <!-- <i class="dropdown icon"></i> -->
+                                            </a>
+                                        </th>
+                                        <th class="b-table-place b-td-xs hidden-xs text-center-sm text-center" colspan="1">
+                                            <a href="#">
+                                                <span>Место</span>
+                                                <!-- <i class="dropdown icon"></i> -->
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs" colspan="2">
+                                            <a href="" ng-click="setOrderBy('arena__%s_title')">
+                                                <span>Арена</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'arena__%s_title'"></i>
+                                            </a>
+                                        </th>
+                                        <th class="hidden-xs hidden-sm" colspan="2">
+                                            <a href="" ng-click="setOrderBy('coach__%s_lastname,coach__%s_name')">
+                                                <span>Тренер</span>
+                                                <i class="dropdown icon" ng-show="params.order_by === 'coach__%s_lastname,coach__%s_name'"></i>
+                                            </a>
+                                        </th>
+                                    </tr>
+
+                                    {% verbatim %}
+                                        <tr ng-repeat="club in data.results">
+                                            <td class="b-td-team" colspan="2">
+                                                <div class="w-gallery-preview__item__img">
+                                                    <div class="img-wrap">
+                                                        <figure class="figure-styled">
+                                                            <a href="#" class="ui image"><img ng-src="{{ 'http://dev.sportomatics.ru' + club.logo }}" alt=""></a>
+                                                        </figure>
+                                                    </div>
+                                                    <div class="b-cell">
+                                                        <p><a href="{{ club.url }}">{{ club.title }}</a></p>
+                                                        <p class="text-small visible-xs">{{ club.address.title }}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="hidden-xs" colspan="2">
+                                                {{ club.address.title }}
+                                            </td>
+                                            <td colspan="2">
+                                                <p>
+                                                    <a href="#">{{ club.next_schedule.title_verbose }}</a>
+                                                </p>
+                                                <p class="text-small">
+                                                    {{ club.next_schedule.date|date:"dd MMMM yyyy hh:mm" }}
+                                                </p>
+                                            </td>
+                                            <td class="b-td-xs hidden-xs text-center-sm" colspan="1">{{ club.matches_total }}</td>
+                                            <td class="b-td-xs hidden-xs text-center-sm" colspan="1">10</td>
+                                            <td class="b-td-xs text-center hidden-xs" colspan="1">6</td>
+                                            <td class="hidden-xs" colspan="2"><a href="{{ club.arena.url }}">{{ club.arena.title }}</a></td>
+                                            <td class="hidden-xs hidden-sm" colspan="2"><a href="#">{{ club.coach.lastname }} {{ club.coach.name }}</a></td>
+                                        </tr>
+                                    {% endverbatim %}
+
+                                </table>
+                            </div>
+
+                            <div class="loader-large" ng-hide="loaded"></div>
+
+                        </section><!--w-section-->
+                    </div>
+                    <!--tabs content items-->
+
+                <!--tabs content end-->
+
+                </section><!--w-page-tabs-->
+            </section><!--container-->
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+</div>
+{% endblock %}

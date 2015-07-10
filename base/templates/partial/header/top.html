@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load base_extras %}
+{% comment %}
 <div class="top-line">
     <div class="container">
         <div class="ui text menu">
@@ -18,14 +19,28 @@
 
             <div class="ui text right menu">
                 {% if user.is_authenticated %}
-                <a href="{% url 'auth_logout' %}" class="item">{% trans 'Logout' %}</a>
+                    {% if request.user.avatar %}
+                        <a href="{% url 'accounts:profile-private' %}" class="item">
+                            <img src="{{ request.user.avatar.url }}" height="30" />
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'accounts:profile-private' %}" class="item">
+                        {{ request.user.username }}
+                    </a>
+                    <a href="{% url 'auth_logout' %}?next={{ request.path }}" class="item">{% trans 'Logout' %}</a>
                 {% else %}
-                <a href="{% url 'auth_login' %}" class="item">{% trans 'Login' %}</a>
-                <a href="{% url 'accounts:signup' %}" class="item">{% trans 'Signup' %}</a>
+                    <form action="{% url 'auth_login' %}?next={{ request.path }}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="username" />
+                        <input type="password" name="password" />
+                        <input type="submit" value="{% trans 'Login' %}">
+                    </form>
+                    <!-- <a href="{% url 'auth_login' %}" class="item">{% trans 'Login' %}</a> -->
+                    <a href="{% url 'accounts:signup' %}" class="item">{% trans 'Signup' %}</a>
                 {% endif %}
 
                 <div class="ui dropdown item">
-                    {% trans 'Language' %} <i class="dropdown icon"></i>
+                    {% trans 'Language' %} <i class="world icon"></i>
                     <div class="menu">
                         {% get_language_info_list for LANGUAGES as languages %}
                         {% for language in languages %}
@@ -43,3 +58,85 @@
         </div>
     </div>
 </div>
+{% endcomment %}
+
+<section class="w-head__navbar">
+
+        <nav class="navbar" role="navigation">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <!--<button type="button" class="navbar-toggle mlpushmenu-trigger float-left" id="trigger"> data-toggle="collapse"  data-target="#menu"-->
+                    <span class="sr-only">Menu</span>
+                    </button>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="nav navbar-nav navbar-left b-menu">
+                        <li class="label">
+                            Виды спорта:
+                        </li><li class="active">
+                            <a href="{% url 'hockeyapp:index' %}">Хоккей</a>
+                        </li><li>
+                            <a href="#">Футбол</a>
+                        </li><li>
+                            <a href="#">Баскетбол</a>
+                        </li><li>
+                            <a href="#">Волейбол</a>
+                        </li><li>
+                            <a href="#">Бейсбол</a>
+                        </li><li class="ui dropdown top right pointing">
+                            <a class="default text" href="#">Все<i class="dropdown icon"></i></a>
+                            <ul class="menu">
+                                <li class="item">Clothing</li>
+                                <li class="item">Home Goods</li>
+                                <li class="item">Bedroom</li>
+                                <li class="item">Status</li>
+                                <li class="item">Cancellations</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right b-menu">
+                        <li>
+                            <a href="#">Регистрация</a>
+                        </li>
+                        <li>
+                            {% comment %}
+                            {% if user.is_authenticated %}
+                                {% if request.user.avatar %}
+                                    <a href="{% url 'accounts:profile-private' %}" class="item">
+                                        <img src="{{ request.user.avatar.url }}" height="30" />
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'accounts:profile-private' %}" class="item">
+                                    {{ request.user.username }}
+                                </a>
+                                <a href="{% url 'auth_logout' %}?next={{ request.path }}" class="item">{% trans 'Logout' %}</a>
+                            {% else %}
+                                <form action="{% url 'auth_login' %}?next={{ request.path }}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="text" name="username" />
+                                    <input type="password" name="password" />
+                                    <input type="submit" value="{% trans 'Login' %}">
+                                </form>
+                                <!-- <a href="{% url 'auth_login' %}" class="item">{% trans 'Login' %}</a> -->
+                                <a href="{% url 'accounts:signup' %}" class="item">{% trans 'Signup' %}</a>
+                            {% endif %}
+                            {% endcomment %}
+                            <a href="{% url 'auth_login' %}?next={{ request.path }}" class="item">{% trans 'Signup' %}</a>
+                        </li>
+                        <li class="ui dropdown top right pointing">
+                            <a class="default text" href="#">Язык<i class="dropdown icon"></i></a>
+                            <ul class="menu">
+                                <li class="item">Clothing</li>
+                                <li class="item">Home Goods</li>
+                                <li class="item">Bedroom</li>
+                                <li class="item">Status</li>
+                                <li class="item">Cancellations</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </section><!--w-head__navbar-->

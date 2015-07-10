@@ -1,86 +1,144 @@
-angular.module('Sportomatics')
-.controller('PlayersSearchController', [
-    '$http', '$scope', 'PlayersSearchService', '$location',
-    function($http, $scope, PlayersSearchService, $location) {
-    var self = this,
-        getUnchecker = function(isDefault, defaultValue) {
-            return function() {
-                if ((isDefault && $(this).attr('value') !== defaultValue) ||
-                    (!isDefault && $(this).attr('value') === defaultValue)) {
-                    $(this).attr('checked', false);
-                }
-            };
-        };
-
+angular.module('Sportomatics').controller('PlayersSearchController', [
+  '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', 'OrderService', function($http, $scope, $location, PlayersSearchService, tags, $timeout, OrderService) {
+    var f;
+    $scope.tags = tags;
     $scope.PlayersSearchService = PlayersSearchService;
     $scope.$location = $location;
-
-    $scope.data = {};
-    $scope.countries = [];
-    $scope.loader = false;
-
     $scope.params = $location.search();
-
-    $scope.PlayerPartnersPopup = {
-        data: null,
-        isClubsVisible: false
+    $scope.setState = function(state) {
+      $location.search('state', state);
+      $scope.params = $location.search();
+      if (state === 'table' && !$scope.data) {
+        PlayersSearchService.search($scope);
+      }
     };
-
-    $scope.PlayerPartnersPopupShow = function(e, event) {
-        var popup = $('.player-partners-popup:hidden'),
-        url = $('#PlayerCardLink').attr('href');
-        if (popup.length) {
-            $scope.PlayerPartnersPopup.data = null;
-            $http.get(url.replace(0, this.player.pk))
-            .success(function(data) {
-                $scope.PlayerPartnersPopup.data = data;
-            });
-            $('.player-partners-popup:hidden').show(500).offset({
-                left: event.pageX,
-                top: event.pageY
-            });
-        }
+    $scope.loadCountries = function(query) {
+      return $scope.tags.loadCountries($scope.countriesURL, query);
     };
-
-    $scope.lineCheck = function(e) {
-        var defaultValue = '',
-            isDefault;
-        isDefault = $(e).attr('value') === defaultValue;
-        if ($(e).is(':checked')) {
-            $('input[name="line"]').each(getUnchecker(isDefault, defaultValue));
-        }
+    $scope.loadClubs = function(query) {
+      return $scope.tags.loadClubs($scope.clubsURL, query);
     };
-
-    $scope.setCitizenship = function(event) {
-        if (event.target.id === 'isCitizenshipAll' && event.target.checked) {
-            $('#isCitizenshipRussia').attr('checked', false);
-            $('#isCitizenshipOther').attr('checked', false);
+    $scope.loadPlayers = function(query) {
+      return $scope.tags.loadPlayers($scope.playersURL, query);
+    };
+    $scope.loadLeagues = function(query) {
+      return $http.get($scope.leaguesURL);
+    };
+    $scope.getUnchecker = function(isDefault, defaultValue) {
+      return function() {
+        if ((isDefault && $(this).attr('value') !== defaultValue) || (!isDefault && $(this).attr('value') === defaultValue)) {
+          return $(this).attr('checked', false);
         }
-        if (event.target.id === 'isCitizenshipRussia' && event.target.checked) {
-            $('#isCitizenshipAll').attr('checked', false);
-        }
-        if (event.target.id === 'isCitizenshipOther' && event.target.checked) {
-            self.isCitizenshipOther = event.target.checked;
-            self.isCitizenshipAll = false;
-            $('#isCitizenshipAll').attr('checked', false);
-        }
+      };
+    };
+    $scope.countries = [];
+    if ($scope.params.citizenship) {
+      $scope.citizenship = JSON.parse($scope.params.citizenship);
     }
-
+    if ($scope.params.club) {
+      $scope.club = JSON.parse($scope.params.club);
+    }
+    if ($scope.params.league2) {
+      $scope.league2 = JSON.parse($scope.params.league2);
+    }
+    $scope.PlayerPartnersPopup = {
+      'data': null,
+      'isClubsVisible': false
+    };
+    $scope.PlayerPartnersPopupShow = function(e, event) {
+      var popup, url;
+      popup = $('.player-partners-popup:hidden');
+      url = $('#PlayerCardLink').attr('href');
+      if (popup.length) {
+        $scope.PlayerPartnersPopup.data = null;
+        $http.get(url.replace(0, this.player.pk)).success(function(data) {
+          $scope.PlayerPartnersPopup.data = data;
+        });
+        $('.player-partners-popup:hidden').show(500).offset({
+          'left': event.pageX,
+          'top': event.pageY
+        });
+      }
+    };
+    $scope.lineCheck = function(e) {
+      var defaultValue, isDefault;
+      defaultValue = '';
+      isDefault = $(e).attr('value') === defaultValue;
+      if ($(e).is(':checked')) {
+        $('input[name="line"]').each($scope.getUnchecker(isDefault, defaultValue));
+      }
+    };
+    $scope.setCitizenship = function(event) {
+      if (event.target.id === 'isCitizenshipAll' && event.target.checked) {
+        $('#isCitizenshipRussia').attr('checked', false);
+        $('#isCitizenshipOther').attr('checked', false);
+      }
+      if (event.target.id === 'isCitizenshipRussia' && event.target.checked) {
+        $('#isCitizenshipAll').attr('checked', false);
+      }
+      if (event.target.id === 'isCitizenshipOther' && event.target.checked) {
+        self.isCitizenshipOther = event.target.checked;
+        self.isCitizenshipAll = false;
+        $('#isCitizenshipAll').attr('checked', false);
+      }
+    };
     $scope.contractCheck = function(e) {
-        var isDefault = $(e).attr('value') === '';
-        if ($(e).is(':checked')) {
-            $('input[name="contract"]').each(getUnchecker(isDefault, ''));
-        }
+      var isDefault;
+      isDefault = $(e).attr('value') === '';
+      if ($(e).is(':checked')) {
+        $('input[name="contract_types"]').each($scope.getUnchecker(isDefault, ''));
+      }
     };
-
     $scope.setPlayersFilter = function(obj) {
-        PlayersSearchService.setPlayersFilter($scope, obj);
+      PlayersSearchService.setPlayersFilter($scope, obj);
     };
-
     $scope.setClubsFilter = function(obj) {
-        PlayersSearchService.setClubsFilter($scope, obj);
+      PlayersSearchService.setClubsFilter($scope, obj);
     };
-
-    // PlayersSearchService.search($scope);
-    PlayersSearchService.loadCountries($scope, $location, PlayersSearchService.search);
-}]);
+    $scope.setSeason = function(e) {
+      if ($(e).val()) {
+        $location.search('season', $(e).val());
+      } else {
+        $location.search('season', null);
+      }
+      $scope.params = $location.search();
+    };
+    $scope.setCountry = function(country) {
+      $scope.setLeague('');
+      $location.search('country', country || null);
+      $timeout(function() {
+        return $('.ui.dropdown.leagues').dropdown();
+      }, 0);
+    };
+    $scope.setLeague = function(league) {
+      if (!league) {
+        $('.ui.dropdown.leagues .text').text('');
+      }
+      $location.search('league', league || null);
+    };
+    $scope.setOrderBy = function(order_by) {
+      OrderService.setOrderBy($scope, order_by);
+      return $scope.search();
+    };
+    $scope.search = function() {
+      $scope.setState('table');
+      PlayersSearchService.search($scope);
+    };
+    PlayersSearchService.loadCountries($scope);
+    if ($scope.params.state === 'table' && !$scope.data) {
+      f = function() {
+        return PlayersSearchService.search($scope);
+      };
+      $timeout(f, 1000);
+    }
+    $('.unstackable.striped.table').visibility({
+      'once': false,
+      'observeChanges': true,
+      'onBottomVisible': function() {
+        if ($scope.data && $scope.data.next) {
+          return PlayersSearchService.next($scope);
+        }
+      }
+    });
+  }
+]);

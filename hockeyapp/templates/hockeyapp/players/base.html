@@ -1,5 +1,91 @@
 {% extends "base.html" %}
 
+{% block extrahead %}
+<!--<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/styleTwo.css">
+<link href="/static/css-styled/semantic.min.css" rel="stylesheet">
+<link href="/static/css-styled/grid.css" rel="stylesheet">
+<link href="/static/css-styled/style.css" media="all" type="text/css" rel="stylesheet">-->
+    <link href="/static/new/dist/semantic.min.css" rel="stylesheet">
+    <link href="/static/new/fonts/icon-fonts/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/new/assets/css/jcarousel.connected-carousels.css">
+    <link href="/static/new/css-styled/grid.css" rel="stylesheet">
+    <link href="/static/new/css-styled/style.css" media="all" type="text/css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed|Roboto:400,300,300italic,400italic,500,700,900&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
+    <!-- my styles -->
+    <link href="/static/css/new.css" media="all" type="text/css" rel="stylesheet">
+    <!-- my styles end -->
+
+    <script src="/static/new/assets/js/modernizr.custom.js"></script>
+    <script type="text/javascript" src="/static/new/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/new/dist/semantic.min.js"></script>
+    <!--push mobile menu-->
+    <script src="/static/new/assets/js/classie.js"></script>
+    <script src="/static/new/assets/js/mlpushmenu.js"></script>
+    <!---->
+
+    <script type="text/javascript" src="/static/new/assets/js/jquery.jcarousel.min.js"></script>
+    <script type="text/javascript" src="/static/new/assets/js/jcarousel.connected-carousels.js"></script>
+    <script type="text/javascript" src="/static/new/assets/js/scripts.js"></script>
+<style>
+</style>
+{% if object.club.main_color %}
+<style>
+     .ui.tabular.menu .item {
+    color: {{object.club.main_color}} !important; /* текст табов secondary */
+    }
+     .team-player-number{
+    background: {{object.club.main_color}} !important; /* номер игрока secondary */
+    }
+     .heading{
+    color: {{object.club.main_color}} !important; /* заголовок сезонов secondary */
+    }
+     .team-info .info-item .icon{
+    color: {{object.club.main_color}} !important; /* иконки над меню primary */
+    }
+     .page-menu.ui.green.menu {
+    background: {{object.club.main_color}} !important; /* цвет меню primary */
+    }
+     .ui-tabs-nav .ui-state-active {
+        color: #000000 !important;
+    }
+     .ui.tabular.menu .ui-tabs-active .item{
+        color: #000000 !important;
+    }
+    .player-select-table th {
+    background: {{object.club.main_color}} !important;
+    }
+    .clubs-calendars-table th {
+    background: {{object.club.main_color}} !important;
+    }
+    .clubs-team-table th {
+    background: {{object.club.main_color}} !important;
+    }
+     .graph-controls-block {
+     background: {{object.club.main_color}} !important;
+     }
+     .chart-button {
+        background: {{object.club.main_color}} !important;
+     }
+     .active-season-button {
+     background: {{object.club.main_color}} !important;
+     border: 1px solid {{object.club.main_color}} !important;
+
+     }
+     .page-menu.ui.green.menu {
+     background: {{object.club.main_color}} !important;
+     }
+     .tabs-list .tabs-link {
+     color: {{object.club.main_color}} !important;
+     }
+     .design-table.ui.table th{
+     background: {{object.club.main_color}} !important;
+     }
+</style>
+{% endif %}
+{% endblock %}
+
+
 {% block header %}
     {% include "partial/header.html" with user_card_menu_active="players" %}
 {% endblock %}

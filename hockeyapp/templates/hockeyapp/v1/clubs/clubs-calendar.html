@@ -1,0 +1,239 @@
+{% extends "hockeyapp/v1/clubs/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{{title}}: календарь игр, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container clubs-page clubs-calendar-page">
+        <!-- {% trans "Calendar" %} -->
+        {% include "hockeyapp/v1/clubs/clubs-header.html" with club_section="Calendar" %}
+        <input type="hidden" id="club-match-api" value="{% url 'api:hockey:matches' %}">
+
+        <div class="page-content page-container"
+             ng-controller="ClubCalendarController as ClubCalendarCtrl"
+             ng-init="url = '{% url 'hockeyapp:club-calendar-api' pk=pk %}'; urlPopup = '{% url 'hockeyapp:schedule-api' pk=0 %}'">
+            {% include "hockeyapp/v1/clubs/menu.html" with clubs_menu_active="club-calendar" %}
+            <div class="page-inner-container">
+                <div class="team-calendar">
+                    <div class="ui tabular menu team-calendar-menu-off content-tabs">
+                        <span class="calendar-desc">
+                            <span class="calendar-desc-home"><i class="sign icon"></i> ДОМАШНИЕ МАТЧИ</span>
+                            <span class="calendar-desc-elsewhere"><i class="sign icon"></i> ВЫЕЗДНЫЕ МАТЧИ</span>
+                        </span>
+                        <span class="heading"><i class="calendar icon"></i> КАЛЕНДАРЬ ИГР </span>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="season" value="{{ default_season.pk }}"
+                                   ng-model="season"
+                                   onchange="angular.element(this).scope().setSeason(this)">
+                            <div class="default text">{{ default_season.label }}</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                {% for season in seasons %}
+                                    <div class="item" data-value="{{ season.pk }}">{{ season.label }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+                            <li class="ui-state-default ui-corner-top"
+                                ng-class="{ 'ui-tabs-active ui-state-active':!params.type }">
+                                <a class="item tab-btn ui-tabs-anchor" href=""
+                                   ng-click="setType('')">
+                                    {% trans 'ALL' %}
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-top"
+                                ng-class="{ 'ui-tabs-active ui-state-active':params.type === 'home' }">
+                                <a class="item item-orange tab-btn ui-tabs-anchor" href=""
+                                   ng-click="setType('home')">
+                                    {% trans 'AS HOME' %}
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-top"
+                                ng-class="{ 'ui-tabs-active ui-state-active':params.type === 'guest' }">
+                                <a class="item item-blue tab-btn ui-tabs-anchor" href=""
+                                   ng-click="setType('guest')">
+                                    {% trans 'AS GUEST' %}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div ng-repeat="row in calendars">
+                        <ul class="calendars-list">
+                            <li class="calendar-item" ng-repeat="calendar in row">
+                                <table class="ui celled table segment clubs-calendars-table">
+                                    {% verbatim %}
+                                        <thead>
+                                            <tr>
+                                                <!-- <th colspan="7">{{ calendar.date|date:"MMMM yyyy" }}</th> -->
+                                                <th colspan="7">{{ calendar.month_display }} {{ calendar.date|date:"yyyy" }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="row in calendar.table">
+                                                <td ng-repeat="cell in row"
+                                                    ng-class="{ 'cell-calendar-event-other': isHome(cell), 'cell-calendar-event': isGuest(cell) }"
+                                                    onclick="angular.element(this).scope().CalendarEventPopupShow(this, event);">
+                                                    <img class="calendar-event-logo" alt=""
+                                                         ng-src="{{ getLogo(cell) }}"
+                                                         ng-show="getLogo(cell)" />
+                                                    <span class="calendar-date" ng-show="cell.date">
+                                                        {{ cell.date.getDate() }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    {% endverbatim %}
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="align-center" ng-show="calendars.length < 4">
+                        <a class="ui green small button" href="" ng-click="previous()">
+                            Показать еще
+                        </a>
+                    </div>
+                </div>
+
+                {% include "hockeyapp/v1/clubs/clubs-calendar-popup.html" %}
+
+                <hr class="hr">
+
+                <div class="row">
+                    <div class="column">
+                        <div class="ui tabular menu">
+                            <span class="heading">График выигрышей и проигрышей</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="m-t-10" id="chartdiv" style="width: 100%; height:300px; "></div>
+                </div>
+                <div class="margin-auto text-center m-t-10">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="line" value=""
+                               ng-checked="homeOnly"
+                               onchange="angular.element(this).scope().homeOnly = !angular.element(this).scope().homeOnly; angular.element(this).scope().createGamesChart();">
+                        <label>только домашние матчи</label>
+                    </div>
+                </div>
+                <div style="position:relative;text-align: center; top: 50px; right: 34px; background: #ffffff" ng-show="!loaded">
+                    <img style="position: absolute; max-height: 100px; z-index: 1;" src="{{ STATIC_URL }}images/loader-large.gif">
+                </div>
+                <div class="row m-t-20" ng-show="loaded">
+                    <div class="column">
+                        <div class="ui tabular menu">
+                            <span class="heading">Карта выездных матчей</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="clubs-map-container">
+                    <div id="clubs-map">
+                    </div>
+                </div>
+
+                <hr class="hr">
+
+                <div class="team-track">
+                    <div class="heading">МАРШРУТ ВЫЕЗДА 25,26, 27 СЕНТЯБРЯ</div>
+                    <div class="team-track-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m29!1m12!1m3!1d4699650.3181077065!2d45.722230525521425!3d54.88973746113399!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m14!1i0!3e6!4m5!1s0x43d93a259216bce1%3A0xaceec0921eda92cc!2sUfa%2C+Republic+of+Bashkortostan%2C+Russia!3m2!1d54.738762099999995!2d55.972055399999995!4m5!1s0x46b54afc73d4b0c9%3A0x3d44d6cc5757cf4c!2sMoscow%2C+Russia!3m2!1d55.755826!2d37.6173!5e0!3m2!1sen!2sua!4v1414536584415" width="932" height="486" frameborder="0" style="border:0"></iframe>
+                    </div>
+                </div>
+                <div class="ui grid">
+                    <div class="three column row team-cities">
+                        <div class="column">
+                            <div class="heading">УФА</div>
+                            <div class="team-cities">
+                                <div class="city">
+                                    <div class="city-photos">
+                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                        <ul class="cities-photos-list">
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <div class="city-desc">
+                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                        <p>Телефон: 275-14-00</p>
+                                        <p>Открыт: 27 августа 2007г.</p>
+                                        <p>Вместимость: 2970 человек</p>
+                                        <a href="#" class="city-link">НА КАРТЕ</a>
+                                        <a href="#" class="city-users">пользователи в Уфе</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="heading">ЕКАТЕРИНБУРГ</div>
+                            <div class="team-cities">
+                                <div class="city">
+                                    <div class="city-photos">
+                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                        <ul class="cities-photos-list">
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <div class="city-desc">
+                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                        <p>Телефон: 275-14-00</p>
+                                        <p>Открыт: 27 августа 2007г.</p>
+                                        <p>Вместимость: 2970 человек</p>
+                                        <a href="#" class="city-link">НА КАРТЕ</a>
+                                        <a href="#" class="city-users">пользователи в Екатеринбурге</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="heading">ЧЕЛЯБИНСК</div>
+                            <div class="team-cities">
+                                <div class="city">
+                                    <div class="city-photos">
+                                        <img src="{{ STATIC_URL }}images/stadium.jpg" alt="" class="city-photo">
+                                        <ul class="cities-photos-list">
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                            <li class="city-photo-item"><img src="{{ STATIC_URL }}images/thumb.png" alt=""></li>
+                                        </ul>
+                                    </div>
+                                    <div class="city-desc">
+                                        <p><span class="lang-icon"></span> РОССИЯ, Уфа</p>
+                                        <p>Название: «Уфа-Арена» / «Ufa-Arena»</p>
+                                        <p>Адрес: Уфа, ул.Ленина, 114</p>
+                                        <p>Телефон: 275-14-00</p>
+                                        <p>Открыт: 27 августа 2007г.</p>
+                                        <p>Вместимость: 2970 человек</p>
+                                        <a href="#" class="city-link">НА КАРТЕ</a>
+                                        <a href="#" class="city-users">пользователи в Челябинске</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="team-controls player-controls-block">
+                    <li class="team-control-btn"><a class="ui orange button">СОХРАНИТЬ В ИЗБРАННОМ</a></li>
+                    <li class="team-control-btn"><a class="ui blue button">СОХРАНИТЬ В ВИДЕ PDF-ФАЙЛА</a></li>
+                    <li class="team-control-btn"><a class="ui green button">ОТПРАВИТЬ ПО E-MAIL</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

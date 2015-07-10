@@ -1,0 +1,76 @@
+{% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+{% block tabs-content %}
+
+
+{% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-symbol' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-symbol" %}
+    {% endblock %}
+
+    <section class="b-header b-header__md">
+        <h2 class="b-header__text">
+            Талисман
+        </h2>
+    </section><!--b-header b-header__md-->
+
+    <section class="row w-section w-talisman">
+        <div class="col-sm-3 b-talisman">
+            <div class="img-wrap b-talisman__img">
+                <figure class="figure-styled">
+                    <img src="http://placehold.it/250x250" alt="" title=""/>
+                </figure>
+            </div>
+
+            <div class="b-talisman__name">
+                Конь Огонь
+            </div><!--b-talisman__name-->
+        </div><!--w-talisman-->
+
+
+        <div class="col-sm-9">
+            <div class="b-header b-header__sm">
+                <h3 class="b-header__text">
+                    Интервью
+                </h3>
+            </div><!--b-header b-header__sm-->
+
+            <div class="row w-text">
+                <div class="col-md-2 b-text__img float-left">
+                    <div class="img-wrap">
+                        <figure class="figure-styled">
+                            <img class="img-responsive" src="/static/new/images/thumb-d.jpg" alt="" title=""/>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="col-md-10 b-text">
+                    <p class="b-text__p">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                    <p class="b-text__p">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="b-text__p">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+
+                    <div class="b-send-interview">
+                        <p class="">
+                            Интервью с талисманом вашей команды нет? Поговорите с ними
+                        </p>
+                        <a class="" href="#">Отправить текст интервью на сайт</a>
+                    </div>
+                </div><!--b-text-->
+            </div><!--row-->
+        </div>
+    </section><!--w-talisman-->
+</div>
+<!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/main/sticky_menu.html' with clubs_main_tab='main-symbol' clubs_menu_active='club-main' %}
+{% endblock %}

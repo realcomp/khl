@@ -1,14 +1,16 @@
+#coding: utf-8
+from __future__ import unicode_literals
 import datetime
 import json
-import re
+import os
+
+import filer
 
 from django.conf import settings
 from django.db.models.loading import get_model
 from django.utils import timezone
 
 from instagram.client import InstagramAPI
-
-from base.models import InstagramImageFile
 
 
 CURRENT_APP = __package__.split('.')[0]
@@ -88,3 +90,460 @@ def get_arena_instagram_locations(coords):
     lat, lng = coords.split(',')
     data = insta_api.location_search(lat=lat, lng=lng)
     return set([l.id for l in data])
+
+
+def delete_club_duplicates_with_relation(delete_dup=False):
+    _clubs = {
+                10: (148,),
+                12: (218,),
+                13: (278,),
+                20: (132,),
+                26: (289,),
+                29: (73,69,),
+                36: (314,),
+                37: (217,89,),
+                52: (136,15,),
+                57: (324,99,),
+                58: (323,1,),
+                65: (75,149,30,),
+                76: (311,),
+                77: (269,),
+                141: (214,),
+                164: (224,),
+                185: (256,),
+                194: (286,),
+                204: (167,),
+                213: (95,200,87,),
+                219: (165,226,),
+                257: (283,),
+                264: (50,33,),
+                271: (172,),
+                300: (247,),
+                313: (243,),
+                321: (144,),
+                322: (198,),
+                98: (23,),
+    }
+    club_rel_models = (
+        get_model(CURRENT_APP, 'AddressClub'),
+        get_model(CURRENT_APP, 'LeagueClub'),
+        get_model(CURRENT_APP, 'ClubPlayer'),
+        get_model(CURRENT_APP, 'CoachClub'),
+        get_model(CURRENT_APP, 'LogoClubHistory'),
+        get_model(CURRENT_APP, 'ClubSocial'),
+        get_model(CURRENT_APP, 'Timeline'),       
+    )
+    _hg_models = (
+        get_model(CURRENT_APP, 'Match'),
+        get_model(CURRENT_APP, 'Schedule')
+    )
+    PM = get_model(CURRENT_APP, 'Player')
+    ClubM = get_model(CURRENT_APP, 'Club')
+    for club_id, dup_club_ids in _clubs.items():
+        if delete_dup:
+            for dup in ClubM.objects.filter(pk__in=dup_club_ids): dup.players=[]
+            PM.objects.filter(last_club__pk__in=dup_club_ids
+                     ).update(last_club_id=club_id)
+        else:
+            for _model in club_rel_models:
+                _model.objects.filter(club__pk__in=dup_club_ids
+                              ).update(club_id=club_id)
+                _qs = _model.objects.filter(club_id=club_id)
+                delete_duplicates(_qs, _model)
+            for _model in _hg_models:
+                _model.objects.filter(home_team__pk__in=dup_club_ids
+                             ).update(home_team_id=club_id)
+                _qs = _model.objects.filter(home_team_id=club_id)
+                #delete_duplicates(_qs)
+                _model.objects.filter(guest_team__pk__in=dup_club_ids
+                             ).update(guest_team_id=club_id)
+                _qs = _model.objects.filter(guest_team_id=club_id)
+                #delete_duplicates(_qs)
+
+
+def delete_duplicates(qs, model=None, exclude_field=None):
+    _rows = qs.values()
+    CPM = get_model(CURRENT_APP, 'ClubPlayerMatch')
+    CP = get_model(CURRENT_APP, 'ClubPlayer')
+    for row in _rows:
+        row.pop('id', None)
+        if exclude_field:
+            row.pop(exclude_field, None)
+        _vals = qs.filter(**row)
+        if _vals.count() > 1:
+            _ids = set(_vals.values_list('pk', flat=True))
+            cur_id = _ids.pop()
+            if model == CP:
+                _cur_cp = CP.objects.get(pk=cur_id)
+                _cp_qs = CP.objects.filter(pk__in=_ids)
+                _cpm_qs = CPM.objects.filter(clubplayer__in=_ids)
+                for _cp in _cp_qs:
+                    _cur_cp.homematches.add(*_cp.homematches.all())
+                    _cur_cp.guestmatches.add(*_cp.guestmatches.all())
+                _cpm_qs.update(clubplayer_id=cur_id)
+                _qs = CPM.objects.filter(clubplayer_id=cur_id)
+                delete_duplicates(_qs)
+            qs.filter(pk__in=_ids).delete()
+
+
+
+def delete_club_players_duplicates():
+    CP = get_model(CURRENT_APP, 'ClubPlayer')
+    qs = CP.objects.all()
+    _rows = qs.values()
+    CPM = get_model(CURRENT_APP, 'ClubPlayerMatch')
+    for row in _rows:
+        row.pop('id', None)
+        _vals = qs.filter(**row)
+        if _vals.count() > 1:
+            _ids = set(_vals.values_list('pk', flat=True))
+            cur_id = _ids.pop()
+            _cur_cp = CP.objects.get(pk=cur_id)
+            _cp_qs = CP.objects.filter(pk__in=_ids)
+            _cpm_qs = CPM.objects.filter(clubplayer__in=_ids)
+            for _cp in _cp_qs:
+                _cur_cp.homematches.add(*_cp.homematches.all())
+                _cur_cp.guestmatches.add(*_cp.guestmatches.all())
+            _cpm_qs.update(clubplayer_id=cur_id)
+            _qs = CPM.objects.filter(clubplayer_id=cur_id)
+            delete_duplicates(_qs, exclude_field='adv_stats_id')
+            qs.filter(pk__in=_ids).delete()
+
+
+def delete_cpm_duplicates():
+    CPM = get_model(CURRENT_APP, 'ClubPlayerMatch')
+    _qs = CPM.objects.all()
+    delete_duplicates(_qs, exclude_field='adv_stats_id')
+
+
+def create_superhigh_schedule():
+    b''' Создаем расписание для superliga и Высшей лиги '''
+    MM = get_model(CURRENT_APP, 'Match')
+    SM = get_model(CURRENT_APP, 'Schedule')
+    LM = get_model(CURRENT_APP, 'League')
+    SeasonM = get_model('base', 'Season')
+    dt = {
+        'superleague': {
+            'self': LM.objects.filter(en_title='Superliga').last(),
+            'comp': (
+                {
+                    'start_date': datetime.datetime(day=10, month=9, year=1996),
+                    'end_date': datetime.datetime(day=13, month=3, year=1997),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=15, month=3, year=1997),
+                    'end_date': datetime.datetime(day=9, month=4, year=1997),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=3, month=9, year=1997),
+                    'end_date': datetime.datetime(day=29, month=3, year=1998),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=1, month=4, year=1998),
+                    'end_date': datetime.datetime(day=24, month=4, year=1998),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=12, month=9, year=1998),
+                    'end_date': datetime.datetime(day=8, month=3, year=1999),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=11, month=3, year=1999),
+                    'end_date': datetime.datetime(day=15, month=4, year=1999),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=12, month=9, year=1998),
+                    'end_date': datetime.datetime(day=8, month=3, year=1999),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=11, month=3, year=1999),
+                    'end_date': datetime.datetime(day=15, month=4, year=1999),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=8, month=9, year=1999),
+                    'end_date': datetime.datetime(day=26, month=2, year=2000),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=29, month=2, year=2000),
+                    'end_date': datetime.datetime(day=2, month=4, year=2000),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=7, month=9, year=2000),
+                    'end_date': datetime.datetime(day=10, month=3, year=2001),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=11, month=3, year=2001),
+                    'end_date': datetime.datetime(day=6, month=4, year=2001),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=12, month=9, year=2001),
+                    'end_date': datetime.datetime(day=12, month=3, year=2002),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=15, month=3, year=2002),
+                    'end_date': datetime.datetime(day=7, month=4, year=2002),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=12, month=9, year=2002),
+                    'end_date': datetime.datetime(day=12, month=3, year=2003),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=15, month=3, year=2003),
+                    'end_date': datetime.datetime(day=7, month=4, year=2003),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=11, month=9, year=2003),
+                    'end_date': datetime.datetime(day=15, month=3, year=2004),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=18, month=3, year=2004),
+                    'end_date': datetime.datetime(day=10, month=4, year=2004),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=1, month=9, year=2004),
+                    'end_date': datetime.datetime(day=15, month=3, year=2005),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=18, month=3, year=2005),
+                    'end_date': datetime.datetime(day=8, month=4, year=2005),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=7, month=9, year=2005),
+                    'end_date': datetime.datetime(day=10, month=3, year=2006),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=13, month=3, year=2006),
+                    'end_date': datetime.datetime(day=16, month=4, year=2006),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=7, month=9, year=2006),
+                    'end_date': datetime.datetime(day=8, month=3, year=2007),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=11, month=3, year=2007),
+                    'end_date': datetime.datetime(day=13, month=4, year=2007),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=4, month=9, year=2007),
+                    'end_date': datetime.datetime(day=1, month=3, year=2008),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=4, month=3, year=2008),
+                    'end_date': datetime.datetime(day=11, month=4, year=2008),
+                    'type': 2,
+                },
+            ),
+        },
+        'highleague': {
+            'self': LM.objects.filter(en_title='VHL-2').last(),
+            'comp': (
+                {
+                    'start_date': datetime.datetime(day=14, month=9, year=1996),
+                    'end_date': datetime.datetime(day=9, month=3, year=1997),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=17, month=9, year=1997),
+                    'end_date': datetime.datetime(day=15, month=3, year=1998),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=13, month=9, year=1998),
+                    'end_date': datetime.datetime(day=3, month=4, year=1999),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=11, month=9, year=1999),
+                    'end_date': datetime.datetime(day=12, month=3, year=2000),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=8, month=9, year=2000),
+                    'end_date': datetime.datetime(day=7, month=4, year=2001),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=15, month=9, year=2001),
+                    'end_date': datetime.datetime(day=22, month=4, year=2002),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=14, month=9, year=2002),
+                    'end_date': datetime.datetime(day=28, month=2, year=2003),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=1, month=3, year=2003),
+                    'end_date': datetime.datetime(day=27, month=4, year=2003),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=13, month=9, year=2003),
+                    'end_date': datetime.datetime(day=6, month=3, year=2004),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=7, month=3, year=2004),
+                    'end_date': datetime.datetime(day=22, month=4, year=2004),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=20, month=9, year=2004),
+                    'end_date': datetime.datetime(day=22, month=4, year=2005),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=20, month=9, year=2005),
+                    'end_date': datetime.datetime(day=30, month=4, year=2006),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=16, month=9, year=2006),
+                    'end_date': datetime.datetime(day=22, month=4, year=2007),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=15, month=9, year=2007),
+                    'end_date': datetime.datetime(day=13, month=3, year=2008),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=14, month=3, year=2008),
+                    'end_date': datetime.datetime(day=24, month=4, year=2008),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=13, month=9, year=2008),
+                    'end_date': datetime.datetime(day=4, month=3, year=2009),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=5, month=3, year=2009),
+                    'end_date': datetime.datetime(day=26, month=4, year=2009),
+                    'type': 2,
+                },
+                {
+                    'start_date': datetime.datetime(day=12, month=9, year=2009),
+                    'end_date': datetime.datetime(day=4, month=3, year=2010),
+                    'type': 1,
+                },
+                {
+                    'start_date': datetime.datetime(day=5, month=3, year=2010),
+                    'end_date': datetime.datetime(day=27, month=4, year=2010),
+                    'type': 2,
+                },
+            ),
+        }
+    }
+    matches = MM.objects.filter(schedule__isnull=True,
+                        date__lte=datetime.datetime(day=30, month=6, year=2010))
+    for league_data in dt.values():
+        league = league_data['self']
+        for  s in league_data['comp']:
+            season = SeasonM.objects.get_season_by_date(s['start_date'])
+            _ms = matches.filter(date__gte=s['start_date'],
+                                date__lte=s['end_date'],
+                                home_team__leagueclub__season=season,
+                                guest_team__leagueclub__season=season,
+                                home_team__leagueclub__league=league,
+                                guest_team__leagueclub__league=league,
+            )
+            _m_ids = set(_ms.values_list('pk', flat=True))
+            _ms = matches.filter(pk__in=_m_ids)
+            for match in _ms:
+                #h = match.home_team.leagueclub_set.filter(season=season,
+                                                          #league=league).last()
+                #g = match.guest_team.leagueclub_set.filter(season=season,
+                                                          #league=league).last()
+                #if h.league == g.league and h.league == league:
+                data = dict(title=match.title,
+                            league=league,
+                            season=season,
+                            home_team=match.home_team,
+                            guest_team=match.guest_team,
+                            challenge_type=s['type'],
+                            match=match,
+                            khl_id=match.khl_id,
+                            processed=True,
+                            date=match.date
+                )
+                schedule = SM.objects.filter(khl_id=match.khl_id).last()
+                if schedule:
+                    print('munch munch... strange food-->>', match.pk, schedule.pk)
+                else:
+                    SM.objects.get_or_create(**data)
+
+
+
+
+def get_filepaths(directory):
+    file_paths = []
+    # Walk the tree.
+    for root, directories, files in os.walk(directory):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            file_paths.append(filepath)  # Add it to the list.
+    return file_paths
+
+
+def clear_media(media_path):
+    db_recs = {obj.file.path for obj in filer.models.File.objects.all()}
+    media_links = set(get_filepaths(media_path))
+    for_del = media_links - db_recs
+    for file_path in for_del: os.remove(file_path)
+
+
+def get_judge_players():
+    JM = get_model(CURRENT_APP, 'Judge')
+    PM = get_model(CURRENT_APP, 'Player')
+    for j in JM.objects.all():
+        qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
+        if qs.exists():
+            player_links = '  '.join(['www.sportomatics.ru'+obj.admin_change_link() for obj in qs])
+            print 'Судья: www.sportomatics.ru{}'.format(j.admin_change_link())
+            print 'Игроки: {}'.format(player_links)
+
+
+def get_coach_players():
+    CM = get_model(CURRENT_APP, 'Coach')
+    PM = get_model(CURRENT_APP, 'Player')
+    count = 0
+    for j in CM.objects.exclude(ru_name='', ru_lastname=''
+                      ).filter(ru_name__isnull=False, ru_lastname__isnull=False
+    ):
+        qs = PM.objects.filter(ru_name=j.ru_name, ru_lastname=j.ru_lastname)
+        if qs.exists():
+            player_links = ['<a href="http://www.sportomatics.ru{}">{}<a/>'.format(
+                                obj.admin_change_link(), obj.ru_fio
+                            ) for obj in qs]
+            count+=1
+            res = '<tr><td>{}</td><td>Тренер:</td>'.format(count)
+            res+= '<td><a href="http://www.sportomatics.ru{}">{}</a></td>'.format(
+                        j.admin_change_link(), j.ru_fio
+            )
+            res+='<td>Игроки:</td><td>{}</td></tr>'.format('  '.join(player_links))
+            print res

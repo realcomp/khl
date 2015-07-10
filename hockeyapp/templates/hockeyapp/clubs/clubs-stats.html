@@ -1,4 +1,5 @@
 {% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{title}}: командная статистика, хоккей  - Sportomatics.ru
@@ -7,30 +8,8 @@
 {% block body %}
 <section class="content">
     <div class="container clubs-page clubs-stats-page players-search-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">Хоккей</a>
-                <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:club-list' %}">Клубы</a>
-                <div class="divider"> / </div>
-                <a class="section" href="/ru/hockey/clubs/#?country={{address.city.country.pk}}&league=1">{{address.city.country.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="/ru/hockey/clubs/#?country=1&league={{league.pk}}">{{league.title}}</a>
-                <div class="divider"> / </div>
-                <a class="section" href="">{{title}}</a>
-                <div class="divider"> / </div>
-                <a class="active section">Командная статистика</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include "hockeyapp/clubs/team-info.html" %}
+        <!-- {% trans "Team stats" %} -->
+        {% include "hockeyapp/clubs/clubs-header.html" with club_section="Team stats" %}
 
         <div class="page-content page-container"
              ng-controller="ClubStatsController as ClubStatsCtrl">
@@ -47,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    {% include "hockeyapp/clubs/clubs-stats-players.html" %}
+                    {% include "hockeyapp/players-search-table.html" with club_hidden=True %}
                 </div>
             </div>
             {% include "hockeyapp/player-partners-popup.html" %}

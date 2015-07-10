@@ -3,8 +3,6 @@ from __future__ import unicode_literals, print_function
 
 __author__='smirnov.ev'
 
-import itertools
-
 from django.db import models
 from django.db.models import F, Q, Max, Min
 from django.db.models.loading import get_model
@@ -86,7 +84,13 @@ class MatchFKQuerySetMixin(object):
         q_guest = Q(
             match__guest_team=club,
             match__guest_players__player=player)
-        return self.filter(q_home | q_guest)
+        return self.is_active().filter(q_home | q_guest)
+
+    def is_active(self):
+        b'''Запись, которую необходимо учитывать при подсчете статистики'''
+        return self.filter( match__isnull=False,
+                            match__challenge_type__isnull=False,
+                            match__challenge_type__gt=0)
 
 
 class MatchGoalHistoryQuerySet(
@@ -121,6 +125,11 @@ class MatchPenaltyHistoryManager(ManagerMixin, models.Manager):
 
 class MatchManager(ManagerMixin, models.Manager):
     b''' Мененжер матчей по-умолчанию '''
+    def active(self):
+        b'''Запись, которую необходимо учитывать при подсчете статистики'''
+        return self.filter( challenge_type__isnull=False,
+                            challenge_type__gt=0)
+
     def get_or_create_match(self, **kwargs):
         b''' метод взять или создать запись о матче '''
         self._season = kwargs.pop('season', {})
@@ -269,21 +278,23 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         min_max = self.aggregate(Min('match__date'), Max('match__date'))
         start_date = min_max.get('match__date__min')
         end_date = min_max.get('match__date__max')
-        if start_date and end_date:
-            self._dates = list(month_range(start_date, end_date))
-            return map(self._month_qs, range(len(self._dates) - 1))
-        return []
+        if not start_date or not end_date:
+            return []
 
-    def _month_qs(self, i):
-        month_qs = self.filter(
-            match__date__gt=self._dates[i],
-            match__date__lte=self._dates[i + 1])
-        month_qs.date = self._dates[i]
-        if month_qs.exists():
-            month_qs.season = month_qs.first().clubplayer.season
-        else:
-            month_qs.season = None
-        return month_qs
+        _dates = list(month_range(start_date, end_date))
+
+        def _month_qs(i):
+            month_qs = self.is_active().filter(
+                match__date__gt=_dates[i],
+                match__date__lte=_dates[i + 1])
+            month_qs.date = _dates[i]
+            if month_qs.exists():
+                month_qs.season = month_qs.first().clubplayer.season
+            else:
+                month_qs.season = None
+            return month_qs
+
+        return map(_month_qs, range(len(_dates) - 1))
 
     def group_by_season(self):
         """
@@ -294,7 +305,7 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         return map(self._season_qs, seasons)
 
     def _season_qs(self, season):
-        season_qs = self.filter(clubplayer__season=season)
+        season_qs = self.is_active().filter(clubplayer__season=season)
         min_max = season_qs.aggregate(Min('match__date'),Max('match__date'))
         season_qs.start_date = min_max.get('match__date__min')
         season_qs.end_date = min_max.get('match__date__max')
@@ -303,34 +314,19 @@ class ClubPlayerMatchQuerySet(MatchFKQuerySetMixin, models.QuerySet):
         return season_qs
 
     def home_matches(self):
-        return self.filter(match__home_team=F('clubplayer__club'))
+        return self.is_active().filter(match__home_team=F('clubplayer__club'))
 
     def guest_matches(self):
-        return self.filter(match__guest_team=F('clubplayer__club'))
+        return self.is_active().filter(match__guest_team=F('clubplayer__club'))
 
     def home_matches_win(self):
-        self.home_matches().extra(**self.X_HOME_WIN)
+        return self.home_matches().extra(**self.X_HOME_WIN)
 
     def home_matches_lose(self):
-        self.home_matches().extra(**self.X_GUEST_WIN)
+        return self.home_matches().extra(**self.X_GUEST_WIN)
 
     def guest_matches_win(self):
-        self.guest_matches().extra(**self.X_GUEST_WIN)
+        return self.guest_matches().extra(**self.X_GUEST_WIN)
 
     def guest_matches_lose(self):
-        self.guest_matches().extra(**self.X_HOME_WIN)
-
-    # def aggregate_by_player(self, key, player_id):
-    #     cache_key = 'ClubPlayerMatchQuerySet/player/%s/%s' % (player_id, key)
-    #     result = cache.get(cache_key)
-    #     if result is None:
-    #         field, _, op = key.rpartition('__')
-    #         OP = {
-    #             'sum': Sum,
-    #             'avg': Avg,
-    #             'count': Count,
-    #         }[op]
-    #         result = self.aggregate(OP(field)).get(key) or 0
-    #         # cache for a day
-    #         cache.set(cache_key, result, 60*60*24)
-    #     return result
+        return self.guest_matches().extra(**self.X_HOME_WIN)

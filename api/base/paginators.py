@@ -1,22 +1,22 @@
 #coding: utf-8
-from rest_framework import pagination
-from rest_framework import serializers
+from rest_framework import compat, pagination, response
 
 
-class NextPageField(serializers.Field):
-    page_field = 'page'
-    def to_representation(self, value):
-        if value.has_next():
-            return value.next_page_number()
+class AltPagination(pagination.PageNumberPagination):
+    def get_paginated_response(self, data):
+        next_page = None
+        if self.page.has_next():
+            next_page = self.page.next_page_number()
 
+        previous_page = None
+        if self.page.has_previous():
+            previous_page = self.page.previous_page_number()
 
-class PreviousPageField(serializers.Field):
-    page_field = 'page'
-    def to_representation(self, value):
-        if value.has_previous():
-            return value.previous_page_number()
-
-
-class AltPaginationSerializer(pagination.PaginationSerializer):
-    next_page = NextPageField(source='*')
-    previous_page = PreviousPageField(source='*')
+        return response.Response(compat.OrderedDict((
+            ('count', self.page.paginator.count),
+            ('next', self.get_next_link()),
+            ('next_page', next_page),
+            ('previous', self.get_previous_link()),
+            ('previous_page', previous_page),
+            ('results', data),
+        )))

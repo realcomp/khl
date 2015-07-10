@@ -1,0 +1,512 @@
+{% load i18n %}
+
+<form class="ui form form-styled">
+    <div class="ui ui-widget ui-helper-reset">
+        <div class="ui header title"
+             ng-click="noSearchParams = !noSearchParams">
+            <i class="dropdown icon"></i>
+            Параметры для поиска
+        </div><!--accordion header-->
+
+        <div class="content" ng-hide="noSearchParams">
+            <!-- <div class="ui positive message"> -->
+            <!--     <i class="close icon"></i> -->
+            <!--     <div class="header"> -->
+            <!--         Фильтр для поиска игроков -->
+            <!--     </div> -->
+            <!--     <p>Сейчас по вашему запросу найдено около 12 000 записей</p> -->
+            <!-- </div><\!--message-\-> -->
+
+            <div class="row">
+                <div class="col-sm-4 b-accordion-content__item">
+                    <div class="field">
+                        <label>Имя, Фамилия</label>
+                        <div class="b-search ui category search result">
+                            <div class="ui icon input">
+                                <input type="text" ng-model="fio"
+                                       ng-init="fio = params.fio"
+                                       ng-change="$location.search('fio', fio || null)">
+                                <i class="search link icon"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Игровой номер</label>
+                        <div class="three fields">
+                            <div class="field">
+                                <input type="text" ng-model="number"
+                                       ng-init="number = params.number"
+                                       ng-change="$location.search('number', number || null)">
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Амплуа</label>
+                        <div class="grouped fields">
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="line" value="-3"
+                                           ng-checked="!params.line || params.line.indexOf('-3') < 0">
+                                    <label>нападающий</label>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="line" value="-2"
+                                           ng-checked="!params.line || params.line.indexOf('-2') < 0">
+                                    <label>защитник</label>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="line" value="-1"
+                                           ng-checked="!params.line || params.line.indexOf('-1') < 0">
+                                    <label>вратарь</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Хват</label>
+                        <div class="grouped fields">
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="grip_ex" value="правый"
+                                           ng-checked="!params.grip_ex || params.grip_ex.indexOf('правый') < 0">
+                                    <label>правый</label>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="grip_ex" value="левый"
+                                           ng-checked="!params.grip_ex || params.grip_ex.indexOf('левый') < 0">
+                                    <label>левый</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--field-->
+                </div><!--col-->
+
+                <div class="col-sm-4 b-accordion-content__item">
+                    <div class="field">
+                        <label>Данные за</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="gender" disabled>
+                            <div class="default text">сезон</div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <!-- <div class="item" data-value="сезон 14/15">сезон 14/15</div> -->
+                                <!-- <div class="item" data-value="сезон 13/14">сезон 13/14</div> -->
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Играет до сих пор</label>
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="is_playing" value="левый"
+                                   ng-checked="!params.is_playing || params.is_playing !== 'false'">
+                            <label>да</label>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Возраст</label>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" placeholder="от"
+                                       ng-model="age__gte"
+                                       ng-init="age__gte = params.age__gte"
+                                       ng-change="$location.search('age__gte', age__gte || null)">
+                            </div>
+                            <div class="field">
+                                <input type="text" placeholder="до"
+                                       ng-model="age__lte"
+                                       ng-init="age__lte = params.age__lte"
+                                       ng-change="$location.search('age__lte', age__lte || null)">
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Рост</label>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" placeholder="от"
+                                       ng-model="height__gte"
+                                       ng-init="height__gte = params.height__gte"
+                                       ng-change="$location.search('height__gte', height__gte || null)">
+                            </div>
+                            <div class="field">
+                                <input type="text" placeholder="до"
+                                       ng-model="height__lte"
+                                       ng-init="height__lte = params.height__lte"
+                                       ng-change="$location.search('height__lte', height__lte || null)">
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Вес</label>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" placeholder="от"
+                                       ng-model="weight__gte"
+                                       ng-init="weight__gte = params.weight__gte"
+                                       ng-change="$location.search('weight__gte', weight__gte || null)">
+                            </div>
+                            <div class="field">
+                                <input type="text" placeholder="до"
+                                       ng-model="weight__lte"
+                                       ng-init="weight__lte = params.weight__lte"
+                                       ng-change="$location.search('weight__lte', weight__lte || null)">
+                            </div>
+                        </div>
+                    </div><!--field-->
+                </div><!--col-->
+
+
+
+                <div class="col-sm-4 b-accordion-content__item">
+                    <div class="field">
+                        <label>Страна</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" ng-update-hidden
+                                   ng-model="countriesSelected"
+                                   ng-init="countriesSelected = params.country || ['1']"
+                                   ng-change="PlayersSearchService.setCountries(this, countriesSelected || null)">
+                            <div class="default text"></div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                {% for country in countries %}
+                                    <div class="item" data-value="{{ country.pk }}">
+                                        {{ country.title }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Лига</label>
+                        <div class="ui selection dropdown">
+                            <input type="hidden" ng-update-hidden
+                                   ng-model="leaguesSelected"
+                                   ng-init="leaguesSelected = params.league"
+                                   ng-change="PlayersSearchService.setLeagues(this, leaguesSelected || null)">
+                            <div class="default text"></div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                {% verbatim %}
+                                    <div class="item" data-value="{{ league.pk }}"
+                                         ng-repeat="league in PlayersSearchService.getLeagues(countries, countriesSelected || [1])">
+                                        {{ league.title }}
+                                    </div>
+                                {% endverbatim %}
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Контракт</label>
+                        <div class="grouped fields">
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="contract_ex" value="*"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('*') < 0">
+                                    <label>Нет данных</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="contract_ex" value="Двусторонний КХЛ/МХЛ"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('Двусторонний КХЛ/МХЛ') < 0">
+                                    <label>Двусторонний КХЛ/МХЛ</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="contract_ex" value="Двусторонний КХЛ/ВХЛ"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('Двусторонний КХЛ/ВХЛ') < 0">
+                                    <label>Двусторонний КХЛ/ВХЛ</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="contract_ex" value="Односторонний КХЛ"
+                                           ng-checked="!params.contract_ex || params.contract_ex.indexOf('Односторонний КХЛ') < 0">
+                                    <label>Односторонний КХЛ</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--field-->
+
+                    <div class="field">
+                        <label>Гражданство</label>
+                        <div class="b-search ui category search result">
+                            <!-- <div class="ui icon input"> -->
+                                <tags-input style="max-width: 448px !important; border: 0 !important;"
+                                            ng-model="citizenship"
+                                            ng-init="countriesURL = '{% url 'hockeyapp:country-list-api' %}'"
+                                            display-property="title"
+                                            placeholder="{% trans 'start typing' %}"
+                                            add-on-comma="{false}" add-from-autocomplete-only="true">
+                                    <auto-complete load-on-focus="true" load-on-empty="true"
+                                                   min-length="1" source="loadCountries($query)"
+                                                   max-results-to-show="4">
+                                    </auto-complete>
+                                </tags-input>
+                                <!-- <i class="search link icon"></i> -->
+                            <!-- </div> -->
+                            <!-- <div class="results"></div> -->
+                        </div>
+                    </div><!--field-->
+                </div><!--col-->
+            </div><!--row-->
+        </div><!--accordion content-->
+
+        <div class="ui header title" ng-click="isDisplayParams = !isDisplayParams">
+            <i class="dropdown icon"></i>
+            Данные для отображения
+        </div><!--accordion header-->
+
+        <div class="content" ng-show="isDisplayParams">
+            <div class="fields-styled">
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="number"
+                               ng-checked="params.display_params && params.display_params.indexOf('number') >= 0">
+                        <label>игровой номер</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="age"
+                               ng-checked="params.display_params && params.display_params.indexOf('age') >= 0">
+                        <label>возраст</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="contract"
+                               ng-checked="params.display_params && params.display_params.indexOf('contract') >= 0">
+                        <label>контракт</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="citizenship"
+                               ng-checked="params.display_params && params.display_params.indexOf('citizenship') >= 0">
+                        <label>гражданство</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="grip"
+                               ng-checked="params.display_params && params.display_params.indexOf('grip') >= 0">
+                        <label>хват</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="height"
+                               ng-checked="params.display_params && params.display_params.indexOf('height') >= 0">
+                        <label>рост</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="club"
+                               ng-checked="params.display_params && params.display_params.indexOf('club') >= 0">
+                        <label>текущая команда</label>
+                    </div>
+                </div><div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="display_params" value="weight"
+                               ng-checked="params.display_params && params.display_params.indexOf('weight') >= 0">
+                        <label>вес</label>
+                    </div>
+                </div>
+            </div><!--fields-styled-->
+
+            <h4 class="ui horizontal header divider">
+                Технические показатели
+            </h4>
+            <div class="field">
+                <div class="row">
+                    <div class="col-sm-4 b-accordion-content__item">
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="matches_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('matches_total') >= 0">
+                                <label>И <span class="label-small">игры</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('goals_total') >= 0">
+                                <label>Ш <span class="label-small">шайбы</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="points_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('points_total') >= 0">
+                                <label>О <span class="label-small">очки</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="plus_minus_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('plus_minuss_total') >= 0">
+                                <label>+/-</label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="es_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('es_goals_total') >= 0">
+                                <label>ШР <span class="label-small">шайбы в равенстве</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="pp_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('pp_goals_total') >= 0">
+                                <label>ШБ <span class="label-small">шайбы в большинстве</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="ev_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('ev_goals_total') >= 0">
+                                <label>ШМ <span class="label-small">шайбы в меньшенстве</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="overtime_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('overtime_goals_total') >= 0">
+                                <label>ШО <span class="label-small">шайбы в овертайме</span></label>
+                            </div>
+                        </div>
+                    </div><!--col-->
+
+                    <div class="col-sm-4 b-accordion-content__item">
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="win_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('win_goals_total') >= 0">
+                                <label>ШП <span class="label-small">шайбы победные</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="bullet_goals_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('bullet_goals_total') >= 0">
+                                <label>РБ <span class="label-small">решающие буллиты</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="assists_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('assists_total') >= 0">
+                                <label>А <span class="label-small">ассистент</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="shots_total"
+                                       ng-checked="params.display_params && params.display_params.indexOf('shots_total') >= 0">
+                                <label>БП <span class="label-small">бросков по воротам</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="pis_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('pis_average') >= 0">
+                                <label>%БВ <span class="label-small">%бросков по воротам</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="goals_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('goals_average') >= 0">
+                                <label>СрШ/И <span class="label-small">среднее кол-во шайб за игру</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="assists_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('assists_average') >= 0">
+                                <label>СрА/И <span class="label-small">среднее кол-во передач за игру</span></label>
+                            </div>
+                        </div>
+                    </div><!--col-->
+
+                    <div class="col-sm-4 b-accordion-content__item">
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="points_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('points_average') >= 0">
+                                <label>СрО/И <span class="label-small">среднее кол-во очков за игру</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="penalty_time_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('penalty_time_average') >= 0">
+                                <label>СрШ/И <span class="label-small">среднее штрафное время за игру</span></label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="display_params" value="plus_minus_average"
+                                       ng-checked="params.display_params && params.display_params.indexOf('plus_minus_average') >= 0">
+                                <label>Ср+/-/И <span class="label-small">среднее показатель "плюс/минус" за игру</span></label>
+                            </div>
+                        </div>
+                    </div><!--col-->
+                </div><!--row-->
+            </div><!--field-->
+
+            <!-- <div class="ui negative message"> -->
+            <!--     <i class="close icon"></i> -->
+            <!--     <div class="header"> -->
+            <!--         Выберите меньше параметров -->
+            <!--     </div> -->
+            <!--     <p>В результате может быть отображено не более 20 параметров игрока</p> -->
+            <!-- </div> -->
+        </div><!--accordion content-->
+
+        <div class="active content">
+            <div class="row">
+                <div class="w-btn b-player-filter__btn">
+                    <!-- <a class="ui button" href=""> -->
+                    <!--     Показать стандартные -->
+                    <!-- </a> -->
+                    <a class="ui primary button" href=""
+                       ng-click="search()">Показать выбранные</a>
+                </div><!--w-btn-->
+            </div>
+        </div>
+
+    </div><!--accordion-->
+</form>

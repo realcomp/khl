@@ -1,0 +1,78 @@
+{% extends "hockeyapp/clubs/base.html" %}
+{% load i18n %}
+
+
+{% block title %}
+{{fio}}: достижения, хоккей  - Sportomatics.ru
+{% endblock %}
+
+{% load static from base_extras %}
+{% load base_extras %}
+
+{% block extrahead %}
+{{ block.super }}
+<link href="{% static 'timelinejs/compiled/css/timeline.css' %}" rel="stylesheet" type="text/css">
+<script src="{% static 'timelinejs/compiled/js/timeline.js' %}" type="text/javascript"></script>
+{# <script src="{% static 'timelinejs/compiled/js/timeline-min.js' %}" type="text/javascript"></script> #}
+<script src="{% static 'timelinejs/compiled/js/storyjs-embed.js' %}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        createStoryJS({
+            type: 'timeline',
+            height: '600',
+            source: '{% url 'hockeyapp:player-timeline-api' pk %}',
+            embed_id: 'player-timeline',
+            start_at_end: true
+        });
+    });
+</script>
+{% endblock %}
+
+
+{% block body %}
+<div class="w-page__crew">
+    <div class="body_inner bg-image">
+        <main id="main">
+            <section class="container">
+
+                {% include "hockeyapp/players/player-header.html" with player_section="Achievements" %}
+
+                {% include "hockeyapp/players/menu.html" with player_menu_active="player-achievements" %}
+
+                <section class="w-page-tabs">
+
+                    <div class="ui tabular w-page-tabs__tabs w-page-tabs__with-select menu hidden-xs">
+                        <div class="item active" data-tab="tab-name">Достижения</div>
+                    </div>
+                    <!--tabs items ends-->
+                    <div class="ui vertical tabular-xs menu visible-xs">
+                        <div class="item active" data-tab="tab-name">Достижения</div>
+                    </div>
+
+                    <!--tabs content items-->
+                    <div class="b-tabs-content ui" >
+
+                    {% block mobile_menu %}
+                        {% include "hockeyapp/clubs/mlpushmenu.html" with section="player" active_section="player-achievements" active_menu="main-card" %}
+                    {% endblock %}
+                        <div class="row">
+                            <div class="column">
+                                <div id="player-timeline"></div>
+                            </div>
+                        </div>
+                    </div><!--tabs content items-->
+
+                </section><!--w-page-tabs-->
+
+            </section><!--container-->
+
+        </main>
+        <footer id="footer">
+
+        </footer>
+    </div>
+
+
+</div>
+
+{% endblock %}

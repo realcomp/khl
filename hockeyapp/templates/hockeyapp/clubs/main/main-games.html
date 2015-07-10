@@ -1,0 +1,186 @@
+{% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/main/tabs.html' with clubs_main_tab='main-games' %}
+<!--tabs content items-->
+<div class="b-tabs-content ui">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-main" active_menu="main-games" %}
+    {% endblock %}
+
+    <section class="w-game-stats w-section">
+        <div class="b-centered-btn b-row">
+            <div class="ui buttons">
+                <div class="ui button" data-direction="left">
+                    Все
+                </div>
+                <div class="ui active button" data-direction="right">
+                    Дома
+                </div>
+                <div class="ui button" data-direction="left">
+                    В гостях
+                </div>
+                <div class="ui button" data-direction="left">
+                    Буллиты
+                </div>
+                <div class="ui button" data-direction="left">
+                    Овертаймы
+                </div>
+            </div>
+        </div><!--b-centered-btn-->
+
+        <div class="b-game-stats b-row">
+
+        </div><!--b-game-stats-->
+    </section><!--w-game-stats-->
+
+
+    <section class="w-games-calendar w-section">
+        <div class="b-centered-btn b-row">
+            <div class="ui buttons">
+                <div class="ui button">
+                    2010-11
+                </div>
+                <div class="ui button">
+                    2011-12
+                </div>
+                <div class="ui active button">
+                    2012-13
+                </div>
+                <div class="ui button">
+                    2013-14
+                </div>
+                <div class="ui button">
+                    2014-15
+                </div>
+            </div>
+        </div><!--b-centered-btn-->
+
+
+        <div class="b-games-calendar b-row">
+            <div class="b-header b-header__sm">
+                <h3 class="b-header__text">
+                    Календарь игр <span class="hidden-xs">сезона</span> 2012-13
+                </h3>
+            </div><!--b-header b-header__sm-->
+
+
+            <div class="row">
+                <div class="col-md-4 col-sm-6 b-games-calendar__item">
+                    <table class="ui celled table colored-th grey-th">
+                        <tr class="hidden-xs">
+                            <th>Дата</th>
+                            <th>Матч</th>
+                            <th>Счет</th>
+                        </tr>
+                        <tr>
+                            <td>21.09.2013</td>
+                            <td>СКА-Автомобилист</td>
+                            <td><span class="ui label b-win">4:1</span></td>
+                        </tr>
+                        <tr>
+                            <td>14.01.2013</td>
+                            <td>СКА-Адмирал</td>
+                            <td><span class="ui label b-lose">2:3</span></td>
+                        </tr>
+                        <tr>
+                            <td>21.09.2012</td>
+                            <td>СКА-Автомобилист</td>
+                            <td><span class="ui label b-win">2:0</span></td>
+                        </tr>
+                        <tr>
+                            <td>14.03.2012</td>
+                            <td>СКА-Адмирал</td>
+                            <td><span class="ui label b-win">4:3</span></td>
+                        </tr>
+                        <tr>
+                            <td>18.01.2012</td>
+                            <td>Динамо-СКА</td>
+                            <td><span class="ui label">7:7</span></td>
+                        </tr>
+                    </table>
+                </div><!--b-games-calendar__item-->
+
+
+                <div class="col-md-4 col-sm-6 b-games-calendar__item">
+                    <table class="ui celled table colored-th grey-th">
+                        <tr class="hidden-xs">
+                            <th>Дата</th>
+                            <th>Матч</th>
+                            <th>Счет</th>
+                        </tr>
+                        <tr>
+                            <td>21.09.2013</td>
+                            <td>СКА-Автомобилист</td>
+                            <td><span class="ui label b-win">4:1</span></td>
+                        </tr>
+                        <tr>
+                            <td>14.01.2013</td>
+                            <td>СКА-Адмирал</td>
+                            <td><span class="ui label b-lose">2:3</span></td>
+                        </tr>
+                        <tr>
+                            <td>21.09.2012</td>
+                            <td>СКА-Автомобилист</td>
+                            <td><span class="ui label b-win">2:0</span></td>
+                        </tr>
+                        <tr>
+                            <td>14.03.2012</td>
+                            <td>СКА-Адмирал</td>
+                            <td><span class="ui label b-win">4:3</span></td>
+                        </tr>
+                        <tr>
+                            <td>18.01.2012</td>
+                            <td>Динамо-СКА</td>
+                            <td><span class="ui label">7:7</span></td>
+                        </tr>
+                    </table>
+                </div><!--b-games-calendar__item-->
+
+
+                <div class="col-md-4 col-sm-6 b-games-calendar__item">
+                    <table class="ui celled table colored-th grey-th">
+                        <tr class="hidden-xs">
+                            <th>Дата</th>
+                            <th>Матч</th>
+                            <th>Счет</th>
+                        </tr>
+                        <tr>
+                            <td>21.09.2013</td>
+                            <td>СКА-Автомобилист</td>
+                            <td><span class="ui label b-win">4:1</span></td>
+                        </tr>
+                        <tr>
+                            <td>14.01.2013</td>
+                            <td>СКА-Адмирал</td>
+                            <td><span class="ui label b-lose">2:3</span></td>
+                        </tr>
+                        <tr>
+                            <td>21.09.2012</td>
+                            <td>СКА-Автомобилист</td>
+                            <td><span class="ui label b-win">2:0</span></td>
+                        </tr>
+                        <tr>
+                            <td>14.03.2012</td>
+                            <td>СКА-Адмирал</td>
+                            <td><span class="ui label b-win">4:3</span></td>
+                        </tr>
+                        <tr>
+                            <td>18.01.2012</td>
+                            <td>Динамо-СКА</td>
+                            <td><span class="ui label">7:7</span></td>
+                        </tr>
+                    </table>
+                </div><!--b-games-calendar__item-->
+            </div><!--row-->
+        </div><!--b-games-calendar-->
+    </section><!--w-games-calendar-->
+</div>
+<!--tabs content items-->
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/main/sticky_menu.html' with clubs_main_tab='main-games' clubs_menu_active='club-main' %}
+{% endblock %}

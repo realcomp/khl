@@ -1,4 +1,5 @@
 {% extends "hockeyapp/players/base.html" %}
+{% load i18n %}
 
 {% block title %}
 {{fio}}: новости, хоккей  - Sportomatics.ru
@@ -7,24 +8,8 @@
 {% block body %}
 <section class="content">
     <div class="container player-card-short-page">
-        <div class="breadcrumbs">
-            <div class="ui small breadcrumb">
-                <a class="section" href="/">ХОККЕЙ</a>
-                <div class="divider"> / </div>
-                <a class="section" href="{% url 'hockeyapp:players-search' %}">Игроки</a>
-                <div class="divider"> / </div>
-                <a class="active section">Новости</a>
-            </div>
-            <div class="search-block">
-                <div class="item">
-                    <div class="ui icon input">
-                        <input type="text" placeholder="Search...">
-                        <i class="search link icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include "hockeyapp/players/card.html" %}
+        <!-- {% trans "News" %} -->
+        {% include "hockeyapp/players/player-header.html" with player_section="News" %}
 
         <div class="page-content page-container">
             {% include "hockeyapp/players/menu.html" with players_menu_active="player-card-news" %}

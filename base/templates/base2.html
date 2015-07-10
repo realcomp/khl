@@ -1,0 +1,78 @@
+{% load static from base_extras %}
+{% load get_static_prefix from static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+        <meta content="" name="description">
+        <meta content="" name="keywords">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{% static 'css/google.css' %}" type="text/css">
+        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/dropzone.css">
+        <link rel="stylesheet" href="{% static 'css/icon.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/button.css' %}">
+        <link rel="stylesheet" href="{% static 'css/flag.css' %}">
+        <link rel="stylesheet" href="{% static 'css/styleTwo.css' %}">
+        <link rel="stylesheet" href="{% static 'font-awesome-4.3.0/css/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/ng-tags-input.css' %}">
+        <link rel="stylesheet" href="{% static 'css/isteven-multi-select.css' %}">
+        <link rel="stylesheet" href="{% static 'css/teams/ska.css' %}">
+        <link rel="stylesheet" href="{% static 'leaflet-0.7.3/leaflet.css' %}">
+        <link rel="stylesheet" href="{% static 'semantic-ui/dist/components/flag.min.css' %}">
+        <link rel="stylesheet" href="{% static 'leaflet.markercluster/dist/MarkerCluster.css' %}" />
+        <link rel="stylesheet" href="{% static 'leaflet.markercluster/dist/MarkerCluster.Default.css' %}" />
+        <link rel="stylesheet" href="{% static 'Leaflet.label/dist/leaflet.label.css' %}"/>
+        <link rel="stylesheet" href="{% static 'semantic-ui-icon/icon.min.css' %}">
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <!--<script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>-->
+        <script src="{% static 'js/google_maps_v3.2.js' %}"></script>
+        <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+
+        <!--<script src="http://code.highcharts.com/highcharts.js"></script>-->
+        <script src="http://code.highcharts.com/stock/highstock.js"></script>
+        <script src="http://code.highcharts.com/highcharts-3d.js"></script>
+        <script src="http://code.highcharts.com/highcharts-more.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <script src="http://code.highcharts.com/modules/data.js"></script>
+        <script src="http://code.highcharts.com/modules/drilldown.js"></script>
+
+        <!--<script src="{% static 'js/highcharts_custom.js' %}"></script>-->
+        <!-- <script src="{% static 'jquery-ui/jquery-ui.min.js' %}"></script> -->
+        <!--<script src="{% static 'js/semantic.min.js' %}"></script>-->
+        <script src="{% static 'angular/angular.min.js' %}"></script>
+        <script src="{% static 'autofill-event/src/autofill-event.js' %}"></script>
+        <script src="{% static 'angular-cookies/angular-cookies.min.js' %}"></script>
+        <script src="{% static 'angular-resource/angular-resource.min.js' %}"></script>
+        <script src="{% static 'angular-ui-router/release/angular-ui-router.min.js' %}"></script>
+        <script src="{% static 'js/angucomplete.js' %}"></script>
+        <script src="{% static 'js/ng-tags-input.js' %}"></script>
+        <script src="{% static 'leaflet-0.7.3/leaflet.js' %}"></script>
+        <script src="{% static 'leaflet.markercluster/dist/leaflet.markercluster-src.js' %}"></script>
+        <script src="{% static 'leaflet-plugins/layer/tile/Google.js' %}"></script>
+        <script src="{% static 'Leaflet.label/dist/leaflet.label.js' %}"></script>
+        {% block extrahead %}
+        {% endblock %}
+    </head>
+    <body ng-app="{% block ngapp %}Sportomatics{% endblock %}">
+        {% block body %}
+        {% endblock %}
+        </div>
+        {% include "partial/footer.html" %}
+
+        <script src="{% static 'build/app.js' %}"></script>
+        <script src="{% static 'build/libs.min.js' %}"></script>
+        <script src="{% static 'js/club-team.js' %}"></script>
+    {% block footer %}
+    {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,164 @@
+{% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
+{% block tabs-content %}
+
+{% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-winlose' %}
+
+<div class="b-tabs-content ui tab active" ng-controller="ClubCalendarController">
+
+    {% block mobile_menu %}
+        {% include "hockeyapp/clubs/mlpushmenu.html" with section="club" active_section="club-calendar" active_menu="calendar-winlose" %}
+    {% endblock %}
+
+    <section class="w-section">
+        <div class="b-header b-header__md b-header__filter-in">
+            <div class="w-table">
+                <h2 class="b-cell b-header__text">
+                    Выигрыши и проигрыши
+                </h2>
+
+                <a href="#" class="b-cell b-change-views__item w-tooltip" ng-class="{'active': selection === 'all'}" ng-click="setSelecton('all')" data-content="Все матчи" data-variation="basic">
+                    <i class="ellipsis horizontal icon"></i>
+                </a>
+
+                <a href="#" class="b-cell b-change-views__item w-tooltip" ng-class="{'active': selection === 'home'}" ng-click="setSelecton('home')" data-content="Домашние мачти" data-variation="basic">
+                    <i class="home icon"></i>
+                </a>
+
+                <a href="#" class="b-cell b-change-views__item w-tooltip" ng-class="{'active': selection === 'guest'}" ng-click="setSelecton('guest')" data-content="Гостевые матчи" data-variation="basic">
+                    <i class="plane icon"></i>
+                </a>
+            </div><!--row-->
+        </div><!--b-header b-header__md-->
+
+        {% verbatim %}
+        <div class="ui positive message" ng-if="loaded">
+            <i class="close icon"></i>
+            <p>На графике визуализированы выигрыши и проигрыши команды. Красным обозначена проигранная игра, зеленым - победная. Высота столбца показывает счет. Серым обозначены будущие игры.
+            <br>
+            Для перехода на карточку игры просто кликните в соответствующий столбец
+            <br>
+            По состоянию на {{stats.date}} выиграно {{stats.won.length}} игр (дома - {{stats.wonHome.length}}), проиграно {{stats.lost.length}} (дома - {{stats.lostHome.length}})</p>
+        </div>
+        {% endverbatim %}
+
+        <div id="clubGamesChart" class="w-map" style="height: auto !important">
+            <div id="chartdiv"></div>
+        </div>
+
+        <div class="ui large centered inline text loader" style="background: none !important" ng-class="{'active': !loaded}">
+            Загрузка...
+        </div>
+
+        <br>
+
+        {% comment %}
+        <p class="b-desription">
+            На графике визуализированы выигрыши и проигрыши команды. Красным обозначена проигранная игра, зеленым - победная. Высота столбца показывает счет. Серым обозначены будущие игры.
+        </p>
+        <p class="b-desription">
+            Для перехода на карточку игры просто кликните в соответствующий столбец
+        </p>
+        <p class="b-desription">
+            По состоянию на 19.04.2015 выиграно 12 игр(дома - 4), проиграно 19(дома - 8)
+        </p>
+        <div class="w-command-calendar__item w-command-calendar__item-bg">
+            <div class="b-header b-header__xs">
+                <h5 class="b-header__text">
+                    Автомобилист - СКА
+                </h5>
+            </div><!--b-header b-header__xs-->
+            <div class="row">
+                <div class="col-sm-4 col-md-12 col-lg-4">
+                    <a href="#" class="ui image">
+                        <img class="ui circular image" src="images/l-hockey/logo-2.jpg">
+                    </a>
+                </div>
+
+                <p class="col-sm-2 col-md-12 col-lg-4 b-score b-win-text">
+                    0 : 5
+                </p>
+
+                <div class="col-sm-4 col-md-12 col-lg-4">
+                    <a href="#" class="ui image">
+                        <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                    </a>
+                </div>
+            </div><!--row-->
+
+            <div class="w-command-calendar__info">
+                <p class="date">
+                    17 марта 2015г. 20:20 МСК
+                </p>
+            </div>
+        </div><!--w-command-calendar__item-->
+
+        <div class="w-command-calendar__item w-command-calendar__item-bg">
+            <div class="b-header b-header__xs">
+                <h5 class="b-header__text">
+                    Автомобилист - СКА
+                </h5>
+            </div><!--b-header b-header__xs-->
+            <div class="row">
+                <div class="col-sm-4 col-md-12 col-lg-4">
+                    <a href="#" class="ui image">
+                        <img class="ui circular image" src="images/l-hockey/logo-2.jpg">
+                    </a>
+                </div>
+
+                <p class="col-sm-2 col-md-12 col-lg-4 b-score b-lose-text">
+                    5 : 0
+                </p>
+
+                <div class="col-sm-4 col-md-12 col-lg-4">
+                    <a href="#" class="ui image">
+                        <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                    </a>
+                </div>
+            </div><!--row-->
+
+            <div class="w-command-calendar__info">
+                <p class="date">
+                    17 марта 2015г. 20:20 МСК
+                </p>
+            </div>
+        </div><!--w-command-calendar__item-->
+
+        <div class="w-command-calendar__item w-command-calendar__item-bg">
+            <div class="b-header b-header__xs">
+                <h5 class="b-header__text">
+                    Адмирал - СКА
+                </h5>
+            </div><!--b-header b-header__xs-->
+            <div class="row">
+                <div class="col-sm-4 col-md-12 col-lg-4">
+                    <a href="#" class="ui image">
+                        <img class="ui circular image" src="images/l-hockey/logo-1.jpg">
+                    </a>
+                </div>
+
+                <p class="col-sm-2 col-md-12 col-lg-4 b-score">
+                    - : -
+                </p>
+
+                <div class="col-sm-4 col-md-12 col-lg-4">
+                    <a href="#" class="ui image">
+                        <img class="ui circular image" src="images/l-hockey/logo.jpg">
+                    </a>
+                </div>
+            </div><!--row-->
+
+            <div class="w-command-calendar__info">
+                <p class="date">
+                    17 марта 2015г. 20:20 МСК
+                </p>
+            </div>
+        </div><!--w-command-calendar__item-->
+        {% endcomment %}
+    </section>
+</div>
+
+{% endblock %}
+
+{% block sticky_menu %}
+    {% include 'hockeyapp/clubs/calendar/sticky_menu.html' with clubs_main_tab='calendar-winlose' clubs_menu_active='club-calendar' %}
+{% endblock %}
