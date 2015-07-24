@@ -323,7 +323,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return $('#' + this.divId).highcharts({
         chart: {
           type: 'column',
-          alignTicks: false
+          alignTicks: false,
+          marginBottom: 180,
+          height: 400
         },
         title: {
           text: 'Посещаемость'
@@ -336,7 +338,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           },
           reversed: false,
           lineColor: '#FFFFFF',
-          max: 100
+          max: 100,
+          tickInterval: 10
         },
         yAxis: {
           gridLineWidth: 0,
@@ -348,9 +351,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
             }, {
               value: this.max,
               width: 1,
-              color: '#141414',
+              color: '#E7E7E7',
               label: {
-                text: 'Вместимость'
+                text: 'Максимальная вместимость: ' + this.max + ' человек'
               }
             }
           ],
@@ -372,28 +375,33 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           margin: 30
         },
         tooltip: {
+          hideDelay: 500000,
           shared: true,
           useHTML: true,
           crosshairs: true,
+          borderWidth: 0,
+          shadow: false,
           style: {
-            padding: 0
+            padding: 0,
+            marginTop: 60
+          },
+          positioner: function(a, b, p) {
+            return {
+              y: 240,
+              x: p.plotX
+            };
           },
           formatter: function() {
-            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.spectators + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>';
+            return HTML_CLUB_HOME_ATTENDANCE_DIV(this.points[0].key, this.points[0].point.spectators, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
           }
         },
         plotOptions: {
           series: {
             stacking: 'normal',
             borderWidth: 0,
-            pointWidth: 5,
-            pointPlacement: "on"
-          },
-          column: {
-            pointPadding: 0,
-            groupPadding: 0,
-            borderWidth: 1,
-            pointWidth: 4
+            pointPlacement: "on",
+            groupPadding: 0.05,
+            pointPadding: 0.2
           }
         },
         series: this.data

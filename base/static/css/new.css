@@ -84,19 +84,22 @@
     display: none !important;
 }
 
-#clubGamesChart .highcharts-tooltip{
+#clubGamesChart .highcharts-tooltip, #clubHomeAttendanceChart .highcharts-tooltip{
 
 }
-#clubGamesChart .highcharts-tooltip span{
+#clubGamesChart .highcharts-tooltip span,  #clubHomeAttendanceChart .highcharts-tooltip span{
     border: none !important;
     box-shadow: none !important;
 }
-#clubGamesChart svg .highcharts-tooltip{
+#clubGamesChart svg .highcharts-tooltip,  #clubHomeAttendanceChart svg .highcharts-tooltip{
     display: none !important;
     opacity: 0 !important;
 }
-#clubGamesChart g .highcharts-tooltip path{
+#clubGamesChart g .highcharts-tooltip path,  #clubHomeAttendanceChart g .highcharts-tooltip path{
     fill: none;
+}
+#clubHomeAttendanceChart .w-command-calendar__item .b-score{
+    font-size: 16px;
 }
 /* angucomplete */
 .form-control {
@@ -392,4 +395,7 @@ angucomplete input{
 }
 #sidr li a i{
     margin-right: 5px !important;
+}
+#sidr{
+    display: none;
 }

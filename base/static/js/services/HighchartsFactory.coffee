@@ -236,6 +236,8 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                 chart:
                     type: 'column'
                     alignTicks: false
+                    marginBottom: 180
+                    height: 400
                 title:
                     text: 'Посещаемость'
                 xAxis:
@@ -246,6 +248,7 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     reversed: false
                     lineColor: '#FFFFFF'
                     max: 100
+                    tickInterval: 10
                 yAxis:
                     gridLineWidth: 0
                     plotLines: [
@@ -257,9 +260,9 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                         {
                             value: @max
                             width: 1
-                            color: '#141414'
+                            color: '#E7E7E7'
                             label:
-                                text: 'Вместимость'
+                                text: 'Максимальная вместимость: '+@max+' человек'
                         }
                     ]
                     title: 'Счет'
@@ -277,26 +280,31 @@ angular.module('Sportomatics').factory 'HighchartsFactory', ($timeout, LocaleFac
                     enabled: false
                     margin: 30
                 tooltip:
+                    hideDelay: 500000
                     shared: true
                     useHTML: true
                     crosshairs: true
+                    borderWidth: 0
+                    shadow: false
                     style:
                         padding: 0
+                        marginTop: 60
+                    positioner: (a,b,p) ->
+                        return (
+                            y: 240
+                            x: p.plotX
+                        )
                     #formatter: () ->
                     #    return '<div class="text-center"> <div class="tooltip-header"><b>' + this.key + '<b></div><a class="score">' + this.point.score + '</a><br><a class="match-date">' + (new Date(this.point.date).yyyymmddHHMMFormatted()) + '</a>'
                     formatter: () ->
-                        return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.spectators + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>'
+                        return HTML_CLUB_HOME_ATTENDANCE_DIV(this.points[0].key, this.points[0].point.spectators, (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()),this.points[0].point.leftLogo, this.points[0].point.rightLogo)#return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.spectators + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>'
                 plotOptions:
                     series:
                         stacking: 'normal'
                         borderWidth: 0
-                        pointWidth: 5
                         pointPlacement: "on"
-                    column:
-                        pointPadding: 0,
-                        groupPadding: 0,
-                        borderWidth: 1
-                        pointWidth: 4
+                        groupPadding: 0.05
+                        pointPadding: 0.2
                 series: @data
 
 

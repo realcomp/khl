@@ -14,7 +14,7 @@
         <meta content="" name="keywords">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'css/google.css' %}" type="text/css">
-        <link rel="stylesheet" href="{{STATIC_PREFIX}}css/dropzone.css">
+        <link rel="stylesheet" href="{% static 'css/dropzone.css' %}">
         <link rel="stylesheet" href="{% static 'css/icon.min.css' %}">
         <!--<link rel="stylesheet" href="{% static 'css/semantic.min.css' %}">-->
         <!--<link rel="stylesheet" href="{% static 'css/style.css' %}">-->
@@ -91,7 +91,8 @@
         <script src="{% static 'build/app.js' %}"></script>
         <script src="{% static 'build/libs.min.js' %}"></script>
         <script src="{% static 'js/club-team.js' %}"></script>
-    {% block footer %}
-    {% endblock %}
+
+        {% block footer %}
+        {% endblock %}
     </body>
 </html>
