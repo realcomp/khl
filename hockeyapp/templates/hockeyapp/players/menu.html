@@ -45,10 +45,10 @@
                     <a href="{% url 'hockeyapp:players:indicators' pk %}">Статистика</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-clubs' %}active {% endif %} item">
-                    <a href="#">Клубы</a>
+                    <a href="{% url 'hockeyapp:players:clubs' pk %}">Клубы</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-coaches' %}active {% endif %} item">
-                    <a href="#">Тренеры</a>
+                    <a href="{% url 'hockeyapp:players:coaches' pk %}">Тренеры</a>
                 </li>
                 <li class="{% if player_menu_active == 'player-partners' %}active {% endif %} item">
                     <a href="{% url 'hockeyapp:players:partners' pk %}">Партнеры</a>
