@@ -4347,7 +4347,8 @@ angular.module('Sportomatics')
         this.list = function() {
 
             if($scope.selectedClub) return this.listAvergePlayer();
-            if($('.club-id').length !== 0) return this.listClubs();
+            if($('.club-id').length !== 0 && $('#listClubs').length === 1) return this.listClubs();
+            if($('#listClubs').length === 1 && $('.club-id').length === 0) return;
 
             if($scope.initialDataBySeason == null) return
             if($scope.activeSeason !== -1) return $scope.makeChart();
