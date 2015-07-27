@@ -1,7 +1,7 @@
 {% extends 'hockeyapp/clubs/main/clubs-main.html' %}
 
 {% block custom_scripts %}
-    {% with 'maps' as name %}
+    {% with maps=1 %}
       {{block.super}}
     {% endwith %}
 {% endblock %}

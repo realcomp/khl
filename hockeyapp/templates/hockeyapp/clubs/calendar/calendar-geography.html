@@ -1,7 +1,7 @@
 {% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
 
 {% block custom_scripts %}
-    {% with 'maps' as name %}
+    {% with maps=1 %}
       {{block.super}}
     {% endwith %}
 {% endblock %}

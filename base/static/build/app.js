@@ -2,11 +2,10 @@
 angular.module('Sportomatics', [
     'angucomplete',
     'ngTagsInput',
-    'ui.router',
     'ngResource',
     'ngCookies',
     'isteven-multi-select'])
-.config(function($stateProvider, $urlRouterProvider){
+/*.config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {
             url: '/ru/hockey/players',
@@ -15,7 +14,7 @@ angular.module('Sportomatics', [
                 alert($state)
             }
         })
-})
+})*/
 
 .directive('ngUpdateHidden', function() {
     return {
@@ -4079,7 +4078,7 @@ angular.module('Sportomatics')
 })
 
 angular.module('Sportomatics')
-    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $state, $location, $q, HighchartsFactory) {
+    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/
         var self = this;
         var url = (document.getElementById('api-player-indicators') != null) ? document.getElementById('api-player-indicators').value : '';

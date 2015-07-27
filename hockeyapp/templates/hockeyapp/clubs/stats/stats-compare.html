@@ -1,7 +1,7 @@
 {% extends 'hockeyapp/clubs/stats/clubs-stats.html' %}
 
 {% block custom_scripts %}
-    {% with 'charts' as name %}
+    {% with charts=1 %}
       {{block.super}}
     {% endwith %}
 {% endblock %}

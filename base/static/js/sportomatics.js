@@ -2,11 +2,10 @@
 angular.module('Sportomatics', [
     'angucomplete',
     'ngTagsInput',
-    'ui.router',
     'ngResource',
     'ngCookies',
     'isteven-multi-select'])
-.config(function($stateProvider, $urlRouterProvider){
+/*.config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {
             url: '/ru/hockey/players',
@@ -15,7 +14,7 @@ angular.module('Sportomatics', [
                 alert($state)
             }
         })
-})
+})*/
 
 .directive('ngUpdateHidden', function() {
     return {

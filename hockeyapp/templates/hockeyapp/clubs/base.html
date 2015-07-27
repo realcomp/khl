@@ -1,33 +1,9 @@
 {% extends "base.html" %}
 
-{% block extrahead %}
-
-    <link href="/static/new/dist/mlpushmenu/jquery.multilevelpushmenu.css" rel="stylesheet">
-    <link href="/static/new/dist/semantic.min.css" rel="stylesheet">
-
-    <link href="/static/new/fonts/icon-fonts/style.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/static/new/assets/css/jcarousel.connected-carousels.css">
-    <link href="/static/new/css-styled/grid.css" rel="stylesheet">
-    <link href="/static/new/css-styled/style.css" media="all" type="text/css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed|Roboto:400,300,300italic,400italic,500,700,900&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
-    <!-- my styles -->
-    <link href="/static/css/new.css" media="all" type="text/css" rel="stylesheet">
-    <!-- my styles end -->
-
-    <script src="/static/new/assets/js/modernizr.custom.js"></script>
-    <script type="text/javascript" src="/static/new/assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/static/new/dist/semantic.min.js"></script>
-
-    <!--push mobile menu-->
-    <!--<script src="/static/new/assets/js/classie.js"></script>
-    <script src="/static/new/assets/js/mlpushmenu.js"></script>
-    -->
-    <script src="/static/new/dist/mlpushmenu/jquery.multilevelpushmenu.min.js"></script>
-
-    <script type="text/javascript" src="/static/new/assets/js/jquery.jcarousel.min.js"></script>
-    <script type="text/javascript" src="/static/new/assets/js/jcarousel.connected-carousels.js"></script>
-    <script type="text/javascript" src="/static/new/assets/js/scripts.js"></script>
-
+{% block custom_scripts %}
+    {% with base=1 %}
+      {{block.super}}
+    {% endwith %}
 {% endblock %}
 
 {% block header %}

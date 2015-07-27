@@ -1,5 +1,5 @@
 angular.module('Sportomatics')
-    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $state, $location, $q, HighchartsFactory) {
+    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/
         var self = this;
         var url = (document.getElementById('api-player-indicators') != null) ? document.getElementById('api-player-indicators').value : '';
