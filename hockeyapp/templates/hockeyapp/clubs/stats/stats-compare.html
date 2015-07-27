@@ -1,4 +1,11 @@
 {% extends 'hockeyapp/clubs/stats/clubs-stats.html' %}
+
+{% block custom_scripts %}
+    {% with 'charts' as name %}
+      {{block.super}}
+    {% endwith %}
+{% endblock %}
+
 {% block tabs-content %}
 
 {% include 'hockeyapp/clubs/stats/tabs.html' with clubs_main_tab='stats-compare' %}

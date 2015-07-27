@@ -1,4 +1,11 @@
 {% extends "hockeyapp/players/main/player-main.html" %}
+
+{% block custom_scripts %}
+    {% with 'charts' as name %}
+      {{block.super}}
+    {% endwith %}
+{% endblock %}
+
 {% load i18n %}
 
 {% block title %}

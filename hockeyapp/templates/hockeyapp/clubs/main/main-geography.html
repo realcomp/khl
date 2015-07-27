@@ -1,4 +1,11 @@
 {% extends 'hockeyapp/clubs/main/clubs-main.html' %}
+
+{% block custom_scripts %}
+    {% with 'maps' as name %}
+      {{block.super}}
+    {% endwith %}
+{% endblock %}
+
 {% block tabs-content %}
 
 <div ng-controller="ClubGeographyController">

@@ -2717,7 +2717,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
         name: 'club',
         data: $scope.games.map(function(game, index) {
           return {
-            x: index * 4.5,
+            x: index * 4.21,
             y: game.spectators,
             date: game.date,
             name: game.opponent.title_verbose,

@@ -24,7 +24,7 @@ angular.module('Sportomatics').controller 'ClubHomeController', ($scope, $locati
                         data: $scope.games.map((game, index) ->
                             #opponentAddress = if game.opponent.address and game.opponent.address.title then game.opponent.address.title else ''
                             return (
-                                x: index*4.5
+                                x: index*4.21
                                 y: game.spectators
                                 date: game.date
                                 name: game.opponent.title_verbose

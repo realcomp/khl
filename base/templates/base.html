@@ -40,15 +40,8 @@
         <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
         <script src="{% static 'sidr/jquery.sidr.min.js' %}"></script>
 
-        <!--<script src="http://code.highcharts.com/highcharts.js"></script>-->
-        <script src="http://code.highcharts.com/stock/highstock.js"></script>
-        <script src="http://code.highcharts.com/highcharts-3d.js"></script>
-        <script src="http://code.highcharts.com/highcharts-more.js"></script>
-        <script src="http://code.highcharts.com/modules/exporting.js"></script>
-        <script src="http://code.highcharts.com/modules/data.js"></script>
-        <script src="http://code.highcharts.com/modules/drilldown.js"></script>
 
-        <!--<script src="{% static 'js/highcharts_custom.js' %}"></script>-->
+
         <!-- <script src="{% static 'jquery-ui/jquery-ui.min.js' %}"></script> -->
         <!--<script src="{% static 'js/semantic.min.js' %}"></script>-->
         <script src="{% static 'angular/angular.min.js' %}"></script>
@@ -58,10 +51,24 @@
         <script src="{% static 'angular-ui-router/release/angular-ui-router.min.js' %}"></script>
         <script src="{% static 'js/angucomplete.js' %}"></script>
         <script src="{% static 'js/ng-tags-input.js' %}"></script>
-        <script src="{% static 'leaflet-0.7.3/leaflet.js' %}"></script>
-        <script src="{% static 'leaflet.markercluster/dist/leaflet.markercluster-src.js' %}"></script>
-        <script src="{% static 'leaflet-plugins/layer/tile/Google.js' %}"></script>
-        <script src="{% static 'Leaflet.label/dist/leaflet.label.js' %}"></script>
+        {% block custom_scripts %}
+            {% ifequal name "maps" %}
+                <script src="{% static 'leaflet-0.7.3/leaflet.js' %}"></script>
+                <script src="{% static 'leaflet.markercluster/dist/leaflet.markercluster-src.js' %}"></script>
+                <script src="{% static 'leaflet-plugins/layer/tile/Google.js' %}"></script>
+                <script src="{% static 'Leaflet.label/dist/leaflet.label.js' %}"></script>
+            {% endifequal %}
+            {% ifequal name "charts" %}
+                <!-- Highcharts -->
+                <script src="http://code.highcharts.com/stock/highstock.js"></script>
+                <script src="http://code.highcharts.com/highcharts-3d.js"></script>
+                <script src="http://code.highcharts.com/highcharts-more.js"></script>
+                <script src="http://code.highcharts.com/modules/exporting.js"></script>
+                <script src="http://code.highcharts.com/modules/data.js"></script>
+                <script src="http://code.highcharts.com/modules/drilldown.js"></script>
+                <!-- /Highcharts -->
+            {% endifequal %}
+        {% endblock %}
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
