@@ -34,7 +34,7 @@ urlpatterns = [
         api.ClubTitlesSearch.as_view(),
         name='club-titles-search-api'),
     url(r'^api/players/(?P<pk>\d+)/$',
-        api_players.PlayersSearch.as_view({'get': 'retrieve'}),
+        api_players.PlayerDetails.as_view(),
         name='player-card-api'),
     url(r'^api/players/(?P<player_id>\d+)/indicators/$',
         api.PlayerCardIndicators.as_view(),
