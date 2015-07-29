@@ -6,7 +6,8 @@ from ..views import api
 from ..views.api import (
     generic,
     clubs as api_clubs,
-    players as api_players)
+    players as api_players,
+    search as api_search)
 from ..views import admin, players as views_players
 
 
@@ -91,6 +92,9 @@ urlpatterns = [
     # clubs
     url(r'^clubs/', include('hockeyapp.urls.clubs', namespace='clubs')),
     url(r'^v1/clubs/', include('hockeyapp.urls.v1.clubs', namespace='clubs_v1')),
+
+    # search
+    url(r'^api/search/$', api_search.Search.as_view(), name='search'),
 
     # admin
     url(r'^sporto-admin/club-insta-photo/$',
