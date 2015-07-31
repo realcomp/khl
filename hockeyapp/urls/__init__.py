@@ -8,7 +8,7 @@ from ..views.api import (
     clubs as api_clubs,
     players as api_players,
     search as api_search)
-from ..views import admin, players as views_players
+from ..views import admin, players as views_players, search
 
 
 urlpatterns = [
@@ -84,17 +84,20 @@ urlpatterns = [
     url(r'^metrics/players/compare/graph/$',
         views.MetricsPlayersCompareGraph.as_view(),
         name='metrics-compare-graph'),
+
     # players
     url(r'^players/', include('hockeyapp.urls.players', namespace='players')),
     url(r'^v1/players/', include('hockeyapp.urls.v1.players', namespace='players_v1')),
     url(r'^players2/$', views_players.PlayersSearch2.as_view(),
         name='players-search2'),
+
     # clubs
     url(r'^clubs/', include('hockeyapp.urls.clubs', namespace='clubs')),
     url(r'^v1/clubs/', include('hockeyapp.urls.v1.clubs', namespace='clubs_v1')),
 
     # search
-    url(r'^api/search/$', api_search.Search.as_view(), name='search'),
+    url(r'^search/$', search.Search.as_view(), name='search'),
+    url(r'^api/search/$', api_search.Search.as_view(), name='search-api'),
 
     # admin
     url(r'^sporto-admin/club-insta-photo/$',

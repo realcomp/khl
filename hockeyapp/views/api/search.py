@@ -21,4 +21,4 @@ class Search(generics.ListAPIView):
             'player': Player.objects,
             'schedule': Schedule.objects,
         })
-        return factory.get_results(self.request.QUERY_PARAMS.get('s'))
+        return factory.get_results(self.request.query_params.get('s'))
