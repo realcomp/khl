@@ -6,8 +6,9 @@ from ..views import api
 from ..views.api import (
     generic,
     clubs as api_clubs,
-    players as api_players)
-from ..views import admin, players as views_players
+    players as api_players,
+    search as api_search)
+from ..views import admin, players as views_players, search
 
 
 urlpatterns = [
@@ -34,7 +35,7 @@ urlpatterns = [
         api.ClubTitlesSearch.as_view(),
         name='club-titles-search-api'),
     url(r'^api/players/(?P<pk>\d+)/$',
-        api_players.PlayersSearch.as_view({'get': 'retrieve'}),
+        api_players.PlayerDetails.as_view(),
         name='player-card-api'),
     url(r'^api/players/(?P<player_id>\d+)/indicators/$',
         api.PlayerCardIndicators.as_view(),
@@ -83,14 +84,20 @@ urlpatterns = [
     url(r'^metrics/players/compare/graph/$',
         views.MetricsPlayersCompareGraph.as_view(),
         name='metrics-compare-graph'),
+
     # players
     url(r'^players/', include('hockeyapp.urls.players', namespace='players')),
     url(r'^v1/players/', include('hockeyapp.urls.v1.players', namespace='players_v1')),
     url(r'^players2/$', views_players.PlayersSearch2.as_view(),
         name='players-search2'),
+
     # clubs
     url(r'^clubs/', include('hockeyapp.urls.clubs', namespace='clubs')),
     url(r'^v1/clubs/', include('hockeyapp.urls.v1.clubs', namespace='clubs_v1')),
+
+    # search
+    url(r'^search/$', search.Search.as_view(), name='search'),
+    url(r'^api/search/$', api_search.Search.as_view(), name='search-api'),
 
     # admin
     url(r'^sporto-admin/club-insta-photo/$',

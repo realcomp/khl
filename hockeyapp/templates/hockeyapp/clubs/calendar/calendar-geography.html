@@ -1,4 +1,11 @@
 {% extends 'hockeyapp/clubs/calendar/clubs-calendar.html' %}
+
+{% block custom_scripts %}
+    {% with maps=1 %}
+      {{block.super}}
+    {% endwith %}
+{% endblock %}
+
 {% block tabs-content %}
 
 {% include 'hockeyapp/clubs/calendar/tabs.html' with clubs_main_tab='calendar-geography' %}

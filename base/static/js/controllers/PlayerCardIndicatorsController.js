@@ -1,5 +1,5 @@
 angular.module('Sportomatics')
-    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $state, $location, $q, HighchartsFactory) {
+    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/
         var self = this;
         var url = (document.getElementById('api-player-indicators') != null) ? document.getElementById('api-player-indicators').value : '';
@@ -267,7 +267,8 @@ angular.module('Sportomatics')
         this.list = function() {
 
             if($scope.selectedClub) return this.listAvergePlayer();
-            if($('.club-id').length !== 0) return this.listClubs();
+            if($('.club-id').length !== 0 && $('#listClubs').length === 1) return this.listClubs();
+            if($('#listClubs').length === 1 && $('.club-id').length === 0) return;
 
             if($scope.initialDataBySeason == null) return
             if($scope.activeSeason !== -1) return $scope.makeChart();

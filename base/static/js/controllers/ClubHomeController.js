@@ -2,6 +2,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
   $scope.clubMatchApi = document.getElementById('club-match-api').value;
   $scope.clubPk = document.getElementById('team-id').value;
   $scope.params = $location.search();
+  $scope.clubLogo = document.getElementById('club-logo').value;
   $scope.createVisitorsChart = function() {
     var params;
     params = '';
@@ -21,12 +22,14 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
         name: 'club',
         data: $scope.games.map(function(game, index) {
           return {
-            x: index,
+            x: index * 4.21,
             y: game.spectators,
             date: game.date,
             name: game.opponent.title_verbose,
             score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
-            spectators: game.spectators + ' (' + parseInt(parseFloat(game.arena_capacity_rate).toFixed(2) * 100) + '%)'
+            spectators: game.spectators + ' (' + parseInt(parseFloat(game.arena_capacity_rate).toFixed(2) * 100) + '%)',
+            leftLogo: game.opponent.logo,
+            rightLogo: $scope.clubLogo
           };
         }).filter(function(toFilter) {
           return toFilter != null;

@@ -13,7 +13,7 @@ from ..serializers import (
     CountrySerializer, PlayerCardDetailSerializer, SeasonSerializer,
     CountryLeaguesSerializer)
 from ..serializers.players import (
-    PlayerCardClubsSerializer, PlayerCardCoachesSerializer)
+    PlayerClubsSerializer, PlayerCoachesSerializer)
 
 
 class PlayersSearch(TemplateView):
@@ -53,7 +53,7 @@ class PlayerMainCard(DetailView):
                             ).filter(clubplayer__player=self.get_object()
                             ).locale_order_by(self.request, '%s_title'
                             ).distinct()
-        context['clubs'] = PlayerCardClubsSerializer(
+        context['clubs'] = PlayerClubsSerializer(
             clubs, many=True, context=context).data
         context.update(PlayerCardDetailSerializer(
             self.get_object(), context=context).data)
@@ -64,25 +64,32 @@ class PlayerIndicators(PlayerMainCard):
     template_name = 'hockeyapp/players/stats/player-stats.html'
 
 
-class PlayerCardClubs(PlayerMainCard):
-    template_name = 'hockeyapp/players/player-card-clubs.html'
+class PlayerPartners(PlayerMainCard):
+    template_name = 'hockeyapp/players/partners/player-partners.html'
+
+
+class PlayerAchievements(PlayerMainCard):
+    template_name = 'hockeyapp/players/achievements/player-achievements.html'
+
+class PlayerClubs(PlayerMainCard):
+    template_name = 'hockeyapp/players/clubs/player-clubs.html'
 
     def get_context_data(self, **kwargs):
-        context = super(PlayerCardClubs, self).get_context_data(**kwargs)
+        context = super(PlayerClubs, self).get_context_data(**kwargs)
         clubs = Club.objects.active(
                             ).filter(clubplayer__player=self.get_object()
                             ).locale_order_by(self.request, '%s_title'
                             ).distinct()
-        context['clubs'] = PlayerCardClubsSerializer(
+        context['clubs'] = PlayerClubsSerializer(
             clubs, many=True, context=context).data
         return context
 
 
-class PlayerCardCoaches(PlayerMainCard):
-    template_name = 'hockeyapp/players/player-card-coaches.html'
+class PlayerCoaches(PlayerMainCard):
+    template_name = 'hockeyapp/players/coaches/player-coaches.html'
 
     def get_context_data(self, **kwargs):
-        context = super(PlayerCardCoaches, self).get_context_data(**kwargs)
+        context = super(PlayerCoaches, self).get_context_data(**kwargs)
         clubs = (
             Club.objects
             .filter(clubplayer__player=self.get_object()))
@@ -91,22 +98,13 @@ class PlayerCardCoaches(PlayerMainCard):
             .filter(coachclub__club__in=clubs, coachclub__head=True)
             .locale_order_by(self.request, '%s_lastname', '%s_name')
             .distinct())
-        context['coaches'] = PlayerCardCoachesSerializer(
+        context['coaches'] = PlayerCoachesSerializer(
             coaches, many=True, context=context).data
         return context
 
 
-class PlayerPartners(PlayerMainCard):
-    template_name = 'hockeyapp/players/partners/player-partners.html'
-
-
-class PlayerAchievements(PlayerMainCard):
-    template_name = 'hockeyapp/players/achievements/player-achievements.html'
-
-
 class PlayerPhotos(PlayerMainCard):
     template_name = 'hockeyapp/players/photos/player-photos.html'
-
 
 class PlayerCardCommunication(PlayerMainCard):
     template_name = 'hockeyapp/players/player-card-communication.html'

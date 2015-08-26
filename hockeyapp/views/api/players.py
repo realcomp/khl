@@ -44,6 +44,11 @@ class PlayerNumbers(NumbersList):
         return sorted(clubs_by_number.values(), key=lambda x: x['number'])
 
 
+class PlayerDetails(generics.RetrieveAPIView):
+    queryset = Player.objects.all().select_related('clubplayer')
+    serializer_class = PlayersSearchSerializer
+
+
 class PlayersSearch(viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
     queryset = Player.objects.all().select_related('clubplayer')

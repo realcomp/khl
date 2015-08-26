@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load base_extras %}
+
+{% block extrahead %}
+{{ block.super }}
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/styleTwo.css">
+<link href="/static/css-styled/semantic.min.css" rel="stylesheet">
+<link href="/static/css-styled/grid.css" rel="stylesheet">
+<link href="/static/css-styled/style.css" media="all" type="text/css" rel="stylesheet">
+{% endblock %}
+{% block title %}
+Результаты поиска - Sportomatics.ru
+{% endblock %}
+
+{% block body %}
+<section class="content">
+    <div class="container home-page">
+        <div class="ui grid breadcrumb-search">
+            <div class="twelve wide column">
+                <div class="breadcrumbs">
+                    <div class="ui small breadcrumb">
+                        <div class="active section">Главная</div>
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column">
+                <div class="search-block">
+                    <div class="item">
+                        <div class="ui icon input">
+                            <input type="text" placeholder="Search...">
+                            <i class="search link icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-content page-container">
+            <div class="page-inner-container">
+                <div class="ui grid">
+                    {% if results %}
+                        {% for result in results %}
+                            {{ result.title }}<br />
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            {% include "hockeyapp/player-partners-popup.html" %}
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

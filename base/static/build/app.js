@@ -2,11 +2,10 @@
 angular.module('Sportomatics', [
     'angucomplete',
     'ngTagsInput',
-    'ui.router',
     'ngResource',
     'ngCookies',
     'isteven-multi-select'])
-.config(function($stateProvider, $urlRouterProvider){
+/*.config(function($stateProvider, $urlRouterProvider){
     $stateProvider
         .state('playersCoaches', {
             url: '/ru/hockey/players',
@@ -15,7 +14,7 @@ angular.module('Sportomatics', [
                 alert($state)
             }
         })
-})
+})*/
 
 .directive('ngUpdateHidden', function() {
     return {
@@ -271,7 +270,7 @@ $.fn.textWidth = function(){
     return width;
 };
 
-var HTML_CLUB_GAMES_DIV, HTML_INDICATORS_LIST_ITEM;
+var HTML_CLUB_GAMES_DIV, HTML_CLUB_HOME_ATTENDANCE_DIV, HTML_INDICATORS_LIST_ITEM;
 
 HTML_INDICATORS_LIST_ITEM = function(result, title, image, color) {
   return '<li class="" style="border-right: 5px solid ' + color + ';"> <div class="b-inline b-diagram__legend__table-style__item"> <div class="b-inline hidden-xs"> <a class="ui image" ><img class="ui image b-diagram__legend__image" src="' + image + '" width="32" height="32"></a> </div> <div class="b-inline"> <p class=""> <a class="no-decoration default-a pointer">' + title + '</a> <!--<i class="flag cz i-top-2 hidden-xs"></i>--> </p> </div> </div> <p class="b-inline b-diagram__legend__table-style__games">' + result + '</p> </li>';
@@ -279,6 +278,10 @@ HTML_INDICATORS_LIST_ITEM = function(result, title, image, color) {
 
 HTML_CLUB_GAMES_DIV = function(title, score, date, leftLogo, rightLogo, color) {
   return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score" style="color: ' + color + '">' + score + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
+};
+
+HTML_CLUB_HOME_ATTENDANCE_DIV = function(title, count, date, leftLogo, rightLogo) {
+  return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score">' + count + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
 };
 
 angular.module('Sportomatics')
@@ -1174,7 +1177,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
       return $('#' + this.divId).highcharts({
         chart: {
           type: 'column',
-          alignTicks: false
+          alignTicks: false,
+          marginBottom: 180,
+          height: 400
         },
         title: {
           text: 'Посещаемость'
@@ -1187,7 +1192,8 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           },
           reversed: false,
           lineColor: '#FFFFFF',
-          max: 100
+          max: 100,
+          tickInterval: 10
         },
         yAxis: {
           gridLineWidth: 0,
@@ -1199,9 +1205,9 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
             }, {
               value: this.max,
               width: 1,
-              color: '#141414',
+              color: '#E7E7E7',
               label: {
-                text: 'Вместимость'
+                text: 'Максимальная вместимость: ' + this.max + ' человек'
               }
             }
           ],
@@ -1223,28 +1229,33 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
           margin: 30
         },
         tooltip: {
+          hideDelay: 500000,
           shared: true,
           useHTML: true,
           crosshairs: true,
+          borderWidth: 0,
+          shadow: false,
           style: {
-            padding: 0
+            padding: 0,
+            marginTop: 60
+          },
+          positioner: function(a, b, p) {
+            return {
+              y: 240,
+              x: p.plotX
+            };
           },
           formatter: function() {
-            return '<div class="text-center"> <div class="tooltip-header"><b>' + this.points[0].key + '<b></div><a class="score">' + this.points[0].point.spectators + '</a><br><a class="match-date">' + (new Date(this.points[0].point.date).yyyymmddHHMMFormatted()) + '</a>';
+            return HTML_CLUB_HOME_ATTENDANCE_DIV(this.points[0].key, this.points[0].point.spectators, new Date(this.points[0].point.date).yyyymmddHHMMFormatted(), this.points[0].point.leftLogo, this.points[0].point.rightLogo);
           }
         },
         plotOptions: {
           series: {
             stacking: 'normal',
             borderWidth: 0,
-            pointWidth: 5,
-            pointPlacement: "on"
-          },
-          column: {
-            pointPadding: 0,
-            groupPadding: 0,
-            borderWidth: 1,
-            pointWidth: 4
+            pointPlacement: "on",
+            groupPadding: 0.05,
+            pointPadding: 0.2
           }
         },
         series: this.data
@@ -3251,6 +3262,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
   $scope.clubMatchApi = document.getElementById('club-match-api').value;
   $scope.clubPk = document.getElementById('team-id').value;
   $scope.params = $location.search();
+  $scope.clubLogo = document.getElementById('club-logo').value;
   $scope.createVisitorsChart = function() {
     var params;
     params = '';
@@ -3270,12 +3282,14 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
         name: 'club',
         data: $scope.games.map(function(game, index) {
           return {
-            x: index,
+            x: index * 4.21,
             y: game.spectators,
             date: game.date,
             name: game.opponent.title_verbose,
             score: Math.abs(game.score) + ' : ' + Math.abs(game.opponent_score),
-            spectators: game.spectators + ' (' + parseInt(parseFloat(game.arena_capacity_rate).toFixed(2) * 100) + '%)'
+            spectators: game.spectators + ' (' + parseInt(parseFloat(game.arena_capacity_rate).toFixed(2) * 100) + '%)',
+            leftLogo: game.opponent.logo,
+            rightLogo: $scope.clubLogo
           };
         }).filter(function(toFilter) {
           return toFilter != null;
@@ -4630,7 +4644,7 @@ angular.module('Sportomatics')
 })
 
 angular.module('Sportomatics')
-    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $state, $location, $q, HighchartsFactory) {
+    .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/
         var self = this;
         var url = (document.getElementById('api-player-indicators') != null) ? document.getElementById('api-player-indicators').value : '';
@@ -4898,7 +4912,8 @@ angular.module('Sportomatics')
         this.list = function() {
 
             if($scope.selectedClub) return this.listAvergePlayer();
-            if($('.club-id').length !== 0) return this.listClubs();
+            if($('.club-id').length !== 0 && $('#listClubs').length === 1) return this.listClubs();
+            if($('#listClubs').length === 1 && $('.club-id').length === 0) return;
 
             if($scope.initialDataBySeason == null) return
             if($scope.activeSeason !== -1) return $scope.makeChart();
