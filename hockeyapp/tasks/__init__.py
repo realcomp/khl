@@ -1,4 +1,4 @@
-#coding: utf-8
+# coding: utf-8
 from __future__ import unicode_literals, print_function
 
 import datetime
@@ -28,15 +28,16 @@ from .. import timeline_tasks
 def club_async_update(links, parser):
     for link in links:
         try:
-            parser().put_data_in_db_from_page(link[:-1]) #remove last slash
+            parser().put_data_in_db_from_page(link[:-1])  # remove last slash
         except Exception, exc:
             logger.error(exc, exc_info=sys.exc_info())
+
 
 @app.task(ignore_result=True, track_started=True)
 def periodic_update_clubs():
     try:
-        for links, club_parser in ( 
-            (parsers.club.KHLClubURLs().get_page(), parsers.club.KHLClubInfo), 
+        for links, club_parser in (
+            (parsers.club.KHLClubURLs().get_page(), parsers.club.KHLClubInfo),
             (parsers.club.VHLClubURLs().get_page(), parsers.club.VHLClubInfo),
             (parsers.club.MHLClubURLs().get_page(), parsers.club.MHLClubInfo),
             (parsers.club.MHL2ClubURLs().get_page(), parsers.club.MHL2ClubInfo),
@@ -53,8 +54,8 @@ def periodic_update_schedules():
         for chlng in models.Challenge.objects.filter(processed=False):
             _parser = getattr(parsers.schedule, chlng.parser_type)
             _parser(absolute_url=chlng.url
-                ).put_data_in_db_from_page( challenge = chlng,
-                                            challenge_type=chlng.challenge_type)
+                    ).put_data_in_db_from_page(challenge=chlng,
+                                               challenge_type=chlng.challenge_type)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
@@ -63,9 +64,9 @@ def periodic_update_schedules():
 def periodic_get_matches():
     try:
         matches = models.Schedule.objects.filter(khl_id__isnull=False,
-                                                processed=False,
-                                                challenge__isnull=False,
-                                                match__isnull=True)
+                                                 processed=False,
+                                                 challenge__isnull=False,
+                                                 match__isnull=True)
         for m in matches:
             async_hockey_match_parser.delay(m.khl_id, challenge=m.challenge)
     except Exception, exc:
@@ -101,7 +102,7 @@ def rhockey_player_parser(player_id):
 
 @app.task(ignore_result=True, track_started=True)
 def rhockey_players_parser():
-    for i in range(1,99748):
+    for i in range(1, 99748):
         try:
             rhockey_player_parser.delay(i)
         except Exception, exc:
@@ -136,17 +137,17 @@ def async_hockey_player_update(id, parser_id):
     '''
     try:
         parser_id = int(parser_id)
-        parser = {  1: parsers.player.MHLPlayerInfo,
-                    2: parsers.player.KHLPlayerInfo,
-                    3: parsers.player.VHLPlayerInfo,
-                    4: parsers.player.MHL2PlayerInfo,
-        }.get(parser_id)
+        parser = {1: parsers.player.MHLPlayerInfo,
+                  2: parsers.player.KHLPlayerInfo,
+                  3: parsers.player.VHLPlayerInfo,
+                  4: parsers.player.MHL2PlayerInfo,
+                  }.get(parser_id)
         if parser:
             data = parser().get_page(id)
-            models.Player.objects.get_or_create_player( khl_id=id,
-                                                        update=True,
-                                                        data=data
-            )
+            models.Player.objects.get_or_create_player(khl_id=id,
+                                                       update=True,
+                                                       data=data
+                                                       )
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
 
@@ -172,7 +173,7 @@ def async_db_matches_update():
     '''
     try:
         for match_id in models.Match.objects.filter(home_score__isnull=True
-                                            ).values_list('id', flat=True):
+                                                    ).values_list('id', flat=True):
             async_db_match_update.delay(match_id)
     except Exception, exc:
         logger.error(exc, exc_info=sys.exc_info())
@@ -185,17 +186,13 @@ def async_db_match_update(match_id):
     '''
     try:
         match = models.Match.objects.get(id=match_id)
-        match.count=match.count.strip(
-                            ).replace(' ',''
-                            ).replace('+:-', ''
-                            ).replace('-:+',''
-                            ).replace('(',''
-                            ).replace(')','')
+        match.count = match.count.strip(
+        ).replace(' ', ''
+                  ).replace('+:-', ''
+                            ).replace('-:+', '').replace('(', '').replace(')', '')
         match.home_score = str2int_safe(match.count.split(':')[0])
-        match.guest_score = str2int_safe(match.count.split(':'
-                                                )[1].replace('Б',''
-                                                   ).replace('OT',''
-                                                   ).replace('ОТ', ''))
+        match.guest_score = str2int_safe(
+            match.count.split(':')[1].replace('Б', '').replace('OT', '').replace('ОТ', ''))
         match.bullet_win = 'Б' in match.count
         match.overtime_win = ('ОТ' in match.count) or ('OT' in match.count)
         match.save(update_fields=['count', 'home_score', 'guest_score',
@@ -207,14 +204,15 @@ def async_db_match_update(match_id):
 insta_api = InstagramAPI(client_id=settings.INSTAGRAM_ID,
                          client_secret=settings.INSTAGRAM_SECRET)
 
+
 @app.task(ignore_result=True, track_started=True)
 def get_instagram_pictures(insta_loc_id, arena, min_timestamp,
-                            max_timestamp=None, max_id=None
-):
+                           max_timestamp=None, max_id=None
+                           ):
     data, next = insta_api.location_recent_media(location_id=insta_loc_id,
-                                                min_timestamp=min_timestamp,
-                                                max_timestamp=max_timestamp,
-                                                max_id=max_id)
+                                                 min_timestamp=min_timestamp,
+                                                 max_timestamp=max_timestamp,
+                                                 max_id=max_id)
     if data:
         _fn = arena.image_folder_name or 'Instaphotos'
         for item in data:
@@ -222,13 +220,13 @@ def get_instagram_pictures(insta_loc_id, arena, min_timestamp,
                 iif = InstagramImageFile.objects.get_or_create_iif(item, _fn)
                 if iif and arena:
                     _crtr = models.ArenaInstaPhoto.objects.get_or_create
-                    _crtr(arena=arena,photo=iif)
+                    _crtr(arena=arena, photo=iif)
     if next:
         max_id = re.search('max_id=(\d+)', next).group(0).split('=')[1]
-        get_instagram_pictures.delay(  insta_loc_id, arena,
-                                        min_timestamp=min_timestamp,
-                                        max_timestamp=max_timestamp,
-                                        max_id=max_id)
+        get_instagram_pictures.delay(insta_loc_id, arena,
+                                     min_timestamp=min_timestamp,
+                                     max_timestamp=max_timestamp,
+                                     max_id=max_id)
 
 
 @app.task(ignore_result=True, track_started=True)
@@ -236,7 +234,7 @@ def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
     if min_timestamp:
         min_t = min_timestamp
     else:
-        _ts_min = datetime.datetime.today()-datetime.timedelta(days=1)
+        _ts_min = datetime.datetime.today() - datetime.timedelta(days=1)
         min_t = int(time.mktime(_ts_min.timetuple()))
     if max_timestamp:
         max_t = max_timestamp
@@ -246,4 +244,29 @@ def get_arenas_instagram_pictures(min_timestamp=None, max_timestamp=None):
     for arena in arenas:
         locations = utils.get_arena_instagram_locations(arena.coords)
         for loc_id in locations:
-                get_instagram_pictures.delay(loc_id, arena, min_t, max_t)
+            get_instagram_pictures.delay(loc_id, arena, min_t, max_t)
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_db_matches_parse_count():
+    try:
+        for match_id in models.Match.objects.filter(
+                count__isnull=False).values_list('id', flat=True):
+            async_db_match_parse_count.delay(match_id)
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())
+
+
+@app.task(ignore_result=True, track_started=True)
+def async_db_match_parse_count(match_id):
+    try:
+        match = models.Match.objects.get(id=match_id)
+        if match.count:
+            home_count, _, guest_count = match.count.partition(':')
+            match.home_count = int(filter(
+                lambda x: x.isdigit(), home_count) or 0)
+            match.guest_count = int(filter(
+                lambda x: x.isdigit(), guest_count) or 0)
+            match.save()
+    except Exception, exc:
+        logger.error(exc, exc_info=sys.exc_info())

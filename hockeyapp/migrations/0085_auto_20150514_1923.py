@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+from django.db import migrations
 
 
 def parse_count(apps, schema_editor):
     Match = apps.get_model('hockeyapp', 'Match')
-    for match in Match.objects.filter(count__isnull=False):
+    for match in Match.objects.filter(count__isnull=False).none():
         if match.count:
             home_count, _, guest_count = match.count.partition(':')
             match.home_count = int(filter(
