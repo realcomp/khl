@@ -12,7 +12,7 @@ from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
-from django.db.models import F, Q, Avg, Sum, Count
+from django.db.models import F, Q, Avg, Sum
 from django.utils import timezone
 
 import filer
@@ -269,27 +269,19 @@ class ClubPlayerQuerySet(models.QuerySet):
         поучаствовавший во всех матчах сезона
         '''
         from hockeyapp.models import Match
-        
-        # Get the total number of matches for this club/season
-        total_matches = Match.objects.filter(
-            Q(home_team=club) | Q(guest_team=club)
-        ).filter(
-            challenge_type__isnull=False, 
-            challenge_type__gt=0
-        ).filter(
-            clubplayermatch__clubplayer__season=season
-        ).distinct().count()
-        
-        if total_matches == 0:
-            return self.none()
-        
-        # Find players who participated in all matches
-        return self.exclude(line=1).filter(
+        matches = set(
+            Match.objects
+            .filter(Q(home_team=club) | Q(guest_team=club))
+            .filter(challenge_type__isnull=False, challenge_type__gt=0)
+            .filter(clubplayermatch__clubplayer__season=season)
+            .values_list('pk', flat=True))
+        qs = self.exclude(line=1).filter(
+            clubplayermatch__match__isnull=False,
             clubplayermatch__match__challenge_type__isnull=False,
-            clubplayermatch__match__challenge_type__gt=0
-        ).annotate(
-            match_count=Count('clubplayermatch__match', distinct=True)
-        ).filter(match_count=total_matches)
+            clubplayermatch__match__challenge_type__gt=0)
+        for pk in matches:
+            qs = qs.filter(clubplayermatch__match=pk)
+        return qs
 
 
 class RelatedPlayer(models.QuerySet):
