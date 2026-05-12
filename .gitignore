@@ -71,3 +71,6 @@ celerybeat-schedule
 # Local backups
 *.before-postgres
 *.before-*
+
+# Performance raw logs
+docs/performance/*.log
