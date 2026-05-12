@@ -1,0 +1,64 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:9.6
+    environment:
+      POSTGRES_DB: sportomatics
+      POSTGRES_USER: sportomatics
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Монтируем дамп базы данных для авто-импорта при ПЕРВОМ запуске пустой БД
+      # Поместите sportomatics_20160705.sql.gz в папку docker-entrypoint-initdb.d рядом с docker-compose.yml
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:4.0-alpine
+    volumes:
+      - redisdata:/data
+
+  web:
+    build: .
+    restart: always
+    volumes:
+      - ./media:/app/media
+      - static_volume:/app/static
+    depends_on:
+      - db
+      - redis
+    # Порт не пробрасываем наружу, так как перед ним стоит Nginx
+
+  celery_worker:
+    build: .
+    command: celery -A sportomatics worker -l info
+    restart: always
+    volumes:
+      - ./media:/app/media
+    depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build: .
+    command: celery -A sportomatics beat -l info
+    restart: always
+    depends_on:
+      - db
+      - redis
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "127.0.0.1:3011:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./media:/app/media
+      - static_volume:/app/static
+    depends_on:
+      - web
+
+volumes:
+  pgdata:
+  redisdata:
+  static_volume:

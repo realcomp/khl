@@ -1,7 +1,7 @@
 numpy==1.9.2
 raven==5.1.1
 requests==2.5.0
-psycopg2==2.5.4
+psycopg2==2.8.6
 python-dateutil==2.3
 
 #grab
@@ -21,6 +21,8 @@ celery==3.1.17
 jsonfield==1.0.2
 
 Django==1.7.4
+django-polymorphic==0.8.1
+easy-thumbnails==2.3
 #django-atomic-celery==1.1.2
 #django-atomic-signals==1.1.0
 django-autocomplete-light==2.0.5
@@ -34,7 +36,7 @@ django-registration-redux==1.1
 django-relatives==0.3.1
 django-rosetta==0.7.4
 django-redis==3.8.2
-django-picklefield==0.3.1
+django-picklefield==0.3.2
 django-social-auth==0.7.28
 
 #development
