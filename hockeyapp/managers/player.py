@@ -12,7 +12,7 @@ from StringIO import StringIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
-from django.db.models import F, Q, Avg, Sum
+from django.db.models import F, Q, Avg, Sum, Count
 from django.utils import timezone
 
 import filer
@@ -262,26 +262,37 @@ class ClubPlayerQuerySet(models.QuerySet):
 
     def by_leagues(self, leagues):
         return self.filter(league__in=leagues)
-
     def ironmans(self, club, season):
-        ''''
+        '
         Железный человек - игрок (кроме вратаря),
         поучаствовавший во всех матчах сезона
-        '''
+        '
+        from django.db.models import Count
         from hockeyapp.models import Match
-        matches = set(
-            Match.objects
-            .filter(Q(home_team=club) | Q(guest_team=club))
-            .filter(challenge_type__isnull=False, challenge_type__gt=0)
-            .filter(clubplayermatch__clubplayer__season=season)
-            .values_list('pk', flat=True))
-        qs = self.exclude(line=1).filter(
-            clubplayermatch__match__isnull=False,
+        
+        # Get all matches for the club in this season
+        match_ids = list(Match.objects.filter(
+            Q(home_team=club) | Q(guest_team=club),
+            challenge_type__isnull=False,
+            challenge_type__gt=0,
+            clubplayermatch__clubplayer__season=season
+        ).distinct().values_list('pk', flat=True))
+        
+        if not match_ids:
+            return self.none()
+        
+        # Instead of looping and adding JOINs, we build a single query
+        # that checks if a player participated in all the matches
+        base_qs = self.exclude(line=1).filter(
+            clubplayermatch__match__in=match_ids,
             clubplayermatch__match__challenge_type__isnull=False,
-            clubplayermatch__match__challenge_type__gt=0)
-        for pk in matches:
-            qs = qs.filter(clubplayermatch__match=pk)
-        return qs
+            clubplayermatch__match__challenge_type__gt=0
+        )
+        
+        # Group by player and count distinct matches
+        return base_qs.annotate(
+            match_count=Count('clubplayermatch__match', distinct=True)
+        ).filter(match_count=len(match_ids))
 
 
 class RelatedPlayer(models.QuerySet):
