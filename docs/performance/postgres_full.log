@@ -1,0 +1,1265 @@
+db-1  | 
+db-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1  | 
+db-1  | LOG:  database system was shut down at 2026-05-12 03:38:23 UTC
+db-1  | LOG:  MultiXact member wraparound protections are now enabled
+db-1  | LOG:  autovacuum launcher started
+db-1  | LOG:  database system is ready to accept connections
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+db-1  | DETAIL:  Key (typname, typnamespace)=(django_migrations_id_seq, 2200) already exists.
+db-1  | STATEMENT:  CREATE TABLE "django_migrations" ("id" serial NOT NULL PRIMARY KEY, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" timestamp with time zone NOT NULL)
+db-1  | ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+db-1  | DETAIL:  Key (typname, typnamespace)=(django_migrations_id_seq, 2200) already exists.
+db-1  | STATEMENT:  CREATE TABLE "django_migrations" ("id" serial NOT NULL PRIMARY KEY, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" timestamp with time zone NOT NULL)
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+db-1  | DETAIL:  Key (typname, typnamespace)=(hockeyapp_addressclub_id_seq, 2200) already exists.
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_addressclub" ("id" serial NOT NULL PRIMARY KEY, "start_date" date NULL, "end_date" date NULL, "address_id" integer NOT NULL)
+db-1  | ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+db-1  | DETAIL:  Key (typname, typnamespace)=(hockeyapp_addressclub_id_seq, 2200) already exists.
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_addressclub" ("id" serial NOT NULL PRIMARY KEY, "start_date" date NULL, "end_date" date NULL, "address_id" integer NOT NULL)
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+db-1  | DETAIL:  Key (typname, typnamespace)=(hockeyapp_logoclubhistory_id_seq, 2200) already exists.
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_logoclubhistory" ("id" serial NOT NULL PRIMARY KEY, "start_date" date NULL, "end_date" date NULL, "club_id" integer NOT NULL, "logo_id" integer NOT NULL)
+db-1  | ERROR:  duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+db-1  | DETAIL:  Key (typname, typnamespace)=(hockeyapp_logoclubhistory_id_seq, 2200) already exists.
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_logoclubhistory" ("id" serial NOT NULL PRIMARY KEY, "start_date" date NULL, "end_date" date NULL, "club_id" integer NOT NULL, "logo_id" integer NOT NULL)
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  table "hockeyapp_clubplayermatch_clubplayers" does not exist
+db-1  | STATEMENT:  DROP TABLE "hockeyapp_clubplayermatch_clubplayers" CASCADE
+db-1  | ERROR:  table "hockeyapp_clubplayermatch_clubplayers" does not exist
+db-1  | STATEMENT:  DROP TABLE "hockeyapp_clubplayermatch_clubplayers" CASCADE
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "wiki_page" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "wiki_page" varchar(200) DEFAULT '' NOT NULL
+db-1  | ERROR:  column "wiki_page" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "wiki_page" varchar(200) DEFAULT '' NOT NULL
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "date_str" of relation "hockeyapp_match" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_match" RENAME COLUMN "date" TO "date_str"
+db-1  | ERROR:  column "date_str" of relation "hockeyapp_match" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_match" RENAME COLUMN "date" TO "date_str"
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "head" of relation "hockeyapp_coachclub" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_coachclub" ADD COLUMN "head" boolean DEFAULT true NOT NULL
+db-1  | ERROR:  column "head" of relation "hockeyapp_coachclub" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_coachclub" ADD COLUMN "head" boolean DEFAULT true NOT NULL
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "capacity" does not exist
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_arena" RENAME COLUMN "capacity" TO "capacity_str"
+db-1  | ERROR:  column "capacity" does not exist
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_arena" RENAME COLUMN "capacity" TO "capacity_str"
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  relation "hockeyapp_name" already exists
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_name" ("id" serial NOT NULL PRIMARY KEY, "type" smallint NOT NULL, "ru_name" varchar(4096) NOT NULL, "en_name" varchar(4096) NOT NULL)
+db-1  | ERROR:  relation "hockeyapp_name" already exists
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_name" ("id" serial NOT NULL PRIMARY KEY, "type" smallint NOT NULL, "ru_name" varchar(4096) NOT NULL, "en_name" varchar(4096) NOT NULL)
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "challenge_type" of relation "hockeyapp_match" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_match" ADD COLUMN "challenge_type" smallint NULL CHECK ("challenge_type" >= 0)
+db-1  | ERROR:  column "challenge_type" of relation "hockeyapp_match" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_match" ADD COLUMN "challenge_type" smallint NULL CHECK ("challenge_type" >= 0)
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  relation "hockeyapp_arenainstaphoto" already exists
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_arenainstaphoto" ("id" serial NOT NULL PRIMARY KEY, "player_numbers" varchar(1024) NOT NULL, "comment" varchar(1024) NOT NULL, "processed" boolean NOT NULL, "proccesed_time" timestamp with time zone NOT NULL, "arena_id" integer NOT NULL, "club_id" integer NULL, "match_id" integer NULL, "photo_id" integer NOT NULL)
+db-1  | ERROR:  relation "hockeyapp_arenainstaphoto" already exists
+db-1  | STATEMENT:  CREATE TABLE "hockeyapp_arenainstaphoto" ("id" serial NOT NULL PRIMARY KEY, "player_numbers" varchar(1024) NOT NULL, "comment" varchar(1024) NOT NULL, "processed" boolean NOT NULL, "proccesed_time" timestamp with time zone NOT NULL, "arena_id" integer NOT NULL, "club_id" integer NULL, "match_id" integer NULL, "photo_id" integer NOT NULL)
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "matches_lose_total" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "matches_lose_total" integer NULL
+db-1  | ERROR:  column "matches_lose_total" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "matches_lose_total" integer NULL
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "bullet_goals_total" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "bullet_goals_total" integer NULL
+db-1  | ERROR:  column "bullet_goals_total" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "bullet_goals_total" integer NULL
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | ERROR:  column "pis_average" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "pis_average" double precision NULL
+db-1  | ERROR:  column "pis_average" of relation "hockeyapp_player" already exists
+db-1  | STATEMENT:  ALTER TABLE "hockeyapp_player" ADD COLUMN "pis_average" double precision NULL
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | FATAL:  role "postgres" does not exist
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  checkpoints are occurring too frequently (24 seconds apart)
+db-1  | HINT:  Consider increasing the configuration parameter "max_wal_size".
+db-1  | LOG:  checkpoints are occurring too frequently (12 seconds apart)
+db-1  | HINT:  Consider increasing the configuration parameter "max_wal_size".
+db-1  | LOG:  checkpoints are occurring too frequently (13 seconds apart)
+db-1  | HINT:  Consider increasing the configuration parameter "max_wal_size".
+db-1  | ERROR:  canceling autovacuum task
+db-1  | CONTEXT:  automatic analyze of table "sportomatics.public.hockeyapp_relatedplayer"
+db-1  | ERROR:  role "postgres" does not exist
+db-1  | STATEMENT:  REVOKE ALL ON SCHEMA public FROM PUBLIC;
+db-1  | 	REVOKE ALL ON SCHEMA public FROM postgres;
+db-1  | 	GRANT ALL ON SCHEMA public TO postgres;
+db-1  | 	GRANT ALL ON SCHEMA public TO PUBLIC;
+db-1  | 	
+db-1  | 	
+db-1  | 	
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  incomplete startup packet
+db-1  | LOG:  received fast shutdown request
+db-1  | LOG:  aborting any active transactions
+db-1  | LOG:  autovacuum launcher shutting down
+db-1  | LOG:  shutting down
+db-1  | LOG:  database system is shut down
+db-1  | 
+db-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1  | 
+db-1  | 2026-05-12 17:52:30.351 UTC [27]   LOG:  database system was shut down at 2026-05-12 17:52:30 UTC
+db-1  | 2026-05-12 17:52:30.353 UTC [27]   LOG:  MultiXact member wraparound protections are now enabled
+db-1  | 2026-05-12 17:52:30.355 UTC [1]   LOG:  database system is ready to accept connections
+db-1  | 2026-05-12 17:52:30.355 UTC [31]   LOG:  autovacuum launcher started
+db-1  | 2026-05-12 17:52:49.076 UTC [47] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 17:53:40.217 UTC [60] sportomatics sportomatics LOG:  duration: 7404.970 ms  statement: SELECT "hockeyapp_clubplayer"."id", "hockeyapp_clubplayer"."player_id", "hockeyapp_clubplayer"."club_id", "hockeyapp_clubplayer"."number", "hockeyapp_clubplayer"."line", "hockeyapp_clubplayer"."start_date", "hockeyapp_clubplayer"."end_date", "hockeyapp_clubplayer"."league_id", "hockeyapp_clubplayer"."season_id" FROM "hockeyapp_clubplayer" INNER JOIN "hockeyapp_clubplayermatch" ON ( "hockeyapp_clubplayer"."id" = "hockeyapp_clubplayermatch"."clubplayer_id" ) INNER JOIN "hockeyapp_match" ON ( "hockeyapp_clubplayermatch"."match_id" = "hockeyapp_match"."id" ) INNER JOIN "hockeyapp_clubplayermatch" T6 ON ( "hockeyapp_clubplayer"."id" = T6."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T8 ON ( "hockeyapp_clubplayer"."id" = T8."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T10 ON ( "hockeyapp_clubplayer"."id" = T10."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T12 ON ( "hockeyapp_clubplayer"."id" = T12."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T14 ON ( "hockeyapp_clubplayer"."id" = T14."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T16 ON ( "hockeyapp_clubplayer"."id" = T16."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T18 ON ( "hockeyapp_clubplayer"."id" = T18."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T20 ON ( "hockeyapp_clubplayer"."id" = T20."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T22 ON ( "hockeyapp_clubplayer"."id" = T22."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T24 ON ( "hockeyapp_clubplayer"."id" = T24."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T26 ON ( "hockeyapp_clubplayer"."id" = T26."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T28 ON ( "hockeyapp_clubplayer"."id" = T28."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T30 ON ( "hockeyapp_clubplayer"."id" = T30."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T32 ON ( "hockeyapp_clubplayer"."id" = T32."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T34 ON ( "hockeyapp_clubplayer"."id" = T34."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T36 ON ( "hockeyapp_clubplayer"."id" = T36."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T38 ON ( "hockeyapp_clubplayer"."id" = T38."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T40 ON ( "hockeyapp_clubplayer"."id" = T40."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T42 ON ( "hockeyapp_clubplayer"."id" = T42."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T44 ON ( "hockeyapp_clubplayer"."id" = T44."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T46 ON ( "hockeyapp_clubplayer"."id" = T46."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T48 ON ( "hockeyapp_clubplayer"."id" = T48."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T50 ON ( "hockeyapp_clubplayer"."id" = T50."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T52 ON ( "hockeyapp_clubplayer"."id" = T52."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T54 ON ( "hockeyapp_clubplayer"."id" = T54."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T56 ON ( "hockeyapp_clubplayer"."id" = T56."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T58 ON ( "hockeyapp_clubplayer"."id" = T58."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T60 ON ( "hockeyapp_clubplayer"."id" = T60."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T62 ON ( "hockeyapp_clubplayer"."id" = T62."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T64 ON ( "hockeyapp_clubplayer"."id" = T64."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T66 ON ( "hockeyapp_clubplayer"."id" = T66."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T68 ON ( "hockeyapp_clubplayer"."id" = T68."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T70 ON ( "hockeyapp_clubplayer"."id" = T70."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T72 ON ( "hockeyapp_clubplayer"."id" = T72."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T74 ON ( "hockeyapp_clubplayer"."id" = T74."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T76 ON ( "hockeyapp_clubplayer"."id" = T76."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T78 ON ( "hockeyapp_clubplayer"."id" = T78."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T80 ON ( "hockeyapp_clubplayer"."id" = T80."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T82 ON ( "hockeyapp_clubplayer"."id" = T82."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T84 ON ( "hockeyapp_clubplayer"."id" = T84."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T86 ON ( "hockeyapp_clubplayer"."id" = T86."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T88 ON ( "hockeyapp_clubplayer"."id" = T88."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T90 ON ( "hockeyapp_clubplayer"."id" = T90."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T92 ON ( "hockeyapp_clubplayer"."id" = T92."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T94 ON ( "hockeyapp_clubplayer"."id" = T94."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T96 ON ( "hockeyapp_clubplayer"."id" = T96."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T98 ON ( "hockeyapp_clubplayer"."id" = T98."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T100 ON ( "hockeyapp_clubplayer"."id" = T100."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T102 ON ( "hockeyapp_clubplayer"."id" = T102."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T104 ON ( "hockeyapp_clubplayer"."id" = T104."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T106 ON ( "hockeyapp_clubplayer"."id" = T106."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T108 ON ( "hockeyapp_clubplayer"."id" = T108."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T110 ON ( "hockeyapp_clubplayer"."id" = T110."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T112 ON ( "hockeyapp_clubplayer"."id" = T112."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T114 ON ( "hockeyapp_clubplayer"."id" = T114."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T116 ON ( "hockeyapp_clubplayer"."id" = T116."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T118 ON ( "hockeyapp_clubplayer"."id" = T118."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T120 ON ( "hockeyapp_clubplayer"."id" = T120."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T122 ON ( "hockeyapp_clubplayer"."id" = T122."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T124 ON ( "hockeyapp_clubplayer"."id" = T124."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T126 ON ( "hockeyapp_clubplayer"."id" = T126."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T128 ON ( "hockeyapp_clubplayer"."id" = T128."clubplayer_id" ) INNER JOIN "hockeyapp_clubplayermatch" T130 ON ( "hockeyapp_clubplayer"."id" = T130."clubplayer_id" ) WHERE ("hockeyapp_clubplayer"."club_id" = 56 AND "hockeyapp_clubplayer"."season_id" = 19 AND NOT ("hockeyapp_clubplayer"."line" = 1) AND "hockeyapp_match"."challenge_type" IS NOT NULL AND "hockeyapp_match"."challenge_type" > 0 AND "hockeyapp_clubplayermatch"."match_id" IS NOT NULL AND T6."match_id" = 36482 AND T8."match_id" = 33060 AND T10."match_id" = 35849 AND T12."match_id" = 33419 AND T14."match_id" = 36749 AND T16."match_id" = 33041 AND T18."match_id" = 36754 AND T20."match_id" = 35861 AND T22."match_id" = 33177 AND T24."match_id" = 33432 AND T26."match_id" = 36121 AND T28."match_id" = 36762 AND T30."match_id" = 36635 AND T32."match_id" = 36125 AND T34."match_id" = 33327 AND T36."match_id" = 33316 AND T38."match_id" = 33190 AND T40."match_id" = 33447 AND T42."match_id" = 36649 AND T44."match_id" = 36138 AND T46."match_id" = 33095 AND T48."match_id" = 35884 AND T50."match_id" = 36381 AND T52."match_id" = 33202 AND T54."match_id" = 35891 AND T56."match_id" = 33461 AND T58."match_id" = 33161 AND T60."match_id" = 32957 AND T62."match_id" = 36415 AND T64."match_id" = 33345 AND T66."match_id" = 33219 AND T68."match_id" = 33014 AND T70."match_id" = 35910 AND T72."match_id" = 33351 AND T74."match_id" = 32968 AND T76."match_id" = 36683 AND T78."match_id" = 35869 AND T80."match_id" = 33230 AND T82."match_id" = 33397 AND T84."match_id" = 33105 AND T86."match_id" = 35922 AND T88."match_id" = 33150 AND T90."match_id" = 33273 AND T92."match_id" = 33369 AND T94."match_id" = 33114 AND T96."match_id" = 36572 AND T98."match_id" = 33246 AND T100."match_id" = 32991 AND T102."match_id" = 33377 AND T104."match_id" = 32943 AND T106."match_id" = 36455 AND T108."match_id" = 33258 AND T110."match_id" = 33388 AND T112."match_id" = 36722 AND T114."match_id" = 33406 AND T116."match_id" = 33142 AND T118."match_id" = 33271 AND T120."match_id" = 36659 AND T122."match_id" = 36671 AND T124."match_id" = 33049 AND T126."match_id" = 33002 AND T128."match_id" = 36734 AND T130."match_id" = 33279) ORDER BY "hockeyapp_clubplayer"."id" DESC LIMIT 1
+db-1  | 2026-05-12 17:53:55.375 UTC [61] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 17:55:01.585 UTC [81] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 17:56:08.162 UTC [92] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 17:57:14.460 UTC [103] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 17:58:20.712 UTC [114] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 17:59:27.002 UTC [125] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:00:33.226 UTC [137] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:01:39.608 UTC [148] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:02:45.680 UTC [159] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:03:51.975 UTC [172] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:04:58.345 UTC [183] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:06:04.837 UTC [195] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:07:11.415 UTC [206] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:08:17.734 UTC [217] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:09:23.877 UTC [228] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:10:30.057 UTC [239] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:11:36.386 UTC [251] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:12:42.712 UTC [262] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:13:48.959 UTC [273] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:14:55.263 UTC [284] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:16:01.640 UTC [296] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:17:08.007 UTC [307] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:18:14.421 UTC [318] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:19:20.498 UTC [329] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:20:26.545 UTC [340] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:21:32.741 UTC [352] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:22:39.000 UTC [363] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:23:45.353 UTC [374] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:24:51.442 UTC [385] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:25:57.410 UTC [396] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:27:03.996 UTC [408] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:28:10.215 UTC [419] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:29:16.465 UTC [430] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:30:22.659 UTC [441] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:31:28.910 UTC [452] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:32:35.093 UTC [464] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:33:41.468 UTC [475] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:34:47.633 UTC [486] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:35:53.667 UTC [497] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:36:59.790 UTC [508] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:38:06.189 UTC [520] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:39:12.446 UTC [531] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:40:18.686 UTC [542] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:41:24.742 UTC [553] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:42:31.212 UTC [564] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:43:37.514 UTC [576] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:44:43.573 UTC [587] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:45:49.647 UTC [598] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:46:55.899 UTC [609] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:48:02.404 UTC [621] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:49:09.024 UTC [632] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:50:15.433 UTC [643] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:51:21.500 UTC [654] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:52:27.852 UTC [665] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:53:34.227 UTC [677] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:54:40.595 UTC [688] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:55:46.597 UTC [699] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:56:52.706 UTC [710] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:57:58.994 UTC [721] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 18:59:05.374 UTC [733] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:00:11.465 UTC [743] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:01:17.929 UTC [754] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:02:24.129 UTC [765] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:03:30.429 UTC [784] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:04:36.844 UTC [796] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:05:42.974 UTC [807] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:06:49.243 UTC [818] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:07:55.379 UTC [829] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:09:01.608 UTC [840] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:10:07.988 UTC [863] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:11:14.255 UTC [894] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:12:20.616 UTC [905] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:13:26.859 UTC [916] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:14:33.070 UTC [928] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:15:39.512 UTC [939] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:16:45.927 UTC [950] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:17:52.107 UTC [961] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:18:58.325 UTC [972] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:20:04.691 UTC [1012] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:21:11.172 UTC [1023] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:22:17.489 UTC [1048] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:23:24.121 UTC [1073] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:24:30.251 UTC [1084] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:25:36.473 UTC [1096] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:26:42.838 UTC [1107] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:27:48.956 UTC [1118] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:28:55.330 UTC [1129] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:30:01.613 UTC [1140] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:31:08.592 UTC [1152] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:32:14.947 UTC [1163] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:33:21.531 UTC [1174] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:34:28.020 UTC [1185] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:35:34.485 UTC [1197] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:36:41.345 UTC [1208] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:37:47.645 UTC [1219] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:38:53.672 UTC [1230] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:39:59.861 UTC [1241] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:41:07.410 UTC [1253] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:42:13.882 UTC [1264] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:43:19.873 UTC [1275] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:44:26.209 UTC [1286] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:45:32.550 UTC [1297] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:46:38.864 UTC [1309] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:47:45.219 UTC [1320] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:48:51.448 UTC [1331] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:49:57.683 UTC [1342] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:51:04.156 UTC [1354] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:52:10.609 UTC [1365] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:53:16.994 UTC [1376] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:54:23.052 UTC [1387] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:55:29.133 UTC [1398] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:56:35.731 UTC [1410] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:57:41.843 UTC [1421] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:58:48.091 UTC [1432] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 19:59:54.447 UTC [1443] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:01:00.894 UTC [1454] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:02:07.316 UTC [1466] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:03:13.722 UTC [1477] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:04:20.403 UTC [1488] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:05:26.832 UTC [1499] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:06:32.938 UTC [1510] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:07:39.396 UTC [1522] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:08:45.540 UTC [1533] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:09:51.640 UTC [1544] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:10:57.746 UTC [1555] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:12:04.133 UTC [1567] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:13:10.505 UTC [1578] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:14:16.748 UTC [1589] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:15:22.898 UTC [1600] [unknown] [unknown] LOG:  incomplete startup packet
+db-1  | 2026-05-12 20:16:28.971 UTC [1611] [unknown] [unknown] LOG:  incomplete startup packet
