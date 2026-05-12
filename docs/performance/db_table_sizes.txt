@@ -1,0 +1,54 @@
+            table_name             | total_size | rows 
+-----------------------------------+------------+------
+ hockeyapp_relatedplayer           | 2106 MB    |    0
+ hockeyapp_match                   | 922 MB     |    0
+ hockeyapp_clubplayermatch         | 261 MB     |    0
+ easy_thumbnails_source            | 245 MB     |    0
+ hockeyapp_player                  | 136 MB     |    0
+ hockeyapp_match_home_players      | 93 MB      |    0
+ hockeyapp_match_guest_players     | 93 MB      |    0
+ base_instagramimagefile           | 91 MB      |    0
+ hockeyapp_matchpenaltyhistory     | 61 MB      |    0
+ hockeyapp_timeline                | 51 MB      |    0
+ hockeyapp_matchgoalhistory_assist | 34 MB      |    0
+ hockeyapp_matchgoalhistory        | 28 MB      |    0
+ hockeyapp_advancedplayerstats     | 24 MB      |    0
+ easy_thumbnails_thumbnail         | 11 MB      |    0
+ filer_file                        | 9760 kB    |    0
+ hockeyapp_clubplayer              | 9640 kB    |    0
+ hockeyapp_match_line_judges       | 8696 kB    |    0
+ hockeyapp_match_judges            | 5360 kB    |    0
+ hockeyapp_schedule                | 4856 kB    |    0
+ hockeyapp_arenainstaphoto         | 3584 kB    |    0
+ base_instagramuser                | 2736 kB    |    0
+ filer_image                       | 2640 kB    |    0
+ hockeyapp_club                    | 2512 kB    |    0
+ django_admin_log                  | 2088 kB    |    0
+ hockeyapp_club_players            | 952 kB     |    0
+ hockeyapp_coachclub               | 400 kB     |    0
+ hockeyapp_addressclub             | 368 kB     |    0
+ hockeyapp_judge                   | 288 kB     |    0
+ hockeyapp_leagueclub              | 288 kB     |    0
+ hockeyapp_name                    | 256 kB     |    0
+ hockeyapp_coach                   | 224 kB     |    0
+ filer_folder                      | 192 kB     |    0
+ hockeyapp_arena                   | 176 kB     |    0
+ accounts_user_groups              | 104 kB     |    0
+ hockeyapp_arenainstaphoto_players | 104 kB     |    0
+ auth_group_permissions            | 104 kB     |    0
+ auth_permission                   | 96 kB      |    0
+ hockeyapp_challenge               | 96 kB      |    0
+ accounts_user                     | 96 kB      |    0
+ hockeyapp_clubtitlealias          | 88 kB      |    0
+ addresses_address                 | 88 kB      |    0
+ hockeyapp_league                  | 80 kB      |    0
+ filer_clipboard                   | 72 kB      |    0
+ django_content_type               | 72 kB      |    0
+ registration_registrationprofile  | 72 kB      |    0
+ django_migrations                 | 72 kB      |    0
+ auth_group                        | 72 kB      |    0
+ base_season                       | 64 kB      |    0
+ base_titlealias                   | 64 kB      |    0
+ addresses_country                 | 64 kB      |    0
+(50 rows)
+
