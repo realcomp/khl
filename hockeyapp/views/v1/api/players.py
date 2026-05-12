@@ -46,7 +46,7 @@ class PlayerNumbers(NumbersList):
 
 class PlayersSearch(viewsets.ReadOnlyModelViewSet):
     filter_backends = PlayersSearchFilter, PlayersSearchOrderFilter
-    queryset = Player.objects.all().select_related('clubplayer')
+    queryset = Player.objects.all().select_related('clubplayer', 'citizenship', 'last_club')
     paginate_by = 50
     serializer_class = PlayersSearchSerializer
 
