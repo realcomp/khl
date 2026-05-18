@@ -78,7 +78,7 @@ angular.module('Sportomatics')
                         .success(function(data){
                             $scope.radarPlayers.push({
                                 id: id,
-                                color: player.club.main_color || CHART_COLORS[$scope.playersToCompare.length-2],
+                                color: (player.club && player.club.main_color) || CHART_COLORS[$scope.playersToCompare.length-2],
                                 fio: player.fio,
                                 dataBySeason: data,
                                 logo: player.photo
@@ -129,7 +129,7 @@ angular.module('Sportomatics')
                     console.log($scope.playerToCompare)
                     var playerObject = {
                         title: $scope.playerToCompare.name || id,
-                        color: $scope.playerToCompare.club.main_color || CHART_COLORS[$scope.playersToCompare.length-1],
+                        color: ($scope.playerToCompare.club && $scope.playerToCompare.club.main_color) || CHART_COLORS[$scope.playersToCompare.length-1],
                         id: id,
                         link: $scope.apiPlayersUrl + id + '/indicators/',
                         logo: $scope.playerToCompare.photo
@@ -225,6 +225,7 @@ angular.module('Sportomatics')
                 self.chart = $('#chartdiv').highcharts();
             }
             _.each(results, function(result){
+                if(result.data && result.data.length)
                 legendContent += HTML_INDICATORS_LIST_ITEM(_.last(result.data).y, result.name, result.logo, result.color)
             })
             $('#legend-header').html($scope.localeObject.fieldNames[$scope.field].fullName + '<br> Сезон ' + (new Date($scope.lastSeason).getFullYear()-1) + '/' + (new Date($scope.lastSeason).getFullYear()).toString().substr(2,4))
