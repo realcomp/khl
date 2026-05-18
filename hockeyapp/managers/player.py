@@ -263,10 +263,10 @@ class ClubPlayerQuerySet(models.QuerySet):
     def by_leagues(self, leagues):
         return self.filter(league__in=leagues)
     def ironmans(self, club, season):
-        '
+        ''''
         Железный человек - игрок (кроме вратаря),
         поучаствовавший во всех матчах сезона
-        '
+        '''
         from django.db.models import Count
         from hockeyapp.models import Match
         
