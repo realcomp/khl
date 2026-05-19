@@ -51,7 +51,7 @@ angular.module('Sportomatics')
                         .success(function(data){
                             $timeout(function(){
                                 $scope.playerToCompare.photo = data.photo;
-                                $scope.playerToCompare.name = data.name + ' ' + data.lastname + ' ( ' + data.club.title + ' )';
+                                $scope.playerToCompare.name = data.name + ' ' + data.lastname + (data.club ? ' ( ' + data.club.title + ' )' : '');
                                 $scope.playerToCompare.club = data.club;
                             }, 100)
                         })
@@ -104,8 +104,7 @@ angular.module('Sportomatics')
         };
 
         $scope.$on('field-changed', function(event, preventList){
-            console.log(field)
-            $location.search('field', field);
+            $location.search('field', $scope.field);
             if(preventList == null)
             self.list();
         })
