@@ -20,8 +20,11 @@ ALLOWED_HOSTS = [
                     '141.8.196.179:443',
                     '94.23.21.186',
                     '.sportomatics.ru',
+                    '.sportomatics.com',
                     'localhost',
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = (
     'suit',

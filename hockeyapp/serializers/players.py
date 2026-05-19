@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import itertools
+from urlparse import urlparse
 
 from django.db.models import Avg, Sum
 
@@ -20,7 +21,12 @@ class PlayersSearchSerializer(BasePlayerCardSerializer):
     photo = serializers.SerializerMethodField()
 
     def get_photo(self, obj):
-        return obj.photo.url if obj.photo else None
+        if not obj.photo:
+            return None
+        url = obj.photo.url
+        parsed = urlparse(url)
+        # Return only the path so photo URLs work regardless of which host stored them
+        return parsed.path if parsed.scheme else url
     line_display = serializers.ReadOnlyField(source='get_line_display')
     citizenship = CountrySerializer()
     #clubplayers = serializers.SerializerMethodField()

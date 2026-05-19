@@ -47,7 +47,7 @@ angular.module('Sportomatics')
             $scope.dataType = type;
             if(type === 'graph-radar'){
                 if($scope.playerToCompare.id){
-                    $http.get($scope.apiPlayersUrl+$scope.playerToCompare.id)
+                    $http.get($scope.apiPlayersUrl+$scope.playerToCompare.id+'/')
                         .success(function(data){
                             $timeout(function(){
                                 $scope.playerToCompare.photo = data.photo;
@@ -77,7 +77,7 @@ angular.module('Sportomatics')
                 color: CHART_COLORS[$scope.playersToCompare.length-2],
                 photo: null
             };
-            $http.get($scope.apiPlayersUrl + id)
+            $http.get($scope.apiPlayersUrl + id + '/')
                 .then(function(response){
                     var player = response.data;
                     playerInfo.fio = player.fio;
@@ -134,7 +134,7 @@ angular.module('Sportomatics')
         $scope.addGraph = function(id, preventCreation){
             if(!id || _.findWhere($scope.playersToCompare, {id: id})) return;
             $location.search('compare_to', id);
-            $http.get($scope.apiPlayersUrl+id)
+            $http.get($scope.apiPlayersUrl+id+'/')
                 .then(function(response){
                     var data = response.data;
                     $scope.playerToCompare.photo = data.photo;
