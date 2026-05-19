@@ -4961,11 +4961,13 @@ angular.module('Sportomatics')
             $scope.playerSeasons = $scope.dataBySeason.results.map(function(e){ return e.season.end_date.substr(0,4); });
 
             $('#legend-header').html($scope.localeObject.fieldNames[$scope.field].fullName + '<br> Сезон ' + (new Date($scope.lastSeason).getFullYear()-1) + '/' + (new Date($scope.lastSeason).getFullYear()).toString().substr(2,4))
-            var legendContent = ''
-            _.each(newPlayerIndicatorsData, function(result){
-                legendContent += HTML_INDICATORS_LIST_ITEM(_.last(result.data).y, result.name, result.logo, result.color)
-            })
-            $('#legend-content').html(legendContent)
+            if ($scope.playersToCompare.length <= 1) {
+                var legendContent = ''
+                _.each(newPlayerIndicatorsData, function(result){
+                    legendContent += HTML_INDICATORS_LIST_ITEM(_.last(result.data).y, result.name, result.logo, result.color)
+                })
+                $('#legend-content').html(legendContent)
+            }
 
             /*if ($scope.limited) { //not registered users
              $scope.chart.chartCursor = null;
