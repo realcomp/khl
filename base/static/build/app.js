@@ -4729,7 +4729,7 @@ angular.module('Sportomatics')
                                 dataBySeason: data,
                                 logo: player.photo
                             })
-                            if(preventCreation == null)
+                            if(preventCreation == null || $scope.dataType === 'graph-radar')
                             $scope.createRadar();
                             $scope.addGraph(id, true);
                         })
@@ -5193,7 +5193,7 @@ angular.module('Sportomatics')
                             }
                         }
                     }).filter(function(toFilter){ return toFilter != undefined; });
-                    self.spiderChart.addSeries(data[0]);
+                    if(data[0]) self.spiderChart.addSeries(data[0]);
                     var playerSeasons = playerObject.dataBySeason.results.map(function (e) { return e.season.end_date.substr(0, 4); });
                     $scope.playerSeasons = _.uniq($scope.playerSeasons.concat(playerSeasons)).sort();
                 })
