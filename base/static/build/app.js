@@ -4719,7 +4719,7 @@ angular.module('Sportomatics')
         $scope.addRadarGraph = function(id, preventCreation){
             if(_.findWhere($scope.radarPlayers, {id: id})) return;
             var playerInfo = {
-                fio: String(id),
+                fio: $scope.playerToCompare.fio || String(id),
                 color: CHART_COLORS[$scope.playersToCompare.length-2],
                 photo: null
             };
