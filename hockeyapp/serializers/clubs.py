@@ -11,6 +11,7 @@ from base.models import Season
 from base.serializers import TitleBaseSerializer
 
 from . import (
+    _photo_path,
     SeasonSerializer,
     BasePlayerCardSerializer, PlayerCardSerializer,
     BaseClubSerializer, ClubLightListSerializer, BaseClubPlayerSerializer,
@@ -28,7 +29,10 @@ class ClubTeamPlayerSerializer(BasePlayerCardSerializer):
     birth_date_short = serializers.SerializerMethodField()
     citizenship = CountrySerializer()
     contract_to = serializers.SerializerMethodField()
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return _photo_path(obj.photo)
     is_joined = serializers.ReadOnlyField()
     is_left = serializers.ReadOnlyField()
     is_legionnaire = serializers.ReadOnlyField()
@@ -462,7 +466,10 @@ class OriginPlayersClubSerilizer(BaseClubSerializer):
 
 
 class OriginPlayersSerilizer(BasePlayerCardSerializer):
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return _photo_path(obj.photo)
     line_display = serializers.ReadOnlyField(source='get_line_display')
     club = OriginPlayersClubSerilizer()
     citizenship = CountrySerializer()
@@ -491,7 +498,10 @@ class ClubCoachesPagination(pagination.PageNumberPagination):
 
 
 class ClubCoachesSerilizer(CoachSerializer):
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return _photo_path(obj.photo)
 
     class Meta(object):
         fields = 'pk', 'name', 'lastname', 'fio', 'photo'

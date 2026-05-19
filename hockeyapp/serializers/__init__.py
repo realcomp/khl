@@ -2,6 +2,15 @@
 from __future__ import unicode_literals
 
 from dateutil import relativedelta
+from urlparse import urlparse
+
+
+def _photo_path(photo_field):
+    if not photo_field:
+        return None
+    url = photo_field.url
+    parsed = urlparse(url)
+    return parsed.path if parsed.scheme else url
 
 from django.core.urlresolvers import reverse
 from django.utils import timezone
@@ -126,7 +135,10 @@ class ClubListArenaSerializer(ClubLightListSerializer):
 
 
 class ArenaSerializer(TitleBaseSerializer):
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return _photo_path(obj.photo)
     url = serializers.ReadOnlyField(source='get_absolute_url')
     club_set = ClubListArenaSerializer(many=True)
 
@@ -183,7 +195,10 @@ class ClubPlayerSerializer(serializers.ModelSerializer):
 
 class PlayerCardSerializer(BasePlayerCardSerializer):
     club = ClubLightListSerializer()
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return _photo_path(obj.photo)
     age = serializers.SerializerMethodField()
     contract_type = serializers.ReadOnlyField(
         source='get_contract_type_display')
@@ -252,7 +267,10 @@ class PlayerCardDetailSerializer(PlayerCardSerializer):
 
 class MetricsPlayerSerializer(BasePlayerCardSerializer):
     club = ClubLightListSerializer()
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return _photo_path(obj.photo)
     age = serializers.SerializerMethodField()
     contract_type = serializers.ReadOnlyField(
         source='get_contract_type_display')

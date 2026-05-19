@@ -246,7 +246,7 @@
                                 <div class="w-gallery-preview__item__img img-wrap">
                                     <a href="{{ currentUrl + player.player.id}}">
                                         <figure class="figure-styled">
-                                            <img class="ui image" src="{{player.player.photo.file}}">
+                                            <img class="ui image" ng-src="{{player.player.photo}}">
                                         </figure>
                                     </a>
                                 </div>
@@ -267,7 +267,7 @@
                                 <div class="b-player-info__team ui feed">
                                     <div class="event">
                                         <div class="label">
-                                            <img src="{{player.player.club.logo}}" alt="" title="">
+                                            <img ng-src="{{player.player.club.logo}}" alt="" title="">
                                         </div>
                                         <div class="content">
                                             <div class="summary">
