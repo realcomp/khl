@@ -4717,25 +4717,35 @@ angular.module('Sportomatics')
 
         $scope.addRadarGraph = function(id, preventCreation){
             if(_.findWhere($scope.radarPlayers, {id: id})) return;
+            var playerInfo = {
+                fio: String(id),
+                color: CHART_COLORS[$scope.playersToCompare.length-2],
+                photo: null
+            };
             $http.get($scope.apiPlayersUrl + id)
                 .then(function(response){
                     var player = response.data;
+                    playerInfo.fio = player.fio;
+                    playerInfo.color = (player.club && player.club.main_color) || playerInfo.color;
+                    playerInfo.photo = player.photo;
+                }, function(){
+                    // continue with defaults
+                })
+                .then(function(){
                     $http.get($scope.apiPlayersUrl + id + '/indicators/?group_by=season')
                         .success(function(data){
                             $scope.radarPlayers.push({
                                 id: id,
-                                color: (player.club && player.club.main_color) || CHART_COLORS[$scope.playersToCompare.length-2],
-                                fio: player.fio,
+                                color: playerInfo.color,
+                                fio: playerInfo.fio,
                                 dataBySeason: data,
-                                logo: player.photo
+                                logo: playerInfo.photo
                             })
                             if(preventCreation == null || $scope.dataType === 'graph-radar')
                             $scope.createRadar();
                             $scope.addGraph(id, true);
                         })
-                }, function(){
-                    // player details failed — skip radar for this player
-                })
+                });
         };
 
         $scope.$on('field-changed', function(event, preventList){
