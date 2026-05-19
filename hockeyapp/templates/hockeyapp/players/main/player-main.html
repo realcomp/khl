@@ -22,7 +22,7 @@
                         <div class="w-gallery-preview__item__img img-wrap">
                             <figure class="figure-styled">
                                 <a href="#" class="ui image">
-                                    <img class="ui image" src="images/a-hockey/ava-16.jpg">
+                                    <img class="ui image" src="{{ photo|default:'/static/images/nophoto.gif' }}">
                                 </a>
                             </figure>
                         </div>
@@ -41,7 +41,7 @@
                         <div class="b-player-info__team ui feed">
                             <div class="event">
                                 <div class="label">
-                                    <img src="images/l-hockey/logo-2.jpg" alt="" title="">
+                                    <img src="{{ club.logo|default:'' }}" alt="" title="">
                                 </div>
                                 <div class="content">
                                     <div class="summary">
