@@ -159,9 +159,13 @@ angular.module('Sportomatics')
                                     $scope.loader = false;
                                 }).then(function(){
                                     $scope.playersToCompare.push(playerObject);
-                                    $scope.addRadarGraph(id, true);
-                                    if(preventCreation == null)
-                                    $scope.makeChart();
+                                    if ($scope.dataType === 'graph-radar') {
+                                        $scope.addRadarGraph(id);
+                                    } else {
+                                        $scope.addRadarGraph(id, true);
+                                        if(preventCreation == null)
+                                        $scope.makeChart();
+                                    }
                                 })
                         })
                 })
