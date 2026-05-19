@@ -1,7 +1,8 @@
 var HTML_CLUB_GAMES_DIV, HTML_CLUB_HOME_ATTENDANCE_DIV, HTML_INDICATORS_LIST_ITEM;
 
 HTML_INDICATORS_LIST_ITEM = function(result, title, image, color) {
-  return '<li class="" style="border-right: 5px solid ' + color + ';"> <div class="b-inline b-diagram__legend__table-style__item"> <div class="b-inline hidden-xs"> <a class="ui image" ><img class="ui image b-diagram__legend__image" src="' + image + '" width="32" height="32"></a> </div> <div class="b-inline"> <p class=""> <a class="no-decoration default-a pointer">' + title + '</a> <!--<i class="flag cz i-top-2 hidden-xs"></i>--> </p> </div> </div> <p class="b-inline b-diagram__legend__table-style__games">' + result + '</p> </li>';
+  var imgHtml = image ? '<a class="ui image" ><img class="ui image b-diagram__legend__image" src="' + image + '" width="32" height="32"></a>' : '';
+  return '<li class="" style="border-right: 5px solid ' + color + ';"> <div class="b-inline b-diagram__legend__table-style__item"> <div class="b-inline hidden-xs">' + imgHtml + '</div> <div class="b-inline"> <p class=""> <a class="no-decoration default-a pointer">' + title + '</a> </p> </div> </div> <p class="b-inline b-diagram__legend__table-style__games">' + result + '</p> </li>';
 };
 
 HTML_CLUB_GAMES_DIV = function(title, score, date, leftLogo, rightLogo, color) {

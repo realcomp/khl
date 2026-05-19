@@ -542,9 +542,10 @@ angular.module('Sportomatics')
             $scope.playerStatsSpiderChart.setHeaderChangeable(true);
             $scope.playerStatsSpiderChart.draw();
             self.spiderChart = $("#chartdiv2").highcharts();
+            var radarCompareData = [];
             if($scope.radarPlayers.length > 0){
                 _.each($scope.radarPlayers, function(playerObject){
-                    var data = playerObject.dataBySeason.results.map(function(el){
+                    var seriesData = playerObject.dataBySeason.results.map(function(el){
                         if(el.season.end_date.indexOf($scope.lastSeason) > -1){
                             return {
                                 name: playerObject.fio,
@@ -558,7 +559,10 @@ angular.module('Sportomatics')
                             }
                         }
                     }).filter(function(toFilter){ return toFilter != undefined; });
-                    if(data[0]) self.spiderChart.addSeries(data[0]);
+                    if(seriesData[0]) {
+                        self.spiderChart.addSeries(seriesData[0]);
+                        radarCompareData.push(seriesData[0]);
+                    }
                     var playerSeasons = playerObject.dataBySeason.results.map(function (e) { return e.season.end_date.substr(0, 4); });
                     $scope.playerSeasons = _.uniq($scope.playerSeasons.concat(playerSeasons)).sort();
                 })
@@ -566,7 +570,9 @@ angular.module('Sportomatics')
             $('#legend-header').html($scope.localeObject.fieldNames[_.last(categories)].fullName)
             var legendContent = ''
             _.each(data, function(result){
-                console.log(result)
+                legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
+            })
+            _.each(radarCompareData, function(result){
                 legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
             })
             $('#legend-content').html(legendContent)

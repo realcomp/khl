@@ -273,7 +273,8 @@ $.fn.textWidth = function(){
 var HTML_CLUB_GAMES_DIV, HTML_CLUB_HOME_ATTENDANCE_DIV, HTML_INDICATORS_LIST_ITEM;
 
 HTML_INDICATORS_LIST_ITEM = function(result, title, image, color) {
-  return '<li class="" style="border-right: 5px solid ' + color + ';"> <div class="b-inline b-diagram__legend__table-style__item"> <div class="b-inline hidden-xs"> <a class="ui image" ><img class="ui image b-diagram__legend__image" src="' + image + '" width="32" height="32"></a> </div> <div class="b-inline"> <p class=""> <a class="no-decoration default-a pointer">' + title + '</a> <!--<i class="flag cz i-top-2 hidden-xs"></i>--> </p> </div> </div> <p class="b-inline b-diagram__legend__table-style__games">' + result + '</p> </li>';
+  var imgHtml = image ? '<a class="ui image" ><img class="ui image b-diagram__legend__image" src="' + image + '" width="32" height="32"></a>' : '';
+  return '<li class="" style="border-right: 5px solid ' + color + ';"> <div class="b-inline b-diagram__legend__table-style__item"> <div class="b-inline hidden-xs">' + imgHtml + '</div> <div class="b-inline"> <p class=""> <a class="no-decoration default-a pointer">' + title + '</a> </p> </div> </div> <p class="b-inline b-diagram__legend__table-style__games">' + result + '</p> </li>';
 };
 
 HTML_CLUB_GAMES_DIV = function(title, score, date, leftLogo, rightLogo, color) {
@@ -5187,9 +5188,10 @@ angular.module('Sportomatics')
             $scope.playerStatsSpiderChart.setHeaderChangeable(true);
             $scope.playerStatsSpiderChart.draw();
             self.spiderChart = $("#chartdiv2").highcharts();
+            var radarCompareData = [];
             if($scope.radarPlayers.length > 0){
                 _.each($scope.radarPlayers, function(playerObject){
-                    var data = playerObject.dataBySeason.results.map(function(el){
+                    var seriesData = playerObject.dataBySeason.results.map(function(el){
                         if(el.season.end_date.indexOf($scope.lastSeason) > -1){
                             return {
                                 name: playerObject.fio,
@@ -5203,7 +5205,10 @@ angular.module('Sportomatics')
                             }
                         }
                     }).filter(function(toFilter){ return toFilter != undefined; });
-                    if(data[0]) self.spiderChart.addSeries(data[0]);
+                    if(seriesData[0]) {
+                        self.spiderChart.addSeries(seriesData[0]);
+                        radarCompareData.push(seriesData[0]);
+                    }
                     var playerSeasons = playerObject.dataBySeason.results.map(function (e) { return e.season.end_date.substr(0, 4); });
                     $scope.playerSeasons = _.uniq($scope.playerSeasons.concat(playerSeasons)).sort();
                 })
@@ -5211,7 +5216,9 @@ angular.module('Sportomatics')
             $('#legend-header').html($scope.localeObject.fieldNames[_.last(categories)].fullName)
             var legendContent = ''
             _.each(data, function(result){
-                console.log(result)
+                legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
+            })
+            _.each(radarCompareData, function(result){
                 legendContent += HTML_INDICATORS_LIST_ITEM(parseFloat(_.last(result.data)).toFixed(3), result.name, result.logo, result.color)
             })
             $('#legend-content').html(legendContent)
