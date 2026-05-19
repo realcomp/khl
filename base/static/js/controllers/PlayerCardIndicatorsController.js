@@ -73,7 +73,8 @@ angular.module('Sportomatics')
         $scope.addRadarGraph = function(id, preventCreation){
             if(_.findWhere($scope.radarPlayers, {id: id})) return;
             $http.get($scope.apiPlayersUrl + id)
-                .success(function(player){
+                .then(function(response){
+                    var player = response.data;
                     $http.get($scope.apiPlayersUrl + id + '/indicators/?group_by=season')
                         .success(function(data){
                             $scope.radarPlayers.push({
@@ -87,6 +88,8 @@ angular.module('Sportomatics')
                             $scope.createRadar();
                             $scope.addGraph(id, true);
                         })
+                }, function(){
+                    // player details failed — skip radar for this player
                 })
         };
 
@@ -122,10 +125,15 @@ angular.module('Sportomatics')
             if(!id || _.findWhere($scope.playersToCompare, {id: id})) return;
             $location.search('compare_to', id);
             $http.get($scope.apiPlayersUrl+id)
-                .success(function(data){
+                .then(function(response){
+                    var data = response.data;
                     $scope.playerToCompare.photo = data.photo;
                     $scope.playerToCompare.name = data.name + ' ' + data.lastname;
                     $scope.playerToCompare.club = data.club;
+                }, function(){
+                    $scope.playerToCompare.name = $scope.playerToCompare.fio || String(id);
+                })
+                .then(function(){
                     console.log($scope.playerToCompare)
                     var playerObject = {
                         title: $scope.playerToCompare.name || id,

@@ -17,7 +17,10 @@ from ..models import (
 
 class PlayersSearchSerializer(BasePlayerCardSerializer):
     url = serializers.ReadOnlyField(source='get_absolute_url')
-    photo = serializers.ReadOnlyField(source='photo.url')
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, obj):
+        return obj.photo.url if obj.photo else None
     line_display = serializers.ReadOnlyField(source='get_line_display')
     citizenship = CountrySerializer()
     #clubplayers = serializers.SerializerMethodField()
