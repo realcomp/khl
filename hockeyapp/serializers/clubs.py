@@ -359,8 +359,11 @@ class NumbersSerializer(serializers.ModelSerializer):
 
 
 class ScheduleClubSerializer(TitleBaseSerializer):
-    logo = serializers.ReadOnlyField(source='logo.url')
+    logo = serializers.SerializerMethodField()
     url = serializers.ReadOnlyField(source='get_absolute_url')
+
+    def get_logo(self, obj):
+        return _photo_path(obj.logo) if obj.logo else None
 
     class Meta(object):
         fields = 'pk', 'title', 'logo', 'url'
@@ -393,8 +396,11 @@ class ClubMainAboutSerializer(TitleBaseSerializer):
     '''
     Serializer for ClubMainAboutView
     '''
-    logo = serializers.ReadOnlyField(source='logo.url')
+    logo = serializers.SerializerMethodField()
     url = serializers.ReadOnlyField(source='get_absolute_url')
+
+    def get_logo(self, obj):
+        return _photo_path(obj.logo)
     title_verbose = serializers.SerializerMethodField()
     address = AddressSerializer()
     arena = ArenaSerializer()

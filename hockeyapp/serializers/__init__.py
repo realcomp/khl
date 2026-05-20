@@ -100,8 +100,11 @@ class BaseClubPlayerSerializer(serializers.ModelSerializer):
 
 
 class BaseClubSerializer(TitleBaseSerializer):
-    logo = serializers.ReadOnlyField(source='logo.url')
+    logo = serializers.SerializerMethodField()
     url = serializers.ReadOnlyField(source='get_absolute_url')
+
+    def get_logo(self, obj):
+        return _photo_path(obj.logo)
 
     class Meta(object):
         fields = (
