@@ -2,10 +2,18 @@
 from __future__ import unicode_literals
 
 import rest_framework as drf
+from urlparse import urlparse
 
 from filer.models import Image
 
 from base.models import InstagramImageFile, InstagramUser, Season
+
+
+def _url_path(url):
+    if not url:
+        return url
+    parsed = urlparse(url)
+    return parsed.path if parsed.scheme else url
 
 
 class LangDepSerializer(drf.serializers.ModelSerializer):
@@ -23,6 +31,11 @@ class TitleBaseSerializer(LangDepSerializer):
 
 
 class FIFSerialiser(drf.serializers.ModelSerializer):
+    file = drf.serializers.SerializerMethodField()
+
+    def get_file(self, obj):
+        return _url_path(obj.file.url if obj.file else None)
+
     class Meta:
         model = Image
         fields = 'id', 'file', 'name', '_height', '_width'

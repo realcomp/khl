@@ -7,7 +7,7 @@ from rest_framework import pagination, response, serializers
 from api.addresses.serializers import AddressMinimalSerializer, CountrySerializer
 from api.base.serializers import IIFMinimalSerializer, FIFSerialiser
 from api.base.serializers import TitleBaseSerializer, LangDepSerializer
-from api.base.serializers import SeasonSerializer
+from api.base.serializers import SeasonSerializer, _url_path
 
 from hockeyapp.models import (
     ArenaInstaPhoto, Club, Match, Player, Arena, CoachClub, Schedule)
@@ -91,7 +91,10 @@ class ClubListSerializer(TitleBaseSerializer):
     title_verbose = drf.serializers.SerializerMethodField()
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
-    logo = drf.serializers.ReadOnlyField(source='logo.url')
+    logo = drf.serializers.SerializerMethodField()
+
+    def get_logo(self, obj):
+        return _url_path(obj.logo.url if obj.logo else None)
     url = drf.serializers.ReadOnlyField(source='get_absolute_url')
     address = AddressMinimalSerializer()
     arena = ArenaClubListSerializer()
@@ -180,7 +183,10 @@ class I18NClubMinimalSerialiser(TitleBaseSerializer):
     title_verbose = drf.serializers.SerializerMethodField()
     def get_title_verbose(self, obj):
         return obj.get_title_verbose(request=self.context.get('request'))
-    logo = drf.serializers.ReadOnlyField(source='logo.url')
+    logo = drf.serializers.SerializerMethodField()
+
+    def get_logo(self, obj):
+        return _url_path(obj.logo.url if obj.logo else None)
     url = drf.serializers.ReadOnlyField(source='get_absolute_url')
     address = AddressMinimalSerializer()
     class Meta:
