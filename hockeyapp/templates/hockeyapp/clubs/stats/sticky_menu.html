@@ -3,7 +3,7 @@
         <div class="container">
             <ul class="w-main-nav__b-menu ui inverted green menu">
                 <li class="item w-main-nav__b-menu__logo hidden-xs">
-                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';"/></a>
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="{{ logo }}"/></a>
                 </li>
                 <li class="{% if clubs_menu_active == 'club-main' %}active {% endif %} item">
                     <a href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
@@ -55,7 +55,7 @@
         <div class="container w-clearboth">
             <ul class="w-main-nav__b-menu ui inverted green menu">
                 <li class="item w-main-nav__b-menu__logo hidden-xs">
-                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="{{ logo }}" onerror="this.onerror = null; this.src = 'http://dev.sportomatics.ru{{logo}}';"/></a>
+                    <a href="{% url 'hockeyapp:clubs:main-about' pk %}"><img src="{{ logo }}"/></a>
                 </li>
                 <li class="{% if clubs_menu_active == 'club-main' %}active {% endif %} item">
                     <a href="{% url 'hockeyapp:clubs:main-about' pk %}">Главное</a>
