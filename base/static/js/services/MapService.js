@@ -77,7 +77,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
     _.each(clubs, function(club, index) {
       var clubIcon, coordinate1, coordinate2, coords;
       clubIcon = L.icon({
-        iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo : '/static/abc.jpg',
+        iconUrl: club.logo || '/static/images/no-photo.png',
         iconSize: [20, 20],
         shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
         shadowSize: [34, 48]
@@ -126,7 +126,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
         }
         clubs.push(club);
         clubIcon = L.icon({
-          iconUrl: club.logo ? 'http://dev.sportomatics.ru' + club.logo : '/static/abc.jpg',
+          iconUrl: club.logo || '/static/images/no-photo.png',
           iconSize: [20, 20],
           shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png',
           shadowSize: [34, 48]

@@ -74,7 +74,7 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
         countOfGeocoded = 0
         _.each clubs, (club, index) ->
             clubIcon = L.icon(
-                iconUrl: if club.logo then 'http://dev.sportomatics.ru' + club.logo else '/static/abc.jpg'
+                iconUrl: club.logo or '/static/images/no-photo.png'
                 iconSize: [ 20, 20 ]
                 shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png'
                 shadowSize: [ 34, 48]
@@ -107,7 +107,7 @@ angular.module('Sportomatics').service 'MapService', ($q, $timeout) ->
                 # prevent duplicate clubs
                 clubs.push club
                 clubIcon = L.icon(
-                    iconUrl: if club.logo then 'http://dev.sportomatics.ru' + club.logo else '/static/abc.jpg'
+                    iconUrl: club.logo or '/static/images/no-photo.png'
                     iconSize: [ 20, 20 ]
                     shadowUrl: '/static/leaflet-0.7.3/images/marker-icon-2x.png'
                     shadowSize: [ 34, 48]

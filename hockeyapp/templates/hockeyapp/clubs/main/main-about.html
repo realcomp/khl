@@ -17,7 +17,7 @@
             <div class="w-command-info__main row b-row">
                 <div class="b-command-info__logo col-sm-5">
                     <div class="img-wrap">
-                        <figure class="figure-styled">
+                        <figure class="figure-styled" {% if main_color %}style="background-color: {{ main_color }}"{% endif %}>
                                 <img src="{{ logo }}"/>
                         </figure>
                     </div>

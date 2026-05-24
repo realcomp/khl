@@ -101,5 +101,12 @@
 
         {% block footer %}
         {% endblock %}
+        <script>
+        $(function() {
+            $('img').on('error', function() {
+                this.style.visibility = 'hidden';
+            });
+        });
+        </script>
     </body>
 </html>
