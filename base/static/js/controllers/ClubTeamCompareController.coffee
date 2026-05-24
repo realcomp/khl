@@ -187,9 +187,10 @@ angular.module('Sportomatics').controller 'ClubTeamCompareController', ($scope, 
                     averageData = 0
                     _.each club.results, (result) ->
                         player = _.findWhere(club.all_players, pk: Number(result.config.url.match("players\/(.*)\/indicators")[1]))
-                        player.result = _.find(result.data.results, (result) ->
+                        matchedResult = _.find(result.data.results, (result) ->
                             return result.season.pk.toString() is club.seasonResult.pk.toString()
-                        )[$scope.field]
+                        )
+                        player.result = if matchedResult? then matchedResult[$scope.field] else null
                         return if player.line is 3 and not $scope.offenders or player.line is 2 and not $scope.defenders
                         if player.selected is true
                             averageData += parseFloat(_.last(result.data.results)[key])

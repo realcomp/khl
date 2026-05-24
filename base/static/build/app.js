@@ -269,7 +269,7 @@ $.fn.textWidth = function(){
     $(this).html(html_org);
     return width;
 };
-;
+
 var HTML_CLUB_GAMES_DIV, HTML_CLUB_HOME_ATTENDANCE_DIV, HTML_INDICATORS_LIST_ITEM;
 
 HTML_INDICATORS_LIST_ITEM = function(result, title, image, color) {
@@ -284,9 +284,9 @@ HTML_CLUB_GAMES_DIV = function(title, score, date, leftLogo, rightLogo, color) {
 HTML_CLUB_HOME_ATTENDANCE_DIV = function(title, count, date, leftLogo, rightLogo) {
   return '<div class="w-command-calendar__item w-command-calendar__item-bg"> <div class="b-header b-header__xs"> <h5 class="b-header__text">' + title + '</h5> </div> <div class="row"> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + leftLogo + '"> </a> </div> <p class="col-sm-2 col-md-12 col-lg-4 b-score">' + count + '</p> <div class="col-sm-4 col-md-12 col-lg-4"> <a href="#" class="ui image"> <img class="ui circular image" src="' + rightLogo + '"> </a> </div> </div> <div class="w-command-calendar__info"> <p class="date">' + date + ' МСК </p> </div> </div>';
 };
-;
+
 angular.module('Sportomatics')
-;
+
 angular.module('Sportomatics')
 .value('zoomData', {
     startDate: 'a',
@@ -853,7 +853,6 @@ function makeGraph(id, title, color, field, valueAxis, localeObject){
 
     return graph;
 }
-;
 angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, LocaleFactory, $location, $rootScope) {
   var HighchartsArenaVisitorsChart, HighchartsClubGamesChart, HighchartsPlayerClubsChart, HighchartsPlayerClubsPieChart, HighchartsPlayerIndicatorsChart, HighchartsSpiderChart;
   HighchartsSpiderChart = (function() {
@@ -1507,7 +1506,7 @@ angular.module('Sportomatics').factory('HighchartsFactory', function($timeout, L
     PlayerIndicatorsChart: HighchartsPlayerIndicatorsChart
   };
 });
-;
+
 angular.module('Sportomatics').factory('IndicatorsFactory', function() {
   var PlayerIndicatorsChart;
   PlayerIndicatorsChart = (function() {
@@ -1539,7 +1538,7 @@ angular.module('Sportomatics').factory('IndicatorsFactory', function() {
     PlayerIndicatorsChart: PlayerIndicatorsChart
   };
 });
-;
+
 angular.module('Sportomatics')
     .factory('LocaleFactory', function($rootScope){
         var chosen = 'ru';
@@ -1841,7 +1840,7 @@ angular.module('Sportomatics')
         return factory;
 
     })
-;
+
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 angular.module('Sportomatics').service('MapService', function($q, $timeout) {
@@ -2141,7 +2140,7 @@ angular.module('Sportomatics').service('MapService', function($q, $timeout) {
     return deferred.promise;
   };
 });
-;
+
 angular.module('Sportomatics').service('OrderService', function() {
   this.setOrderBy = function($scope, order_by) {
     var isDefault, isSame;
@@ -2162,7 +2161,7 @@ angular.module('Sportomatics').service('OrderService', function() {
     }
   };
 });
-;
+
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 angular.module('Sportomatics').service('PlayersSearchService', function($http, $timeout) {
@@ -2678,7 +2677,7 @@ angular.module('Sportomatics').service('PlayersSearchService', function($http, $
     });
   };
 });
-;
+
 angular.module('Sportomatics').service('ProfileService',
     function($http, $cookies) {
         this.setAvatar = function(files) {
@@ -2702,7 +2701,7 @@ angular.module('Sportomatics').service('ProfileService',
         };
     }
 );
-;
+
 angular.module('Sportomatics').service('SeasonsService', function() {
   this.isSeasonActive = function(season, pk, isFirst) {
     if (season) {
@@ -2733,7 +2732,7 @@ angular.module('Sportomatics').service('SeasonsService', function() {
     }
   };
 });
-;
+
 angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
   this.loadCountries = function(url, query) {
     return $http.get(url + '?s=' + query);
@@ -2745,7 +2744,7 @@ angular.module('Sportomatics').service('tags', function($http, $q, $filter) {
     return $http.get(url + '?s=' + query);
   };
 });
-;
+
 angular.module('Sportomatics').controller('ClubCalendarController', [
   '$scope', '$http', '$location', '$parse', 'MapService', 'HighchartsFactory', '$timeout', function($scope, $http, $location, $parse, MapService, HighchartsFactory, $timeout) {
     $scope.MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
@@ -3155,7 +3154,7 @@ angular.module('Sportomatics').controller('ClubCalendarController', [
     $scope.list();
   }
 ]);
-;
+
 angular.module('Sportomatics').controller('ClubFanController', function($scope, MapService) {
   $scope.loaded = true;
   console.log($scope.loaded);
@@ -3259,7 +3258,7 @@ angular.module('Sportomatics').controller('ClubFanController', function($scope, 
   }
   MapService.createClubsMap($scope.fans, 'fans');
 });
-;
+
 angular.module('Sportomatics').controller('ClubHomeController', function($scope, $location, $http, HighchartsFactory) {
   $scope.clubMatchApi = document.getElementById('club-match-api').value;
   $scope.clubPk = document.getElementById('team-id').value;
@@ -3304,7 +3303,7 @@ angular.module('Sportomatics').controller('ClubHomeController', function($scope,
   };
   $scope.createVisitorsChart();
 });
-;
+
 angular.module('Sportomatics')
     .controller('ClubHomeMapController', function($scope, $rootScope){
         /*var coordinates = $('#coordinates').val();
@@ -3327,7 +3326,6 @@ angular.module('Sportomatics')
             .bindPopup(title + '<br>')
             .openPopup();*/
     })
-;
 angular.module('Sportomatics').controller('ClubListController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'MapService', 'SeasonsService', 'OrderService', function($http, $scope, $location, PlayersSearchService, MapService, SeasonsService, OrderService) {
     var url;
@@ -3440,7 +3438,7 @@ angular.module('Sportomatics').controller('ClubListController', [
     });
   }
 ]);
-;
+
 angular.module('Sportomatics').controller('ClubMainAboutController', [
   '$scope', '$location', '$http', 'SeasonsService', function($scope, $location, $http, SeasonsService) {
     $scope.$location = $location;
@@ -3469,7 +3467,7 @@ angular.module('Sportomatics').controller('ClubMainAboutController', [
     $scope.getBestPlayers();
   }
 ]);
-;
+
 angular.module('Sportomatics')
     .controller('ClubNewsController', function($scope, $http, LocaleFactory, $timeout){
         $scope.club = $("#team-name-hidden").length ? $("#team-name-hidden").val() : 'Club';
@@ -3611,7 +3609,130 @@ angular.module('Sportomatics')
 
 
     })
-;
+
+angular.module('Sportomatics').controller('ClubCoachesController', function($scope, $http, $location, SeasonsService) {
+  var url;
+  url = $('#club-coaches-api').val();
+  $scope.$location = $location;
+  $scope.SeasonsService = SeasonsService;
+  $scope.params = $location.search();
+  $scope.setSeason = function(season) {
+    $location.search('season', season);
+    $scope.params = $location.search();
+    $scope.list();
+  };
+  $scope.list = function() {
+    var params, season;
+    if ($scope.params.season) {
+      season = $scope.params.season;
+    } else {
+      season = SeasonsService.getDefaultSeason();
+    }
+    params = 'season=' + season;
+    $scope.data = [];
+    $scope.loaded = false;
+    $http.get(url + '?' + params).success(function(data) {
+      $scope.data = [data];
+      $scope.loaded = true;
+    });
+  };
+  $scope.back = function() {
+    var params;
+    params = 'season=' + $scope.data[$scope.data.length - 1].previous_season.pk;
+    $scope.loaded = false;
+    $http.get(url + '?' + params).success(function(data) {
+      $scope.data.push(data);
+      $scope.loaded = true;
+    });
+  };
+  $scope.list();
+  $('#footer').visibility({
+    'once': false,
+    'observeChanges': true,
+    'onBottomVisible': function() {
+      if ($scope.data && $scope.data[$scope.data.length - 1].previous_season.pk) {
+        return $scope.back();
+      }
+    }
+  });
+});
+
+angular.module('Sportomatics').controller('ClubGeographyController', function($http, MapService, $scope, $timeout, $location, SeasonsService) {
+  var clubTeamApi, loader, self;
+  $scope.$location = $location;
+  $scope.SeasonsService = SeasonsService;
+  $scope.params = $location.search();
+  $scope.setSeason = function(season) {
+    $location.search('season', season);
+    $scope.params = $location.search();
+    $scope.list();
+  };
+  $scope.switchHistory = function() {
+    $location.search('is_history', !$scope.params.is_history || null);
+    $scope.params = $location.search();
+    $scope.list();
+  };
+  clubTeamApi = document.getElementById("club-players-api").value;
+  loader = $('.loader');
+  loader.addClass('active');
+  self = this;
+  self.reverse = false;
+  $scope.state = 'table';
+  $scope.sortBy = 'fio';
+  $scope.setState = function(state) {
+    $scope.state = state;
+    if (state === 'map') {
+      return $timeout(function() {
+        return $scope.setMap();
+      }, 500);
+    }
+  };
+  $scope.setSortBy = function(sortBy) {
+    $scope.sortBy = sortBy;
+    _.sortBy($scope.players, $scope.sortBy);
+    if ($scope.sortBy === sortBy) {
+      return $scope.players = $scope.players.reverse();
+    }
+  };
+  $scope.list = function() {
+    var params, season;
+    params = '';
+    if (!$scope.params.is_history) {
+      if ($scope.params.season) {
+        season = $scope.params.season;
+      } else {
+        season = SeasonsService.getDefaultSeason();
+      }
+      params = 'season=' + season;
+    }
+    return $http.get(clubTeamApi + '?' + params).success(function(data) {
+      $scope.players = _.sortBy(_.filter(data, function(player) {
+        return (player.birth_place != null) && player.birth_place.length !== 0;
+      }), $scope.sortBy);
+      $scope.cities = _.sortBy(_.map(_.groupBy(_.map($scope.players, function(player) {
+        return {
+          city: player.birth_place
+        };
+      }), 'city'), function(value, key) {
+        return {
+          name: key,
+          count: value.length
+        };
+      }), 'count').reverse();
+      return loader.removeClass('active');
+    });
+  };
+  $scope.list();
+  $scope.setMap = function() {
+    if (MapService.isRendered() === true) {
+      MapService.remove();
+    }
+    return MapService.createClubsMap($scope.players, 'players').then(function() {
+      return loader.removeClass('active');
+    });
+  };
+});
+
 angular.module('Sportomatics').controller('ClubStatsController', [
   '$http', '$scope', '$location', 'PlayersSearchService', function($http, $scope, $location, PlayersSearchService) {
     $scope.PlayersSearchService = PlayersSearchService;
@@ -3656,7 +3777,8 @@ angular.module('Sportomatics').controller('ClubStatsController', [
     PlayersSearchService.search($scope);
   }
 ]);
-;
+
+// Generated by CoffeeScript 1.12.7
 angular.module('Sportomatics').controller('ClubTeamCompareController', function($scope, $http, $q, IndicatorsFactory, HighchartsFactory, LocaleFactory, $timeout) {
   var averageClubPlayerIndicatorsChart, self;
   self = this;
@@ -3880,13 +4002,14 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
         if (_.contains(ALL_FIELDS, key)) {
           averageData = 0;
           _.each(club.results, function(result) {
-            var player;
+            var matchedResult, player;
             player = _.findWhere(club.all_players, {
               pk: Number(result.config.url.match("players\/(.*)\/indicators")[1])
             });
-            player.result = _.find(result.data.results, function(result) {
+            matchedResult = _.find(result.data.results, function(result) {
               return result.season.pk.toString() === club.seasonResult.pk.toString();
-            })[$scope.field];
+            });
+            player.result = matchedResult != null ? matchedResult[$scope.field] : null;
             if (player.line === 3 && !$scope.offenders || player.line === 2 && !$scope.defenders) {
               return;
             }
@@ -3996,7 +4119,7 @@ angular.module('Sportomatics').controller('ClubTeamCompareController', function(
   };
   $scope.addAverageClubPlayerData(this.clubPk);
 });
-;
+
 angular.module('Sportomatics').controller('ClubTeamController', [
   '$http', '$scope', '$timeout', 'MapService', function($http, $scope, $timeout, MapService) {
     var popup, url;
@@ -4263,7 +4386,7 @@ angular.module('Sportomatics').controller('ClubTeamController', [
     });
   }
 ]);
-;
+
 angular.module('Sportomatics')
 .controller('MetricsCompareController', ['$http', '$scope', function($http, $scope) {
     this.graph_type = 'linear';
@@ -4272,7 +4395,6 @@ angular.module('Sportomatics')
         this.graph_type = type;
     };
 }])
-;
 angular.module('Sportomatics')
 .controller('MetricsPlayersController', ['$http', '$scope', function($http, $scope) {
     var self = this,
@@ -4289,7 +4411,6 @@ angular.module('Sportomatics')
     };
     this.search();
 }])
-;
 angular.module('Sportomatics')
 .controller('NewsListController', [
     '$http', '$scope', '$location',
@@ -4341,7 +4462,7 @@ angular.module('Sportomatics')
 
     $scope.list($scope);
 }]);
-;
+
 var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 angular.module('Sportomatics').controller('NumbersController', [
@@ -4433,7 +4554,7 @@ angular.module('Sportomatics').controller('NumbersController', [
     $scope.list();
   }
 ]);
-;
+
 angular.module('Sportomatics')
     .config(['$resourceProvider', function($resourceProvider) {
         // Don't strip trailing slashes from calculated URLs
@@ -4647,7 +4768,7 @@ angular.module('Sportomatics')
             return this.getDate() + ' ' + monthsRu[this.getMonth()] + ' ' + this.getFullYear();
         }
 })
-;
+
 angular.module('Sportomatics')
     .controller('PlayerCardIndicatorsController', function($http, $scope, $timeout, LocaleFactory, $location, $q, HighchartsFactory) {
         //http://www.amcharts.com/lib/images/
@@ -5234,7 +5355,7 @@ angular.module('Sportomatics')
     })
 
 
-;
+
 angular.module('Sportomatics')
     .controller('PlayerPartnersController', function($scope, $rootScope, $timeout, $http, $location){
         $scope.player_id = $('#player-id').val();
@@ -5339,7 +5460,7 @@ angular.module('Sportomatics')
         $scope.getCurrentTeam();
 
     });
-;
+
 angular.module('Sportomatics').controller('PlayersSearch2Controller', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', function($http, $scope, $location, PlayersSearchService, tags, $timeout) {
     $scope.tags = tags;
@@ -5461,7 +5582,7 @@ angular.module('Sportomatics').controller('PlayersSearch2Controller', [
     };
   }
 ]);
-;
+
 angular.module('Sportomatics').controller('PlayersSearchController', [
   '$http', '$scope', '$location', 'PlayersSearchService', 'tags', '$timeout', 'OrderService', function($http, $scope, $location, PlayersSearchService, tags, $timeout, OrderService) {
     var f;
@@ -5606,7 +5727,7 @@ angular.module('Sportomatics').controller('PlayersSearchController', [
     });
   }
 ]);
-;
+
 angular.module('Sportomatics').controller('ProfileController', [
   '$http', '$scope', 'tags', function($http, $scope, tags) {
     $scope.tags = tags;
@@ -5670,7 +5791,7 @@ angular.module('Sportomatics').controller('ProfileController', [
     };
   }
 ]);
-;
+
 angular.module('Sportomatics').controller('RegistrationController', [
     '$http', '$scope','$templateCache','$q', '$cookies', '$location', 'tags', 'ProfileService',
     function($http, $scope, $templateCache, $q, $cookies, $location, tags, ProfileService) {
@@ -5896,127 +6017,4 @@ angular.module('Sportomatics').controller('RegistrationController', [
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
         }
-;
-angular.module('Sportomatics').controller('ClubCoachesController', function($scope, $http, $location, SeasonsService) {
-  var url;
-  url = $('#club-coaches-api').val();
-  $scope.$location = $location;
-  $scope.SeasonsService = SeasonsService;
-  $scope.params = $location.search();
-  $scope.setSeason = function(season) {
-    $location.search('season', season);
-    $scope.params = $location.search();
-    $scope.list();
-  };
-  $scope.list = function() {
-    var params, season;
-    if ($scope.params.season) {
-      season = $scope.params.season;
-    } else {
-      season = SeasonsService.getDefaultSeason();
-    }
-    params = 'season=' + season;
-    $scope.data = [];
-    $scope.loaded = false;
-    $http.get(url + '?' + params).success(function(data) {
-      $scope.data = [data];
-      $scope.loaded = true;
-    });
-  };
-  $scope.back = function() {
-    var params;
-    params = 'season=' + $scope.data[$scope.data.length - 1].previous_season.pk;
-    $scope.loaded = false;
-    $http.get(url + '?' + params).success(function(data) {
-      $scope.data.push(data);
-      $scope.loaded = true;
-    });
-  };
-  $scope.list();
-  $('#footer').visibility({
-    'once': false,
-    'observeChanges': true,
-    'onBottomVisible': function() {
-      if ($scope.data && $scope.data[$scope.data.length - 1].previous_season.pk) {
-        return $scope.back();
-      }
-    }
-  });
-});
-;
-angular.module('Sportomatics').controller('ClubGeographyController', function($http, MapService, $scope, $timeout, $location, SeasonsService) {
-  var clubTeamApi, loader, self;
-  $scope.$location = $location;
-  $scope.SeasonsService = SeasonsService;
-  $scope.params = $location.search();
-  $scope.setSeason = function(season) {
-    $location.search('season', season);
-    $scope.params = $location.search();
-    $scope.list();
-  };
-  $scope.switchHistory = function() {
-    $location.search('is_history', !$scope.params.is_history || null);
-    $scope.params = $location.search();
-    $scope.list();
-  };
-  clubTeamApi = document.getElementById("club-players-api").value;
-  loader = $('.loader');
-  loader.addClass('active');
-  self = this;
-  self.reverse = false;
-  $scope.state = 'table';
-  $scope.sortBy = 'fio';
-  $scope.setState = function(state) {
-    $scope.state = state;
-    if (state === 'map') {
-      return $timeout(function() {
-        return $scope.setMap();
-      }, 500);
-    }
-  };
-  $scope.setSortBy = function(sortBy) {
-    $scope.sortBy = sortBy;
-    _.sortBy($scope.players, $scope.sortBy);
-    if ($scope.sortBy === sortBy) {
-      return $scope.players = $scope.players.reverse();
-    }
-  };
-  $scope.list = function() {
-    var params, season;
-    params = '';
-    if (!$scope.params.is_history) {
-      if ($scope.params.season) {
-        season = $scope.params.season;
-      } else {
-        season = SeasonsService.getDefaultSeason();
-      }
-      params = 'season=' + season;
-    }
-    return $http.get(clubTeamApi + '?' + params).success(function(data) {
-      $scope.players = _.sortBy(_.filter(data, function(player) {
-        return (player.birth_place != null) && player.birth_place.length !== 0;
-      }), $scope.sortBy);
-      $scope.cities = _.sortBy(_.map(_.groupBy(_.map($scope.players, function(player) {
-        return {
-          city: player.birth_place
-        };
-      }), 'city'), function(value, key) {
-        return {
-          name: key,
-          count: value.length
-        };
-      }), 'count').reverse();
-      return loader.removeClass('active');
-    });
-  };
-  $scope.list();
-  $scope.setMap = function() {
-    if (MapService.isRendered() === true) {
-      MapService.remove();
-    }
-    return MapService.createClubsMap($scope.players, 'players').then(function() {
-      return loader.removeClass('active');
-    });
-  };
-});
-;
+
