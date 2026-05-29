@@ -417,3 +417,72 @@ class RelatedPlayer(models.Model):
         ordering = 'modified',
         verbose_name = _('Related Player')
         verbose_name_plural = _('Related Players')
+
+
+TOURNAMENT_TYPE_CHOICES = (
+    ('regular', _('Regular season')),
+    ('playoff', _('Playoff')),
+    ('other', _('Other')),
+)
+
+
+class PlayerSeasonStat(models.Model):
+    player = models.ForeignKey(Player, related_name='season_stats')
+    club = models.ForeignKey(
+        'hockeyapp.Club', on_delete=models.SET_NULL, null=True, blank=True)
+    season = models.ForeignKey(
+        'base.Season', on_delete=models.SET_NULL, null=True, blank=True)
+    tournament_type = models.CharField(
+        max_length=16, choices=TOURNAMENT_TYPE_CHOICES, default='regular')
+    is_goalie = models.BooleanField(default=False)
+
+    # Shared skater + goalie
+    number = models.CharField(max_length=8, blank=True)
+    matches = models.PositiveSmallIntegerField(null=True, blank=True)
+    goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    assists = models.PositiveSmallIntegerField(null=True, blank=True)
+    penalty_time = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    # Skater
+    points = models.PositiveSmallIntegerField(null=True, blank=True)
+    plus_minus = models.SmallIntegerField(null=True, blank=True)
+    plus = models.PositiveSmallIntegerField(null=True, blank=True)
+    minus = models.PositiveSmallIntegerField(null=True, blank=True)
+    es_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    pp_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    sh_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    overtime_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    win_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    bullet_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    shots = models.PositiveSmallIntegerField(null=True, blank=True)
+    pis = models.FloatField(null=True, blank=True)
+    shots_per_game = models.FloatField(null=True, blank=True)
+    faceoff = models.PositiveSmallIntegerField(null=True, blank=True)
+    winfaceoff = models.PositiveSmallIntegerField(null=True, blank=True)
+    winfaceoff_p = models.FloatField(null=True, blank=True)
+    icetime_per_game = models.CharField(max_length=8, blank=True)
+    hits = models.PositiveSmallIntegerField(null=True, blank=True)
+    blocks = models.PositiveSmallIntegerField(null=True, blank=True)
+    fouls = models.PositiveSmallIntegerField(null=True, blank=True)
+    takeaways = models.PositiveSmallIntegerField(null=True, blank=True)
+    interceptions = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    # Goalie
+    wins = models.PositiveSmallIntegerField(null=True, blank=True)
+    losses = models.PositiveSmallIntegerField(null=True, blank=True)
+    bullet_matches = models.PositiveSmallIntegerField(null=True, blank=True)
+    shots_received = models.PositiveSmallIntegerField(null=True, blank=True)
+    loose_goals = models.PositiveSmallIntegerField(null=True, blank=True)
+    saves = models.PositiveSmallIntegerField(null=True, blank=True)
+    saves_p = models.FloatField(null=True, blank=True)
+    sf = models.FloatField(null=True, blank=True)
+    zero_goals_matches = models.PositiveSmallIntegerField(null=True, blank=True)
+    gamingtime = models.CharField(max_length=16, blank=True)
+
+    __unicode__ = lambda self: '{} - {} ({})'.format(
+        self.player, self.season, self.tournament_type)
+
+    class Meta(object):
+        unique_together = ('player', 'club', 'season', 'tournament_type')
+        verbose_name = _('Player Season Stat')
+        verbose_name_plural = _('Player Season Stats')

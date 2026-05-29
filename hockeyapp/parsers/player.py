@@ -8,6 +8,7 @@ import re
 import requests
 
 from django.db.models.loading import get_model
+from lxml import html as lxml_html
 
 from base.utils import str2int_safe
 
@@ -622,3 +623,258 @@ class ProbrosanetPlayerInfoParser(GrabParser):
                 if tr.xpath('td')[0].text.strip() == 'Позиция:':
                     return tr.xpath('td')[1].text.strip()
         return ''
+
+
+# ---------------------------------------------------------------------------
+# V2 parsers for the new khl.ru layout
+# ---------------------------------------------------------------------------
+
+_SKATER_COLS = {
+    '№': 'number',
+    'И': 'matches',
+    'Ш': 'goals',
+    'А': 'assists',
+    'О': 'points',
+    '+/-': 'plus_minus',
+    '+': 'plus',
+    '-': 'minus',
+    'Штр': 'penalty_time',
+    'ШР': 'es_goals',
+    'ШБ': 'pp_goals',
+    'ШМ': 'sh_goals',
+    'ШО': 'overtime_goals',
+    'ШП': 'win_goals',
+    'РБ': 'bullet_goals',
+    'БВ': 'shots',
+    '%БВ': 'pis',
+    'БВ/И': 'shots_per_game',
+    'Вбр': 'faceoff',
+    'ВВбр': 'winfaceoff',
+    '%Вбр': 'winfaceoff_p',
+    'ВП/И': 'icetime_per_game',
+    'СПр': 'hits',
+    'БлБ': 'blocks',
+    'ФоП': 'fouls',
+    'ОТБ': 'takeaways',
+    'ПХТ': 'interceptions',
+}
+
+_GOALIE_COLS = {
+    'И': 'matches',
+    'В': 'wins',
+    'П': 'losses',
+    'ИБ': 'bullet_matches',
+    'Бр': 'shots_received',
+    'ПШ': 'loose_goals',
+    'ОБ': 'saves',
+    '%ОБ': 'saves_p',
+    'КН': 'sf',
+    'Ш': 'goals',
+    'А': 'assists',
+    'И"0"': 'zero_goals_matches',
+    'Штр': 'penalty_time',
+    'ВП': 'gamingtime',
+}
+
+_TOURNAMENT_MAP = {
+    'рег': 'regular',
+    'regular': 'regular',
+    'плей': 'playoff',
+    'playoff': 'playoff',
+}
+
+_POSITION_MAP = {
+    'вратарь': 1,
+    'goalkeeper': 1,
+    'защитник': 2,
+    'defender': 2,
+    'нападающий': 3,
+    'forward': 3,
+    'offender': 3,
+}
+
+
+def _map_tournament(text):
+    text_low = text.lower()
+    for key, val in _TOURNAMENT_MAP.items():
+        if key in text_low:
+            return val
+    return 'other'
+
+
+def _map_position(text):
+    text_low = text.lower()
+    for key, val in _POSITION_MAP.items():
+        if key in text_low:
+            return val
+    return 0
+
+
+def _cell_text(el):
+    return (el.text_content() or '').strip()
+
+
+def _parse_int(s):
+    try:
+        return int(s.replace('\xa0', '').strip())
+    except (ValueError, AttributeError):
+        return None
+
+
+def _parse_float(s):
+    try:
+        return float(s.replace(',', '.').replace('\xa0', '').strip())
+    except (ValueError, AttributeError):
+        return None
+
+
+class KHLPlayerPageV2(object):
+    """Parses player bio card from khl.ru new layout."""
+
+    BIO_LABELS = {
+        'дата рождения': 'birth_date',
+        'родился': 'birth_date',
+        'гражданство': 'citizenship_name',
+        'рост': 'height',
+        'вес': 'weight',
+        'хват': 'grip',
+        'контракт до': 'contract_to',
+        'амплуа': 'position_text',
+        'клуб': 'club_name',
+    }
+
+    def parse(self, tree):
+        result = {}
+        self._parse_names(tree, result)
+        self._parse_detail_body(tree, result)
+        return result
+
+    def _parse_names(self, tree, result):
+        items = tree.xpath(
+            '//*[contains(@class,"frameCard-header__detail-titleItem")]')
+        if items:
+            result['ru_fio'] = _cell_text(items[0])
+        if len(items) > 1:
+            result['en_fio'] = _cell_text(items[1])
+
+    def _parse_detail_body(self, tree, result):
+        body = tree.xpath(
+            '//*[contains(@class,"frameCard-header__detail-body")]')
+        if not body:
+            return
+        body = body[0]
+
+        # Try label/value pair elements
+        items = body.xpath('.//*[contains(@class,"playerCard-item")]')
+        if not items:
+            # Fallback: scan all text nodes for "Label: Value" pattern
+            items = body.xpath('.//div | .//li | .//p')
+
+        for item in items:
+            text = _cell_text(item)
+            if ':' in text:
+                label, _, value = text.partition(':')
+                field = self.BIO_LABELS.get(label.strip().lower())
+                if field:
+                    result[field] = value.strip()
+            else:
+                for label_key, field in self.BIO_LABELS.items():
+                    label_els = item.xpath(
+                        './/*[contains(translate(text(),"АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЭЮЯ'
+                        'абвгдежзийклмнопрстуфхцчшщэюя",'
+                        '"абвгдежзийклмнопрстуфхцчшщэюяабвгдежзийклмнопрстуфхцчшщэюя"),'
+                        '"{}")] '.format(label_key)
+                    )
+                    if label_els:
+                        siblings = item.xpath('.//*[last()]')
+                        if siblings:
+                            val = _cell_text(siblings[-1])
+                            if val:
+                                result[field] = val
+                        break
+
+    @staticmethod
+    def is_goalie(bio):
+        pos = bio.get('position_text', '').lower()
+        return 'вратарь' in pos or 'goalie' in pos or 'goalkeeper' in pos
+
+
+class KHLPlayerSeasonStatsV2(object):
+    """Parses seasonal stats table from khl.ru new layout."""
+
+    def parse(self, tree, is_goalie=False):
+        col_map = _GOALIE_COLS if is_goalie else _SKATER_COLS
+
+        stat_divs = tree.xpath(
+            '//div[contains(@class,"statTable-tabContent")]'
+            '[contains(@class,"fade")]'
+        )
+        if not stat_divs:
+            # Fallback: any div with statTable-tabContent
+            stat_divs = tree.xpath(
+                '//div[contains(@class,"statTable-tabContent")]')
+        if not stat_divs:
+            return []
+
+        table = stat_divs[0]
+
+        # Build column index → field name map from thead
+        header_cells = table.xpath('.//thead//th | .//thead//td')
+        field_map = {}
+        for i, th in enumerate(header_cells):
+            col_label = _cell_text(th)
+            if col_label in col_map:
+                field_map[i] = col_map[col_label]
+
+        rows = table.xpath('.//tbody//tr | .//tr[not(ancestor::thead)]')
+        results = []
+        current_season_str = None
+        current_tournament_str = None
+
+        for row in rows:
+            cells = row.xpath('./td | ./th')
+            if not cells:
+                continue
+
+            first_text = _cell_text(cells[0])
+
+            # Season header detection: single cell spanning multiple cols,
+            # or row has ≤2 cells and first cell contains '/'
+            is_header = (
+                cells[0].get('colspan') or
+                (len(cells) <= 2 and '/' in first_text) or
+                (len(cells) == 1)
+            )
+
+            if is_header:
+                # "25/26 | рег.чемпионат" or "25/26 Плей-офф"
+                parts = re.split(r'\s*\|\s*|\s{2,}', first_text, maxsplit=1)
+                if len(parts) >= 2:
+                    current_season_str = parts[0].strip()
+                    current_tournament_str = parts[1].strip()
+                elif '/' in first_text:
+                    current_season_str = first_text.strip()
+                    current_tournament_str = ''
+                continue
+
+            if not current_season_str:
+                continue
+
+            club_name = first_text
+            if not club_name:
+                continue
+
+            stat = {
+                'club_name': club_name,
+                'season_str': current_season_str,
+                'tournament_str': current_tournament_str or '',
+            }
+
+            for i, cell in enumerate(cells):
+                field = field_map.get(i)
+                if field:
+                    stat[field] = _cell_text(cell)
+
+            results.append(stat)
+
+        return results

@@ -75,7 +75,7 @@ class AbstractMan(AdminLinkMixin, LocaleAttrMixin, models.Model):
         abstract=True
 
 
-from .players import Player, ClubPlayer, RelatedPlayer
+from .players import Player, ClubPlayer, RelatedPlayer, PlayerSeasonStat
 
 
 class PlayerCitizenship(models.Model):

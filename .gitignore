@@ -74,3 +74,5 @@ celerybeat-schedule
 
 # Performance raw logs
 docs/performance/*.log
+db.sqlite3.backup_20260524_224903
+realcomp@91.99.210.59

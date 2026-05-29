@@ -1,0 +1,27 @@
+REG25/26 https://www.khl.ru/calendar/1369/00/
+PO25/26 https://www.khl.ru/calendar/1370/00/
+REG 24/25 https://www.khl.ru/calendar/1288/00/
+PO 24/25 https://www.khl.ru/calendar/1289/00/
+REG 23/24 https://www.khl.ru/calendar/1217/00/
+PO 23/24 https://www.khl.ru/calendar/1218/00/
+REG 22/23 https://www.khl.ru/calendar/1154/00/
+PO 22/23 https://www.khl.ru/calendar/1155/00/
+REG 21/22 https://www.khl.ru/calendar/1097/00/
+PO 21/22 https://www.khl.ru/calendar/1098/00/
+REG 20/21 https://www.khl.ru/calendar/1045/00/
+PO 20/21 https://www.khl.ru/calendar/1046/00/
+REG 19/20  https://www.khl.ru/calendar/851/00/
+PO 19/20  https://www.khl.ru/calendar/854/00/
+REG 18/19 https://www.khl.ru/calendar/671/00/
+PO17/18 https://www.khl.ru/calendar/674/00/
+REG 17/18 https://www.khl.ru/calendar/468/00/
+PO17/18 https://www.khl.ru/calendar/472/00/
+REG 16/17 https://www.khl.ru/calendar/405/00/
+PO 16/17 https://www.khl.ru/calendar/406/00/
+REG 15/16 https://www.khl.ru/calendar/309/00/
+PO 15/16 https://www.khl.ru/calendar/310/00/
+REG 14/15 https://www.khl.ru/calendar/266/00/
+PO 14/15 https://www.khl.ru/calendar/267/00/
+REG 13/14 https://www.khl.ru/calendar/244/00/
+PO 13/14 https://www.khl.ru/calendar/245/00/
+
