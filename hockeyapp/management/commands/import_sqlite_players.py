@@ -92,9 +92,8 @@ class Command(BaseCommand):
             self.stdout.write('DRY RUN — nothing will be saved\n')
 
         from addresses.models import Country
-        from base.models import Season
         from filer.models import Image as FilerImage
-        from hockeyapp.models.players import Player, PlayerSeasonStat
+        from hockeyapp.models.players import Player
         from hockeyapp.models.clubs import Club
 
         conn = sqlite3.connect(db_path)
@@ -209,6 +208,13 @@ class Command(BaseCommand):
 
         # ── import season stats ───────────────────────────────────────────────
         if not skip_stats:
+            try:
+                from hockeyapp.models.players import PlayerSeasonStat
+            except ImportError:
+                self.stdout.write('WARNING: PlayerSeasonStat not found — skipping stats. Deploy new code + migrate first.\n')
+                conn.close()
+                return
+            from base.models import Season
             cur = conn.execute('SELECT * FROM player_stat ORDER BY id')
             stat_rows = cur.fetchall()
             self.stdout.write('Processing %d stat rows...\n' % len(stat_rows))
