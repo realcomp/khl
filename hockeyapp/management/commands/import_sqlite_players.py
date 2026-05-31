@@ -28,6 +28,13 @@ MONTHS_RU = {
 }
 
 
+def to_num(val):
+    """Convert '-' or empty string to None for numeric DB fields."""
+    if val is None or val == '' or val == '-':
+        return None
+    return val
+
+
 def parse_birth_date(s):
     """'25 июня 1984' -> datetime.date(1984, 6, 25), or None."""
     if not s:
@@ -258,41 +265,41 @@ class Command(BaseCommand):
                 stat_values = dict(
                     is_goalie=bool(row['is_goalie']),
                     number=row['number'] or '',
-                    matches=row['matches'],
-                    goals=row['goals'],
-                    assists=row['assists'],
-                    points=row['points'],
-                    plus_minus=row['plus_minus'],
-                    plus=row['plus'],
-                    minus=row['minus'],
-                    penalty_time=row['penalty_time'],
-                    es_goals=row['es_goals'],
-                    pp_goals=row['pp_goals'],
-                    sh_goals=row['sh_goals'],
-                    overtime_goals=row['overtime_goals'],
-                    win_goals=row['win_goals'],
-                    bullet_goals=row['bullet_goals'],
-                    shots=row['shots'],
-                    pis=row['pis'],
-                    shots_per_game=row['shots_per_game'],
-                    faceoff=row['faceoff'],
-                    winfaceoff=row['winfaceoff'],
-                    winfaceoff_p=row['winfaceoff_p'],
+                    matches=to_num(row['matches']),
+                    goals=to_num(row['goals']),
+                    assists=to_num(row['assists']),
+                    points=to_num(row['points']),
+                    plus_minus=to_num(row['plus_minus']),
+                    plus=to_num(row['plus']),
+                    minus=to_num(row['minus']),
+                    penalty_time=to_num(row['penalty_time']),
+                    es_goals=to_num(row['es_goals']),
+                    pp_goals=to_num(row['pp_goals']),
+                    sh_goals=to_num(row['sh_goals']),
+                    overtime_goals=to_num(row['overtime_goals']),
+                    win_goals=to_num(row['win_goals']),
+                    bullet_goals=to_num(row['bullet_goals']),
+                    shots=to_num(row['shots']),
+                    pis=to_num(row['pis']),
+                    shots_per_game=to_num(row['shots_per_game']),
+                    faceoff=to_num(row['faceoff']),
+                    winfaceoff=to_num(row['winfaceoff']),
+                    winfaceoff_p=to_num(row['winfaceoff_p']),
                     icetime_per_game=row['icetime_per_game'] or '',
-                    hits=row['hits'],
-                    blocks=row['blocks'],
-                    fouls=row['fouls'],
-                    takeaways=row['takeaways'],
-                    interceptions=row['interceptions'],
-                    wins=row['wins'],
-                    losses=row['losses'],
-                    bullet_matches=row['bullet_matches'],
-                    shots_received=row['shots_received'],
-                    loose_goals=row['loose_goals'],
-                    saves=row['saves'],
-                    saves_p=row['saves_p'],
-                    sf=row['sf'],
-                    zero_goals_matches=row['zero_goals_matches'],
+                    hits=to_num(row['hits']),
+                    blocks=to_num(row['blocks']),
+                    fouls=to_num(row['fouls']),
+                    takeaways=to_num(row['takeaways']),
+                    interceptions=to_num(row['interceptions']),
+                    wins=to_num(row['wins']),
+                    losses=to_num(row['losses']),
+                    bullet_matches=to_num(row['bullet_matches']),
+                    shots_received=to_num(row['shots_received']),
+                    loose_goals=to_num(row['loose_goals']),
+                    saves=to_num(row['saves']),
+                    saves_p=to_num(row['saves_p']),
+                    sf=to_num(row['sf']),
+                    zero_goals_matches=to_num(row['zero_goals_matches']),
                     gamingtime=row['gamingtime'] or '',
                 )
 
