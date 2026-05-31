@@ -4,7 +4,7 @@
 
 Использование:
     python manage.py import_sqlite_players
-    python manage.py import_sqlite_players --db /path/to/players_parsed.sqlite3
+    python manage.py import_sqlite_players --db /app/media/players_parsed.sqlite3
     python manage.py import_sqlite_players --dry-run
     python manage.py import_sqlite_players --skip-photos
     python manage.py import_sqlite_players --skip-stats
@@ -14,11 +14,11 @@ from __future__ import unicode_literals
 import datetime
 import os
 import sqlite3
-import sys
 
 from django.conf import settings
 from django.core.files import File as DjangoFile
 from django.core.management.base import BaseCommand, CommandError
+from optparse import make_option
 
 
 MONTHS_RU = {
@@ -29,7 +29,7 @@ MONTHS_RU = {
 
 
 def parse_birth_date(s):
-    """'25 июня 1984' → datetime.date(1984, 6, 25), or None."""
+    """'25 июня 1984' -> datetime.date(1984, 6, 25), or None."""
     if not s:
         return None
     parts = s.strip().split()
@@ -49,24 +49,35 @@ def parse_birth_date(s):
 class Command(BaseCommand):
     help = 'Import players, stats and photos from players_parsed.sqlite3'
 
-    def add_arguments(self, parser):
-        parser.add_argument(
+    option_list = BaseCommand.option_list + (
+        make_option(
             '--db',
+            dest='db',
             default=os.path.join(settings.BASE_DIR, 'players_parsed.sqlite3'),
             help='Path to players_parsed.sqlite3',
-        )
-        parser.add_argument(
-            '--dry-run', action='store_true',
+        ),
+        make_option(
+            '--dry-run',
+            action='store_true',
+            dest='dry_run',
+            default=False,
             help='Show what would be done without writing to DB',
-        )
-        parser.add_argument(
-            '--skip-photos', action='store_true',
+        ),
+        make_option(
+            '--skip-photos',
+            action='store_true',
+            dest='skip_photos',
+            default=False,
             help='Do not import photos into filer',
-        )
-        parser.add_argument(
-            '--skip-stats', action='store_true',
+        ),
+        make_option(
+            '--skip-stats',
+            action='store_true',
+            dest='skip_stats',
+            default=False,
             help='Do not import PlayerSeasonStat records',
-        )
+        ),
+    )
 
     def handle(self, *args, **options):
         db_path = options['db']
@@ -78,9 +89,8 @@ class Command(BaseCommand):
             raise CommandError('SQLite file not found: %s' % db_path)
 
         if dry_run:
-            self.stdout.write(self.style.WARNING('DRY RUN — nothing will be saved'))
+            self.stdout.write('DRY RUN — nothing will be saved\n')
 
-        # deferred imports to avoid issues at import time
         from addresses.models import Country
         from base.models import Season
         from filer.models import Image as FilerImage
@@ -90,7 +100,7 @@ class Command(BaseCommand):
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
 
-        # ── build lookup caches ───────────────────────────────────────────────
+        # ── lookup caches ─────────────────────────────────────────────────────
         countries = {c.ru_title.strip(): c for c in Country.objects.all() if c.ru_title}
         clubs = {}
         for c in Club.objects.all():
@@ -104,28 +114,25 @@ class Command(BaseCommand):
             key = '%s/%s' % (str(s.start_date.year)[2:], str(s.end_date.year)[2:])
             seasons[key] = s
 
-        self.stdout.write('Countries: %d, Clubs: %d, Seasons: %d' % (
+        self.stdout.write('Countries: %d, Clubs: %d, Seasons: %d\n' % (
             len(countries), len(set(clubs.values())), len(seasons)))
 
-        # ── import players ────────────────────────────────────────────────────
         stats = {
             'players_created': 0,
             'players_updated': 0,
             'players_skipped': 0,
             'photos_imported': 0,
             'photos_skipped': 0,
-            'stats_created': 0,
-            'stats_skipped': 0,
+            'stats_written': 0,
             'unmatched_clubs': set(),
             'unmatched_seasons': set(),
             'unmatched_countries': set(),
         }
 
-        cur = conn.execute(
-            'SELECT * FROM player ORDER BY khl_id'
-        )
+        # ── import players ────────────────────────────────────────────────────
+        cur = conn.execute('SELECT * FROM player ORDER BY khl_id')
         rows = cur.fetchall()
-        self.stdout.write('Processing %d players…' % len(rows))
+        self.stdout.write('Processing %d players...\n' % len(rows))
 
         for row in rows:
             khl_id = row['khl_id']
@@ -141,7 +148,6 @@ class Command(BaseCommand):
 
             changed_fields = []
 
-            # fill only empty fields for existing players
             def _set_if_empty(field, value):
                 if value and not getattr(player, field):
                     setattr(player, field, value)
@@ -183,7 +189,7 @@ class Command(BaseCommand):
             else:
                 stats['players_skipped'] += 1
 
-            # ── photo import ──────────────────────────────────────────────────
+            # ── photo ─────────────────────────────────────────────────────────
             if not skip_photos and row['photo_status'] == 'ok' and not player.photo_id:
                 photo_rel = row['photo_local_path']
                 photo_abs = os.path.join(settings.MEDIA_ROOT, photo_rel)
@@ -205,7 +211,7 @@ class Command(BaseCommand):
         if not skip_stats:
             cur = conn.execute('SELECT * FROM player_stat ORDER BY id')
             stat_rows = cur.fetchall()
-            self.stdout.write('Processing %d stat rows…' % len(stat_rows))
+            self.stdout.write('Processing %d stat rows...\n' % len(stat_rows))
 
             player_cache = {}
 
@@ -285,40 +291,33 @@ class Command(BaseCommand):
                         **stat_kwargs
                     )
                     if not created:
-                        # update stats even for existing records
                         for k, v in stat_values.items():
                             setattr(obj, k, v)
                         obj.save()
 
-                stats['stats_created'] += 1
+                stats['stats_written'] += 1
 
         conn.close()
 
         # ── summary ───────────────────────────────────────────────────────────
-        self.stdout.write('')
-        self.stdout.write(self.style.SUCCESS('=== Done ==='))
-        self.stdout.write('Players created:   %d' % stats['players_created'])
-        self.stdout.write('Players updated:   %d' % stats['players_updated'])
-        self.stdout.write('Players unchanged: %d' % stats['players_skipped'])
-        self.stdout.write('Photos imported:   %d' % stats['photos_imported'])
-        self.stdout.write('Photos missing:    %d' % stats['photos_skipped'])
-        self.stdout.write('Stat rows written: %d' % stats['stats_created'])
+        self.stdout.write('\n=== Done ===\n')
+        self.stdout.write('Players created:   %d\n' % stats['players_created'])
+        self.stdout.write('Players updated:   %d\n' % stats['players_updated'])
+        self.stdout.write('Players unchanged: %d\n' % stats['players_skipped'])
+        self.stdout.write('Photos imported:   %d\n' % stats['photos_imported'])
+        self.stdout.write('Photos missing:    %d\n' % stats['photos_skipped'])
+        self.stdout.write('Stat rows written: %d\n' % stats['stats_written'])
 
         if stats['unmatched_countries']:
-            self.stdout.write(self.style.WARNING(
-                'Unmatched countries (%d): %s' % (
-                    len(stats['unmatched_countries']),
-                    ', '.join(sorted(stats['unmatched_countries'])[:20]),
-                )
+            self.stdout.write('Unmatched countries (%d): %s\n' % (
+                len(stats['unmatched_countries']),
+                ', '.join(sorted(stats['unmatched_countries'])[:20]),
             ))
         if stats['unmatched_clubs']:
-            self.stdout.write(self.style.WARNING(
-                'Unmatched clubs (%d): %s' % (
-                    len(stats['unmatched_clubs']),
-                    ', '.join(sorted(stats['unmatched_clubs'])[:30]),
-                )
+            self.stdout.write('Unmatched clubs (%d): %s\n' % (
+                len(stats['unmatched_clubs']),
+                ', '.join(sorted(stats['unmatched_clubs'])[:30]),
             ))
         if stats['unmatched_seasons']:
-            self.stdout.write(self.style.WARNING(
-                'Unmatched seasons: %s' % ', '.join(sorted(stats['unmatched_seasons']))
-            ))
+            self.stdout.write('Unmatched seasons: %s\n' % ', '.join(
+                sorted(stats['unmatched_seasons'])))
