@@ -94,7 +94,7 @@ class Command(BaseCommand):
         from addresses.models import Country
         from base.models import Season
         from filer.models import Image as FilerImage
-        from hockeyapp.models import Player, PlayerSeasonStat
+        from hockeyapp.models.players import Player, PlayerSeasonStat
         from hockeyapp.models.clubs import Club
 
         conn = sqlite3.connect(db_path)
