@@ -97,7 +97,11 @@ class Command(BaseCommand):
         from hockeyapp.models.clubs import Club
 
         conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
+
+        def dict_factory(cursor, row):
+            return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+
+        conn.row_factory = dict_factory
 
         # ── lookup caches ─────────────────────────────────────────────────────
         countries = {c.ru_title.strip(): c for c in Country.objects.all() if c.ru_title}
