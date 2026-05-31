@@ -281,8 +281,8 @@ class Command(BaseCommand):
 
                 if not dry_run:
                     obj, created = PlayerSeasonStat.objects.get_or_create(
-                        **stat_kwargs,
                         defaults=stat_values,
+                        **stat_kwargs
                     )
                     if not created:
                         # update stats even for existing records
