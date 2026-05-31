@@ -109,9 +109,11 @@ class Command(BaseCommand):
                 clubs[c.en_title.strip()] = c
 
         seasons = {}
-        for s in Season.objects.filter(start_date__isnull=False, end_date__isnull=False):
-            key = '%s/%s' % (str(s.start_date.year)[2:], str(s.end_date.year)[2:])
-            seasons[key] = s
+        if not skip_stats:
+            from base.models import Season
+            for s in Season.objects.filter(start_date__isnull=False, end_date__isnull=False):
+                key = '%s/%s' % (str(s.start_date.year)[2:], str(s.end_date.year)[2:])
+                seasons[key] = s
 
         self.stdout.write('Countries: %d, Clubs: %d, Seasons: %d\n' % (
             len(countries), len(set(clubs.values())), len(seasons)))
@@ -214,7 +216,6 @@ class Command(BaseCommand):
                 self.stdout.write('WARNING: PlayerSeasonStat not found — skipping stats. Deploy new code + migrate first.\n')
                 conn.close()
                 return
-            from base.models import Season
             cur = conn.execute('SELECT * FROM player_stat ORDER BY id')
             stat_rows = cur.fetchall()
             self.stdout.write('Processing %d stat rows...\n' % len(stat_rows))
