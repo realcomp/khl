@@ -2,6 +2,25 @@
 
 Перенос данных из `players_parsed.sqlite3` (результат парсинга KHL) в основную БД Postgres на сервере.
 
+## Текущий статус (май 2026)
+
+Импорт **выполнен**:
+- Игроков создано: 4051, обновлено: 2709, без изменений: 3768
+- Фотографий импортировано: 3741 (через django-filer)
+- Строк статистики (`PlayerSeasonStat`): ~21 881
+- Миграция `0088_playerseasonstat` применена
+
+## Архитектура: два уровня статистики
+
+В БД сосуществуют **два разных** способа хранения статистики:
+
+| Таблица | Что хранит | Записей |
+|---|---|---|
+| `hockeyapp_clubplayermatch` | 1 строка = 1 матч = 1 игрок | ~1.4 млн |
+| `hockeyapp_playerseasonstat` | 1 строка = итого за сезон в клубе | ~21 881 |
+
+`PlayerSeasonStat` заполняется из `player_stat` в SQLite (данные с KHL.ru за 2014–2026), покрывает сезоны которых нет в матчах (16/17–25/26 и частично старее).
+
 ## Что переносится
 
 | Источник (SQLite) | Назначение (Postgres) | Правило |
@@ -13,35 +32,45 @@
 ## Требования перед запуском
 
 На сервере должны быть:
-- `players_parsed.sqlite3` — в `/opt/sportomatics/media/` (или указать путь через `--db`)
+- `players_parsed.sqlite3` — в `/opt/sportomatics/media/`
 - Фотографии — в `/opt/sportomatics/media/players/khl/<khl_id>.jpg`
-- Management command — `hockeyapp/management/commands/import_sqlite_players.py` в образе
+- Код задеплоен через `git pull` + `docker compose build web`
+- Миграция `0088_playerseasonstat` применена
 
 ## Шаг 1 — скопировать файлы на сервер (с Mac)
 
 ```bash
 # SQLite с данными игроков
-scp players_parsed.sqlite3 root@server:/opt/sportomatics/media/
+scp players_parsed.sqlite3 root@91.99.210.59:/opt/sportomatics/media/
 
 # Фотографии (~9 800 файлов)
-rsync -avz --progress media/players/khl/ root@server:/opt/sportomatics/media/players/khl/
-
-# Management command (если код не задеплоен через git + docker build)
-scp hockeyapp/management/commands/import_sqlite_players.py \
-  root@server:/tmp/import_sqlite_players.py
+rsync -avz --progress media/players/khl/ root@91.99.210.59:/opt/sportomatics/media/players/khl/
 ```
 
-## Шаг 2 — скопировать management command в контейнер
+## Шаг 2 — деплой и миграция (если первый раз на новом сервере)
 
 ```bash
-# Если файл передан через /tmp:
-docker cp /tmp/import_sqlite_players.py \
-  sportomatics-web-1:/app/hockeyapp/management/commands/
-
-# Если код уже в образе после git pull + docker compose build web — этот шаг не нужен
+cd /opt/sportomatics
+git pull origin perf-audit-autofix
+docker compose build web
+docker compose up -d web
+docker exec sportomatics-web-1 python manage.py migrate hockeyapp 0088_playerseasonstat
 ```
 
-## Шаг 3 — сухой прогон
+## Шаг 3 — очистка SQLite перед импортом
+
+В `player_stat` могут быть строки-заголовки с неправильными `club_name`:
+
+```bash
+sqlite3 /opt/sportomatics/media/players_parsed.sqlite3 "
+DELETE FROM player_stat
+WHERE club_name IN (
+  'Всего в КХЛ:', 'Всего:', 'Кубок Надежды:', 'Плей-офф:', 'Регулярный чемпионат:'
+);
+"
+```
+
+## Шаг 4 — сухой прогон
 
 ```bash
 docker exec sportomatics-web-1 python manage.py import_sqlite_players \
@@ -50,15 +79,20 @@ docker exec sportomatics-web-1 python manage.py import_sqlite_players \
 
 Вывод покажет:
 - сколько игроков будет создано/обновлено
-- **Unmatched clubs** — названия клубов из SQLite, не найденные в Postgres
-- **Unmatched seasons** — строки сезонов (например `"22/23"`), не совпавшие с Season
-- **Unmatched countries** — страны, не найденные в `addresses_country`
+- **Unmatched clubs** — клубы из SQLite, не найденные в Postgres
+- **Unmatched seasons** — сезоны не совпавшие с `base_season`
+- **Unmatched countries** — страны не найденные в `addresses_country`
 
-## Шаг 4 — полный импорт
+## Шаг 5 — полный импорт
 
 ```bash
+# Только игроки и фото (без статистики)
 docker exec sportomatics-web-1 python manage.py import_sqlite_players \
-  --db /app/media/players_parsed.sqlite3
+  --db /app/media/players_parsed.sqlite3 --skip-stats
+
+# Только статистика (фото уже есть)
+docker exec sportomatics-web-1 python manage.py import_sqlite_players \
+  --db /app/media/players_parsed.sqlite3 --skip-photos
 ```
 
 ### Опции команды
@@ -70,10 +104,67 @@ docker exec sportomatics-web-1 python manage.py import_sqlite_players \
 | `--skip-photos` | Пропустить импорт фотографий |
 | `--skip-stats` | Пропустить импорт PlayerSeasonStat |
 
-## Примечания
+## Устранение типовых проблем
 
-- **Существующие игроки**: поля обновляются только если они пустые/null в Postgres — данные, внесённые вручную, не затираются.
-- **Статистика**: всегда перезаписывается (upsert) — это основная цель импорта.
-- **Фотографии**: загружаются через django-filer только если `player.photo` ещё не задан.
-- `photo_local_path` в SQLite хранится относительно `media/`, например `players/khl/1.jpg`. Абсолютный путь внутри контейнера: `/app/media/players/khl/1.jpg`.
-- Незаматченные клубы и сезоны выводятся в конце — их нужно добавить как алиасы или завести в БД вручную.
+### Unmatched seasons — все сезоны не нашлись
+`base_season` содержит только старые сезоны. Добавить недостающие:
+```bash
+docker exec sportomatics-db-1 psql -U sportomatics -d sportomatics -c "
+INSERT INTO base_season (ru_title, en_title, title, start_date, end_date) VALUES
+  ('Сезон 16/17', 'Season 16/17', 'Сезон 16/17', '2016-07-01', '2017-06-30'),
+  ...;
+"
+```
+Формат ключа сезона: `str(start_date.year)[2:] + '/' + str(end_date.year)[2:]` → `"22/23"`.
+
+### Unmatched clubs
+Проверить как клуб называется в БД:
+```bash
+docker exec sportomatics-db-1 psql -U sportomatics -d sportomatics -c "
+SELECT id, ru_title FROM hockeyapp_club WHERE ru_title ILIKE '%название%';
+"
+```
+Если клуб есть под другим именем — исправить `club_name` в SQLite:
+```bash
+sqlite3 /opt/sportomatics/media/players_parsed.sqlite3 \
+  "UPDATE player_stat SET club_name = 'Правильное название' WHERE club_name = 'Неправильное';"
+```
+Если клуба нет совсем — добавить (все поля NOT NULL обязательны):
+```bash
+docker exec sportomatics-db-1 psql -U sportomatics -d sportomatics -c "
+INSERT INTO hockeyapp_club (ru_title, en_title, title, site, contacts, html_body, proccesed_time, url, fb, gl, im, ok, pp, tw, ut, vk, main_color, secondary_color, third_color)
+VALUES ('Название', 'Name', 'Название', '', '', '', NOW(), '', '', '', '', '', '', '', '', '', '', '', '');
+"
+```
+
+### Unmatched countries
+Страны с нестандартными названиями добавить в `addresses_country`:
+```bash
+docker exec sportomatics-db-1 psql -U sportomatics -d sportomatics -c "
+INSERT INTO addresses_country (ru_title, en_title, title) VALUES ('Название', 'Name', 'Название');
+"
+```
+
+### Записи с club=NULL после импорта — переимпортировать
+```bash
+# Удалить кривые записи
+docker exec sportomatics-db-1 psql -U sportomatics -d sportomatics -c "
+DELETE FROM hockeyapp_playerseasonstat WHERE club_id IS NULL;
+"
+# Переимпортировать
+docker exec sportomatics-web-1 python manage.py import_sqlite_players \
+  --db /app/media/players_parsed.sqlite3 --skip-photos
+```
+
+### SyntaxError / ImportError при запуске
+- Код в контейнере старый — нужен `git pull` + `docker compose build web` + `docker compose up -d web`
+- Затем `docker cp` не нужен, команда уже в образе
+
+## Известные несоответствия названий клубов
+
+| В SQLite | В БД (id) |
+|---|---|
+| Лев Пп | Лев Попрад (165) |
+| Лев Пр | Лев Прага (226) |
+| Куньлунь РС | Куньлунь РС (добавлен вручную) |
+| Драконы | Драконы (добавлен вручную) |
